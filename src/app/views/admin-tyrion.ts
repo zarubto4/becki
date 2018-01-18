@@ -37,7 +37,7 @@ export class TyrionComponent extends BaseMainComponent implements OnInit {
     refresh(): void {
         this.blockUI();
 
-        this.backendService.serverGetUpdates()
+        this.tyrionBackendService.serverGetUpdates()
             .then((updates: IServerUpdates) => {
                 this.updates = updates;
                 this.updates.releases.forEach((release: IGitHubReleases) => {
@@ -66,7 +66,7 @@ export class TyrionComponent extends BaseMainComponent implements OnInit {
             update_time: update_time
         };
         console.info(JSON.stringify(body));
-        this.backendService.serverUpdateServerComponent(body)
+        this.tyrionBackendService.serverUpdateServerComponent(body)
             .then((result) => {
                 this.unblockUI();
                 this.fmSuccess(this.translate('flash_successfully_scheduled'));

@@ -9,10 +9,10 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { IBoard, IHardwareNewPassword, IHomerServerPublicDetail } from '../backend/TyrionAPI';
+import { IBoard, IHardwareNewPassword, IHomerServer} from '../backend/TyrionAPI';
 import { FlashMessageSuccess } from '../services/NotificationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
@@ -42,10 +42,10 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
     les: boolean = true;
     error_message: string = null;
 
-    servers: IHomerServerPublicDetail[] = null;
+    servers: IHomerServer[] = null;
     servers_options: FormSelectComponentOption[] = null;
 
-    constructor(public backendService: BackendService, private formBuilder: FormBuilder, public translationService: TranslationService) {
+    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder, public translationService: TranslationService) {
         this.form = this.formBuilder.group({
             'serverSelector': ['', [BeckiValidators.condition(() => (this.tab === 'selector'), Validators.required)]],
             'serverUrl': ['', [BeckiValidators.condition(() => (this.tab === 'manual'), Validators.required), Validators.maxLength(31), Validators.minLength(8)]],      // TODO Valid URL alpha.homer.stage.byzance.cz
@@ -75,7 +75,7 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
 
     findAllAccessibleServers(): void {
         this.backendService.homerServersGetList()
-            .then((servers: IHomerServerPublicDetail[]) => {
+            .then((servers: IHomerServer[]) => {
                 this.servers = servers;
                 this.servers_options = this.servers.map((pv) => {
                     let status = this.translationService.translateTable(pv.server_type, this, 'server_type');

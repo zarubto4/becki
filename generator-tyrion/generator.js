@@ -2,9 +2,8 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var program = require("commander");
 var fs_1 = require("fs");
 var moment = require("moment");
@@ -54,9 +53,9 @@ var CONFIG = {
         'post:/login': '__login',
         'post:/logout': '__logout',
         'get:/facebook/{return_link}': '__loginFacebook',
-        'get:/github/{return_link}': '__loginGitHub',
+        'get:/github/{return_link}': '__loginGitHub'
     },
-    methodsOkCodes: [200, 201, 202],
+    methodsOkCodes: [200, 201, 202]
 };
 var throwError = function (msg) {
     console.log(chalk.red(msg + ''));
@@ -110,7 +109,7 @@ fileWriteLine('/**************************************************************/'
 fileWriteLine();
 fileWriteLine('/* tslint:disable */');
 fileWriteLine();
-fileWriteLine();
+fileWriteLine('import { HomerAPI } from \'./HomerAPI\';');
 // DEFINITIONS:
 var validateDefName = function (name) {
     var defNameValidated = name.replace(/[ ]/g, '_'); // replaces spaces
@@ -319,7 +318,7 @@ var makeReadableMethodName = function (method, url, pathObj) {
         }
     });
     if (first_prefix === null || second_prefix === null) {
-        throwError('Missing fist or second Parameter');
+        throwError('Missing fist or second Parameter Something like Get_ Set_ Add_ Delete_ etc... Maybe char "_" is missing???? ::: ' + ' URL: ' + url + ' path: ' + pathObj.toString() + ' first prefix:: ' + first_prefix + ' second prefix' + second_prefix);
     }
     // But first part to lowecase
     out = second_prefix + first_prefix + out;
@@ -358,14 +357,14 @@ for (var pathUrl in paths) {
             console.log(chalk.green('Adding method \"' + m + '\" to list.', ' path Method:: (' + pathMethod + ':' + pathUrl + ')'));
             methodsParams[m] = {
                 pathUrl: pathUrl,
-                pathMethod: pathMethod,
+                pathMethod: pathMethod
             };
             methodsNames.push(m);
         }
     }
 }
 methodsNames.sort();
-fileWriteLine('export abstract class ' + className + ' {');
+fileWriteLine('export abstract class ' + className + ' extends HomerAPI {');
 fileWriteLine();
 fileWriteLine('    protected abstract requestRestPath<T>(method:string, path:string, body:Object, success:number[]):Promise<T>;');
 fileWriteLine();

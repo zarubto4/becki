@@ -59,7 +59,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProjectCreate(this.id, {  // TODO [permission]: M_Project.read_permission, M_Project.createPermission
+                this.tyrionBackendService.mProjectCreate(this.id, {  // TODO [permission]: M_Project.read_permission, M_Project.createPermission
                     name: model.name,
                     description: model.description
                 })
@@ -81,7 +81,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
             if (success) {
                 // console.log(model);
                 this.blockUI();
-                this.backendService.mProjectEdit(project.id, {
+                this.tyrionBackendService.mProjectEdit(project.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -101,7 +101,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         this.modalService.showModal(new ModalsRemovalModel(project.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProjectDelete(project.id)
+                this.tyrionBackendService.mProjectDelete(project.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

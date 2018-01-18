@@ -41,7 +41,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.backendService.typeOfBoardsGetAll()])
+        Promise.all<any>([this.tyrionBackendService.typeOfBoardsGetAll()])
             .then((values: [ITypeOfBoard[]]) => {
                 this.typeOfBoards = values[0];
                 this.unblockUI();
@@ -64,7 +64,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
     }
 
     onShowPublicProgramByFilter(page: number = 0): void {
-        Promise.all<any>([this.backendService.cProgramGetListByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.cProgramGetListByFilter(page, {
             public_programs: true,       // For public its required
         })
         ])
@@ -79,7 +79,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
     }
 
     onShowForDecisionsProgramByFilter(page: number = 0): void {
-        Promise.all<any>([this.backendService.cProgramGetListByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.cProgramGetListByFilter(page, {
             pending_programs: true,       // For public its required
         })
         ])
@@ -94,7 +94,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
     }
 
     onShowPublicLibraryByFilter(page: number = 0): void {
-        Promise.all<any>([this.backendService.libraryGetShortListByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.libraryGetShortListByFilter(page, {
             public_library: true,       // For public its required
         })
         ])
@@ -109,7 +109,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
     }
 
     onShowForDecisionsLibraryByFilter(page: number = 0): void {
-        Promise.all<any>([this.backendService.libraryGetShortListByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.libraryGetShortListByFilter(page, {
             pending_library: true,       // For public its required
         })
         ])
@@ -127,7 +127,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramDelete(code.id)
+                this.tyrionBackendService.cProgramDelete(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         this.onShowPublicProgramByFilter();
@@ -148,7 +148,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramEdit(code.id, {
+                this.tyrionBackendService.cProgramEdit(code.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -180,7 +180,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryEdit(library.id, {
+                this.tyrionBackendService.libraryEdit(library.id, {
                     project_id: null,
                     name: model.name,
                     description: model.description
@@ -200,7 +200,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         this.modalService.showModal(new ModalsRemovalModel(library.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryDelete(library.id)
+                this.tyrionBackendService.libraryDelete(library.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_removed_success')));
                         this.onShowPublicLibraryByFilter();

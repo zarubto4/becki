@@ -50,7 +50,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
 
     refresh(): void {
         this.blockUI();
-        this.backendService.typeOfBoardGet(this.hardwareTypeId)
+        this.tyrionBackendService.typeOfBoardGet(this.hardwareTypeId)
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
                 this.unblockUI();
@@ -63,7 +63,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
 
     onEditClick() {
         this.blockUI();
-        Promise.all<any>([this.backendService.processorGetAll(), this.backendService.producersGetAll()])
+        Promise.all<any>([this.tyrionBackendService.processorGetAll(), this.tyrionBackendService.producersGetAll()])
             .then((values: [IProcessor[], IProducer[]]) => {
                 let model = new ModalsCreateTypeOfBoardModel(
                     values[0],
@@ -79,7 +79,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.typeOfBoardEdit(this.typeOfBoard.id, {
+                        this.tyrionBackendService.typeOfBoardEdit(this.typeOfBoard.id, {
                             description: model.description,
                             name: model.name,
                             compiler_target_name: model.compiler_target_name,
@@ -107,7 +107,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(new ModalsRemovalModel(this.typeOfBoard.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardDelete(this.typeOfBoard.id)
+                this.tyrionBackendService.typeOfBoardDelete(this.typeOfBoard.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -125,7 +125,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.bootloaderCreate(this.typeOfBoard.id, {
+                this.tyrionBackendService.bootloaderCreate(this.typeOfBoard.id, {
                     description: model.description,
                     name: model.name,
                     changing_note: model.changing_note,
@@ -151,7 +151,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.bootloaderEdit(bootloader.id, {
+                this.tyrionBackendService.bootloaderEdit(bootloader.id, {
                     description: model.description,
                     name: model.name,
                     changing_note: model.changing_note,
@@ -172,7 +172,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramEdit(code.id, {
+                this.tyrionBackendService.cProgramEdit(code.id, {
                     name: model.name,
                     description: model.description,
                 })
@@ -192,7 +192,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramVersionDelete(version.version_id)
+                this.tyrionBackendService.cProgramVersionDelete(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
                         this.refresh();
@@ -210,7 +210,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramVersionEditInformation(version.version_id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.cProgramVersionEditInformation(version.version_id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -231,7 +231,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardUploadPicture(this.typeOfBoard.id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.typeOfBoardUploadPicture(this.typeOfBoard.id, { // TODO [permission]: version.update_permission
                     file: model.file
                 })
                     .then(() => {
@@ -252,7 +252,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.bootloaderUploadFile(bootloader.id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.bootloaderUploadFile(bootloader.id, { // TODO [permission]: version.update_permission
                     file: model.file
                 })
                     .then(() => {
@@ -271,7 +271,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(new ModalsSetAsMainModel(this.translate('label_default_c_program_setting'), version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeofboardSetcprogramversion_as_main(version.version_id)
+                this.tyrionBackendService.typeofboardSetcprogramversion_as_main(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_set_as_default')));
                         this.refresh(); // also unblockUI
@@ -288,7 +288,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(new ModalsSetAsMainModel(this.translate('label_bootloader'), bootloader.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.bootloaderEditSetAsMain(bootloader.id)
+                this.tyrionBackendService.bootloaderEditSetAsMain(bootloader.id)
                     .then(() => {
                         this.fmSuccess(this.translate('flash_successfully_set_main'));
                         this.refresh(); // also unblockUI
@@ -305,7 +305,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(new ModalsRemovalModel(bootloader.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.bootloaderDelete(bootloader.id)
+                this.tyrionBackendService.bootloaderDelete(bootloader.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -323,7 +323,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardBatchCreate(this.typeOfBoard.id, {
+                this.tyrionBackendService.typeOfBoardBatchCreate(this.typeOfBoard.id, {
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
@@ -370,7 +370,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardBatchEdit(batch.id, {
+                this.tyrionBackendService.typeOfBoardBatchEdit(batch.id, {
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
@@ -401,7 +401,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(new ModalsRemovalModel(batch.revision + ' ' + batch.production_batch)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardBatchDelete(batch.id)
+                this.tyrionBackendService.typeOfBoardBatchDelete(batch.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.navigate(['admin/garfield/']);

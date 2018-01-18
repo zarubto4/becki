@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../services/NotificationService';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { Router } from '@angular/router';
 import { TranslationService } from '../services/TranslationService';
 
@@ -23,7 +23,7 @@ export class ForgotPasswordComponent implements OnInit {
     showFailed: boolean;
     failedReason: string;
 
-    constructor(protected formBuilder: FormBuilder, protected router: Router, protected backendService: BackendService, protected notificationService: NotificationService, protected translationService: TranslationService) {
+    constructor(protected formBuilder: FormBuilder, protected router: Router, protected backendService: TyrionBackendService, protected notificationService: NotificationService, protected translationService: TranslationService) {
 
         this.forgotPasswordForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email]]

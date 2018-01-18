@@ -25,7 +25,7 @@ export class HardwareComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        this.backendService.typeOfBoardsGetAll()
+        this.tyrionBackendService.typeOfBoardsGetAll()
             .then((typeOfBoards) => {
                 this.devices = typeOfBoards;
                 // console.log(typeOfBoards);

@@ -69,7 +69,7 @@ export class FinancialProductExtensionsComponent extends BaseMainComponent imple
 
     refresh(): void {
         this.blockUI();
-        this.backendService.productGet(this.id).then(product =>  {
+        this.tyrionBackendService.productGet(this.id).then(product =>  {
             this.product = product;
             this.unblockUI();
         }).catch(error =>  {

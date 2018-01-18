@@ -57,7 +57,7 @@ export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent 
     refresh(): void {
         this.blockUI();
 
-        this.backendService.invoiceGet(this.invoiceId).then(invoice =>  {
+        this.tyrionBackendService.invoiceGet(this.invoiceId).then(invoice =>  {
             this.fullIvoice = invoice;
             // console.log(invoice);
             this.unblockUI();
@@ -66,7 +66,7 @@ export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent 
             this.unblockUI();
         });
 
-        this.backendService.productsGetUserOwnList().then(products =>  {
+        this.tyrionBackendService.productsGetUserOwnList().then(products =>  {
             this.product = products.find(product => product.id === this.id);
             this.unblockUI();
         }).catch(error =>  {

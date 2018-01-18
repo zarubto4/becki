@@ -11,7 +11,7 @@
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { ModalModel } from '../services/ModalService';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 
@@ -44,7 +44,7 @@ export class ModalsPublicShareResponseComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             'version_name': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],

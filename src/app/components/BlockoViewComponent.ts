@@ -8,7 +8,7 @@ import { BlockoCore, BlockoPaperRenderer, BlockoBasicBlocks, BlockoTargetInterfa
 import { Component, AfterViewInit, OnChanges, OnDestroy, Input, ViewChild, ElementRef,
     SimpleChanges, Output, EventEmitter, NgZone } from '@angular/core';
 import { ModalService } from '../services/ModalService';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
 import { ITypeOfBlock, IBlockoBlockVersionShortDetail, IBlockoBlockShortDetail } from '../backend/TyrionAPI';
@@ -69,7 +69,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     groupRemovedCallback: (block: Blocks.BaseInterfaceBlockGroup) => void;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: BackendService, private translationService: TranslationService) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, private translationService: TranslationService) {
         this.zone.runOutsideAngular(() => {
 
             this.blockoRenderer = new BlockoPaperRenderer.RendererController();

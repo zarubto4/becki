@@ -57,7 +57,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         this.modalService.showModal(new ModalsRemovalModel(blocko.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.bProgramDelete(blocko.id)
+                this.tyrionBackendService.bProgramDelete(blocko.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -75,7 +75,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.bProgramCreate(this.id, { name: model.name, description: model.description }) // TODO [permission]: "Project.update_permission"
+                this.tyrionBackendService.bProgramCreate(this.id, { name: model.name, description: model.description }) // TODO [permission]: "Project.update_permission"
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_add_to_project', model.name)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -93,7 +93,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.bProgramEdit(blocko.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.bProgramEdit(blocko.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_update')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

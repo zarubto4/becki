@@ -62,7 +62,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProgramCreate(project.id, { // TODO [permission]: M_Program.create_permission
+                this.tyrionBackendService.mProgramCreate(project.id, { // TODO [permission]: M_Program.create_permission
                     name: model.name,
                     description: model.description
                 })
@@ -92,7 +92,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProjectEdit(this.gridProject.id, {
+                this.tyrionBackendService.mProjectEdit(this.gridProject.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -113,7 +113,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(new ModalsRemovalModel(this.gridProject.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProjectDelete(this.gridProject.id)
+                this.tyrionBackendService.mProjectDelete(this.gridProject.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_remove')));
 
@@ -139,7 +139,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProgramEdit(program.id, {
+                this.tyrionBackendService.mProgramEdit(program.id, {
                     name: model.name,
                     description: model.description,
                 })
@@ -160,7 +160,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(new ModalsRemovalModel(program.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProgramDelete(program.id)
+                this.tyrionBackendService.mProgramDelete(program.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_remove')));
                         this.refresh();

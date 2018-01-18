@@ -47,7 +47,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.backendService.tariffGet(this.tariffId), this.backendService.tariffGetAllTypes()])
+        Promise.all<any>([this.tyrionBackendService.tariffGet(this.tariffId), this.tyrionBackendService.tariffGetAllTypes()])
             .then((values: [ITariff, IProductExtensionType[]]) => {
                 this.tariff = values[0];
                 this.extensionTypes = values[1];
@@ -80,7 +80,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
 
     onTariffDeactivateClick(tariff: ITariff): void {
         this.blockUI();
-        this.backendService.tariffDeactivate(tariff.id)
+        this.tyrionBackendService.tariffDeactivate(tariff.id)
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
                 this.refresh();
@@ -93,7 +93,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
 
     onTariffActivateClick(tariff: ITariff): void {
         this.blockUI();
-        this.backendService.tariffActivate(tariff.id)
+        this.tyrionBackendService.tariffActivate(tariff.id)
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
                 this.refresh();
@@ -121,7 +121,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.tariffEdit(tariff.id, {
+                this.tyrionBackendService.tariffEdit(tariff.id, {
                     color: model.color,
                     awesome_icon: model.awesome_icon,
                     company_details_required: model.company_details_required,
@@ -146,7 +146,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
     }
 
     onExtensionShiftUpClick(extension: IProductExtension): void {
-        this.backendService.tariffExtensionOrderUP(extension.id)
+        this.tyrionBackendService.tariffExtensionOrderUP(extension.id)
             .then(() => {
                 this.refresh();
             })
@@ -157,7 +157,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
     }
 
     onExtensionShiftDownClick(extension: IProductExtension): void {
-        this.backendService.tariffExtensionOrderDown(extension.id)
+        this.tyrionBackendService.tariffExtensionOrderDown(extension.id)
             .then(() => {
                 this.refresh();
             })
@@ -172,7 +172,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.tariffExtensionCreate(this.tariffId, {
+                this.tyrionBackendService.tariffExtensionCreate(this.tariffId, {
                     name: model.name,
                     description: model.description,
                     color: model.color,
@@ -206,7 +206,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.tariffExtensionEdit(extension.id, {
+                this.tyrionBackendService.tariffExtensionEdit(extension.id, {
                     name: model.name,
                     description: model.description,
                     color: model.color,
@@ -228,7 +228,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
 
     onExtensionActivateClick(extension: IProductExtension): void {
         this.blockUI();
-        this.backendService.tariffExtensionActive(extension.id)
+        this.tyrionBackendService.tariffExtensionActive(extension.id)
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_deactivated_success')));
                 this.refresh();
@@ -241,7 +241,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
 
     onExtensionDeactivateClick(extension: IProductExtension): void {
         this.blockUI();
-        this.backendService.tariffExtensionDeactivate(extension.id)
+        this.tyrionBackendService.tariffExtensionDeactivate(extension.id)
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_deactivated_success')));
                 this.refresh();

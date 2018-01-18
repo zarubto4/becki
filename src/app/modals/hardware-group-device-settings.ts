@@ -4,7 +4,7 @@
  */
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { IBoardGroup, IBoardShortDetail } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
@@ -40,7 +40,7 @@ export class ModalsHardwareGroupDeviceSettingsComponent implements OnInit {
     @ViewChild('listGroup')
     listGroup: FormSwitchTwoListSelectComponent;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
     }
 
     ngOnInit() {

@@ -6,7 +6,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { NotificationService, FlashMessageError } from '../services/NotificationService';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 
 @Component({
     selector: 'bk-view-notifications',

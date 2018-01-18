@@ -16,7 +16,7 @@ import { Nl2BrPipe } from './pipes/Nl2BrPipe';
 import { UnixTimeFormatPipe } from './pipes/UnixTimeFormatPipe';
 import { LayoutMainComponent } from './layouts/main';
 import { LayoutNotLoggedComponent } from './layouts/not-logged';
-import { BackendService } from './services/BackendService';
+import { TyrionBackendService } from './services/BackendService';
 import { AuthGuard, NonAuthGuard } from './services/AuthGuard';
 import { ModalService } from './services/ModalService';
 import { TabMenuService } from './services/TabMenuService';
@@ -434,12 +434,12 @@ class BeckiErrorHandler implements ErrorHandler {
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
         ValidatorErrorsService,
-        BackendService,
-        AuthGuard, // AuthGuard service must be after BackendService
+        TyrionBackendService,
+        AuthGuard, // AuthGuard service must be after TyrionBackendService
         ExitConfirmGuard,
         BeckiImageLinks,
-        NonAuthGuard, // NonAuthGuard service must be after BackendService
-        NotificationService, // NotificationService must be after BackendService
+        NonAuthGuard, // NonAuthGuard service must be after TyrionBackendService
+        NotificationService, // NotificationService must be after TyrionBackendService
         StorageService,
         BlockUIService,
         ModalService,

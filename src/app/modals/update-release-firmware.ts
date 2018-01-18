@@ -5,7 +5,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import {
@@ -81,7 +81,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         inline: false
     };
 
-    constructor(public backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]],
             'firmwareType': ['', [Validators.required]],

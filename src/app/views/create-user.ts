@@ -11,7 +11,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../services/NotificationService';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BlockUIService } from '../services/BlockUIService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
@@ -31,7 +31,7 @@ export class CreateUserComponent implements OnInit, OnDestroy {
     constructor(
         protected formBuilder: FormBuilder,
         protected router: Router,
-        protected backendService: BackendService,
+        protected backendService: TyrionBackendService,
         protected notificationService: NotificationService,
         protected activatedRoute: ActivatedRoute,
         protected translateService: TranslationService,

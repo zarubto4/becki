@@ -112,7 +112,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             }
 
             if (!this.projectId && this.typeOfBlockId) {
-                Promise.all<any>([this.backendService.typeOfBlockGet(this.typeOfBlockId)])
+                Promise.all<any>([this.tyrionBackendService.typeOfBlockGet(this.typeOfBlockId)])
                     .then((values: [ITypeOfBlock]) => {
                         this.group = values[0];
                         this.unblockUI();
@@ -175,7 +175,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     refresh(): void {
 
         this.blockUI();
-        this.backendService.blockoBlockGet(this.blockId) // TODO [permission]: BlockoBlock_read_permission
+        this.tyrionBackendService.blockoBlockGet(this.blockId) // TODO [permission]: BlockoBlock_read_permission
             .then((blockoBlock) => {
 
                 this.blockoBlock = blockoBlock;
@@ -215,7 +215,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockEdit(this.blockoBlock.id, {
+                this.tyrionBackendService.blockoBlockEdit(this.blockoBlock.id, {
                     name: model.name,
                     general_description: model.description,
                     type_of_block_id: this.typeOfBlockId // tohle je trochu divný ne?
@@ -240,7 +240,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(new ModalsRemovalModel(this.blockoBlock.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockDelete(this.blockoBlock.id)
+                this.tyrionBackendService.blockoBlockDelete(this.blockoBlock.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -260,7 +260,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(new ModalsRemovalModel(version.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockVersionDelete(version.id)
+                this.tyrionBackendService.blockoBlockVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -280,7 +280,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockVersionEdit(version.id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.blockoBlockVersionEdit(version.id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -302,7 +302,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     selectBlockVersion(version: IBlockoBlockVersionShortDetail) {
         this.blockUI();
-        this.backendService.blockoBlockVersionGet(version.id)
+        this.tyrionBackendService.blockoBlockVersionGet(version.id)
             .then((blockoBlockVersion) => {
 
                 // console.log(blockoBlockVersion);
@@ -522,7 +522,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 });
 
                 this.blockUI();
-                this.backendService.blockoBlockVersionCreate(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
+                this.tyrionBackendService.blockoBlockVersionCreate(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
                     version_name: m.name,
                     version_description: m.description,
                     logic_json: this.blockCode,
@@ -547,7 +547,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(new ModalsPublicShareRequestModel(this.blockoBlock.name, programVersion.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockVersionMakePublic(programVersion.id)
+                this.tyrionBackendService.blockoBlockVersionMakePublic(programVersion.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
                         this.refresh();
@@ -564,7 +564,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     onProgramVersionPublishResult(version: IBlockoBlockVersionShortDetail): void {
 
-        Promise.all<any>([this.backendService.typeOfBlocksGetByFilter(0, {
+        Promise.all<any>([this.tyrionBackendService.typeOfBlocksGetByFilter(0, {
             public_programs: true,       // For public its required
         })
         ])
@@ -595,7 +595,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.blockoBlockVersionEditResponsePublication({
+                        this.tyrionBackendService.blockoBlockVersionEditResponsePublication({
                             version_id: version.id,
                             version_name: model.version_name,
                             version_description: model.version_description,
@@ -628,7 +628,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockMakeClone({
+                this.tyrionBackendService.blockoBlockMakeClone({
                     blocko_block_id: this.blockoBlock.id,
                     type_of_blocks_id: model.type_of_widget,
                     project_id: this.projectId,
@@ -649,7 +649,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     onBlockSetMainClick(version: IBlockoBlockVersionShortDetail): void {
         this.blockUI();
-        this.backendService.blockoBlockVersionSetAsMain(version.id)
+        this.tyrionBackendService.blockoBlockVersionSetAsMain(version.id)
             .then(() => {
                 this.refresh();
             })

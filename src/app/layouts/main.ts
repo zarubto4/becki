@@ -5,7 +5,7 @@
 
 import { Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { BreadcrumbsService } from '../services/BreadcrumbsService';
 import { TabMenuService } from '../services/TabMenuService';
 import { LabeledLink } from '../helpers/LabeledLink';
@@ -56,7 +56,7 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(
         public notificationService: NotificationService,
-        public backendService: BackendService,
+        public backendService: TyrionBackendService,
         @Inject('navigation') private navigation: LabeledLink[],
         breadcrumbsService: BreadcrumbsService,
         private tabMenuService: TabMenuService,

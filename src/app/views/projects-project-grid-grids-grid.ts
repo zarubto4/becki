@@ -144,7 +144,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProgramVersionDelete(version.version_id)
+                this.tyrionBackendService.mProgramVersionDelete(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -164,7 +164,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProgramVersionEdit(version.version_id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.mProgramVersionEdit(version.version_id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -184,8 +184,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.blockUI();
 
         Promise.all<any>([
-            this.backendService.typeOfWidgetGetAll(),
-            this.backendService.mProgramGet(this.gridId)// TODO [permission]: M_Program.read_permission
+            this.tyrionBackendService.typeOfWidgetGetAll(),
+            this.tyrionBackendService.mProgramGet(this.gridId)// TODO [permission]: M_Program.read_permission
         ])
             .then((values: [ITypeOfWidget[], IMProgram]) => {
                 let typesOfWidgets: ITypeOfWidget[] = values[0];
@@ -232,7 +232,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         }
 
         this.blockUI();
-        this.backendService.mProgramVersionGet(programVersion.version_id)
+        this.tyrionBackendService.mProgramVersionGet(programVersion.version_id)
             .then((programVersionFull) => {
                 this.unblockUI();
                 this.selectedProgramVersion = programVersionFull;
@@ -271,7 +271,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProgramEdit(this.gridProgram.id, {
+                this.tyrionBackendService.mProgramEdit(this.gridProgram.id, {
                     name: model.name,
                     description: model.description,
                 })
@@ -292,7 +292,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.modalService.showModal(new ModalsRemovalModel(this.gridProgram.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProgramDelete(this.gridProgram.id)
+                this.tyrionBackendService.mProgramDelete(this.gridProgram.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -316,7 +316,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.modalService.showModal(m).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.mProgramVersionCreate(this.gridId, { // TODO [permission]: M_Program.create_permission
+                this.tyrionBackendService.mProgramVersionCreate(this.gridId, { // TODO [permission]: M_Program.create_permission
                     version_name: m.name,
                     version_description: m.description,
                     m_code: this.gridView.getDataJson(),
@@ -364,7 +364,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             return;
         }
 
-        this.backendService.gridWidgetVersionGet(event.type.version_id) // TODO [permission]: GridWidgetVersion_read_permission
+        this.tyrionBackendService.gridWidgetVersionGet(event.type.version_id) // TODO [permission]: GridWidgetVersion_read_permission
             .then((widgetVersion) => {
                 this.widgetSourceCache[event.type.version_id] = widgetVersion.logic_json;
                 event.resolve(widgetVersion.logic_json);

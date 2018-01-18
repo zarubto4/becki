@@ -129,7 +129,7 @@ fileWriteLine('/**************************************************************/'
 fileWriteLine();
 fileWriteLine('/* tslint:disable */');
 fileWriteLine();
-fileWriteLine();
+fileWriteLine('import { HomerAPI } from \'./HomerAPI\';');
 
 // DEFINITIONS:
 
@@ -388,7 +388,7 @@ let makeReadableMethodName = (method: string, url: string, pathObj: string) => {
     });
 
     if (first_prefix === null || second_prefix === null ) {
-        throwError('Missing fist or second Parameter');
+        throwError('Missing fist or second Parameter Something like Get_ Set_ Add_ Delete_ etc... Maybe char "_" is missing???? ::: ' +  ' URL: ' + url + ' path: ' + pathObj.toString() + ' first prefix:: ' + first_prefix + ' second prefix' + second_prefix);
     }
 
     // But first part to lowecase
@@ -450,7 +450,7 @@ for (let pathUrl in paths) {
 
 methodsNames.sort();
 
-fileWriteLine('export abstract class ' + className + ' {');
+fileWriteLine('export abstract class ' + className + ' extends HomerAPI {');
 fileWriteLine();
 fileWriteLine('    protected abstract requestRestPath<T>(method:string, path:string, body:Object, success:number[]):Promise<T>;');
 fileWriteLine();

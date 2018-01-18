@@ -9,7 +9,7 @@ import { ModalModel } from '../services/ModalService';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { TranslationService } from '../services/TranslationService';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 
 
 export class ModalsPictureUploadModel extends ModalModel {
@@ -52,7 +52,7 @@ export class ModalsPictureUploadComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private translationService: TranslationService, private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private translationService: TranslationService, private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             'defaultPicture': [''],
             'avatar_picture': [''],

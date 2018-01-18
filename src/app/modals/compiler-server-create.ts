@@ -6,7 +6,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 
 export class ModalsCreateCompilerServerModel extends ModalModel {
@@ -33,7 +33,7 @@ export class ModalsCreateCompilationServerComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             'personal_server_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],

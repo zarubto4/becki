@@ -6,7 +6,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IProductExtensionType } from '../backend/TyrionAPI';
@@ -43,7 +43,7 @@ export class ModalsExtensionComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             'color': ['', [Validators.required]],

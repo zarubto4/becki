@@ -42,7 +42,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.backendService.typeOfBoardsGetAll(), this.backendService.processorGetAll(), this.backendService.producersGetAll()])
+        Promise.all<any>([this.tyrionBackendService.typeOfBoardsGetAll(), this.tyrionBackendService.processorGetAll(), this.tyrionBackendService.producersGetAll()])
             .then((values: [ITypeOfBoard[], IProcessor[], IProducer[]]) => {
                 this.typeOfBoards = values[0];
                 this.processors = values[1];
@@ -66,7 +66,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardCreate({
+                this.tyrionBackendService.typeOfBoardCreate({
                     description: model.description,
                     name: model.name,
                     compiler_target_name: model.compiler_target_name,
@@ -90,7 +90,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.producerCreate({
+                this.tyrionBackendService.producerCreate({
                     description: model.description,
                     name: model.name
                 })
@@ -110,7 +110,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.processorCreate({
+                this.tyrionBackendService.processorCreate({
                     description: model.description,
                     processor_code: model.processor_code,
                     processor_name: model.processor_name,
@@ -132,7 +132,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.processorEdit(processor.id, {
+                this.tyrionBackendService.processorEdit(processor.id, {
                     description: model.description,
                     processor_code: model.processor_code,
                     processor_name: model.processor_name,
@@ -153,7 +153,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.producerEdit(producer.id, {
+                this.tyrionBackendService.producerEdit(producer.id, {
                     description: model.description,
                     name: model.name
                 })
@@ -181,7 +181,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardEdit(typeOfBoard.id, {
+                this.tyrionBackendService.typeOfBoardEdit(typeOfBoard.id, {
                     description: model.description,
                     name: model.name,
                     compiler_target_name: model.compiler_target_name,
@@ -212,7 +212,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(new ModalsRemovalModel(typeOfBoard.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardDelete(typeOfBoard.id)
+                this.tyrionBackendService.typeOfBoardDelete(typeOfBoard.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -229,7 +229,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(new ModalsRemovalModel(processor.processor_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.processorDelete(processor.id)
+                this.tyrionBackendService.processorDelete(processor.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -246,7 +246,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(new ModalsRemovalModel(producer.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.producerDelete(producer.id)
+                this.tyrionBackendService.producerDelete(producer.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -264,7 +264,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardCreateManualRegistration({
+                this.tyrionBackendService.boardCreateManualRegistration({
                     full_id: model.processorId,
                     type_of_board_id: model.typeOfBoard
                 })
@@ -285,7 +285,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
 
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
 
-        this.backendService.boardsGetWithFilterParameters(pageNumber, {
+        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
             type_of_board_ids: boardTypes
         })
             .then((values) => {
@@ -307,7 +307,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(new ModalsRemovalModel(board.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardDeactivate(board.id)
+                this.tyrionBackendService.boardDeactivate(board.id)
                     .then(() => {
                         this.refresh();
                         this.unblockUI();
@@ -324,7 +324,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.refresh();
                         this.unblockUI();
@@ -340,7 +340,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
 
     onHardwareSynchronize(): void {
         this.blockUI();
-        this.backendService.boardSynchronizeAllWithCentralRegistrationAuthority()
+        this.tyrionBackendService.boardSynchronizeAllWithCentralRegistrationAuthority()
             .then(() => {
                 this.unblockUI();
                 this.onFilterHardware(0);
@@ -354,7 +354,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
 
     onPrintLabelHardwareClick(device: IBoardShortDetail): void {
         this.blockUI();
-        this.backendService.boardPrintlabel(device.id)
+        this.tyrionBackendService.boardPrintlabel(device.id)
             .then(() => {
                 this.unblockUI();
             })

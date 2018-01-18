@@ -45,14 +45,14 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
 
     onFilterInstances(pageNumber: number = 0): void {
         this.blockUI();
-        this.backendService.instanceGetByFilter(pageNumber, {
+        this.tyrionBackendService.instanceGetByFilter(pageNumber, {
             project_id: this.id
         })
             .then((values) => {
                 this.instanceFilter = values;
 
                 this.instanceFilter.content.forEach((instance, index, obj) => {
-                    this.backendService.onlineStatus.subscribe((status) => {
+                    this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'HomerInstance' && instance.id === status.model_id) {
                             instance.online_state = status.online_status;
                         }
@@ -88,7 +88,7 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.instanceEdit(instance.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.instanceEdit(instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -114,7 +114,7 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.instanceSetStartOrShutDown(instance.id)
+                    this.tyrionBackendService.instanceSetStartOrShutDown(instance.id)
                         .then(() => {
                             this.storageService.projectRefresh(this.id);
                             this.unblockUI();

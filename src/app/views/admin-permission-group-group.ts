@@ -47,7 +47,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
 
     refresh(): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.roleGet(this.id)])
+        Promise.all<any>([this.tyrionBackendService.roleGet(this.id)])
             .then((values: [ISecurityRole]) => {
                 this.securityRole = values[0];
                 this.unblockUI();
@@ -68,7 +68,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.roleEdit(this.securityRole.id, {
+                this.tyrionBackendService.roleEdit(this.securityRole.id, {
                     description: model.description,
                     name: model.name
                 })
@@ -87,7 +87,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(new ModalsRemovalModel(this.securityRole.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.roleDelete(this.securityRole.id)
+                this.tyrionBackendService.roleDelete(this.securityRole.id)
                     .then(() => {
                         this.unblockUI();
                         this.navigate(['/admin/permission-group']);
@@ -111,7 +111,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.roleAddPerson(this.id, { persons_mail: m.emails })
+                    this.tyrionBackendService.roleAddPerson(this.id, { persons_mail: m.emails })
                         .then(() => {
                             this.refresh(); // also unblockUI
                         })
@@ -124,7 +124,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
     }
 
     onMemberDeleteClick(member: IPersonMiddleDetail) {
-        if ((this.backendService.personInfoSnapshot.mail === member.mail) || (this.backendService.personInfoSnapshot.id === member.id)) {
+        if ((this.tyrionBackendService.personInfoSnapshot.mail === member.mail) || (this.tyrionBackendService.personInfoSnapshot.id === member.id)) {
             this.fmError(this.translate('label_cannot_remove_yourself'));
         }
 
@@ -134,7 +134,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
                 return;
             } else {
                 this.blockUI();
-                this.backendService.roleRemovePerson(this.id, member.id)
+                this.tyrionBackendService.roleRemovePerson(this.id, member.id)
                     .then(() => {
                         this.refresh(); // also unblockUI
                     })
@@ -148,14 +148,14 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
 
 
     onPermissionAddClick() {
-        Promise.all<any>([this.backendService.permissionsGetAll()])
+        Promise.all<any>([this.tyrionBackendService.permissionsGetAll()])
             .then((values: [IPermission[]]) => {
                 let m = new ModalsRolePermissionAddModel(values[0]);
                 this.modalService.showModal(m)
                     .then((success) => {
                         if (success) {
                             this.blockUI();
-                            this.backendService.roleAddPermissions(this.id, { permissions: m.permissionsForAdd })
+                            this.tyrionBackendService.roleAddPermissions(this.id, { permissions: m.permissionsForAdd })
                                 .then(() => {
                                     this.refresh(); // also unblockUI
                                 })
@@ -177,7 +177,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.permissionEdit(permission.permission_key, {
+                this.tyrionBackendService.permissionEdit(permission.permission_key, {
                     description: model.description,
                 })
                     .then(() => {
@@ -195,7 +195,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(new ModalsRemovalModel(permission.permission_key)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.roleRemovePermission(this.id, permission.permission_key)
+                this.tyrionBackendService.roleRemovePermission(this.id, permission.permission_key)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI

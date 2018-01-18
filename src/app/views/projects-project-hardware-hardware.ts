@@ -15,7 +15,7 @@ import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
-import { OnlineChangeStatus, BeckiBackend, ITerminalWebsocketMessage, IWebsocketTerminalState } from '../backend/BeckiBackend';
+import { OnlineChangeStatus, TyrionApiBackend, ITerminalWebsocketMessage, IWebsocketTerminalState } from '../backend/BeckiBackend';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
@@ -90,7 +90,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.colorForm = this.formBuilder.group({
         });
 
-        this.backendService.onlineStatus.subscribe(status => {
+        this.tyrionBackendService.onlineStatus.subscribe(status => {
             if (status.model === 'Board') {
                 if (this.hardwareId === status.model_id) {
                     this.device.online_state = status.online_status;
@@ -114,7 +114,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
 
-        this.backendService.objectUpdateTyrionEcho.subscribe((status) => {
+        this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
             if (status.model === 'Board' && this.hardwareId === status.model_id) {
                 this.refresh();
                 this.onFilterActualizationProcedureTask();
@@ -173,8 +173,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             if (success) {
                 let con = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1)); // dont need chceck if exist cuz we know its exist
                 this.avalibleHardware = con;
-                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
-                // this.backendService.closeHardwareTerminalWebsocket(terminal.hardwareURL + ':' + terminal.hardwareURLport); // TODO lepší je ponechat WS otevřený v "resting" stavu a pak je všechny zavřít najedou
+                this.tyrionBackendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
+                // this.tyrionBackendService.closeHardwareTerminalWebsocket(terminal.hardwareURL + ':' + terminal.hardwareURLport); // TODO lepší je ponechat WS otevřený v "resting" stavu a pak je všechny zavřít najedou
             }
         });
     }
@@ -190,8 +190,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
                 this.terminalHardware.find(terminals => terminal.id === terminals.id).logLevel = logLevel;
 
-                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
-                this.backendService.requestDeviceTerminalSubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport, logLevel);
+                this.tyrionBackendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
+                this.tyrionBackendService.requestDeviceTerminalSubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport, logLevel);
 
             }
         });
@@ -219,7 +219,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         return true;
                     }
                 })) {
-                    this.backendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
+                    this.tyrionBackendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
                 }
 
 
@@ -233,7 +233,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     'connected': false
                 });
 
-                this.backendService.requestDeviceTerminalSubcribe(model.selectedBoard.id, model.selectedBoard.hardwareURL + ':' + model.selectedBoard.hardwareURLport, model.logLevel);
+                this.tyrionBackendService.requestDeviceTerminalSubcribe(model.selectedBoard.id, model.selectedBoard.hardwareURL + ':' + model.selectedBoard.hardwareURLport, model.logLevel);
                 this.lastInstance++;
 
 
@@ -255,11 +255,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         //  this.hardwareTerminalWS.unsubscribe();
 
         this.terminalHardware.forEach(hardware => {
-            this.backendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.hardwareURL + ':' + hardware.hardwareURLport);
+            this.tyrionBackendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.hardwareURL + ':' + hardware.hardwareURLport);
         });
 
 
-        this.backendService.closeHardwareTerminalWebsocket('all');
+        this.tyrionBackendService.closeHardwareTerminalWebsocket('all');
     }
 
     onToggleHardwareTab(tab: string) {
@@ -273,10 +273,10 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.WSinit = true;
 
 
-            this.hardwareTerminalWS = this.backendService.hardwareTerminal;
+            this.hardwareTerminalWS = this.tyrionBackendService.hardwareTerminal;
             this.hardwareTerminalWS.subscribe(msg => this.onMessage(msg));
 
-            this.hardwareTerminalStateWS = this.backendService.hardwareTerminalState;
+            this.hardwareTerminalStateWS = this.tyrionBackendService.hardwareTerminalState;
             this.hardwareTerminalStateWS.subscribe(msg => this.onStateMessage(msg));
 
             this.colorForm.valueChanges.subscribe(value => {
@@ -302,7 +302,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
             }
 
-            this.backendService.boardsGetWithFilterParameters(0, { // TODO https://youtrack.byzance.cz/youtrack/issue/BECKI-368
+            this.tyrionBackendService.boardsGetWithFilterParameters(0, { // TODO https://youtrack.byzance.cz/youtrack/issue/BECKI-368
                 projects: [this.projectId],
                 type_of_board_ids: []
             }).then(boards => {
@@ -312,7 +312,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
 
                 hardwares.map(hardware => {
-                    this.backendService.boardGet(hardware.id).then(board => {
+                    this.tyrionBackendService.boardGet(hardware.id).then(board => {
                         if (board.server && board.server.server_url) {
                             this.avalibleHardware.push({
                                 'id': hardware.id,
@@ -320,7 +320,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                                 'name': hardware.name,
                                 'onlineStatus': board.online_state,
                                 'hardwareURL': board.server.server_url,
-                                'hardwareURLport': board.server.hardware_log_port,
+                                'hardwareURLport': board.server.server_remote_port,
                                 'connected': false
                             });
                         } else {
@@ -349,18 +349,18 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     refresh(): void {
         this.blockUI();
-        this.backendService.boardGet(this.hardwareId) // TODO [permission]: Project.read_permission
+        this.tyrionBackendService.boardGet(this.hardwareId) // TODO [permission]: Project.read_permission
             .then((board) => {
                 this.device = board;
                 this.config_array();
 
-                this.backendService.onlineStatus.subscribe(status => {
+                this.tyrionBackendService.onlineStatus.subscribe(status => {
                     if (status.model === 'HomerServer' && this.device.server.id === status.model_id) {
                         this.device.server.online_state = status.online_status;
                     }
                 });
 
-                return this.backendService.typeOfBoardGet(board.type_of_board_id);
+                return this.tyrionBackendService.typeOfBoardGet(board.type_of_board_id);
 
             })
             .then((typeOfBoard) => {
@@ -376,7 +376,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
     terminalFirstRun(board: IBoard): void {
-        this.backendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + '');
+        this.tyrionBackendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + '');
 
         // TODO při změně jména/aliasu refreshnout název terminálu
 
@@ -388,7 +388,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             'name': this.device.name,
             'onlineStatus': this.device.online_state,
             'hardwareURL': board.server.server_url,
-            'hardwareURLport': board.server.hardware_log_port,
+            'hardwareURLport': board.server.server_remote_port,
             'connected': false
         });
 
@@ -406,7 +406,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
         });
         if (this.device.server && this.device.server.server_url) {
-            this.backendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.hardware_log_port, 'info');
+            this.tyrionBackendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.server_remote_port, 'info');
         }
     }
 
@@ -432,7 +432,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardEditPersonalDescription(device.id, {
+                this.tyrionBackendService.boardEditPersonalDescription(device.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -452,7 +452,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardDisconnectFromProject(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
+                this.tyrionBackendService.boardDisconnectFromProject(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -471,7 +471,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardUploadPicture(this.device.id, { // TODO [permission]: edit_permission
+                this.tyrionBackendService.boardUploadPicture(this.device.id, { // TODO [permission]: edit_permission
                     file: model.file
                 })
                     .then(() => {
@@ -488,7 +488,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     onEditParameterValue_Boolean_Click(parameter_type: string, value: boolean): void {
         this.blockUI();
-        this.backendService.boardEditDevelopersParameters(this.device.id, {
+        this.tyrionBackendService.boardEditDevelopersParameters(this.device.id, {
             parameter_type: parameter_type,
             boolean_value: value
         })
@@ -514,7 +514,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardEditDevelopersParameters(this.device.id, {
+                this.tyrionBackendService.boardEditDevelopersParameters(this.device.id, {
                     parameter_type: parameter_type,
                     integer_value: model.value
                 })
@@ -531,7 +531,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onRestartDeviceClick(): void {
-        this.backendService.boardCommandExecution({
+        this.tyrionBackendService.boardCommandExecution({
             board_id: this.device.id,
             command: 'RESTART'
         })
@@ -560,7 +560,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onSwitchToBootloaderDeviceClick(): void {
-        this.backendService.boardCommandExecution({
+        this.tyrionBackendService.boardCommandExecution({
             board_id: this.device.id,
             command: 'SWITCH_TO_BOOTLOADER'
         })
@@ -586,7 +586,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardEditDevelopersParameters(this.device.id, {
+                this.tyrionBackendService.boardEditDevelopersParameters(this.device.id, {
                     parameter_type: parameter_type,
                     string_value: model.value
                 })
@@ -612,7 +612,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.hardwareUpdateBootloader({
+                    this.tyrionBackendService.hardwareUpdateBootloader({
                         device_ids: [this.device.id]
                     })
                         .then(() => {
@@ -636,7 +636,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL', 'MANUALLY_BY_USER_BLOCKO_GROUP', 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME', 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE', 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
         this.blockUI();
 
-        this.backendService.actualizationTaskGetByFilter(pageNumber, {
+        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
             actualization_procedure_ids: null,
             board_ids: [this.device.id],
             instance_ids: [],
@@ -648,10 +648,10 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.actualizationTaskFilter = values;
 
                 this.actualizationTaskFilter.content.forEach((task, index, obj) => {
-                    this.backendService.objectUpdateTyrionEcho.subscribe((status) => {
+                    this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
 
-                            this.backendService.actualizationTaskGet(task.id)
+                            this.tyrionBackendService.actualizationTaskGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
                                     task.date_of_finish = value.date_of_finish;
@@ -684,7 +684,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
+                        this.tyrionBackendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
                             board_backup_pair_list: [
                                 {
                                     board_id: this.device.id,
@@ -704,7 +704,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
         } else {
             this.blockUI();
-            this.backendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
+            this.tyrionBackendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
                 board_backup_pair_list: [
                     {
                         board_id: this.device.id,

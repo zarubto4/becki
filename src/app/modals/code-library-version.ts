@@ -5,7 +5,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import {
@@ -38,7 +38,7 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
 
     loading = false;
 
-    constructor(private backendService: BackendService) {
+    constructor(private backendService: TyrionBackendService) {
     }
 
     onLibraryVersionClick(libraryVersion: ILibraryVersionShortDetail) {

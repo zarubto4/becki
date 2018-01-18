@@ -36,7 +36,7 @@ export class AdminDashboardComponent extends BaseMainComponent implements OnInit
 
     refresh(): void {
         this.blockUI();
-        this.backendService.reportAdminDashboardGet()
+        this.tyrionBackendService.reportAdminDashboardGet()
             .then(report => {
                 this.report = report;
                 this.unblockUI();

@@ -5,7 +5,7 @@
 
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 
 @Component({
@@ -18,7 +18,7 @@ export class LogoutComponent {
 
     logoutInProgress: boolean = false;
 
-    constructor(private backendService: BackendService, private router: Router, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private router: Router, private translationService: TranslationService) {
 
         this.logout();
 

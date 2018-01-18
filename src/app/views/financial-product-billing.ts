@@ -54,7 +54,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
 
     refresh(): void {
         this.blockUI();
-        this.backendService.productGet(this.id).then(product => {
+        this.tyrionBackendService.productGet(this.id).then(product => {
             this.product = product;
             this.productPaymentDetails = this.product.payment_details;
             this.customer = this.product.customer;
@@ -87,7 +87,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.productEditPaymentDetails(this.productPaymentDetails.id, {
+                this.tyrionBackendService.productEditPaymentDetails(this.productPaymentDetails.id, {
                     city: model.city,
                     company_authorized_email: model.company_authorized_email,
                     company_authorized_phone: model.company_authorized_phone,
@@ -132,7 +132,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.companyUpdate(this.customer.id, {
+                this.tyrionBackendService.companyUpdate(this.customer.id, {
                     city: model.city,
                     company_authorized_email: model.company_authorized_email,
                     company_authorized_phone: model.company_authorized_phone,

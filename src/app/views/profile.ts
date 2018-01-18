@@ -5,7 +5,7 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { NotificationService, Notification, FlashMessage } from '../services/NotificationService';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
 import { FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
@@ -37,7 +37,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     openTabName = 'personal';
 
-    constructor(injector: Injector, public backendService: BackendService, protected notificationService: NotificationService) {
+    constructor(injector: Injector, public backendService: TyrionBackendService, protected notificationService: NotificationService) {
         super(injector);
 
         this.emailForm = this.formBuilder.group({

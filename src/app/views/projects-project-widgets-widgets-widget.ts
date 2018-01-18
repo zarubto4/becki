@@ -107,7 +107,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             }
 
             if (!this.projectId && this.typeOfWidgetId) {
-                Promise.all<any>([this.backendService.typeOfWidgetGet(this.typeOfWidgetId)])
+                Promise.all<any>([this.tyrionBackendService.typeOfWidgetGet(this.typeOfWidgetId)])
                     .then((values: [ITypeOfWidget]) => {
                         this.group = values[0];
                         this.unblockUI();
@@ -149,7 +149,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetEdit(this.widget.id, {
+                this.tyrionBackendService.gridWidgetEdit(this.widget.id, {
                     name: model.name,
                     description: model.description,
                     type_of_widget_id: this.typeOfWidgetId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
@@ -172,7 +172,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(new ModalsRemovalModel(this.widget.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetDelete(this.widget.id)
+                this.tyrionBackendService.gridWidgetDelete(this.widget.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
 
@@ -199,7 +199,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(new ModalsRemovalModel(version.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetVersionDelete(version.id)
+                this.tyrionBackendService.gridWidgetVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed_success')));
                         if (this.projectId) {
@@ -223,7 +223,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetVersionEdit(version.id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.gridWidgetVersionEdit(version.id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -269,7 +269,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     refresh(): void {
 
         this.blockUI();
-        this.backendService.gridWidgetGet(this.widgetId) // TODO [permission]: GridWidget_read_permission
+        this.tyrionBackendService.gridWidgetGet(this.widgetId) // TODO [permission]: GridWidget_read_permission
             .then((widget) => {
                 this.widget = widget;
 
@@ -301,7 +301,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     selectWidgetVersion(version: IGridWidgetVersionShortDetail) {
         this.blockUI();
-        this.backendService.gridWidgetVersionGet(version.id) // TODO [permission]: GridWidgetVersion_read_permission
+        this.tyrionBackendService.gridWidgetVersionGet(version.id) // TODO [permission]: GridWidgetVersion_read_permission
             .then((widgetVersion) => {
 
                 this.cleanTestView();
@@ -524,7 +524,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 let designJson = JSON.stringify({});
 
                 this.blockUI();
-                this.backendService.gridWidgetVersionCreate(this.widgetId, { // TODO [permission]: GridWidgetVersion_create_permission" : "create: If user have GridWidget.update_permission = true,
+                this.tyrionBackendService.gridWidgetVersionCreate(this.widgetId, { // TODO [permission]: GridWidgetVersion_create_permission" : "create: If user have GridWidget.update_permission = true,
                     version_name: m.name,
                     version_description: m.description,
                     logic_json: this.widgetCode,
@@ -549,7 +549,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(new ModalsPublicShareRequestModel(this.widget.name, programVersion.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetVersionMakePublic(programVersion.id)
+                this.tyrionBackendService.gridWidgetVersionMakePublic(programVersion.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
                         this.refresh();
@@ -566,7 +566,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     onProgramVersionPublishResult(version: IGridWidgetVersionShortDetail): void {
 
-        Promise.all<any>([this.backendService.typeOfWidgetGetByFilter(0, {
+        Promise.all<any>([this.tyrionBackendService.typeOfWidgetGetByFilter(0, {
             public_programs: true,       // For public its required
         })
         ])
@@ -597,7 +597,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.gridWidgetVersionEditResponsePublication({
+                        this.tyrionBackendService.gridWidgetVersionEditResponsePublication({
                             version_id: version.id,
                             version_name: model.version_name,
                             version_description: model.version_description,
@@ -630,7 +630,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetMakeClone({
+                this.tyrionBackendService.gridWidgetMakeClone({
                     grid_widget_id: this.widget.id,
                     type_of_widget_id: model.type_of_widget,
                     project_id: this.projectId,
@@ -651,7 +651,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     onWidgetSetMainClick(version: IGridWidgetVersionShortDetail): void {
         this.blockUI();
-        this.backendService.gridWidgetVersionSetAsMain(version.id)
+        this.tyrionBackendService.gridWidgetVersionSetAsMain(version.id)
             .then(() => {
                 this.refresh();
             })

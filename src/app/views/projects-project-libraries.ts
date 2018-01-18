@@ -75,7 +75,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         this.modalService.showModal(new ModalsRemovalModel(library.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryDelete(library.id)
+                this.tyrionBackendService.libraryDelete(library.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_removed_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -93,7 +93,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryCreate({
+                this.tyrionBackendService.libraryCreate({
                     project_id: this.id,
                     name: model.name,
                     description: model.description
@@ -115,7 +115,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryMakeClone({
+                this.tyrionBackendService.libraryMakeClone({
                     library_id: library.id,
                     project_id: this.id,
                     name: model.name,
@@ -137,7 +137,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryEdit(library.id, {
+                this.tyrionBackendService.libraryEdit(library.id, {
                     project_id: this.id,
                     name: model.name,
                     description: model.description
@@ -167,7 +167,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
             page = 1;
         }
 
-        this.backendService.libraryGetShortListByFilter(page, {
+        this.tyrionBackendService.libraryGetShortListByFilter(page, {
             public_library: true,
         })
             .then((iLibraryList) => {

@@ -8,7 +8,7 @@
 
 import { Input, Output, EventEmitter, Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
 import { ICProgramShortDetailForBlocko } from '../backend/TyrionAPI';
@@ -40,7 +40,7 @@ export class ModalsCodeSelectComponent {
 
     errorMessage: string = null;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
     }
 
     onValueChanged(versionId: string) {

@@ -91,7 +91,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     ngOnInit(): void {
         this.blockUI();
 
-        Promise.all<any>([this.backendService.tariffsGetAll(), this.backendService.companiesGetAll()])
+        Promise.all<any>([this.tyrionBackendService.tariffsGetAll(), this.tyrionBackendService.companiesGetAll()])
             .then((values: [ITariff[], ICustomer[]]) => {
                 this.tariffs = values[0];
                 this.companies = values[1];
@@ -164,7 +164,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'street': ['', [Validators.required]],
             'street_number': ['', [Validators.required]],
             'company_registration_no': ['', [BeckiValidators.condition(() => !this.inEu, Validators.required)]],
-            'company_vat_number': ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))],
+            'company_vat_number': ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.tyrionBackendService, 'vat_number'))],
             'zip_code': ['', [Validators.required, Validators.minLength(4)]]
         });
 
@@ -215,7 +215,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'street': ['', [Validators.required]],
             'street_number': ['', [Validators.required]],
             'company_registration_no': ['', [BeckiValidators.condition(() => !this.inEu, Validators.required), Validators.minLength(4), Validators.maxLength(20)]],
-            'company_vat_number': ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))],
+            'company_vat_number': ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.tyrionBackendService, 'vat_number'))],
             'zip_code': ['', [Validators.required]]
         });
 
@@ -439,7 +439,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     onCreateCompany(): void {
 
-        this.backendService.companyCreate({
+        this.tyrionBackendService.companyCreate({
             city: this.formCustomerRegistration.controls['city'].value,
             company_authorized_email: this.formCustomerRegistration.controls['company_authorized_email'].value,
             company_authorized_phone: this.formCustomerRegistration.controls['company_authorized_phone'].value,
@@ -471,7 +471,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     refreshCompaniesForDecision(): void {
         this.blockUI();
-        this.backendService.companiesGetAll()
+        this.tyrionBackendService.companiesGetAll()
             .then((companies) => {
 
                 this.companies = companies;
@@ -579,7 +579,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
 
 
-        this.backendService.productCreate(tariffDataForRegistration)
+        this.tyrionBackendService.productCreate(tariffDataForRegistration)
             .then(response => {
                 if ((<any>response)._code_ === 200) {
                     this.fmWarning(this.translate('flash_product_created_prepaid'));

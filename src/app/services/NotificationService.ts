@@ -3,7 +3,7 @@
  */
 import moment = require('moment/moment');
 import { Injectable, NgZone } from '@angular/core';
-import { BackendService } from './BackendService';
+import { TyrionBackendService } from './BackendService';
 import { INotification, INotificationElement, INotificationButton } from '../backend/TyrionAPI';
 import { NullSafe } from '../helpers/NullSafe';
 import { Router } from '@angular/router';
@@ -266,7 +266,7 @@ export class NotificationService {
 
     protected highImportanceOverlayTimeout: any = null;
 
-    constructor(protected backendService: BackendService, protected router: Router, protected zone: NgZone, protected translationService: TranslationService) {
+    constructor(protected backendService: TyrionBackendService, protected router: Router, protected zone: NgZone, protected translationService: TranslationService) {
         console.info('NotificationService init');
 
         // tick for overlay notifs

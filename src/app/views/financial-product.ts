@@ -53,7 +53,7 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.productEditDetails(this.product.id, {
+                this.tyrionBackendService.productEditDetails(this.product.id, {
                     name: model.name,
                 })
                     .then(() => {
@@ -76,7 +76,7 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
         this.modalService.showModal(new ModalsDeactivateModel(this.product.name, false, this.translate('label_modal_body_text'))).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.productDeactivate(this.product.id)
+                this.tyrionBackendService.productDeactivate(this.product.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_deactivated')));
                         this.router.navigate(['/financial']);
@@ -93,7 +93,7 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
         this.modalService.showModal(new ModalsDeactivateModel(this.product.name, true, null)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.productActivate(this.product.id)
+                this.tyrionBackendService.productActivate(this.product.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_activated')));
                         this.refresh(); // also unblockUI
@@ -109,7 +109,7 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
 
     refresh(): void {
         this.blockUI();
-        this.backendService.productGet(this.id).then(product => {
+        this.tyrionBackendService.productGet(this.id).then(product => {
             this.product = product;
             this.unblockUI();
         })

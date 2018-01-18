@@ -65,7 +65,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         super(injector);
         this.homerService = injector.get(HomerService);
 
-        this.backendService.onlineStatus.subscribe((status) => {
+        this.tyrionBackendService.onlineStatus.subscribe((status) => {
             if (status.model === 'HomerInstance' && this.instanceId === status.model_id) {
                 this.instance.online_state = status.online_status;
             }
@@ -80,7 +80,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.instanceEdit(this.instance.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.instanceEdit(this.instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -144,7 +144,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     refresh(): void {
         this.blockUI();
         // this.instance.actual_instance.procedures.forEach(proc => proc.updates.forEach(update => update.));
-        this.backendService.instanceGet(this.instanceId) // TODO [permission]: "B_program.update_permission"
+        this.tyrionBackendService.instanceGet(this.instanceId) // TODO [permission]: "B_program.update_permission"
             .then((instance) => {
 
                 this.instance = instance;
@@ -152,7 +152,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
 
-                this.backendService.onlineStatus.subscribe((status) => {
+                this.tyrionBackendService.onlineStatus.subscribe((status) => {
                     if (status.model === 'HomerServer' && this.instance.server_id === status.model_id) {
                         this.instance.server_online_state = status.online_status;
                     }
@@ -164,7 +164,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
                     this.instance.actual_instance.hardware_group.forEach((deviceGroup, index, obj) => {
 
-                        this.backendService.onlineStatus.subscribe((status) => {
+                        this.tyrionBackendService.onlineStatus.subscribe((status) => {
                             if (status.model === 'Board' && deviceGroup.main_board_pair.board_id === status.model_id) {
                                 deviceGroup.main_board_pair.online_state = status.online_status;
                             }
@@ -193,7 +193,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     onGridProgramPublishClick(gridProgram: IMProgramInstanceParameter) {
         this.blockUI();
-        this.backendService.instanceUpdateGridSettings({
+        this.tyrionBackendService.instanceUpdateGridSettings({
             m_program_parameter_id: gridProgram.id,
             snapshot_settings: gridProgram.snapshot_settings === 'absolutely_public' ? 'only_for_project_members' : 'absolutely_public'
         })
@@ -236,13 +236,13 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     changeVersionAction() {
 
-        this.backendService.bProgramGet(this.instance.actual_instance.b_program_id).then((blocko) => {
+        this.tyrionBackendService.bProgramGet(this.instance.actual_instance.b_program_id).then((blocko) => {
             let m = new ModalsBlockoVersionSelectModel(blocko.program_versions, NullSafe(() => this.instance.actual_instance.b_program_version_id));
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.bProgramVersionUploadToCloud(m.programVersion, {}) // TODO [permission]: B_program.update_permission
+                        this.tyrionBackendService.bProgramVersionUploadToCloud(m.programVersion, {}) // TODO [permission]: B_program.update_permission
                             .then(() => {
                                 this.storageService.projectRefresh(this.projectId);
                                 this.refresh();
@@ -286,7 +286,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.instanceSetStartOrShutDown(this.instanceId)
+                    this.tyrionBackendService.instanceSetStartOrShutDown(this.instanceId)
                         .then(() => {
                             this.storageService.projectRefresh(this.projectId);
                             this.unblockUI();
@@ -336,14 +336,14 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     loadBlockoLiveView() {
         this.zone.runOutsideAngular(() => {
             if (this.blockoView && this.instance.actual_instance && this.instance.actual_instance.b_program_version_id) {
-                this.backendService.bProgramVersionGet(this.instance.actual_instance.b_program_version_id) // TODO [permission]: B_program.read_permission
+                this.tyrionBackendService.bProgramVersionGet(this.instance.actual_instance.b_program_version_id) // TODO [permission]: B_program.read_permission
                     .then((programVersionFull) => {
                         const selectedProgramVersion = programVersionFull;
                         console.info(JSON.stringify(selectedProgramVersion.program));
                         this.blockoView.setDataJson(selectedProgramVersion.program);
 
                         if (this.instance.instance_remote_url) {
-                            const authToken = this.backendService.getToken();
+                            const authToken = this.tyrionBackendService.getToken();
                             this.homerDao = this.homerService.connectToHomer(this.instance.instance_remote_url, authToken);
 
                             this.homerDao.onOpenCallback = (e) => {

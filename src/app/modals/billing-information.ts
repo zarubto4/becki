@@ -8,7 +8,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { IProducer, ITypeOfBoard } from '../backend/TyrionAPI';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
@@ -55,7 +55,7 @@ export class ModalsBillingInformationComponent implements OnInit {
 
     inEu: boolean = false;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             'city': ['', [Validators.required]],

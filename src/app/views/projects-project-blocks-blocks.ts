@@ -69,7 +69,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
 
     refresh(): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.typeOfBlockGet(this.typeOfBlockId)])
+        Promise.all<any>([this.tyrionBackendService.typeOfBlockGet(this.typeOfBlockId)])
             .then((values: [ITypeOfBlock]) => {
                 this.group = values[0];
                 this.unblockUI();
@@ -93,7 +93,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockMakeClone({
+                this.tyrionBackendService.blockoBlockMakeClone({
                     blocko_block_id: block.id,
                     type_of_blocks_id: model.type_of_blocks,
                     project_id: this.projectId,
@@ -118,7 +118,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBlockEdit(this.group.id, {
+                this.tyrionBackendService.typeOfBlockEdit(this.group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -146,7 +146,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(new ModalsRemovalModel(this.group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBlockDelete(this.group.id)
+                this.tyrionBackendService.typeOfBlockDelete(this.group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_groups_remove')));
                         if (this.projectId) {
@@ -175,7 +175,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockCreate({
+                this.tyrionBackendService.blockoBlockCreate({
                     type_of_block_id: group.id,
                     name: model.name,
                     general_description: model.description
@@ -207,7 +207,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockEdit(block.id, {
+                this.tyrionBackendService.blockoBlockEdit(block.id, {
                     name: model.name,
                     general_description: model.description,
                     type_of_block_id: this.typeOfBlockId // tohle je trochu divný ne?
@@ -238,7 +238,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(new ModalsRemovalModel(block.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.blockoBlockDelete(block.id)
+                this.tyrionBackendService.blockoBlockDelete(block.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
                         if (this.projectId) {
@@ -261,7 +261,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
 
     onBlockActivateClick(block: IBlockoBlockShortDetail): void {
         this.blockUI();
-        this.backendService.blockoBlockActivate(block.id)
+        this.tyrionBackendService.blockoBlockActivate(block.id)
             .then(() => {
                 this.refresh();
             })
@@ -273,7 +273,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
 
     onBlockDeactivateClick(block: IBlockoBlockShortDetail): void {
         this.blockUI();
-        this.backendService.blockoBlockDeactivate(block.id)
+        this.tyrionBackendService.blockoBlockDeactivate(block.id)
             .then(() => {
                 this.refresh();
             })

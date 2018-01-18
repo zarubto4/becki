@@ -5,7 +5,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IBoardGroup } from '../backend/TyrionAPI';
@@ -68,7 +68,7 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     single_error_message: string = null;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
 
         this.form = this.formBuilder.group({
             'id': ['', [Validators.required], BeckiAsyncValidators.hardwareDeviceId(backendService)],

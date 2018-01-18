@@ -5,7 +5,7 @@
 
 import { Injectable, Inject } from '@angular/core';
 import { Route, Routes, Router, ActivatedRouteSnapshot, NavigationEnd, NavigationCancel } from '@angular/router';
-import { BackendService } from './BackendService';
+import { TyrionBackendService } from './BackendService';
 import { LabeledLink } from '../helpers/LabeledLink';
 import { CurrentParamsService } from './CurrentParamsService';
 
@@ -23,7 +23,7 @@ export class BreadcrumbsService {
         @Inject('routes') protected routes: Routes,
         protected router: Router,
         protected currentParamsService: CurrentParamsService,
-        protected backendService: BackendService
+        protected backendService: TyrionBackendService
     ) {
         console.info('BreadcrumbsService init');
 

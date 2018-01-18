@@ -6,7 +6,7 @@
 
 
 import { Router, ActivatedRoute } from '@angular/router';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalService } from '../services/ModalService';
 import { Injector, NgZone } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -25,7 +25,7 @@ import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
 export abstract class BaseMainComponent {
 
     protected beckiImageLinks: BeckiImageLinks = null;
-    protected backendService: BackendService = null;
+    protected tyrionBackendService: TyrionBackendService = null;
     protected storageService: StorageService = null;
     protected router: Router = null;
     protected activatedRoute: ActivatedRoute = null;
@@ -40,7 +40,7 @@ export abstract class BaseMainComponent {
     constructor(protected injector: Injector) {
         // console.log('BaseMainComponent init');
         if (injector) {
-            this.backendService = injector.get(BackendService);
+            this.tyrionBackendService = injector.get(TyrionBackendService);
             this.storageService = injector.get(StorageService);
             this.router = injector.get(Router);
             this.activatedRoute = injector.get(ActivatedRoute);

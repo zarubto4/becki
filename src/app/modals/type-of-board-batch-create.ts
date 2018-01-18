@@ -5,7 +5,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { IApplicableProduct } from '../backend/TyrionAPI';
@@ -57,7 +57,7 @@ export class ModalsCreateTypeOfBoardBatchComponent implements OnInit {
         inline: false
     };
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             'revision': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],

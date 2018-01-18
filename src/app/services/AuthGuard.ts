@@ -5,12 +5,12 @@
 
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { BackendService } from './BackendService';
+import { TyrionBackendService } from './BackendService';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-    constructor(private backendService: BackendService, private router: Router) {
+    constructor(private backendService: TyrionBackendService, private router: Router) {
     }
 
     canActivate(): Promise<boolean> {
@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
 @Injectable()
 export class NonAuthGuard implements CanActivate {
 
-    constructor(private backendService: BackendService, private router: Router) {
+    constructor(private backendService: TyrionBackendService, private router: Router) {
     }
 
     canActivate(): Promise<boolean> {

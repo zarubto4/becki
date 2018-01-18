@@ -6,7 +6,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { CodeDirectory } from '../components/CodeIDEComponent';
 import { FileTreeObject } from '../components/FileTreeComponent';
@@ -62,7 +62,7 @@ export class ModalsCodeFileDialogComponent implements OnInit {
     textSubmit: string = 'btn_done';
     textCancel: string = 'btn_cancel';
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
     }
 
     ngOnInit() {

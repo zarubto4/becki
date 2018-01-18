@@ -29,7 +29,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        this.backendService.garfieldGetList()
+        this.tyrionBackendService.garfieldGetList()
             .then((garfield_s) => {
                 this.garfield_s = garfield_s;
                 this.unblockUI();
@@ -42,7 +42,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
 
     onCreateGarfield() {
         this.blockUI();
-        Promise.all<any>([this.backendService.producersGetAll(), this.backendService.typeOfBoardsGetAll()])
+        Promise.all<any>([this.tyrionBackendService.producersGetAll(), this.tyrionBackendService.typeOfBoardsGetAll()])
             .then((values: [IProducer[], ITypeOfBoard[]]) => {
                 let model = new ModalsGarfieldModel(
                     values[0],
@@ -51,7 +51,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.garfieldCreate({
+                        this.tyrionBackendService.garfieldCreate({
                             description: model.description,
                             name: model.name,
                             print_label_id_1: model.print_label_id_1,
@@ -94,7 +94,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.garfieldEdit(garfield.id, {
+                this.tyrionBackendService.garfieldEdit(garfield.id, {
                     description: model.description,
                     name: model.name,
                     print_label_id_1: model.print_label_id_1,
@@ -116,7 +116,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(new ModalsRemovalModel(garfield.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.garfieldDelete(garfield.id)
+                this.tyrionBackendService.garfieldDelete(garfield.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
