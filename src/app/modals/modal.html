@@ -2,6 +2,12 @@
     <div class="modal-dialog" [class.modal-width-80]="modalWrapper.modalModel?modalWrapper.modalModel.modalWide:false">
         <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
 
+
+
+
+            <template [ngSwitchCase]="'ModalsUpdateHomerServerModel'">
+                <bk-modals-homer-update-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-homer-update-server>
+            </template>
             <template [ngSwitchCase]="'ModalsHardwareChangeServerModel'">
                 <bk-modals-hardware-change-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-change-server>
             </template>

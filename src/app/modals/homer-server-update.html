@@ -1,0 +1,19 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+
+            <div *ngIf="options_available_version">
+                <bk-form-select [control]="form.controls.selected_version" [label]="'label_version'|bkTranslate:this" [options]="options_available_version"></bk-form-select>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{"btn_update"|bkTranslate:this}}</button>
+    </div>
+</div>

@@ -440,16 +440,16 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     public requestRestPath<T>(method: string, path: string, body: Object, success: number[]): Promise<T> {
 
-        console.log('requestRestPath', path);
+
         // If path contains http on beginning! or first char is "/" its on 100% api path from TyrionAPI
         // For example /login or /get_projects:{all}
         // But if contains https - for example https://homer.server.cz/get_something - it didnt used ${this.protocol}://${this.host}${path}
-        if (path.substring(0, 3) !== 'http' || path.charAt(0) === '/') {
+        if (path.charAt(0) === '/') {
             console.log('Its a Tyrion API');
             return this.requestRest(method, `${this.protocol}://${this.host}${path}`, body, success);
         } else {
             console.log('Its a External outside API');
-            return this.requestRest(method, `${path}`, body, success);
+            return this.requestRest(method, path, body, success);
         }
     }
 
@@ -493,6 +493,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                 }
             })
             .catch((e: any) => {
+                console.error(e);
                 this.tasks -= 1;
                 throw e;
             });

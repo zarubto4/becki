@@ -102,6 +102,9 @@ fileWriteLine();
 fileWriteLine('/* tslint:disable */');
 fileWriteLine();
 fileWriteLine();
+fileWriteLine('import { IHomerServer } from "./TyrionAPI";');
+fileWriteLine();
+fileWriteLine();
 // DEFINITIONS:
 var validateDefName = function (name) {
     var defNameValidated = name.replace(/[ ]/g, '_'); // replaces spaces
@@ -372,7 +375,8 @@ methodsNames.forEach(function (methodName) {
     var params = pathInfo['parameters'];
     var encodeQueries = [];
     if (params) {
-        outParameters.push('serverURL: string');
+        outParameters.push('serverURL:IHomerServer');
+        outParametersComment.push('@param serverURL');
         params.forEach(function (param) {
             if (param['in'] === 'path') {
                 var type = solveType(param);
@@ -500,7 +504,7 @@ methodsNames.forEach(function (methodName) {
     if (encodeQueries.length) {
         fileWriteLine(encodeQueries.join('\n'));
     }
-    fileWriteLine('        return this.requestRestPath(\"' + pathMethod.toLocaleUpperCase() + '\",' + ' serverURL' + basePath + ' + `' + pathUrlVariables + (queryParameters.length ? '?' + queryParameters.join('&') : '') + '`, ' + body + ', [' + returnCodes.join(',') + ']);');
+    fileWriteLine('        return this.requestRestPath(\"' + pathMethod.toLocaleUpperCase() + '\",' + ' `http://` +' + ' serverURL.server_url + (serverURL.rest_api_port !== null  ? \`:\` + serverURL.rest_api_port : \`\`) ' + basePath + ' + `' + pathUrlVariables + (queryParameters.length ? '?' + queryParameters.join('&') : '') + '`, ' + body + ', [' + returnCodes.join(',') + ']);');
     fileWriteLine('    }');
     fileWriteLine();
 });

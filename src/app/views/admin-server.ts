@@ -13,6 +13,7 @@ import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-creat
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IVersionOverview } from '../backend/HomerAPI';
+import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
 
 @Component({
     selector: 'bk-view-admin-server',
@@ -163,31 +164,13 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
             });
     }
 
-    onHomerServerUpdateServer(serverShortDetail: IHomerServer): void {
-
-        // Get full detail object first
-        Promise.all<any>([this.tyrionBackendService.homerServerGet(serverShortDetail.id)])
-            .then((values: [IHomerServer]) => {
-
-                // TODO Example API NA Homera
-                // TODO DOMINIK EXAMPLE ÚKOL
-                // NA tuto adresu budu posílat request
-                let homer_url = values[0].server_url;
-
-                this.tyrionBackendService.homerServerGetOverView(homer_url)
-                    .then((version: IVersionOverview) => {
-                        console.log('Version Objects', version);
-                    })
-                    .catch((reason) => {
-                        this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
-                        this.unblockUI();
-                    });
-
-            })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
-                this.unblockUI();
-            });
+    onHomerServerUpdateServer(server: IHomerServer): void {
+        let model = new ModalsUpdateHomerServerModel(server);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+            }
+        });
     }
 
     onHomerServerDeleteClick(serverShortDetail: IHomerServer): void {

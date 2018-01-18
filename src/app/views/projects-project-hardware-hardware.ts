@@ -376,7 +376,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
     terminalFirstRun(board: IBoard): void {
-        this.tyrionBackendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + '');
+        this.tyrionBackendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.server_remote_port + '');
 
         // TODO při změně jména/aliasu refreshnout název terminálu
 

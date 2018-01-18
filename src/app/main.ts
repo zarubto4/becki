@@ -137,6 +137,7 @@ import { TableListComponent } from './components/TableListComponent';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
 import { AdminDashboardComponent } from './views/admin-dashboard';
 import { ModalsCreateHomerServerComponent } from './modals/homer-server-create';
+import { ModalsUpdateHomerServerComponent } from './modals/homer-server-update';
 import { ModalsCreateCompilationServerComponent } from './modals/compiler-server-create';
 import { ModalsCreateProducerComponent } from './modals/create-producer';
 import { ModalsCreateProcessorComponent } from './modals/create-processor';
@@ -574,6 +575,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBillingInformationComponent,
         ModalsProjectPropertiesComponent,
         ModalsCreateHomerServerComponent,
+        ModalsUpdateHomerServerComponent,
         ModalsFinancialProductComponent,
         ModalsTariffComponent,
         ModalsPublicShareResponseComponent,

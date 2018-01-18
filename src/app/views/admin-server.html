@@ -72,6 +72,9 @@
                                         table tr button { opacity:0.05;}
                                         table tr:hover button { opacity:1 }
                                     </style>
+                                    <button title="{{'label_server_udpate'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!homer_server.edit_permission" (click)="onHomerServerUpdateServer(homer_server)">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
                                     <button title="{{'label_server_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!homer_server.edit_permission" (click)="onHomerServerEditClick(homer_server)">
                                         <i class="fa fa-cog"></i>
                                     </button>
