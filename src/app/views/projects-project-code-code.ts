@@ -325,9 +325,6 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 value: pv.tag_name
             };
         });
-
-        this.libraryCompilationVersionOptions.sort((a, b) => { return (a.label > b.label) ? -1 : ((b.label > a.label) ? 1 : 0); });
-
     }
 
     onAddLibraryClick() {
