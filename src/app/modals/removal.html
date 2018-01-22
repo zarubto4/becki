@@ -4,7 +4,8 @@
         <h4 class="modal-title">{{modalModel.name}}</h4>
     </div>
     <div class="modal-body">
-         {{'body_text'|bkTranslate:this}}<strong> {{modalModel.name}}</strong>?
+        {{(modalModel.bodyText?(modalModel.bodyText):('body_text'|bkTranslate:this))}}
+        <span *ngIf="!modalModel.bodyText"> <strong> {{modalModel.name}}</strong>?</span>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onYesClick()">{{'btn_yes'|bkTranslate:this}}</button>

@@ -144,17 +144,32 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onStateMessage(msg: IWebsocketTerminalState) {
-        if (msg.websocketUrl === null && msg.isConnected === null) { // Pokud z beckiBacked příjde oboje null, znamená to, že device nemá serverURL a serverPort
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_connect_device_wrong_server')));
-            return;
-        }
-
+        let terminalDevice;
         if (this.terminalHardware) {
-            this.terminalHardware.find(terminal => {
-                if (msg.websocketUrl.includes(terminal.hardwareURL + ':' + terminal.hardwareURLport)) {
+            terminalDevice = this.terminalHardware.find(terminal => {
+                if (msg.websocketUrl && msg.websocketUrl.includes(terminal.hardwareURL + ':' + terminal.hardwareURLport)) {
                     return true;
                 }
-            }).connected = msg.isConnected; // najdeme odebíraný HW kterého se status update týká a upravíme ho (pokud se nenajde, prostě se to přeskočí)
+            });
+        }
+
+        switch (msg.reason) { // pro případné samosté obstarávání každého problému co nastane na websocketu
+            case 'cantConnect':
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_connect'))); // v některých případech chybí serverUrl/port, takže backend rovnou vyhodí že se nedá připojit
+                break;
+
+            case 'conectionFailed':
+                // this.addFlashMessage(new FlashMessageError(this.translate('flash_conection_failed')));
+                terminalDevice.connected = msg.isConnected;
+                break;
+
+            case 'dissconected':
+                terminalDevice.connected = msg.isConnected;
+                break;
+
+            case 'connected':
+                terminalDevice.connected = msg.isConnected; // najdeme odebíraný HW kterého se status update týká a upravíme ho (pokud se nenajde, prostě se to přeskočí)
+                break;
         }
     }
 
@@ -170,13 +185,12 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onUserUnsubscribeClick(terminal: TerminalParameters) {
-        this.modalService.showModal(new ModalsRemovalModel((terminal.name ? terminal.name : terminal.id))).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel((terminal.name ? terminal.name : terminal.id), this.translate('modal_unsubscribe_device', (terminal.name ? terminal.name : terminal.id)))).then((success) => {
             if (success) {
-
                 this.avalibleHardware = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1));
                 // Tímto přidáme unsubscribed HW do "avalibeHardware" takže ho uživatel může znovu přidat
 
-                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport); // pošleme unsubscribe request na WS 
+                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport); // pošleme unsubscribe request na WS
                 // this.backendService.closeHardwareTerminalWebsocket(terminal.hardwareURL + ':' + terminal.hardwareURLport); // je lepší je ponechat WS otevřený v "resting" stavu a pak je všechny zavřít najedou
             }
         });
@@ -257,14 +271,16 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
 
-        this.terminalHardware.forEach(hardware => {
-            this.backendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.hardwareURL + ':' + hardware.hardwareURLport);
-        }); // odhlásíme každej HW co byl připojen
 
+        if (this.WSinit) {
+            this.terminalHardware.forEach(hardware => {
+                this.backendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.hardwareURL + ':' + hardware.hardwareURLport);
+            }); // odhlásíme každej HW co byl připojen
 
-        this.backendService.closeHardwareTerminalWebsocket('all'); // zavřeme všechny HW websockety na backednu
-        this.hardwareTerminalWS.unsubscribe();
-        this.hardwareTerminalStateWS.unsubscribe(); // unsubscribe toho neposedného subscribera, takže se nestane že přijde stejná flash messeage 5x za sebou
+            this.backendService.closeHardwareTerminalWebsocket('all'); // zavřeme všechny HW websockety na backednu
+            this.hardwareTerminalWS.unsubscribe();
+            this.hardwareTerminalStateWS.unsubscribe(); // unsubscribe toho neposedného subscribera, takže se nestane že přijde stejná flash messeage 5x za sebou
+        }
     }
 
     onToggleHardwareTab(tab: string) {
@@ -412,11 +428,12 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
         }).then(() => {
             this.colorForm.controls['color' + this.device.id].setValue('#0000FF'); // přidáme do console.log barvu
+            this.consoleLog.add('output', 'Initializing the device, more info in settings', this.device.id, this.device.id);
         });
-        if (this.device.server && this.device.server.server_url) {// prob. navíc podmínka
-            this.backendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.hardware_log_port, 'info');
-            // Pošleme request na WS o subscribe logy
-        }
+        //   if (this.device.server && this.device.server.server_url) {// prob. navíc podmínka
+        this.backendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.hardware_log_port, 'info');
+        // Pošleme request na WS o subscribe logy
+        //   }
     }
 
     config_array(): void {

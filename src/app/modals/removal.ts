@@ -10,7 +10,7 @@ import { Input, Output, EventEmitter, Component } from '@angular/core';
 import { ModalModel } from '../services/ModalService';
 
 export class ModalsRemovalModel extends ModalModel {
-    constructor(public name: string) {
+    constructor(public name: string, public bodyText?: string) {
         super();
     }
 }

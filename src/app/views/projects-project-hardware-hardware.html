@@ -612,9 +612,12 @@
                                                 </span>
                                                 {{(terminal.logLevel)}}
                                             </td>
+                                            <!-- fa fa-times-circle fa fa-check -->
                                             <td class="text-center vert-align">
-                                                <i class="fa fa-2x fa-check font-green-jungle" *ngIf="terminal.connected"></i>
-                                                <i class="fa fa-2x fa-times-circle font-red" *ngIf="!terminal.connected"></i>
+                                                <span class="font-green-jungle" *ngIf="terminal.connected">subscribed</span>
+
+                                                <span class="font-red" *ngIf="(!terminal.connected && (terminal.hardwareURL && terminal.hardwareURLport))">trying to connect</span>
+                                                <span class="font-red" *ngIf="(!terminal.connected && !(terminal.hardwareURL && terminal.hardwareURLport))">can't connect</span>
                                             </td>
                                             <td class="vert-align  text-center">
                                                 <bk-online-state [online_state]="terminal.onlineStatus"></bk-online-state>
@@ -627,8 +630,8 @@
                                                 <button title="{{'label_change_log_level'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onUserChangeLogLevelClick(terminal)">
                                                     <i class="fa fa-bars"></i>
                                                 </button>
-                                                <button title="{{'label_unsubscribe'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onUserUnsubscribeClick(terminal)">
-                                                    <i class="fa fa-trash"></i>
+                                                <button title="{{'label_unsubscribe_device'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onUserUnsubscribeClick(terminal)">
+                                                    <i class="fa fa-times"></i>
                                                 </button>
                                             </td>
                                         </tr>

@@ -1221,6 +1221,8 @@ export class StaticTranslation {
                 'label_unknown_value': 'none',
                 'label_cant_load_device': 'Device cannot be loaded. {0}',
                 'label_no_hardware_to_show_comment': 'There are no devices to show, but you can add some',
+                'label_unsubscribe_device': 'Unsubscribe device',
+
 
                 'label_actual_program_name': 'Current <strong class="font-color-code">FIRMWARE </strong> name',
                 'label_actual_program_version': 'Current <strong class="font-color-code">FIRMWARE </strong> version name',
@@ -1247,7 +1249,6 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_terminal': 'terminal',
                 'label_settings_terminal': 'settings',
-                'label_unsubscribe': 'unsubscribe',
                 'label_no_hardware_to_show': 'No hardware to show',
                 'label_change_log_level': 'Change log level',
                 'btn_add_hardware': 'Add hardware',
@@ -1278,7 +1279,9 @@ export class StaticTranslation {
                 'flash_remove_device_fail': 'Device could not be removed, ',
                 'flash_cant_update_bootloader': 'Unable to update Bootloader, {0}.',
                 'flash_cant_edit_backup_mode': 'Device backup mode could not be changed, {0}.',
-                'flash_cant_connect_device_wrong_server': 'cant connect device, device don\'t have correct server adress'
+                'flash_cant_connect': 'can\'t connect device',
+                'flash_conection_failed': 'device connection failed',
+                'modal_unsubscribe_device': 'Are you sure you want to unsubribe {0}?\n (It can be subscribed again)',
 
             }, 'ProjectsProjectInstancesComponent': {
 
