@@ -72,7 +72,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     WSinit: boolean = false;
     avalibleHardware: TerminalParameters[] = []; // ukládání všech dostupných HW pro terminalSubsribe
-    avalibleColors = ['#0082c8', '#e6194b', '#3cb44b', '#ffe119', '#f58231', '#911eb4', '#46f0f0', '#008080', '#aa6e28', '#ffd8b1']; //předdefinované barvy pro terminál
+    avalibleColors = ['#0082c8', '#e6194b', '#3cb44b', '#ffe119', '#f58231', '#911eb4', '#46f0f0', '#008080', '#aa6e28', '#ffd8b1']; // předdefinované barvy pro terminál
 
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
@@ -167,7 +167,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 terminalDevice.connected = msg.isConnected;
                 break;
 
-            case 'connected':
+            case 'opened':
                 terminalDevice.connected = msg.isConnected; // najdeme odebíraný HW kterého se status update týká a upravíme ho (pokud se nenajde, prostě se to přeskočí)
                 break;
         }
