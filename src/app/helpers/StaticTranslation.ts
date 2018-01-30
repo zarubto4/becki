@@ -1282,7 +1282,7 @@ export class StaticTranslation {
                 'flash_remove_device_fail': 'Device could not be removed, ',
                 'flash_cant_update_bootloader': 'Unable to update Bootloader, {0}.',
                 'flash_cant_edit_backup_mode': 'Device backup mode could not be changed, {0}.',
-                'flash_cant_connect': 'can\'t connect device',
+                'flash_cant_connect': 'Something is wrong with server parameters, its not possible to subscribe logs form Device',
                 'flash_conection_failed': 'device connection failed',
                 'modal_unsubscribe_device': 'Are you sure you want to unsubribe {0}?\n (It can be subscribed again)',
 

@@ -445,10 +445,10 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         // For example /login or /get_projects:{all}
         // But if contains https - for example https://homer.server.cz/get_something - it didnt used ${this.protocol}://${this.host}${path}
         if (path.charAt(0) === '/') {
-            console.log('Its a Tyrion API');
+            // console.log('Its a Tyrion API');
             return this.requestRest(method, `${this.protocol}://${this.host}${path}`, body, success);
         } else {
-            console.log('Its a External outside API');
+            // console.log('Its a External outside API');
             return this.requestRest(method, path, body, success);
         }
     }
@@ -718,68 +718,83 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     public connectDeviceTerminalWebSocket(server: string, port: string, resetWS: boolean = true): void {
-        if (!(server !== null) && !(port !== null)) {     // pokud vůbec má parametry na připojení (hodně obskurní metoda využívající dvojtej zápor (zahrnuje i undefined, apod.))
-            let websocket: WebSocket = null; // připravíme si nový WS
 
-            let wsPosition: number = this.hardwareTerminalwebSockets.findIndex(ws => { // pokusíme se najít zda již neexistuje připojený WS na stejné adrese
-                // (WS hledáme dle Url + port, takže pokud budeme mít stejné URL ale jiný port, chová se k tomu jako k novému připojnení)
-                if (ws.url.includes(server + ':' + port)) {
-                    websocket = ws;
-                    return true;
-                }
+        /* tslint:disable */
+
+        console.log('Server URL:', server);
+        console.log('Server Port:', port);
+
+        /* tslint:enable */
+
+        if (server === null || port === null) {
+            //  pokud WS nemá potřebné parametry, vrátíme status že jsme se ani nepokusili připojit
+            this.hardwareTerminalState.next({
+                websocketUrl: null,
+                isConnected: null,
+                'reason': 'cantConnect'
             });
-
-            if (websocket) { // pokud jsme chtěli resetovat WS, tak pokračujeme dále v kódu, jinak skončíme
-                if (resetWS) {
-                    this.closeHardwareTerminalWebsocket(websocket.url);
-                } else {
-                    return;
-
-                }
-            }
-
-            websocket = new WebSocket(`${this.wsProtocol}://${server}:${port}/${this.getToken()}`); // inicializace připojení
-
-            websocket.addEventListener('close', ws => {
-                this.reconnectTerminalWebSocketAfterTimeout(); // přidání WS listenerů a toho co mají udělat,  tomto případě že při "closed" se pokusí recconectnout a pošle status
-                this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false, 'reason': 'conectionClosed' });
-            });
-
-            websocket.addEventListener('open', ws => { // přidání WS listenerů a toho co mají udělat
-                // this.reconnectTerminalWebSocketAfterTimeout();
-                this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': true, 'reason': 'opened' }); // pošle, že se WS otevřel
-            });
-
-
-            let opened = Rx.Observable
-                .fromEvent<void>(websocket, 'open'); // pro messeageQueue
-            let channelReceived = Rx.Observable  // pro messeages co příjdou z WS
-                .fromEvent<MessageEvent>(websocket, 'message')
-                .map(event => { // rozložíme je na kusy a jednotlivé kusy se pokusíme naparsovat jako Json
-                    try {
-                        return JSON.parse(event.data);
-                    } catch (e) {
-                        console.error('Parse error: ', e);
-                    }
-                    return null;
-                });
-            channelReceived // filtrujeme a rozřazujeme, keep in mind že je šance že je otevřeno najednou víc WS
-                .filter(message => message.message_channel === 'hardware-logger')
-                .subscribe(this.hardwareTerminal); // všechno se ale sype do jednoho Rx.subjectu takže se ve view pracuje jenom s jedním
-
-
-            opened.subscribe(open => this.sendWebSocketTerminalMessageQueue());
-
-            if (wsPosition > -1) { // nahradíme WS co extistuje, čímž nám nevnikají duplikáty
-                this.hardwareTerminalwebSockets[wsPosition] = websocket;
-            } else { // pokud je WS novej, přidá se do seznamu
-
-                this.hardwareTerminalwebSockets.push(websocket);
-            }
-        } else { // pokud WS nemá potřebné parametry, vrátíme status že jsme se ani nepokusili připojit
-            this.hardwareTerminalState.next({ websocketUrl: null, isConnected: null, 'reason': 'cantConnect' });
             return;
         }
+
+        // pokud vůbec má parametry na připojení (hodně obskurní metoda využívající dvojtej zápor (zahrnuje i undefined, apod.))
+        let websocket: WebSocket = null; // připravíme si nový WS
+
+        let wsPosition: number = this.hardwareTerminalwebSockets.findIndex(ws => { // pokusíme se najít zda již neexistuje připojený WS na stejné adrese
+            // (WS hledáme dle Url + port, takže pokud budeme mít stejné URL ale jiný port, chová se k tomu jako k novému připojnení)
+            if (ws.url.includes(server + ':' + port)) {
+                websocket = ws;
+                return true;
+            }
+        });
+
+        if (websocket) { // pokud jsme chtěli resetovat WS, tak pokračujeme dále v kódu, jinak skončíme
+            if (resetWS) {
+                this.closeHardwareTerminalWebsocket(websocket.url);
+            } else {
+                return;
+
+            }
+        }
+
+        websocket = new WebSocket(`${this.wsProtocol}://${server}:${port}/${this.getToken()}`); // inicializace připojení
+
+        websocket.addEventListener('close', ws => {
+            this.reconnectTerminalWebSocketAfterTimeout(); // přidání WS listenerů a toho co mají udělat,  tomto případě že při "closed" se pokusí recconectnout a pošle status
+            this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false, 'reason': 'conectionClosed' });
+        });
+
+        websocket.addEventListener('open', ws => { // přidání WS listenerů a toho co mají udělat
+            // this.reconnectTerminalWebSocketAfterTimeout();
+            this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': true, 'reason': 'opened' }); // pošle, že se WS otevřel
+        });
+
+
+        let opened = Rx.Observable
+            .fromEvent<void>(websocket, 'open'); // pro messeageQueue
+        let channelReceived = Rx.Observable  // pro messeages co příjdou z WS
+            .fromEvent<MessageEvent>(websocket, 'message')
+            .map(event => { // rozložíme je na kusy a jednotlivé kusy se pokusíme naparsovat jako Json
+                try {
+                    return JSON.parse(event.data);
+                } catch (e) {
+                    console.error('Parse error: ', e);
+                }
+                return null;
+            });
+        channelReceived // filtrujeme a rozřazujeme, keep in mind že je šance že je otevřeno najednou víc WS
+            .filter(message => message.message_channel === 'hardware-logger')
+            .subscribe(this.hardwareTerminal); // všechno se ale sype do jednoho Rx.subjectu takže se ve view pracuje jenom s jedním
+
+
+        opened.subscribe(open => this.sendWebSocketTerminalMessageQueue());
+
+        if (wsPosition > -1) { // nahradíme WS co extistuje, čímž nám nevnikají duplikáty
+            this.hardwareTerminalwebSockets[wsPosition] = websocket;
+        } else { // pokud je WS novej, přidá se do seznamu
+
+            this.hardwareTerminalwebSockets.push(websocket);
+        }
+
     }
 
 

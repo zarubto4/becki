@@ -237,6 +237,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         return true;
                     } // Pokud nenajdeme HW, se stejným portem nebo server URL, pošleme novej pořadavek na připojení HW
                 })) {
+                    console.log('addNewHardwareToTerminal(): URL: ', model.selectedBoard.hardwareURL, ' Port: ', model.selectedBoard.hardwareURLport );
                     this.tyrionBackendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
                 }
 
@@ -396,6 +397,9 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
     terminalFirstRun(board: IBoard): void {
+
+        console.log('  terminalFirstRun(): URL: ', this.device.server.server_url, ' Port: ', this.device.server.server_remote_port);
+
         this.tyrionBackendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.server_remote_port + '');
         // připojení k websocketu daného deviceu
 
