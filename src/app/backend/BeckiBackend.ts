@@ -344,7 +344,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     public protocol = 'http';
 
-    public wsProtocol = 'ws';
+    public wsProtocol = 'ws'; // TODO - úprava podle typu zabezpečení homera - server by to měl mít v parametrech každý separátně
 
     public requestProxyServerUrl = 'http://127.0.0.1:4000/fetch/';
 
@@ -717,16 +717,16 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         this.webSocket = null;
     }
 
-    public connectDeviceTerminalWebSocket(server: string, port: string, resetWS: boolean = true): void {
+    public connectDeviceTerminalWebSocket(server_url: string, port: string, resetWS: boolean = true): void {
 
         /* tslint:disable */
 
-        console.log('Server URL:', server);
+        console.log('Server URL:', server_url);
         console.log('Server Port:', port);
 
         /* tslint:enable */
 
-        if (server === null || port === null) {
+        if (server_url === null || port === null) {
             //  pokud WS nemá potřebné parametry, vrátíme status že jsme se ani nepokusili připojit
             this.hardwareTerminalState.next({
                 websocketUrl: null,
@@ -736,12 +736,14 @@ export abstract class TyrionApiBackend extends TyrionAPI {
             return;
         }
 
+        //  if (!(server !== null || port !== null) && !(server === null && port === null)) { - Dominiku co to je za bullhshit?
+
         // pokud vůbec má parametry na připojení (hodně obskurní metoda využívající dvojtej zápor (zahrnuje i undefined, apod.))
         let websocket: WebSocket = null; // připravíme si nový WS
 
         let wsPosition: number = this.hardwareTerminalwebSockets.findIndex(ws => { // pokusíme se najít zda již neexistuje připojený WS na stejné adrese
             // (WS hledáme dle Url + port, takže pokud budeme mít stejné URL ale jiný port, chová se k tomu jako k novému připojnení)
-            if (ws.url.includes(server + ':' + port)) {
+            if (ws.url.includes(server_url + ':' + port)) {
                 websocket = ws;
                 return true;
             }
@@ -756,7 +758,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
             }
         }
 
-        websocket = new WebSocket(`${this.wsProtocol}://${server}:${port}/${this.getToken()}`); // inicializace připojení
+        websocket = new WebSocket(`${this.wsProtocol}://${server_url}:${port}/${this.getToken()}`); // inicializace připojení
 
         websocket.addEventListener('close', ws => {
             this.reconnectTerminalWebSocketAfterTimeout(); // přidání WS listenerů a toho co mají udělat,  tomto případě že při "closed" se pokusí recconectnout a pošle status

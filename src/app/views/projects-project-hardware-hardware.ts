@@ -309,7 +309,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 }
             });
 
-            if (this.device.server && this.device.server.server_url) {
+            if (this.device.server && this.device.server.server_url && this.device.server.server_remote_port) {
                 this.terminalFirstRun(this.device);
             } else {
                 this.terminalHardware.push({ // pokud nemá device jak URL tak i PORT tak ho přidáme do seznamu, ale nepřipojíme ho
@@ -398,20 +398,21 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     terminalFirstRun(board: IBoard): void {
 
-        console.log('  terminalFirstRun(): URL: ', this.device.server.server_url, ' Port: ', this.device.server.server_remote_port);
+        console.log('  terminalFirstRun():', 'URL: ' + board.server.server_url, ' Port: ' + board.server.server_remote_port);
+        console.log(' terminalFirstRun(): Server', board.server);
 
-        this.tyrionBackendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.server_remote_port + '');
+        this.tyrionBackendService.connectDeviceTerminalWebSocket(board.server.server_url, board.server.server_remote_port + '');
         // připojení k websocketu daného deviceu
 
         // TODO při změně jména/aliasu refreshnout název terminálu
 
-        this.colorForm.addControl('color' + this.device.id, new FormControl('color' + this.device.id)); // přidáme control na barvu v terminálu
-        this.colorForm.controls['color' + this.device.id].setValue('#0000FF'); // přidáme default barvu
+        this.colorForm.addControl('color' + board.id, new FormControl('color' + board.id)); // přidáme control na barvu v terminálu
+        this.colorForm.controls['color' + board.id].setValue('#0000FF'); // přidáme default barvu
         this.terminalHardware.push({ // přidáme to do seznamu "odebýraných HW"
-            'id': this.device.id,
+            'id': board.id,
             'logLevel': 'info',
-            'name': this.device.name,
-            'onlineStatus': this.device.online_state,
+            'name': board.name,
+            'onlineStatus': board.online_state,
             'hardwareURL': board.server.server_url,
             'hardwareURLport': board.server.server_remote_port,
             'connected': false
@@ -430,11 +431,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
         }).then(() => {
-            this.colorForm.controls['color' + this.device.id].setValue('#0000FF'); // přidáme do console.log barvu
-            this.consoleLog.add('output', 'Initializing the device, more info in settings', this.device.id, this.device.id);
+            this.colorForm.controls['color' + board.id].setValue('#0000FF'); // přidáme do console.log barvu
+            this.consoleLog.add('output', 'Initializing the device, more info in settings', board.id, board.id);
         });
-        //   if (this.device.server && this.device.server.server_url) {// prob. navíc podmínka
-        this.tyrionBackendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.server_remote_port, 'info');
+        //   if (board.server && board.server.server_url) {// prob. navíc podmínka
+        this.tyrionBackendService.requestDeviceTerminalSubcribe(board.id, board.server.server_url + ':' + board.server.server_remote_port, 'info');
         // Pošleme request na WS o subscribe logy
         //   }
     }
