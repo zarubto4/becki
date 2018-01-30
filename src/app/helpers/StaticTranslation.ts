@@ -154,6 +154,9 @@ export class StaticTranslation {
                 'label_hardware_log_port': 'Hardware Logger Stream port',
                 'label_hash_certificate': 'Hash',
                 'label_connection_identifier': 'Connection Token',
+            }, 'ModalsUpdateHomerServerComponent': {
+                'title': 'Update Server',
+                'label_personal_server_name': 'Server name',
             }, 'ModalsGarfieldComponent': {
                 'title': 'Garfield',
                 'label_name': 'Garfield Identification',
