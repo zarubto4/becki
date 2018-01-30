@@ -1,14 +1,14 @@
 /**
- * Created by davidhradek on 08.12.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { IProject, ITypeOfBoard } from '../backend/TyrionAPI';
-import { BackendService } from './BackendService';
+import { TyrionBackendService } from './BackendService';
 
 @Injectable()
 export class StorageService {
@@ -23,7 +23,7 @@ export class StorageService {
     protected typeOfBoardsLastTouch: number = 0;
     protected typeOfBoardsInProgress: boolean = false;
 
-    constructor(protected backendService: BackendService, protected router: Router) {
+    constructor(protected backendService: TyrionBackendService, protected router: Router) {
         console.info('StorageService init');
     }
 

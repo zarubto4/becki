@@ -1,16 +1,13 @@
 /**
- * Created by davidhradek on 28.11.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
-/*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
- */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { IBProgramVersion, IBProgramVersionShortDetail } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
@@ -38,7 +35,7 @@ export class ModalsBlockoVersionSelectComponent implements OnInit {
 
     options: FormSelectComponentOption[];
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             'programVersion': ['', [Validators.required]]

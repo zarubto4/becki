@@ -36,7 +36,7 @@ export class ProducersComponent extends BaseMainComponent implements OnInit, OnD
 
     refresh(): void {
         this.blockUI();
-        this.backendService.producersGetAll()
+        this.tyrionBackendService.producersGetAll()
             .then((producers) => {
                 this.producers = producers;
             })

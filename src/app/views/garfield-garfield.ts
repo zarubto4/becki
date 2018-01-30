@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import {
-    BeckiBackend, IWebSocketGarfieldDeviceConnect, IWebSocketGarfieldDeviceConfigure, IWebSocketMessage,
+    TyrionApiBackend, IWebSocketGarfieldDeviceConnect, IWebSocketGarfieldDeviceConfigure, IWebSocketMessage,
     IWebSocketGarfieldDeviceBinary, BugFoundError, IWebSocketGarfieldDeviceTest
 } from '../backend/BeckiBackend';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
@@ -164,25 +164,25 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             'test_config': ['', [Validators.required]]
         });
 
-        this.wsMessageSubscription = this.backendService.garfieldRecived.subscribe(msg => this.onMessage(msg));
+        this.wsMessageSubscription = this.tyrionBackendService.garfieldRecived.subscribe(msg => this.onMessage(msg));
 
         let message: IWebSocketMessage = {
-            message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+            message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
             message_type: 'subscribe_garfield',
-            message_id: this.backendService.uuid()
+            message_id: this.tyrionBackendService.uuid()
         };
 
-        this.backendService.sendWebSocketMessage(message);
+        this.tyrionBackendService.sendWebSocketMessage(message);
     }
 
     ngOnDestroy(): void {
         let message: IWebSocketMessage = {
-            message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+            message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
             message_type: 'unsubscribe_garfield',
-            message_id: this.backendService.uuid()
+            message_id: this.tyrionBackendService.uuid()
         };
 
-        this.backendService.sendWebSocketMessage(message);
+        this.tyrionBackendService.sendWebSocketMessage(message);
         this.wsMessageSubscription.unsubscribe();
         clearInterval(this.reloadInterval);
         clearTimeout(this.garfieldAppDetection);
@@ -190,7 +190,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     refresh(): void {
         this.blockUI();
-        this.backendService.garfieldGet(this.garfieldId)
+        this.tyrionBackendService.garfieldGet(this.garfieldId)
             .then((garfield) => {
                 this.garfield = garfield;
 
@@ -205,7 +205,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     };
                 });
 
-                let personObject = this.backendService.personInfoSnapshot;
+                let personObject = this.tyrionBackendService.personInfoSnapshot;
                 this.personName = personObject.full_name;
 
                 // Find Test firmware main test version
@@ -236,17 +236,17 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 }
 
                 // Find Main and Backup Server
-                this.backendService.homerServersGetList()
-                    .then((IHomerServerPublicDetails) => {
+                this.tyrionBackendService.homerServersGetList()
+                    .then((IHomerServer) => {
 
-                        for (let key in IHomerServerPublicDetails) {
+                        for (let key in IHomerServer) {
 
-                            if (!IHomerServerPublicDetails.hasOwnProperty(key)) {
+                            if (!IHomerServer.hasOwnProperty(key)) {
                                 continue;
                             }
 
-                            if (IHomerServerPublicDetails[key].server_type === 'main_server') {
-                                this.backendService.homerServerGet(IHomerServerPublicDetails[key].id)
+                            if (IHomerServer[key].server_type === 'main_server') {
+                                this.tyrionBackendService.homerServerGet(IHomerServer[key].id)
                                     .then((server) => {
                                         this.mainServer = server;
                                     })
@@ -256,8 +256,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                                     });
                             }
 
-                            if (IHomerServerPublicDetails[key].server_type === 'backup_server') {
-                                this.backendService.homerServerGet(IHomerServerPublicDetails[key].id)
+                            if (IHomerServer[key].server_type === 'backup_server') {
+                                this.tyrionBackendService.homerServerGet(IHomerServer[key].id)
                                     .then((server) => {
                                         this.backupServer = server;
                                     })
@@ -343,9 +343,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         if (this.garfield && this.garfield.print_sticker_id && this.garfield.print_label_id_1 && this.garfield.print_label_id_2) {
 
             Promise.all<any>([
-                this.backendService.printerGetOnlineState(this.garfieldId, this.garfield.print_sticker_id),
-                this.backendService.printerGetOnlineState(this.garfieldId, this.garfield.print_label_id_1),
-                this.backendService.printerGetOnlineState(this.garfieldId, this.garfield.print_label_id_2)
+                this.tyrionBackendService.printerGetOnlineState(this.garfieldId, this.garfield.print_sticker_id),
+                this.tyrionBackendService.printerGetOnlineState(this.garfieldId, this.garfield.print_label_id_1),
+                this.tyrionBackendService.printerGetOnlineState(this.garfieldId, this.garfield.print_label_id_2)
             ])
                 .then((values: [IPrinter, IPrinter, IPrinter]) => {
                     this.print_sticker = values[0];
@@ -361,7 +361,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     onTestPrinter(printerId: number) {
 
-        this.backendService.printerTestprinting(this.garfieldId, printerId)
+        this.tyrionBackendService.printerTestprinting(this.garfieldId, printerId)
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_test_print_success')));
             }).catch(reason => {
@@ -387,7 +387,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.garfieldEdit(this.garfieldId, {
+                this.tyrionBackendService.garfieldEdit(this.garfieldId, {
                     description: model.description,
                     name: model.name,
                     print_label_id_1: model.print_label_id_1,
@@ -409,7 +409,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         this.modalService.showModal(new ModalsRemovalModel(this.garfield.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.garfieldDelete(this.garfieldId)
+                this.tyrionBackendService.garfieldDelete(this.garfieldId)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.navigate(['admin/garfield/']);
@@ -459,11 +459,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     setDetection() {
         this.garfieldAppDetection = setTimeout(() => {
             let msg: IWebSocketMessage = {
-                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
                 message_type: 'keepalive',
-                message_id: this.backendService.uuid()
+                message_id: this.tyrionBackendService.uuid()
             };
-            this.backendService.sendWebSocketMessage(msg);
+            this.tyrionBackendService.sendWebSocketMessage(msg);
             this.garfieldAppDetection = setTimeout(() => {
                 this.onDisconnectGarfield();
             }, 20000);
@@ -500,15 +500,15 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     getDeviceId(): Promise<any> {
         let message: IWebSocketMessage = {
-            message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+            message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
             message_type: 'device_id',
-            message_id: this.backendService.uuid()
+            message_id: this.tyrionBackendService.uuid()
         };
         return this.send(message, 15000);
     }
 
     getDeviceOrRegister(full_id: string): Promise<IHardwareNewSettingsResult> {
-        return this.backendService.boardCreateAutomaticGarfield({
+        return this.tyrionBackendService.boardCreateAutomaticGarfield({
             full_id: full_id,
             garfield_station_id: this.garfield.id,
             type_of_board_batch_id: this.productionBatchForm.controls['batch'].value,
@@ -525,9 +525,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     uploadBootLoaderProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
             let message: IWebSocketGarfieldDeviceBinary = {
-                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
                 message_type: 'device_binary',
-                message_id: this.backendService.uuid(),
+                message_id: this.tyrionBackendService.uuid(),
                 url: this.bootLoader.file_path,
                 type: 'bootloader'
             };
@@ -551,9 +551,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     uploadTestFirmwareProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
             let message: IWebSocketGarfieldDeviceBinary = {
-                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
                 message_type: 'device_binary',
-                message_id: this.backendService.uuid(),
+                message_id: this.tyrionBackendService.uuid(),
                 url: this.firmwareTestMainVersion.download_link_bin_file,
                 type: 'firmware'
             };
@@ -577,9 +577,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     testDeviceProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
             let message: IWebSocketGarfieldDeviceTest = {
-                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
                 message_type: 'device_test',
-                message_id: this.backendService.uuid(),
+                message_id: this.tyrionBackendService.uuid(),
                 test_config: JSON.parse(this.formConfigJson.controls['test_config'].value)
             };
 
@@ -602,9 +602,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     uploadProductionFirmwareProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
             let message: IWebSocketGarfieldDeviceBinary = {
-                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
                 message_type: 'device_binary',
-                message_id: this.backendService.uuid(),
+                message_id: this.tyrionBackendService.uuid(),
                 url: this.firmwareMainVersion.download_link_bin_file,
                 type: 'firmware'
             };
@@ -630,9 +630,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             this.deviceSafe()
                 .then((device: IHardwareNewSettingsResult) => {
                     let message: IWebSocketGarfieldDeviceConfigure = {
-                        message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                        message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
                         message_type: 'device_configure',
-                        message_id: this.backendService.uuid(),
+                        message_id: this.tyrionBackendService.uuid(),
                         configuration: device.configuration
                     };
 
@@ -677,9 +677,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     backUpProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
             let message: IWebSocketMessage = {
-                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
                 message_type: 'device_backup',
-                message_id: this.backendService.uuid(),
+                message_id: this.tyrionBackendService.uuid(),
             };
 
             this.send(message, 30000)
@@ -725,7 +725,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 message_channel: message.message_channel,
                 status: 'success'
             };
-            this.backendService.sendWebSocketMessage(msg);
+            this.tyrionBackendService.sendWebSocketMessage(msg);
         }
     }
 
@@ -828,7 +828,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             request.setCallbacks(resolve, reject, onTimeout.bind(this));
             request.startTimeout(); // Begin countdown
             this.messageBuffer.push(request);
-            this.backendService.sendWebSocketMessage(message);
+            this.tyrionBackendService.sendWebSocketMessage(message);
         });
     }
 }

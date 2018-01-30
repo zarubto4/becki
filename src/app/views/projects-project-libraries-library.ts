@@ -1,6 +1,8 @@
 /**
- * Created by davidhradek on 17.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
@@ -94,7 +96,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(new ModalsRemovalModel(this.library.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryDelete(this.library.id)
+                this.tyrionBackendService.libraryDelete(this.library.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save_success', this.projectId)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -113,7 +115,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryEdit(this.library.id, {
+                this.tyrionBackendService.libraryEdit(this.library.id, {
                     project_id: this.projectId,
                     name: model.name,
                     description: model.description
@@ -164,7 +166,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryVersionDelete(version.version_id)
+                this.tyrionBackendService.libraryVersionDelete(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -183,7 +185,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(new ModalsPublicShareRequestModel(this.library.name, version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryVersionMakePublic(version.version_id)
+                this.tyrionBackendService.libraryVersionMakePublic(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
                         this.refresh();
@@ -201,7 +203,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryVersionEdit(version.version_id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.libraryVersionEdit(version.version_id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -220,7 +222,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
     refresh(): void {
 
         this.blockUI();
-        this.backendService.libraryGet(this.libraryId)
+        this.tyrionBackendService.libraryGet(this.libraryId)
             .then((library) => {
 
                 this.library = library;
@@ -257,7 +259,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryVersionEditResponsePublication({
+                this.tyrionBackendService.libraryVersionEditResponsePublication({
                     version_id: version.version_id,
                     version_name: model.version_name,
                     version_description: model.version_description,
@@ -280,7 +282,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
 
     reloadVersions(): void {
         if (this.libraryId) {
-            this.backendService.libraryGet(this.libraryId)
+            this.tyrionBackendService.libraryGet(this.libraryId)
                 .then((library) => {
                     this.library = library;
                     this.libraryVersions = this.library.versions || [];
@@ -297,7 +299,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         }
 
         this.blockUI();
-        this.backendService.libraryVersionGet(libraryVersion.version_id)
+        this.tyrionBackendService.libraryVersionGet(libraryVersion.version_id)
             .then((programVersionFull) => {
                 this.unblockUI();
 
@@ -378,7 +380,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.libraryMakeClone({
+                this.tyrionBackendService.libraryMakeClone({
                     library_id: this.library.id,
                     project_id: this.projectId,
                     name: model.name,
@@ -415,7 +417,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 });
 
                 this.blockUI();
-                this.backendService.libraryVersionCreate(this.libraryId, {
+                this.tyrionBackendService.libraryVersionCreate(this.libraryId, {
                     version_name: m.name,
                     version_description: m.description,
                     files: userFiles

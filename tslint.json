@@ -6,7 +6,9 @@
   "exclude": [
     "node_modules"
   ],
-  "eslintIgnore": ["generator"],
+  "eslintIgnore": [
+    "generator,generator-homer"
+  ],
   "rules": {
     "class-name": true,
     "comment-format": [
@@ -21,21 +23,21 @@
       "spaces"
     ],
     "ter-indent": [
-        true,
-        4,
-        {
-            "SwitchCase": 1,
-            "MemberExpression": 1,
-            "FunctionDeclaration": {
-                "parameters": 1
-            },
-            "FunctionExpression": {
-                "parameters": 1
-            },
-            "CallExpression": {
-                "arguments": 1
-            }
+      true,
+      4,
+      {
+        "SwitchCase": 1,
+        "MemberExpression": 1,
+        "FunctionDeclaration": {
+          "parameters": 1
+        },
+        "FunctionExpression": {
+          "parameters": 1
+        },
+        "CallExpression": {
+          "arguments": 1
         }
+      }
     ],
     "label-position": true,
     "max-line-length": [
@@ -59,7 +61,10 @@
       "trace"
     ],
     "no-string-throw": true,
-    "no-console": [true, "log"],
+    "no-console": [
+      true,
+      "log"
+    ],
     "no-construct": true,
     "no-debugger": true,
     "no-duplicate-variable": true,

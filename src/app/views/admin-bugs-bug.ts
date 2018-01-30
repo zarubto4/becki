@@ -41,7 +41,7 @@ export class BugsBugComponent extends BaseMainComponent implements OnInit, OnDes
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getBug(this.bugId)
+        this.tyrionBackendService.getBug(this.bugId)
             .then((bug) => {
                 this.bug = bug;
 
@@ -55,7 +55,7 @@ export class BugsBugComponent extends BaseMainComponent implements OnInit, OnDes
 
     onReportBug() {
         this.blockUI();
-        this.backendService.reportBug(this.bugId)
+        this.tyrionBackendService.reportBug(this.bugId)
             .then((bug) => {
                 this.bug = bug;
                 this.unblockUI();
@@ -67,7 +67,7 @@ export class BugsBugComponent extends BaseMainComponent implements OnInit, OnDes
     }
 
     onDeleteBug() {
-        this.backendService.deleteBug(this.bugId)
+        this.tyrionBackendService.deleteBug(this.bugId)
             .then((response) => {
                 this.navigate(['/admin/bug']);
             })

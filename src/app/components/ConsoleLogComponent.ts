@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 18.01.17.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import moment = require('moment/moment');

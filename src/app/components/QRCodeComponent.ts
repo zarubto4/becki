@@ -1,5 +1,6 @@
 /**
- * Created by daviduhlir on 22.5.17.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 import { Component, Input, OnInit, OnChanges, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import * as QRCode from 'qrcode';

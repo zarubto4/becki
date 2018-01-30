@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanDeactivate } from '@angular/router';
-import { BackendService } from './BackendService';
+import { TyrionBackendService } from './BackendService';
 import { ExitConfirmationService } from './ExitConfirmationService';
 
 @Injectable()

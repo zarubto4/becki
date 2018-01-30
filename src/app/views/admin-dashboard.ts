@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 03.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
@@ -35,7 +36,7 @@ export class AdminDashboardComponent extends BaseMainComponent implements OnInit
 
     refresh(): void {
         this.blockUI();
-        this.backendService.reportAdminDashboardGet()
+        this.tyrionBackendService.reportAdminDashboardGet()
             .then(report => {
                 this.report = report;
                 this.unblockUI();

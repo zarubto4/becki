@@ -1,6 +1,8 @@
 /**
- * Created by davidhradek on 28.11.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 
 export function NullSafe<T>(valueFunction: () => T): T {
     try {

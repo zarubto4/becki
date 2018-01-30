@@ -1,6 +1,8 @@
 /**
- * Created by davidhradek on 19.12.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 
 ///<reference path='../../../node_modules/monaco-editor/monaco.d.ts'/>
 

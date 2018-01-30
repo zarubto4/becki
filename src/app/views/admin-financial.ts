@@ -1,6 +1,4 @@
-/**
- * Created by davidhradek on 05.12.16.
- */
+
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
@@ -33,7 +31,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.backendService.tariffsGetAll(), this.backendService])
+        Promise.all<any>([this.tyrionBackendService.tariffsGetAll(), this.tyrionBackendService])
             .then((values: [ITariff[]]) => {
                 this.tariffs = values[0];
                 this.unblockUI();
@@ -53,7 +51,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(new ModalsRemovalModel(tariff.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.tariffDelete(tariff.id)
+                this.tyrionBackendService.tariffDelete(tariff.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
                         this.refresh();
@@ -71,7 +69,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.tariffCreate({
+                this.tyrionBackendService.tariffCreate({
                     color: model.color,
                     awesome_icon: model.awesome_icon,
                     company_details_required: model.company_details_required,
@@ -112,7 +110,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.tariffEdit(tariff.id, {
+                this.tyrionBackendService.tariffEdit(tariff.id, {
                     color: model.color,
                     awesome_icon: model.awesome_icon,
                     company_details_required: model.company_details_required,
@@ -137,7 +135,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
     }
 
     onTariffShiftUpClick(tariff: ITariff): void {
-        this.backendService.tariffOrderUp(tariff.id)
+        this.tyrionBackendService.tariffOrderUp(tariff.id)
             .then(() => {
                 this.refresh();
             })
@@ -148,7 +146,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
     }
 
     onTariffShiftDownClick(tariff: ITariff): void {
-        this.backendService.tariffOrderDown(tariff.id)
+        this.tyrionBackendService.tariffOrderDown(tariff.id)
             .then(() => {
                 this.refresh();
             })
@@ -159,7 +157,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
     }
 
     onTariffActivate(tariff: ITariff): void {
-        this.backendService.tariffActivate(tariff.id)
+        this.tyrionBackendService.tariffActivate(tariff.id)
             .then(() => {
                 this.refresh();
             })
@@ -170,7 +168,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
     }
 
     onTariffDeactivate(tariff: ITariff): void {
-        this.backendService.tariffDeactivate(tariff.id)
+        this.tyrionBackendService.tariffDeactivate(tariff.id)
             .then(() => {
                 this.refresh();
             })
@@ -189,7 +187,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.tariffExtensionCreate('TODO', {
+                this.tyrionBackendService.tariffExtensionCreate('TODO', {
                     name: model.name,
                     description: model.description,
                     color: model.color,

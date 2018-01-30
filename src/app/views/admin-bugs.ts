@@ -27,7 +27,7 @@ export class BugsComponent extends BaseMainComponent implements OnInit, OnDestro
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getBugsAll()
+        this.tyrionBackendService.getBugsAll()
             .then((bugs) => {
                 this.bugs = bugs;
 

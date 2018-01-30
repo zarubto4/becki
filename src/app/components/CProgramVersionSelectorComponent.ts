@@ -1,11 +1,12 @@
 /**
- * Created by davidhradek on 20.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, Input, Output, EventEmitter, OnInit, NgZone } from '@angular/core';
 import { ICProgramShortDetail, ICProgramShortDetailForBlocko, ICProgramVersionShortDetail } from '../backend/TyrionAPI';
 import { BaseMainComponent } from '../views/BaseMainComponent';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 import { ModalService } from '../services/ModalService';
 
@@ -65,7 +66,7 @@ export class CProgramVersionSelectorComponent implements OnInit {
     selectedProgramId: string = null;
     selectedProgramVersionId: string = null;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: BackendService, private translationService: TranslationService) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, private translationService: TranslationService) {
 
     }
 

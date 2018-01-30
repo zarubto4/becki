@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 16.05.17.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 // !!!ALL THIS METHODS IS FROM CODE-SERVER!!!

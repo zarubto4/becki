@@ -1,14 +1,11 @@
 /**
- * Created by davidhradek on 15.08.16.
- */
-/*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import {
@@ -84,7 +81,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         inline: false
     };
 
-    constructor(public backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]],
             'firmwareType': ['', [Validators.required]],

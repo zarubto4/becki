@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 03.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
@@ -32,7 +33,7 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     constructor(injector: Injector) {
         super(injector);
         this.blockForm = this.formBuilder.group({
-            'id': ['', [Validators.required, BeckiAsyncValidators.hardwareDeviceId(this.backendService)]],
+            'id': ['', [Validators.required, BeckiAsyncValidators.hardwareDeviceId(this.tyrionBackendService)]],
             'project': ['', [Validators.required]],
         });
 
@@ -46,7 +47,7 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     }
 
     reloadGroupOptions() {
-        this.backendService.boardGroupGetListFromProject(this.blockForm.controls['project'].value).then(groups => {
+        this.tyrionBackendService.boardGroupGetListFromProject(this.blockForm.controls['project'].value).then(groups => {
             this.group_options_available = groups.map((pv) => {
                 return {
                     label: pv.name,
@@ -58,7 +59,7 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     }
 
     ngOnInit(): void {
-        this.backendService.projectGetByLoggedPerson().then((projects) => {
+        this.tyrionBackendService.projectGetByLoggedPerson().then((projects) => {
             this.projects = projects.map(project => {
                 return {
                     label: project.project_name,
@@ -81,7 +82,7 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
         let groupIDs = this.listGroup.selectedItems.map(a => a.value);
 
         this.blockUI();
-        this.backendService.boardConnectWithProject({
+        this.tyrionBackendService.boardConnectWithProject({
             group_ids: groupIDs,
             hash_for_adding: this.blockForm.controls['id'].value,
             project_id: this.blockForm.controls['project'].value

@@ -1,15 +1,13 @@
 /**
- * Created by davidhradek on 15.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-/*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
- */
+
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IPermission } from '../backend/TyrionAPI';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { ModalModel } from '../services/ModalService';
 
@@ -39,7 +37,7 @@ export class ModalsRolePermissionAddComponent implements OnInit {
     permission_options: FormSelectComponentOption[] = null;
     form: FormGroup;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             'permission': ['']
         });

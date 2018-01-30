@@ -1,14 +1,11 @@
 /**
- * Created by davidhradek on 04.08.16.
- */
-/*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslationService } from '../services/TranslationService';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 
 
 
@@ -28,7 +25,7 @@ export class LayoutNotLoggedComponent implements OnInit, OnDestroy {
 
 
     versionString = this.translationService.translate('label_becki_version', this, null, [BECKI_VERSION, BECKI_VERSION_ID, BECKI_VERSION_DATE]);
-    constructor(private backendService: BackendService, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private translationService: TranslationService) {
         this.beckiBeta = backendService.getBeckiBeta();
     }
 

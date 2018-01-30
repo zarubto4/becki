@@ -48,11 +48,11 @@ export class ProjectsProjectActualizationProcedureComponent extends BaseMainComp
 
     refresh(): void {
         this.blockUI();
-        this.backendService.actualizationProcedureGet(this.actualization_procedure_id)
+        this.tyrionBackendService.actualizationProcedureGet(this.actualization_procedure_id)
             .then((procedure) => {
                 this.procedure = procedure;
 
-                this.backendService.objectUpdateTyrionEcho.subscribe(status => {
+                this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
                     if (status.model === 'ActualizationProcedure' && this.procedure.id === status.model_id) {
                         this.refresh();
                     }
@@ -77,7 +77,7 @@ export class ProjectsProjectActualizationProcedureComponent extends BaseMainComp
                                        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL' , 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' , 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
         this.blockUI();
 
-        this.backendService.actualizationTaskGetByFilter(pageNumber, {
+        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
             actualization_procedure_ids: [this.actualization_procedure_id],
             board_ids: null,
             instance_ids: null,
@@ -89,10 +89,10 @@ export class ProjectsProjectActualizationProcedureComponent extends BaseMainComp
                 this.actualizationTaskFilter = values;
 
                 this.actualizationTaskFilter.content.forEach((task, index, obj) => {
-                    this.backendService.objectUpdateTyrionEcho.subscribe((status) => {
+                    this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
 
-                            this.backendService.actualizationTaskGet(task.id)
+                            this.tyrionBackendService.actualizationTaskGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
                                     task.date_of_finish = value.date_of_finish;

@@ -1,6 +1,4 @@
-/**
- * Created by davidhradek on 04.08.16.
- */
+
 
 import { Component, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';

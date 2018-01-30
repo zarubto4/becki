@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 15.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
@@ -83,7 +84,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramDelete(code.id)
+                this.tyrionBackendService.cProgramDelete(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
@@ -104,7 +105,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramCreate({ // TODO [permission]: C_program.create_permission (Project.update_permission)
+                this.tyrionBackendService.cProgramCreate({ // TODO [permission]: C_program.create_permission (Project.update_permission)
                     project_id: this.project_id,
                     name: model.name,
                     description: model.description,
@@ -131,7 +132,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramEdit(code.id, {
+                this.tyrionBackendService.cProgramEdit(code.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -152,7 +153,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramMakeClone({
+                this.tyrionBackendService.cProgramMakeClone({
                     c_program_id: code.id,
                     project_id: this.project_id,
                     name: model.name,
@@ -183,7 +184,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
             page = 1;
         }
 
-        this.backendService.cProgramGetListByFilter(page, {
+        this.tyrionBackendService.cProgramGetListByFilter(page, {
             public_programs: true,
         })
             .then((iCProgramList) => {

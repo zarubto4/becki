@@ -44,7 +44,7 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
     }
 
     onPayClick(invoice: IInvoice): void {
-        this.backendService.invoiceSendReimbursement(invoice.id).then(gopay => {
+        this.tyrionBackendService.invoiceSendReimbursement(invoice.id).then(gopay => {
 
             let gwUrl = gopay.gw_url;
 
@@ -72,7 +72,7 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
         let model = new ModalsSendInvoiceModel('Send invoice', invoice.id, this.product.payment_details.invoice_email);
         this.modalService.showModal(model).then((success) => {
-            this.backendService.invoiceResend(invoice.id, {}).then(response => {
+            this.tyrionBackendService.invoiceResend(invoice.id, {}).then(response => {
                 // this.unblockUI();
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_invoice_been_resend')));
             }).catch(() => {
@@ -107,7 +107,7 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     refresh(): void {
         this.blockUI();
-        this.backendService.productGet(this.id).then(product =>  {
+        this.tyrionBackendService.productGet(this.id).then(product =>  {
             this.product = product;
             this.invoices = this.product.invoices;
             this.unblockUI();

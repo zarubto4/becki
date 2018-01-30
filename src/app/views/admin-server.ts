@@ -1,17 +1,19 @@
 /**
- * Created by davidhradek on 05.12.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
-    ICompilationServer, ICompilerServerPublicDetail, IHomerServer, IHomerServerPublicDetail,
+    ICompilationServer, ICompilerServerPublicDetail, IHomerServer,
     ITypeOfBoard
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
+import { IVersionOverview } from '../backend/HomerAPI';
+import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
 
 @Component({
     selector: 'bk-view-admin-server',
@@ -19,7 +21,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 })
 export class ServerComponent extends BaseMainComponent implements OnInit {
 
-    homer_servers: IHomerServerPublicDetail[] = null;
+    homer_servers: IHomerServer[] = null;
     compilations_servers: ICompilerServerPublicDetail[] = null;
 
     tab: string = 'homer_server';
@@ -35,12 +37,12 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.backendService.homerServersGetList(), this.backendService.compilationServersGetList()])
-            .then((values: [IHomerServerPublicDetail[], ICompilerServerPublicDetail[]]) => {
+        Promise.all<any>([this.tyrionBackendService.homerServersGetList(), this.tyrionBackendService.compilationServersGetList()])
+            .then((values: [IHomerServer[], ICompilerServerPublicDetail[]]) => {
 
                 this.homer_servers = values[0];
                 this.homer_servers.forEach((server, index, obj) => {
-                    this.backendService.onlineStatus.subscribe((status) => {
+                    this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'HomerServer' && server.id === status.model_id) {
                             server.online_state = status.online_status;
                         }
@@ -50,7 +52,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
 
                 this.compilations_servers = values[1];
                 this.compilations_servers.forEach((server, index, obj) => {
-                    this.backendService.onlineStatus.subscribe((status) => {
+                    this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'CompilationServer' && server.id === status.model_id) {
                             server.online_state = status.online_status;
                         }
@@ -75,7 +77,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.homerServerCreate({
+                this.tyrionBackendService.homerServerCreate({
                     personal_server_name: model.personal_server_name,
                     web_view_port: model.web_view_port,
                     server_url: model.server_url,
@@ -98,7 +100,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.compilationServerCreate({
+                this.tyrionBackendService.compilationServerCreate({
                     personal_server_name: model.personal_server_name,
                     server_url: model.server_url
                 })
@@ -112,13 +114,13 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onHomerServerClick(serverShortDetail: IHomerServerPublicDetail): void {
+    onHomerServerClick(serverShortDetail: IHomerServer): void {
         // TODO dodělat stránku server??
     }
 
-    onHomerServerEditClick(serverShortDetail: IHomerServerPublicDetail): void {
+    onHomerServerEditClick(serverShortDetail: IHomerServer): void {
         // Get full detail object first
-        Promise.all<any>([this.backendService.homerServerGet(serverShortDetail.id)])
+        Promise.all<any>([this.tyrionBackendService.homerServerGet(serverShortDetail.id)])
             .then((values: [IHomerServer]) => {
 
                 let server: IHomerServer = values[0];
@@ -137,7 +139,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.homerServerEdit(server.id, {
+                        this.tyrionBackendService.homerServerEdit(server.id, {
                             personal_server_name: model.personal_server_name,
                             web_view_port: model.web_view_port,
                             server_url: model.server_url,
@@ -162,11 +164,20 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
             });
     }
 
-    onHomerServerDeleteClick(serverShortDetail: IHomerServerPublicDetail): void {
+    onHomerServerUpdateServer(server: IHomerServer): void {
+        let model = new ModalsUpdateHomerServerModel(server);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+            }
+        });
+    }
+
+    onHomerServerDeleteClick(serverShortDetail: IHomerServer): void {
         this.modalService.showModal(new ModalsRemovalModel(serverShortDetail.personal_server_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.homerServerDelete(serverShortDetail.id)
+                this.tyrionBackendService.homerServerDelete(serverShortDetail.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -185,7 +196,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
 
     onCompilationServerEditClick(serverShortDetail: ICompilerServerPublicDetail): void {
         // Get full detail object first
-        Promise.all<any>([this.backendService.compilationServerGet(serverShortDetail.id)])
+        Promise.all<any>([this.tyrionBackendService.compilationServerGet(serverShortDetail.id)])
             .then((values: [ICompilationServer]) => {
 
                 let server: ICompilationServer = values[0];
@@ -194,7 +205,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.compilationServerEdit(server.id, {
+                        this.tyrionBackendService.compilationServerEdit(server.id, {
                             personal_server_name: model.personal_server_name,
                             server_url: model.server_url
                         })
@@ -219,7 +230,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(new ModalsRemovalModel(server.personal_server_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.compilationServersDelete(server.id)
+                this.tyrionBackendService.compilationServersDelete(server.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI

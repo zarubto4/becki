@@ -1,6 +1,8 @@
 /**
- * Created by davidhradek on 17.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
@@ -108,7 +110,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             }
         });
 
-        this.backendService.objectUpdateTyrionEcho.subscribe(status => {
+        this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'CProgram' && this.codeId === status.model_id) {
                 this.refresh();
             }
@@ -161,7 +163,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramVersionEditResponsePublication({
+                this.tyrionBackendService.cProgramVersionEditResponsePublication({
                     version_id: version.version_id,
                     version_name: model.version_name,
                     version_description: model.version_description,
@@ -186,7 +188,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsRemovalModel(this.codeProgram.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramDelete(this.codeProgram.id)
+                this.tyrionBackendService.cProgramDelete(this.codeProgram.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         if (this.projectId != null) {
@@ -207,7 +209,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramEdit(this.codeProgram.id, {
+                this.tyrionBackendService.cProgramEdit(this.codeProgram.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -227,7 +229,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramVersionDelete(version.version_id)
+                this.tyrionBackendService.cProgramVersionDelete(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
                         if (this.projectId != null) {
@@ -251,7 +253,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramVersionEditInformation(version.version_id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.cProgramVersionEditInformation(version.version_id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -285,7 +287,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     refresh(): void {
 
         this.blockUI();
-        this.backendService.cProgramGet(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
+        this.tyrionBackendService.cProgramGet(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
             .then((codeProgram) => {
 
                 this.codeProgram = codeProgram;
@@ -305,7 +307,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 this.unblockUI();
 
-                this.backendService.typeOfBoardGet(this.codeProgram.type_of_board_id)
+                this.tyrionBackendService.typeOfBoardGet(this.codeProgram.type_of_board_id)
                     .then((response) => {
                         this.typeOfBoard = response;
                         this.onMakeListOfCompilationVersion();
@@ -354,7 +356,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                     this.codeIDE.exetrnalAddFile(cf);
 
-                    this.backendService.libraryVersionGet(mm.libraryVersion.version_id)
+                    this.tyrionBackendService.libraryVersionGet(mm.libraryVersion.version_id)
                         .then((lv) => {
                             if (lv && lv.files) {
                                 lv.files.forEach((f) => {
@@ -380,7 +382,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 this.codeIDE.externalRefresh();
 
-                this.backendService.libraryVersionGet(mm.libraryVersion.version_id)
+                this.tyrionBackendService.libraryVersionGet(mm.libraryVersion.version_id)
                     .then((lv) => {
                         if (lv && lv.files) {
                             lv.files.forEach((f) => {
@@ -412,7 +414,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramMakeClone({
+                this.tyrionBackendService.cProgramMakeClone({
                     c_program_id: this.codeProgram.id,
                     project_id: this.projectId,
                     name: model.name,
@@ -465,7 +467,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     reloadVersions(): void {
         if (this.codeId) {
-            this.backendService.cProgramGet(this.codeId)
+            this.tyrionBackendService.cProgramGet(this.codeId)
                 .then((codeProgram) => {
                     this.codeProgram = codeProgram;
                     this.codeProgramVersions = this.codeProgram.program_versions || [];
@@ -481,7 +483,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsPublicShareRequestModel(this.codeProgram.name, programVersion.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.cProgramVersionMakePublic(programVersion.version_id)
+                this.tyrionBackendService.cProgramVersionMakePublic(programVersion.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
                         this.refresh();
@@ -503,7 +505,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
 
         this.blockUI();
-        this.backendService.cProgramVersionGet(programVersion.version_id) // TODO [permission]: C_program.Version.read_permission
+        this.tyrionBackendService.cProgramVersionGet(programVersion.version_id) // TODO [permission]: C_program.Version.read_permission
             .then((programVersionFull) => {
                 this.unblockUI();
 
@@ -533,7 +535,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         cf.libraryName = uf.library_short_detail.name;
                         cf.libraryVersionId = uf.library_version_short_detail.version_id;
 
-                        this.backendService.libraryVersionGet(uf.library_version_short_detail.version_id)
+                        this.tyrionBackendService.libraryVersionGet(uf.library_version_short_detail.version_id)
                             .then((lv) => {
                                 if (lv && lv.files) {
                                     lv.files.forEach((f) => {
@@ -639,7 +641,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 });
 
                 this.blockUI();
-                this.backendService.cProgramVersionCreate(this.codeId, { // TODO [permission]: "C_Program.update_permission" : "true",
+                this.tyrionBackendService.cProgramVersionCreate(this.codeId, { // TODO [permission]: "C_Program.update_permission" : "true",
                     imported_libraries: libs,
                     version_name: m.name,
                     version_description: m.description,
@@ -705,7 +707,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         });
 
         this.buildInProgress = true;
-        this.backendService.cProgramCompile({
+        this.tyrionBackendService.cProgramCompile({
             imported_libraries: libs,
             main: main,
             files: userFiles,
@@ -754,7 +756,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsSetAsMainModel(this.translate('label_default_c_program_setting'), version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeofboardSetcprogramversion_as_main(version.version_id)
+                this.tyrionBackendService.typeofboardSetcprogramversion_as_main(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_set_as_default')));
                         this.refresh(); // also unblockUI
@@ -773,7 +775,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
 
         this.blockUI();
-        this.backendService.boardsGetForIdeOperation(this.projectId) // TODO [permission]: Board.edit_permission
+        this.tyrionBackendService.boardsGetForIdeOperation(this.projectId) // TODO [permission]: Board.edit_permission
             .then((boards) => {
                 this.unblockUI();
 
@@ -788,7 +790,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     .then((success) => {
                         if (success && m.selectedBoard) {
                             this.blockUI();
-                            this.backendService.cProgramUploadIntoHardware({
+                            this.tyrionBackendService.cProgramUploadIntoHardware({
                                 board_pairs: [{
                                     board_id: m.selectedBoard.id,
                                     c_program_version_id: version.version_id

@@ -1,15 +1,12 @@
 /**
- * Created by davidhradek on 01.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
-/*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
- */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { CodeDirectory } from '../components/CodeIDEComponent';
 import { FileTreeObject } from '../components/FileTreeComponent';
@@ -65,7 +62,7 @@ export class ModalsCodeFileDialogComponent implements OnInit {
     textSubmit: string = 'btn_done';
     textCancel: string = 'btn_cancel';
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
     }
 
     ngOnInit() {

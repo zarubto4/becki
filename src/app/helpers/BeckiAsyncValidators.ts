@@ -1,10 +1,12 @@
 /**
- * Created by davidhradek on 04.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 
 import { FormControl, AsyncValidatorFn, AbstractControl } from '@angular/forms';
 import { Observable, Observer } from 'rxjs/Rx';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { IBProgram } from '../backend/TyrionAPI';
 
 export class AsyncValidatorDebounce {
@@ -51,7 +53,7 @@ export class AsyncValidatorDebounce {
 
 export class BeckiAsyncValidators {
 
-    public static validateEntity(backEnd: BackendService, inputKey: ('mail'|'nick_name'|'vat_number')): AsyncValidatorFn {
+    public static validateEntity(backEnd: TyrionBackendService, inputKey: ('mail'|'nick_name'|'vat_number')): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
 
@@ -77,7 +79,7 @@ export class BeckiAsyncValidators {
 
     }
 
-    public static projectNameTaken(backEnd: BackendService): AsyncValidatorFn {
+    public static projectNameTaken(backEnd: TyrionBackendService): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
                 backEnd.projectGetByLoggedPerson()
@@ -96,7 +98,7 @@ export class BeckiAsyncValidators {
     }
 
 
-    public static hardwareDeviceId(backEnd: BackendService): AsyncValidatorFn {
+    public static hardwareDeviceId(backEnd: TyrionBackendService): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
                 backEnd.boardCheckRegistrationStatus(control.value) // TODO [permission]: Project.read_permission
@@ -116,7 +118,7 @@ export class BeckiAsyncValidators {
 
     // blockoNameTaken validator is not used
     /*
-    public static blockoNameTaken(backEnd: BackendService, projectId: string|(() => string)): AsyncValidatorFn {
+    public static blockoNameTaken(backEnd: TyrionBackendService, projectId: string|(() => string)): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
                 let projId: string = null;

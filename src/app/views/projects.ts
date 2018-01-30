@@ -29,7 +29,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     };
 
     ngOnInit(): void {
-        this.backendService.objectUpdateTyrionEcho.subscribe(status => {
+        this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'ProjectsRefreshAfterInvite') {
                 this.refresh();
             }
@@ -39,7 +39,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.projectGetByLoggedPerson(), this.backendService.productsGetUserCanUsed()])
+        Promise.all<any>([this.tyrionBackendService.projectGetByLoggedPerson(), this.tyrionBackendService.productsGetUserCanUsed()])
             .then((values: [IProjectShortDetail[], IApplicableProduct[]]) => {
                 this.projects = values[0];
                 this.products = values[1];
@@ -97,7 +97,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.projectCreate({
+                this.tyrionBackendService.projectCreate({
                     name: model.name,
                     description: model.description,
                     product_id: model.product
@@ -123,7 +123,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.projectEdit(project.project_id, {
+                this.tyrionBackendService.projectEdit(project.project_id, {
                     project_name: model.name,
                     project_description: model.description
                 })
@@ -143,7 +143,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(new ModalsRemovalModel(project.project_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.projectDelete(project.project_id)
+                this.tyrionBackendService.projectDelete(project.project_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.refresh(); // also unblockUI

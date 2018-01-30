@@ -1,7 +1,7 @@
 /**
- * Created by davidhradek on 03.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { NotificationService, FlashMessageError } from './NotificationService';
@@ -9,15 +9,15 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import { BeckiBackend, RestRequest, RestResponse } from '../backend/BeckiBackend';
+import { TyrionApiBackend, RestRequest, RestResponse } from '../backend/BeckiBackend';
 import { TranslationService } from '../services/TranslationService';
 
 @Injectable()
-export class BackendService extends BeckiBackend {
+export class TyrionBackendService extends TyrionApiBackend {
 
     constructor(protected http: Http, protected router: Router, private translationService: TranslationService) {
         super();
-        console.info('BackendService init');
+        console.info('TyrionBackendService init');
         this.refreshPersonInfo();
     }
 

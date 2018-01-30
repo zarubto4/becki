@@ -6,7 +6,7 @@
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { IApplicableProduct } from '../backend/TyrionAPI';
@@ -41,7 +41,7 @@ export class ModalsProjectPropertiesComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4)], BeckiAsyncValidators.condition((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName === value);

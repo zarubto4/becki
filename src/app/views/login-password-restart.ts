@@ -12,7 +12,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService, FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 
 
@@ -32,7 +32,7 @@ export class PasswordRestartComponent implements OnInit, OnDestroy {
         protected activatedRoute: ActivatedRoute,
         protected router: Router,
         protected formBuilder: FormBuilder,
-        protected backEndService: BackendService,
+        protected backEndService: TyrionBackendService,
         protected notificationService: NotificationService,
         protected translationService: TranslationService,
     ) {

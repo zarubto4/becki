@@ -4,7 +4,7 @@ import { FlashMessage } from '../services/NotificationService';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalModel } from '../services/ModalService';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 
 
@@ -38,7 +38,7 @@ export class ModalsFileUploadComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private translationService: TranslationService, private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private translationService: TranslationService, private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             'fileTypeTitle': [''],
             'fileTypeDescription': [''],

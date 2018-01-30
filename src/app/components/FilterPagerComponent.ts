@@ -1,7 +1,7 @@
 /**
- * Created by davidhradek on 21.11.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { NotificationService, Notification } from '../services/NotificationService';
 import { INotificationElement, INotificationButton } from '../backend/TyrionAPI';

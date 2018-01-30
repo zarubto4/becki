@@ -47,7 +47,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.productEditDetails(product.id, {
+                this.tyrionBackendService.productEditDetails(product.id, {
                     name: model.name,
                 })
                     .then(() => {
@@ -64,7 +64,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        this.backendService.productsGetUserOwnList()
+        this.tyrionBackendService.productsGetUserOwnList()
             .then(products => {
                 this.products = products;
                 this.unblockUI();

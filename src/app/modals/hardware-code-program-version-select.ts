@@ -1,10 +1,12 @@
 /**
- * Created by davidhradek on 12.06.17.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import {
@@ -42,7 +44,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
 
     loading = false;
 
-    constructor(private backendService: BackendService) {
+    constructor(private backendService: TyrionBackendService) {
     }
 
     loadProject() {

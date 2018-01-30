@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 05.12.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, Injector, OnInit } from '@angular/core';
@@ -24,7 +25,7 @@ export class HardwareComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        this.backendService.typeOfBoardsGetAll()
+        this.tyrionBackendService.typeOfBoardsGetAll()
             .then((typeOfBoards) => {
                 this.devices = typeOfBoards;
                 // console.log(typeOfBoards);

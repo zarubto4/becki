@@ -1,7 +1,7 @@
 /**
- * Created by davidhradek on 21.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
@@ -81,7 +81,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfWidgetCreate({ // TODO [permission]: TypeOfWidget_create_permission
+                this.tyrionBackendService.typeOfWidgetCreate({ // TODO [permission]: TypeOfWidget_create_permission
                     project_id: this.projectId ? this.projectId : null,
                     name: model.name,
                     description: model.description
@@ -111,7 +111,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfWidgetEdit(group.id, {
+                this.tyrionBackendService.typeOfWidgetEdit(group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -139,7 +139,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
         this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfWidgetDelete(group.id)
+                this.tyrionBackendService.typeOfWidgetDelete(group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
                         if (this.projectId) {
@@ -167,7 +167,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
 
     onShowPublicGridGroupsByFilter(page: number = 0): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.typeOfWidgetGetByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.typeOfWidgetGetByFilter(page, {
             public_programs: true,       // For public its required
         })
         ])
@@ -183,7 +183,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
 
     onShowProgramForDecisionsByFilter(page: number = 0): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.gridWidgetGetByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.gridWidgetGetByFilter(page, {
             pending_widget: true,       // For public its required
         })
         ])
@@ -198,7 +198,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
     }
 
     onGroupShiftUpClick(group: ITypeOfWidgetShortDetail): void {
-        this.backendService.typeOfWidgetOrderUp(group.id)
+        this.tyrionBackendService.typeOfWidgetOrderUp(group.id)
             .then(() => {
                 this.onShowPublicGridGroupsByFilter();
             })
@@ -209,7 +209,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
     }
 
     onGroupShiftDownClick(group: ITypeOfWidgetShortDetail): void {
-        this.backendService.typeOfWidgetOrderDown(group.id)
+        this.tyrionBackendService.typeOfWidgetOrderDown(group.id)
             .then(() => {
                 this.onShowPublicGridGroupsByFilter();
             })
@@ -221,7 +221,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
 
     onGroupActivateClick(group: ITypeOfWidgetShortDetail): void {
         this.blockUI();
-        this.backendService.typeOfWidgetActivate(group.id)
+        this.tyrionBackendService.typeOfWidgetActivate(group.id)
             .then(() => {
                 this.onShowPublicGridGroupsByFilter();
             })
@@ -233,7 +233,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
 
     onGroupDeactivateClick(group: ITypeOfWidgetShortDetail): void {
         this.blockUI();
-        this.backendService.typeOfWidgetDeactivate(group.id)
+        this.tyrionBackendService.typeOfWidgetDeactivate(group.id)
             .then(() => {
                 this.onShowPublicGridGroupsByFilter();
             })

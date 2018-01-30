@@ -9,7 +9,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IBoard, IHardwareNewPassword } from '../backend/TyrionAPI';
@@ -41,7 +41,7 @@ export class ModalsHardwareRestartMQTTPassComponent implements OnInit {
 
     pass: IHardwareNewPassword = null;
 
-    constructor(public backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({});
     }
 

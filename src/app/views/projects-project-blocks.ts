@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 21.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 
@@ -81,7 +82,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBlockCreate({
+                this.tyrionBackendService.typeOfBlockCreate({
                     project_id: this.projectId ? this.projectId : null,
                     name: model.name,
                     description: model.description
@@ -111,7 +112,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBlockEdit(group.id, {
+                this.tyrionBackendService.typeOfBlockEdit(group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -139,7 +140,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBlockDelete(group.id)
+                this.tyrionBackendService.typeOfBlockDelete(group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('flash_block_group_remove'));
                         if (this.projectId) {
@@ -163,7 +164,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     onShowPublicBlockoGroupsByFilter(page: number = 0): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.typeOfBlocksGetByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.typeOfBlocksGetByFilter(page, {
             public_programs: true,       // For public its required
         })
         ])
@@ -179,7 +180,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     onShowProgramForDecisionsByFilter(page: number = 0): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.blockoBlockGetByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.blockoBlockGetByFilter(page, {
             pending_blocks: true,       // For public its required
         })
         ])
@@ -195,7 +196,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
 
     onGroupShiftUpClick(group: ITypeOfBlockShortDetail): void {
-        this.backendService.typeOfBlockOrderUp(group.id)
+        this.tyrionBackendService.typeOfBlockOrderUp(group.id)
             .then(() => {
                 this.onShowPublicBlockoGroupsByFilter();
             })
@@ -206,7 +207,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
     }
 
     onGroupShiftDownClick(group: ITypeOfBlockShortDetail): void {
-        this.backendService.typeOfBlockOrderDown(group.id)
+        this.tyrionBackendService.typeOfBlockOrderDown(group.id)
             .then(() => {
                 this.onShowPublicBlockoGroupsByFilter();
             })
@@ -218,7 +219,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     onGroupActivateClick(group: ITypeOfBlockShortDetail): void {
         this.blockUI();
-        this.backendService.typeOfBlocksActivate(group.id)
+        this.tyrionBackendService.typeOfBlocksActivate(group.id)
             .then(() => {
                 this.onShowPublicBlockoGroupsByFilter();
             })
@@ -230,7 +231,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     onGroupDeactivateClick(group: ITypeOfBlockShortDetail): void {
         this.blockUI();
-        this.backendService.typeOfBlocksDeactivate(group.id)
+        this.tyrionBackendService.typeOfBlocksDeactivate(group.id)
             .then(() => {
                 this.onShowPublicBlockoGroupsByFilter();
             })

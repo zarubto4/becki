@@ -1,7 +1,7 @@
 /**
- * Created by davidhradek on 09.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -37,7 +37,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
                 this.project = project;
             });
 
-            this.backendService.objectUpdateTyrionEcho.subscribe(status => {
+            this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
                 if (status.model === 'Project' && this.id === status.model_id) {
                     this.refresh();
                 }
@@ -60,7 +60,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.projectEdit(this.id, {
+                this.tyrionBackendService.projectEdit(this.id, {
                     project_name: model.name,
                     project_description: model.description
                 })
@@ -82,7 +82,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         this.modalService.showModal(new ModalsRemovalModel(this.project.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.projectDelete(this.id)
+                this.tyrionBackendService.projectDelete(this.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.router.navigate(['/projects']);
@@ -153,7 +153,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         this.storageService.projectRefresh(this.id);
         /*
         this.blockUI();
-        this.backendService.getProject(this.id)
+        this.tyrionBackendService.getProject(this.id)
             .then(project => {
                 this.project = project;
                 this.unblockUI();

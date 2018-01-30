@@ -2,7 +2,9 @@
 /src/app/**/*.js
 /src/app/**/*.js.map
 
-/generator/generator.js
+/generator-tyrion/generator.js
+/generator-homer/generator.js
+
 
 
 # Logs

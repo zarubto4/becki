@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 05.12.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, Injector, OnInit } from '@angular/core';
@@ -28,7 +29,7 @@ export class RoleGroupComponent extends BaseMainComponent implements OnInit {
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.backendService.roleGetAll()])
+        Promise.all<any>([this.tyrionBackendService.roleGetAll()])
             .then((values: [IRoleShortDetai[]]) => {
                 this.securityRole = values[0];
                 this.unblockUI();
@@ -44,7 +45,7 @@ export class RoleGroupComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.roleCreate({
+                this.tyrionBackendService.roleCreate({
                     description: model.description,
                     name: model.name
                 })
@@ -67,7 +68,7 @@ export class RoleGroupComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.roleEdit(role.id, {
+                this.tyrionBackendService.roleEdit(role.id, {
                     description: model.description,
                     name: model.name
                 })
@@ -85,7 +86,7 @@ export class RoleGroupComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(new ModalsRemovalModel(role.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.roleDelete(role.id)
+                this.tyrionBackendService.roleDelete(role.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI

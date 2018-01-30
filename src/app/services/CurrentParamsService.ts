@@ -1,10 +1,11 @@
 /**
- * Created by davidhradek on 16.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Injectable } from '@angular/core';
 import { Router, RoutesRecognized, ActivatedRouteSnapshot, Params, NavigationCancel, NavigationEnd } from '@angular/router';
-import { BackendService } from './BackendService';
+import { TyrionBackendService } from './BackendService';
 import { Observable, Subject } from 'rxjs/Rx';
 import { IProject, IBProgram, ICProgram } from '../backend/TyrionAPI';
 
@@ -103,7 +104,7 @@ export class CurrentParamsService {
     protected currentActualizationProcedureSubject: Subject<string> = null;
     public currentActualizationProcedureSnapShot: string = null;
 
-    constructor(protected router: Router, protected backendService: BackendService) {
+    constructor(protected router: Router, protected backendService: TyrionBackendService) {
         console.info('BreadcrumbsService init');
 
         this.currentParams = this.currentParamsSubject = new Subject<{ [key: string]: string }>();

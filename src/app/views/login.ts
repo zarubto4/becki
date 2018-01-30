@@ -1,11 +1,12 @@
 /**
- * Created by davidhradek on 03.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { PermissionMissingError, UserNotValidatedError } from '../backend/BeckiBackend';
 import { BlockUIService } from '../services/BlockUIService';
@@ -30,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     routeParamsSubscription: Subscription;
 
     constructor(
-        private backendService: BackendService,
+        private backendService: TyrionBackendService,
         private formBuilder: FormBuilder,
         private router: Router,
         private blockUIService: BlockUIService,

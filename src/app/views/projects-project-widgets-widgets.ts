@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 01.11.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
@@ -64,7 +65,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
 
     refresh(): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.typeOfWidgetGet(this.typeOfWidgetId)])
+        Promise.all<any>([this.tyrionBackendService.typeOfWidgetGet(this.typeOfWidgetId)])
             .then((values: [ITypeOfWidget]) => {
                 this.group = values[0];
                 this.unblockUI();
@@ -89,7 +90,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetMakeClone({
+                this.tyrionBackendService.gridWidgetMakeClone({
                     grid_widget_id: widget.id,
                     type_of_widget_id: model.type_of_widget,
                     project_id: this.projectId,
@@ -114,7 +115,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfWidgetEdit(this.group.id, {
+                this.tyrionBackendService.typeOfWidgetEdit(this.group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -142,7 +143,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(new ModalsRemovalModel(this.group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfWidgetDelete(this.group.id)
+                this.tyrionBackendService.typeOfWidgetDelete(this.group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_remove_success')));
                         if (this.projectId) {
@@ -170,7 +171,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetCreate({
+                this.tyrionBackendService.gridWidgetCreate({
                     type_of_widget_id: group.id,
                     name: model.name,
                     description: model.description
@@ -202,7 +203,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetEdit(widget.id, {
+                this.tyrionBackendService.gridWidgetEdit(widget.id, {
                     name: model.name,
                     description: model.description,
                     type_of_widget_id: this.typeOfWidgetId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
@@ -233,7 +234,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(new ModalsRemovalModel(widget.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.gridWidgetDelete(widget.id)
+                this.tyrionBackendService.gridWidgetDelete(widget.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
                         if (this.projectId) {
@@ -257,7 +258,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
 
     onWidgetActivateClick(widget: IGridWidgetShortDetail): void {
         this.blockUI();
-        this.backendService.gridWidgetActivate(widget.id)
+        this.tyrionBackendService.gridWidgetActivate(widget.id)
             .then(() => {
                 this.refresh();
             })
@@ -269,7 +270,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
 
     onWidgetDeactivateClick(widget: IGridWidgetShortDetail): void {
         this.blockUI();
-        this.backendService.gridWidgetDeactivate(widget.id)
+        this.tyrionBackendService.gridWidgetDeactivate(widget.id)
             .then(() => {
                 this.refresh();
             })

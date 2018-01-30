@@ -1,8 +1,11 @@
 /**
- * Created by davidhradek on 08.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
+
 import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin } from './TyrionAPI';
+import { HomerAPI } from './HomerAPI';
 import * as Rx from 'rxjs';
 import { ConsoleLogType } from '../components/ConsoleLogComponent';
 
@@ -331,7 +334,7 @@ export interface ModelChangeStatus {
 
 // BECKI BACKEND
 
-export abstract class BeckiBackend extends TyrionAPI {
+export abstract class TyrionApiBackend extends TyrionAPI {
 
     public static WS_CHANNEL = 'becki';
 
@@ -353,7 +356,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     private webSocketReconnectTimeout: any = null;
 
-    private beckiBeta: boolean = true; // TODO BETA
+    private beckiBeta: boolean = true; // TODO BETA - Vedle Loga
 
     public notificationReceived: Rx.Subject<IWebSocketNotification> = new Rx.Subject<IWebSocketNotification>();
 
@@ -390,7 +393,6 @@ export abstract class BeckiBackend extends TyrionAPI {
     protected websocketErrorShown: boolean = false;
 
     // CONSTRUCTOR
-
     public constructor() {
         super();
         // TODO: make better environment detection
@@ -430,14 +432,25 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     }
 
+
+
     // GENERIC REQUESTS
-
-
 
     protected abstract requestRestGeneral(request: RestRequest): Promise<RestResponse>;
 
     public requestRestPath<T>(method: string, path: string, body: Object, success: number[]): Promise<T> {
-        return this.requestRest(method, `${this.protocol}://${this.host}${path}`, body, success);
+
+
+        // If path contains http on beginning! or first char is "/" its on 100% api path from TyrionAPI
+        // For example /login or /get_projects:{all}
+        // But if contains https - for example https://homer.server.cz/get_something - it didnt used ${this.protocol}://${this.host}${path}
+        if (path.charAt(0) === '/') {
+            console.log('Its a Tyrion API');
+            return this.requestRest(method, `${this.protocol}://${this.host}${path}`, body, success);
+        } else {
+            console.log('Its a External outside API');
+            return this.requestRest(method, path, body, success);
+        }
     }
 
     public requestRest<T>(method: string, url: string, body: Object, success: number[]): Promise<T> {
@@ -480,6 +493,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                 }
             })
             .catch((e: any) => {
+                console.error(e);
                 this.tasks -= 1;
                 throw e;
             });
@@ -707,7 +721,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         if (!(server !== null) && !(port !== null)) {     // pokud vůbec má parametry na připojení (hodně obskurní metoda využívající dvojtej zápor (zahrnuje i undefined, apod.))
             let websocket: WebSocket = null; // připravíme si nový WS
 
-            let wsPosition: number = this.hardwareTerminalwebSockets.findIndex(ws => { // pokusíme se najít zda již neexistuje připojený WS na stejné adrese 
+            let wsPosition: number = this.hardwareTerminalwebSockets.findIndex(ws => { // pokusíme se najít zda již neexistuje připojený WS na stejné adrese
                 // (WS hledáme dle Url + port, takže pokud budeme mít stejné URL ale jiný port, chová se k tomu jako k novému připojnení)
                 if (ws.url.includes(server + ':' + port)) {
                     websocket = ws;
@@ -756,7 +770,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
             opened.subscribe(open => this.sendWebSocketTerminalMessageQueue());
 
-            if (wsPosition > -1) { // nahradíme WS co extistuje, čímž nám nevnikají duplikáty 
+            if (wsPosition > -1) { // nahradíme WS co extistuje, čímž nám nevnikají duplikáty
                 this.hardwareTerminalwebSockets[wsPosition] = websocket;
             } else { // pokud je WS novej, přidá se do seznamu
 
@@ -787,8 +801,9 @@ export abstract class BeckiBackend extends TyrionAPI {
 
         let websocket = this.hardwareTerminalwebSockets.find(ws => { // najdeme dle URL WS co chceme zavřít
             if (ws.url.includes(websocketURL)) {
-                // console.warn("nenalezen websocket");
-
+                /* tslint:disable:no-console */
+                console.warn('nenalezen websocket');
+                /* tslint:disable:no-console */
                 return true;
             }
         });
@@ -830,7 +845,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                         }
                         return null;
                     })
-                    .filter(message => (message && message.message_channel === BeckiBackend.WS_CHANNEL));
+                    .filter(message => (message && message.message_channel === TyrionApiBackend.WS_CHANNEL));
                 let channelGarfieldReceived = Rx.Observable
                     .fromEvent<MessageEvent>(this.webSocket, 'message')
                     .map(event => {
@@ -841,7 +856,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                         }
                         return null;
                     })
-                    .filter(message => (message && message.message_channel === BeckiBackend.WS_CHANNEL_GARFIELD));
+                    .filter(message => (message && message.message_channel === TyrionApiBackend.WS_CHANNEL_GARFIELD));
                 let errorOccurred = Rx.Observable
                     .fromEvent(this.webSocket, 'error');
 
@@ -919,7 +934,6 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     // WebSocket Messages:
 
-
     public requestDeviceTerminalSubcribe(deviceId: string, webSocketURL: string, logLevel: string): void {
         if (this.hardwareTerminalwebSockets) {
 
@@ -956,7 +970,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     public requestNotificationsSubscribe(): void {
         let message = {
             message_id: this.uuid(),
-            message_channel: BeckiBackend.WS_CHANNEL,
+            message_channel: TyrionApiBackend.WS_CHANNEL,
             message_type: 'subscribe_notification'
         };
         if (!this.findEnqueuedWebSocketMessage(message, 'message_channel', 'message_type')) {
@@ -967,7 +981,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     public requestNotificationsUnsubscribe(): void {
         let message = {
             message_id: this.uuid(),
-            message_channel: BeckiBackend.WS_CHANNEL,
+            message_channel: TyrionApiBackend.WS_CHANNEL,
             message_type: 'unsubscribe_notification'
         };
         if (!this.findEnqueuedWebSocketMessage(message, 'message_channel', 'message_type')) {
@@ -979,7 +993,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
         let message = {
             message_id: this.uuid(),
-            message_channel: BeckiBackend.WS_CHANNEL,
+            message_channel: TyrionApiBackend.WS_CHANNEL,
             message_type: 'subscribe_instace',
             version_id
         };
@@ -991,7 +1005,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     public requestBProgramValues(version_id: string): void {
         let message = {
             message_id: this.uuid(),
-            message_channel: BeckiBackend.WS_CHANNEL,
+            message_channel: TyrionApiBackend.WS_CHANNEL,
             message_type: 'getValues',
             version_id
         };

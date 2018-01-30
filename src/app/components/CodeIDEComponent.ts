@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 25.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, OnChanges, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
