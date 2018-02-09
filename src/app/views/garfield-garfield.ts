@@ -746,6 +746,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         }
 
         this.device = null;
+        this.deviceId = null;
         let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
         if (msg.device_id) {
             this.deviceId = msg.device_id;

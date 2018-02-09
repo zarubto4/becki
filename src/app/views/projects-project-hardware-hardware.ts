@@ -2,7 +2,7 @@
  * Created by Tomas Kupcek on 12.01.2017.
  */
 
-import { Component, Injector, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     IActualizationProcedureTaskList, IBoard, IBoardShortDetail,
@@ -15,20 +15,16 @@ import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
-import { OnlineChangeStatus, TyrionApiBackend, ITerminalWebsocketMessage, IWebsocketTerminalState } from '../backend/BeckiBackend';
-import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
+import { ITerminalWebsocketMessage, IWebsocketTerminalState } from '../backend/BeckiBackend';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import { ConsoleLogComponent, ConsoleLogType, ConsoleLogItem } from '../components/ConsoleLogComponent';
+import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ModalPickHardwareTerminalComponent, ModalPickHardwareTerminalModel } from '../modals/pick-hardware-terminal';
-import { IBoardForFastUploadDetail } from '../backend/TyrionAPI';
+import { ModalPickHardwareTerminalModel } from '../modals/pick-hardware-terminal';
 import { ModalsHardwareRestartMQTTPassModel } from '../modals/hardware-restart-mqtt-pass';
 import * as Rx from 'rxjs';
-import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-server';
-import { Observable, Subject } from 'rxjs/Rx';
 
 export interface TerminalParameters {
     id: string;
@@ -277,9 +273,13 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.terminalHardware.forEach(hardware => {
                 this.tyrionBackendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.hardwareURL + ':' + hardware.hardwareURLport);
             }); // odhlásíme každej HW co byl připojen
+        }
 
-            this.tyrionBackendService.closeHardwareTerminalWebsocket('all'); // zavřeme všechny HW websockety na backednu
+        this.tyrionBackendService.closeHardwareTerminalWebsocket('all'); // zavřeme všechny HW websockety na backednu
+        if (this.hardwareTerminalWS) {
             this.hardwareTerminalWS.unsubscribe();
+        }
+        if (this.hardwareTerminalStateWS) {
             this.hardwareTerminalStateWS.unsubscribe(); // unsubscribe toho neposedného subscribera, takže se nestane že přijde stejná flash messeage 5x za sebou
         }
     }
