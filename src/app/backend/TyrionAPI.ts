@@ -182,7 +182,7 @@ export interface IActualizationProcedureMake {
     /**
      * @name time
      * @type number
-     * @description If  value is null - its a command for immediately update 
+     * @description If  value is null - its a command for immediately update
      * @format int64
      * @readonly
      * @required
@@ -1233,7 +1233,7 @@ export interface IBoardServerRedirect {
     /**
      * @name server_url
      * @type string
-     * @description Required only if server_id is null && server_port is not null 
+     * @description Required only if server_id is null && server_port is not null
      */
     server_url?: string;
 }
@@ -1768,7 +1768,7 @@ export interface ICProgramFilter {
     /**
      * @name pending_programs
      * @type boolean
-     * @description Designed for Administrators for publishing decisions of Community Codes - Without permission, the value is ignored. 
+     * @description Designed for Administrators for publishing decisions of Community Codes - Without permission, the value is ignored.
      */
     pending_programs?: boolean;
     /**
@@ -2738,12 +2738,12 @@ export interface IDMBoardRegistrationCentralAuthority {
      */
     hardware_type_compiler_target_name: string;
     /**
-     * @name hash_for_adding
+     * @name registration_hash
      * @type string
      * @readonly
      * @required
      */
-    hash_for_adding: string;
+    registration_hash: string;
     /**
      * @name mac_address
      * @type string
@@ -4340,7 +4340,7 @@ export interface IHardwareBackupSettings {
 
 /**
  * @name IHardwareBatch
- * @description: Model of Production Batch  
+ * @description: Model of Production Batch
  */
 export interface IHardwareBatch {
     /**
@@ -4652,7 +4652,7 @@ export interface IHardwareGroup {
 
 /**
  * @name IHardwareGroupFilter
- * @description: Json Model for Hardware Group Filter List 
+ * @description: Json Model for Hardware Group Filter List
  */
 export interface IHardwareGroupFilter {
     /**
@@ -6386,7 +6386,7 @@ export interface ILibraryFilter {
     /**
      * @name pending_library
      * @type boolean
-     * @description Designed for Administrators for publishing decisions of Community Codes - Without permission, the value is ignored. 
+     * @description Designed for Administrators for publishing decisions of Community Codes - Without permission, the value is ignored.
      */
     pending_library?: boolean;
     /**
@@ -6537,7 +6537,7 @@ export interface ILoginResult {
     /**
      * @name permissions
      * @type string[]
-     * @description List of all person permission (private and all collections from Person Roles ("SecurityRole") 
+     * @description List of all person permission (private and all collections from Person Roles ("SecurityRole")
      * @readonly
      * @required
      */
@@ -7359,7 +7359,7 @@ export interface IPaymentDetailsNew {
     /**
      * @name company_web
      * @type string
-     * @description Required: only if company_account = trueThe company_web url must be valid 
+     * @description Required: only if company_account = trueThe company_web url must be valid
      */
     company_web?: string;
     /**
@@ -8598,7 +8598,7 @@ export interface IProject {
     /**
      * @name project_stats
      * @type IProjectStats
-     * @description Its Asynchronous Cached Value and it visible only, when system has cached everything. If not, the system automatically searches for all data in a special thread, and when it gets it, it sends them to the client via Websocket. 
+     * @description Its Asynchronous Cached Value and it visible only, when system has cached everything. If not, the system automatically searches for all data in a special thread, and when it gets it, it sends them to the client via Websocket.
      */
     project_stats?: IProjectStats;
     /**
@@ -8979,7 +8979,7 @@ export interface IResultBadRequest {
 
 /**
  * @name IResultExternalServerSideError
- * @description: Unknown Error on external server 
+ * @description: Unknown Error on external server
  */
 export interface IResultExternalServerSideError {
     /**
@@ -10437,7 +10437,7 @@ export abstract class TyrionAPI extends HomerAPI {
      * @operationId logout
      * @tags Access, Person, APP-Api
      *
-     * @description for logout person - that's deactivate person token 
+     * @description for logout person - that's deactivate person token
      *
      *
      * @returns {IResultOk} [code 200] Successfully logged out
@@ -11290,11 +11290,11 @@ export abstract class TyrionAPI extends HomerAPI {
      * @operationId hardware_check
      * @tags Board
      *
-     * @description Check Board state for new Registration. Types of responses in JSON state value[CAN_REGISTER, NOT_EXIST, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE]... 
-     *     PERMANENTLY_DISABLED - device was removed by Byzance. 
-     *    BROKEN_DEVICE - device exist - but its not possible to registered that. Damaged during manufacturing. 
+     * @description Check Board state for new Registration. Types of responses in JSON state value[CAN_REGISTER, NOT_EXIST, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE]...
+     *     PERMANENTLY_DISABLED - device was removed by Byzance.
+     *    BROKEN_DEVICE - device exist - but its not possible to registered that. Damaged during manufacturing.
      *
-     * @param {string} hash_for_adding
+     * @param {string} registration_hash
      *
      * @returns {IBoardRegistrationStatus} [code 200] Ok Result
      *
@@ -11302,8 +11302,8 @@ export abstract class TyrionAPI extends HomerAPI {
      * @throws {IResultForbidden} [code 403] Need required permission
      * @throws {IResultInternalServerError} [code 500] Server side Error
      */
-    public boardCheckRegistrationStatus(hash_for_adding:string):Promise<IBoardRegistrationStatus> {
-        return this.requestRestPath("GET", `/hardware/check/${hash_for_adding}`, {}, [200]);
+    public boardCheckRegistrationStatus(registration_hash:string):Promise<IBoardRegistrationStatus> {
+        return this.requestRestPath("GET", `/hardware/check/${registration_hash}`, {}, [200]);
     }
 
     /**
@@ -11418,7 +11418,7 @@ export abstract class TyrionAPI extends HomerAPI {
      * @operationId hardware_update_description
      * @tags Hardware
      *
-     * @description Used for add descriptions by owners. "Persons" who registred "Board" to own "Project" 
+     * @description Used for add descriptions by owners. "Persons" who registred "Board" to own "Project"
      *
      * @param {string} hardware_id
      * @param {INameAndDescription} body - Contains Json with values
@@ -11862,7 +11862,7 @@ export abstract class TyrionAPI extends HomerAPI {
      *
      * @param {string} compilation_id
      *
-     * @returns {any} [code 200] 
+     * @returns {any} [code 200]
      *
      * @throws [code 303] Automatic Redirect To another URL
      * @throws {IResultForbidden} [code 403] Need required permission or File is not probably right type
@@ -13449,8 +13449,8 @@ export abstract class TyrionAPI extends HomerAPI {
      * @operationId hardwareType_create
      * @tags HardwareType
      *
-     * @description The HardwareType is category for IoT. Like Raspberry2, Arduino-Uno etc. 
-     *    
+     * @description The HardwareType is category for IoT. Like Raspberry2, Arduino-Uno etc.
+     *
      *    We using that for compilation, sorting libraries, filters and more..
      *
      * @param {IHardwareTypeNew} body - Contains Json with values
@@ -13702,7 +13702,7 @@ export abstract class TyrionAPI extends HomerAPI {
 
     /**
      * @name homerServerEditSetBackupServer
-     * @summary edit Homer_Server Set Backup Server 
+     * @summary edit Homer_Server Set Backup Server
      * @operationId homer_server_set_backup_server
      * @tags Admin-External-Server
      *
@@ -13723,7 +13723,7 @@ export abstract class TyrionAPI extends HomerAPI {
 
     /**
      * @name homerServerEditSetMainServer
-     * @summary edit Homer_Server Set Main Server 
+     * @summary edit Homer_Server Set Main Server
      * @operationId homer_server_set_main_server
      * @tags Admin-External-Server
      *
@@ -14122,7 +14122,7 @@ export abstract class TyrionAPI extends HomerAPI {
      *
      * @returns {IResultOk} [code 200] Ok Result
      *
-     * @throws {IResultBadRequest} [code 400] Something is wrong 
+     * @throws {IResultBadRequest} [code 400] Something is wrong
      * @throws {IUnauthorized} [code 401] Unauthorized request
      * @throws {IResultForbidden} [code 403] Need required permission
      * @throws {IResultInternalServerError} [code 500] Server side Error
@@ -14180,7 +14180,7 @@ export abstract class TyrionAPI extends HomerAPI {
      * @operationId library_create
      * @tags Library
      *
-     * @description Create Library for C programs 
+     * @description Create Library for C programs
      *
      * @param {ILibraryNew} body - Contains Json with values
      *
@@ -14591,10 +14591,10 @@ export abstract class TyrionAPI extends HomerAPI {
      * @operationId notification_getByFilter
      * @tags Notifications
      *
-     * @description Get list of latest user notifications. Server return maximum 25 latest objects. 
-     *    
-     *     For get another page (next 25 notifications) call this api with "page_number" path parameter. 
-     *    
+     * @description Get list of latest user notifications. Server return maximum 25 latest objects.
+     *
+     *     For get another page (next 25 notifications) call this api with "page_number" path parameter.
+     *
      *     May missing or you can insert Integer values from page[1,2...,n] in JsonNotification body cannot by documented through swagger. Visit wiki.byzance.cz
      *
      * @param {number} page_number - page_number is Integer. Contain  1,2...  For first call, use 1
@@ -15361,12 +15361,12 @@ export abstract class TyrionAPI extends HomerAPI {
      * @operationId product_create
      * @tags Price & Invoice & Tariffs
      *
-     * @description It is the base object. Peak of Pyramid :). This Api is used for its creation. You can get two kind of response: 
-     *    
-     *    First(201):  System create new Object - Product 
-     *    
-     *    Second(200): The product requires payment - The server creates the object, but returns an Invoice 
-     *    
+     * @description It is the base object. Peak of Pyramid :). This Api is used for its creation. You can get two kind of response:
+     *
+     *    First(201):  System create new Object - Product
+     *
+     *    Second(200): The product requires payment - The server creates the object, but returns an Invoice
+     *
      *    If the user choose credit card payment, the invoice will contain gw_url, which is a link to the payment gate, you can redirect him there. If bank transfer is chosen, server will return an Invoice, but the user will pay it independently via his bank account.
      *
      * @param {IProductNew} body - Contains Json with values
@@ -15753,7 +15753,7 @@ export abstract class TyrionAPI extends HomerAPI {
      * @operationId project_changeParticipantStatus
      * @tags Project
      *
-     * @description Changes participant status 
+     * @description Changes participant status
      *
      * @param {string} project_id - project_id String path
      * @param {IProjectParticipantStatus} body - Contains Json with values
@@ -16222,7 +16222,7 @@ export abstract class TyrionAPI extends HomerAPI {
 
     /**
      * @name roleRemovePerson
-     * @summary remove Role Person 
+     * @summary remove Role Person
      * @operationId role_remove_person
      * @tags Admin-Role, Admin-Person
      *

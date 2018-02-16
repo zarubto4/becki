@@ -6,7 +6,7 @@
     <div class="modal-body">
 
         <form [formGroup]="form">
-            <bk-form-input [label]="{{'label_name'|bkTranslate:this}}" [control]="form.controls['name']"></bk-form-input>
+            <bk-form-input [label]="'label_name'|bkTranslate:this" [control]="form.controls['name']"></bk-form-input>
         </form>
     </div>
     <div class="modal-footer">

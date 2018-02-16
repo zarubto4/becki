@@ -5,8 +5,8 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name" [label]="{{'label_widget_group_name'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" [label]="{{'label_widget_group_description'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.name" [label]="'label_widget_group_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" [label]="'label_widget_group_description'|bkTranslate:this"></bk-form-input>
         </form>
     </div>
     <div class="modal-footer">

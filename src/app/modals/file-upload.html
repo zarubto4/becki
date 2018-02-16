@@ -11,7 +11,7 @@
             <span *ngIf="modalModel.acceptFileType && modalModel.acceptFileType.length" class="bold">{{'label_accept_file_type'|bkTranslate:this}}: {{modalModel.acceptFileType}}</span><br />
 
             <br><br>
-            <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept="{{modalModel.acceptFileType}}">
+            <input type="file" (change)="fileChange($event)" [placeholder]="'Upload file'" accept="{{modalModel.acceptFileType}}">
 
         </form>
     </div>

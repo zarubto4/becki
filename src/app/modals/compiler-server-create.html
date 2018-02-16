@@ -5,8 +5,8 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.personal_server_name" placeholder="Server Name" [label]="{{'label_personal_server_name'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.server_url" [label]="{{'label_server_url'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.personal_server_name" [placeholder]="'Server Name'" [label]="'label_personal_server_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.server_url" [label]="'label_server_url'|bkTranslate:this"></bk-form-input>
         </form>
     </div>
     <div class="modal-footer">

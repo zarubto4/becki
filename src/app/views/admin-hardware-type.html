@@ -107,12 +107,12 @@
                                             </span>
                                         </div>
                                     </span>
-                                    <a (click)="onDeviceClick(device)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+                                    <a (click)="onDeviceClick_Admin(device)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                                 </td>
                                 <td class="vert-align no-wrap">{{device.id}}</td>
                                 <td class="vert-align no-wrap">{{device.description}}</td>
-                                <td class="vert-align no-wrap">{{device.hash_for_adding}}</td>
-                                <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
+                                <td class="vert-align no-wrap">{{device.registration_hash}}</td>
+                                <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
                                 <td class="vert-align no-wrap">
                                     <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
                                     <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>

@@ -137,6 +137,10 @@ export abstract class BaseMainComponent {
         this.navigate(['/hardware', hardware_id]);
     }
 
+    public onDeviceClick_Admin(device_id: string): void {
+        this.navigate(['/device', device_id]);
+    }
+
     public onInstanceClick(instance_id: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'instances', instance_id]);
     }

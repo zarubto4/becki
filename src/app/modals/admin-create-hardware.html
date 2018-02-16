@@ -6,9 +6,11 @@
     <div class="modal-body">
         <form [formGroup]="form">
 
-            <bk-form-input [control]="form.controls.processorId" placeholder="Processor ID" [label]="{{'label_processor_id'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.processorId"
+                           [placeholder]="'Processor ID'"
+                           [label]="'label_processor_id'|bkTranslate:this"></bk-form-input>
 
-            <bk-form-select [control]="form.controls.hardwareType" [label]="{{'label_type_of_board'|bkTranslate:this}}"
+            <bk-form-select [control]="form.controls.hardwareTypeId" [label]="'label_type_of_board'|bkTranslate:this"
                             [options]="hardwareTypeOption"></bk-form-select>
 
         </form>

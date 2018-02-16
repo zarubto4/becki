@@ -12,8 +12,8 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name"       [label]="{{'label_hardware_device'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" [label]="{{'label_device_description'|bkTranslate:this}}" aria-valuetext="Hardware description"></bk-form-input>
+            <bk-form-input [control]="form.controls.name"       [label]="'label_hardware_device'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" [label]="'label_device_description'|bkTranslate:this" aria-valuetext="Hardware description"></bk-form-input>
         </form>
     </div>
     <div class="modal-footer">

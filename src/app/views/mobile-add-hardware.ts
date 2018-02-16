@@ -84,7 +84,7 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
         this.blockUI();
         this.tyrionBackendService.boardConnectWithProject({
             group_ids: groupIDs,
-            hash_for_adding: this.blockForm.controls['id'].value,
+            registration_hash: this.blockForm.controls['id'].value,
             project_id: this.blockForm.controls['project'].value
         })
             .then(() => {

@@ -55,7 +55,7 @@
                     <div class="col-md-6 text-center">
 
                         <h3>{{'label_companies'|bkTranslate:this}}</h3>
-                        <bk-form-select (change)="setCompanyOwner()" [control]="formCustomer.controls['company']" [labelComment]="false" [label]="{{'label_select_company'|bkTranslate:this}}"
+                        <bk-form-select (change)="setCompanyOwner()" [control]="formCustomer.controls['company']" [labelComment]="false" [label]="'label_select_company'|bkTranslate:this"
                                         [options]="optionsCompanies"></bk-form-select>
 
                         <button *ngIf="selectedCompanies" type="button" class="btn blue btn-lg" (click)="stepClick(4)">
@@ -88,39 +88,39 @@
 
                         <form *ngIf="formCustomer" [formGroup]="formCustomer">
 
-                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_name']" [control]="formCustomerRegistration.controls['company_name']" [label]=" {{'label_company_name'|bkTranslate:this}}"></bk-form-input>
+                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_name']" [control]="formCustomerRegistration.controls['company_name']" [label]="'label_company_name'|bkTranslate:this"></bk-form-input>
 
                             <div class="row">
                                 <div class="col-md-8">
-                                    <bk-form-input [control]="formCustomerRegistration.controls['street']" [label]=" {{'label_street'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerRegistration.controls['street']" [label]="'label_street'|bkTranslate:this"></bk-form-input>
                                 </div>
                                 <div class="col-md-4">
-                                    <bk-form-input [control]="formCustomerRegistration.controls['street_number']" [label]=" {{'label_street_number'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerRegistration.controls['street_number']" [label]="'label_street_number'|bkTranslate:this"></bk-form-input>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-9">
-                                    <bk-form-input [control]="formCustomerRegistration.controls['city']" [label]=" {{'label_city'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerRegistration.controls['city']" [label]="'label_city'|bkTranslate:this"></bk-form-input>
                                 </div>
                                 <div class="col-md-3">
-                                    <bk-form-input [control]="formCustomerRegistration.controls['zip_code']" [label]=" {{'label_zip_code'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerRegistration.controls['zip_code']" [label]="'label_zip_code'|bkTranslate:this"></bk-form-input>
                                 </div>
                             </div>
 
 
-                            <bk-form-select (change)="checkCustomerInEu()" [control]="formCustomerRegistration.controls['country']" [label]=" {{'label_country'|bkTranslate:this}}" [options]="optionsCountryList"></bk-form-select>
+                            <bk-form-select (change)="checkCustomerInEu()" [control]="formCustomerRegistration.controls['country']" [label]="'label_country'|bkTranslate:this" [options]="optionsCountryList"></bk-form-select>
 
-                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_registration_no'] && !inEu" [control]="formCustomerRegistration.controls['company_registration_no']" [label]=" {{'label_registration_number'|bkTranslate:this}}"></bk-form-input>
-                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_vat_number'] && inEu" [control]="formCustomerRegistration.controls['company_vat_number']" [label]=" {{'label_vat_number'|bkTranslate:this}}"></bk-form-input>
-
-                            <hr>
-                            <bk-form-input [control]="formCustomerRegistration.controls['company_web']" type="url" [label]="{{'label_company_web'|bkTranslate:this}}"></bk-form-input>
+                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_registration_no'] && !inEu" [control]="formCustomerRegistration.controls['company_registration_no']" [label]="'label_registration_number'|bkTranslate:this"></bk-form-input>
+                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_vat_number'] && inEu" [control]="formCustomerRegistration.controls['company_vat_number']" [label]="'label_vat_number'|bkTranslate:this"></bk-form-input>
 
                             <hr>
-                            <bk-form-input [control]="formCustomerRegistration.controls['invoice_email']" [label]=" {{'label_invoice_email'|bkTranslate:this}}"></bk-form-input>
-                            <bk-form-input [control]="formCustomerRegistration.controls['company_authorized_email']" type="email" [label]="{{'label_company_email'|bkTranslate:this}}"></bk-form-input>
-                            <bk-form-input [control]="formCustomerRegistration.controls['company_authorized_phone']" type="tel" [label]="{{'label_company_phone'|bkTranslate:this}}"></bk-form-input>
+                            <bk-form-input [control]="formCustomerRegistration.controls['company_web']" type="url" [label]="'label_company_web'|bkTranslate:this"></bk-form-input>
+
+                            <hr>
+                            <bk-form-input [control]="formCustomerRegistration.controls['invoice_email']" [label]="'label_invoice_email'|bkTranslate:this"></bk-form-input>
+                            <bk-form-input [control]="formCustomerRegistration.controls['company_authorized_email']" type="email" [label]="'label_company_email'|bkTranslate:this"></bk-form-input>
+                            <bk-form-input [control]="formCustomerRegistration.controls['company_authorized_phone']" type="tel" [label]="'label_company_phone'|bkTranslate:this"></bk-form-input>
 
                         </form>
                     </div>
@@ -430,7 +430,7 @@
                                     </div>
                                 </div>
                                 <div class="portlet-body">
-                                    <bk-form-input [control]="formPaymentDetail.controls['product_individual_name']" [label]="{{'step_three_label_product_name'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['product_individual_name']" [label]="'step_three_label_product_name'|bkTranslate:this"></bk-form-input>
                                 </div>
                             </div>
                         </div>
@@ -447,7 +447,7 @@
                                     </div>
                                 </div>
                                 <div class="portlet-body">
-                                    <bk-form-input [control]="formPaymentDetail.controls['product_individual_name']" [label]="{{'step_three_label_product_name'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['product_individual_name']" [label]="'step_three_label_product_name'|bkTranslate:this"></bk-form-input>
                                 </div>
                             </div>
 
@@ -459,21 +459,21 @@
                                     </div>
                                 </div>
                                 <div class="portlet-body">
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_name']" [readonly]="true" [label]=" {{'label_company_name'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['street']" [readonly]="true"  [label]=" {{'label_street'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['street_number']" [readonly]="true" [label]=" {{'label_street_number'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['city']" [readonly]="true" [label]=" {{'label_city'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['zip_code']" [readonly]="true" [label]=" {{'label_zip_code'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_name']" [readonly]="true" [label]="'label_company_name'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['street']" [readonly]="true"  [label]="'label_street'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['street_number']" [readonly]="true" [label]="'label_street_number'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['city']" [readonly]="true" [label]="'label_city'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['zip_code']" [readonly]="true" [label]="'label_zip_code'|bkTranslate:this"></bk-form-input>
 
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['country']" [readonly]="true" [label]=" {{'label_country'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['country']" [readonly]="true" [label]="'label_country'|bkTranslate:this"></bk-form-input>
 
-                                    <bk-form-input *ngIf="selectedCompanies.payment_details.company_registration_no" [control]="formCustomerSelectedCompany.controls['company_registration_no']" [readonly]="true" [label]=" {{'label_registration_number'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input *ngIf="selectedCompanies.payment_details.company_vat_number" [control]="formCustomerSelectedCompany.controls['company_vat_number']" [readonly]="true" [label]=" {{'label_vat_number'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_web']" type="url" [readonly]="true" [label]="{{'label_company_web'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input *ngIf="selectedCompanies.payment_details.company_registration_no" [control]="formCustomerSelectedCompany.controls['company_registration_no']" [readonly]="true" [label]="'label_registration_number'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input *ngIf="selectedCompanies.payment_details.company_vat_number" [control]="formCustomerSelectedCompany.controls['company_vat_number']" [readonly]="true" [label]="'label_vat_number'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_web']" type="url" [readonly]="true" [label]="'label_company_web'|bkTranslate:this"></bk-form-input>
                                     <hr>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_authorized_email']" [readonly]="true" type="email" [label]="{{'label_company_email'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_authorized_phone']" [readonly]="true" type="tel" [label]="{{'label_company_phone'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['invoice_email']" [readonly]="true" [label]="{{'label_invoice_email'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_authorized_email']" [readonly]="true" type="email" [label]="'label_company_email'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_authorized_phone']" [readonly]="true" type="tel" [label]="'label_company_phone'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['invoice_email']" [readonly]="true" [label]="'label_invoice_email'|bkTranslate:this"></bk-form-input>
                                 </div>
                             </div>
 
@@ -490,22 +490,22 @@
                                 </div>
                                 <div class="portlet-body">
 
-                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_name']" [control]="formPaymentDetail.controls['company_name']" [label]=" {{'label_company_name'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_name']" [control]="formPaymentDetail.controls['company_name']" [label]="'label_company_name'|bkTranslate:this"></bk-form-input>
 
-                                    <bk-form-input [control]="formPaymentDetail.controls['street']" [label]=" {{'label_street'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['street_number']" [label]=" {{'label_street_number'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['city']" [label]=" {{'label_city'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['zip_code']" [label]=" {{'label_zip_code'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['street']" [label]="'label_street'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['street_number']" [label]="'label_street_number'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['city']" [label]="'label_city'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['zip_code']" [label]="'label_zip_code'|bkTranslate:this"></bk-form-input>
 
-                                    <bk-form-select (change)="checkInEu()" [control]="formPaymentDetail.controls['country']" [label]=" {{'label_country'|bkTranslate:this}}" [options]="optionsCountryList"></bk-form-select>
+                                    <bk-form-select (change)="checkInEu()" [control]="formPaymentDetail.controls['country']" [label]="'label_country'|bkTranslate:this" [options]="optionsCountryList"></bk-form-select>
 
-                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_registration_no'] && !inEu" [control]="formPaymentDetail.controls['company_registration_no']" [label]=" {{'label_registration_number'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_vat_number'] && inEu" [control]="formPaymentDetail.controls['company_vat_number']" [label]=" {{'label_vat_number'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['company_web']" type="url" [label]="{{'label_company_web'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_registration_no'] && !inEu" [control]="formPaymentDetail.controls['company_registration_no']" [label]="'label_registration_number'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_vat_number'] && inEu" [control]="formPaymentDetail.controls['company_vat_number']" [label]="'label_vat_number'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['company_web']" type="url" [label]="'label_company_web'|bkTranslate:this"></bk-form-input>
                                     <hr>
-                                    <bk-form-input [control]="formPaymentDetail.controls['company_authorized_email']" type="email" [label]="{{'label_company_email'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['company_authorized_phone']" type="tel" [label]="{{'label_company_phone'|bkTranslate:this}}"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['invoice_email']" type="email" [label]="{{'label_invoice_email'|bkTranslate:this}}"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['company_authorized_email']" type="email" [label]="'label_company_email'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['company_authorized_phone']" type="tel" [label]="'label_company_phone'|bkTranslate:this"></bk-form-input>
+                                    <bk-form-input [control]="formPaymentDetail.controls['invoice_email']" type="email" [label]="'label_invoice_email'|bkTranslate:this"></bk-form-input>
                                 </div>
                             </div>
 

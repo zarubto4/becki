@@ -9,15 +9,15 @@
         <form [formGroup]="form">
 
             <span>{{'label_program_additional_comment'|bkTranslate:this}}</span>
-            <bk-form-input [label]="{{'label_program_name'|bkTranslate:this}}" [control]="form.controls['program_name']"></bk-form-input>
-            <bk-form-text-area [label]="{{'label_program_description'|bkTranslate:this}}" [control]="form.controls['program_description']"></bk-form-text-area>
+            <bk-form-input [label]="'label_program_name'|bkTranslate:this" [control]="form.controls['program_name']"></bk-form-input>
+            <bk-form-text-area [label]="'label_program_description'|bkTranslate:this" [control]="form.controls['program_description']"></bk-form-text-area>
             <hr>
-            <bk-form-input [label]="{{'label_version_name'|bkTranslate:this}}" [control]="form.controls['version_name']"></bk-form-input>
-            <bk-form-text-area [label]="{{'label_version_description'|bkTranslate:this}}" [control]="form.controls['version_description']"></bk-form-text-area>
+            <bk-form-input [label]="'label_version_name'|bkTranslate:this" [control]="form.controls['version_name']"></bk-form-input>
+            <bk-form-text-area [label]="'label_version_description'|bkTranslate:this" [control]="form.controls['version_description']"></bk-form-text-area>
 
             <div *ngIf="this.modalModel.choice_list">
                 <hr>
-                <bk-form-select [control]="form.controls.choice_object" [label]="{{'label_group_select'|bkTranslate:this}}"
+                <bk-form-select [control]="form.controls.choice_object" [label]="'label_group_select'|bkTranslate:this"
                                 [options]="modalModel.choice_list"></bk-form-select>
             </div>
 
@@ -28,7 +28,7 @@
                 <i *ngIf="!modalModel.decision"  style="font-size: 1.8em;"  class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onApproveClick(!modalModel.decision)"></i>
             </div>
             <hr>
-            <bk-form-text-area [label]="{{'label_reason'|bkTranslate:this}}" [control]="form.controls['reason']"></bk-form-text-area>
+            <bk-form-text-area [label]="'label_reason'|bkTranslate:this" [control]="form.controls['reason']"></bk-form-text-area>
 
 
         </form>

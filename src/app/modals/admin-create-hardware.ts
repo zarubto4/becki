@@ -16,7 +16,7 @@ export class ModalsAdminCreateHardwareModel extends ModalModel {
     constructor(
         public hardwareTypes: IHardwareType[],
         public processorId: string = '',
-        public hardwareType: string = '',
+        public hardwareTypeId: string = '',
     ) {
         super();
     }
@@ -41,7 +41,7 @@ export class ModalsAdminCreateHardwareComponent implements OnInit {
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             'processorId': ['', [Validators.required, Validators.minLength(24), Validators.maxLength(24)]],
-            'hardwareType': ['', [Validators.required]]
+            'hardwareTypeId': ['', [Validators.required]]
         });
     }
 
@@ -55,12 +55,12 @@ export class ModalsAdminCreateHardwareComponent implements OnInit {
         });
 
         (<FormControl>(this.form.controls['processorId'])).setValue(this.modalModel.processorId);
-        (<FormControl>(this.form.controls['hardwareType'])).setValue(this.modalModel.hardwareType);
+        (<FormControl>(this.form.controls['hardwareTypeId'])).setValue(this.modalModel.hardwareTypeId);
     }
 
     onSubmitClick(): void {
         this.modalModel.processorId = this.form.controls['processorId'].value;
-        this.modalModel.hardwareType = this.form.controls['hardwareType'].value;
+        this.modalModel.hardwareTypeId = this.form.controls['hardwareTypeId'].value;
         this.modalClose.emit(true);
     }
 

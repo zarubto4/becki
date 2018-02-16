@@ -5,8 +5,8 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name" [label]="{{'label_name'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.description"  [label]="{{'label_description'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.name" [label]="'label_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.description"  [label]="'label_description'|bkTranslate:this"></bk-form-input>
 
             <div>
                 <label>{{'label_connectible_to_internet'|bkTranslate:this}}</label>

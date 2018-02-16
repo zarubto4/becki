@@ -5,10 +5,10 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name"           [label]="{{'label_name'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.description"    [label]="{{'label_description'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.processor_code" [label]="{{'label_code'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.speed"          [label]="{{'label_speed'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.name"           [label]="'label_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.description"    [label]="'label_description'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.processor_code" [label]="'label_code'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.speed"          [label]="'label_speed'|bkTranslate:this"></bk-form-input>
         </form>
     </div>
     <div class="modal-footer">

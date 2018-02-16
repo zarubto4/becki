@@ -5,7 +5,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IHardwareList, IProcessor, IProducer, IHardwareType } from '../backend/TyrionAPI';
+import { IHardwareList, IProcessor, IProducer, IHardwareType, IHardware } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateProducerModel } from '../modals/create-producer';
 import { ModalsCreateProcessorModel } from '../modals/create-processor';
@@ -110,7 +110,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                 this.tyrionBackendService.processorCreate({
                     description: model.description,
                     processor_code: model.processor_code,
-                    processor_name: model.processor_name,
+                    name: model.name,
                     speed: model.speed
                 })
                     .then(() => {
@@ -125,7 +125,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     }
 
     onProcessorEditClick(processor: IProcessor): void {
-        let model = new ModalsCreateProcessorModel(processor.description, processor.processor_code, processor.processor_name, processor.speed, true);
+        let model = new ModalsCreateProcessorModel(processor.description, processor.processor_code, processor.name, processor.speed, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -223,7 +223,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     }
 
     onProcessorDeleteClick(processor: IProcessor): void {
-        this.modalService.showModal(new ModalsRemovalModel(processor.processor_name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(processor.name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.processorDelete(processor.id)
@@ -261,9 +261,9 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardCreateManualRegistration({
+                this.tyrionBackendService.hardwareCreateManual({
                     full_id: model.processorId,
-                    type_of_board_id: model.hardwareType
+                    hardware_type_id: model.hardwareType
                 })
                     .then(() => {
                         this.onFilterHardware();
@@ -296,11 +296,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
             });
     }
 
-    onDeviceClick(device: IHardwareShortDetail): void {
-        this.navigate(['/device', device.id]);
-    }
-
-    onRemoveHardwareClick(board: IHardwareShortDetail): void {
+    onRemoveHardwareClick(board: IHardware): void {
         this.modalService.showModal(new ModalsRemovalModel(board.name)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -316,7 +312,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         });
     }
 
-    onEditHardwareClick(device: IHardwareShortDetail): void {
+    onEditHardwareClick(device: IHardware): void {
         let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -349,7 +345,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
             });
     }
 
-    onPrintLabelHardwareClick(device: IHardwareShortDetail): void {
+    onPrintLabelHardwareClick(device: IHardware): void {
         this.blockUI();
         this.tyrionBackendService.boardPrintlabel(device.id)
             .then(() => {
