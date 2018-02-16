@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="row">
         <div class="col-md-12">
@@ -16,7 +16,7 @@
                         </span>
                     </div>
                     <div *ngIf="blockoProgram" class="becki-actions">
-                        <button title="{{'label_blocko_program_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blockoProgram.edit_permission"
+                        <button title="{{'label_blocko_program_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blockoProgram.update_permission"
                             (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
@@ -349,8 +349,8 @@
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_server'|bkTranslate:this}}
                             <span *ngIf="blockoProgram.instance_details.server_name">
                                 <strong>{{blockoProgram.instance_details.server_name}}</strong>
-                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'online'" class="font-green-jungle bold">({{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_status'}})</span>
-                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'offline'" class="font-red bold">({{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_status'}})</span>
+                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'online'" class="font-green-jungle bold">({{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_state'}})</span>
+                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'offline'" class="font-red bold">({{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_state'}})</span>
                             </span>
                             <span class="bold" *ngIf="!blockoProgram.instance_details.server_name">({{'label_none'|bkTranslate:this}})</span>
                         </div>
@@ -358,9 +358,9 @@
                         <div>
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_instance'|bkTranslate:this}}
                             <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)"><strong>{{blockoProgram.instance_details.instance_id}}</strong></a>
-                            <span *ngIf="blockoProgram.instance_details.online_state == 'online'" class="font-green-jungle bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}})</span>
-                            <span *ngIf="blockoProgram.instance_details.online_state == 'offline'" class="font-red bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}})</span>
-                            <span *ngIf="blockoProgram.instance_details.online_state == 'shut_down'" class="font-yellow-casablanca bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}})</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'online'" class="font-green-jungle bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_state'}})</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'offline'" class="font-red bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_state'}})</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'shut_down'" class="font-yellow-casablanca bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_state'}})</span>
                             <span class="bold" *ngIf="!blockoProgram.instance_details.instance_id">{{'label_none'|bkTranslate:this}}</span>
                         </div>
                         <br>

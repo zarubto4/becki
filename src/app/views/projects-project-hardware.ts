@@ -10,8 +10,8 @@ import { Subscription } from 'rxjs/Rx';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
-    IProject, IBoardShortDetail, IBoardList, IBoardGroup, IActualizationProcedureList,
-    IActualizationProcedureShortDetail, ICProgramShortDetail, IBootLoader
+    IProject, IHardwareShortDetail, IHardwareList, IHardwareGroup, IUpdateProcedureList,
+    IUpdateProcedureShortDetail, ICProgramShortDetail, IBootLoader
 } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -32,9 +32,9 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     projectSubscription: Subscription;
 
 
-    devicesFilter: IBoardList = null;
-    deviceGroup: IBoardGroup[] = null;
-    actualizationFilter: IActualizationProcedureList = null;
+    devicesFilter: IHardwareList = null;
+    deviceGroup: IHardwareGroup[] = null;
+    actualizationFilter: IUpdateProcedureList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -84,7 +84,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
 
-    onEditClick(device: IBoardShortDetail): void {
+    onEditClick(device: IHardwareShortDetail): void {
         let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -102,19 +102,16 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         });
     }
 
-    onDeviceClick(device: IBoardShortDetail): void {
+    onDeviceClick(device: IHardwareShortDetail): void {
         this.navigate(['/projects', this.projectId, 'hardware', device.id]);
     }
 
-    onBoardTypeClick(boardTypeId: string): void {
-        this.navigate(['/hardware', boardTypeId]);
-    }
 
     onCProgramClick(cProgramId: string): void {
         this.navigate(['/projects', this.projectId, 'code', cProgramId]);
     }
 
-    onRemoveClick(device: IBoardShortDetail): void {
+    onRemoveClick(device: IHardwareShortDetail): void {
         this.modalService.showModal(new ModalsRemovalModel('[' + device.id + '] ' + (device.name ? device.name : ''))).then((success) => {
             if (success) {
                 this.blockUI();
@@ -156,7 +153,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
 
-    onDeviceEditGroupClick(device: IBoardShortDetail) {
+    onDeviceEditGroupClick(device: IHardwareShortDetail) {
         if (this.deviceGroup == null) {
             this.tyrionBackendService.boardGroupGetListFromProject(this.projectId)
                 .then((values) => {
@@ -216,7 +213,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         });
     }
 
-    onGroupEditClick(group: IBoardGroup): void {
+    onGroupEditClick(group: IHardwareGroup): void {
         let model = new ModalsHardwareGroupPropertiesModel(group.name, group.description, true, group.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -237,7 +234,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         });
     }
 
-    onGroupDeleteClick(group: IBoardGroup): void {
+    onGroupDeleteClick(group: IHardwareGroup): void {
         this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -273,7 +270,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                 this.devicesFilter.content.forEach((device, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'Board' && device.id === status.model_id) {
-                            device.online_state = status.online_status;
+                            device.online_state = status.online_state;
                         }
                     });
                 });
@@ -345,7 +342,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
 
-    onUpdateProcedureCancelClick(procedure: IActualizationProcedureShortDetail): void {
+    onUpdateProcedureCancelClick(procedure: IUpdateProcedureShortDetail): void {
         this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
             .then(() => {
                 this.unblockUI();
@@ -357,7 +354,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             });
     }
 
-    onUpdateProcedureUpdateClick(procedure: IActualizationProcedureShortDetail): void {
+    onUpdateProcedureUpdateClick(procedure: IUpdateProcedureShortDetail): void {
 
     }
 

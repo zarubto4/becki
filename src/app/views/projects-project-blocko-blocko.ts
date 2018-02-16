@@ -7,11 +7,11 @@ import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import {
-    IProject, IBProgram, IBlockoBlockVersion, IBoardsForBlocko, IBProgramVersion, IBPair, IMProject, IMProgramSnapShot,
-    IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail, IBProgramVersionShortDetail,
+    IProject, IBProgram, IBlockoBlockVersion, IHardwaresForBlocko, IBProgramVersion, IBPair, IMProject, IMProgramSnapShot,
+    IMProjectSnapShot, IBlockoBlockVersionShortDetail, IHardwareShortDetail, IBProgramVersionShortDetail,
     IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko, ICProgramShortDetailForBlocko,
     ITypeOfBlockList,
-    IBlockoBlockShortDetail, ITypeOfBlockShortDetail, IHardwareGroup, IBoardGroup, IGroupPair
+    IBlockoBlockShortDetail, ITypeOfBlockShortDetail, IHardwareGroup, IHardwareGroup, IGroupPair
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';
@@ -65,13 +65,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     // hw:
 
-    allBoardsDetails: IBoardsForBlocko = null;
+    allBoardsDetails: IHardwaresForBlocko = null;
 
-    boardById: { [id: string]: IBoardShortDetail } = {};
+    boardById: { [id: string]: IHardwareShortDetail } = {};
 
     selectedHardware: IHardwareGroup[] = [];
 
-    hwGroups: IBoardGroup[] = [];
+    hwGroups: IHardwareGroup[] = [];
 
     // grid:
     allGridProjects: IMProjectShortDetailForBlocko[] = null;
@@ -491,12 +491,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    getAllFreeMainBoards(): IBoardShortDetail[] {
+    getAllFreeMainBoards(): IHardwareShortDetail[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.boards) {
             return [];
         }
         let used = this.getAllUsedHwIds();
-        let out: IBoardShortDetail[] = [];
+        let out: IHardwareShortDetail[] = [];
         this.allBoardsDetails.boards.forEach((b) => {
             if (
                 NullSafe(() => this.allBoardsDetails.type_of_boards.find((tob) => tob.id === b.type_of_board_id).connectible_to_internet)
@@ -508,12 +508,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    getAllFreeSubBoards(): IBoardShortDetail[] {
+    getAllFreeSubBoards(): IHardwareShortDetail[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.boards) {
             return [];
         }
         let used = this.getAllUsedHwIds();
-        let out: IBoardShortDetail[] = [];
+        let out: IHardwareShortDetail[] = [];
         this.allBoardsDetails.boards.forEach((b) => {
             if (
                 !NullSafe(() => this.allBoardsDetails.type_of_boards.find((tob) => tob.id === b.type_of_board_id).connectible_to_internet)
@@ -1189,9 +1189,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.tyrionBackendService.bProgramGetAllDetailsForIntegration(this.projectId), // TODO [permission]: project.read_permission
             this.tyrionBackendService.boardGroupGetListFromProject(this.projectId)
         ])
-            .then((values: [ITypeOfBlockList, IBoardsForBlocko, IBoardGroup[]]) => {
+            .then((values: [ITypeOfBlockList, IHardwaresForBlocko, IHardwareGroup[]]) => {
                 let typeOfBlocks: ITypeOfBlockList = values[0];
-                let blockoDetails: IBoardsForBlocko = values[1];
+                let blockoDetails: IHardwaresForBlocko = values[1];
                 this.hwGroups = values[2];
 
                 let projects: IMProjectShortDetailForBlocko[] = blockoDetails.m_projects;
@@ -1241,13 +1241,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 this.tyrionBackendService.onlineStatus.subscribe((status) => {
                     if (status.model === 'HomerInstance' && this.blockoProgram.instance_details.instance_id === status.model_id) {
-                        this.blockoProgram.instance_details.online_state = status.online_status;
+                        this.blockoProgram.instance_details.online_state = status.online_state;
                     }
                 });
 
                 this.tyrionBackendService.onlineStatus.subscribe((status) => {
                     if (status.model === 'HomerServer' && this.blockoProgram.instance_details.server_id === status.model_id) {
-                        this.blockoProgram.instance_details.server_online_state = status.online_status;
+                        this.blockoProgram.instance_details.server_online_state = status.online_state;
                     }
                 });
 

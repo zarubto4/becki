@@ -3,22 +3,22 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
-
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
     <div class="portlet portlet light bordered">
+
         <div class="portlet-title">
             <div class="becki-caption">
-                <span *ngIf="project" class="font-blue-dark">
+                <span class="font-blue-dark">
                     <i class="fa fa-fw fa-tachometer"></i>
-                    {{'title'|bkTranslate:this:project.name}}
+                        {{'title'|bkTranslate:this:project.name}}
                 </span>
             </div>
-            <div *ngIf="project" class="becki-actions">
-                <button title="{{'label_project_properities'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!project.edit_permission"
+            <div class="becki-actions">
+                <button *ngIf="project" title="{{'label_project_properities'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!project.update_permission"
                     (click)="onEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>
-                <button title="{{'label_project_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission"
+                <button *ngIf="project" title="{{'label_project_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission"
                     (click)="onRemoveClick()">
                     <i class="fa fa-trash"></i>
                 </button>
@@ -28,12 +28,11 @@
         <div *ngIf="project">
             {{'label_name'|bkTranslate:this}}: <strong>{{project.name}}</strong><br> {{'label_description'|bkTranslate:this}}:
             <strong>{{project.description}}</strong><br>
-            <br> {{'label_product'|bkTranslate:this}}: <strong>{{project.product_name}}</strong>
+            <br> {{'label_product'|bkTranslate:this}}: <strong>{{project.product.name}}</strong>
         </div>
-        <div class="clearfix"></div>
     </div>
 
-    <div class="row" *ngIf="project">
+    <div class="row" *ngIf="project && project.project_stats">
 
         <div class="col-md-4">
             <div class="portlet portlet light bordered">
@@ -46,24 +45,7 @@
                     </div>
                 </div>
                 <div>
-                    {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.boards.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
-                    <strong>{{count("devices_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span> / <strong>{{count("devices_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-microchip"></i>
-                            <span [innerHTML]="'label_byzance_hardware_update'|bkTranslate:this"></span>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.boards.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
-                    <strong>{{count("devices_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span> / <strong>{{count("devices_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
+                    {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.project_stats.hardware}}</strong><br> {{'label_Status'|bkTranslate:this}}:
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -81,9 +63,9 @@
                     </div>
                 </div>
                 <div>
-                    {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.c_programs.length}}</strong>
+                    {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.c_programs}}</strong>
                     <br>
-                    {{'label_libraries_count'|bkTranslate:this}}:<strong>{{project.libraries.length}}</strong>
+                    {{'label_libraries_count'|bkTranslate:this}}:<strong>{{project.project_stats.libraries}}</strong>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -98,7 +80,9 @@
                     </div>
                 </div>
                 <div>
-                     {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.b_programs.length}}</strong><br> {{'label_blocks_count'|bkTranslate:this}}: <strong>{{count("blocko_blocks")}}</strong><span [innerHTML]="'label_in_blocks_group'|bkTranslate:this:project.type_of_blocks.length"></span>
+                     {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.b_programs}}</strong>
+                     <br>
+                     {{'label_blocks_count'|bkTranslate:this}}: <strong>{{project.project_stats.blocks}}</strong>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -113,7 +97,9 @@
                     </div>
                 </div>
                 <div>
-                    {{'label_programs_count'|bkTranslate:this}}: <strong>{{count("grid_programs")}}</strong> <span [innerHTML]="'label_in_projects'|bkTranslate:this:project.m_projects.length"></span><br> {{'label_widgets_count'|bkTranslate:this}}: <strong>{{count("grid_widgets")}}</strong> <span [innerHTML]="'label_in_group'|bkTranslate:this:project.type_of_widgets.length"></span>
+                    {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.grid_projects}}</strong>
+                    <br>
+                    {{'label_widgets_count'|bkTranslate:this}}: <strong>{{project.project_stats.widgets}}</strong>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -125,13 +111,12 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-cloud"></i>
-            <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
+                            <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
                         </span>
                     </div>
                 </div>
                 <div>
-                    {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.instancies.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
-                    <strong>{{count("instances_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span> / <strong>{{count("instances_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
+                    {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.project_stats.instances}}</strong>
                 </div>
                 <div class="clearfix"></div>
             </div>

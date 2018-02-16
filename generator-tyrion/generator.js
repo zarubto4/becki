@@ -12,7 +12,7 @@ var request = require('sync-request');
 /* tslint:disable:no-console max-line-length */
 program
     .version('0.0.1')
-    .option('-i, --input [input]', 'Input Swagger file or url (default: http://127.0.0.1:9000/api-docs)', 'http://127.0.0.1:9000/api-docs')
+    .option('-i, --input [input]', 'Input Swagger file or url (default: http://127.0.0.1:9000/swagger.json)', 'http://127.0.0.1:9000/swagger.json')
     .option('-o, --output [output]', 'Output TypeScript file (default: ' + __dirname + '/../src/app/backend/TyrionAPI.ts)', __dirname + '/../src/app/backend/TyrionAPI.ts')
     .option('-c, --className [className]', 'Output TypeScript class name (default: TyrionAPI)', 'TyrionAPI')
     .option('-p, --prefixInterfaces [prefixInterfaces]', 'Prefix for all TypeScript interfaces (default: I)', 'I')
@@ -37,7 +37,7 @@ if (program['debug'] === true) {
 // CONFIG
 var CONFIG = {
     definitionsRefPrefix: '#/definitions/',
-    ignoredDefinitions: ['EntityBean', 'EntityBeanIntercept', 'ValuePair'],
+    ignoredDefinitions: ['EntityBean', 'EntityBeanIntercept', 'ValuePair', 'HttpEntity', 'Result', 'StringBuilder', 'PersistenceContext', 'Cookies'],
     methodsReplace: {
         // "" for ignore
         'get:/websocket/becki/{secure_token}': '',
@@ -88,6 +88,7 @@ else {
 var swaggerObject = JSON.parse(swaggerFile);
 // FILE methods:
 var outFileContent = '';
+var number_of_bugs = 0;
 var fileWriteLine = function (line) {
     if (line === void 0) { line = ''; }
     outFileContent += line + '\n';
@@ -182,7 +183,7 @@ for (var defName in definitions) {
         throwError('Duplicate validated definition name (' + defNameValidated + ')');
     }
     if (CONFIG.ignoredDefinitions.indexOf(defName) > -1) {
-        console.log(chalk.yellow('Ignore definition \"' + defName + '\" because config.'));
+        console.log(chalk.yellow('Ignore definition \"' + defName + '\" because its set in Configuration'));
         continue;
     }
     definitionsKeys.push(defName);
@@ -190,7 +191,9 @@ for (var defName in definitions) {
 }
 definitionsKeys.sort();
 definitionsKeys.forEach(function (defName) {
-    console.log(chalk.green('Generate interface for definition \"' + defName + '\".'));
+    if (DEBUG) {
+        console.log(chalk.green('Generate interface for definition \"' + defName + '\".'));
+    }
     var def = definitions[defName];
     if (def['type'] !== 'object') {
         throwError('Unknown type of definition (' + def['type'] + ')');
@@ -221,10 +224,20 @@ definitionsKeys.forEach(function (defName) {
             }
             var type = solveType(prop);
             if (!type) {
+                number_of_bugs++;
                 throwError('Missing type for key ' + propKey + ' in definition (' + defName + ')');
             }
+            if (/\s/.test(propKey)) {
+                number_of_bugs++;
+                console.log(chalk.red('Something is wrong with property name \"')
+                    + chalk.red(propKey) + chalk.yellow('\" of definition \"') + chalk.red(defName)
+                    + chalk.yellow('\" .. property KEY contain space!!!'));
+            }
             if (!propKey.match(/^([a-z0-9_])+$/g)) {
-                console.log(chalk.yellow('Something is wrong with property name \"' + propKey + '\" of definition \"' + defName + '\" .. property name don\'t contain only a-z 0-9 and _ characters.'));
+                number_of_bugs++;
+                console.log(chalk.yellow('Something is wrong with property name \"')
+                    + chalk.red(propKey) + chalk.yellow('\" of definition \"') + chalk.red(defName)
+                    + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s Bis size Latter?'));
             }
             fileWriteLine('    /**');
             fileWriteLine('     * @name ' + propKey);
@@ -270,12 +283,16 @@ var makeReadableMethodName = function (method, url, pathObj) {
         return null;
     }
     var prefix = '';
-    console.log('method:: ', url);
-    console.log('method:: ', pathObj);
-    console.log('method:: ', method);
+    if (DEBUG) {
+        console.log('method:: ', url);
+        console.log('method:: ', pathObj);
+        console.log('method:: ', method);
+    }
     var partsAll = pathObj['summary'].replace(/{[a-zA-Z0-9_-]+}/g, '').split(/[ \/,]/);
     var parts = partsAll.filter(function (value, index, self) { return self.indexOf(value) === index; }); // unique
-    console.log('parts:', parts);
+    if (DEBUG) {
+        console.log('parts:', parts);
+    }
     var out = prefix;
     var first_prefix = null;
     var second_prefix = null;
@@ -354,7 +371,9 @@ for (var pathUrl in paths) {
             throwError('Duplicate name of method \"' + m + '\" (' + pathMethod + ':' + pathUrl + ')');
         }
         else {
-            console.log(chalk.green('Adding method \"' + m + '\" to list.', ' path Method:: (' + pathMethod + ':' + pathUrl + ')'));
+            if (DEBUG) {
+                console.log(chalk.green('Adding method \"' + m + '\" to list.', ' path Method:: (' + pathMethod + ':' + pathUrl + ')'));
+            }
             methodsParams[m] = {
                 pathUrl: pathUrl,
                 pathMethod: pathMethod
@@ -372,7 +391,9 @@ methodsNames.forEach(function (methodName) {
     var pathUrl = methodsParams[methodName]['pathUrl'];
     var pathMethod = methodsParams[methodName]['pathMethod'];
     var pathInfo = paths[pathUrl][pathMethod];
-    console.log(chalk.green('Generating method \"' + methodName + '\" (' + pathMethod + ':' + pathUrl + ')'));
+    if (DEBUG) {
+        console.log(chalk.green('Generating method \"' + methodName + '\" (' + pathMethod + ':' + pathUrl + ')'));
+    }
     var outParameters = [];
     var outParametersComment = [];
     var bodyParams = [];
@@ -435,8 +456,11 @@ methodsNames.forEach(function (methodName) {
             var codeInt = parseInt(code, 10);
             var response = responses[code];
             var type = solveType(response);
-            if (!type && codeInt !== 500) {
-                console.log(chalk.yellow('Missing type for reponse code ' + code + ' in method (' + methodName + ')'));
+            // Code 303 is ok - its just a redirect
+            if (!type && codeInt !== 500 && codeInt !== 303) {
+                number_of_bugs++;
+                console.log(chalk.red('Missing type for reponse code ' + code + ' in method (' + methodName + ')'));
+                console.log(chalk.red('  - When Generating method \"' + methodName + '\" (' + pathMethod + ':' + pathUrl + ')'));
             }
             var description = response['description'];
             var res = {
@@ -472,7 +496,10 @@ methodsNames.forEach(function (methodName) {
         });
     }
     else {
-        console.log(chalk.yellow('Missing ok response in method (' + methodName + ')'));
+        if (!responses[303]) {
+            number_of_bugs++;
+            console.log(chalk.yellow('Missing ok response in method (' + methodName + ')'));
+        }
     }
     if (returnTypes.length === 0) {
         returnTypes.push('any');
@@ -522,4 +549,8 @@ console.log(chalk.magenta('██║  ██║██║   ██║██║╚
 console.log(chalk.magenta('██████╔╝╚██████╔╝██║ ╚████║███████╗██╗'));
 console.log(chalk.magenta('╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝'));
 console.log();
+if (number_of_bugs > 0) {
+    console.log(chalk.red('NOT CRITICAL BUGS in Swagger Annotation - PLEASE FIX IT'));
+    console.log(chalk.red('Number of Bugs: ' + number_of_bugs));
+}
 /* tslint:enable */

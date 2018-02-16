@@ -13,7 +13,7 @@ import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IMyDpOptions } from 'mydatepicker';
 
-export class ModalsCreateTypeOfBoardBatchModel extends ModalModel {
+export class ModalsCreateHardwareTypeBatchModel extends ModalModel {
     constructor(
         public edit: boolean = false,
         public revision: string = '',
@@ -38,10 +38,10 @@ export class ModalsCreateTypeOfBoardBatchModel extends ModalModel {
     selector: 'bk-modals-type-of-board-batch-create',
     templateUrl: './type-of-board-batch-create.html'
 })
-export class ModalsCreateTypeOfBoardBatchComponent implements OnInit {
+export class ModalsCreateHardwareTypeBatchComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsCreateTypeOfBoardBatchModel;
+    modalModel: ModalsCreateHardwareTypeBatchModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();

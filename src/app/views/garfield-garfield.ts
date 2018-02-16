@@ -1,8 +1,8 @@
 import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
-    IBoard, IBootLoader, ICProgramVersionShortDetail, IGarfield, IHardwareNewSettingsResult, IHomerServer,
-    IPrinter, ITypeOfBoard
+    IHardware, IBootLoader, ICProgramVersionShortDetail, IGarfield, IHardwareNewSettingsResult, IHomerServer,
+    IPrinter, IHardwareType
 } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -25,7 +25,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     garfield: IGarfield = null;
     garfieldId: string;
-    typeOfBoard: ITypeOfBoard = null;
+    hardwareType: IHardwareType = null;
     device: IHardwareNewSettingsResult = null;
     deviceId: string = null;
 
@@ -35,7 +35,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     mainServer: IHomerServer = null;           // Destination for Server registration
     backupServer: IHomerServer = null;         // Destination for Server registration (backup)
 
-    productionBatchForm: FormGroup; // Burn Info Batch Form TypeOfBoard.batch
+    productionBatchForm: FormGroup; // Burn Info Batch Form HardwareType.batch
     batchOptions: FormSelectComponentOption[] = null;
     batch: string = null;
 
@@ -194,11 +194,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             .then((garfield) => {
                 this.garfield = garfield;
 
-                this.typeOfBoard = garfield.type_of_board;
+                this.hardwareType = garfield.type_of_board;
                 this.bootLoader = garfield.type_of_board.main_boot_loader;
 
 
-                this.batchOptions = this.typeOfBoard.batchs.map((pv) => {
+                this.batchOptions = this.hardwareType.batchs.map((pv) => {
                     return {
                         label: pv.revision + ' ' + pv.production_batch + ' (' + pv.date_of_assembly + ')',
                         value: pv.id
@@ -211,13 +211,13 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 // Find Test firmware main test version
                 for (let key in this.garfield.type_of_board.main_test_c_program.program_versions) {
 
-                    if (!this.typeOfBoard.main_test_c_program.program_versions.hasOwnProperty(key)) {
+                    if (!this.hardwareType.main_test_c_program.program_versions.hasOwnProperty(key)) {
                         continue;
                     }
 
 
-                    if (this.typeOfBoard.main_test_c_program.program_versions[key].main_mark) {
-                        this.firmwareTestMainVersion = this.typeOfBoard.main_test_c_program.program_versions[key];
+                    if (this.hardwareType.main_test_c_program.program_versions[key].main_mark) {
+                        this.firmwareTestMainVersion = this.hardwareType.main_test_c_program.program_versions[key];
                         break;
                     }
                 }
@@ -225,12 +225,12 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 // Find Main Production firmware main version
                 for (let key in this.garfield.type_of_board.main_c_program.program_versions) {
 
-                    if (!this.typeOfBoard.main_c_program.program_versions.hasOwnProperty(key)) {
+                    if (!this.hardwareType.main_c_program.program_versions.hasOwnProperty(key)) {
                         continue;
                     }
 
-                    if (this.typeOfBoard.main_c_program.program_versions[key].main_mark) {
-                        this.firmwareMainVersion = this.typeOfBoard.main_c_program.program_versions[key];
+                    if (this.hardwareType.main_c_program.program_versions[key].main_mark) {
+                        this.firmwareMainVersion = this.hardwareType.main_c_program.program_versions[key];
                         break;
                     }
                 }
@@ -512,7 +512,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             full_id: full_id,
             garfield_station_id: this.garfield.id,
             type_of_board_batch_id: this.productionBatchForm.controls['batch'].value,
-            type_of_board_id: this.typeOfBoard.id
+            type_of_board_id: this.hardwareType.id
         });
     }
 
@@ -731,7 +731,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     onDeviceConnectMessage(message: IWebSocketMessage) {
         if (!(this.garfield
-                && this.typeOfBoard
+                && this.hardwareType
                 && this.bootLoader
                 && this.printer_label_1
                 && this.printer_label_2

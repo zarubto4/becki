@@ -12,12 +12,12 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { IBoard, IHardwareNewPassword } from '../backend/TyrionAPI';
+import { IHardware, IHardwareNewPassword } from '../backend/TyrionAPI';
 import { FlashMessageSuccess } from '../services/NotificationService';
 
 
 export class ModalsHardwareRestartMQTTPassModel extends ModalModel {
-    constructor(public board: IBoard) {
+    constructor(public board: IHardware) {
         super();
     }
 }

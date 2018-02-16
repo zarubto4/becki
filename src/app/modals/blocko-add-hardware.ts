@@ -8,11 +8,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { IBoard, IBoardShortDetail } from '../backend/TyrionAPI';
+import { IHardware, IHardwareShortDetail } from '../backend/TyrionAPI';
 
 
 export class ModalsBlockoAddHardwareModel extends ModalModel {
-    constructor(public boards: IBoardShortDetail[], public selectedBoard: IBoardShortDetail = null) {
+    constructor(public boards: IHardwareShortDetail[], public selectedBoard: IHardwareShortDetail = null) {
         super();
     }
 }

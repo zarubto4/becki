@@ -5,9 +5,9 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import { IInstanceList, IInstanceShortDetail } from '../backend/TyrionAPI';
+import { IInstance, IInstanceList} from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalsConfirmModel } from '../modals/confirm';
+import { ModalsConfirmModel} from '../modals/confirm';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 
@@ -54,7 +54,7 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
                 this.instanceFilter.content.forEach((instance, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'HomerInstance' && instance.id === status.model_id) {
-                            instance.online_state = status.online_status;
+                            instance.online_state = status.online_state;
                         }
                     });
                 });
@@ -75,15 +75,7 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         }
     }
 
-    onInstanceClick(instance: IInstanceShortDetail) {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'instances', instance.id]);
-    }
-
-    onBlockoProgramClick(bProgramId: string) {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgramId]);
-    }
-
-    onInstanceEditClick(instance: IInstanceShortDetail) {
+    onInstanceEditClick(instance: IInstance) {
         let model = new ModalsInstanceEditDescriptionModel(instance.id, instance.name, instance.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -91,41 +83,55 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
                 this.tyrionBackendService.instanceEdit(instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.onFilterInstances();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
-    onInstanceStartOrShutdownClick(instance: IInstanceShortDetail, start: boolean) { // start (True) for Start or (False) for Shutdown
-        let m = null;
+    onInstanceShutdownClick(instance: IInstance) { // start (True) for Start or (False) for Shutdown
+        let model = new ModalsConfirmModel(this.translate('label_shut_down_instance_modal'), this.translate('label_shut_down_instance_modal_comment');
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceSnapshotShutdown(instance.current_snapshot_id)
+                    .then(() => {
+                        this.unblockUI();
+                        this.onFilterInstances();
+                    })
+                    .catch((err) => {
+                        this.unblockUI();
+                        this.fmError(this.translate('label_upload_error', err));
+                    });
+            }
+        });
+    }
 
-        if (start) { // start (True) for Start or (False) for Shutdown
-            m = new ModalsConfirmModel(this.translate('label_upload_instance_modal'), this.translate('label_upload_instance_modal_comment'));
-        } else {
-            m = new ModalsConfirmModel(this.translate('label_shut_down_instance_modal'), this.translate('label_shut_down_instance_modal_comment'));
-        }
-
-        this.modalService.showModal(m)
+    onInstanceStartClick() {
+        let model = new ModalsConfirmModel(this.translate('label_upload_instance_modal'), this.translate('label_upload_instance_modal_comment'));
+        this.modalService.showModal(model)
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.tyrionBackendService.instanceSetStartOrShutDown(instance.id)
+                    this.tyrionBackendService.instanceSnapshotDeploy({
+                        snapshot_id: instance.id,
+                        upload_time: 0
+                    })
                         .then(() => {
-                            this.storageService.projectRefresh(this.id);
                             this.unblockUI();
+                            this.onFilterInstances();
                         })
                         .catch((err) => {
                             this.unblockUI();
                             this.fmError(this.translate('label_upload_error', err));
                         });
                 }
-            });
+        });
     }
+
 
 
 }

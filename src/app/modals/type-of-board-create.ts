@@ -13,7 +13,7 @@ import { formSelectComponentOptionsMaker } from '../components/FormSelectCompone
 import { IApplicableProduct } from '../backend/TyrionAPI';
 import { ModalModel } from '../services/ModalService';
 
-export class ModalsCreateTypeOfBoardModel extends ModalModel {
+export class ModalsCreateHardwareTypeModel extends ModalModel {
     constructor(
         public processors: IProcessor[],
         public producers: IProducer[],
@@ -33,10 +33,10 @@ export class ModalsCreateTypeOfBoardModel extends ModalModel {
     selector: 'bk-modals-type-of-board-create',
     templateUrl: './type-of-board-create.html'
 })
-export class ModalsCreateTypeOfBoardComponent implements OnInit {
+export class ModalsCreateHardwareTypeComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsCreateTypeOfBoardModel;
+    modalModel: ModalsCreateHardwareTypeModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();

@@ -23,7 +23,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
-    typeOfBoardsSubscription: Subscription;
+    hardwareTypesSubscription: Subscription;
 
     project: IProject = null;
 
@@ -65,10 +65,6 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
 
     onLibraryClick(library: ILibraryShortDetail): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries', library.id]);
-    }
-
-    onBoardTypeClick(boardTypeId: string): void {
-        this.navigate(['/hardware', boardTypeId]);
     }
 
     onRemoveClick(library: ILibraryShortDetail): void {

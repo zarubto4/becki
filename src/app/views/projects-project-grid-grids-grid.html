@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="row">
         <div class="col-md-12">
@@ -16,7 +16,7 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!gridProgram.edit_permission"
+                        <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!gridProgram.update_permission"
                             (click)="onProgramEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
@@ -196,7 +196,7 @@
                                         }
                                     </style>
 
-                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission"
+                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                         (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>

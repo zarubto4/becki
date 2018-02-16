@@ -6,13 +6,13 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
-    IBoardFilter, IBoardList, IBoardShortDetail, IProcessor, IProducer,
-    ITypeOfBoard
+    IHardwareFilter, IHardwareList, IHardwareShortDetail, IProcessor, IProducer,
+    IHardwareType
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateProducerModel } from '../modals/create-producer';
 import { ModalsCreateProcessorModel } from '../modals/create-processor';
-import { ModalsCreateTypeOfBoardModel } from '../modals/type-of-board-create';
+import { ModalsCreateHardwareTypeModel } from '../modals/type-of-board-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsAdminCreateHardwareModel } from '../modals/admin-create-hardware';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
@@ -23,10 +23,10 @@ import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-descript
 })
 export class AdminHardwareComponent extends BaseMainComponent implements OnInit {
 
-    typeOfBoards: ITypeOfBoard[] = null;
+    hardwareTypes: IHardwareType[] = null;
     processors: IProcessor[] = null;
     producers: IProducer[] = null;
-    boardsFiler: IBoardList = null;
+    boardsFiler: IHardwareList = null;
 
     tab: string = 'hardware_list';
 
@@ -42,9 +42,9 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.tyrionBackendService.typeOfBoardsGetAll(), this.tyrionBackendService.processorGetAll(), this.tyrionBackendService.producersGetAll()])
-            .then((values: [ITypeOfBoard[], IProcessor[], IProducer[]]) => {
-                this.typeOfBoards = values[0];
+        Promise.all<any>([this.tyrionBackendService.hardwareTypesGetAll(), this.tyrionBackendService.processorGetAll(), this.tyrionBackendService.producersGetAll()])
+            .then((values: [IHardwareType[], IProcessor[], IProducer[]]) => {
+                this.hardwareTypes = values[0];
                 this.processors = values[1];
                 this.producers = values[2];
                 this.unblockUI();
@@ -61,12 +61,12 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     }
 
 
-    onCreateTypeOfBoardClick(): void {
-        let model = new ModalsCreateTypeOfBoardModel(this.processors, this.producers);
+    onCreateHardwareTypeClick(): void {
+        let model = new ModalsCreateHardwareTypeModel(this.processors, this.producers);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeOfBoardCreate({
+                this.tyrionBackendService.hardwareTypeCreate({
                     description: model.description,
                     name: model.name,
                     compiler_target_name: model.compiler_target_name,
@@ -166,22 +166,22 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         });
     }
 
-    onTypeOfBoardEditClick(typeOfBoard: ITypeOfBoard): void {
-        let model = new ModalsCreateTypeOfBoardModel(
+    onHardwareTypeEditClick(hardwareType: IHardwareType): void {
+        let model = new ModalsCreateHardwareTypeModel(
             this.processors,
             this.producers,
-            typeOfBoard.name,
-            typeOfBoard.description,
-            typeOfBoard.connectible_to_internet,
-            typeOfBoard.compiler_target_name,
-            typeOfBoard.processor_id,
-            typeOfBoard.producer_id,
+            hardwareType.name,
+            hardwareType.description,
+            hardwareType.connectible_to_internet,
+            hardwareType.compiler_target_name,
+            hardwareType.processor_id,
+            hardwareType.producer_id,
             true
         );
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeOfBoardEdit(typeOfBoard.id, {
+                this.tyrionBackendService.hardwareTypeEdit(hardwareType.id, {
                     description: model.description,
                     name: model.name,
                     compiler_target_name: model.compiler_target_name,
@@ -200,7 +200,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         });
     }
 
-    onTypeOfBoardClick(boardTypeId: string): void {
+    onHardwareTypeClick(boardTypeId: string): void {
         this.router.navigate(['/hardware', boardTypeId]);
     }
 
@@ -208,11 +208,11 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.router.navigate(['/producers', producer]);
     }
 
-    onTypeOfBoardDeleteClick(typeOfBoard: ITypeOfBoard): void {
-        this.modalService.showModal(new ModalsRemovalModel(typeOfBoard.name)).then((success) => {
+    onHardwareTypeDeleteClick(hardwareType: IHardwareType): void {
+        this.modalService.showModal(new ModalsRemovalModel(hardwareType.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeOfBoardDelete(typeOfBoard.id)
+                this.tyrionBackendService.hardwareTypeDelete(hardwareType.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -260,13 +260,13 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     }
 
     onCreateHardwareClick(): void {
-        let model = new ModalsAdminCreateHardwareModel(this.typeOfBoards);
+        let model = new ModalsAdminCreateHardwareModel(this.hardwareTypes);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.boardCreateManualRegistration({
                     full_id: model.processorId,
-                    type_of_board_id: model.typeOfBoard
+                    type_of_board_id: model.hardwareType
                 })
                     .then(() => {
                         this.onFilterHardware();
@@ -299,11 +299,11 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
             });
     }
 
-    onDeviceClick(device: IBoardShortDetail): void {
+    onDeviceClick(device: IHardwareShortDetail): void {
         this.navigate(['/device', device.id]);
     }
 
-    onRemoveHardwareClick(board: IBoardShortDetail): void {
+    onRemoveHardwareClick(board: IHardwareShortDetail): void {
         this.modalService.showModal(new ModalsRemovalModel(board.name)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -319,7 +319,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         });
     }
 
-    onEditHardwareClick(device: IBoardShortDetail): void {
+    onEditHardwareClick(device: IHardwareShortDetail): void {
         let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -352,7 +352,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
             });
     }
 
-    onPrintLabelHardwareClick(device: IBoardShortDetail): void {
+    onPrintLabelHardwareClick(device: IHardwareShortDetail): void {
         this.blockUI();
         this.tyrionBackendService.boardPrintlabel(device.id)
             .then(() => {

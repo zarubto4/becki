@@ -3,7 +3,10 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -14,19 +17,17 @@
                 </span>
             </div>
             <div class="becki-actions">
-
             </div>
         </div>
 
         <div *ngIf="procedure">
-
             <div class="row">
                 <div class="col-md-4">
                     <strong>{{'label_type_of_update'|bkTranslate:this}}</strong>: <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
                     <br>
                     <br>
 
-                    {{'label_created'|bkTranslate:this}}: {{procedure.date_of_create|bkUnixTimeToDate}}
+                    {{'label_created'|bkTranslate:this}}: {{procedure.created|bkUnixTimeToDate}}
                     <br>
 
                     {{'label_planed'|bkTranslate:this}}: {{procedure.date_of_planing|bkUnixTimeToDate}}
@@ -38,12 +39,12 @@
 
                 </div>
                 <div class="col-md-4">
-                    <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
+                    <template [ngIf]="procedure.program">
                         <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
-                            <a class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.a.c_program_version_name}}</a>
+                            <a class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_version_name}}</a>
                         </template>
                         <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
-                            <a class="bold" [routerLink]="['/projects', projectId, 'hardware', procedure.bootloader.type_of_board_id]">{{procedure.bootloader.bootloader_name}}</a>
+                            <a class="bold" [routerLink]="['/projects', projectId, 'hardware', procedure.bootloader.hardware_type_id]">{{procedure.bootloader.bootloader_name}}</a>
                         </template>
                     </template>
                 </div>
@@ -83,7 +84,7 @@
 
                     <td class="vert-align">{{update.id.substr(0, 12)}}</td>
                     <td class="vert-align">
-                        <a class="bold" [routerLink]="['/projects', projectId, 'hardware', update.board.id]">{{ update.board.name ? update.board.name : update.board.id}}</a>
+                        <a class="bold" [routerLink]="['/projects', projectId, 'hardware', update.hardware.id]">{{ update.hardware.name ? update.hardware.name : update.hardware.id}}</a>
                     </td>
 
                     <td class="vert-align">

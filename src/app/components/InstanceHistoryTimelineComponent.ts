@@ -18,7 +18,7 @@ import { IHomerInstanceRecord } from '../backend/TyrionAPI';
 
                         <a *ngFor="let instance of data; let i = index" [class.selected]="i == selected" (click)="itemClick(i, instance)">
                             <span style="text-overflow: ellipsis; display:block; overflow: hidden;white-space: nowrap;">{{instance.b_program_version_name}}</span> 
-                            <span class="font-grey-salsa" style="display: block; font-size: 70%">{{instance.date_of_created|bkUnixTimeToDate}}</span>
+                            <span class="font-grey-salsa" style="display: block; font-size: 70%">{{instance.createdd|bkUnixTimeToDate}}</span>
                         </a>
 
                     </div>

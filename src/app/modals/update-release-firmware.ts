@@ -9,9 +9,9 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import {
-    IActualizationProcedureMakeTypeOfBoard,
-    IBoardGroup, IBootLoader, IBPair, ICProgramFilter, ICProgramList, ICProgramShortDetail,
-    ICProgramShortDetailForBlocko, ITypeOfBoard, ITypeOfBoardShortDetail
+    IUpdateProcedureMakeHardwareType,
+    IHardwareGroup, IBootLoader, IBPair, ICProgramFilter, ICProgramList, ICProgramShortDetail,
+    ICProgramShortDetailForBlocko, IHardwareType, IHardwareTypeShortDetail
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
@@ -21,10 +21,10 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
         public project_id: string = null,
-        public deviceGroup: IBoardGroup[] = [],         // All possible Hardware groups for settings
+        public deviceGroup: IHardwareGroup[] = [],         // All possible Hardware groups for settings
         public deviceGroupStringIdSelected: string = '',   // List with group ids for hardware update,
         public firmwareType: string = 'firmware',
-        public groups: IActualizationProcedureMakeTypeOfBoard[] = [],
+        public groups: IUpdateProcedureMakeHardwareType[] = [],
         public time: number = 0,
         public timeZoneOffset: number = 0,
     ) {
@@ -50,12 +50,12 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     formGroupList: FormSelectComponent;
     groupsForSelect: FormSelectComponentOption[] = null;
 
-    type_of_boards: ITypeOfBoard[] = null;
-    selectedDeviceGroup: IBoardGroup = null;
+    type_of_boards: IHardwareType[] = null;
+    selectedDeviceGroup: IHardwareGroup = null;
     immediately: boolean = true;
 
-    cPrograms: { [typeOfBoardId: string]: ICProgramList } = {};
-    bootloaders: { [typeOfBoardId: string]: IBootLoader[] } = {};
+    cPrograms: { [hardwareTypeId: string]: ICProgramList } = {};
+    bootloaders: { [hardwareTypeId: string]: IBootLoader[] } = {};
 
     firmwareTypeSelect: FormSelectComponentOption[] = [];
 
@@ -102,13 +102,13 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
 
     onGroupChange(value: string) {
         (<FormControl>(this.form.controls['versionSelected'])).setValue(null);
-        let devgroup: IBoardGroup = null;
+        let devgroup: IHardwareGroup = null;
 
         for (let i: number = 0; i < this.modalModel.deviceGroup.length; i++) {
 
             if (this.modalModel.deviceGroup[i].id === value ) {
                 devgroup = this.modalModel.deviceGroup[i];
-                devgroup.type_of_boards_short_detail.forEach((tp: ITypeOfBoardShortDetail) => {
+                devgroup.type_of_boards_short_detail.forEach((tp: IHardwareTypeShortDetail) => {
 
 
                     this.form.addControl(tp.id + '_selectedBootloaderId', new FormControl('', []));
@@ -132,9 +132,9 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
 
                     if (this.bootloaders[tp.id] == null) {
 
-                        this.backendService.typeOfBoardGet(tp.id)
-                            .then((typeOfBoard) => {
-                                this.bootloaders[tp.id] = typeOfBoard.boot_loaders;
+                        this.backendService.hardwareTypeGet(tp.id)
+                            .then((hardwareType) => {
+                                this.bootloaders[tp.id] = hardwareType.boot_loaders;
 
                                 if (this.cPrograms[tp.id] && this.bootloaders[tp.id]) {
                                     this.selectedDeviceGroup = devgroup;
@@ -148,8 +148,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         }
     }
 
-    hwCProgramVersionChanged(typeOfBoardId: string, cProgramVersion: string) {
-        (<FormControl>(this.form.controls[typeOfBoardId + '_selectedCProgramVersionId'])).setValue(cProgramVersion);
+    hwCProgramVersionChanged(hardwareTypeId: string, cProgramVersion: string) {
+        (<FormControl>(this.form.controls[hardwareTypeId + '_selectedCProgramVersionId'])).setValue(cProgramVersion);
         (<FormControl>(this.form.controls['versionSelected'])).setValue(cProgramVersion);
     }
 
@@ -206,13 +206,13 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
             this.modalModel.firmwareType = this.form.controls['firmwareType'].value;
         }
 
-        this.selectedDeviceGroup.type_of_boards_short_detail.forEach((typeOfBoard: ITypeOfBoardShortDetail) => {
+        this.selectedDeviceGroup.type_of_boards_short_detail.forEach((hardwareType: IHardwareTypeShortDetail) => {
 
-            let bootloader_id: string = this.form.controls[typeOfBoard.id + '_selectedBootloaderId'].value;
-            let c_program_version_id: string = this.form.controls[typeOfBoard.id + '_selectedCProgramVersionId'].value;
+            let bootloader_id: string = this.form.controls[hardwareType.id + '_selectedBootloaderId'].value;
+            let c_program_version_id: string = this.form.controls[hardwareType.id + '_selectedCProgramVersionId'].value;
 
-            let gr: IActualizationProcedureMakeTypeOfBoard = {
-                type_of_board_id: typeOfBoard.id,
+            let gr: IUpdateProcedureMakeHardwareType = {
+                type_of_board_id: hardwareType.id,
                 bootloader_id: bootloader_id,
                 c_program_version_id: c_program_version_id
             };

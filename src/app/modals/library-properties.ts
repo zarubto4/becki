@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
-import { ITypeOfBoard } from '../backend/TyrionAPI';
+import { IHardwareType } from '../backend/TyrionAPI';
 
 
 export class ModalsLibraryPropertiesModel extends ModalModel {

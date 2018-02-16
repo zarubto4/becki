@@ -4,10 +4,10 @@
   -->
 
 
-<bk-layout-main tabMenu="{{init == true ? (projectId == null ? 'byzance-admin' : 'projects-project') : ''}}" [title]="init == true ? (projectId == null ? ('main_administration_title'|bkTranslate:this): currentParamsService.currentProjectNameSnapshot) : '' "
+<bk-layout-main [tabMenu]="{{init == true ? (projectId == null ? 'byzance-admin' : 'projects-project') : ''}}" [title]="init == true ? (projectId == null ? ('main_administration_title'|bkTranslate:this): currentParamsService.currentProjectNameSnapshot) : '' "
     [subtitle]="init == true ? (projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot) : '' "
     [lastBreadName]="device?device.id:''">
-    <div *ngIf="device && typeOfBoard" class="row">
+    <div *ngIf="device && hardwareType" class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
@@ -19,7 +19,7 @@
                     </div>
                     <div class="becki-actions">
 
-                        <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!device.edit_permission"
+                        <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!device.update_permission"
                             (click)="onEditClick(device)">
                             <i class="fa fa-cog"></i>
                         </button>
@@ -51,10 +51,10 @@
                 </div>
 
                 <div *ngIf="hardwareTab == 'overview'">
-                    <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-40 margin-right-15">
+                    <div *ngIf="device && hardwareType" class="row margin-left-15 margin-top-40 margin-right-15">
 
                         <!-- Main Overview -->
-                        <div *ngIf="device && typeOfBoard" class="row">
+                        <div *ngIf="device && hardwareType" class="row">
 
                             <div class="col-md-4">
 
@@ -75,15 +75,15 @@
 
                                 <div>
                                     {{'label_type'|bkTranslate:this}}:
-                                    <a [routerLink]="['/hardware', device.type_of_board_id]" class="bold">{{typeOfBoard.name}}</a>
+                                    <a [routerLink]="['/hardware', device.type_of_board_id]" class="bold">{{hardwareType.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_producer'|bkTranslate:this}}:
-                                    <a [routerLink]="['/producers', typeOfBoard.producer_id]" class="bold">{{typeOfBoard.producer_name}}</a>
+                                    <a [routerLink]="['/producers', hardwareType.producer_id]" class="bold">{{hardwareType.producer_name}}</a>
                                 </div>
                                 <div>
                                     {{'label_revision'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
+                                    <span class="font-grey-mint bold">{{hardwareType.revision}}</span>
                                 </div>
 
                                 <br>
@@ -122,7 +122,7 @@
 
                                 <div>
                                     {{'label_server'|bkTranslate:this}}:
-                                    <span *ngIf="!device.server" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                    <span *ngIf="!device.server" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
                                     <span *ngIf="device.server" class="font-grey-mint bold">{{device.server.personal_server_name}}</span>
                                 </div>
                                 <hr>
@@ -207,11 +207,11 @@
                                 <H4>{{'label_image'|bkTranslate:this}}</H4>
                                 <br>
 
-                                <img *ngIf="typeOfBoard.picture_link && !device.picture_link " [attr.src]="typeOfBoard.picture_link">
+                                <img *ngIf="hardwareType.picture_link && !device.picture_link " [attr.src]="hardwareType.picture_link">
                                 <img *ngIf="device.picture_link " [attr.src]="device.picture_link">
-                                <i *ngIf="!typeOfBoard.picture_link && !device.picture_link " class="fa fa-fw fa-microchip text-center"></i>
+                                <i *ngIf="!hardwareType.picture_link && !device.picture_link " class="fa fa-fw fa-microchip text-center"></i>
 
-                                <p *ngIf="device.edit_permission && projectId" class="text-center">
+                                <p *ngIf="device.update_permission && projectId" class="text-center">
                                     <a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a>
                                 </p>
                             </div>
@@ -219,7 +219,7 @@
                         </div>
 
                         <!-- Allert List -->
-                        <div *ngIf="device && typeOfBoard && device.alert_list && device.alert_list.length" class="row">
+                        <div *ngIf="device && hardwareType && device.alert_list && device.alert_list.length" class="row">
                             <hr>
                             <div class="col-md-4">
                                 <H4>Alerts on this Hardware</H4>
@@ -244,7 +244,7 @@
                         <br>
 
                         <!-- Firmware Overview -->
-                        <div *ngIf="device && typeOfBoard" class="row">
+                        <div *ngIf="device && hardwareType" class="row">
                             <div class="col-md-6">
                                 <div class="portlet portlet light bordered">
                                     <div class="portlet-title">
@@ -359,7 +359,7 @@
                 </div>
 
                 <div *ngIf="hardwareTab == 'developer'">
-                    <div *ngIf="device && typeOfBoard" class="row">
+                    <div *ngIf="device && hardwareType" class="row">
                         <div class="col-md-12">
 
                             <div class="col-md-6">
@@ -410,17 +410,17 @@
                                 <H4>{{'label_core_configuration'|bkTranslate:this}}</H4>
                                 <span [innerHtml]="'label_core_configuration_comment'|bkTranslate:this"></span>
                                 <div>
-                                    <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
+                                    <button *ngIf="device.update_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
                                         <i class="fa fa-heartbeat"></i> {{'label_restart_device'|bkTranslate:this}}
                                     </button>
 
-                                    <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onSwitchToBootloaderDeviceClick()">
+                                    <button *ngIf="device.update_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onSwitchToBootloaderDeviceClick()">
                                         <i class="fa fa-briefcase"></i> {{'label_restart_to_bootloader'|bkTranslate:this}}
                                     </button>
-                                    <button *ngIf="device.edit_permission" class="btn red btn-sm" (click)="onGenerateNewPassword()">
+                                    <button *ngIf="device.update_permission" class="btn red btn-sm" (click)="onGenerateNewPassword()">
                                         <i class="fa fa-lock"></i> {{'label_change_mqtt_pass'|bkTranslate:this}}
                                     </button>
-                                    <button *ngIf="device.edit_permission" class="btn red btn-sm" (click)="onChangeServer()">
+                                    <button *ngIf="device.update_permission" class="btn red btn-sm" (click)="onChangeServer()">
                                         <i class="fa fa-lock"></i> {{'label_change_server'|bkTranslate:this}}
                                     </button>
                                 </div>
@@ -470,7 +470,7 @@
                 </div>
 
                 <div *ngIf="hardwareTab == 'updates'">
-                    <div *ngIf="device && typeOfBoard" class="row">
+                    <div *ngIf="device && hardwareType" class="row">
                         <div class="col-md-12">
 
                             <div *ngIf="actualizationTaskFilter && actualizationTaskFilter.content.length > 0" class="table-scrollable">
@@ -496,7 +496,7 @@
                                             <td class="vert-align">
                                                 <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', update.actualization_procedure_id]">{{update.id.substr(0, 12)}}</a>
                                             </td>
-                                            <td class="vert-align">{{update.date_of_create|bkUnixTimeToDate}}</td>
+                                            <td class="vert-align">{{update.created|bkUnixTimeToDate}}</td>
 
                                             <td class="vert-align" *ngIf="update.date_of_finish">
                                                 {{update.date_of_finish|bkUnixTimeToDate}}

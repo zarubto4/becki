@@ -1,25 +1,25 @@
 <bk-layout-main
 
-        tabMenu="{{typeOfBoard != null ? (typeOfBoard.update_permission? 'byzance-admin' : '') : null}}"
-        [title]="typeOfBoard != null ? ( typeOfBoard.update_permission ? ('main_administration_title'|bkTranslate:this) : ('main_title'|bkTranslate:this)) : null"
-        [subtitle]="typeOfBoard != null ? ( typeOfBoard.update_permission ? ('main_subtitle'|bkTranslate:this) : ( typeOfBoard ? typeOfBoard.name: '') ) : null"
-        [lastBreadName]="typeOfBoard?typeOfBoard.name:''"
+        [tabMenu]="{{hardwareType != null ? (hardwareType.update_permission? 'byzance-admin' : '') : null}}"
+        [title]="hardwareType != null ? ( hardwareType.update_permission ? ('main_administration_title'|bkTranslate:this) : ('main_title'|bkTranslate:this)) : null"
+        [subtitle]="hardwareType != null ? ( hardwareType.update_permission ? ('main_subtitle'|bkTranslate:this) : ( hardwareType ? hardwareType.name: '') ) : null"
+        [lastBreadName]="hardwareType?hardwareType.name:''"
         >
-    <div *ngIf="typeOfBoard" class="portlet portlet light bordered">
+    <div *ngIf="hardwareType" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-microchip"></i>
-                    {{typeOfBoard.name}}
+                    {{hardwareType.name}}
                 </span>
             </div>
-            <div *ngIf="typeOfBoard && typeOfBoard.edit_permission" class="becki-actions">
+            <div *ngIf="hardwareType && hardwareType.update_permission" class="becki-actions">
 
-                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.edit_permission"
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!hardwareType.update_permission"
                         (click)="onEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>
-                <button title="{{'label_type_of_boards_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!typeOfBoard.delete_permission"
+                <button title="{{'label_type_of_boards_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!hardwareType.delete_permission"
                         (click)="onRemoveClick()">
                     <i class="fa fa-trash"></i>
                 </button>
@@ -29,40 +29,40 @@
             <div class="col-md-8">
                 <div>
                     {{'label_name'|bkTranslate:this}}:
-                    <span class="font-color-neutral-dark bold">{{typeOfBoard.name}}</span>
+                    <span class="font-color-neutral-dark bold">{{hardwareType.name}}</span>
                 </div>
                 <div>
                     {{'label_description'|bkTranslate:this}}:
-                    <span class="font-color-neutral-dark bold">{{typeOfBoard.description}}</span>
+                    <span class="font-color-neutral-dark bold">{{hardwareType.description}}</span>
                 </div>
                 <div>
                     {{'label_producer'|bkTranslate:this}}:
-                    <a [routerLink]="['/producers', typeOfBoard.producer_id]" class="bold">{{typeOfBoard.producer_name}}</a>
+                    <a [routerLink]="['/producers', hardwareType.producer_id]" class="bold">{{hardwareType.producer_name}}</a>
                 </div>
                 <div>
                     {{'label_processor'|bkTranslate:this}}:
-                    <span class="font-color-neutral-dark bold">{{typeOfBoard.processor_name}}</span>
+                    <span class="font-color-neutral-dark bold">{{hardwareType.processor_name}}</span>
                 </div>
                 <div>
                     {{'label_target_name'|bkTranslate:this}}:
-                    <span class="font-color-neutral-dark bold">{{typeOfBoard.compiler_target_name}}</span>
+                    <span class="font-color-neutral-dark bold">{{hardwareType.compiler_target_name}}</span>
                 </div>
                 <div>
                     {{'label_abilities'|bkTranslate:this}}:<br>
-                    <div *ngIf="typeOfBoard.compiler_target_name == 'BYZANCE_YODAG2'">
+                    <div *ngIf="hardwareType.compiler_target_name == 'BYZANCE_YODAG2'">
                         &nbsp;<i class="fa fa-fw fa-plug" title="Ethernet"></i> {{'label_ethernet'|bkTranslate:this}}<br>
                         &nbsp;<i class="fa fa-fw fa-wifi" title="Wi-Fi"></i> {{'label_wifi'|bkTranslate:this}}<br>
                     </div>
-                    <div *ngIf="typeOfBoard.compiler_target_name == 'BYZANCE_YODAG3E'">
+                    <div *ngIf="hardwareType.compiler_target_name == 'BYZANCE_YODAG3E'">
                         &nbsp;<i class="fa fa-fw fa-plug" title="Ethernet"></i> {{'text_ethernet_with_poe'|bkTranslate:this}}<br>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 hw-image-col">
-                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
-                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
+                <img *ngIf="hardwareType.picture_link" [attr.src]="hardwareType.picture_link">
+                <i *ngIf="!hardwareType.picture_link" class="fa fa-fw fa-microchip text-center"></i>
 
-                <p *ngIf="typeOfBoard.edit_permission" class="text-center"><a (click)="updatePictureClick()" class="bold">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+                <p *ngIf="hardwareType.update_permission" class="text-center"><a (click)="updatePictureClick()" class="bold">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
             </div>
         </div>
     </div>
@@ -70,7 +70,7 @@
 
 
     <!-- Only with permission -->
-    <div *ngIf="typeOfBoard && typeOfBoard.bootloader_edit_permission" class="portlet portlet light bordered">
+    <div *ngIf="hardwareType && hardwareType.bootloader_update_permission" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
@@ -80,7 +80,7 @@
             </div>
             <div class="becki-actions">
 
-                <button title="{{'label_bootloader_create_description'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.bootloader_edit_permission"
+                <button title="{{'label_bootloader_create_description'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!hardwareType.bootloader_update_permission"
                         (click)="onCreateBootloaderClick()">
                     <i class="fa fa-plus"></i>
                 </button>
@@ -101,7 +101,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let bootloader of typeOfBoard.boot_loaders">
+                        <tr *ngFor="let bootloader of hardwareType.boot_loaders">
                             <td class="vert-align no-wrap"><strong>{{bootloader.id.substr(0,8)}}</strong> </td>
                             <!-- Main Mark - Only for settings for Type of Board -->
                             <td class="vert-align">
@@ -128,16 +128,16 @@
                                     </button>
                                 </a>
 
-                                <button *ngIf="typeOfBoard.bootloader_edit_permission" title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onBootloaderEditClick(bootloader)">
+                                <button *ngIf="hardwareType.bootloader_update_permission" title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onBootloaderEditClick(bootloader)">
                                     <i class="fa fa-cog"></i>
                                 </button>
-                                <button *ngIf="typeOfBoard.bootloader_edit_permission && !bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!bootloader.update_permission" (click)="onBootloaderSetMainClick(bootloader)">
+                                <button *ngIf="hardwareType.bootloader_update_permission && !bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!bootloader.update_permission" (click)="onBootloaderSetMainClick(bootloader)">
                                     <i class="fa fa-flag"></i>
                                 </button>
-                                <button *ngIf="typeOfBoard.bootloader_edit_permission && !bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!bootloader.update_permission" (click)="onBootloaderUpdateFile(bootloader)">
+                                <button *ngIf="hardwareType.bootloader_update_permission && !bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!bootloader.update_permission" (click)="onBootloaderUpdateFile(bootloader)">
                                     <i class="fa fa-file-code-o"></i>
                                 </button>
-                                <button *ngIf="typeOfBoard.bootloader_edit_permission" title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onBootloaderDeleteClick(bootloader)">
+                                <button *ngIf="hardwareType.bootloader_update_permission" title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onBootloaderDeleteClick(bootloader)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
@@ -145,12 +145,12 @@
                     </tbody>
                 </table>
             </div>
-            <h3  *ngIf="!typeOfBoard.boot_loaders" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="typeOfBoard.boot_loaders && typeOfBoard.boot_loaders.length == 0 " class="list-no-items">
+            <h3  *ngIf="!hardwareType.boot_loaders" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+            <div *ngIf="hardwareType.boot_loaders && hardwareType.boot_loaders.length == 0 " class="list-no-items">
                 <p class="list-no-items__main-label">{{'label_no_bootloaders'|bkTranslate:this}}</p>
                 <p class="list-no-items__sub-label">{{'label_no_bootloaders_comment'|bkTranslate:this}} </p>
                 <p>
-                    <button *ngIf="typeOfBoard.bootloader_edit_permission" class="btn blue" (click)="onCreateBootloaderClick()">
+                    <button *ngIf="hardwareType.bootloader_update_permission" class="btn blue" (click)="onCreateBootloaderClick()">
                         <i class="fa fa-plus-circle"></i> {{'btn_create_bootloader'|bkTranslate:this}}
                     </button>
                 </p>
@@ -159,7 +159,7 @@
     </div>
 
     <!-- Only with permission Main C Program -->
-    <div *ngIf="typeOfBoard && typeOfBoard.default_c_program_edit_permission" class="portlet portlet light bordered">
+    <div *ngIf="hardwareType && hardwareType.default_c_program_update_permission" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
@@ -169,12 +169,12 @@
             </div>
             <div class="becki-actions">
 
-                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.default_c_program_edit_permission"
-                        [routerLink]="[typeOfBoard.main_test_c_program.id]">
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!hardwareType.default_c_program_update_permission"
+                        [routerLink]="[hardwareType.main_test_c_program.id]">
                     <i class="fa fa-plus"></i>
                 </button>
-                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.default_c_program_edit_permission"
-                        (click)="onCProgramEditClick(typeOfBoard.main_c_program)">
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!hardwareType.default_c_program_update_permission"
+                        (click)="onCProgramEditClick(hardwareType.main_c_program)">
                     <i class="fa fa-cog"></i>
                 </button>
             </div>
@@ -182,14 +182,14 @@
         <div>
             <div>
                 {{'label_name'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_c_program.name}}</span>
+                <span class="font-color-neutral-dark bold">{{hardwareType.main_c_program.name}}</span>
             </div>
             <div>
                 {{'label_description'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_c_program.description}}</span>
+                <span class="font-color-neutral-dark bold">{{hardwareType.main_c_program.description}}</span>
             </div>
 
-            <div *ngIf="(typeOfBoard && typeOfBoard.main_c_program.program_versions.length)">
+            <div *ngIf="(hardwareType && hardwareType.main_c_program.program_versions.length)">
                 <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
@@ -202,10 +202,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let version of typeOfBoard.main_c_program.program_versions">
+                        <tr *ngFor="let version of hardwareType.main_c_program.program_versions">
                         <!-- NAME -->
                         <td class="vert-align bold">
-                            <a [routerLink]="[typeOfBoard.main_c_program.id]">
+                            <a [routerLink]="[hardwareType.main_c_program.id]">
                                 {{version.version_name}}
                             </a>
                         </td>
@@ -246,7 +246,7 @@
                                 <i class="fa fa-cog"></i>
                             </button>
 
-                            <button *ngIf="version.status=='successfully_compiled_and_restored' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!typeOfBoard.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                            <button *ngIf="version.status=='successfully_compiled_and_restored' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
                                 <i class="fa fa-flag"></i>
                             </button>
 
@@ -259,12 +259,12 @@
                     </tbody>
                 </table>
             </div>
-            <h3 *ngIf="!typeOfBoard.main_c_program" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="typeOfBoard.main_c_program.program_versions && typeOfBoard.main_c_program.program_versions == 0" class="list-no-items">
+            <h3 *ngIf="!hardwareType.main_c_program" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+            <div *ngIf="hardwareType.main_c_program.program_versions && hardwareType.main_c_program.program_versions == 0" class="list-no-items">
                 <p class="list-no-items__main-label">{{'label_no_c_program_versions'|bkTranslate:this}}</p>
                 <p class="list-no-items__sub-label">{{'label_no_c_program_versions_comment'|bkTranslate:this}} </p>
                 <p>
-                    <button class="btn blue" [routerLink]="[typeOfBoard.main_c_program.id]">
+                    <button class="btn blue" [routerLink]="[hardwareType.main_c_program.id]">
                         <i class="fa fa-plus-circle"></i> {{'btn_create_c_program_version'|bkTranslate:this}}
                     </button>
                 </p>
@@ -273,7 +273,7 @@
     </div>
 
     <!-- Only with permission Main Test C Program -->
-    <div *ngIf="typeOfBoard && typeOfBoard.test_c_program_edit_permission" class="portlet portlet light bordered">
+    <div *ngIf="hardwareType && hardwareType.test_c_program_update_permission" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
@@ -282,12 +282,12 @@
                 </span>
             </div>
             <div class="becki-actions">
-                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.test_c_program_edit_permission"
-                        [routerLink]="[typeOfBoard.main_test_c_program.id]">
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!hardwareType.test_c_program_update_permission"
+                        [routerLink]="[hardwareType.main_test_c_program.id]">
                     <i class="fa fa-plus"></i>
                 </button>
-                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.test_c_program_edit_permission"
-                        (click)="onCProgramEditClick(typeOfBoard.main_test_c_program)">
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!hardwareType.test_c_program_update_permission"
+                        (click)="onCProgramEditClick(hardwareType.main_test_c_program)">
                     <i class="fa fa-cog"></i>
                 </button>
             </div>
@@ -295,14 +295,14 @@
         <div>
             <div>
                 {{'label_name'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_test_c_program.name}}</span>
+                <span class="font-color-neutral-dark bold">{{hardwareType.main_test_c_program.name}}</span>
             </div>
             <div>
                 {{'label_description'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_test_c_program.description}}</span>
+                <span class="font-color-neutral-dark bold">{{hardwareType.main_test_c_program.description}}</span>
             </div>
 
-            <div *ngIf="(typeOfBoard && typeOfBoard.main_test_c_program.program_versions.length)">
+            <div *ngIf="(hardwareType && hardwareType.main_test_c_program.program_versions.length)">
                 <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
@@ -315,10 +315,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let version of typeOfBoard.main_test_c_program.program_versions">
+                    <tr *ngFor="let version of hardwareType.main_test_c_program.program_versions">
                         <!-- NAME -->
                         <td class="vert-align bold">
-                            <a [routerLink]="[typeOfBoard.main_test_c_program.id]">
+                            <a [routerLink]="[hardwareType.main_test_c_program.id]">
                                 {{version.version_name}}
                             </a>
                         </td>
@@ -386,7 +386,7 @@
                                 <i class="fa fa-cog"></i>
                             </button>
 
-                            <button *ngIf="version.status=='successfully_compiled_and_restored' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!typeOfBoard.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                            <button *ngIf="version.status=='successfully_compiled_and_restored' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
                                 <i class="fa fa-flag"></i>
                             </button>
 
@@ -399,12 +399,12 @@
                     </tbody>
                 </table>
             </div>
-            <h3 *ngIf="!typeOfBoard.main_test_c_program" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="typeOfBoard.main_test_c_program.program_versions && typeOfBoard.main_test_c_program.program_versions == 0" class="list-no-items">
+            <h3 *ngIf="!hardwareType.main_test_c_program" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+            <div *ngIf="hardwareType.main_test_c_program.program_versions && hardwareType.main_test_c_program.program_versions == 0" class="list-no-items">
                 <p class="list-no-items__main-label">{{'label_no_c_program_versions'|bkTranslate:this}}</p>
                 <p class="list-no-items__sub-label">{{'label_no_c_program_versions_comment'|bkTranslate:this}} </p>
                 <p>
-                    <button class="btn blue" [routerLink]="[typeOfBoard.main_test_c_program.id]">
+                    <button class="btn blue" [routerLink]="[hardwareType.main_test_c_program.id]">
                         <i class="fa fa-plus-circle"></i> {{'btn_create_c_program_version'|bkTranslate:this}}
                     </button>
                 </p>
@@ -413,7 +413,7 @@
     </div>
 
     <!-- Only with permission Revision For Burning procedure -->
-    <div *ngIf="typeOfBoard && typeOfBoard.register_new_device_permission" class="portlet portlet light bordered">
+    <div *ngIf="hardwareType && hardwareType.register_new_device_permission" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
@@ -422,14 +422,14 @@
                 </span>
             </div>
             <div class="becki-actions">
-                <button title="{{'label_revision_create_description'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.register_new_device_permission"
+                <button title="{{'label_revision_create_description'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!hardwareType.register_new_device_permission"
                         (click)="onCreateRevisionClick()">
                     <i class="fa fa-plus"></i>
                 </button>
             </div>
         </div>
         <div>
-            <div *ngIf="(typeOfBoard && typeOfBoard.batchs.length)">
+            <div *ngIf="(hardwareType && hardwareType.batchs.length)">
                 <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
@@ -443,7 +443,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let batch of typeOfBoard.batchs">
+                    <tr *ngFor="let batch of hardwareType.batchs">
 
                         <!-- NAME -->
                         <td class="vert-align">
@@ -489,7 +489,7 @@
                                 }
                             </style>
 
-                            <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!batch.edit_permission"
+                            <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!batch.update_permission"
                                     (click)="onEditRevisionClick(batch)">
                                 <i class="fa fa-cog"></i>
                             </button>
@@ -503,8 +503,8 @@
                     </tbody>
                 </table>
             </div>
-            <h3 *ngIf="!typeOfBoard.batchs" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="typeOfBoard.batchs && typeOfBoard.batchs.length == 0" class="list-no-items">
+            <h3 *ngIf="!hardwareType.batchs" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+            <div *ngIf="hardwareType.batchs && hardwareType.batchs.length == 0" class="list-no-items">
                 <p class="list-no-items__main-label">{{'label_no_batch'|bkTranslate:this}}</p>
                 <p class="list-no-items__sub-label">{{'label_no_batch_comment'|bkTranslate:this}} </p>
                 <p>

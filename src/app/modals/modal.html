@@ -53,7 +53,7 @@
             <template [ngSwitchCase]="'ModalsTariffModel'">
                 <bk-modals-tariff [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-tariff>
             </template>
-            <template [ngSwitchCase]="'ModalsCreateTypeOfBoardBatchModel'">
+            <template [ngSwitchCase]="'ModalsCreateHardwareTypeBatchModel'">
                 <bk-modals-type-of-board-batch-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-type-of-board-batch-create>
             </template>
             <template [ngSwitchCase]="'ModalsAdminCreateHardwareModel'">
@@ -92,7 +92,7 @@
             <template [ngSwitchCase]="'ModalsSetAsMainModel'">
                 <bk-modals-set-as-main [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-set-as-main>
             </template>
-            <template [ngSwitchCase]="'ModalsCreateTypeOfBoardModel'">
+            <template [ngSwitchCase]="'ModalsCreateHardwareTypeModel'">
                 <bk-modals-type-of-board-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-type-of-board-create>
             </template>
             <template [ngSwitchCase]="'ModalsDeactivateModel'">

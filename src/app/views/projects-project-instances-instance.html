@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot"
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot"
                 [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div *ngIf="instance" class="row">
@@ -19,7 +19,7 @@
                     <div class="becki-actions">
 
                         <button title="{{'label_instance_properties'|bkTranslate:this}}"
-                                class="btn btn-icon-only blue" [disabled]="!instance.edit_permission"
+                                class="btn btn-icon-only blue" [disabled]="!instance.update_permission"
                                 (click)="onInstanceEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
@@ -81,7 +81,7 @@
                 <div *ngIf="instanceTab == 'overview'" class="margin-left-15 margin-top-40">
 
                     <div *ngIf="instance" class="row">
-                        <h3 *ngIf="instanceStatus">{{instanceStatus.online_status}}</h3>
+                        <h3 *ngIf="instanceStatus">{{instanceStatus.online_state}}</h3>
                         <div class="col-md-8">
 
                             <div>
@@ -213,7 +213,7 @@
                                 <div *ngIf="instance.actual_instance!=null">
 
                                      <div>{{'label_created'|bkTranslate:this}}:
-                                       <span class="font-grey-mint bold">{{instance.actual_instance.date_of_created|bkUnixTimeToDate}}</span>
+                                       <span class="font-grey-mint bold">{{instance.actual_instance.createdd|bkUnixTimeToDate}}</span>
                                      </div>
                                     <div>
                                         {{'label_running_from'|bkTranslate:this}}:
@@ -408,7 +408,7 @@
 
                                 <div>
                                     {{'label_created'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{currentHistoricInstance.date_of_created|bkUnixTimeToDate}}</span>
+                                    <span class="font-grey-mint bold">{{currentHistoricInstance.createdd|bkUnixTimeToDate}}</span>
                                 </div>
                                 <div>
                                     {{'label_running_from'|bkTranslate:this}}:
@@ -456,7 +456,7 @@
                                             {{'label_device_type'|bkTranslate:this}}:
                                             <strong><a
                                                 class="font-grey-mint"
-                                                (click)="onBoardTypeClick(hardware.main_board_pair.type_of_board_id)">{{hardware.main_board_pair.type_of_board_name}}</a></strong>
+                                                (click)="onHardwareTypeClick(hardware.main_board_pair.type_of_board_id)">{{hardware.main_board_pair.type_of_board_name}}</a></strong>
                                         </div>
                                         <br>
                                         <div>
@@ -490,7 +490,7 @@
                                             </div>
                                             <div><strong class="font-color-hardware">{{'label_hardware_caps'|bkTranslate:this}}</strong>
                                                 {{'table_hardware_type'|bkTranslate:this}}:
-                                                <strong><a (click)="onBoardTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong>
+                                                <strong><a (click)="onHardwareTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong>
                                             </div>
                                             <br>
                                             <div>
@@ -606,7 +606,7 @@
                             <tr *ngFor="let procedure of instance.actual_instance.procedure_short_details">
 
                                 <td><a (click)="onProcedureClick(procedure)">{{procedure.id.substr(0,13)}}</a></td>
-                                <td>{{procedure.date_of_create|bkUnixTimeToDate}}</td>
+                                <td>{{procedure.created|bkUnixTimeToDate}}</td>
                                 <td>{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
                                 <td>
                                     <span *ngIf="!procedure.date_of_finish" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
@@ -658,7 +658,7 @@
                                                                 (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.board_id}}</a>
                                                             </td>
                                                             <td class="vert-align font-grey-mint"><a style="white-space:nowrap"
-                                                                                                     (click)="onBoardTypeClick(update.board_detail.type_of_board_id)">{{update.board_detail.type_of_board_name}}</a>
+                                                                                                     (click)="onHardwareTypeClick(update.board_detail.type_of_board_id)">{{update.board_detail.type_of_board_name}}</a>
                                                             </td>
 
 

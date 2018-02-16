@@ -5,7 +5,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { IProducer, ITypeOfBoard } from '../backend/TyrionAPI';
+import { IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { TyrionBackendService } from '../services/BackendService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
@@ -46,7 +46,7 @@ export class ModalsCompanyInformationComponent implements OnInit {
     modalClose = new EventEmitter<boolean>();
 
     producer_options: FormSelectComponentOption[] = null;
-    typeOfBoard_options: FormSelectComponentOption[] = null;
+    hardwareType_options: FormSelectComponentOption[] = null;
 
     form: FormGroup;
 

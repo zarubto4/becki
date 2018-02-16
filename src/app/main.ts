@@ -54,7 +54,7 @@ import { ProjectsProjectBlocksComponent } from './views/projects-project-blocks'
 import { ProjectsProjectBlocksBlocksBlockComponent } from './views/projects-project-blocks-blocks-block';
 import { CreateUserComponent } from './views/create-user';
 import { ProjectsProjectGridComponent } from './views/projects-project-grid';
-import { RedirectOkComponent } from './views/redirect-ok';
+import { RedirectOkComponent } from './components/redirect-ok';
 import { ProductRegistrationComponent } from './views/financial-product-registration';
 import { ModalsProjectPropertiesComponent } from './modals/project-properties';
 import { ModalsRemovalComponent } from './modals/removal';
@@ -141,7 +141,7 @@ import { ModalsUpdateHomerServerComponent } from './modals/homer-server-update';
 import { ModalsCreateCompilationServerComponent } from './modals/compiler-server-create';
 import { ModalsCreateProducerComponent } from './modals/create-producer';
 import { ModalsCreateProcessorComponent } from './modals/create-processor';
-import { ModalsCreateTypeOfBoardComponent } from './modals/type-of-board-create';
+import { ModalsCreateHardwareTypeComponent } from './modals/type-of-board-create';
 import { AdminHardwareComponent } from './views/admin-hardware-type';
 import { ModalsSetAsMainComponent } from './modals/set-as-main';
 import { ModalsBootloaderPropertyComponent } from './modals/bootloader-property';
@@ -157,7 +157,7 @@ import { GarfieldGarfieldComponent } from './views/garfield-garfield';
 import { ModalsFileUploadComponent } from './modals/file-upload';
 import { ModalsPictureUploadComponent } from './modals/picture-upload';
 import { ModalsAdminCreateHardwareComponent } from './modals/admin-create-hardware';
-import { ModalsCreateTypeOfBoardBatchComponent } from './modals/type-of-board-batch-create';
+import { ModalsCreateHardwareTypeBatchComponent } from './modals/type-of-board-batch-create';
 import { ModalsTariffComponent } from './modals/tariff';
 import { AdminFinancialComponent } from './views/admin-financial';
 import { AdminFinancialTariffComponent } from './views/admin-financial-tariff';
@@ -585,8 +585,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsRemovalComponent,
         ModalsCreateProducerComponent,
         ModalsDeactivateComponent,
-        ModalsCreateTypeOfBoardComponent,
-        ModalsCreateTypeOfBoardBatchComponent,
+        ModalsCreateHardwareTypeComponent,
+        ModalsCreateHardwareTypeBatchComponent,
         ModalsAddHardwareComponent,
         ModalsSelectHardwareComponent,
         ModalsFileUploadComponent,

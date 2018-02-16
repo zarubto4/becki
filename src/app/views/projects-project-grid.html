@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -39,7 +39,7 @@
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!gridProject.edit_permission" (click)="onProjectEditClick(gridProject)">
+                        <button title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!gridProject.update_permission" (click)="onProjectEditClick(gridProject)">
                             <i class="fa fa-cog"></i>
                         </button>
                         <button title="{{'label_group_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick(gridProject)">

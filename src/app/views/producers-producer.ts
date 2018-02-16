@@ -5,7 +5,7 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs';
-import { IProducer, ITypeOfBoard } from '../backend/TyrionAPI';
+import { IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
@@ -19,7 +19,7 @@ export class ProducersProducerComponent extends BaseMainComponent implements OnI
     producerId: string;
     producer: IProducer = null;
 
-    devices: ITypeOfBoard[] = null;
+    devices: IHardwareType[] = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -43,7 +43,7 @@ export class ProducersProducerComponent extends BaseMainComponent implements OnI
         this.tyrionBackendService.producerGet(this.producerId)
             .then((producer) => {
                 this.producer = producer;
-                return this.tyrionBackendService.typeOfBoardsGetAll();
+                return this.tyrionBackendService.hardwareTypesGetAll();
             })
             .then((devices) => {
                 for (let i in devices) {
@@ -60,7 +60,7 @@ export class ProducersProducerComponent extends BaseMainComponent implements OnI
         this.unblockUI();
     }
 
-    onDeviceClick(device: ITypeOfBoard): void {
+    onDeviceClick(device: IHardwareType): void {
         this.navigate(['/hardware', device.id]);
     }
 }

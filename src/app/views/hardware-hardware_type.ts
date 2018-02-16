@@ -6,19 +6,19 @@ import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     IBootLoader, ICProgram, ICProgramVersionShortDetail, IProcessor, IProducer,
-    ITypeOfBoard, ITypeOfBoardBatch
+    IHardwareType, IHardwareTypeBatch
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsSetAsMainModel } from '../modals/set-as-main';
-import { ModalsCreateTypeOfBoardModel } from '../modals/type-of-board-create';
+import { ModalsCreateHardwareTypeModel } from '../modals/type-of-board-create';
 import { ModalsBootloaderPropertyModel } from '../modals/bootloader-property';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
 import { ModalsFileUploadModel } from '../modals/file-upload';
-import { ModalsCreateTypeOfBoardBatchModel } from '../modals/type-of-board-batch-create';
+import { ModalsCreateHardwareTypeBatchModel } from '../modals/type-of-board-batch-create';
 
 @Component({
     selector: 'bk-view-hardware-hardware-type',
@@ -26,7 +26,7 @@ import { ModalsCreateTypeOfBoardBatchModel } from '../modals/type-of-board-batch
 })
 export class HardwareHardwareTypeComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    typeOfBoard: ITypeOfBoard = null;
+    hardwareType: IHardwareType = null;
 
     hardwareTypeId: string;
     routeParamsSubscription: Subscription;
@@ -50,9 +50,9 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
 
     refresh(): void {
         this.blockUI();
-        this.tyrionBackendService.typeOfBoardGet(this.hardwareTypeId)
-            .then((typeOfBoard) => {
-                this.typeOfBoard = typeOfBoard;
+        this.tyrionBackendService.hardwareTypeGet(this.hardwareTypeId)
+            .then((hardwareType) => {
+                this.hardwareType = hardwareType;
                 this.unblockUI();
             })
             .catch((reason) => {
@@ -65,21 +65,21 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.blockUI();
         Promise.all<any>([this.tyrionBackendService.processorGetAll(), this.tyrionBackendService.producersGetAll()])
             .then((values: [IProcessor[], IProducer[]]) => {
-                let model = new ModalsCreateTypeOfBoardModel(
+                let model = new ModalsCreateHardwareTypeModel(
                     values[0],
                     values[1],
-                    this.typeOfBoard.name,
-                    this.typeOfBoard.description,
-                    this.typeOfBoard.connectible_to_internet,
-                    this.typeOfBoard.compiler_target_name,
-                    this.typeOfBoard.processor_id,
-                    this.typeOfBoard.producer_id,
+                    this.hardwareType.name,
+                    this.hardwareType.description,
+                    this.hardwareType.connectible_to_internet,
+                    this.hardwareType.compiler_target_name,
+                    this.hardwareType.processor_id,
+                    this.hardwareType.producer_id,
                     true
                 );
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.tyrionBackendService.typeOfBoardEdit(this.typeOfBoard.id, {
+                        this.tyrionBackendService.hardwareTypeEdit(this.hardwareType.id, {
                             description: model.description,
                             name: model.name,
                             compiler_target_name: model.compiler_target_name,
@@ -104,10 +104,10 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
     }
 
     onRemoveClick() {
-        this.modalService.showModal(new ModalsRemovalModel(this.typeOfBoard.name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(this.hardwareType.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeOfBoardDelete(this.typeOfBoard.id)
+                this.tyrionBackendService.hardwareTypeDelete(this.hardwareType.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -125,7 +125,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.bootloaderCreate(this.typeOfBoard.id, {
+                this.tyrionBackendService.bootloaderCreate(this.hardwareType.id, {
                     description: model.description,
                     name: model.name,
                     changing_note: model.changing_note,
@@ -227,11 +227,11 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
     }
 
     updatePictureClick(): void {
-        let model = new ModalsPictureUploadModel(null, this.typeOfBoard.picture_link, false);
+        let model = new ModalsPictureUploadModel(null, this.hardwareType.picture_link, false);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeOfBoardUploadPicture(this.typeOfBoard.id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.hardwareTypeUploadPicture(this.hardwareType.id, { // TODO [permission]: version.update_permission
                     file: model.file
                 })
                     .then(() => {
@@ -319,11 +319,11 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
     }
 
     onCreateRevisionClick() {
-        let model = new ModalsCreateTypeOfBoardBatchModel();
+        let model = new ModalsCreateHardwareTypeBatchModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeOfBoardBatchCreate(this.typeOfBoard.id, {
+                this.tyrionBackendService.hardwareTypeBatchCreate(this.hardwareType.id, {
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
@@ -350,8 +350,8 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onEditRevisionClick(batch: ITypeOfBoardBatch) {
-        let model = new ModalsCreateTypeOfBoardBatchModel(
+    onEditRevisionClick(batch: IHardwareTypeBatch) {
+        let model = new ModalsCreateHardwareTypeBatchModel(
             true,
             batch.revision,
             batch.production_batch,
@@ -370,7 +370,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeOfBoardBatchEdit(batch.id, {
+                this.tyrionBackendService.hardwareTypeBatchEdit(batch.id, {
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
@@ -397,11 +397,11 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onDeleteRevisionClick(batch: ITypeOfBoardBatch) {
+    onDeleteRevisionClick(batch: IHardwareTypeBatch) {
         this.modalService.showModal(new ModalsRemovalModel(batch.revision + ' ' + batch.production_batch)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeOfBoardBatchDelete(batch.id)
+                this.tyrionBackendService.hardwareTypeBatchDelete(batch.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.navigate(['admin/garfield/']);

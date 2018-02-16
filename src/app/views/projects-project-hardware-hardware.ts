@@ -5,8 +5,8 @@
 import { Component, Injector, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
-    IActualizationProcedureTaskList, IBoard, IBoardShortDetail,
-    ITypeOfBoard
+    IUpdateProcedureTaskList, IHardware, IHardwareShortDetail,
+    IHardwareType
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -22,7 +22,7 @@ import { ModalsPictureUploadModel } from '../modals/picture-upload';
 import { ConsoleLogComponent, ConsoleLogType, ConsoleLogItem } from '../components/ConsoleLogComponent';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ModalPickHardwareTerminalComponent, ModalPickHardwareTerminalModel } from '../modals/pick-hardware-terminal';
-import { IBoardForFastUploadDetail } from '../backend/TyrionAPI';
+import { IHardwareForFastUploadDetail } from '../backend/TyrionAPI';
 import { ModalsHardwareRestartMQTTPassModel } from '../modals/hardware-restart-mqtt-pass';
 import * as Rx from 'rxjs';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
@@ -55,12 +55,12 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     init: boolean = false;  // Only for title and sutitle menu (for slow internet there was sometimes
     // issue with no project for admin view or for project view but with slow
     // ngOnInit method
-    device: IBoard = null;
-    typeOfBoard: ITypeOfBoard = null;
+    device: IHardware = null;
+    hardwareType: IHardwareType = null;
     projectId: string;
     hardwareId: string;
     routeParamsSubscription: Subscription;
-    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    actualizationTaskFilter: IUpdateProcedureTaskList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -95,10 +95,10 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.tyrionBackendService.onlineStatus.subscribe(status => {
             if (status.model === 'Board') {
                 if (this.hardwareId === status.model_id) {
-                    this.device.online_state = status.online_status;
+                    this.device.online_state = status.online_state;
                 };
             }
-            this.terminalHardware.find(hardware => hardware.id === status.model_id).onlineStatus = status.online_status; // pokud najdeme terminalHW, změníme mu status u něj.
+            this.terminalHardware.find(hardware => hardware.id === status.model_id).onlineStatus = status.online_state; // pokud najdeme terminalHW, změníme mu status u něj.
         });
 
     };
@@ -377,15 +377,15 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
                 this.tyrionBackendService.onlineStatus.subscribe(status => {
                     if (status.model === 'HomerServer' && this.device.server.id === status.model_id) {
-                        this.device.server.online_state = status.online_status;
+                        this.device.server.online_state = status.online_state;
                     }
                 });
 
-                return this.tyrionBackendService.typeOfBoardGet(board.type_of_board_id);
+                return this.tyrionBackendService.hardwareTypeGet(board.type_of_board_id);
 
             })
-            .then((typeOfBoard) => {
-                this.typeOfBoard = typeOfBoard;
+            .then((hardwareType) => {
+                this.hardwareType = hardwareType;
                 this.unblockUI();
 
             })
@@ -396,9 +396,9 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
 
-    terminalFirstRun(board: IBoard): void {
+    terminalFirstRun(board: IHardware): void {
 
-        console.log('  terminalFirstRun():', 'URL: ' + board.server.server_url, ' Port: ' + board.server.server_remote_port);
+        console.log(' terminalFirstRun():', 'URL: ' + board.server.server_url, ' Port: ' + board.server.server_remote_port);
         console.log(' terminalFirstRun(): Server', board.server);
 
         this.tyrionBackendService.connectDeviceTerminalWebSocket(board.server.server_url, board.server.server_remote_port + '');
@@ -457,7 +457,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     }
 
-    onEditClick(device: IBoardShortDetail): void {
+    onEditClick(device: IHardwareShortDetail): void {
         let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -478,7 +478,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         });
     }
 
-    onRemoveClick(device: IBoardShortDetail): void {
+    onRemoveClick(device: IHardwareShortDetail): void {
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -501,7 +501,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardUploadPicture(this.device.id, { // TODO [permission]: edit_permission
+                this.tyrionBackendService.boardUploadPicture(this.device.id, { // TODO [permission]: update_permission
                     file: model.file
                 })
                     .then(() => {
@@ -714,7 +714,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.tyrionBackendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
+                        this.tyrionBackendService.boardUpdateBackup({ // TODO [permission]: Board.update_permission
                             board_backup_pair_list: [
                                 {
                                     board_id: this.device.id,
@@ -734,7 +734,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
         } else {
             this.blockUI();
-            this.tyrionBackendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
+            this.tyrionBackendService.boardUpdateBackup({ // TODO [permission]: Board.update_permission
                 board_backup_pair_list: [
                     {
                         board_id: this.device.id,

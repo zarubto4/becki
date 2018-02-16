@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -57,7 +57,7 @@
                             </style>
 
 
-                            <button title="{{'label_instance_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!instance.edit_permission" (click)="onInstanceEditClick(instance)">
+                            <button title="{{'label_instance_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!instance.update_permission" (click)="onInstanceEditClick(instance)">
                             <i class="fa fa-cog"></i>
                         </button>
 

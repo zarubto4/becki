@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="row">
         <div class="col-md-12">
@@ -16,7 +16,7 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="{{'label_library_properties'|bkTranslate:this}}" class="btn btn-icon-only green" *ngIf="library.edit_permission"
+                        <button title="{{'label_library_properties'|bkTranslate:this}}" class="btn btn-icon-only green" *ngIf="library.update_permission"
                             (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>

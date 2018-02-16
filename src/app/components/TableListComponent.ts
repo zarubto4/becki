@@ -15,7 +15,7 @@ export interface IVersionItem {
     description: string;
     state?: boolean;
     delete_permission?: boolean;
-    edit_permission?: boolean;
+    update_permission?: boolean;
 }
 
 export interface IPageObject {

@@ -6,7 +6,7 @@ import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
-import { IProject, ICProgramShortDetail } from '../backend/TyrionAPI';
+import { IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -17,11 +17,11 @@ import { ModalsRemovalModel } from '../modals/removal';
 })
 export class ProjectsProjectComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string; // Project ID
-
+    // Routes
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
+    project_id: string; // Project ID
     project: IProject = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
@@ -32,13 +32,13 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
-            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+            this.project_id = params['project'];
+            this.projectSubscription = this.storageService.project(this.project_id).subscribe((project) => {
                 this.project = project;
             });
 
             this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
-                if (status.model === 'Project' && this.id === status.model_id) {
+                if (status.model === 'Project' && this.project_id === status.model_id) {
                     this.refresh();
                 }
             });
@@ -56,13 +56,13 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
 
     onEditClick(): void {
 
-        let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, this.project.product_id, true, this.project.name);
+        let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, this.project.product.id, true, this.project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.projectEdit(this.id, {
-                    project_name: model.name,
-                    project_description: model.description
+                this.tyrionBackendService.projectEdit(this.project_id, {
+                    name: model.name,
+                    description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_update')));
@@ -82,7 +82,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         this.modalService.showModal(new ModalsRemovalModel(this.project.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.projectDelete(this.id)
+                this.tyrionBackendService.projectDelete(this.project_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.router.navigate(['/projects']);
@@ -96,72 +96,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         });
     }
 
-
-    count(status: 'grid_widgets' | 'grid_programs' | 'blocko_blocks' | 'devices_online' | 'devices_offline' | 'instances_online' | 'instances_offline'): number {
-        if (!this.project) {
-            return 0;
-        }
-        let count = 0;
-        if (status === 'devices_online' && this.project.boards) {
-            this.project.boards.forEach((b) => {
-                if (b.online_state === 'online') {
-                    count++;
-                }
-            });
-        }
-        if (status === 'devices_offline' && this.project.boards) {
-            this.project.boards.forEach((b) => {
-                if (b.online_state !== 'online') {
-                    count++;
-                }
-            });
-        }
-        if (status === 'instances_online' && this.project.boards) {
-            this.project.instancies.forEach((i) => {
-                if (i.instance_online_state === 'online') {
-                    count++;
-                }
-            });
-        }
-        if (status === 'instances_offline' && this.project.boards) {
-            this.project.instancies.forEach((i) => {
-                if (i.instance_online_state !== 'online') {
-                    count++;
-                }
-            });
-        }
-        if (status === 'grid_widgets' && this.project.type_of_widgets) {
-            this.project.type_of_widgets.forEach((tw) => {
-                count += tw.grid_widgets.length;
-            });
-        }
-        if (status === 'grid_programs' && this.project.m_projects) {
-            this.project.m_projects.forEach((mp) => {
-                count += mp.programs.length;
-            });
-        }
-        if (status === 'blocko_blocks' && this.project.type_of_blocks) {
-            this.project.type_of_blocks.forEach((tb) => {
-                count += tb.blocko_blocks.length;
-            });
-        }
-        return count;
-    }
-
-
     refresh(): void {
-        this.storageService.projectRefresh(this.id);
-        /*
-        this.blockUI();
-        this.tyrionBackendService.getProject(this.id)
-            .then(project => {
-                this.project = project;
-                this.unblockUI();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
-                this.unblockUI();
-            });
-        */
+        this.storageService.projectRefresh(this.project_id);
     }
 }

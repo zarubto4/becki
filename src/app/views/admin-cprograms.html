@@ -1,9 +1,9 @@
 <bk-layout-main
-     tabMenu="byzance-admin"
+     [tabMenu]="byzance-admin"
      [title]="'main_title'|bkTranslate:this"
      [subtitle]="'main_subtitle'|bkTranslate:this">
 
-    <div *ngIf="typeOfBoards" class="row">
+    <div *ngIf="hardwareTypes" class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
@@ -60,7 +60,7 @@
 
                                     <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{code.name}}</a></td>
                                     <td class="vert-align">{{code.description}}</td>
-                                    <td class="vert-align no-wrap"><a (click)="onTypeOfBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                                    <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                                     <td class="vert-align no-wrap text-right">
 
                                         <style type="text/css">
@@ -68,7 +68,7 @@
                                             table tr:hover button { opacity:1 }
                                         </style>
 
-                                        <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.edit_permission" (click)="onCProgramEditClick(code)">
+                                        <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.update_permission" (click)="onCProgramEditClick(code)">
                                             <i class="fa fa-cog"></i>
                                         </button>
 
@@ -114,7 +114,7 @@
 
                                     <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{code.name}}</a></td>
                                     <td class="vert-align">{{code.description}}</td>
-                                    <td class="vert-align no-wrap"><a (click)="onTypeOfBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                                    <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                                     <td class="vert-align no-wrap text-right">
 
                                         <style type="text/css">
@@ -164,7 +164,7 @@
                                 <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{library.name}}</a></td>
                                 <td class="vert-align">{{library.description}}</td>
                                 <td class="vert-align no-wrap">
-                                    <a *ngFor="let board of library.type_of_boards" (click)="onTypeOfBoardTypeClick(board.id)">{{board.name}}, </a>
+                                    <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeTypeClick(board.id)">{{board.name}}, </a>
                                 </td>
                                 <td class="vert-align no-wrap text-right">
 
@@ -173,7 +173,7 @@
                                         table tr:hover button { opacity:1 }
                                     </style>
 
-                                    <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.edit_permission" (click)="onLibraryEditClick(library)">
+                                    <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission" (click)="onLibraryEditClick(library)">
                                         <i class="fa fa-cog"></i>
                                     </button>
 
@@ -222,7 +222,7 @@
                                 <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
                                 <td class="vert-align">{{library.description}}</td>
                                 <td class="vert-align no-wrap">
-                                    <a *ngFor="let board of library.type_of_boards" (click)="onTypeOfBoardTypeClick(board.id)">{{board.name}}, </a>
+                                    <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeTypeClick(board.id)">{{board.name}}, </a>
                                 </td>
                                 <td class="vert-align no-wrap text-right">
 

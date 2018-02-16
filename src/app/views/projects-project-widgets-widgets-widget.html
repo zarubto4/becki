@@ -4,7 +4,7 @@
   -->
 
 <bk-layout-main
-    tabMenu="{{projectId == null ? 'byzance-admin' : 'projects-project'}}"
+    [tabMenu]="{{projectId == null ? 'byzance-admin' : 'projects-project'}}"
     [title]="projectId == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
     [subtitle]="projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
@@ -19,7 +19,7 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button *ngIf="group" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.edit_permission"
+                        <button *ngIf="group" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.update_permission"
                             (click)="onWidgetEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
@@ -286,7 +286,7 @@
                                         <i class="fa fa-flag"></i>
                                     </button>
 
-                                    <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission"
+                                    <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                             (click)="onEditVersionClick(version)">
                                              <i class="fa fa-cog"></i>
                                     </button>

@@ -5,12 +5,8 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
-import { ModalsAddHardwareModel } from '../modals/add-hardware';
-import { ModalsRemovalModel } from '../modals/removal';
-import { IProject, IBoard, IBoardPersonalDescription, IProjectParticipant } from '../backend/TyrionAPI';
-import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
+import { IProject, IProjectParticipant } from '../backend/TyrionAPI';
 import { ModalsMembersAddModel } from '../modals/members-add';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
@@ -21,7 +17,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
 })
 export class ProjectsProjectMembersComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
+    project_id: string;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
@@ -38,8 +34,8 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
-            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+            this.project_id = params['project'];
+            this.projectSubscription = this.storageService.project(this.project_id).subscribe((project) => {
                 this.project = project;
             });
         });
@@ -59,9 +55,9 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.tyrionBackendService.projectShare(this.id, { persons_mail: m.emails })
+                    this.tyrionBackendService.projectShare(this.project_id, { persons_mail: m.emails })
                         .then(() => {
-                            this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                            this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                         })
                         .catch((err) => {
                             this.unblockUI();
@@ -72,12 +68,10 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
     }
 
     onMemberDeleteClick(member: IProjectParticipant) {
-        if ((this.tyrionBackendService.personInfoSnapshot.mail === member.mail) || (this.tyrionBackendService.personInfoSnapshot.id === member.id)) {
+
+        if ((this.tyrionBackendService.personInfoSnapshot.email === member.mail) || (this.tyrionBackendService.personInfoSnapshot.id === member.id)) {
             this.fmError(this.translate('label_cannot_remove_yourself'));
         }
-
-
-
 
         let con = new ModalsConfirmModel(this.translate('modal_title_remove_member'), this.translate('modal_text_remove_member'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
         this.modalService.showModal(con).then((success) => {
@@ -85,9 +79,9 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
                 return;
             } else {
                 this.blockUI();
-                this.tyrionBackendService.projectUnshare(this.id, { persons_mail: [member.mail] })
+                this.tyrionBackendService.projectUnshare(this.project_id, { persons_mail: [member.mail] })
                     .then(() => {
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
                     .catch((err) => {
                         this.unblockUI();
@@ -97,9 +91,9 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
         });
     }
 
-    onMemberSnedAgainClick(member: IProjectParticipant) {
+    onMemberSendAgainClick(member: IProjectParticipant) {
         this.blockUI();
-        this.tyrionBackendService.projectShare(this.id, { persons_mail: [member.mail] })
+        this.tyrionBackendService.projectShare(this.project_id, { persons_mail: [member.mail] })
             .then(() => {
                 this.unblockUI();
                 let m = new ModalsConfirmModel(this.translate('modal_label_invitation'), this.translate('modal_label_invitation_send', member.mail), true, null, null, [this.translate('btn_ok')]);

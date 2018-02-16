@@ -6,7 +6,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IGarfield, IProducer, ITypeOfBoard } from '../backend/TyrionAPI';
+import { IGarfield, IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsGarfieldModel } from '../modals/garfield';
@@ -42,8 +42,8 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
 
     onCreateGarfield() {
         this.blockUI();
-        Promise.all<any>([this.tyrionBackendService.producersGetAll(), this.tyrionBackendService.typeOfBoardsGetAll()])
-            .then((values: [IProducer[], ITypeOfBoard[]]) => {
+        Promise.all<any>([this.tyrionBackendService.producersGetAll(), this.tyrionBackendService.hardwareTypesGetAll()])
+            .then((values: [IProducer[], IHardwareType[]]) => {
                 let model = new ModalsGarfieldModel(
                     values[0],
                     values[1],
@@ -59,7 +59,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
                             print_sticker_id: model.print_sticker_id,
                             hardware_tester_id: model.hardware_tester_id,
                             producer_id: model.producer,
-                            type_of_board_id: model.typeOfBoard,
+                            type_of_board_id: model.hardwareType,
                         })
                             .then(() => {
                                 this.refresh();
@@ -137,8 +137,8 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
         this.navigate(['/producers', producer.id]);
     }
 
-    onTypeOfBoardClick(typeOfBoard: ITypeOfBoard) {
-        this.navigate(['/hardware', typeOfBoard.id]);
+    onHardwareTypeClick(hardwareType: IHardwareType) {
+        this.navigate(['/hardware', hardwareType.id]);
     }
 
 }

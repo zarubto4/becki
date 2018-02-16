@@ -1,6 +1,6 @@
 <bk-layout-main
 
-    tabMenu="byzance-admin"
+    [tabMenu]="byzance-admin"
     [title]="'main_title'|bkTranslate:this"
     [subtitle]="'main_subtitle'|bkTranslate:this">
 
@@ -41,26 +41,26 @@
                             </div>
                         </div>
                         <div class="col col-lg-3">
-                            <div *ngIf="typeOfBoard">
+                            <div *ngIf="hardwareType">
                                 <strong>{{'label_hardware_type'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/hardware', typeOfBoard.id]" class="bold">{{typeOfBoard.name}}</a>
+                                <a [routerLink]="['/hardware', hardwareType.id]" class="bold">{{hardwareType.name}}</a>
                             </div>
-                            <div *ngIf="typeOfBoard">
+                            <div *ngIf="hardwareType">
                                 <strong>{{'label_producer'|bkTranslate:this}}:</strong>
                                 <a [routerLink]="['/producers', garfield.producer.id]" class="bold">{{garfield.producer.name}}</a>
                             </div>
                             <br>
                             <div *ngIf="firmwareTestMainVersion">
                                 <strong>{{'label_main_test_version'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/admin/hardware/code', typeOfBoard.main_test_c_program.id]" class="bold">{{firmwareTestMainVersion.version_name}}</a>
+                                <a [routerLink]="['/admin/hardware/code', hardwareType.main_test_c_program.id]" class="bold">{{firmwareTestMainVersion.version_name}}</a>
                             </div>
                             <div *ngIf="firmwareMainVersion">
                                 <strong>{{'label_main_version'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/admin/hardware/code', typeOfBoard.main_c_program.id]" class="bold">{{firmwareMainVersion.version_name}}</a>
+                                <a [routerLink]="['/admin/hardware/code', hardwareType.main_c_program.id]" class="bold">{{firmwareMainVersion.version_name}}</a>
                             </div>
                             <div *ngIf="bootLoader">
                                 <strong>{{'label_main_bootloader'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/hardware', typeOfBoard.id]" class="bold">{{bootLoader.version_identificator}}</a>
+                                <a [routerLink]="['/hardware', hardwareType.id]" class="bold">{{bootLoader.version_identificator}}</a>
                             </div>
 
                         </div>
@@ -104,12 +104,12 @@
             <div *ngIf="garfield" class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span class="font-blue-dark" *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected
+                        <span class="font-blue-dark" *ngIf="garfield && hardwareType && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected
                                 && mainServer && backupServer && mainServer && backupServer">
                             <i class="fa fa-fw fa-check"></i>
                               {{'label_prerequisites'|bkTranslate:this}}
                         </span>
-                        <span class="font-blue-dark" *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected
+                        <span class="font-blue-dark" *ngIf="!(garfield && hardwareType && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected
                                 && mainServer && backupServer && mainServer && backupServer)">
                             <i class="fa fa-fw fa-exclamation-triangle"></i>
                               {{'label_prerequisites_not_complete'|bkTranslate:this}}
@@ -333,7 +333,7 @@
         </div>
     </div>
 
-    <div *ngIf="!(garfield && typeOfBoard && bootLoader && printer_label_1 && printer_label_2 && print_sticker && garfieldTesterConnected  && bootLoader.file_path && mainServer&& backupServer && productionBatchForm.valid)" class="row">
+    <div *ngIf="!(garfield && hardwareType && bootLoader && printer_label_1 && printer_label_2 && print_sticker && garfieldTesterConnected  && bootLoader.file_path && mainServer&& backupServer && productionBatchForm.valid)" class="row">
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-body">
@@ -345,7 +345,7 @@
         </div>
     </div>
 
-    <div *ngIf="(garfield && typeOfBoard && bootLoader && printer_label_1 && printer_label_2 && print_sticker && garfieldTesterConnected  && bootLoader.file_path && mainServer && backupServer && productionBatchForm.valid)" class="row">
+    <div *ngIf="(garfield && hardwareType && bootLoader && printer_label_1 && printer_label_2 && print_sticker && garfieldTesterConnected  && bootLoader.file_path && mainServer && backupServer && productionBatchForm.valid)" class="row">
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-body">

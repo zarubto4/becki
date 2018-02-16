@@ -3,7 +3,7 @@
  * directory of this distribution.
  */
  -->
-<bk-layout-main  tabMenu="tariffs-tariff" [title]="product?product.name:null">
+<bk-layout-main  [tabMenu]="tariffs-tariff" [title]="product?product.name:null">
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
@@ -28,7 +28,7 @@
                     <tr>
                         <th>{{'table_invoice_id'|bkTranslate:this}}</th>
                         <th>{{'table_date_of_pay'|bkTranslate:this}}</th>
-                        <th>{{'table_date_of_create'|bkTranslate:this}}</th>
+                        <th>{{'table_created'|bkTranslate:this}}</th>
                         <th>{{'table_paid'|bkTranslate:this}}</th>
                         <th class="text-right">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>

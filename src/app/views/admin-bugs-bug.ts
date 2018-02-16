@@ -1,15 +1,9 @@
 /**
  * Created by alexandrtyls on 03.10.17.
  */
-
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { Response } from '@angular/http';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { IServerError } from '../backend/TyrionAPI';
 

@@ -183,8 +183,8 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 this.blockoBlockVersions = this.blockoBlock.versions || [];
 
                 this.blockoBlockVersions.sort((a, b) => {
-                    if (a.date_of_create === b.date_of_create) { return 0; }
-                    if (a.date_of_create > b.date_of_create) { return -1; }
+                    if (a.created === b.created) { return 0; }
+                    if (a.created > b.created) { return -1; }
                     return 1;
                 });
 

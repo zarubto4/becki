@@ -324,7 +324,7 @@ export class RequestError extends Error {
 export interface OnlineChangeStatus {
     model: ('Board' | 'HomerInstance' | 'HomerServer' | 'CompilationServer');
     model_id: 'string';
-    online_status: ('not_yet_first_connected' | 'synchronization_in_progress' | 'offline' | 'online' | 'unknown_lost_connection_with_server');
+    online_state: ('NOT_YET_FIRST_CONNECTED'|'FREEZED'|'SHUT_DOWN'|'SYNCHRONIZATION_IN_PROGRESS'|'OFFLINE'|'ONLINE'|'UNKNOWN_LOST_CONNECTION_WITH_SERVER');
 }
 
 export interface ModelChangeStatus {
@@ -427,7 +427,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         }
 
         // David 1 IP
-        // this.host = "192.168.65.30:9000";
+        // this.host = '192.168.65.30:9000";
         // this.host = "192.168.65.137:9000";
 
     }
@@ -502,7 +502,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     // TOKEN MANIPULATIONS
 
     public getToken(): string {
-        return window.localStorage.getItem('authToken');
+        return window.localStorage.getItem('auth_token');
     }
 
     public getBeckiBeta(): boolean {
@@ -510,18 +510,18 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     private setToken(token: string, withRefreshPersonalInfo = true): void {
-        window.localStorage.setItem('authToken', token);
+        window.localStorage.setItem('auth_token', token);
         if (withRefreshPersonalInfo) {
             this.refreshPersonInfo();
         }
     }
 
     public tokenExist(): boolean {
-        return window.localStorage.getItem('authToken') ? true : false;
+        return !!window.localStorage.getItem('auth_token');
     }
 
     protected unsetToken(): void {
-        window.localStorage.removeItem('authToken');
+        window.localStorage.removeItem('auth_token');
         this.refreshPersonInfo();
     }
 
@@ -533,11 +533,11 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         }
 
         return this.__login({
-            mail: mail,
+            email: mail,
             password: password
         })
             .then((body) => {
-                this.setToken(body.authToken);
+                this.setToken(body.auth_token);
                 return body;
             }).then(body => {
                 return JSON.stringify(body);
@@ -549,7 +549,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
             redirect_url: redirectUrl
         })
             .then(body => {
-                this.setToken(body.authToken);
+                this.setToken(body.auth_token);
                 return body.redirect_url;
             });
     }
@@ -559,7 +559,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
             redirect_url: redirectUrl
         })
             .then(body => {
-                this.setToken(body.authToken, false);
+                this.setToken(body.auth_token, false);
                 return body.redirect_url;
             });
     }
@@ -928,7 +928,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                     .filter(message => message.message_type === 'newInputConnectorValue')
                     .subscribe(this.BProgramInputConnectorValueReceived);
                 channelReceived
-                    .filter(message => message.message_type === 'online_status_change')
+                    .filter(message => message.message_type === 'online_state_change')
                     .subscribe(this.onlineStatus);
                 channelReceived
                     .filter(message => message.message_type === 'becki_object_update')

@@ -1,6 +1,6 @@
 <bk-layout-main
 
-    tabMenu="byzance-admin"
+    [tabMenu]="byzance-admin"
     [title]="'main_title'|bkTranslate:this"
     [subtitle]="'main_subtitle'|bkTranslate:this">
 
@@ -40,7 +40,7 @@
                                 <a (click)="onGarfieldClick(garfield)" class="no-wrap"><strong>{{garfield.name}}</strong></a>
                             </td>
                             <td class="vert-align no-wrap">
-                                <a (click)="onTypeOfBoardClick(garfield.type_of_board)" class="no-wrap"><strong>{{garfield.type_of_board.name}}</strong></a>
+                                <a (click)="onHardwareTypeClick(garfield.type_of_board)" class="no-wrap"><strong>{{garfield.type_of_board.name}}</strong></a>
                             </td>
                             <td class="vert-align no-wrap">
                                 <a (click)="onProducerClick(garfield.producer)" class="no-wrap"><strong>{{garfield.producer.name}}</strong></a>
@@ -53,7 +53,7 @@
                                     table tr button { opacity:0.05;}
                                     table tr:hover button { opacity:1 }
                                 </style>
-                                <button title="{{'label_garfield_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!garfield.edit_permission" (click)="onEditGarfield(garfield)">
+                                <button title="{{'label_garfield_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!garfield.update_permission" (click)="onEditGarfield(garfield)">
                                     <i class="fa fa-cog"></i>
                                 </button>
                                 <button title="{{'label_garfield_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!garfield.delete_permission" (click)="onDeleteGarfield(garfield)">

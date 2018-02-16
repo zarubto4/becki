@@ -10,7 +10,6 @@ import { TyrionBackendService } from '../services/BackendService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { PermissionMissingError, UserNotValidatedError } from '../backend/BeckiBackend';
 import { BlockUIService } from '../services/BlockUIService';
-import { IPersonAuthentication } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { TranslationService } from '../services/TranslationService';
 
@@ -63,7 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     onResendValidationClick(): void {
         this.blockUIService.blockUI();
 
-        this.backendService.emailSendAuthentication({ mail: this.loginForm.controls['email'].value })
+        this.backendService.emailSendAuthentication({ email: this.loginForm.controls['email'].value })
             .then(() => {
                 this.blockUIService.unblockUI();
                 this.resendVertification = false;

@@ -12,8 +12,8 @@ import { CodeFile } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import {
-    IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, ITypeOfBoard,
-    IBoardShortDetail, ILibrary, ILibraryVersionShortDetail, ILibraryVersion
+    IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, IHardwareType,
+    IHardwareShortDetail, ILibrary, ILibraryVersionShortDetail, ILibraryVersion
 } from '../backend/TyrionAPI';
 import { ICodeCompileErrorMessage, CodeCompileError, CodeError } from '../backend/BeckiBackend';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -53,9 +53,9 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     reloadInterval: any = null;
-    device: ITypeOfBoard = null;
+    device: IHardwareType = null;
 
-    allDevices: IBoardShortDetail[];
+    allDevices: IHardwareShortDetail[];
     projectSubscription: Subscription;
 
     protected afterLoadSelectedVersionId: string = null;

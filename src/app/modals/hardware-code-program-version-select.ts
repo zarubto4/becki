@@ -17,7 +17,7 @@ import {
 
 
 export class ModalsHardwareCodeProgramVersionSelectModel extends ModalModel {
-    constructor(public projectId: string, public typeOfBoardId: string, public selectedProgramVersion: ICProgramVersionShortDetail = null) {
+    constructor(public projectId: string, public hardwareTypeId: string, public selectedProgramVersion: ICProgramVersionShortDetail = null) {
         super();
     }
 }
@@ -53,7 +53,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
         this.backendService.projectGet(this.modalModel.projectId)
             .then((p) => {
                 this.loading = false;
-                this.codePrograms = p.c_programs.filter((cp) => cp.type_of_board_id === this.modalModel.typeOfBoardId);
+                this.codePrograms = p.c_programs.filter((cp) => cp.type_of_board_id === this.modalModel.hardwareTypeId);
 
             })
             .catch((e) => {

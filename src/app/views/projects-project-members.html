@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -38,7 +38,7 @@
                         <button title="{{'label_remove_member'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
                             <i class="fa fa-trash"></i>
                         </button>
-                        <button title="{{'label_send_invitation'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="member.id == selfId" (click)="onMemberSnedAgainClick(member)">
+                        <button title="{{'label_send_invitation'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="member.id == selfId" (click)="onMemberSendAgainClick(member)">
                             <i class="fa fa-envelope"></i>
                         </button>
                     </td>

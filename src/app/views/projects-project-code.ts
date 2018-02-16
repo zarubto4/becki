@@ -9,7 +9,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
-import { IProject, ITypeOfBoard, ICProgramShortDetail, ICProgramList } from '../backend/TyrionAPI';
+import { IProject, IHardwareType, ICProgramShortDetail, ICProgramList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
@@ -22,14 +22,14 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
-    typeOfBoardsSubscription: Subscription;
+    hardwareTypesSubscription: Subscription;
 
     project: IProject = null;
 
     codePrograms: ICProgramShortDetail[] = null;
     publicPrograms: ICProgramList = null;
 
-    typeOfBoards: ITypeOfBoard[] = null;
+    hardwareTypes: IHardwareType[] = null;
 
     tab: string = 'my_programs';
 
@@ -46,8 +46,8 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 this.project = project;
                 this.codePrograms = project.c_programs;
             });
-            this.typeOfBoardsSubscription = this.storageService.typeOfBoards().subscribe((typeOfBoards) => {
-                this.typeOfBoards = typeOfBoards;
+            this.hardwareTypesSubscription = this.storageService.hardwareTypes().subscribe((hardwareTypes) => {
+                this.hardwareTypes = hardwareTypes;
             });
         });
 
@@ -67,8 +67,8 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
-        if (this.typeOfBoardsSubscription) {
-            this.typeOfBoardsSubscription.unsubscribe();
+        if (this.hardwareTypesSubscription) {
+            this.hardwareTypesSubscription.unsubscribe();
         }
     }
 
@@ -76,9 +76,6 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.navigate(['/projects', this.currentParamsService.get('project'), 'code', code.id]);
     }
 
-    onBoardTypeClick(boardTypeId: string): void {
-        this.navigate(['/hardware', boardTypeId]);
-    }
 
     onRemoveClick(code: ICProgramShortDetail): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
@@ -98,10 +95,10 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     }
 
     onAddClick(): void {
-        if (!this.typeOfBoards) {
+        if (!this.hardwareTypes) {
             this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
-        let model = new ModalsCodePropertiesModel(this.typeOfBoards);
+        let model = new ModalsCodePropertiesModel(this.hardwareTypes);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -124,11 +121,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     }
 
     onEditClick(code: ICProgramShortDetail): void {
-        if (!this.typeOfBoards) {
+        if (!this.hardwareTypes) {
             this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
 
-        let model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, '', true, code.name);
+        let model = new ModalsCodePropertiesModel(this.hardwareTypes, code.name, code.description, '', true, code.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

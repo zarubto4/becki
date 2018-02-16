@@ -101,7 +101,7 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_version_identificator': 'Version Hardware Identification',
                 'label_changing_note': 'Changing Note (Markdown)'
-            }, 'ModalsCreateTypeOfBoardBatchComponent': {
+            }, 'ModalsCreateHardwareTypeBatchComponent': {
                 'title': 'Create new Production Batch or Revision',
                 'label_product_revision': 'Revision Code',
                 'label_product_batch': 'Production Batch',
@@ -116,7 +116,7 @@ export class StaticTranslation {
                 'label_customer_company_name': 'Producer Company name - For Label Print',
                 'label_customer_company_made_description': 'Made in Description - For Label Print',
                 'label_date_of_assembly': 'Date of Assembly'
-            }, 'ModalsCreateTypeOfBoardComponent': {
+            }, 'ModalsCreateHardwareTypeComponent': {
                 'title': 'Create new Board Type',
                 'label_name': 'Name',
                 'label_description': 'Description',
@@ -652,9 +652,7 @@ export class StaticTranslation {
                 'label_programs_count': 'Programs count',
                 'label_libraries_count': 'Libraries count',
                 'label_blocks_count': 'Blocks count',
-                'label_in_blocks_group': ' in<strong> {0} </strong>group(s)',
                 'label_byzance_grid': 'Byzance<strong class="font-color-grid">GRID</strong>',
-                'label_in_projects': 'in <strong> {0} </strong> group(s)',
                 'label_widgets_count': 'Widgets count',
                 'label_in_group': 'in <strong> {0} </strong>group(s)',
 
@@ -671,7 +669,7 @@ export class StaticTranslation {
                 'btn_add_credits': 'Add credits',
                 'table_invoice_id': 'Invoice ID',
                 'table_date_of_pay': 'Date of payment',
-                'table_date_of_create': 'Date of creation',
+                'table_created': 'Date of creation',
                 'table_paid': 'Paid',
                 'table_actions': 'Actions',
                 'no_invoice': 'No invoices',
@@ -682,7 +680,7 @@ export class StaticTranslation {
 
 
             }, 'ProductRegistrationComponent': {
-                'main_title': 'Product subscribtion',
+                'main_title': 'Product subscription',
                 'nav_step_one_title': 'Tariff',
                 'nav_step_one_text': 'Select the right tariff for you',
                 'nav_step_two_title': 'Packages',
@@ -1378,7 +1376,7 @@ export class StaticTranslation {
                 'label_device_type': 'Device type',
                 'label_no_running_update_on_instance': 'There is no running updates in this instance',
                 'label_no_running_update_on_instance_comments': 'There are no records of the required <strong class="font-color-hardware">Hardware</strong> update',
-                'label_online_status': 'online status',
+                'label_online_state': 'online status',
                 'label_instance_not_running_in_cloud': 'Instance is not running in Cloud.',
 
                 'label_cloud': 'CLOUD',
@@ -2395,7 +2393,7 @@ export class StaticTranslation {
                 'ALREADY_IN_INSTANCE': 'Warning! Device is already running in this instance.',
                 'PLANNED_UPDATE': 'Update is scheduled in the future.',
             },
-            'online_status': {
+            'online_state': {
                 'online': 'online',
                 'offline': 'offline',
                 'synchronization_in_progress': 'Synchronizing',

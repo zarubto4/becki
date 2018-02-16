@@ -8,15 +8,15 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { ITypeOfBoard } from '../backend/TyrionAPI';
+import { IHardwareType } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsAdminCreateHardwareModel extends ModalModel {
     constructor(
-        public typeOfBoards: ITypeOfBoard[],
+        public hardwareTypes: IHardwareType[],
         public processorId: string = '',
-        public typeOfBoard: string = '',
+        public hardwareType: string = '',
     ) {
         super();
     }
@@ -36,18 +36,18 @@ export class ModalsAdminCreateHardwareComponent implements OnInit {
 
     form: FormGroup;
 
-    typeOfBoardOption: FormSelectComponentOption[] = null;
+    hardwareTypeOption: FormSelectComponentOption[] = null;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             'processorId': ['', [Validators.required, Validators.minLength(24), Validators.maxLength(24)]],
-            'typeOfBoard': ['', [Validators.required]]
+            'hardwareType': ['', [Validators.required]]
         });
     }
 
     ngOnInit() {
 
-        this.typeOfBoardOption = this.modalModel.typeOfBoards.map((pv) => {
+        this.hardwareTypeOption = this.modalModel.hardwareTypes.map((pv) => {
             return {
                 label: pv.name,
                 value: pv.id
@@ -55,12 +55,12 @@ export class ModalsAdminCreateHardwareComponent implements OnInit {
         });
 
         (<FormControl>(this.form.controls['processorId'])).setValue(this.modalModel.processorId);
-        (<FormControl>(this.form.controls['typeOfBoard'])).setValue(this.modalModel.typeOfBoard);
+        (<FormControl>(this.form.controls['hardwareType'])).setValue(this.modalModel.hardwareType);
     }
 
     onSubmitClick(): void {
         this.modalModel.processorId = this.form.controls['processorId'].value;
-        this.modalModel.typeOfBoard = this.form.controls['typeOfBoard'].value;
+        this.modalModel.hardwareType = this.form.controls['hardwareType'].value;
         this.modalClose.emit(true);
     }
 

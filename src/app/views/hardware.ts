@@ -5,7 +5,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { ITypeOfBoard } from '../backend/TyrionAPI';
+import { IHardwareType } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-hardware',
@@ -13,7 +13,7 @@ import { ITypeOfBoard } from '../backend/TyrionAPI';
 })
 export class HardwareComponent extends BaseMainComponent implements OnInit {
 
-    devices: ITypeOfBoard[] = null;
+    devices: IHardwareType[] = null;
 
     constructor(injector: Injector) {
         super(injector);
@@ -25,10 +25,10 @@ export class HardwareComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        this.tyrionBackendService.typeOfBoardsGetAll()
-            .then((typeOfBoards) => {
-                this.devices = typeOfBoards;
-                // console.log(typeOfBoards);
+        this.tyrionBackendService.hardwareTypesGetAll()
+            .then((hardwareTypes) => {
+                this.devices = hardwareTypes;
+                // console.log(hardwareTypes);
                 this.unblockUI();
             })
             .catch((reason) => {
@@ -37,7 +37,7 @@ export class HardwareComponent extends BaseMainComponent implements OnInit {
             });
     }
 
-    onDeviceClick(device: ITypeOfBoard) {
+    onDeviceClick(device: IHardwareType) {
         this.navigate(['/hardware', device.id]);
     }
 

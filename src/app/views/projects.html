@@ -5,22 +5,13 @@
 
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
     <div class="portlet portlet light bordered">
+
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-briefcase"></i>
-                     {{'title'|bkTranslate:this}}
+                        {{'title'|bkTranslate:this}}
                 </span>
-            </div>
-            <div class="becki-actions pull-left">
-                <!--
-                <button class="btn btn-outline btn-sm white" (click)="onTest2Click()">
-                    <i class="fa fa-spinner"></i> Test flash message
-                </button>
-                <button class="btn btn-outline btn-sm white" (click)="onTestClick()">
-                    <i class="fa fa-spinner"></i> Test UI blocker
-                </button>
-                -->
             </div>
             <div class="becki-actions">
                 <button class="btn blue" (click)="onAddClick()" [disabled]="products && !products.length">
@@ -28,6 +19,7 @@
                 </button>
             </div>
         </div>
+
         <div *ngIf="(projects && projects.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
@@ -39,45 +31,42 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let project of projects">
+                    <tr *ngFor="let project of projects">
 
-                    <td *ngIf="project.active_status" class="no-wrap bold vert-align"><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
+                        <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
 
-                    <td class="vert-align" *ngIf="!project.active_status">
-                        <strong>{{project.project_name}}</strong>
-                        <br>
-                        <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product_id)"><span class="font-red-flamingo bold">{{project.product_name}}</span></a>) </span>
-                    </td>
+                        <td class="vert-align" *ngIf="!project.active">
+                            <strong>{{project.name}}</strong>
+                            <br>
+                            <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
+                        </td>
 
-                    <td class="vert-align">{{project.project_description}}</td>
+                        <td class="vert-align">{{project.description}}</td>
 
-                    <td class="vert-align">
-                        <a (click)="onProductClick(project.product_id)">{{project.product_name}}</a>
-                    </td>
+                        <td class="vert-align">
+                            <a (click)="onProductClick(project.product.id)">{{project.product.name}}</a>
+                        </td>
 
-                    <td class="no-wrap text-right vert-align ">
+                        <td class="no-wrap text-right vert-align ">
 
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
-
-                        <button title="Project properties" class="btn btn-icon-only blue" [disabled]="!project.edit_permission || !project.active_status" (click)="onEditClick(project)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_Remove_project'|bkTranslate}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active_status" (click)="onRemoveClick(project)">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+                            <button title="{{'label_Project_Properties'|bkTranslate}}" class="btn btn-icon-only blue" [disabled]="!project.update_permission || !project.active" (click)="onEditClick(project)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+                            <button title="{{'label_Remove_project'|bkTranslate}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active" (click)="onRemoveClick(project)">
+                                <i class="fa fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
         <h4 *ngIf="!products && !projects" class="text-center">{{'loading'|bkTranslate:this}}</h4>
-
-
         <div *ngIf="projects && !projects.length" class="list-no-items">
-
             <!-- if there is no products -->
             <template [ngIf]="products && !products.length && !projects.length">
                 <p class="list-no-items__main-label">{{'label_no_product'|bkTranslate:this}}</p>
@@ -100,6 +89,7 @@
                             </button>
                         </p>
             </template>
+
 
         </div>
     </div>

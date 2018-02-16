@@ -4,7 +4,7 @@
   -->
 
 <bk-layout-main
-    tabMenu="projects-project"
+    [tabMenu]="'projects-project'"
     [title]="currentParamsService.currentProjectNameSnapshot"
     [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
@@ -50,7 +50,7 @@
                     <tr *ngFor="let code of codePrograms">
                         <td class="vert-align no-wrap bold"><a (click)="onCodeClick(code)">{{code.name}}</a></td>
                         <td class="vert-align">{{code.description}}</td>
-                        <td class="vert-align no-wrap"><a (click)="onBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                         <td class="vert-align no-wrap text-right">
 
                             <style type="text/css">
@@ -58,7 +58,7 @@
                                 table tr:hover button { opacity:1 }
                             </style>
 
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!code.edit_permission" (click)="onEditClick(code)">
+                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!code.update_permission" (click)="onEditClick(code)">
                                 <i class="fa fa-cog"></i>
                             </button>
                             <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
@@ -93,7 +93,7 @@
                         <tr *ngFor="let code of publicPrograms.content">
                             <td class="vert-align no-wrap bold"><a (click)="onCodeClick(code)">{{code.name}}</a></td>
                             <td class="vert-align">{{code.description}}</td>
-                            <td class="vert-align no-wrap"><a (click)="onBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                             <td class="vert-align no-wrap text-right">
 
                                 <style type="text/css">

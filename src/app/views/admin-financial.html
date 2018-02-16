@@ -1,5 +1,5 @@
 <bk-layout-main
-     tabMenu="byzance-admin"
+     [tabMenu]="byzance-admin"
      [title]="'main_title'|bkTranslate:this"
      [subtitle]="'main_subtitle'|bkTranslate:this">
 
@@ -64,15 +64,15 @@
                                             table tr:hover button { opacity:1 }
                                         </style>
 
-                                        <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.edit_permission" (click)="onTariffEditClick(tariff)">
+                                        <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
                                             <i class="fa fa-cog"></i>
                                         </button>
 
-                                        <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftUpClick(tariff)">
+                                        <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftUpClick(tariff)">
                                             <i class="fa fa-chevron-up"></i>
                                         </button>
 
-                                        <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftDownClick(tariff)">
+                                        <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftDownClick(tariff)">
                                             <i class="fa fa-chevron-down"></i>
                                         </button>
 
@@ -132,15 +132,15 @@
                                         table tr:hover button { opacity:1 }
                                     </style>
 
-                                    <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.edit_permission" (click)="onTariffEditClick(tariff)">
+                                    <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
                                         <i class="fa fa-cog"></i>
                                     </button>
 
-                                    <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftUpClick(tariff)">
+                                    <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftUpClick(tariff)">
                                         <i class="fa fa-chevron-up"></i>
                                     </button>
 
-                                    <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftDownClick(tariff)">
+                                    <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftDownClick(tariff)">
                                         <i class="fa fa-chevron-down"></i>
                                     </button>
 

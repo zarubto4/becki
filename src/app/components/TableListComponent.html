@@ -31,7 +31,7 @@
                             {{version.id}}
                         </td>
                         <td class="vert-align" *ngFor="let field of additionalFields">{{version[field]}}</td>
-                        
+
                         <td class="vert-align no-wrap text-right">
 
                             <style type="text/css">
@@ -44,7 +44,7 @@
                                 }
                             </style>
 
-                            <button title="Edit" class="btn btn-icon-only green" [disabled]="!version.edit_permission"
+                            <button title="Edit" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                 (click)="onEditClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>

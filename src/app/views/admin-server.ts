@@ -6,7 +6,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     ICompilationServer, ICompilerServerPublicDetail, IHomerServer,
-    ITypeOfBoard
+    IHardwareType
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
@@ -44,7 +44,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                 this.homer_servers.forEach((server, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'HomerServer' && server.id === status.model_id) {
-                            server.online_state = status.online_status;
+                            server.online_state = status.online_state;
                         }
                     });
                 });
@@ -54,7 +54,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                 this.compilations_servers.forEach((server, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'CompilationServer' && server.id === status.model_id) {
-                            server.online_state = status.online_status;
+                            server.online_state = status.online_state;
                         }
                     });
                 });

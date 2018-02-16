@@ -9,11 +9,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { IBoard, IBoardForFastUploadDetail } from '../backend/TyrionAPI';
+import { IHardware, IHardwareForFastUploadDetail } from '../backend/TyrionAPI';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
-    constructor(public boards: IBoardForFastUploadDetail[], public selectedBoard: IBoardForFastUploadDetail = null) {
+    constructor(public boards: IHardwareForFastUploadDetail[], public selectedBoard: IHardwareForFastUploadDetail = null) {
         super();
     }
 }

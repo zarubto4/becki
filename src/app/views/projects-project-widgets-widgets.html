@@ -4,7 +4,7 @@
   -->
 
 <bk-layout-main
-    tabMenu="{{projectId == null ? 'byzance-admin' : 'projects-project'}}"
+    [tabMenu]="{{projectId == null ? 'byzance-admin' : 'projects-project'}}"
     [title]="projectId == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
     [subtitle]="projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
@@ -17,7 +17,7 @@
                 </span>
             </div>
             <div class="becki-actions">
-                <button *ngIf="group && group.edit_permission" title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onGroupEditClick()">
+                <button *ngIf="group && group.update_permission" title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onGroupEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>
                 <button *ngIf="group && group.delete_permission" title="{{'label_remove_group'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onGroupDeleteClick()">
@@ -66,7 +66,7 @@
                         <button  *ngIf="!projectId && widget.active" title="{{'label_deactive_group'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!widget.update_permission" (click)="onWidgetDeactivateClick(widget)">
                             <i class="fa fa-power-off"></i>
                         </button>
-                        <button *ngIf="widget.edit_permission" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onWidgetEditClick(widget)">
+                        <button *ngIf="widget.update_permission" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onWidgetEditClick(widget)">
                             <i class="fa fa-cog"></i>
                         </button>
                         <button *ngIf="widget.delete_permission" title="{{'label_remove_widget'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onWidgetDeleteClick(widget)">

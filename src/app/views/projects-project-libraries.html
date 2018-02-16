@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -59,7 +59,7 @@
                                     }
                                 </style>
 
-                                <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.edit_permission"
+                                <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission"
                                     (click)="onEditClick(library)">
                                 <i class="fa fa-cog"></i>
                             </button>
@@ -102,7 +102,7 @@
                             <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
                             <td class="vert-align">{{library.description}}</td>
                             <td class="vert-align no-wrap">
-                                <a *ngFor="let board of library.type_of_boards" (click)="onBoardTypeClick(board.id)">{{board.name}}, </a>
+                                <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeClick(board.id)">{{board.name}}, </a>
                             </td>
                             <td class="vert-align no-wrap text-right">
 

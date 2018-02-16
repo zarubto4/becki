@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs/Rx';
 import { CodeFile, CodeIDEComponent } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import { IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, ITypeOfBoard, IBoardShortDetail } from '../backend/TyrionAPI';
+import { IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, IHardwareType, IHardwareShortDetail } from '../backend/TyrionAPI';
 import { ICodeCompileErrorMessage, CodeCompileError, CodeError } from '../backend/BeckiBackend';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { NullSafe } from '../helpers/NullSafe';
@@ -52,9 +52,9 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     reloadInterval: any = null;
-    typeOfBoard: ITypeOfBoard = null;
+    hardwareType: IHardwareType = null;
 
-    allDevices: IBoardShortDetail[];
+    allDevices: IHardwareShortDetail[];
     projectSubscription: Subscription;
 
     @ViewChild(BlockoViewComponent)
@@ -145,9 +145,9 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     markupableAsMain(version: ICProgramVersionShortDetail): boolean {
         return !version
             && !this.projectId
-            && !this.typeOfBoard
-            && (this.typeOfBoard.main_test_c_program != null || this.typeOfBoard.main_c_program == null)
-            && (this.typeOfBoard.main_test_c_program.id === this.codeProgram.id || this.typeOfBoard.main_c_program.id === this.codeProgram.id)
+            && !this.hardwareType
+            && (this.hardwareType.main_test_c_program != null || this.hardwareType.main_c_program == null)
+            && (this.hardwareType.main_test_c_program.id === this.codeProgram.id || this.hardwareType.main_c_program.id === this.codeProgram.id)
             && version.status === 'successfully_compiled_and_restored'
             && !version.main_mark;
     }
@@ -307,9 +307,9 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 this.unblockUI();
 
-                this.tyrionBackendService.typeOfBoardGet(this.codeProgram.type_of_board_id)
+                this.tyrionBackendService.hardwareTypeGet(this.codeProgram.type_of_board_id)
                     .then((response) => {
-                        this.typeOfBoard = response;
+                        this.hardwareType = response;
                         this.onMakeListOfCompilationVersion();
                     });
             })
@@ -321,7 +321,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     }
 
     onMakeListOfCompilationVersion() {
-        this.libraryCompilationVersionOptions = this.typeOfBoard.supported_libraries.map((pv) => {
+        this.libraryCompilationVersionOptions = this.hardwareType.supported_libraries.map((pv) => {
             return {
                 label: pv.tag_name,
                 value: pv.tag_name
@@ -473,10 +473,6 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     this.codeProgramVersions = this.codeProgram.program_versions || [];
                 });
         }
-    }
-
-    onBoardTypeClick(boardTypeId: string): void {
-        this.navigate(['/hardware', boardTypeId]);
     }
 
     onCommunityPublicVersionClick(programVersion: ICProgramVersionShortDetail) {
@@ -775,7 +771,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
 
         this.blockUI();
-        this.tyrionBackendService.boardsGetForIdeOperation(this.projectId) // TODO [permission]: Board.edit_permission
+        this.tyrionBackendService.boardsGetForIdeOperation(this.projectId) // TODO [permission]: Board.update_permission
             .then((boards) => {
                 this.unblockUI();
 

@@ -12,14 +12,14 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { IBoard, IHardwareNewPassword, IHomerServer} from '../backend/TyrionAPI';
+import { IHardware, IHardwareNewPassword, IHomerServer} from '../backend/TyrionAPI';
 import { FlashMessageSuccess } from '../services/NotificationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
 
 
 export class ModalsHardwareChangeServerModel extends ModalModel {
-    constructor(public board: IBoard) {
+    constructor(public board: IHardware) {
         super();
     }
 }

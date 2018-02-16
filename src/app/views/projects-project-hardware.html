@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project"
+<bk-layout-main [tabMenu]="'projects-project'"
                 [title]="currentParamsService.currentProjectNameSnapshot"
                 [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
@@ -82,7 +82,7 @@
                             </td>
                             <td class="vert-align no-wrap">{{device.id}}</td>
                             <td class="vert-align no-wrap">{{device.description}}</td>
-                            <td class="vert-align no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
+                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
                             <td class="vert-align no-wrap">
 
                                 <div *ngIf="!device.hardware_groups">
@@ -100,13 +100,13 @@
                             </td>
 
                             <td class="vert-align no-wrap">
-                                <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-                                <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
                                 <span *ngIf="device.online_state == 'synchronization_in_progress'"
                                       class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
-                                <span *ngIf="device.online_state == 'not_yet_first_connected'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="device.online_state == 'not_yet_first_connected'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
                                 <span *ngIf="device.online_state == 'unknown_lost_connection_with_server'"
-                                      class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                      class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
                             </td>
                             <td class="vert-align no-wrap">
 
@@ -120,12 +120,12 @@
                                 </style>
 
                                 <button title="{{'label_hardware_group'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
-                                        [disabled]="!device.edit_permission"
+                                        [disabled]="!device.update_permission"
                                         (click)="onDeviceEditGroupClick(device)">
                                     <i class="fa fa-object-group"></i>
                                 </button>
                                 <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                        [disabled]="!device.edit_permission"
+                                        [disabled]="!device.update_permission"
                                         (click)="onEditClick(device)">
                                     <i class="fa fa-cog"></i>
                                 </button>
@@ -183,7 +183,7 @@
                             </style>
 
                             <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                    [disabled]="!group.edit_permission"
+                                    [disabled]="!group.update_permission"
                                     (click)="onGroupEditClick(group)">
                                 <i class="fa fa-cog"></i>
                             </button>
@@ -233,7 +233,7 @@
                             <td class="vert-align">
                                 <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', procedure.id]">{{procedure.id.substr(0, 12)}}</a>
                             </td>
-                            <td class="vert-align">{{procedure.date_of_create|bkUnixTimeToDate}}</td>
+                            <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
                             <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
                             <td class="vert-align">
                                 <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
@@ -281,12 +281,12 @@
                                     }
                                 </style>
                                 <button title="{{'label_change_update_parameters'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                        [disabled]="!procedure.edit_permission"
+                                        [disabled]="!procedure.update_permission"
                                         (click)="onUpdateProcedureUpdateClick(procedure)">
                                     <i class="fa fa-cog"></i>
                                 </button>
                                 <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                        [disabled]="!procedure.edit_permission"
+                                        [disabled]="!procedure.update_permission"
                                         (click)="onUpdateProcedureCancelClick(procedure)">
                                     <i class="fa fa-trash"></i>
                                 </button>

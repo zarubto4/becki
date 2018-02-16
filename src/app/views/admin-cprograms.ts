@@ -5,7 +5,7 @@ import { BaseMainComponent } from './BaseMainComponent';
 import {
     ICProgram, ICProgramFilter, ICProgramList, ICProgramShortDetail, ILibraryFilter, ILibraryList, ILibraryShortDetail,
     IRoleShortDetai,
-    ITypeOfBoard
+    IHardwareType
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -25,7 +25,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
     libraries: ILibraryList = null;
     librariesNotApproved: ILibraryList = null;
 
-    typeOfBoards: ITypeOfBoard[] = null;
+    hardwareTypes: IHardwareType[] = null;
 
 
     tab: string = 'public_c_programs';
@@ -41,9 +41,9 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.tyrionBackendService.typeOfBoardsGetAll()])
-            .then((values: [ITypeOfBoard[]]) => {
-                this.typeOfBoards = values[0];
+        Promise.all<any>([this.tyrionBackendService.hardwareTypesGetAll()])
+            .then((values: [IHardwareType[]]) => {
+                this.hardwareTypes = values[0];
                 this.unblockUI();
             })
             .catch((reason) => {
@@ -140,11 +140,11 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
     }
 
     onCProgramEditClick(code: ICProgramShortDetail): void {
-        if (!this.typeOfBoards) {
+        if (!this.hardwareTypes) {
             this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
 
-        let model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, '', true, code.name);
+        let model = new ModalsCodePropertiesModel(this.hardwareTypes, code.name, code.description, '', true, code.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -167,7 +167,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         this.router.navigate(['/admin/hardware/code', cProgram.id]);
     }
 
-    onTypeOfBoardTypeClick(boardTypeId: string): void {
+    onHardwareTypeTypeClick(boardTypeId: string): void {
         this.router.navigate(['/hardware', boardTypeId]);
     }
 

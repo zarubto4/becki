@@ -20,6 +20,7 @@ import { StorageService } from '../services/StorageService';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
+import {IProject} from "../backend/TyrionAPI";
 
 
 export abstract class BaseMainComponent {
@@ -74,7 +75,6 @@ export abstract class BaseMainComponent {
         this.blockUIService.unblockUI();
     }
 
-
     protected getBeckiFlag(imageName: string): string {
         return this.beckiImageLinks.getBeckiImage(imageName, 'flags');
     }
@@ -113,6 +113,32 @@ export abstract class BaseMainComponent {
         let fm = new FlashMessageError(msg, reason);
         this.addFlashMessage(fm);
         return fm;
+    }
+
+// -- ON CLIC ----------------------------------------------------------------------------------------------------------------
+
+    onProjectClick(project_id: string): void {
+        this.navigate(['/projects', project_id]);
+    }
+
+    onProductClick(product_id: string): void {
+        this.router.navigate(['/financial', product_id]);
+    }
+
+    onProducerClick(producer_id: string): void {
+        this.navigate(['/producers', producer_id]);
+    }
+
+    onHardwareTypeClick(hardware_id: string): void {
+        this.navigate(['/hardware', hardware_id]);
+    }
+
+    onInstanceClick(instance_id: string) {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'instances', instance_id]);
+    }
+
+    onBlockoProgramClick(b_program_id: string) {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', b_program_id]);
     }
 
 }

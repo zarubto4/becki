@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { IBoardGroup } from '../backend/TyrionAPI';
+import { IHardwareGroup } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessageError, FlashMessage } from '../services/NotificationService';
@@ -19,7 +19,7 @@ import { TranslationService } from '../services/TranslationService';
 export class ModalsAddHardwareModel extends ModalModel {
     constructor(
         public project_id: string,
-        public deviceGroup: IBoardGroup[] = []
+        public deviceGroup: IHardwareGroup[] = []
     ) {
         super();
     }

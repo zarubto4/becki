@@ -67,7 +67,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
         this.tyrionBackendService.onlineStatus.subscribe((status) => {
             if (status.model === 'HomerInstance' && this.instanceId === status.model_id) {
-                this.instance.online_state = status.online_status;
+                this.instance.online_state = status.online_state;
             }
         });
 
@@ -154,7 +154,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
                 this.tyrionBackendService.onlineStatus.subscribe((status) => {
                     if (status.model === 'HomerServer' && this.instance.server_id === status.model_id) {
-                        this.instance.server_online_state = status.online_status;
+                        this.instance.server_online_state = status.online_state;
                     }
                 });
 
@@ -166,7 +166,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
                         this.tyrionBackendService.onlineStatus.subscribe((status) => {
                             if (status.model === 'Board' && deviceGroup.main_board_pair.board_id === status.model_id) {
-                                deviceGroup.main_board_pair.online_state = status.online_status;
+                                deviceGroup.main_board_pair.online_state = status.online_state;
                             }
                         });
                     });
@@ -302,10 +302,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     onBlockoClick() {
 
-    }
-
-    onBoardTypeClick(boardTypeId: string): void {
-        this.navigate(['/hardware', boardTypeId]);
     }
 
 

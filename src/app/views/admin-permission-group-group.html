@@ -1,4 +1,4 @@
-<bk-layout-main tabMenu="byzance-admin"
+<bk-layout-main [tabMenu]="byzance-admin"
                 [title]="'main_title'|bkTranslate:this"
                 [subtitle]="'main_subtitle'|bkTranslate:this"
                 [lastBreadName]="securityRole?securityRole.name:''">
@@ -112,7 +112,7 @@
                                         table tr button { opacity:0.05;}
                                         table tr:hover button { opacity:1 }
                                     </style>
-                                    <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!permission.edit_permission" (click)="onPermissionEditClick(permission)">
+                                    <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!permission.update_permission" (click)="onPermissionEditClick(permission)">
                                         <i class="fa fa-cog"></i>
                                     </button>
                                     <button title="{{'label_person_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!securityRole.update_permission" (click)="onPermissionDeleteClick(permission)">

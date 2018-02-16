@@ -9,12 +9,12 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
-import { ITypeOfBoard } from '../backend/TyrionAPI';
+import { IHardwareType } from '../backend/TyrionAPI';
 
 // TODO Rozdělit kopírování a pak Crate a Edit! ( Dva modaly prostě) - Je to upodmínkované jako piča [TZ]
 export class ModalsCodePropertiesModel extends ModalModel {
     constructor(
-        public typeOfBoards: ITypeOfBoard[],
+        public hardwareTypes: IHardwareType[],
         public name: string = '',
         public description: string = '',
         public deviceType: string = '',
@@ -47,7 +47,7 @@ export class ModalsCodePropertiesComponent implements OnInit {
 
     ngOnInit() {
         if (!this.modalModel.edit) {
-            this.options = formSelectComponentOptionsMaker(this.modalModel.typeOfBoards, 'id', 'name');
+            this.options = formSelectComponentOptionsMaker(this.modalModel.hardwareTypes, 'id', 'name');
         }
         let input: { [key: string]: any } = {
             'name': [this.modalModel.name, [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],

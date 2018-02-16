@@ -1,12 +1,9 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
-import {
-    IProject, IBProgramShortDetail, IActualizationProcedure,
-    IActualizationProcedureTaskList
-} from '../backend/TyrionAPI';
+import { IActualizationProcedureTaskList, IProject, IUpdateProcedure } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
@@ -15,17 +12,17 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 })
 export class ProjectsProjectActualizationProcedureComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    actualization_procedure_id: string;
     projectId: string;
-    procedure: IActualizationProcedure = null;
-    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    project: IProject = null;
+    actualization_procedure_id: string;
 
-    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    procedure: IUpdateProcedure = null;
+    actualizationTaskFilter: IActualizationProcedureTaskList = null;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    project: IProject = null;
+    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     constructor(injector: Injector) {
         super(injector);
@@ -79,7 +76,7 @@ export class ProjectsProjectActualizationProcedureComponent extends BaseMainComp
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
             actualization_procedure_ids: [this.actualization_procedure_id],
-            board_ids: null,
+            hardware_ids: null,
             instance_ids: null,
             update_status: states,
             update_states: [],
@@ -116,10 +113,6 @@ export class ProjectsProjectActualizationProcedureComponent extends BaseMainComp
 
     selectedFilterPageActualizationProcedureTask(event: { index: number }) {
         this.onFilterActualizationProcedureTask(event.index);
-    }
-
-    onBoardTypeClick(boardTypeId: string): void {
-        this.navigate(['/hardware', boardTypeId]);
     }
 
 

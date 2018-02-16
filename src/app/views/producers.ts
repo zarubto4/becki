@@ -55,9 +55,4 @@ export class ProducersComponent extends BaseMainComponent implements OnInit, OnD
 
     }
 
-    onProducerClick(producerId: string): void {
-        this.navigate(['/producers', producerId]);
-    }
-
-
 }

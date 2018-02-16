@@ -6,7 +6,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { IProducer, ITypeOfBoard } from '../backend/TyrionAPI';
+import { IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { TyrionBackendService } from '../services/BackendService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
@@ -15,7 +15,7 @@ import { ModalModel } from '../services/ModalService';
 export class ModalsGarfieldModel extends ModalModel {
     constructor(
         public producers: IProducer[],
-        public typeOfBoards: ITypeOfBoard[],
+        public hardwareTypes: IHardwareType[],
         public name: string = '',
         public description: string = '',
         public print_label_id_1: number = 0,
@@ -24,7 +24,7 @@ export class ModalsGarfieldModel extends ModalModel {
         public hardware_tester_id: string = '',
         public edit: boolean = false,
         public producer: string = '',
-        public typeOfBoard: string = ''
+        public hardwareType: string = ''
     ) {
         super();
     }
@@ -43,7 +43,7 @@ export class ModalsGarfieldComponent implements OnInit {
     modalClose = new EventEmitter<boolean>();
 
     producer_options: FormSelectComponentOption[] = null;
-    typeOfBoard_options: FormSelectComponentOption[] = null;
+    hardwareType_options: FormSelectComponentOption[] = null;
 
     form: FormGroup;
 
@@ -56,7 +56,7 @@ export class ModalsGarfieldComponent implements OnInit {
             'print_label_id_2': ['', [Validators.required, Validators.minLength(5)]],
             'print_sticker_id': ['', [Validators.required, Validators.minLength(5)]],
             'hardware_tester_id': ['', [Validators.required, Validators.minLength(5)]],
-            'typeOfBoard': ['', [Validators.required]],
+            'hardwareType': ['', [Validators.required]],
             'producer': ['', [Validators.required]]
         });
     }
@@ -64,7 +64,7 @@ export class ModalsGarfieldComponent implements OnInit {
     ngOnInit() {
 
         if (!this.modalModel.edit) {
-            this.typeOfBoard_options = this.modalModel.typeOfBoards.map((pv) => {
+            this.hardwareType_options = this.modalModel.hardwareTypes.map((pv) => {
                 return {
                     label: pv.name,
                     value: pv.id
@@ -85,7 +85,7 @@ export class ModalsGarfieldComponent implements OnInit {
         (<FormControl>(this.form.controls['print_label_id_2'])).setValue(this.modalModel.print_label_id_2);
         (<FormControl>(this.form.controls['print_sticker_id'])).setValue(this.modalModel.print_sticker_id);
         (<FormControl>(this.form.controls['hardware_tester_id'])).setValue(this.modalModel.hardware_tester_id);
-        (<FormControl>(this.form.controls['typeOfBoard'])).setValue(this.modalModel.typeOfBoard);
+        (<FormControl>(this.form.controls['hardwareType'])).setValue(this.modalModel.hardwareType);
         (<FormControl>(this.form.controls['producer'])).setValue(this.modalModel.producer);
     }
 
@@ -97,7 +97,7 @@ export class ModalsGarfieldComponent implements OnInit {
         this.modalModel.print_sticker_id = this.form.controls['print_sticker_id'].value;
         this.modalModel.hardware_tester_id = this.form.controls['hardware_tester_id'].value;
         this.modalModel.producer = this.form.controls['producer'].value;
-        this.modalModel.typeOfBoard = this.form.controls['typeOfBoard'].value;
+        this.modalModel.hardwareType = this.form.controls['hardwareType'].value;
         this.modalClose.emit(true);
     }
 

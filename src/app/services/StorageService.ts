@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
-import { IProject, ITypeOfBoard } from '../backend/TyrionAPI';
+import { IProject, IHardwareType } from '../backend/TyrionAPI';
 import { TyrionBackendService } from './BackendService';
 
 @Injectable()
@@ -18,10 +18,10 @@ export class StorageService {
     protected projectsLastTouch: { [id: string]: number } = {};
     protected projectsInProgress: { [id: string]: boolean } = {};
 
-    protected typeOfBoardsSubject: ReplaySubject<ITypeOfBoard[]> = null;
-    protected typeOfBoardsCache: ITypeOfBoard[] = null;
-    protected typeOfBoardsLastTouch: number = 0;
-    protected typeOfBoardsInProgress: boolean = false;
+    protected hardwareTypesSubject: ReplaySubject<IHardwareType[]> = null;
+    protected hardwareTypesCache: IHardwareType[] = null;
+    protected hardwareTypesLastTouch: number = 0;
+    protected hardwareTypesInProgress: boolean = false;
 
     constructor(protected backendService: TyrionBackendService, protected router: Router) {
         console.info('StorageService init');
@@ -74,48 +74,48 @@ export class StorageService {
         });
     }
 
-    // typeOfBoards
+    // hardwareTypes
 
-    public typeOfBoards(): Observable<ITypeOfBoard[]> {
-        this.typeOfBoardsRefreshSoft();
-        if (this.typeOfBoardsSubject) {
-            return this.typeOfBoardsSubject;
+    public hardwareTypes(): Observable<IHardwareType[]> {
+        this.hardwareTypesRefreshSoft();
+        if (this.hardwareTypesSubject) {
+            return this.hardwareTypesSubject;
         }
-        this.typeOfBoardsSubject = new ReplaySubject<ITypeOfBoard[]>(1);
-        return this.typeOfBoardsSubject;
+        this.hardwareTypesSubject = new ReplaySubject<IHardwareType[]>(1);
+        return this.hardwareTypesSubject;
     }
 
-    public typeOfBoardsRefreshSoft(): void {
-        if (!this.typeOfBoardsCache) {
+    public hardwareTypesRefreshSoft(): void {
+        if (!this.hardwareTypesCache) {
             // not in cache
-            this.typeOfBoardsRefresh();
+            this.hardwareTypesRefresh();
         } else {
             // too old
-            if (this.typeOfBoardsLastTouch < (Date.now() - 30 * 1000)) {
-                this.typeOfBoardsRefresh();
+            if (this.hardwareTypesLastTouch < (Date.now() - 30 * 1000)) {
+                this.hardwareTypesRefresh();
             }
         }
     }
 
-    public typeOfBoardsRefresh(): Promise<boolean> {
+    public hardwareTypesRefresh(): Promise<boolean> {
         return new Promise<boolean>((resolve) => {
-            if (this.typeOfBoardsInProgress) {
+            if (this.hardwareTypesInProgress) {
                 return;
             }
-            this.typeOfBoardsInProgress = true;
-            this.backendService.typeOfBoardsGetAll()
-                .then((typeOfBoards) => {
-                    this.typeOfBoardsCache = typeOfBoards;
-                    this.typeOfBoardsLastTouch = Date.now();
-                    this.typeOfBoardsInProgress = false;
-                    if (this.typeOfBoardsSubject) {
-                        this.typeOfBoardsSubject.next(this.typeOfBoardsCache);
+            this.hardwareTypesInProgress = true;
+            this.backendService.hardwareTypesGetAll()
+                .then((hardwareTypes) => {
+                    this.hardwareTypesCache = hardwareTypes;
+                    this.hardwareTypesLastTouch = Date.now();
+                    this.hardwareTypesInProgress = false;
+                    if (this.hardwareTypesSubject) {
+                        this.hardwareTypesSubject.next(this.hardwareTypesCache);
                     }
                     resolve(true);
                 })
                 .catch((err) => {
                     // TODO: error
-                    this.typeOfBoardsInProgress = false;
+                    this.hardwareTypesInProgress = false;
                     resolve(false);
                 });
         });
