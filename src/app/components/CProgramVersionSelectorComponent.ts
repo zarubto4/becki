@@ -4,7 +4,7 @@
  */
 
 import { Component, Input, Output, EventEmitter, OnInit, NgZone } from '@angular/core';
-import { ICProgramShortDetail, ICProgramShortDetailForBlocko, ICProgramVersionShortDetail } from '../backend/TyrionAPI';
+import { ICProgram, ICProgramForBlocko, ICProgramVersionShortDetail } from '../backend/TyrionAPI';
 import { BaseMainComponent } from '../views/BaseMainComponent';
 import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
@@ -44,7 +44,7 @@ import { ModalService } from '../services/ModalService';
 export class CProgramVersionSelectorComponent implements OnInit {
 
     @Input()
-    cPrograms: ICProgramShortDetail[] = null;
+    cPrograms: ICProgram[] = null;
 
     // Fill after select Program
     selectedVersions: ICProgramVersionShortDetail[] = null;
@@ -61,7 +61,7 @@ export class CProgramVersionSelectorComponent implements OnInit {
     @Output()
     valueChanged: EventEmitter<string> = new EventEmitter<string>();
 
-    selectedProgram: ICProgramShortDetail = null;
+    selectedProgram: ICProgram = null;
     selectedVersion: ICProgramVersionShortDetail = null;
     selectedProgramId: string = null;
     selectedProgramVersionId: string = null;

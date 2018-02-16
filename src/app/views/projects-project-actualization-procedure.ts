@@ -5,7 +5,6 @@ import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { IActualizationProcedureTaskList, IProject, IUpdateProcedure } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-
 @Component({
     selector: 'bk-view-projects-project-actualization-procedure',
     templateUrl: './projects-project-actualization-procedure.html',

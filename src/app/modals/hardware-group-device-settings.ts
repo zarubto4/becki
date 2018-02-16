@@ -6,13 +6,13 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IHardwareGroup, IHardwareShortDetail } from '../backend/TyrionAPI';
+import { IHardwareGroup, IHardware } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { FormSwitchTwoListSelectComponent } from '../components/FormSwitchTwoListSelectComponent';
 
 export class ModalsHardwareGroupDeviceSettingsModel extends ModalModel {
     constructor(
-        public device: IHardwareShortDetail,
+        public device: IHardware,
         public deviceGroup: IHardwareGroup[] = [],         // All possible Hardware groups for settings
         public deviceGroupStringIdsAvailable: string[] = [],    // List with group ids for hardware update
         public deviceGroupStringIdsSelected: string[] = []     // List with group ids for hardware update

@@ -10,8 +10,8 @@ import { Subscription } from 'rxjs/Rx';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
-    IProject, IHardwareShortDetail, IHardwareList, IHardwareGroup, IUpdateProcedureList,
-    IUpdateProcedureShortDetail, ICProgramShortDetail, IBootLoader
+    IProject, IHardware, IHardwareList, IHardwareGroup, IHardwareUpdate,
+    IActualizationProcedureTaskList, ICProgram, IBootLoader
 } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -34,7 +34,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     devicesFilter: IHardwareList = null;
     deviceGroup: IHardwareGroup[] = null;
-    actualizationFilter: IUpdateProcedureList = null;
+    actualizationFilter: IHardwareUpdate = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -84,7 +84,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
 
-    onEditClick(device: IHardwareShortDetail): void {
+    onEditClick(device: IHardware): void {
         let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -102,16 +102,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         });
     }
 
-    onDeviceClick(device: IHardwareShortDetail): void {
-        this.navigate(['/projects', this.projectId, 'hardware', device.id]);
-    }
-
-
-    onCProgramClick(cProgramId: string): void {
-        this.navigate(['/projects', this.projectId, 'code', cProgramId]);
-    }
-
-    onRemoveClick(device: IHardwareShortDetail): void {
+    onRemoveClick(device: IHardware): void {
         this.modalService.showModal(new ModalsRemovalModel('[' + device.id + '] ' + (device.name ? device.name : ''))).then((success) => {
             if (success) {
                 this.blockUI();
@@ -153,7 +144,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
 
-    onDeviceEditGroupClick(device: IHardwareShortDetail) {
+    onDeviceEditGroupClick(device: IHardware) {
         if (this.deviceGroup == null) {
             this.tyrionBackendService.boardGroupGetListFromProject(this.projectId)
                 .then((values) => {
@@ -342,7 +333,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
 
-    onUpdateProcedureCancelClick(procedure: IUpdateProcedureShortDetail): void {
+    onUpdateProcedureCancelClick(procedure: IActualizationProcedureTaskList): void {
         this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
             .then(() => {
                 this.unblockUI();
@@ -354,7 +345,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             });
     }
 
-    onUpdateProcedureUpdateClick(procedure: IUpdateProcedureShortDetail): void {
+    onUpdateProcedureUpdateClick(procedure: IActualizationProcedureTaskList): void {
 
     }
 

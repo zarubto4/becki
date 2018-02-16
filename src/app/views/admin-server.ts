@@ -83,7 +83,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                     server_url: model.server_url,
                     mqtt_port: model.mqtt_port,
                     grid_port: model.grid_port,
-                    server_remote_port: model.server_remote_port
+                    hardware_logger_port: model.hardware_logger_port
                 })
                     .then(() => {
                         this.refresh();
@@ -130,7 +130,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                     server.mqtt_port,
                     server.grid_port,
                     server.web_view_port,
-                    server.server_remote_port,
+                    server.hardware_logger_port,
                     server.server_url,
                     server.hash_certificate,
                     server.connection_identificator,
@@ -145,7 +145,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                             server_url: model.server_url,
                             mqtt_port: model.mqtt_port,
                             grid_port: model.grid_port,
-                            server_remote_port: model.server_remote_port
+                            hardware_logger_port: model.hardware_logger_port
                         })
                             .then(() => {
                                 this.refresh();

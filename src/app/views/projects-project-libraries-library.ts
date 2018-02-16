@@ -13,7 +13,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import {
     IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, IHardwareType,
-    IHardwareShortDetail, ILibrary, ILibraryVersionShortDetail, ILibraryVersion
+    IHardware, ILibrary, ILibraryVersionShortDetail, ILibraryVersion
 } from '../backend/TyrionAPI';
 import { ICodeCompileErrorMessage, CodeCompileError, CodeError } from '../backend/BeckiBackend';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -55,7 +55,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
     reloadInterval: any = null;
     device: IHardwareType = null;
 
-    allDevices: IHardwareShortDetail[];
+    allDevices: IHardware[];
     projectSubscription: Subscription;
 
     protected afterLoadSelectedVersionId: string = null;

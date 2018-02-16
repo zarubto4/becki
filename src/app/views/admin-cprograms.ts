@@ -3,7 +3,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
-    ICProgram, ICProgramFilter, ICProgramList, ICProgramShortDetail, ILibraryFilter, ILibraryList, ILibraryShortDetail,
+    ICProgram, ICProgramFilter, ICProgramList, ICProgram, ILibraryFilter, ILibraryList, ILibraryShortDetail,
     IRoleShortDetai,
     IHardwareType
 } from '../backend/TyrionAPI';
@@ -123,7 +123,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
             });
     }
 
-    onCProgramRemoveClick(code: ICProgramShortDetail): void {
+    onCProgramRemoveClick(code: ICProgram): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -139,7 +139,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         });
     }
 
-    onCProgramEditClick(code: ICProgramShortDetail): void {
+    onCProgramEditClick(code: ICProgram): void {
         if (!this.hardwareTypes) {
             this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
@@ -163,7 +163,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         });
     }
 
-    onCProgramClick(cProgram: ICProgramShortDetail): void {
+    onCProgramClick(cProgram: ICProgram): void {
         this.router.navigate(['/admin/hardware/code', cProgram.id]);
     }
 

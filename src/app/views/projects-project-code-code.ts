@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs/Rx';
 import { CodeFile, CodeIDEComponent } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import { IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, IHardwareType, IHardwareShortDetail } from '../backend/TyrionAPI';
+import { IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, IHardwareType, IHardware } from '../backend/TyrionAPI';
 import { ICodeCompileErrorMessage, CodeCompileError, CodeError } from '../backend/BeckiBackend';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { NullSafe } from '../helpers/NullSafe';
@@ -54,7 +54,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     reloadInterval: any = null;
     hardwareType: IHardwareType = null;
 
-    allDevices: IHardwareShortDetail[];
+    allDevices: IHardware[];
     projectSubscription: Subscription;
 
     @ViewChild(BlockoViewComponent)

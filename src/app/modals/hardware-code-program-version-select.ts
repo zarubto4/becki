@@ -9,15 +9,13 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {
-    ICProgramShortDetail, ICProgramVersionShortDetail,
-    ILibrary, ILibraryShortDetail, IMProgramShortDetailForBlocko,
+import { ICProgram, ICProgramVersion, ILibrary, ILibraryVersion, IMProgramShortDetailForBlocko,
     IMProjectShortDetailForBlocko
 } from '../backend/TyrionAPI';
 
 
 export class ModalsHardwareCodeProgramVersionSelectModel extends ModalModel {
-    constructor(public projectId: string, public hardwareTypeId: string, public selectedProgramVersion: ICProgramVersionShortDetail = null) {
+    constructor(public projectId: string, public hardwareTypeId: string, public selectedProgramVersion: ICProgramVersion = null) {
         super();
     }
 }
@@ -34,13 +32,13 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    codePrograms: ICProgramShortDetail[] = null;
+    codePrograms: ICProgram[] = null;
 
-    selectedProgram: ICProgramShortDetail = null;
+    selectedProgram: ICProgram = null;
 
-    programVersions: ICProgramVersionShortDetail[] = null;
+    programVersions: ICProgramVersion[] = null;
 
-    selectedProgramVersion: ICProgramVersionShortDetail = null;
+    selectedProgramVersion: ICProgramVersion = null;
 
     loading = false;
 
@@ -68,7 +66,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
         this.selectedProgramVersion = null;
     }
 
-    onProgramClick(program: ICProgramShortDetail) {
+    onProgramClick(program: ICProgram) {
         this.selectedProgram = program;
         this.programVersions = null;
         this.selectedProgramVersion = null;
@@ -83,8 +81,8 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
             });
     }
 
-    onProgramVersionClick(programVersion: ICProgramVersionShortDetail) {
-        if (programVersion.status !== 'successfully_compiled_and_restored') {
+    onProgramVersionClick(programVersion: ICProgramVersion) {
+        if (programVersion.status !== 'SUCCESS') {
             return;
         }
         this.selectedProgramVersion = programVersion;

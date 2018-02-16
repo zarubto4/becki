@@ -9,7 +9,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
-import { IProject, IHardwareType, ICProgramShortDetail, ICProgramList } from '../backend/TyrionAPI';
+import { IProject, IHardwareType, ICProgram, ICProgramList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
@@ -26,7 +26,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     project: IProject = null;
 
-    codePrograms: ICProgramShortDetail[] = null;
+    codePrograms: ICProgram[] = null;
     publicPrograms: ICProgramList = null;
 
     hardwareTypes: IHardwareType[] = null;
@@ -72,12 +72,12 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         }
     }
 
-    onCodeClick(code: ICProgramShortDetail): void {
+    onCodeClick(code: ICProgram): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'code', code.id]);
     }
 
 
-    onRemoveClick(code: ICProgramShortDetail): void {
+    onRemoveClick(code: ICProgram): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -120,7 +120,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         });
     }
 
-    onEditClick(code: ICProgramShortDetail): void {
+    onEditClick(code: ICProgram): void {
         if (!this.hardwareTypes) {
             this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
@@ -145,7 +145,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         });
     }
 
-    onMakeClone(code: ICProgramShortDetail): void {
+    onMakeClone(code: ICProgram): void {
         let model = new ModalsCodePropertiesModel(null, code.name, code.description, '', true, code.name, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {

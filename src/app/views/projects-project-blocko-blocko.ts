@@ -8,8 +8,8 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import {
     IProject, IBProgram, IBlockoBlockVersion, IHardwaresForBlocko, IBProgramVersion, IBPair, IMProject, IMProgramSnapShot,
-    IMProjectSnapShot, IBlockoBlockVersionShortDetail, IHardwareShortDetail, IBProgramVersionShortDetail,
-    IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko, ICProgramShortDetailForBlocko,
+    IMProjectSnapShot, IBlockoBlockVersionShortDetail, IHardware, IBProgramVersionShortDetail,
+    IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko, ICProgramForBlocko,
     ITypeOfBlockList,
     IBlockoBlockShortDetail, ITypeOfBlockShortDetail, IHardwareGroup, IHardwareGroup, IGroupPair
 } from '../backend/TyrionAPI';
@@ -67,7 +67,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     allBoardsDetails: IHardwaresForBlocko = null;
 
-    boardById: { [id: string]: IHardwareShortDetail } = {};
+    boardById: { [id: string]: IHardware } = {};
 
     selectedHardware: IHardwareGroup[] = [];
 
@@ -370,7 +370,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     break;
                 }
                 case 'group': {
-                    let cPrograms: ICProgramShortDetailForBlocko[] = [];
+                    let cPrograms: ICProgramForBlocko[] = [];
                     params.data.type_of_boards_short_detail.forEach((t: ITypeOfBlockShortDetail) => {
                         this.getCProgramsForBoardType(t.id).forEach((c) => {
                             cPrograms.push(c);
@@ -431,7 +431,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return (Object.keys(obj).length === 0);
     }
 
-    getCProgramsForBoardType(boardTypeId: string): ICProgramShortDetailForBlocko[] {
+    getCProgramsForBoardType(boardTypeId: string): ICProgramForBlocko[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.c_programs) {
             return [];
         }
@@ -491,12 +491,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    getAllFreeMainBoards(): IHardwareShortDetail[] {
+    getAllFreeMainBoards(): IHardware[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.boards) {
             return [];
         }
         let used = this.getAllUsedHwIds();
-        let out: IHardwareShortDetail[] = [];
+        let out: IHardware[] = [];
         this.allBoardsDetails.boards.forEach((b) => {
             if (
                 NullSafe(() => this.allBoardsDetails.type_of_boards.find((tob) => tob.id === b.type_of_board_id).connectible_to_internet)
@@ -508,12 +508,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    getAllFreeSubBoards(): IHardwareShortDetail[] {
+    getAllFreeSubBoards(): IHardware[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.boards) {
             return [];
         }
         let used = this.getAllUsedHwIds();
-        let out: IHardwareShortDetail[] = [];
+        let out: IHardware[] = [];
         this.allBoardsDetails.boards.forEach((b) => {
             if (
                 !NullSafe(() => this.allBoardsDetails.type_of_boards.find((tob) => tob.id === b.type_of_board_id).connectible_to_internet)

@@ -8,11 +8,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import {
-    IUpdateProcedureMakeHardwareType,
-    IHardwareGroup, IBootLoader, IBPair, ICProgramFilter, ICProgramList, ICProgramShortDetail,
-    ICProgramShortDetailForBlocko, IHardwareType, IHardwareTypeShortDetail
-} from '../backend/TyrionAPI';
+import { IHardwareGroup, IBootLoader, IBPair, ICProgramFilter, ICProgramList, ICProgram, ICProgramForBlocko, IHardwareType } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
 import * as moment from 'moment';
