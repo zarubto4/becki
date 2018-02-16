@@ -14,7 +14,7 @@ export class ModalsCreateProcessorModel extends ModalModel {
     constructor(
         public description: string = '',
         public processor_code: string = '',
-        public processor_name: string = '',
+        public name: string = '',
         public speed: number = 0,
         public edit: boolean = false
     ) {
@@ -41,7 +41,7 @@ export class ModalsCreateProcessorComponent implements OnInit {
         this.form = this.formBuilder.group({
             'description': ['', [Validators.required, Validators.minLength(8)]],
             'processor_code': ['', [Validators.required, Validators.minLength(4)]],
-            'processor_name': ['', [Validators.required, Validators.minLength(4)]],
+            'name': ['', [Validators.required, Validators.minLength(4)]],
             'speed': [0, [Validators.required, BeckiValidators.number]]
         });
     }
@@ -49,14 +49,14 @@ export class ModalsCreateProcessorComponent implements OnInit {
     ngOnInit() {
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['processor_code'])).setValue(this.modalModel.processor_code);
-        (<FormControl>(this.form.controls['processor_name'])).setValue(this.modalModel.processor_name);
+        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.processor_name);
         (<FormControl>(this.form.controls['speed'])).setValue(this.modalModel.speed);
     }
 
     onSubmitClick(): void {
         this.modalModel.description = this.form.controls['description'].value;
         this.modalModel.processor_code = this.form.controls['processor_code'].value;
-        this.modalModel.processor_name = this.form.controls['processor_name'].value;
+        this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.speed = this.form.controls['speed'].value;
         this.modalClose.emit(true);
     }

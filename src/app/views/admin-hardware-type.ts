@@ -5,10 +5,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import {
-    IHardwareFilter, IHardwareList, IHardwareShortDetail, IProcessor, IProducer,
-    IHardwareType
-} from '../backend/TyrionAPI';
+import { IHardwareList, IProcessor, IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateProducerModel } from '../modals/create-producer';
 import { ModalsCreateProcessorModel } from '../modals/create-processor';
@@ -135,7 +132,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                 this.tyrionBackendService.processorEdit(processor.id, {
                     description: model.description,
                     processor_code: model.processor_code,
-                    processor_name: model.processor_name,
+                    name: model.name,
                     speed: model.speed
                 })
                     .then(() => {

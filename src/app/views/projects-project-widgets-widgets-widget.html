@@ -58,9 +58,9 @@
                     </div>
                 </div>
 
-                <!--<bk-form-color-picker label="Widget color" [control]="widgetForm.controls.color" [waitForTouch]="false"></bk-form-color-picker>
-                <bk-form-fa-icon-select label="Widget icon" [control]="widgetForm.controls.icon" [waitForTouch]="false"></bk-form-fa-icon-select>
-                <bk-form-input label="Widget description" [control]="wifgrtForm.controls.description" [waitForTouch]="false"></bk-form-input>-->
+                <!--<bk-form-color-picker [label]="Widget color" [control]="widgetForm.controls.color" [waitForTouch]="false"></bk-form-color-picker>
+                <bk-form-fa-icon-select [label]="Widget icon" [control]="widgetForm.controls.icon" [waitForTouch]="false"></bk-form-fa-icon-select>
+                <bk-form-input [label]="Widget description" [control]="wifgrtForm.controls.description" [waitForTouch]="false"></bk-form-input>-->
 
                 <div class="form-group">
                     <bk-monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" [typings]="['ES5', 'ConsoleLib', 'ContextLib', 'UtilsLib', 'WKLib']"></bk-monaco-editor>

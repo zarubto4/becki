@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-select [control]="form.controls.logLevel" label="{{'label_logLevel'|bkTranslate:this}}" placeholder="{{'placeholder_info_level'|bkTranslate:this}}"
+            <bk-form-select [control]="form.controls.logLevel" [label]="{{'label_logLevel'|bkTranslate:this}}" placeholder="{{'placeholder_info_level'|bkTranslate:this}}"
                 [options]="logLeveloptions" [regexFirstOption]="modalModel.logLevel"></bk-form-select>
         </form>
     </div>

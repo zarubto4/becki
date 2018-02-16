@@ -6,16 +6,16 @@
     <div class="modal-body">
 
         <form [formGroup]="form">
-            <bk-form-input label="{{'label_name'|bkTranslate:this}}" [control]="form.controls['name']"></bk-form-input>
-            <bk-form-input label="{{'label_icon'|bkTranslate:this}}" [control]="form.controls['awesome_icon']"></bk-form-input>
-            <bk-form-input label="{{'label_description'|bkTranslate:this}}" [control]="form.controls['description']"></bk-form-input>
+            <bk-form-input [label]="{{'label_name'|bkTranslate:this}}" [control]="form.controls['name']"></bk-form-input>
+            <bk-form-input [label]="{{'label_icon'|bkTranslate:this}}" [control]="form.controls['awesome_icon']"></bk-form-input>
+            <bk-form-input [label]="{{'label_description'|bkTranslate:this}}" [control]="form.controls['description']"></bk-form-input>
             <hr>
-            <bk-form-input label="{{'label_identifier'|bkTranslate:this}}" [control]="form.controls['identifier']"></bk-form-input>
+            <bk-form-input [label]="{{'label_identifier'|bkTranslate:this}}" [control]="form.controls['identifier']"></bk-form-input>
             <br>
             <hr>
-            <bk-form-input label="{{'label_color'|bkTranslate:this}}" [placeholder]="" [control]="form.controls['color']"></bk-form-input>
+            <bk-form-input [label]="{{'label_color'|bkTranslate:this}}" [placeholder]="" [control]="form.controls['color']"></bk-form-input>
             <br>
-            <bk-form-input label="{{'label_credit_for_beginning'|bkTranslate:this}}" placeholder="green-dark" [control]="form.controls['credit_for_beginning']"></bk-form-input>
+            <bk-form-input [label]="{{'label_credit_for_beginning'|bkTranslate:this}}" placeholder="green-dark" [control]="form.controls['credit_for_beginning']"></bk-form-input>
             <br>
             <div>
                 <label>{{'label_company_details_required'|bkTranslate:this}}</label>

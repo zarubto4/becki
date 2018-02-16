@@ -6,7 +6,7 @@
     <div class="modal-body">
         <form [formGroup]="form">
             <input type="checkbox"  name="{{'checkbox_email'|bkTranslate:this}}" (change)="checkboxChanged($event.target['value'])">
-            <bk-form-input (disabled)="differentEmail" [control]="form.controls.email" label="{{'label_email'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input (disabled)="differentEmail" [control]="form.controls.email" [label]="{{'label_email'|bkTranslate:this}}"></bk-form-input>
 
         </form>
     </div>

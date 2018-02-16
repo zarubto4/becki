@@ -30,7 +30,7 @@
 
             <div>
 
-                <bk-form-select [control]="form.controls.permission" label="{{'label_permission'|bkTranslate:this}}"
+                <bk-form-select [control]="form.controls.permission" [label]="{{'label_permission'|bkTranslate:this}}"
                                 [options]="permission_options"></bk-form-select>
                 <button type="button" class="btn grey full-width" (click)="onAddClick()">{{'btn_add_more'|bkTranslate:this}}</button>
             </div>

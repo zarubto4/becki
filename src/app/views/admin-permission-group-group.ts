@@ -5,7 +5,7 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IPermission, IPersonMiddleDetail, ISecurityRole } from '../backend/TyrionAPI';
+import {IPermission, IPerson, IRole} from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPermissionGroupModel } from '../modals/permission-group';
@@ -23,7 +23,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
 
     id: string;
 
-    securityRole: ISecurityRole = null;
+    securityRole: IRole = null;
 
     routeParamsSubscription: Subscription;
 
@@ -48,7 +48,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
     refresh(): void {
         this.blockUI();
         Promise.all<any>([this.tyrionBackendService.roleGet(this.id)])
-            .then((values: [ISecurityRole]) => {
+            .then((values: [IRole]) => {
                 this.securityRole = values[0];
                 this.unblockUI();
             })
@@ -100,7 +100,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
         });
     }
 
-    onPersonClick(person: IPersonMiddleDetail) {
+    onPersonClick(person: IPerson) {
         // TODO stránka uživatele
     }
 
@@ -123,8 +123,8 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
             });
     }
 
-    onMemberDeleteClick(member: IPersonMiddleDetail) {
-        if ((this.tyrionBackendService.personInfoSnapshot.mail === member.mail) || (this.tyrionBackendService.personInfoSnapshot.id === member.id)) {
+    onMemberDeleteClick(member: IPerson) {
+        if ((this.tyrionBackendService.personInfoSnapshot.email === member.email) || (this.tyrionBackendService.personInfoSnapshot.id === member.id)) {
             this.fmError(this.translate('label_cannot_remove_yourself'));
         }
 
@@ -177,7 +177,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.permissionEdit(permission.permission_key, {
+                this.tyrionBackendService.permissionEdit(permission.name, {
                     description: model.description,
                 })
                     .then(() => {
@@ -192,10 +192,10 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
     }
 
     onPermissionDeleteClick(permission: IPermission) {
-        this.modalService.showModal(new ModalsRemovalModel(permission.permission_key)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(permission.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.roleRemovePermission(this.id, permission.permission_key)
+                this.tyrionBackendService.roleRemovePermission(this.id, permission.name)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI

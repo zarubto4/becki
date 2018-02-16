@@ -6,10 +6,10 @@
     <div class="modal-body">
         <form [formGroup]="form">
 
-            <bk-form-input [control]="form.controls.name" label="{{'label_widget_name'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" label="{{'label_widget_description'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.name" [label]="{{'label_widget_name'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" [label]="{{'label_widget_description'|bkTranslate:this}}"></bk-form-input>
 
-            <bk-form-select [control]="form.controls.type_of_widget" label="{{'label_type_of_widget'|bkTranslate:this}}"
+            <bk-form-select [control]="form.controls.type_of_widget" [label]="{{'label_type_of_widget'|bkTranslate:this}}"
                             [options]="options"></bk-form-select>
         </form>
     </div>

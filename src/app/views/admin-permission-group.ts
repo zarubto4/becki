@@ -5,7 +5,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IRoleShortDetai } from '../backend/TyrionAPI';
+import { IRole } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPermissionGroupModel } from '../modals/permission-group';
@@ -16,7 +16,7 @@ import { ModalsPermissionGroupModel } from '../modals/permission-group';
 })
 export class RoleGroupComponent extends BaseMainComponent implements OnInit {
 
-    securityRole: IRoleShortDetai[] = null;
+    securityRole: IRole[] = null;
 
     constructor(injector: Injector) {
         super(injector);
@@ -30,7 +30,7 @@ export class RoleGroupComponent extends BaseMainComponent implements OnInit {
         this.blockUI();
 
         Promise.all<any>([this.tyrionBackendService.roleGetAll()])
-            .then((values: [IRoleShortDetai[]]) => {
+            .then((values: [IRole[]]) => {
                 this.securityRole = values[0];
                 this.unblockUI();
             })
@@ -59,11 +59,7 @@ export class RoleGroupComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onRoleClick(role: string): void {
-        this.navigate(['admin/permission-group/', role]);
-    }
-
-    onRoleEditClick(role: IRoleShortDetai): void {
+    onRoleEditClick(role: IRole): void {
         let model = new ModalsPermissionGroupModel(role.name, role.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -82,7 +78,7 @@ export class RoleGroupComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onRoleRemoveClick(role: IRoleShortDetai): void {
+    onRoleRemoveClick(role: IRole): void {
         this.modalService.showModal(new ModalsRemovalModel(role.name)).then((success) => {
             if (success) {
                 this.blockUI();

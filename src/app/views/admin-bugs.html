@@ -1,6 +1,6 @@
 <bk-layout-main
 
-    [tabMenu]="byzance-admin"
+    [tabMenu]="'byzance-admin'"
     [title]="'main_title'|bkTranslate:this"
     [subtitle]="'main_subtitle'|bkTranslate:this">
 
@@ -41,7 +41,7 @@
                         <tbody>
                         <tr *ngFor="let bug of bugs">
 
-                            <td class="no-wrap bold vert-align"><a (click)="onBugClick(bug)">{{bug.summary}}</a></td>
+                            <td class="no-wrap bold vert-align"><a (click)="onBugClick(bug)">{{bug.cause_message}}</a></td>
 
                             <td class="vert-align">{{bug.created|bkUnixTimeToDate}}</td>
 

@@ -6,39 +6,39 @@
     <div class="modal-body">
         <form [formGroup]="form">
 
-            <bk-form-input *ngIf="form.controls['company_name']" [control]="form.controls['company_name']" label=" {{'label_company_name'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input *ngIf="form.controls['company_name']" [control]="form.controls['company_name']" [label]=" {{'label_company_name'|bkTranslate:this}}"></bk-form-input>
 
             <div class="row">
                 <div class="col-md-8">
                     <bk-form-input [control]="form.controls['street']" [label]="'label_street'|bkTranslate:this"></bk-form-input>
                 </div>
                 <div class="col-md-4">
-                    <bk-form-input [control]="form.controls['street_number']" label=" {{'label_street_number'|bkTranslate:this}}"></bk-form-input>
+                    <bk-form-input [control]="form.controls['street_number']" [label]=" {{'label_street_number'|bkTranslate:this}}"></bk-form-input>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-9">
-                    <bk-form-input [control]="form.controls['city']" label=" {{'label_city'|bkTranslate:this}}"></bk-form-input>
+                    <bk-form-input [control]="form.controls['city']" [label]=" {{'label_city'|bkTranslate:this}}"></bk-form-input>
                 </div>
                 <div class="col-md-3">
-                    <bk-form-input [control]="form.controls['zip_code']" label=" {{'label_zip_code'|bkTranslate:this}}"></bk-form-input>
+                    <bk-form-input [control]="form.controls['zip_code']" [label]=" {{'label_zip_code'|bkTranslate:this}}"></bk-form-input>
                 </div>
             </div>
 
 
-            <bk-form-select (change)="checkInEu()" [control]="form.controls['country']" label=" {{'label_country'|bkTranslate:this}}" [options]="optionsCountryList"></bk-form-select>
+            <bk-form-select (change)="checkInEu()" [control]="form.controls['country']" [label]=" {{'label_country'|bkTranslate:this}}" [options]="optionsCountryList"></bk-form-select>
 
-            <bk-form-input *ngIf="form.controls['company_registration_no'] && !inEu" [control]="form.controls['company_registration_no']" label=" {{'label_registration_number'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input *ngIf="form.controls['company_vat_number'] && inEu" [control]="form.controls['company_vat_number']" label=" {{'label_vat_number'|bkTranslate:this}}"></bk-form-input>
-
-            <hr>
-            <bk-form-input *ngIf="form.controls['company_web']" [control]="form.controls['company_web']" type="url" label="{{'label_company_web'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input *ngIf="form.controls['company_registration_no'] && !inEu" [control]="form.controls['company_registration_no']" [label]=" {{'label_registration_number'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input *ngIf="form.controls['company_vat_number'] && inEu" [control]="form.controls['company_vat_number']" [label]=" {{'label_vat_number'|bkTranslate:this}}"></bk-form-input>
 
             <hr>
-            <bk-form-input *ngIf="form.controls['invoice_email']" [control]="form.controls['invoice_email']" label=" {{'label_invoice_email'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input *ngIf="form.controls['company_authorized_email']" [control]="form.controls['company_authorized_email']" type="email" label="{{'label_company_email'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input *ngIf="form.controls['company_authorized_phone']" [control]="form.controls['company_authorized_phone']" type="tel" label="{{'label_company_phone'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input *ngIf="form.controls['company_web']" [control]="form.controls['company_web']" type="url" [label]="{{'label_company_web'|bkTranslate:this}}"></bk-form-input>
+
+            <hr>
+            <bk-form-input *ngIf="form.controls['invoice_email']" [control]="form.controls['invoice_email']" [label]=" {{'label_invoice_email'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input *ngIf="form.controls['company_authorized_email']" [control]="form.controls['company_authorized_email']" type="email" [label]="{{'label_company_email'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input *ngIf="form.controls['company_authorized_phone']" [control]="form.controls['company_authorized_phone']" type="tel" [label]="{{'label_company_phone'|bkTranslate:this}}"></bk-form-input>
 
         </form>
     </div>

@@ -117,27 +117,31 @@ export abstract class BaseMainComponent {
 
 // -- ON CLIC ----------------------------------------------------------------------------------------------------------------
 
-    onProjectClick(project_id: string): void {
+    public onRoleClick(role_id: string): void {
+        this.navigate(['admin/permission-group/', role_id]);
+    }
+
+    public onProjectClick(project_id: string): void {
         this.navigate(['/projects', project_id]);
     }
 
-    onProductClick(product_id: string): void {
+    public onProductClick(product_id: string): void {
         this.router.navigate(['/financial', product_id]);
     }
 
-    onProducerClick(producer_id: string): void {
+    public onProducerClick(producer_id: string): void {
         this.navigate(['/producers', producer_id]);
     }
 
-    onHardwareTypeClick(hardware_id: string): void {
+    public onHardwareTypeClick(hardware_id: string): void {
         this.navigate(['/hardware', hardware_id]);
     }
 
-    onInstanceClick(instance_id: string) {
+    public onInstanceClick(instance_id: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'instances', instance_id]);
     }
 
-    onBlockoProgramClick(b_program_id: string) {
+    public onBlockoProgramClick(b_program_id: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', b_program_id]);
     }
 
