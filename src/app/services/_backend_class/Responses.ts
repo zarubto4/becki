@@ -146,8 +146,25 @@ export class InvalidBody extends Error {
     name = 'Response_InvalidBody';
     message: string = null;
 
-    public static fromRestResponse(response: RestResponse): BadRequest {
-        return new BadRequest(response);
+    public static fromRestResponse(response: RestResponse): InvalidBody {
+        return new InvalidBody(response);
+    }
+
+    constructor(response: RestResponse) {
+        super(response.body['message']);
+        this.message = response.body['message'];
+    }
+}
+
+// 400 - InvalidBody - Probably Message only for developers
+export class UnsupportedException extends Error {
+
+    code: number = 400;
+    name = 'unsupported_exception';
+    message: string = null;
+
+    public static fromRestResponse(response: RestResponse): UnsupportedException {
+        return new UnsupportedException(response);
     }
 
     constructor(response: RestResponse) {
@@ -220,7 +237,11 @@ export class InternalServerError extends Error {
 
     constructor(response: RestResponse) {
         super('Critical Server Side Error!');
-        this.message = 'Critical Server Side Error!';
+        if ( response.body['message']) {
+            this.message = response.body['message'];
+        }else {
+            this.message = 'Critical Server Side Error!';
+        }
     }
 
 }

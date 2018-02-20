@@ -11,7 +11,7 @@ import {
 } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
-import { IApplicableProduct, IProject} from '../backend/TyrionAPI';
+import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
 
 
 @Component({
@@ -20,9 +20,8 @@ import { IApplicableProduct, IProject} from '../backend/TyrionAPI';
 })
 export class ProjectsComponent extends _BaseMainComponent implements OnInit {
 
-    projects: IProject[];
-
-    products: IApplicableProduct[];
+    projects: IProject[] = null;
+    products: IApplicableProduct[] = null;
 
     constructor(injector: Injector) {
         super(injector);
@@ -51,36 +50,8 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit {
             });
     }
 
-    onTestClick(): void {
-        this.blockUIService.blockUI();
-
-        setTimeout(() => {
-            this.blockUIService.unblockUI();
-        }, 5000);
-    }
-
-    onTest2Click(): void {
-        let text = '';
-        /* tslint:disable:max-line-length */
-        switch (Math.floor(Math.random() * 4)) {
-            case 0: text = 'This is test flash message ... is this okay or its worng?'; break;
-            case 1: text = 'Cannot add project now.'; break;
-            case 2: text = 'Project created successfully ... its great ... I love it <3 :-)'; break;
-            case 3: text = 'Some really really long message. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'; break;
-        }
-        /* tslint:enable */
-        let m: FlashMessage = null;
-        switch (Math.floor(Math.random() * 4)) {
-            case 0: m = new FlashMessageError(text); break;
-            case 1: m = new FlashMessageSuccess(text); break;
-            case 2: m = new FlashMessageInfo(text); break;
-            case 3: m = new FlashMessageWarning(text); break;
-        }
-        this.notificationService.addFlashMessage(m);
-        // this.navigate(['projects', '1']);
-    }
-
     onAddClick(): void {
+
         if (!this.products) {
             this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
         }

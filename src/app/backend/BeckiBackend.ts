@@ -11,7 +11,7 @@ import { ConsoleLogType } from '../components/ConsoleLogComponent';
 import {
     BadRequest, BugFoundError, CodeCompileError,
     CodeError, InternalServerError, InvalidBody, LostConnectionError, PermissionMissingError, RestRequest, RestResponse,
-    UnauthorizedError, UserNotValidatedError
+    UnauthorizedError, UnsupportedException, UserNotValidatedError
 } from '../services/_backend_class/Responses';
 
 declare const BECKI_VERSION: string;
@@ -286,6 +286,8 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                             throw BadRequest.fromRestResponse(response);
                         } else if (response['state'] === 'invalid_body') {
                             throw InvalidBody.fromRestResponse(response);
+                        } else if (response['state'] === 'unsupported_exception') {
+                            throw UnsupportedException.fromRestResponse(response);
                         }
                         // If there is not a state - Make a Critical error for sure
                         throw InternalServerError.fromRestResponse(response);

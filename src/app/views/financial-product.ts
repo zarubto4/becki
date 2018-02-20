@@ -3,10 +3,6 @@
  * directory of this distribution.
  */
 
-/**
- * Created by dominik.krisztof on 10.11.16.
- */
-
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct } from '../backend/TyrionAPI';
@@ -21,7 +17,7 @@ import { ModalsFinancialProductModel } from '../modals/financial-product';
 })
 export class FinancialProductComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
+    product_id: string;
 
     routeParamsSubscription: Subscription;
 
@@ -35,14 +31,24 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
     ngOnInit(): void {
         this.blockUI();
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['product'];
+            this.product_id = params['product'];
             this.refresh();
             this.unblockUI();
         });
     }
 
-    onAddCreditsClick(): void {
-        alert('TODO!'); // TODO !!!
+    onPortletClick(action: string): void {
+        if (action === 'edit_product') {
+            this.onEditClick();
+        }
+
+        if (action === 'deactivate_product') {
+            this.deactivateProduct();
+        }
+
+        if (action === 'activate_product') {
+            this.activateProduct();
+        }
     }
 
     onEditClick(): void {
@@ -53,7 +59,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.productEditDetails(this.product.id, {
+                this.tyrionBackendService.productEditDetails(this.product_id, {
                     name: model.name,
                 })
                     .then(() => {
@@ -76,10 +82,10 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
         this.modalService.showModal(new ModalsDeactivateModel(this.product.name, false, this.translate('label_modal_body_text'))).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.productDeactivate(this.product.id)
+                this.tyrionBackendService.productDeactivate(this.product_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_deactivated')));
-                        this.router.navigate(['/financial']);
+                        this.onFinancleClick();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_deactivate_product'), reason));
@@ -93,7 +99,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
         this.modalService.showModal(new ModalsDeactivateModel(this.product.name, true, null)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.productActivate(this.product.id)
+                this.tyrionBackendService.productActivate(this.product_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_activated')));
                         this.refresh(); // also unblockUI
@@ -109,7 +115,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
 
     refresh(): void {
         this.blockUI();
-        this.tyrionBackendService.productGet(this.id).then(product => {
+        this.tyrionBackendService.productGet(this.product_id).then(product => {
             this.product = product;
             this.unblockUI();
         })

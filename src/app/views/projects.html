@@ -6,34 +6,36 @@
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
     <div class="portlet portlet light bordered">
 
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark uppercase">
-                    <i class="fa fa-fw fa-briefcase"></i>
-                        {{'title'|bkTranslate:this}}
-                </span>
-            </div>
-            <div class="becki-actions">
-                <button class="btn blue" (click)="onAddClick()" [disabled]="products && !products.length">
-                    <i class="fa fa-plus-circle"></i> {{'btn_add_project'|bkTranslate:this}}
-                </button>
-            </div>
-        </div>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+            [title_name]="'title'|bkTranslate:this"
+            [icon]="'fa-briefcase'"
+            (onClick)="onAddClick()"
+            [btns]="[
+                {
+                    condition: (products != null && products.length > 0 && projects != null &&  projects.length > 0),
+                    label: ('btn_add_project'|bkTranslate:this),
+                    icon: 'fa-plus-circle'
+                }
+            ]"></bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-        <div *ngIf="(projects && projects.length)" class="table-scrollable">
-            <table class="table table-hover">
+
+        <!-- Page Content -- START -->
+        <div *ngIf="projects && projects.length" class="table-scrollable">
+            <table class="table table-hover byzance-table">
                 <thead>
-                <tr>
-                    <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
-                    <th class="col col-lg-5">{{'table_description'|bkTranslate:this}}</th>
-                    <th class="col col-lg-2">{{'table_product'|bkTranslate:this}}</th>
-                    <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                </tr>
+                    <tr>
+                        <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-5">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_product'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let project of projects">
 
-                        <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
+                        <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a></td>
 
                         <td class="vert-align" *ngIf="!project.active">
                             <strong>{{project.name}}</strong>
@@ -47,12 +49,13 @@
                             <a (click)="onProductClick(project.product.id)">{{project.product.name}}</a>
                         </td>
 
-                        <td class="no-wrap text-right vert-align ">
+                        <td class="no-wrap text-right vert-align">
 
                             <style type="text/css">
                                 table tr button { opacity:0.05;}
                                 table tr:hover button { opacity:1 }
                             </style>
+
                             <button title="{{'label_Project_Properties'|bkTranslate}}" class="btn btn-icon-only blue" [disabled]="!project.update_permission || !project.active" (click)="onEditClick(project)">
                                 <i class="fa fa-cog"></i>
                             </button>
@@ -64,34 +67,27 @@
                 </tbody>
             </table>
         </div>
+        <!-- Page Content -- END -->
 
-        <h4 *ngIf="!products && !projects" class="text-center">{{'loading'|bkTranslate:this}}</h4>
-        <div *ngIf="projects && !projects.length" class="list-no-items">
-
-            <!-- if there is no products -->
-            <template [ngIf]="products && !products.length && !projects.length">
-                <p class="list-no-items__main-label">{{'label_no_product'|bkTranslate:this}}</p>
-                <p class="list-no-items__sub-label"><span [innerHTML]="'label_no_product_comment'|bkTranslate:this"></span></p>
-                <p>
-                    <button class="btn blue" (click)="onRedirectClick()">
-                        <i class="fa fa-plus-circle"></i> {{'btn_new_subscription'|bkTranslate:this}}
-                    </button>
-                </p>
-            </template>
-
-            <!-- if there is products but no projects-->
-            <template [ngIf]="products && products.length && !projects.length">
-                <p class="list-no-items__main-label">{{'label_no_projects'|bkTranslate:this}}</p>
-                <p class="list-no-items__sub-label">{{'label_no_projects_comment'|bkTranslate:this}}
-                    <p>
-                        <p>
-                            <button class="btn blue" (click)="onAddClick()" [disabled]="products && !products.length">
-                                <i class="fa fa-plus-circle"></i> {{'btn_add_project'|bkTranslate:this}}
-                            </button>
-                        </p>
-            </template>
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <!-- If User has already products, he can crate project. If Products is Empty - First Create product -->
+        <bk-nothing-to-show [condition_loading]="(products == null)"
+                            [condition_empty]="(products != null && products.length == 0)"
+                            [main_message_link]="'label_no_product'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_product_comment'|bkTranslate:this"
+                            [btn_label]="'btn_new_subscription'|bkTranslate:this"
+                            (onButtonClick)="onRedirectClick()"></bk-nothing-to-show>
 
 
-        </div>
+        <template [ngIf]="products != null && products.length > 0">
+            <bk-nothing-to-show [condition_loading]="(projects == null)"
+                                [condition_empty]="(projects != null && projects.length == 0)"
+                                [main_message_link]="'label_no_projects'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_projects_comment'|bkTranslate:this"
+                                [btn_label]="'btn_add_project'|bkTranslate:this"
+                                (onButtonClick)="onAddClick()"></bk-nothing-to-show>
+        </template>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
     </div>
 </bk-layout-main>

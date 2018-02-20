@@ -470,8 +470,8 @@ export class StaticTranslation {
                 'label_deactivated_under': 'Deactivated under',
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
-                'label_no_projects': 'There is not any project',
-                'label_no_projects_comment': 'Create your first project, program, connect hardware and start slowly control the world. <br> Step by step.',
+                'label_no_projects': '<strong class="font-color-byzance-blue">Nerds</strong> rule N.1',
+                'label_no_projects_comment': 'Create project first, connect hardware and <strong class="font-color-byzance-blue">start slowly control the world</strong>... Step by step...',
                 'label_no_product': '<strong class="font-color-hardware">Mr. Salieri</strong> likes things in order and leads an <strong class="font-color-hardware">accounting book...</strong>',
                 'label_no_product_comment': 'If you want to create a project, please create <span class="bold"> Financial product</span> first.',
                 'label_create_product_below': 'You can create it by click on button bellow.',
@@ -529,7 +529,7 @@ export class StaticTranslation {
                 'label_no_extensions': 'No Extensions found.',
                 'label_free': 'Free',
                 'no_extension': 'No Extensions',
-                'no_extension_comment': '<p>No extensions? No additional tuning? Let\'s just tell us that you\'re not making selfie to the instagram... </p> <p> Or are you Scrooge McDuck?!? </p>',
+                'no_extension_comment': '<p>No extensions? No additional tuning? Let\'s just tell us that you\'re not making selfie to the instagram... </p>',
 
             }, 'RoleGroupComponent': {
                 'main_title': 'Platform administration',
@@ -637,8 +637,8 @@ export class StaticTranslation {
                 'btn_included': 'Include',
 
             }, 'ProjectsProjectComponent': {
-                'title': 'PROJECT {0} DASHBOARD',
-                'label_project_properities': 'Project properties',
+                'title': 'Project dashboard',
+                'label_project_properties': 'Project properties',
                 'label_project_remove': 'Remove project',
                 'label_name': 'Name',
                 'label_description': 'Description',
@@ -795,10 +795,6 @@ export class StaticTranslation {
                 'title': 'Products',
                 'btn_new_subscription': 'New Subscription',
                 'label_product_list': 'Products list',
-                'label_title_bank_transfer': 'Bank transfer',
-                'label_title_credits': 'Credits',
-                'label_title_credit_card': 'Credit Card',
-                'label_title_free': 'Free',
                 'label_active': 'active',
                 'label_actions': 'Actions',
                 'label_subscription_id': 'ID',
@@ -2046,7 +2042,7 @@ export class StaticTranslation {
                 'label_no_notifications': 'No notifications.',
             },
             'NothingToShowComponent' : {
-               'loading' : 'Loading'
+                'loading' : 'Loading'
             },
             'BlockoViewComponent': {
                 'error_execution_cant_change': 'Unable to change execution status.',
@@ -2433,6 +2429,12 @@ export class StaticTranslation {
                 'absolutely_public': 'Public',
                 'private': 'Private',
                 'not_in_instance': 'Not present instance.',
+            },
+            'payment_method': {
+                'BANK_TRANSFER': 'Bank transfer',
+                'CREDIT_CARD' : 'Credits',
+                'FREE' : 'Free',
+                'NOT_SET' : 'Not yet set'
             },
             'type_of_update': {
                 'MANUALLY_BY_USER_INDIVIDUAL': 'Individual Update',

@@ -6,121 +6,127 @@
 <bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
     <div class="portlet portlet light bordered">
 
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-tachometer"></i>
-                        {{'title'|bkTranslate:this:project.name}}
-                </span>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+            [title_name]="'title'|bkTranslate:this"
+            [icon]="'fa-tachometer'"
+            (onClick)="onPortletClick($event)"
+            [btns]="[
+             {
+                  condition: (true),
+                  label: ('label_project_properties'|bkTranslate:this),
+                  icon: 'fa-cog',
+                  permission: (project && project.update_permission),
+                  colorType: 'EDIT',
+                  btn_identification: 'edit_project'
+             },
+             {
+                  condition: (true),
+                  label: ('label_project_remove'|bkTranslate:this),
+                  icon: 'fa-trash',
+                  permission: (project && project.delete_permission),
+                  colorType: 'REMOVE',
+                  btn_identification: 'remove_project'
+             }
+            ]">
+        </bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+
+        <!-- Page Content -- START -->
+        <div class="row" *ngIf="project && project.project_stats">
+
+            <div class="col-md-4">
+                <div class="portlet portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark">
+                                <i class="fa fa-fw fa-microchip"></i>
+                                <span [innerHTML]="'label_byzance_hardware'|bkTranslate:this"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.project_stats.hardware}}</strong><br> {{'label_Status'|bkTranslate:this}}:
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
             </div>
-            <div class="becki-actions">
-                <button *ngIf="project" title="{{'label_project_properities'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!project.update_permission"
-                    (click)="onEditClick()">
-                    <i class="fa fa-cog"></i>
-                </button>
-                <button *ngIf="project" title="{{'label_project_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission"
-                    (click)="onRemoveClick()">
-                    <i class="fa fa-trash"></i>
-                </button>
+
+            <div class="col-md-4">
+                <div class="portlet portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark">
+                                <i class="fa fa-fw fa-code"></i>
+                                <span [innerHTML]="'label_byzance_code'|bkTranslate:this"> </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.c_programs}}</strong>
+                        <br>
+                        {{'label_libraries_count'|bkTranslate:this}}:<strong>{{project.project_stats.libraries}}</strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="portlet portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark">
+                                <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
+                                <span [innerHTML]="'label_byzance_blocko'|bkTranslate:this"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                         {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.b_programs}}</strong>
+                         <br>
+                         {{'label_blocks_count'|bkTranslate:this}}: <strong>{{project.project_stats.blocks}}</strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="portlet portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark">
+                                <i class="fa fa-fw fa-desktop"></i>
+                                <span [innerHTML]="'label_byzance_grid'|bkTranslate:this"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.grid_projects}}</strong>
+                        <br>
+                        {{'label_widgets_count'|bkTranslate:this}}: <strong>{{project.project_stats.widgets}}</strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="portlet portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark">
+                                <i class="fa fa-fw fa-cloud"></i>
+                                <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.project_stats.instances}}</strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
             </div>
 
         </div>
-        <div *ngIf="project">
-            {{'label_name'|bkTranslate:this}}: <strong>{{project.name}}</strong><br> {{'label_description'|bkTranslate:this}}:
-            <strong>{{project.description}}</strong><br>
-            <br> {{'label_product'|bkTranslate:this}}: <strong>{{project.product.name}}</strong>
-        </div>
+        <!-- Page Content -- END -->
+
+
     </div>
-
-    <div class="row" *ngIf="project && project.project_stats">
-
-        <div class="col-md-4">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-microchip"></i>
-                            <span [innerHTML]="'label_byzance_hardware'|bkTranslate:this"></span>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.project_stats.hardware}}</strong><br> {{'label_Status'|bkTranslate:this}}:
-                </div>
-                <div class="clearfix"></div>
-            </div>
-
-        </div>
-
-        <div class="col-md-4">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-code"></i>
-                            <span [innerHTML]="'label_byzance_code'|bkTranslate:this"> </span>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.c_programs}}</strong>
-                    <br>
-                    {{'label_libraries_count'|bkTranslate:this}}:<strong>{{project.project_stats.libraries}}</strong>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
-                            <span [innerHTML]="'label_byzance_blocko'|bkTranslate:this"></span>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                     {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.b_programs}}</strong>
-                     <br>
-                     {{'label_blocks_count'|bkTranslate:this}}: <strong>{{project.project_stats.blocks}}</strong>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-desktop"></i>
-                            <span [innerHTML]="'label_byzance_grid'|bkTranslate:this"></span>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.grid_projects}}</strong>
-                    <br>
-                    {{'label_widgets_count'|bkTranslate:this}}: <strong>{{project.project_stats.widgets}}</strong>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-cloud"></i>
-                            <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.project_stats.instances}}</strong>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-
 </bk-layout-main>

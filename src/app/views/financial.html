@@ -5,19 +5,22 @@
  -->
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
     <div class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark uppercase">
-                    <i class="fa fa-fw fa-dollar"></i>
-                   {{'label_product_list'|bkTranslate:this}}
-                </span>
-            </div>
-            <div class="becki-actions">
-                <button *ngIf="(products && products.length > 0)" class="btn blue" (click)="onAddProductClick()">
-                    <i class="fa fa-plus-circle"></i> {{'btn_new_subscription'|bkTranslate:this}}
-                </button>
-            </div>
-        </div>
+
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+            [title_name]="'label_product_list'|bkTranslate:this"
+            [icon]="'fa-dollar'"
+            (onClick)="onAddProductClick()"
+            [btns]="[
+                {
+                    condition: (products && products.length > 0),
+                    label: ('btn_new_subscription'|bkTranslate:this),
+                    icon: 'fa-plus-circle'
+                }
+            ]"></bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+        <!-- Page Content -- START -->
         <div *ngIf="(products && products.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
@@ -34,58 +37,47 @@
                     <tr *ngFor="let product of products">
                         <td class="vert-align no-wrap">
                             <a (click)="onProductClick(product.id)"><b>{{product.name}}</b></a>
-                            <span *ngIf="product.active==true" class="font-green-jungle">({{'label_active'|bkTranslate:this}})</span>
-                            <span *ngIf="product.active==false" class="font-red">({{'label_hibernation'|bkTranslate:this}})</span>
+                            <span *ngIf="product.active" class="font-green-jungle">({{'label_active'|bkTranslate:this}})</span>
+                            <span *ngIf="!product.active" class="font-red">({{'label_hibernation'|bkTranslate:this}})</span>
 
                             <!-- Add independent Icon with status -->
-                            <span *ngIf="product.active==false" class="icon-hint-wraper red">
+                            <span *ngIf="!product.active" class="icon-hint-wraper red">
                               <i class="fa fa-exclamation-triangle font-red-mint"></i>
                               <span class="hint">{{[product.active.toString()]|bkTranslateTable:this:'productStatusTranslate'}}</span>
                             </span>
 
                         </td>
                         <td class="vert-align no-wrap">
-                            <span *ngIf="product.client_billing==true" class="font-blue-chambray">({{'label_client_billing'|bkTranslate:this}})</span>
-                            <span *ngIf="product.client_billing==false" class="font-blue-chambray">({{'label_client_private'|bkTranslate:this}})</span>
+                            <span *ngIf="product.client_billing" class="font-blue-chambray">({{'label_client_billing'|bkTranslate:this}})</span>
+                            <span *ngIf="!product.client_billing" class="font-blue-chambray">({{'label_client_private'|bkTranslate:this}})</span>
                         </td>
                         <td class="vert-align">
-                            <span *ngIf="product.client_billing==true" class="font-blue-chambray bold">{{product.payment_details.company_name}}</span>
+                            <span *ngIf="product.client_billing" class="font-blue-chambray bold">{{product.payment_details.company_name}}</span>
                         </td>
 
                         <td class="vert-align no-wrap ">
-                            <span title="{{'label_title_bank_transfer'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='bank_transfer'"> <!-- title jsou schválně ponecaný eng -->
-                                <i class="fa fa-lg fa-fw fa-exchange"> </i> {{'label_bank_transfer'|bkTranslate:this}}
-                            </span>
-                            <span title="{{'label_title_credits'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='credit'">
-                             <i class="fa fa-lg fa-fw fa-money" > </i> {{'label_credits'|bkTranslate:this}}
-                            </span>
-                            <span title="{{'label_title_credit_card'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='credit_card'">
-                                <i class="fa fa-lg fa-fw fa-credit-card"></i> {{'label_credit_card'|bkTranslate:this}}
-                            </span>
-                            <span title="{{'label_title_free'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='free'">
-                             <i class="fa fa-lg fa-fw fa-hand-peace-o"></i> {{'label_free'|bkTranslate:this}}
-                            </span>
-                            <span title="{{'label_title_free'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='Not set yet'">
-                                <i class="fa fa-lg fa-fw fa-question"></i> {{'label_not_set_yet'|bkTranslate:this}}
-                            </span>
+                            <bk-payment-method-component [method]="product.method"></bk-payment-method-component>
                         </td>
                         <td class="vert-align">{{product.subscription_id}}</td>
                         <td class="vert-align text-right">
-                            <button (click)="onEditClick(product)" [disabled]="product.edit" title="Settings" class="btn green btn-icon-only white">
-                          <i class="fa fa-gear"></i>
-                      </button>
+                            <button (click)="onEditClick(product)" [disabled]="product.update_permission" title="Settings" class="btn green btn-icon-only white">
+                                <i class="fa fa-gear"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <strong class="font-color-hardware">Mr. Salieri</strong> likes things in order and leads an <strong class="font-color-hardware">accounting book...</strong>
+        <!-- Page Content -- END -->
 
-        <bk-nothing-to-show [condition_loading]="products"
-                            [condition_empty]="products && products.length"
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(products == null)"
+                            [condition_empty]="(products != null && products.length == 0)"
                             [main_message_link]="'label_no_product'|bkTranslate:this"
                             [main_message_comment_link]="'label_no_product_comment'|bkTranslate:this"
                             [btn_label]="'btn_new_subscription'|bkTranslate:this"
                             (onButtonClick)="onAddProductClick()"></bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
     </div>
 </bk-layout-main>

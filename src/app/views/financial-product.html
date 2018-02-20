@@ -4,107 +4,103 @@
  */
  -->
 
-<bk-layout-main [tabMenu]="'tariffs-tariff'" [title]="product?product.name:null">
-    <div class="tabbable-line tabbable-full-width">
-        <div class="portlet light bordered">
-            <div *ngIf="product" class="row">
-                <div class="col-md-12">
-                    <div class="portlet portlet light bordered">
-                        <div class="portlet-title">
-                            <div class="becki-caption">
-                                <span class="font-blue-dark"><i class="fa fa-fw fa-tachometer"></i>
-                                    {{'title'|bkTranslate:this}}
-                                </span>
-                            </div>
-                            <div class="becki-actions">
+<bk-layout-main
+    [tabMenu]="'tariffs-tariff'"
+    [title]="product?product.name:null">
+    <div class="portlet portlet light bordered">
 
-                                <button title="{{'label_financial_product_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onEditClick()">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button *ngIf="product.active" title="{{'label_deactivate_product'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="deactivateProduct()">
-                                    <i class="fa fa-stop-circle"></i>
-                                </button>
-                                <button *ngIf="!product.active" title="{{'label_activate_product'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="activateProduct()">
-                                    <i class="fa fa-cloud-upload"></i>
-                                </button>
 
-                                <button *ngIf="product.payment_mode == 'per_credit'" class="btn blue" (click)="onAddCreditsClick()">
-                                    <i class="fa fa-plus-circle"></i> {{'btn_add_credit'|bkTranslate:this}}
-                                </button>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+            [title_name]="'title'|bkTranslate:this"
+            [icon]="'fa-tachometer'"
+            (onClick)="onPortletClick($event)"
+            [btns]="[
+                                {
+                                    condition: (true),
+                                    label: ('label_financial_product_properties'|bkTranslate:this),
+                                    icon: 'fa-cog',
+                                    colorType: 'DEACTIVE',
+                                    btn_identification: 'edit_product'
+                                },
+                                {
+                                    condition: (!product.active),
+                                    label: ('label_deactivate_product'|bkTranslate:this),
+                                    icon: 'fa-stop-circl',
+                                    colorType: 'DEACTIVE',
+                                    btn_identification: 'deactivate_product'
+                                },
+                                {
+                                    condition: (!product.active),
+                                    label: ('label_activate_product'|bkTranslate:this),
+                                    icon: 'fa-cloud-upload',
+                                    colorType: 'ACTIVE',
+                                    btn_identification: 'activate_product'
+                                },
+                                {
+                                    condition: (product.method == 'CREDIT'),
+                                    label: ('btn_add_credit'|bkTranslate:this),
+                                    icon: 'fa-plus-circle',
+                                    btn_identification: 'add_credit'
+                                }
+                        ]">
+        </bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-                            </div>
-                        </div>
-
-                        <div *ngIf="product" class="row">
-
-                            <div class="col-md-6">
-
-                                <div>
-                                    <H4>{{'label_core_details'|bkTranslate:this}}:</H4>
-                                </div>
-
-                                <div>
-                                    {{'label_id_subscription'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{product.subscription_id}}</span>
-                                </div>
-                                <div>
-                                    {{'label_created'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{product.created|bkUnixTimeToDate}}</span>
-                                </div>
-                                <div>
-                                    {{'label_plan'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{product.payment_method|bkStringReplacer}}</span>
-                                </div>
-
-                                <div>
-                                    {{'label_status'|bkTranslate:this}}:
-                                    <span *ngIf="product.active" class="font-green-jungle">{{'option_active'|bkTranslate:this}}</span>
-                                    <span *ngIf="!product.active" class="font-red">{{'option_hibernation'|bkTranslate:this}}</span>
-                                    <span *ngIf="!product.active" class="icon-hint-wraper red"> <i class="fa fa-exclamation-triangle font-red-mint"></i>
-                                      <span class="hint">{{[product.active.toString()]|bkTranslate:this}}</span>
+        <!-- Page Content -- START -->
+        <div *ngIf="product" class="row">
+            <div class="col-md-6">
+                <div>
+                    <H4>{{'label_core_details'|bkTranslate:this}}:</H4>
+                </div>
+                <div>
+                    {{'label_id_subscription'|bkTranslate:this}}:
+                    <span class="font-grey-mint bold">{{product.subscription_id}}</span>
+                </div>
+                <div>
+                    {{'label_created'|bkTranslate:this}}:
+                    <span class="font-grey-mint bold">{{product.created|bkUnixTimeToDate}}</span>
+                </div>
+                <div>
+                    {{'label_plan'|bkTranslate:this}}:
+                    <span class="font-grey-mint bold">{{product.method|bkStringReplacer}}</span>
+                </div>
+                <div>
+                    {{'label_status'|bkTranslate:this}}:
+                    <span *ngIf="product.active" class="font-green-jungle">{{'option_active'|bkTranslate:this}}</span>
+                    <span *ngIf="!product.active" class="font-red">{{'option_hibernation'|bkTranslate:this}}</span>
+                    <span *ngIf="!product.active" class="icon-hint-wraper red">
+                                        <i class="fa fa-exclamation-triangle font-red-mint"></i>
+                                        <span class="hint">{{[product.active.toString()]|bkTranslate:this}}</span>
                                     </span>
-                                </div>
-
-                                <br><br>
-
-                                <div>
-                                    <H4>{{'label_financial_status'|bkTranslate:this}}:</H4>
-                                </div>
-
-                                <div>
-                                    {{'label_remaining_credit'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{product.remaining_credit}}</span>
-                                </div>
-
-
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <div>
-                                    <H4>{{'label_other_details'|bkTranslate:this}}:</H4>
-                                </div>
-
-                                <div *ngIf="product.client_billing" >
-                                    {{'label_billing_mode'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">Client Billing</span> -> <span class="font-red-flamingo bold">{{product.payment_details.company_name}}</span>
-                                </div>
-                                <div *ngIf="!product.client_billing" >
-                                    {{'label_billing_mode'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">Private Billing</span>
-                                </div>
-
-                                <br>
-                                <br>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                </div>
+                <br>
+                <br>
+                <div>
+                    <H4>{{'label_financial_status'|bkTranslate:this}}:</H4>
+                </div>
+                <div>
+                    {{'label_remaining_credit'|bkTranslate:this}}:
+                    <span class="font-grey-mint bold">{{product.remaining_credit}}</span>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div>
+                    <H4>{{'label_other_details'|bkTranslate:this}}:</H4>
+                </div>
+                <div *ngIf="product.client_billing" >
+                    {{'label_billing_mode'|bkTranslate:this}}:
+                    <span class="font-grey-mint bold">Client Billing</span> -> <span class="font-red-flamingo bold">{{product.payment_details.company_name}}</span>
+                </div>
+                <div *ngIf="!product.client_billing" >
+                    {{'label_billing_mode'|bkTranslate:this}}:
+                    <span class="font-grey-mint bold">Private Billing</span>
+                </div>
+                <br>
+                <br>
+            </div>
         </div>
+        <!-- Page Content -- END -->
+
     </div>
 </bk-layout-main>

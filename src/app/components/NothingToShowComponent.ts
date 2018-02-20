@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 
 @Component({
@@ -14,7 +14,7 @@ import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
                 <span [innerHTML]="main_message_comment_link"></span>
             </p>
             <p>
-                <button class="btn blue" (click)="onNothingToShowClick()">
+                <button *ngIf="show_button" class="btn blue" (click)="onNothingToShowClick()">
                     <i class="fa fa-plus-circle"></i> {{btn_label}}
                 </button>
             </p>
@@ -38,6 +38,9 @@ export class NothingToShowComponent {
 
     @Input()
     btn_label: string = 'NOT SET!';
+
+    @Input()
+    show_button: boolean = true;
 
     @Output('onButtonClick')
     onButtonClick: EventEmitter<any> = new EventEmitter<any>();

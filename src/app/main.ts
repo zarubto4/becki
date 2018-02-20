@@ -183,6 +183,8 @@ import { BeckiClickOutsideDirective } from './helpers/ClickDetection';
 import { ModalsCodeSelectComponent } from './modals/code-select';
 import { BeckiBooleanButtonComponent } from './components/BooleanButtonComponent';
 import { NothingToShowComponent } from './components/NothingToShowComponent';
+import { PortletTitleComponent } from './components/PortletTitleComponent';
+import { PaymentMethodComponent } from './components/PaymentMehtodComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -486,6 +488,8 @@ class BeckiErrorHandler implements ErrorHandler {
         TypeOfUpdateComponent,
         TimeZoneSelectorComponent,
         NothingToShowComponent,
+        PortletTitleComponent,
+        PaymentMethodComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
