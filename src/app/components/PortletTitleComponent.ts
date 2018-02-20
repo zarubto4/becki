@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
                             [class.purple-plum]="element.colorType=='DEACTIVE'"
                             [class.blue]="element.colorType=='ADD'" 
                             [class.blue]="element.colorType=='CREATE'"
+                            [class.grey-cascade]="element.colorType==''||element.colorType==null"
                             (click)="onClickButton(element.label)">
                         <i class="fa {{element.icon}}"></i> {{element.label}}
                     </button>

@@ -643,6 +643,8 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_product': 'Financial Product',
+                'label_no_project_stats': '<i class="fa fa-3x fa-spinner fa-spin"></i>',
+                'label_no_project_stats_comment': 'We Collecting all <strong class="font-color-byzance-blue">Project</strong> data and stats.. And of course you do not have to wait.',
                 'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
                 'label_byzance_hardware_update': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> Updates',
                 'label_byzance_blocko': 'Byzance<strong class="font-color-blocko">BLOCKO</strong>',
@@ -1478,15 +1480,16 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectMembersComponent': {
 
-                'project_members_title': 'Project members',
+                'title': 'Project members',
 
-                'btn_add_members': 'Add collaborators',
+                'btn_add_members': 'Invite collaborators',
 
                 'table_name': 'Name',
                 'table_state': 'Description',
                 'table_actions': 'Actions',
 
-                'no_persons_in_this_projects': 'No collaborators in this project.',
+                'no_persons_in_this_projects': 'Forever <strong class="font-color-byzance-blue">Alone?</strong>',
+                'no_persons_in_this_projects_comment': 'It can be easily changed. <strong>Invite your mom</strong>, colleague or anyone you want.',
 
                 'modal_label_invitation': 'Invitation',
                 'modal_label_invitation_send': 'Invitation E-mail was sent to {0}.',

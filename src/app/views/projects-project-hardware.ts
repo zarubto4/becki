@@ -11,7 +11,8 @@ import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
     IProject, IHardware, IHardwareList, IHardwareGroup, IHardwareUpdate,
-    IActualizationProcedureTaskList, ICProgram, IBootLoader, IActualizationProcedureList, IUpdateProcedure
+    IActualizationProcedureTaskList, ICProgram, IBootLoader, IActualizationProcedureList, IUpdateProcedure,
+    IHardwareGroupList
 } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -33,7 +34,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
 
     devicesFilter: IHardwareList = null;
-    deviceGroup: IHardwareGroup[] = null;
+    deviceGroup: IHardwareGroupList = null;
     actualizationFilter: IActualizationProcedureList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
@@ -74,7 +75,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         this.tab = tab;
 
         if (tab === 'hardware_groups' && this.deviceGroup == null) {
-            this.onHardwareGroupRefresh();
+            this.onFilterHardwareGroup();
         }
 
         if (tab === 'updates' && this.actualizationFilter == null) {
@@ -82,6 +83,8 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         }
 
     }
+
+// Hardware   ----------------------------------------------------------------------------------------------------------
 
     onHardwareEditClick(device: IHardware): void {
         let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
@@ -134,7 +137,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         } else {
             let model = new ModalsAddHardwareModel(this.projectId, this.deviceGroup);
             this.modalService.showModal(model).then((success) => {
-                this.onHardwareGroupRefresh();
+                this.onFilterHardwareGroup();
                 this.onFilterHardware();
                 this.unblockUI();
             }).catch((reason) => {
@@ -143,7 +146,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             });
         }
     }
-
 
     onDeviceEditGroupClick(device: IHardware) {
         if (this.deviceGroup == null) {
@@ -171,19 +173,21 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     })
                         .then(() => {
                             this.unblockUI();
-                            this.onHardwareGroupRefresh();
+                            this.onFilterHardwareGroup();
                             this.onFilterHardware();
                         })
                         .catch(reason => {
                             this.unblockUI();
                             this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
-                            this.onHardwareGroupRefresh();
+                            this.onFilterHardwareGroup();
                             this.onFilterHardware();
                         });
                 }
             });
         }
     }
+
+// Hardware Group  -----------------------------------------------------------------------------------------------------
 
     onGroupAddClick(): void {
         let model = new ModalsHardwareGroupPropertiesModel();
@@ -197,7 +201,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 })
                     .then(() => {
                         this.unblockUI();
-                        this.onHardwareGroupRefresh();
+                        this.onFilterHardwareGroup();
                     })
                     .catch(reason => {
                         this.unblockUI();
@@ -218,7 +222,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 })
                     .then(() => {
                         this.unblockUI();
-                        this.onHardwareGroupRefresh();
+                        this.onFilterHardwareGroup();
                     })
                     .catch(reason => {
                         this.unblockUI();
@@ -235,18 +239,21 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.tyrionBackendService.hardwareGroupDelete(group.id)
                     .then(() => {
                         this.unblockUI();
-                        this.onHardwareGroupRefresh();
+                        this.onFilterHardwareGroup();
                         this.onFilterHardware();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_group_fail', reason)));
                         this.unblockUI();
-                        this.onHardwareGroupRefresh();
+                        this.onFilterHardwareGroup();
                         this.onFilterHardware();
                     });
             }
         });
     }
+
+
+    // FILTER ----------------------------------------------------------------------------------------------------------
 
     selectedFilterPageHardware(event: { index: number }) {
         this.onFilterHardware(event.index);
@@ -322,9 +329,14 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     }
     /* tslint:disable:max-line-length ter-indent*/
 
-    onHardwareGroupRefresh(): void {
+
+    selectedFilterPageHardwareGroup(event: { index: number }) {
+        this.onFilterHardwareGroup(event.index);
+    }
+
+    onFilterHardwareGroup(pageNumber: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
+        this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
           project_id : this.projectId
         })
             .then((values) => {
@@ -337,6 +349,8 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             });
     }
 
+
+    // Actualization Procedure -----------------------------------------------------------------------------------------
 
     onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
         this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
@@ -351,7 +365,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     }
 
     onUpdateProcedureUpdateClick(procedure: IUpdateProcedure): void {
-
+        // TODO
     }
 
     onProcedureCreateClick() {

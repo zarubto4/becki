@@ -4,50 +4,71 @@
   -->
 
 <bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
-
     <div class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-users"></i>
-                    {{'project_members_title'|bkTranslate:this}}
-                </span>
-            </div>
-            <div class="becki-actions">
-                <button class="btn blue" (click)="onMembersAddClick($event)">
-                    <i class="fa fa-plus-circle"></i> {{'btn_add_members'|bkTranslate:this}}
-                </button>
-            </div>
-        </div>
-        <div *ngIf="(project && project.participants && project.participants.length)" class="table-scrollable">
+
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+            [title_name]="'title'|bkTranslate:this"
+            [icon]="'fa-users'"
+            (onClick)="onMembersAddClick()"
+            [btns]="[
+                {
+                    condition: (project && project.participants.length > 1),
+                    label: ('btn_add_members'|bkTranslate:this),
+                    colorType: 'ADD',
+                    icon: 'fa-plus-circle'
+                }
+            ]"></bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+
+        <!-- Page Content -- START -->
+        <div *ngIf="(project && project.participants.length > 1)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
-                <tr>
-                    <th>{{'label_email'|bkTranslate:this}}</th>
-                    <th>{{'table_name'|bkTranslate:this}}</th>
-                    <th class="full-width">{{'table_state'|bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
-                </tr>
+                    <tr>
+                        <th>{{'label_email'|bkTranslate:this}}</th>
+                        <th>{{'table_name'|bkTranslate:this}}</th>
+                        <th class="full-width">{{'table_state'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let member of project.participants">
-                    <td class="vert-align no-wrap bold">{{member.email}}</td>
-                    <td class="vert-align no-wrap">{{member.full_name}}</td>
-                    <td class="vert-align">{{readableState(member.state)}}</td>
-                    <td class="vert-align no-wrap">
-                        <button title="{{'label_remove_member'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                        <button title="{{'label_send_invitation'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="member.id == selfId" (click)="onMemberSendAgainClick(member)">
-                            <i class="fa fa-envelope"></i>
-                        </button>
-                    </td>
-                </tr>
+                    <tr *ngFor="let member of project.participants">
+                        <td class="vert-align no-wrap bold">{{member.email}}</td>
+                        <td class="vert-align no-wrap">{{member.full_name}}</td>
+                        <td class="vert-align">{{readableState(member.state)}}</td>
+                        <td class="vert-align no-wrap">
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+                            <button title="{{'label_remove_member'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <button title="{{'label_send_invitation'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="member.id == selfId" (click)="onMemberSendAgainClick(member)">
+                                <i class="fa fa-envelope"></i>
+                            </button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
-        <h3 *ngIf="!project" class="text-center">{{'loading'|bkTranslate:this}}</h3>
-        <h3 *ngIf="project && project.participants && project.participants.length == 0" class="text-center">{{'no_persons_in_this_projects'|bkTranslate:this}}</h3>
-    </div>
+        <!-- Page Content -- END -->
 
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <!-- Admin is always in Project -->
+        <bk-nothing-to-show [condition_loading]="(project == null)"
+                            [condition_empty]="(project != null && project.participants.length < 2)"
+                            [main_message_link]="'no_persons_in_this_projects'|bkTranslate:this"
+                            [main_message_comment_link]="'no_persons_in_this_projects_comment'|bkTranslate:this"
+                            [btn_label]="'btn_add_members'|bkTranslate:this"
+                            [icon]="'fa-users'"
+                            (onButtonClick)="onMembersAddClick()">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+
+    </div>
 </bk-layout-main>

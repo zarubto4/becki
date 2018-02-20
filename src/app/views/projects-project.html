@@ -127,6 +127,14 @@
         </div>
         <!-- Page Content -- END -->
 
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(project == null)"
+                            [condition_empty]="(project != null && project.project_stats == null)"
+                            [main_message_link]="'label_no_project_stats'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_project_stats_comment'|bkTranslate:this"
+                            [show_button]="false">
+                            </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
     </div>
 </bk-layout-main>

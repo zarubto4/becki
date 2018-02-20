@@ -15,7 +15,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
             </p>
             <p>
                 <button *ngIf="show_button" class="btn blue" (click)="onNothingToShowClick()">
-                    <i class="fa fa-plus-circle"></i> {{btn_label}}
+                    <i class="fa {{icon}}"></i> {{btn_label}}
                 </button>
             </p>
         </div>
@@ -38,6 +38,9 @@ export class NothingToShowComponent {
 
     @Input()
     btn_label: string = 'NOT SET!';
+
+    @Input()
+    icon: string = 'fa-plus-circle';
 
     @Input()
     show_button: boolean = true;

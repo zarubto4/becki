@@ -6,303 +6,331 @@
 <bk-layout-main [tabMenu]="'projects-project'"
                 [title]="currentParamsService.currentProjectNameSnapshot"
                 [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
-
     <div class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-microchip"></i>
-                       <span [innerHTML]="'title'|bkTranslate:this"></span>
-                </span>
-            </div>
-            <div *ngIf="tab == 'hardware_list' && (devicesFilter && devicesFilter.content.length)" class="becki-actions">
-                <button class="btn blue" (click)="onAddClick()">
-                    <i class="fa fa-plus-circle"></i> {{'btn_add_hardware'|bkTranslate:this}}
-                </button>
+
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+            [title_name]="'title'|bkTranslate:this"
+            [icon]="'fa-microchip'"
+            (onClick)="onPortletClick($event)"
+            [btns]="[
+              {
+                  condition: (tab == 'hardware_list' && (devicesFilter && devicesFilter.content.length)),
+                  label: ('btn_add_hardware'|bkTranslate:this),
+                  icon: 'fa-plus-circle',
+                  colorType: 'ADD',
+                  btn_identification: 'edit_product'
+              },
+              {
+                  condition: (tab == 'hardware_groups' && (deviceGroup && deviceGroup.length)),
+                  label: ('btn_add_hardware_group'|bkTranslate:this),
+                  icon: 'fa-plus-circle',
+                  colorType: 'ADD',
+                  btn_identification: 'add_hardware_group'
+              },
+              {
+                  condition: (tab == 'updates' && (actualizationFilter && actualizationFilter.content.length)),
+                  label: ('btn_add_new_update'|bkTranslate:this),
+                  icon: 'fa-plus-circle',
+                  colorType: 'ADD',
+                  btn_identification: 'new_release'
+              }
+            ]">
+        </bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+        <!-- Tab Menu -- START -->
+        <bk-tab-menu
+            (onClick)="onToggleTab($event)"
+            [tab_selected_name] = "tab"
+            [color]="'HARDWARE'"
+            [btns]="[
+                {
+                    tab_name: 'hardware_list',
+                    tab_label: ('tab_hardware_list'|bkTranslate:this)
+                },
+                {
+                    tab_name: 'hardware_groups',
+                    tab_label: ('tab_hardware_groups'|bkTranslate:this)
+                },
+                {
+                    tab_name: 'updates',
+                    tab_label: ('tab_updates'|bkTranslate:this)
+                }
+            ]">
+        </bk-tab-menu>
+        <!-- Tab Menu -- END -->
+
+        <!-- Page Content -- START -->
+        <div class="table-scrollable">
+
+            <div *ngIf="tab == 'hardware_list'">
+
+                <!--Filter Parameters -- START -->
+                <div>
+
+                </div>
+                <!--Filter Parameters -- END -->
+
+                <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="">{{'table_hardware_name'|bkTranslate:this}}</th>
+                                <th class="">{{'table_hardware_id'|bkTranslate:this}}</th>
+                                <th class="no-wrap">{{'table_description'|bkTranslate:this}}</th>
+                                <th class="no-wrap"><strong class="font-color-hardware">Hardware</strong>{{'label_type'|bkTranslate:this}}</th>
+                                <th class="no-wrap">{{'table_groups'|bkTranslate:this}}</th>
+                                <th class="no-wrap">{{'table_status'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let device of devicesFilter.content">
+                                <td class="vert-align no-wrap">
+                                    <div class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
+                                        <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
+                                        <div class="hint-fixed">
+                                            <span class="hint right">
+                                                <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <a (click)="onDeviceClick(device.id)"
+                                       class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+                                </td>
+                                <td class="vert-align no-wrap">{{device.id}}</td>
+                                <td class="vert-align no-wrap">{{device.description}}</td>
+                                <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
+                                <td class="vert-align no-wrap">
+
+                                    <div *ngIf="!device.hardware_groups">
+                                        -
+                                    </div>
+                                    <div *ngIf="device.hardware_groups">
+                                        [
+                                        <span *ngFor="let group of device.hardware_groups; let last = last">
+                                            {{group.name}}<span *ngIf="!last">, </span>
+                                        </span>
+                                        ]
+                                    </div>
+
+
+                                </td>
+
+                                <td class="vert-align no-wrap">
+                                    <bk-online-state [online_state]="device.online_state"></bk-online-state>
+                                </td>
+                                <td class="vert-align no-wrap">
+
+                                    <style type="text/css">
+                                        table tr button {
+                                            opacity: 0.05;
+                                        }
+                                        table tr:hover button {
+                                            opacity: 1
+                                        }
+                                    </style>
+
+                                    <button title="{{'label_hardware_group'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
+                                            [disabled]="!device.update_permission"
+                                            (click)="onDeviceEditGroupClick(device)">
+                                        <i class="fa fa-object-group"></i>
+                                    </button>
+                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                            [disabled]="!device.update_permission"
+                                            (click)="onEditClick(device)">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+                                    <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                            [disabled]="!device.delete_permission"
+                                            (click)="onRemoveClick(device)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"  [totalPages]="devicesFilter.pages" (onSelect)="selectedFilterPageHardware($event)"></bk-filter-page-component>
+                </div>
+
+                <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                <bk-nothing-to-show [condition_loading]="(devicesFilter == null)"
+                                    [condition_empty]="(devicesFilter != null && devicesFilter.content.length == 0)"
+                                    [main_message_link]="'label_no_hardware'|bkTranslate:this"
+                                    [main_message_comment_link]="'label_no_hardware_comment'|bkTranslate:this"
+                                    [btn_label]="'btn_add_hardware'|bkTranslate:this"
+                                    (onButtonClick)="onHardwareAddClick()">
+                </bk-nothing-to-show>
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
             </div>
 
-            <div *ngIf="tab == 'hardware_groups' && (deviceGroup && deviceGroup.length)" class="becki-actions">
-                <button class="btn blue" (click)="onGroupAddClick()">
-                    <i class="fa fa-plus-circle"></i> {{'btn_add_hardware_group'|bkTranslate:this}}
-                </button>
-            </div>
 
-            <div *ngIf="tab == 'updates' && (actualizationFilter && actualizationFilter.content.length)" class="becki-actions">
-                <button class="btn blue" (click)="onProcedureCreateClick()">
-                    <i class="fa fa-plus-circle"></i> {{'btn_add_new_update'|bkTranslate:this}}
-                </button>
-            </div>
-        </div>
-
-        <div class="portlet-title tabbable-line">
-            <ul class="nav nav-tabs pull-left margin-left-15">
-                <li [class.active]="tab == 'hardware_list'">
-                    <a class="cursor-pointer" (click)="onToggleTab('hardware_list')">{{'tab_hardware_list'|bkTranslate:this}}</a>
-                </li>
-                <li [class.active]="tab == 'hardware_groups'">
-                    <a class="cursor-pointer" (click)="onToggleTab('hardware_groups')">{{'tab_hardware_groups'|bkTranslate:this}}</a>
-                </li>
-                <li [class.active]="tab == 'updates'">
-                    <a class="cursor-pointer" (click)="onToggleTab('updates')">{{'tab_updates'|bkTranslate:this}}</a>
-                </li>
-            </ul>
-        </div>
-
-        <div *ngIf="tab == 'hardware_list'">
-            <!--Filter Parameters -->
-            <div>
-
-            </div>
-            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable">
-                <table class="table table-hover">
-                    <thead>
+            <div *ngIf="tab == 'hardware_groups'">
+                <div *ngIf="(deviceGroup && deviceGroup.content.length > 0)" class="table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
                         <tr>
-                            <th class="">{{'table_name'|bkTranslate:this}}</th>
-                            <th class="">{{'table_hardware_id'|bkTranslate:this}}</th>
-                            <th class="no-wrap">{{'table_description'|bkTranslate:this}}</th>
-                            <th class="no-wrap"><strong class="font-color-hardware">Hardware</strong>{{'label_type'|bkTranslate:this}}</th>
-                            <th class="no-wrap">{{'table_groups'|bkTranslate:this}}</th>
-                            <th class="no-wrap">{{'table_status'|bkTranslate:this}}</th>
+                            <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
+                            <th class="col col-lg-5">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_size'|bkTranslate:this}}</th>
                             <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let device of devicesFilter.content">
-                            <td class="vert-align no-wrap">
-                                <div class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
-                                    <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
-                                    <div class="hint-fixed">
-                                        <span class="hint right">
-                                            <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <a (click)="onDeviceClick(device.id)"
-                                   class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
-                            </td>
-                            <td class="vert-align no-wrap">{{device.id}}</td>
-                            <td class="vert-align no-wrap">{{device.description}}</td>
-                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
-                            <td class="vert-align no-wrap">
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let group of deviceGroup.content">
 
-                                <div *ngIf="!device.hardware_groups">
-                                    -
-                                </div>
-                                <div *ngIf="device.hardware_groups">
-                                    [
-                                    <span *ngFor="let group of device.hardware_groups; let last = last">
-                                        {{group.name}}<span *ngIf="!last">, </span>
-                                    </span>
-                                    ]
-                                </div>
+                            <td class="vert-align no-wrap">{{group.name}}</td>
+                            <td class="vert-align no-wrap">{{group.description}}</td>
+                            <td class="vert-align no-wrap">{{group.size}}</td>
 
-
-                            </td>
-
-                            <td class="vert-align no-wrap">
-                                <bk-online-state [online_state]="device.online_state"></bk-online-state>
-                            </td>
                             <td class="vert-align no-wrap">
 
                                 <style type="text/css">
                                     table tr button {
                                         opacity: 0.05;
                                     }
+
                                     table tr:hover button {
                                         opacity: 1
                                     }
                                 </style>
 
-                                <button title="{{'label_hardware_group'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
-                                        [disabled]="!device.update_permission"
-                                        (click)="onDeviceEditGroupClick(device)">
-                                    <i class="fa fa-object-group"></i>
-                                </button>
                                 <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                        [disabled]="!device.update_permission"
-                                        (click)="onEditClick(device)">
+                                        [disabled]="!group.update_permission"
+                                        (click)="onGroupEditClick(group)">
                                     <i class="fa fa-cog"></i>
                                 </button>
                                 <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                        [disabled]="!device.delete_permission"
-                                        (click)="onRemoveClick(device)">
+                                        [disabled]="!group.delete_permission"
+                                        (click)="onGroupDeleteClick(group)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-                <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"  [totalPages]="devicesFilter.pages" (onSelect)="selectedFilterPageHardware($event)"></bk-filter-page-component>
+                        </tbody>
+                    </table>
+                    <bk-filter-page-component [from]="deviceGroup.from" [to]="deviceGroup.to" [total]="deviceGroup.total"  [totalPages]="deviceGroup.pages" (onSelect)="selectedFilterPageHardwareGroup($event)"></bk-filter-page-component>
+                </div>
+
+                <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                <bk-nothing-to-show [condition_loading]="(deviceGroup == null)"
+                                    [condition_empty]="(deviceGroup != null && deviceGroup.content.length == 0)"
+                                    [main_message_link]="'label_no_hardware_group'|bkTranslate:this"
+                                    [main_message_comment_link]="'label_no_hardware_group_comment'|bkTranslate:this"
+                                    [btn_label]="'btn_add_hardware_group'|bkTranslate:this"
+                                    (onButtonClick)="onGroupAddClick()">
+                </bk-nothing-to-show>
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
             </div>
-            <h3 *ngIf="!devicesFilter" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="devicesFilter && devicesFilter.content.length == 0" class="list-no-items">
-                <p class="list-no-items__main-label"><span [innerHTML]="'label_no_hardware'|bkTranslate:this"></span></p>
-                <p class="list-no-items__sub-label">{{'label_no_hardware_comment'|bkTranslate:this}}</p>
-                <p>
-                    <button class="btn blue" (click)="onAddClick($event)">
-                        <i class="fa fa-plus-circle"></i> {{'btn_add_hardware'|bkTranslate:this}}
-                    </button>
-                </p>
-            </div>
-        </div>
-
-        <div *ngIf="tab == 'hardware_groups'">
-            <div *ngIf="(deviceGroup && deviceGroup.length > 0)" class="table-scrollable">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-5">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_size'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let group of deviceGroup">
-
-                        <td class="vert-align no-wrap">{{group.name}}</td>
-                        <td class="vert-align no-wrap">{{group.description}}</td>
-                        <td class="vert-align no-wrap">{{group.group_size}}</td>
-
-                        <td class="vert-align no-wrap">
-
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
-
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
-                            <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                    [disabled]="!group.update_permission"
-                                    (click)="onGroupEditClick(group)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                    [disabled]="!group.delete_permission"
-                                    (click)="onGroupDeleteClick(group)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <h3 *ngIf="!deviceGroup" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="deviceGroup && deviceGroup.length == 0" class="list-no-items">
-                <p class="list-no-items__main-label"><span [innerHTML]="'label_no_hardware_group'|bkTranslate:this"></span></p>
-                <p class="list-no-items__sub-label">{{'label_no_hardware_group_comment'|bkTranslate:this}}</p>
-                <p>
-                    <button class="btn blue" (click)="onGroupAddClick()">
-                        <i class="fa fa-plus-circle"></i> {{'btn_add_hardware_group'|bkTranslate:this}}
-                    </button>
-                </p>
-            </div>
-        </div>
 
 
-        <div *ngIf="tab == 'updates'">
-            <div *ngIf="(actualizationFilter && actualizationFilter.content.length > 0)" class="table-scrollable">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_firmware_type'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_details'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_update_type'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
-                            <th class="vert-align">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let procedure of actualizationFilter.content">
+            <div *ngIf="tab == 'updates'">
+                <div *ngIf="(actualizationFilter && actualizationFilter.content.length > 0)" class="table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_firmware_type'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_details'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_update_type'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
+                                <th class="vert-align">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let procedure of actualizationFilter.content">
 
-                            <td class="vert-align">
-                                <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', procedure.id]">{{procedure.id.substr(0, 12)}}</a>
-                            </td>
-                            <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
-                            <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
-                            <td class="vert-align">
-                                <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
-                                <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
-                            </td>
+                                <td class="vert-align">
+                                    <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', procedure.id]">{{procedure.id.substr(0, 12)}}</a>
+                                </td>
+                                <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
+                                <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                                <td class="vert-align">
+                                    <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                                    <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                                </td>
 
-                            <td class="vert-align">
-                                <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
-                            </td>
-                            <td class="vert-align">
-                                <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
-                                    <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
-                                        <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
-                                        -
-                                        <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
+                                <td class="vert-align">
+                                    <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
+                                </td>
+                                <td class="vert-align">
+                                    <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
+                                        <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
+                                            <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
+                                            -
+                                            <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
+                                        </template>
+                                        <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
+                                            <a *ngIf="procedure.program" class="bold" [routerLink]="['/hardware', procedure.bootloader.type_of_board_id]">{{procedure.bootloader.bootloader_name}}</a>
+                                        </template>
                                     </template>
-                                    <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
-                                        <a *ngIf="procedure.program" class="bold" [routerLink]="['/hardware', procedure.bootloader.type_of_board_id]">{{procedure.bootloader.bootloader_name}}</a>
-                                    </template>
-                                </template>
-                            </td>
+                                </td>
 
-                            <td class="vert-align">
-                                <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
-                            </td>
-                            <td class="vert-align">
-                                <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
-                                <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
-                            </td>
+                                <td class="vert-align">
+                                    <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
+                                </td>
+                                <td class="vert-align">
+                                    <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
+                                    <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
+                                </td>
 
-                            <!-- Update State -->
-                            <td class="vert-align">
-                                <bk-update-state [updateState]="procedure.state"></bk-update-state>
-                            </td>
+                                <!-- Update State -->
+                                <td class="vert-align">
+                                    <bk-update-state [updateState]="procedure.state"></bk-update-state>
+                                </td>
 
 
-                            <td class="vert-align no-wrap">
-                                <style type="text/css">
-                                    table tr button {
-                                        opacity: 0.05;
-                                    }
+                                <td class="vert-align no-wrap">
+                                    <style type="text/css">
+                                        table tr button {
+                                            opacity: 0.05;
+                                        }
 
-                                    table tr:hover button {
-                                        opacity: 1
-                                    }
-                                </style>
-                                <button title="{{'label_change_update_parameters'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                        [disabled]="!procedure.update_permission"
-                                        (click)="onUpdateProcedureUpdateClick(procedure)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                        [disabled]="!procedure.update_permission"
-                                        (click)="onUpdateProcedureCancelClick(procedure)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                        table tr:hover button {
+                                            opacity: 1
+                                        }
+                                    </style>
+                                    <button title="{{'label_change_update_parameters'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                            [disabled]="!procedure.update_permission"
+                                            (click)="onUpdateProcedureUpdateClick(procedure)">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+                                    <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                            [disabled]="!procedure.update_permission"
+                                            (click)="onUpdateProcedureCancelClick(procedure)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
 
-                            </td>
+                                </td>
 
-                        </tr>
-                    </tbody>
-                </table>
-                <bk-filter-page-component [from]="actualizationFilter.from" [to]="actualizationFilter.to" [total]="actualizationFilter.total"  [totalPages]="actualizationFilter.pages" (onSelect)="selectedFilterPageActualizationProcedure($event)"></bk-filter-page-component>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <bk-filter-page-component [from]="actualizationFilter.from" [to]="actualizationFilter.to" [total]="actualizationFilter.total"  [totalPages]="actualizationFilter.pages" (onSelect)="selectedFilterPageActualizationProcedure($event)"></bk-filter-page-component>
+                </div>
+
+
+                <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                <bk-nothing-to-show [condition_loading]="(actualizationFilter == null)"
+                                    [condition_empty]="(actualizationFilter != null && actualizationFilter.content.length == 0)"
+                                    [main_message_link]="'label_no_updates'|bkTranslate:this"
+                                    [main_message_comment_link]="'label_no_updates_comment'|bkTranslate:this"
+                                    [btn_label]="'btn_add_new_update'|bkTranslate:this"
+                                    (onButtonClick)="onProcedureCreateClick()">
+                </bk-nothing-to-show>
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
             </div>
-            <h3 *ngIf="!actualizationFilter" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="actualizationFilter && actualizationFilter.content.length == 0" class="list-no-items">
-                <p class="list-no-items__main-label"><span [innerHTML]="'label_no_updates'|bkTranslate:this"></span></p>
-                <p class="list-no-items__sub-label"><span [innerHTML]="'label_no_updates_comment'|bkTranslate:this"></span></p>
-                <p>
-                    <button class="btn blue" (click)="onProcedureCreateClick()">
-                        <i class="fa fa-plus-circle"></i> {{'btn_add_new_update'|bkTranslate:this}}
-                    </button>
-                </p>
-            </div>
+
         </div>
+        <!-- Page Content -- END -->
 
     </div>
 

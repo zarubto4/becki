@@ -54,6 +54,17 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
         }
     }
 
+
+    onPortletClick(action: string): void {
+        if (action === 'edit_project') {
+            this.onEditClick();
+        }
+
+        if (action === 'remove_project') {
+            this.onRemoveClick();
+        }
+    }
+
     onEditClick(): void {
 
         let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, this.project.product.id, true, this.project.name);

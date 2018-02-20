@@ -185,6 +185,7 @@ import { BeckiBooleanButtonComponent } from './components/BooleanButtonComponent
 import { NothingToShowComponent } from './components/NothingToShowComponent';
 import { PortletTitleComponent } from './components/PortletTitleComponent';
 import { PaymentMethodComponent } from './components/PaymentMehtodComponent';
+import { PortletPanelMenuComponent } from './components/PortletPanelMenu';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -248,7 +249,7 @@ let routes: Routes = [
     // { path: 'projects/:project/grid/:grids/:grid', data: { breadName: ':grid' }, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
     // { path: 'projects/:project/instances', data: { breadName: 'CLOUD instances' }, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
-    // { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
 
     // { path: 'projects/:project/widgets', data: { breadName: 'GRID widgets' }, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/widgets/:widgets', data: { breadName: ':widgets' }, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard] },
@@ -354,7 +355,12 @@ let tabMenus = {
                 new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> blocks', ['/', 'projects', ':project', 'blocks'], null),
             ]
         }),
-        new LabeledLink('<strong class="font-color-cloud">CLOUD</strong>', ['/', 'projects', ':project', 'instances'], null, { styleClass: 'color-cloud font-color-cloud-dark' }),
+        new LabeledLink('<strong class="font-color-cloud">CLOUD</strong>', null, null, {
+            styleClass: 'color-cloud', items: [
+                new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> instances', ['/', 'projects', ':project', 'instances'], null, { styleClass: 'color-cloud font-color-cloud-dark' }),
+                new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> servers', ['/', 'projects', ':project', 'servers'], null, { styleClass: 'color-cloud font-color-cloud-dark' }),
+            ]
+        }),
     ],
     'tariffs-tariff': [
         new LabeledLink('Dashboard', ['/', 'financial', ':product'], 'tachometer', { linkActiveExact: true }),
@@ -490,6 +496,7 @@ class BeckiErrorHandler implements ErrorHandler {
         NothingToShowComponent,
         PortletTitleComponent,
         PaymentMethodComponent,
+        PortletPanelMenuComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
