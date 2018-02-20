@@ -1,6 +1,5 @@
 <bk-layout-main
-
-        [tabMenu]="{{hardwareType != null ? (hardwareType.update_permission? 'byzance-admin' : '') : null}}"
+        [tabMenu]="hardwareType != null ? (hardwareType.update_permission? 'byzance-admin' : '') : null"
         [title]="hardwareType != null ? ( hardwareType.update_permission ? ('main_administration_title'|bkTranslate:this) : ('main_title'|bkTranslate:this)) : null"
         [subtitle]="hardwareType != null ? ( hardwareType.update_permission ? ('main_subtitle'|bkTranslate:this) : ( hardwareType ? hardwareType.name: '') ) : null"
         [lastBreadName]="hardwareType?hardwareType.name:''"
@@ -111,7 +110,7 @@
                                 </span>
                             </td>
                             <td class="vert-align no-wrap">{{bootloader.name}}</td>
-                            <td class="vert-align no-wrap">{{bootloader.version_identificator}}</td>
+                            <td class="vert-align no-wrap">{{bootloader.version_identifier}}</td>
                             <td class="vert-align no-wrap">{{bootloader.description.substr(0, 32)}}<span *ngIf="bootloader.description.length > 32">...</span></td>
                             <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span *ngIf="bootloader.changing_note.length > 32">...</span></td>
 
@@ -206,7 +205,7 @@
                         <!-- NAME -->
                         <td class="vert-align bold">
                             <a [routerLink]="[hardwareType.main_c_program.id]">
-                                {{version.version_name}}
+                                {{version.name}}
                             </a>
                         </td>
                         <!-- Main Mark - Only for settings for Type of Board -->
@@ -319,7 +318,7 @@
                         <!-- NAME -->
                         <td class="vert-align bold">
                             <a [routerLink]="[hardwareType.main_test_c_program.id]">
-                                {{version.version_name}}
+                                {{version.name}}
                             </a>
                         </td>
                         <!-- Main Mark - Only for settings for Type of Board -->

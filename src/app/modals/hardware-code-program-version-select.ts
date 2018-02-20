@@ -9,8 +9,8 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { ICProgram, ICProgramVersion, ILibrary, ILibraryVersion, IMProgramShortDetailForBlocko,
-    IMProjectShortDetailForBlocko
+import {
+    ICProgram, ICProgramFilter, ICProgramList, ICProgramVersion, ILibrary, ILibraryVersion
 } from '../backend/TyrionAPI';
 
 
@@ -32,7 +32,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    codePrograms: ICProgram[] = null;
+    codePrograms: ICProgramList = null;
 
     selectedProgram: ICProgram = null;
 
@@ -40,24 +40,17 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
 
     selectedProgramVersion: ICProgramVersion = null;
 
-    loading = false;
-
     constructor(private backendService: TyrionBackendService) {
     }
 
     loadProject() {
 
-        this.loading = true;
-        this.backendService.projectGet(this.modalModel.projectId)
-            .then((p) => {
-                this.loading = false;
-                this.codePrograms = p.c_programs.filter((cp) => cp.type_of_board_id === this.modalModel.hardwareTypeId);
-
-            })
-            .catch((e) => {
-                this.loading = false;
-            });
-
+        this.backendService.cProgramGetListByFilter( 0, {
+            project_id :  this.modalModel.projectId,
+            hardware_type_ids : [this.modalModel.hardwareTypeId]
+        }).then((p) => {
+            this.codePrograms = p;
+        }).catch((e) => {});
     }
 
     onBackClick() {
@@ -70,14 +63,12 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
         this.selectedProgram = program;
         this.programVersions = null;
         this.selectedProgramVersion = null;
-        this.loading = true;
+        this.codePrograms = null;
         this.backendService.cProgramGet(program.id)
             .then((p) => {
-                this.loading = false;
                 this.programVersions = p.program_versions;
             })
             .catch((e) => {
-                this.loading = false;
             });
     }
 

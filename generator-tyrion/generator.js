@@ -40,7 +40,6 @@ var CONFIG = {
     ignoredDefinitions: ['EntityBean', 'EntityBeanIntercept', 'ValuePair', 'HttpEntity', 'Result', 'StringBuilder', 'PersistenceContext', 'Cookies'],
     methodsReplace: {
         // "" for ignore
-        'get:/websocket/becki/{secure_token}': '',
         'get:/websocket/homer_server/{identificator}': '',
         'get:/websocket/compilation_server/{identificator}': '',
         'put:/websocket/terminal/identificator': '',
@@ -218,10 +217,6 @@ definitionsKeys.forEach(function (defName) {
         propKeys.forEach(function (propKey) {
             var prop = props[propKey];
             var required = (propsRequired.indexOf(propKey) > -1) ? '' : '?';
-            // TODO: check if this is okay!
-            if (prop['readOnly'] === true) {
-                required = '';
-            }
             var type = solveType(prop);
             if (!type) {
                 number_of_bugs++;

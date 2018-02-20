@@ -3,7 +3,7 @@
  */
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { IProducer } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -12,13 +12,13 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
     selector: 'bk-view-producers',
     templateUrl: './producers.html'
 })
-export class ProducersComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProducersComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     routeParamsSubscription: Subscription;
 
     producers: IProducer[] = null;
 
-    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     constructor(injector: Injector) {
         super(injector);

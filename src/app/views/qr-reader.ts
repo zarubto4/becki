@@ -1,6 +1,6 @@
 
 import { Component, Injector, OnInit, ViewChild, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { Observable } from 'rxjs/Rx';
 const jsQR = require('jsqr');
 
@@ -8,7 +8,7 @@ const jsQR = require('jsqr');
     selector: 'bk-view-qr-reader',
     templateUrl: './qr-reader.html'
 })
-export class ReaderQrComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
 
     @ViewChild('video') video: ElementRef;

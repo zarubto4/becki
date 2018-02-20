@@ -5,7 +5,7 @@
 
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IGarfield, IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -15,7 +15,7 @@ import { ModalsGarfieldModel } from '../modals/garfield';
     selector: 'bk-view-garfield',
     templateUrl: './garfield.html'
 })
-export class GarfieldComponent extends BaseMainComponent implements OnInit {
+export class GarfieldComponent extends _BaseMainComponent implements OnInit {
 
     garfield_s: IGarfield[] = null;
 
@@ -59,7 +59,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
                             print_sticker_id: model.print_sticker_id,
                             hardware_tester_id: model.hardware_tester_id,
                             producer_id: model.producer,
-                            type_of_board_id: model.hardwareType,
+                            hardware_type_id: model.hardwareType,
                         })
                             .then(() => {
                                 this.refresh();
@@ -89,7 +89,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
             garfield.hardware_tester_id,
             true,
             garfield.producer.name,
-            garfield.type_of_board.name
+            garfield.hardware_type.name
         );
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -131,14 +131,6 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
 
     onGarfieldClick(garfield: IGarfield) {
         this.navigate(['/admin/garfield', garfield.id]);
-    }
-
-    onProducerClick(producer: IProducer) {
-        this.navigate(['/producers', producer.id]);
-    }
-
-    onHardwareTypeClick(hardwareType: IHardwareType) {
-        this.navigate(['/hardware', hardwareType.id]);
     }
 
 }

@@ -11,13 +11,13 @@ import { FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
-import { ICProgramForBlocko } from '../backend/TyrionAPI';
+import { ICProgram } from '../backend/TyrionAPI';
 import { CProgramVersionSelectorComponent } from '../components/CProgramVersionSelectorComponent';
 
 export class ModalsSelectCodeModel extends ModalModel {
     selectedVersionId: string = null;
     constructor(
-        public cPrograms: ICProgramForBlocko[] = []
+        public cPrograms: ICProgram[] = []
     ) {
         super();
     }

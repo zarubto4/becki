@@ -65,7 +65,7 @@ export class ModalsCreateHardwareTypeComponent implements OnInit {
 
         this.processor_options = this.modalModel.processors.map((pv) => {
             return {
-                label: pv.processor_name,
+                label: pv.name,
                 value: pv.id
             };
         });

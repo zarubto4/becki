@@ -3,7 +3,7 @@
  */
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IInvoiceFullDetails } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
     selector: 'bk-view-financial-product-invoices-invoice',
     templateUrl: './financial-product-invoices-invoice.html'
 })
-export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class FinancialProductInvoicesInvoiceComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 

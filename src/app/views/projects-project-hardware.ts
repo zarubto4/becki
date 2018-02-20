@@ -4,14 +4,14 @@
  */
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
     IProject, IHardware, IHardwareList, IHardwareGroup, IHardwareUpdate,
-    IActualizationProcedureTaskList, ICProgram, IBootLoader
+    IActualizationProcedureTaskList, ICProgram, IBootLoader, IActualizationProcedureList, IUpdateProcedure
 } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -23,7 +23,7 @@ import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmw
     selector: 'bk-view-projects-project-hardware',
     templateUrl: './projects-project-hardware.html',
 })
-export class ProjectsProjectHardwareComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectHardwareComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     projectId: string;
     project: IProject = null;
@@ -34,9 +34,9 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     devicesFilter: IHardwareList = null;
     deviceGroup: IHardwareGroup[] = null;
-    actualizationFilter: IHardwareUpdate = null;
+    actualizationFilter: IActualizationProcedureList = null;
 
-    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     tab: string = 'hardware_list';
 
@@ -83,8 +83,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     }
 
-
-    onEditClick(device: IHardware): void {
+    onHardwareEditClick(device: IHardware): void {
         let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -102,11 +101,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         });
     }
 
-    onRemoveClick(device: IHardware): void {
-        this.modalService.showModal(new ModalsRemovalModel('[' + device.id + '] ' + (device.name ? device.name : ''))).then((success) => {
+    onHardwareRemoveClick(hardware: IHardware): void {
+        this.modalService.showModal(new ModalsRemovalModel('[' + hardware.id + '] ' + (hardware.name ? hardware.name : ''))).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardDisconnectFromProject(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
+                this.tyrionBackendService.projectRemoveHW(hardware.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_remove_device_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -119,13 +118,15 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         });
     }
 
-    onAddClick(): void {
+    onHardwareAddClick(): void {
         if (this.deviceGroup == null) {
-            this.tyrionBackendService.boardGroupGetListFromProject(this.projectId)
+            this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
+                project_id: this.projectId
+            })
                 .then((values) => {
                     this.unblockUI();
                     this.deviceGroup = values;
-                    this.onAddClick();
+                    this.onHardwareAddClick();
                 })
                 .catch((reason) => {
                     this.unblockUI();
@@ -146,7 +147,9 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     onDeviceEditGroupClick(device: IHardware) {
         if (this.deviceGroup == null) {
-            this.tyrionBackendService.boardGroupGetListFromProject(this.projectId)
+            this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
+                project_id: this.projectId
+            })
                 .then((values) => {
                     this.unblockUI();
                     this.deviceGroup = values;
@@ -161,8 +164,8 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                 if (success) {
                     this.tyrionBackendService.boardGroupUpdateDeviceList({
                         device_synchro: {
-                            device_id: device.id,
-                            group_ids: model.deviceGroupStringIdsSelected
+                            hardware_id: device.id,
+                            hardware_group_ids: model.deviceGroupStringIdsSelected
                         },
                         group_synchro: null
                     })
@@ -187,7 +190,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardGroupCreate({
+                this.tyrionBackendService.hardwareGroupCreate({
                     name: model.name,
                     description: model.description,
                     project_id: this.projectId
@@ -209,7 +212,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardGroupEdit(group.id, {
+                this.tyrionBackendService.hardwareGroupEdit(group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -229,7 +232,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardGroupDelete(group.id)
+                this.tyrionBackendService.hardwareGroupDelete(group.id)
                     .then(() => {
                         this.unblockUI();
                         this.onHardwareGroupRefresh();
@@ -253,7 +256,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.blockUI();
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
             projects: [this.projectId],
-            type_of_board_ids: boardTypes
+            hardware_type_ids: boardTypes
         })
             .then((values) => {
                 this.devicesFilter = values;
@@ -321,7 +324,9 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     onHardwareGroupRefresh(): void {
         this.blockUI();
-        this.tyrionBackendService.boardGroupGetListFromProject(this.projectId)
+        this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
+          project_id : this.projectId
+        })
             .then((values) => {
                 this.deviceGroup = values;
                 this.unblockUI();
@@ -333,7 +338,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
 
-    onUpdateProcedureCancelClick(procedure: IActualizationProcedureTaskList): void {
+    onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
         this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
             .then(() => {
                 this.unblockUI();
@@ -345,7 +350,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             });
     }
 
-    onUpdateProcedureUpdateClick(procedure: IActualizationProcedureTaskList): void {
+    onUpdateProcedureUpdateClick(procedure: IUpdateProcedure): void {
 
     }
 
@@ -354,7 +359,9 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         // Get all deviceGroup - Recursion
         if (this.deviceGroup == null) {
             this.blockUI();
-            this.tyrionBackendService.boardGroupGetListFromProject(this.projectId)
+            this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
+                    project_id: this.projectId
+                })
                 .then((values) => {
                     this.unblockUI();
                     this.deviceGroup = values;
@@ -376,8 +383,8 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                     hardware_group_id: model.deviceGroupStringIdSelected,
                     project_id: this.projectId,
                     time: model.time,
-                    type_of_boards_settings: model.groups,
-                    timeOffset: model.timeZoneOffset
+                    hardware_type_settings: model.groups,
+                    timeoffset: model.timeZoneOffset
                 })
                     .then(() => {
                         this.unblockUI();

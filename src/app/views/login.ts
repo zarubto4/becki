@@ -8,7 +8,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { PermissionMissingError, UserNotValidatedError } from '../backend/BeckiBackend';
 import { BlockUIService } from '../services/BlockUIService';
 import { Subscription } from 'rxjs';
 import { TranslationService } from '../services/TranslationService';
@@ -76,25 +75,31 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     onLoginClick(): void {
         this.blockUIService.blockUI();
-        this.backendService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value)
+        this.backendService.login(
+            this.loginForm.controls['email'].value,
+            this.loginForm.controls['password'].value)
             .then(() => {
                 this.blockUIService.unblockUI();
                 this.router.navigate(['/']);
             })
             .catch(reason => {
                 this.blockUIService.unblockUI();
-                if (reason instanceof PermissionMissingError) {
-                    this.loginError = (<PermissionMissingError>reason).userMessage;
-                } else if (reason instanceof UserNotValidatedError) {
-                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null, [(<UserNotValidatedError>reason).userMessage]);
-                    this.resendVertification = true;
-                } else {
-                    if (reason.userMessage) {
-                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason.userMessage);
-                    } else {
-                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason);
-                    }
+
+                // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
+                if (reason['code'] === 403) {
+                    this.loginError = reason['message'];
+                    return;
                 }
+
+                // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
+                if (reason['code'] === 705) {
+                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null, reason['message']);
+                    this.resendVertification = true;
+                    return;
+                }
+
+                this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason['message']);
+
             });
     }
 
@@ -107,15 +112,20 @@ export class LoginComponent implements OnInit, OnDestroy {
             })
             .catch(reason => {
                 this.blockUIService.unblockUI();
-                if (reason instanceof PermissionMissingError) {
-                    this.loginError = (<PermissionMissingError>reason).userMessage;
-                } else {
-                    if (reason.userMessage) {
-                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason.userMessage);
-                    } else {
-                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason);
-                    }
+
+                // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
+                if (reason['code'] === 403) {
+                    this.loginError = reason['message'];
+                    return;
                 }
+                // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
+                if (reason['code'] === 705) {
+                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null, reason['message']);
+                    this.resendVertification = true;
+                    return;
+                }
+
+                this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason['message']);
             });
     }
 
@@ -128,15 +138,20 @@ export class LoginComponent implements OnInit, OnDestroy {
             })
             .catch(reason => {
                 this.blockUIService.unblockUI();
-                if (reason instanceof PermissionMissingError) {
-                    this.loginError = (<PermissionMissingError>reason).userMessage;
-                } else {
-                    if (reason.userMessage) {
-                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason.userMessage);
-                    } else {
-                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason);
-                    }
+
+                // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
+                if (reason['code'] === 403) {
+                    this.loginError = reason['message'];
+                    return;
                 }
+                // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
+                if (reason['code'] === 705) {
+                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null, reason['message']);
+                    this.resendVertification = true;
+                    return;
+                }
+
+                this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason['message']);
             });
     }
 

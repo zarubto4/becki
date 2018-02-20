@@ -10,9 +10,7 @@ interface TimeZones {
 
 @Component({
     selector: 'bk-time-zone-selector',
-    template: `
-        <bk-form-select [control]="control" [options]="_options"></bk-form-select>
-    `
+    templateUrl: './TimeZoneComponent.html'
 })
 export class TimeZoneSelectorComponent implements OnInit {
 

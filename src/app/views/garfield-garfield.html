@@ -60,7 +60,7 @@
                             </div>
                             <div *ngIf="bootLoader">
                                 <strong>{{'label_main_bootloader'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/hardware', hardwareType.id]" class="bold">{{bootLoader.version_identificator}}</a>
+                                <a [routerLink]="['/hardware', hardwareType.id]" class="bold">{{bootLoader.version_identifier}}</a>
                             </div>
 
                         </div>
@@ -161,7 +161,7 @@
                                     {{'label_printers_not_valid'|bkTranslate:this}} <i class="fa fa-times"></i>
                                 </span>
                                 <span *ngIf="printer_label_1">
-                                    <span *ngIf="printer_label_1.state =='online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
+                                    <span *ngIf="printer_label_1.state =='ONLINE'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
                                     <span *ngIf="printer_label_1.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
                                     <i class="fa fa-print font-green-jungle cursor-hand" (click)="onTestPrinter(printer_label_1.id)"></i>
                                 </span>
@@ -173,7 +173,7 @@
                                     {{'label_printers_not_valid'|bkTranslate:this}}<i class="fa fa-times"></i>
                                 </span>
                                 <span *ngIf="printer_label_2">
-                                    <span *ngIf="printer_label_2.state =='online'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
+                                    <span *ngIf="printer_label_2.state =='ONLINE'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
                                     <span *ngIf="printer_label_2.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
                                     <i  class="fa fa-print font-green-jungle cursor-hand" (click)="onTestPrinter(printer_label_2.id)"></i>
                                 </span>
@@ -185,7 +185,7 @@
                                     {{'label_printers_not_valid'|bkTranslate:this}}<i class="fa fa-times"></i>
                                 </span>
                                 <span *ngIf="print_sticker">
-                                    <span *ngIf="print_sticker.state =='online'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
+                                    <span *ngIf="print_sticker.state =='ONLINE'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
                                     <span *ngIf="print_sticker.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
                                     <i class="fa fa-print font-green-jungle cursor-hand" (click)="onTestPrinter(print_sticker.id)"></i>
                                 </span>
@@ -217,8 +217,8 @@
                         </div>
 
                         <div class="col col-lg-3">
-                            <h4 *ngIf="!mainServer || !backupServer || mainServer.online_state != 'online' || backupServer.online_state != 'online' " class="font-red-flamingo"><i class="fa fa-server"></i> {{'label_server_settings'|bkTranslate:this}}</h4>
-                            <h4 *ngIf="mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online' " class="font-green-jungle"><i class="fa fa-server"></i> {{'label_server_settings'|bkTranslate:this}}</h4>
+                            <h4 *ngIf="!mainServer || !backupServer || mainServer.online_state != 'ONLINE' || backupServer.online_state != 'ONLINE' " class="font-red-flamingo"><i class="fa fa-server"></i> {{'label_server_settings'|bkTranslate:this}}</h4>
+                            <h4 *ngIf="mainServer && backupServer && mainServer.online_state == 'ONLINE' && backupServer.online_state == 'ONLINE' " class="font-green-jungle"><i class="fa fa-server"></i> {{'label_server_settings'|bkTranslate:this}}</h4>
                             <div>
                                 <strong>{{'label_main_server'|bkTranslate:this}}</strong>
                                 <span *ngIf="!mainServer" class="font-red-flamingo">
@@ -228,8 +228,8 @@
                                     <span class="font-red-flamingo">
                                         {{mainServer.personal_server_name}}
                                     </span>
-                                    <span *ngIf="mainServer.online_state == 'online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
-                                    <span *ngIf="mainServer.online_state != 'online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <span *ngIf="mainServer.online_state == 'ONLINE'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
+                                    <span *ngIf="mainServer.online_state != 'ONLINE'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
                                     <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', mainServer.id]"></i>
                                 </span>
                             </div>
@@ -243,8 +243,8 @@
                                     <span class="font-red-flamingo">
                                         {{backupServer.personal_server_name}}
                                     </span>
-                                    <span *ngIf="backupServer.online_state == 'online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
-                                    <span *ngIf="backupServer.online_state != 'online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <span *ngIf="backupServer.online_state == 'ONLINE'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
+                                    <span *ngIf="backupServer.online_state != 'ONLINE'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
                                     <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', backupServer.id]"></i>
                                 </span>
                             </div>

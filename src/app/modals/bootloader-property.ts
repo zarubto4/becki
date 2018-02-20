@@ -14,7 +14,7 @@ export class ModalsBootloaderPropertyModel extends ModalModel {
         public description: string = '',
         public name: string = '',
         public changing_note: string = '',
-        public version_identificator: string = '',
+        public version_identifier: string = '',
     ) {
         super();
     }
@@ -40,7 +40,7 @@ export class ModalsBootloaderPropertyComponent implements OnInit {
             'description': ['', [Validators.required, Validators.minLength(4)]],
             'name': ['', [Validators.required, Validators.minLength(4)]],
             'changing_note': ['', [Validators.required, Validators.minLength(4)]],
-            'version_identificator': ['', [Validators.required]]
+            'version_identifier': ['', [Validators.required]]
         });
     }
 
@@ -48,14 +48,14 @@ export class ModalsBootloaderPropertyComponent implements OnInit {
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['changing_note'])).setValue(this.modalModel.changing_note);
-        (<FormControl>(this.form.controls['version_identificator'])).setValue(this.modalModel.version_identificator);
+        (<FormControl>(this.form.controls['version_identifier'])).setValue(this.modalModel.version_identifier);
     }
 
     onSubmitClick(): void {
         this.modalModel.description = this.form.controls['description'].value;
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.changing_note = this.form.controls['changing_note'].value;
-        this.modalModel.version_identificator = this.form.controls['version_identificator'].value;
+        this.modalModel.version_identifier = this.form.controls['version_identifier'].value;
         this.modalClose.emit(true);
     }
 

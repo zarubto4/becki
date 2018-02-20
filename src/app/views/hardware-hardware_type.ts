@@ -3,10 +3,10 @@
  * of this distribution.
  */
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import {
-    IBootLoader, ICProgram, ICProgramVersionShortDetail, IProcessor, IProducer,
-    IHardwareType, IHardwareTypeBatch
+    IBootLoader, ICProgram, ICProgramVersion, IProcessor, IProducer,
+    IHardwareType, IHardwareBatch
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -24,7 +24,7 @@ import { ModalsCreateHardwareTypeBatchModel } from '../modals/type-of-board-batc
     selector: 'bk-view-hardware-hardware-type',
     templateUrl: './hardware-hardware_type.html'
 })
-export class HardwareHardwareTypeComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class HardwareHardwareTypeComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     hardwareType: IHardwareType = null;
 
@@ -129,7 +129,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                     description: model.description,
                     name: model.name,
                     changing_note: model.changing_note,
-                    version_identificator: model.version_identificator
+                    version_identifier: model.version_identifier
                 })
                     .then(() => {
                         this.refresh();
@@ -146,7 +146,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
             bootloader.description,
             bootloader.name,
             bootloader.changing_note,
-            bootloader.version_identificator
+            bootloader.version_identifier
         );
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -155,7 +155,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                     description: model.description,
                     name: model.name,
                     changing_note: model.changing_note,
-                    version_identificator: model.version_identificator
+                    version_identifier: model.version_identifier
                 })
                     .then(() => {
                         this.refresh();
@@ -188,11 +188,11 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onRemoveVersionClick(version: ICProgramVersionShortDetail): void {
-        this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
+    onRemoveVersionClick(version: ICProgramVersion): void {
+        this.modalService.showModal(new ModalsRemovalModel(version.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.cProgramVersionDelete(version.version_id)
+                this.tyrionBackendService.cProgramVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
                         this.refresh();
@@ -205,14 +205,14 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onEditVersionClick(version: ICProgramVersionShortDetail): void {
-        let model = new ModalsVersionDialogModel(version.version_name, version.version_description, true);
+    onEditVersionClick(version: ICProgramVersion): void {
+        let model = new ModalsVersionDialogModel(version.name, version.description, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.cProgramVersionEditInformation(version.version_id, { // TODO [permission]: version.update_permission
-                    version_name: model.name,
-                    version_description: model.description
+                this.tyrionBackendService.cProgramVersionEditInformation(version.id, {
+                    name: model.name,
+                    description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.name)));
@@ -231,7 +231,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.hardwareTypeUploadPicture(this.hardwareType.id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.hardwareTypeUploadPicture(this.hardwareType.id, {
                     file: model.file
                 })
                     .then(() => {
@@ -252,7 +252,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.bootloaderUploadFile(bootloader.id, { // TODO [permission]: version.update_permission
+                this.tyrionBackendService.bootloaderUploadFile(bootloader.id, {
                     file: model.file
                 })
                     .then(() => {
@@ -267,11 +267,11 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onCProgramDefaultSetMainClick(version: ICProgramVersionShortDetail) {
-        this.modalService.showModal(new ModalsSetAsMainModel(this.translate('label_default_c_program_setting'), version.version_name)).then((success) => {
+    onCProgramDefaultSetMainClick(version: ICProgramVersion) {
+        this.modalService.showModal(new ModalsSetAsMainModel(this.translate('label_default_c_program_setting'), version.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.typeofboardSetcprogramversion_as_main(version.version_id)
+                this.tyrionBackendService.hardwareTypeSetcprogramversion_as_main(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_set_as_default')));
                         this.refresh(); // also unblockUI
@@ -323,7 +323,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.hardwareTypeBatchCreate(this.hardwareType.id, {
+                this.tyrionBackendService.hardwareBatchCreate(this.hardwareType.id, {
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
@@ -350,7 +350,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onEditRevisionClick(batch: IHardwareTypeBatch) {
+    onEditRevisionClick(batch: IHardwareBatch) {
         let model = new ModalsCreateHardwareTypeBatchModel(
             true,
             batch.revision,
@@ -362,7 +362,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
             batch.mac_address_start,
             batch.mac_address_end,
             batch.ean_number,
-            batch.date_of_assembly,
+            batch.assembled,
             batch.customer_product_name,
             batch.customer_company_name,
             batch.customer_company_made_description,
@@ -370,7 +370,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.hardwareTypeBatchEdit(batch.id, {
+                this.tyrionBackendService.hardwareBatchEdit(batch.id, {
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
@@ -397,11 +397,11 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onDeleteRevisionClick(batch: IHardwareTypeBatch) {
+    onDeleteRevisionClick(batch: IHardwareBatch) {
         this.modalService.showModal(new ModalsRemovalModel(batch.revision + ' ' + batch.production_batch)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.hardwareTypeBatchDelete(batch.id)
+                this.tyrionBackendService.hardwareBatchDelete(batch.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.navigate(['admin/garfield/']);

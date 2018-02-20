@@ -4,8 +4,8 @@
  */
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
-import {IPermission, IPerson, IRole} from '../backend/TyrionAPI';
+import { _BaseMainComponent } from './_BaseMainComponent';
+import { IPermission, IPerson, IRole } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPermissionGroupModel } from '../modals/permission-group';
@@ -19,7 +19,7 @@ import { ModalsPermissionPermissionPropertyModel } from '../modals/permission-pe
     selector: 'bk-view-permission-group-group',
     templateUrl: './admin-permission-group-group.html'
 })
-export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class RoleGroupGroupComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 

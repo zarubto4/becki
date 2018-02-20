@@ -46,7 +46,7 @@ export class PasswordRestartComponent implements OnInit, OnDestroy {
 
     onSubmit(): void {
         this.backEndService.personRestartPassword({
-            mail: this.passwordRestartForm.controls['email'].value,
+            email: this.passwordRestartForm.controls['email'].value,
             password_recovery_token: this.token,
             password: this.passwordRestartForm.controls['password'].value
         })

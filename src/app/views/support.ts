@@ -1,12 +1,12 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 
 @Component({
     selector: 'bk-view-support',
     templateUrl: './support.html'
 })
-export class SupportComponent extends BaseMainComponent implements OnInit {
+export class SupportComponent extends _BaseMainComponent implements OnInit {
 
     tab: string = 'knowledge_base';
 

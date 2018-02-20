@@ -272,27 +272,13 @@ export class CurrentParamsService {
 
         }
 
-        if (this.currentParamsSnapshot['blocks'] !== params['blocks']) {
-
-            if (!params['blocks']) {
-                this.currentBlocksGroupNameSnapshot = null;
-                this.currentBlocksGroupNameSubject.next(this.currentBlocksGroupNameSnapshot);
-            } else {
-                this.backendService.typeOfBlockGet(params['blocks']).then((blocks) => {
-                    this.currentBlocksGroupNameSnapshot = blocks.name;
-                    this.currentBlocksGroupNameSubject.next(this.currentBlocksGroupNameSnapshot);
-                });
-            }
-
-        }
-
         if (this.currentParamsSnapshot['block'] !== params['block']) {
 
             if (!params['block']) {
                 this.currentBlockNameSnapshot = null;
                 this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
             } else {
-                this.backendService.blockoBlockGet(params['block']).then((block) => {// TODO [permission]: BlockoBlock_read_permission
+                this.backendService.blockGet(params['block']).then((block) => {// TODO [permission]: BlockoBlock_read_permission
                     this.currentBlockNameSnapshot = block.name;
                     this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
                 });
@@ -300,19 +286,6 @@ export class CurrentParamsService {
 
         }
 
-        if (this.currentParamsSnapshot['widgets'] !== params['widgets']) {
-
-            if (!params['widgets']) {
-                this.currentWidgetsGroupNameSnapshot = null;
-                this.currentWidgetsGroupNameSubject.next(this.currentWidgetsGroupNameSnapshot);
-            } else {
-                this.backendService.typeOfWidgetGet(params['widgets']).then((widgets) => { // TODO [permission]: TypeOfWidget_read_permission
-                    this.currentWidgetsGroupNameSnapshot = widgets.name;
-                    this.currentWidgetsGroupNameSubject.next(this.currentWidgetsGroupNameSnapshot);
-                });
-            }
-
-        }
 
         if (this.currentParamsSnapshot['widget'] !== params['widget']) {
 
@@ -320,7 +293,7 @@ export class CurrentParamsService {
                 this.currentWidgetNameSnapshot = null;
                 this.currentWidgetNameSubject.next(this.currentWidgetNameSnapshot);
             } else {
-                this.backendService.gridWidgetGet(params['widget']).then((widget) => { // TODO [permission]: GridWidget_read_permission
+                this.backendService.widgetGet(params['widget']).then((widget) => { // TODO [permission]: GridWidget_read_permission
                     this.currentWidgetNameSnapshot = widget.name;
                     this.currentWidgetNameSubject.next(this.currentWidgetNameSnapshot);
                 });
@@ -334,7 +307,7 @@ export class CurrentParamsService {
                 this.currentGridProjectNameSnapshot = null;
                 this.currentGridProjectNameSubject.next(this.currentGridProjectNameSnapshot);
             } else {
-                this.backendService.mProjectGet(params['grids']).then((gridProject) => {// TODO [permission]: M_Project.read_permission
+                this.backendService.gridProjectGet(params['grids']).then((gridProject) => {// TODO [permission]: M_Project.read_permission
                     this.currentGridProjectNameSnapshot = gridProject.name;
                     this.currentGridProjectNameSubject.next(this.currentGridProjectNameSnapshot);
                 });
@@ -348,7 +321,7 @@ export class CurrentParamsService {
                 this.currentGridNameSnapshot = null;
                 this.currentGridNameSubject.next(this.currentGridNameSnapshot);
             } else {
-                this.backendService.mProgramGet(params['grid']).then((gridProgram) => { // TODO [permission]: M_Program.read_permission
+                this.backendService.gridProgramGet(params['grid']).then((gridProgram) => { // TODO [permission]: M_Program.read_permission
                     this.currentGridNameSnapshot = gridProgram.name;
                     this.currentGridNameSubject.next(this.currentGridNameSnapshot);
                 });
@@ -453,7 +426,7 @@ export class CurrentParamsService {
                 this.currentBugSummarySubject.next(this.currentBugSummarySnapshot);
             } else {
                 this.backendService.getBug(params['bug']).then((bug) => {
-                    this.currentBugSummarySnapshot = bug.summary;
+                    this.currentBugSummarySnapshot = bug.stack_trace;
                     this.currentBugSummarySubject.next(this.currentBugSummarySnapshot);
                 });
             }

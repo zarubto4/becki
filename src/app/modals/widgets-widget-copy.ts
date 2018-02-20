@@ -7,12 +7,12 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { ITypeOfWidgetShortDetail } from '../backend/TyrionAPI';
+import { ITag } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsWidgetsWidgetCopyModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '',  public typeOfWidgets: ITypeOfWidgetShortDetail[] = [], public type_of_widget: string = '') {
+    constructor(public name: string = '', public description: string = '',  public tags: ITag[] = [], public type_of_widget: string = '') {
         super();
     }
 }
@@ -43,23 +43,13 @@ export class ModalsWidgetsWidgetCopyComponent implements OnInit {
     }
 
     ngOnInit() {
-
-        this.options = this.modalModel.typeOfWidgets.map((pv) => {
-            return {
-                label: pv.name,
-                value: pv.id
-            };
-        });
-
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['type_of_widget'])).setValue(this.modalModel.type_of_widget);
     }
 
     onSubmitClick(): void {
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
-        this.modalModel.type_of_widget = this.form.controls['type_of_widget'].value;
         this.modalClose.emit(true);
     }
 

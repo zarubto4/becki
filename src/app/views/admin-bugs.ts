@@ -3,14 +3,14 @@
  */
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IServerError } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-bugs',
     templateUrl: './admin-bugs.html'
 })
-export class BugsComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     bugs: IServerError[];
 

@@ -3,8 +3,9 @@
  * directory of this distribution.
  */
  -->
-
-<bk-layout-main [tabMenu]="tariffs-tariff" [title]="product?product.name:null">
+<bk-layout-main
+    [tabMenu]="'tariffs-tariff'"
+    [title]="product?product.name:null">
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">

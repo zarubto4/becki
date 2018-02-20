@@ -49,7 +49,7 @@ export class ModalsCreateProcessorComponent implements OnInit {
     ngOnInit() {
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['processor_code'])).setValue(this.modalModel.processor_code);
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.processor_name);
+        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['speed'])).setValue(this.modalModel.speed);
     }
 

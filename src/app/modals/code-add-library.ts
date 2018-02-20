@@ -4,18 +4,13 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {
-    ILibrary, ILibraryShortDetail, IMProgramShortDetailForBlocko,
-    IMProjectShortDetailForBlocko
-} from '../backend/TyrionAPI';
+import { ILibrary } from '../backend/TyrionAPI';
 
 
 export class ModalsCodeAddLibraryModel extends ModalModel {
-    constructor(public projectId: string, public library: ILibraryShortDetail = null) {
+    constructor(public projectId: string, public library: ILibrary = null) {
         super();
     }
 }
@@ -32,9 +27,9 @@ export class ModalsCodeAddLibraryComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    libraries: ILibraryShortDetail[] = [];
+    libraries: ILibrary[] = [];
 
-    selectedLibrary: ILibraryShortDetail = null;
+    selectedLibrary: ILibrary = null;
 
     page = 1;
 
@@ -69,7 +64,7 @@ export class ModalsCodeAddLibraryComponent implements OnInit {
 
     }
 
-    onLibraryClick(library: ILibraryShortDetail) {
+    onLibraryClick(library: ILibrary) {
         this.selectedLibrary = library;
     }
 

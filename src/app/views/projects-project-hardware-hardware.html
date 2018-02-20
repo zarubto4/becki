@@ -413,11 +413,11 @@
                                 <H4>{{'label_core_configuration'|bkTranslate:this}}</H4>
                                 <span [innerHtml]="'label_core_configuration_comment'|bkTranslate:this"></span>
                                 <div>
-                                    <button *ngIf="hardware.update_permission" [disabled]="hardware.online_state != 'online'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
+                                    <button *ngIf="hardware.update_permission" [disabled]="hardware.online_state != 'ONLINE'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
                                         <i class="fa fa-heartbeat"></i> {{'label_restart_hardware'|bkTranslate:this}}
                                     </button>
 
-                                    <button *ngIf="hardware.update_permission" [disabled]="hardware.online_state != 'online'" class="btn red btn-sm" (click)="onSwitchToBootloaderDeviceClick()">
+                                    <button *ngIf="hardware.update_permission" [disabled]="hardware.online_state != 'ONLINE'" class="btn red btn-sm" (click)="onSwitchToBootloaderDeviceClick()">
                                         <i class="fa fa-briefcase"></i> {{'label_restart_to_bootloader'|bkTranslate:this}}
                                     </button>
                                     <button *ngIf="hardware.update_permission" class="btn red btn-sm" (click)="onGenerateNewPassword()">
@@ -528,7 +528,7 @@
                                             <template [ngIf]="update.firmware_type == 'BOOTLOADER'">
                                                 <td class="vert-align font-grey-mint"></td>
                                                 <td class="vert-align font-grey-mint">
-                                                    <span *ngIf="update.bootloader_detail" class="font-grey-mint bold"> {{update.bootloader_detail.version_identificator}}</span>
+                                                    <span *ngIf="update.bootloader_detail" class="font-grey-mint bold"> {{update.bootloader_detail.version_identifier}}</span>
                                                 </td>
                                             </template>
 

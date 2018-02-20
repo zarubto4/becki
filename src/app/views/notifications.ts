@@ -4,7 +4,7 @@
 
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { NotificationService, FlashMessageError } from '../services/NotificationService';
 import { TyrionBackendService } from '../services/BackendService';
 
@@ -12,11 +12,11 @@ import { TyrionBackendService } from '../services/BackendService';
     selector: 'bk-view-notifications',
     templateUrl: './notifications.html'
 })
-export class NotificationsComponent extends BaseMainComponent implements OnInit {
+export class NotificationsComponent extends _BaseMainComponent implements OnInit {
 
     loading = false;
 
-    notificationService: NotificationService; // exposed for template - filled by BaseMainComponent
+    notificationService: NotificationService; // exposed for template - filled by _BaseMainComponent
 
     constructor(injector: Injector) {
         super(injector);

@@ -4,17 +4,14 @@
  */
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
-import { Subscription } from 'rxjs';
-import { IProducer, IReportAdminDashboard } from '../backend/TyrionAPI';
-import { CurrentParamsService } from '../services/CurrentParamsService';
-
+import { _BaseMainComponent } from './_BaseMainComponent';
+import { IReportAdminDashboard } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-admin-dashboard',
     templateUrl: './admin-dashboard.html'
 })
-export class AdminDashboardComponent extends BaseMainComponent implements OnInit {
+export class AdminDashboardComponent extends _BaseMainComponent implements OnInit {
 
     report: IReportAdminDashboard = null;
 

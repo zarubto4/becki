@@ -122,7 +122,11 @@ export class ModalsAddHardwareComponent implements OnInit {
         devicesForRegistration = devicesForRegistration.filter(device => device.length > 0);
 
         devicesForRegistration.forEach(device => {
-            this.backendService.boardConnectWithProject({ group_ids: this.multiSelectedHardwareGroups, registration_hash: device, project_id: this.modalModel.project_id })
+            this.backendService.projectAddHW({
+                group_ids: this.multiSelectedHardwareGroups,
+                registration_hash: device,
+                project_id: this.modalModel.project_id
+            })
                 .then(() => {
 
                     this.registredDevices.push(device);
@@ -153,7 +157,11 @@ export class ModalsAddHardwareComponent implements OnInit {
             this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
         }
 
-        this.backendService.boardConnectWithProject({ group_ids: groupIDs, registration_hash: this.form.controls['id'].value, project_id: this.modalModel.project_id })
+        this.backendService.projectAddHW({
+            group_ids: groupIDs,
+            registration_hash: this.form.controls['id'].value,
+            project_id: this.modalModel.project_id
+        })
             .then(() => {
                 this.modalClose.emit(true);
             })

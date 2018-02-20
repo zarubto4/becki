@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, FormSelectComponent } from '../components/FormSelectComponent';
-import { IHardware, IHardwareForFastUploadDetail } from '../backend/TyrionAPI';
+import { IHardware } from '../backend/TyrionAPI';
 import { TerminalParameters } from '../views/projects-project-hardware-hardware';
 import { ConsoleLogType } from '../components/ConsoleLogComponent';
 

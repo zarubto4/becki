@@ -9,11 +9,11 @@ import { FormGroup } from '@angular/forms';
 import { ModalModel } from '../services/ModalService';
 import { Core, EditorRenderer, Widgets } from 'the-grid';
 import { Types } from 'common-lib';
-import { IGridWidgetVersionShortDetail } from '../backend/TyrionAPI';
+import { IWidgetVersion } from '../backend/TyrionAPI';
 
 
 export class ModalsGridConfigPropertiesModel extends ModalModel {
-    constructor(public widget: Core.Widget, public gridController: Core.Controller, public widgetVersions?: IGridWidgetVersionShortDetail[]) {
+    constructor(public widget: Core.Widget, public gridController: Core.Controller, public widgetVersions?: IWidgetVersion[]) {
         super();
     }
 }
@@ -40,7 +40,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     formModelOutputs: {[key: string]: any} = {};
     formModelVersion: string;
 
-    widgetVersions: IGridWidgetVersionShortDetail[] = [];
+    widgetVersions: IWidgetVersion[] = [];
 
     StringToConfigPropertyTypeTable = Types.StringToConfigPropertyTypeTable;
     ConfigPropertyType = Types.ConfigPropertyType;

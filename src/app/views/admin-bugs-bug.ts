@@ -2,7 +2,7 @@
  * Created by alexandrtyls on 03.10.17.
  */
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { IServerError } from '../backend/TyrionAPI';
@@ -11,13 +11,13 @@ import { IServerError } from '../backend/TyrionAPI';
     selector: 'bk-view-bugs-bug',
     templateUrl: './admin-bugs-bug.html'
 })
-export class BugsBugComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class BugsBugComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     bugId: string;
     bug: IServerError;
 
     routeParamsSubscription: Subscription;
-    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     constructor(injector: Injector) {
         super(injector);

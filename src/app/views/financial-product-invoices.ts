@@ -6,7 +6,7 @@
  * directory of this distribution.
  */
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IInvoice } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -17,7 +17,7 @@ import { GoPayLoaderService } from '../services/GoPayLoaderService';
     selector: 'bk-view-financial-product-invoices',
     templateUrl: './financial-product-invoices.html'
 })
-export class FinancialProductInvoicesComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class FinancialProductInvoicesComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 

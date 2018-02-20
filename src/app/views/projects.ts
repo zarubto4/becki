@@ -4,7 +4,7 @@
  */
 
 import { Component, OnInit, Injector } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import {
     FlashMessageError, FlashMessageSuccess,
     FlashMessageInfo, FlashMessageWarning, FlashMessage
@@ -18,7 +18,7 @@ import { IApplicableProduct, IProject} from '../backend/TyrionAPI';
     selector: 'bk-view-projects',
     templateUrl: './projects.html',
 })
-export class ProjectsComponent extends BaseMainComponent implements OnInit {
+export class ProjectsComponent extends _BaseMainComponent implements OnInit {
 
     projects: IProject[];
 

@@ -39,22 +39,22 @@ export abstract class Notification {
         let out: Notification = null;
 
         switch (n.notification_level) {
-            case 'info':
+            case 'INFO':
                 out = new NotificationInfo(n.id, n.notification_body, n.created);
                 break;
-            case 'success':
+            case 'SUCCESS':
                 out = new NotificationSuccess(n.id, n.notification_body, n.created);
                 break;
-            case 'warning':
+            case 'WARNING':
                 out = new NotificationWarning(n.id, n.notification_body, n.created);
                 break;
-            case 'error':
+            case 'ERROR':
                 out = new NotificationError(n.id, n.notification_body, n.created);
                 break;
         }
 
         if (out) {
-            if (n.notification_importance === 'high') {
+            if (n.notification_importance === 'HIGH') {
                 out.highImportance = true;
             }
             if (n.was_read) {
@@ -66,7 +66,7 @@ export abstract class Notification {
             if (n.buttons) {
                 out.buttons = n.buttons;
             }
-            if (n.notification_importance === 'low') {
+            if (n.notification_importance === 'LOW') {
                 out.wasRead = true;
             }
         }
@@ -311,7 +311,9 @@ export class NotificationService {
         });
 
         // register error handler for websocket error
-        this.backendService.webSocketErrorOccurred.subscribe(error => this.addFlashMessage(new FlashMessageError(this.translate('flash_communication_failed', error))));
+        this.backendService.webSocketErrorOccurred.subscribe(error => {
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_communication_failed')));
+        });
 
         // subscribe websocket notifications
         this.backendService.notificationReceived.subscribe(notification => {
@@ -345,10 +347,10 @@ export class NotificationService {
                         } else {
                             let notif: Notification = Notification.fromINotification(notification);
                             switch (notification.notification_importance) {
-                                case 'low':
+                                case 'LOW':
                                     this.addOverlayNotification(notif);
                                     break;
-                                case 'normal':
+                                case 'NORMAL':
                                     if (!notif.wasRead) {
                                         this.unreadNotificationsCount++;
                                     }
@@ -357,7 +359,7 @@ export class NotificationService {
                                     this.addSavedNotification(notif);
                                     this.addOverlayNotification(notif);
                                     break;
-                                case 'high':
+                                case 'HIGH':
                                     if (!notif.wasRead) {
                                         this.unreadNotificationsCount++;
                                     }

@@ -30,7 +30,7 @@
         <div class="mt-element-card mt-element-overlay">
             <div class="row">
                 <div *ngFor="let device of devices; let index = index" class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                    <a class="hardware-card" (click)="onDeviceClick(device)">
+                    <a class="hardware-card" (click)="onDeviceClick(device.id)">
                         <div class="mt-card-item">
                             <div class="mt-card-avatar">
                                 <img class="img" *ngIf="device.picture_link" src="{{device.picture_link}}">

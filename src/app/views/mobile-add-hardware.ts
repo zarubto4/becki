@@ -4,11 +4,11 @@
  */
 
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
 import { FormGroup, Validators } from '@angular/forms';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { IProject, IProjectShortDetail } from '../backend/TyrionAPI';
+import { IProject } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 
@@ -16,7 +16,7 @@ import { MultiSelectComponent } from '../components/MultiSelectComponent';
     selector: 'bk-view-mobile-add-hardware',
     templateUrl: './mobile-add-hardware.html'
 })
-export class MobileAddHardwareComponent extends BaseMainComponent implements OnInit {
+export class MobileAddHardwareComponent extends _BaseMainComponent implements OnInit {
 
     @ViewChild('groupList')
     listGroup: MultiSelectComponent;
@@ -47,7 +47,9 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     }
 
     reloadGroupOptions() {
-        this.tyrionBackendService.boardGroupGetListFromProject(this.blockForm.controls['project'].value).then(groups => {
+        this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
+            project_id: this.blockForm.controls['project'].value
+        }).then(groups => {
             this.group_options_available = groups.map((pv) => {
                 return {
                     label: pv.name,
@@ -62,8 +64,8 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
         this.tyrionBackendService.projectGetByLoggedPerson().then((projects) => {
             this.projects = projects.map(project => {
                 return {
-                    label: project.project_name,
-                    value: project.project_id
+                    label: project.name,
+                    value: project.id
                 };
             });
 
@@ -79,10 +81,10 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     }
 
     onSubmit(): void {
-        let groupIDs = this.listGroup.selectedItems.map(a => a.value);
+        let groupIDs: string[] = this.listGroup.selectedItems.map(a => a.value);
 
         this.blockUI();
-        this.tyrionBackendService.boardConnectWithProject({
+        this.tyrionBackendService.projectAddHW({
             group_ids: groupIDs,
             registration_hash: this.blockForm.controls['id'].value,
             project_id: this.blockForm.controls['project'].value

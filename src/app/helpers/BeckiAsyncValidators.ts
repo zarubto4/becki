@@ -53,7 +53,7 @@ export class AsyncValidatorDebounce {
 
 export class BeckiAsyncValidators {
 
-    public static validateEntity(backEnd: TyrionBackendService, inputKey: ('mail'|'nick_name'|'vat_number')): AsyncValidatorFn {
+    public static validateEntity(backEnd: TyrionBackendService, inputKey: ('email'|'nick_name'|'vat_number')): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
 
@@ -84,7 +84,7 @@ export class BeckiAsyncValidators {
             return new Promise<any>((resolve) => {
                 backEnd.projectGetByLoggedPerson()
                     .then((projects) => {
-                        if (projects.find(project => project.project_name === control.value)) {
+                        if (projects.find(project => project.name === control.value)) {
                             resolve({'projectNameTaken': true}); // invalid
                         } else {
                             resolve(null); // valid

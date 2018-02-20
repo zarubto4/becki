@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import {
-    IHardware, IBootLoader, ICProgramVersionShortDetail, IGarfield, IHardwareNewSettingsResult, IHomerServer,
+    IHardware, IBootLoader, ICProgramVersion, IGarfield, IHardwareNewSettingsResult, IHomerServer,
     IPrinter, IHardwareType
 } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -12,7 +12,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import {
     TyrionApiBackend, IWebSocketGarfieldDeviceConnect, IWebSocketGarfieldDeviceConfigure, IWebSocketMessage,
-    IWebSocketGarfieldDeviceBinary, BugFoundError, IWebSocketGarfieldDeviceTest
+    IWebSocketGarfieldDeviceBinary, IWebSocketGarfieldDeviceTest
 } from '../backend/BeckiBackend';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
@@ -21,7 +21,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
     selector: 'bk-view-garfield-garfield',
     templateUrl: './garfield-garfield.html'
 })
-export class GarfieldGarfieldComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     garfield: IGarfield = null;
     garfieldId: string;
@@ -29,8 +29,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     device: IHardwareNewSettingsResult = null;
     deviceId: string = null;
 
-    firmwareTestMainVersion: ICProgramVersionShortDetail = null;    // Main Test Firmware
-    firmwareMainVersion: ICProgramVersionShortDetail = null;        // Main Production Firmware
+    firmwareTestMainVersion: ICProgramVersion = null;    // Main Test Firmware
+    firmwareMainVersion: ICProgramVersion = null;        // Main Production Firmware
     bootLoader: IBootLoader = null;
     mainServer: IHomerServer = null;           // Destination for Server registration
     backupServer: IHomerServer = null;         // Destination for Server registration (backup)
@@ -194,22 +194,22 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             .then((garfield) => {
                 this.garfield = garfield;
 
-                this.hardwareType = garfield.type_of_board;
-                this.bootLoader = garfield.type_of_board.main_boot_loader;
+                this.hardwareType = garfield.hardware_type;
+                this.bootLoader = garfield.hardware_type.main_boot_loader;
 
 
                 this.batchOptions = this.hardwareType.batchs.map((pv) => {
                     return {
-                        label: pv.revision + ' ' + pv.production_batch + ' (' + pv.date_of_assembly + ')',
+                        label: pv.revision + ' ' + pv.production_batch + ' (' + pv.assembled + ')',
                         value: pv.id
                     };
                 });
 
                 let personObject = this.tyrionBackendService.personInfoSnapshot;
-                this.personName = personObject.full_name;
+                this.personName = personObject.first_name + personObject.last_name;
 
                 // Find Test firmware main test version
-                for (let key in this.garfield.type_of_board.main_test_c_program.program_versions) {
+                for (let key in this.garfield.hardware_type.main_test_c_program.program_versions) {
 
                     if (!this.hardwareType.main_test_c_program.program_versions.hasOwnProperty(key)) {
                         continue;
@@ -223,7 +223,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 }
 
                 // Find Main Production firmware main version
-                for (let key in this.garfield.type_of_board.main_c_program.program_versions) {
+                for (let key in this.garfield.hardware_type.main_c_program.program_versions) {
 
                     if (!this.hardwareType.main_c_program.program_versions.hasOwnProperty(key)) {
                         continue;
@@ -236,7 +236,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 }
 
                 // Find Main and Backup Server
-                this.tyrionBackendService.homerServersGetList()
+                this.tyrionBackendService.homerServersGetList(0, {
+                    server_types : ['BACKUP', 'MAIN']
+                })
                     .then((IHomerServer) => {
 
                         for (let key in IHomerServer) {
@@ -382,7 +384,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             this.garfield.hardware_tester_id,
             true,
             this.garfield.producer.name,
-            this.garfield.type_of_board.name
+            this.garfield.hardware_type.name
         );
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -511,8 +513,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         return this.tyrionBackendService.boardCreateAutomaticGarfield({
             full_id: full_id,
             garfield_station_id: this.garfield.id,
-            type_of_board_batch_id: this.productionBatchForm.controls['batch'].value,
-            type_of_board_id: this.hardwareType.id
+            batch_id: this.productionBatchForm.controls['batch'].value,
+            hardware_type_id: this.hardwareType.id
         });
     }
 

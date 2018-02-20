@@ -3,7 +3,7 @@
  * of this distribution.
  */
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { IProject } from '../backend/TyrionAPI';
@@ -15,7 +15,7 @@ import { ModalsRemovalModel } from '../modals/removal';
     selector: 'bk-view-projects-project',
     templateUrl: './projects-project.html',
 })
-export class ProjectsProjectComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     // Routes
     routeParamsSubscription: Subscription;
@@ -24,7 +24,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
     project_id: string; // Project ID
     project: IProject = null;
 
-    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     constructor(injector: Injector) {
         super(injector);

@@ -3,26 +3,22 @@
  * of this distribution.
  */
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
-import {
-    ICompilationServer, ICompilerServerPublicDetail, IHomerServer,
-    IHardwareType
-} from '../backend/TyrionAPI';
+import { _BaseMainComponent } from './_BaseMainComponent';
+import { ICompilationServer, IHomerServer } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IVersionOverview } from '../backend/HomerAPI';
 import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
 
 @Component({
     selector: 'bk-view-admin-server',
     templateUrl: './admin-server.html'
 })
-export class ServerComponent extends BaseMainComponent implements OnInit {
+export class ServerComponent extends _BaseMainComponent implements OnInit {
 
     homer_servers: IHomerServer[] = null;
-    compilations_servers: ICompilerServerPublicDetail[] = null;
+    compilations_servers: ICompilationServer[] = null;
 
     tab: string = 'homer_server';
 
@@ -37,8 +33,10 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.tyrionBackendService.homerServersGetList(), this.tyrionBackendService.compilationServersGetList()])
-            .then((values: [IHomerServer[], ICompilerServerPublicDetail[]]) => {
+        Promise.all<any>([this.tyrionBackendService.homerServersGetList(0, {
+            server_types : ['PUBLIC', 'BACKUP', 'MAIN', 'TEST']
+        }), this.tyrionBackendService.compilationServersGetList()])
+            .then((values: [IHomerServer[], ICompilationServer[]]) => {
 
                 this.homer_servers = values[0];
                 this.homer_servers.forEach((server, index, obj) => {
@@ -48,7 +46,6 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                         }
                     });
                 });
-
 
                 this.compilations_servers = values[1];
                 this.compilations_servers.forEach((server, index, obj) => {
@@ -190,43 +187,30 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onCompilationServerClick(serverShortDetail: ICompilerServerPublicDetail): void {
+    onCompilationServerClick(server: ICompilationServer): void {
         // TODO dodělat stránku server??
     }
 
-    onCompilationServerEditClick(serverShortDetail: ICompilerServerPublicDetail): void {
-        // Get full detail object first
-        Promise.all<any>([this.tyrionBackendService.compilationServerGet(serverShortDetail.id)])
-            .then((values: [ICompilationServer]) => {
-
-                let server: ICompilationServer = values[0];
-
-                let model = new ModalsCreateCompilerServerModel(server.personal_server_name, server.server_url, true);
-                this.modalService.showModal(model).then((success) => {
-                    if (success) {
-                        this.blockUI();
-                        this.tyrionBackendService.compilationServerEdit(server.id, {
-                            personal_server_name: model.personal_server_name,
-                            server_url: model.server_url
-                        })
-                            .then(() => {
-                                this.refresh();
-                            }).catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                                this.refresh();
-                            });
-                    }
-                });
-
-                this.unblockUI();
-            })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
-                this.unblockUI();
-            });
+    onCompilationServerEditClick(server: ICompilationServer): void {
+        let model = new ModalsCreateCompilerServerModel(server.personal_server_name, server.server_url, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.compilationServerEdit(server.id, {
+                    personal_server_name: model.personal_server_name,
+                    server_url: model.server_url
+                })
+                    .then(() => {
+                        this.refresh();
+                    }).catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
-    onCompilationServerDeleteClick(server: ICompilerServerPublicDetail): void {
+    onCompilationServerDeleteClick(server: ICompilationServer): void {
         this.modalService.showModal(new ModalsRemovalModel(server.personal_server_name)).then((success) => {
             if (success) {
                 this.blockUI();

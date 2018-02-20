@@ -4,14 +4,14 @@
  */
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IHardwareType } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-hardware',
     templateUrl: './hardware.html'
 })
-export class HardwareComponent extends BaseMainComponent implements OnInit {
+export class HardwareComponent extends _BaseMainComponent implements OnInit {
 
     devices: IHardwareType[] = null;
 
@@ -35,10 +35,6 @@ export class HardwareComponent extends BaseMainComponent implements OnInit {
                 this.fmError( this.translate('flash_project_cant_load', reason));
                 this.unblockUI();
             });
-    }
-
-    onDeviceClick(device: IHardwareType) {
-        this.navigate(['/hardware', device.id]);
     }
 
 }

@@ -4,7 +4,7 @@
  */
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IRole } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -14,7 +14,7 @@ import { ModalsPermissionGroupModel } from '../modals/permission-group';
     selector: 'bk-view-permission-group',
     templateUrl: './admin-permission-group.html'
 })
-export class RoleGroupComponent extends BaseMainComponent implements OnInit {
+export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
 
     securityRole: IRole[] = null;
 

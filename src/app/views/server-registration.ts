@@ -1,6 +1,6 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
@@ -8,7 +8,7 @@ import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
     selector: 'bk-view-support',
     templateUrl: './server-registration.html'
 })
-export class ServerRegistrationComponent extends BaseMainComponent implements OnInit {
+export class ServerRegistrationComponent extends _BaseMainComponent implements OnInit {
 
     tab: string = 'knowledge_base';
 

@@ -29,6 +29,7 @@ export class ModalsBillingInformationModel extends ModalModel {
         public company_registration_no: string = '',
         public company_vat_number: string = '',
         public zip_code: string = '',
+        public method: ('BANK_TRANSFER' | 'CREDIT_CARD' | 'FREE') = 'FREE'
     ) {
         super();
     }

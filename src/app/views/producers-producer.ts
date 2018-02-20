@@ -3,7 +3,7 @@
  */
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -12,7 +12,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
     selector: 'bk-view-producers',
     templateUrl: './producers-producer.html'
 })
-export class ProducersProducerComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProducersProducerComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     routeParamsSubscription: Subscription;
 
@@ -21,7 +21,7 @@ export class ProducersProducerComponent extends BaseMainComponent implements OnI
 
     devices: IHardwareType[] = null;
 
-    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     constructor(injector: Injector) {
         super(injector);
@@ -60,7 +60,4 @@ export class ProducersProducerComponent extends BaseMainComponent implements OnI
         this.unblockUI();
     }
 
-    onDeviceClick(device: IHardwareType): void {
-        this.navigate(['/hardware', device.id]);
-    }
 }

@@ -4,8 +4,8 @@
  */
 
 import { Component, Input, Output, EventEmitter, OnInit, NgZone } from '@angular/core';
-import { ICProgram, ICProgramForBlocko, ICProgramVersionShortDetail } from '../backend/TyrionAPI';
-import { BaseMainComponent } from '../views/BaseMainComponent';
+import { ICProgram, ICProgramVersion } from '../backend/TyrionAPI';
+import { _BaseMainComponent } from '../views/_BaseMainComponent';
 import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 import { ModalService } from '../services/ModalService';
@@ -47,7 +47,7 @@ export class CProgramVersionSelectorComponent implements OnInit {
     cPrograms: ICProgram[] = null;
 
     // Fill after select Program
-    selectedVersions: ICProgramVersionShortDetail[] = null;
+    selectedVersions: ICProgramVersion[] = null;
 
     @Input()
     already_selected_c_program_id: string = null;
@@ -62,7 +62,7 @@ export class CProgramVersionSelectorComponent implements OnInit {
     valueChanged: EventEmitter<string> = new EventEmitter<string>();
 
     selectedProgram: ICProgram = null;
-    selectedVersion: ICProgramVersionShortDetail = null;
+    selectedVersion: ICProgramVersion = null;
     selectedProgramId: string = null;
     selectedProgramVersionId: string = null;
 
@@ -90,8 +90,8 @@ export class CProgramVersionSelectorComponent implements OnInit {
                         .then((program) => {
                             this.selectedVersions = program.program_versions;
                             program.program_versions.forEach((cp) => {
-                                if (cp.version_id === this.already_selected_c_program_version_id) {
-                                    this.selectedProgramVersionId = cp.version_id;
+                                if (cp.id === this.already_selected_c_program_version_id) {
+                                    this.selectedProgramVersionId = cp.id;
                                     this.selectedVersion = cp;
                                 }
                             });

@@ -8,7 +8,7 @@
  */
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IProductExtension } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
     selector: 'bk-view-financial-product-extensions',
     templateUrl: './financial-product-extensions.html'
 })
-export class FinancialProductExtensionsComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class FinancialProductExtensionsComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 

@@ -8,10 +8,10 @@ import { FormGroup } from '@angular/forms';
 import { ModalModel } from '../services/ModalService';
 import { Core, Blocks } from 'blocko';
 import { Types } from 'common-lib';
-import { IBlockoBlockVersionShortDetail } from '../backend/TyrionAPI';
+import { IBlockVersion } from '../backend/TyrionAPI';
 
 export class ModalsBlockoConfigPropertiesModel extends ModalModel {
-    constructor(public block: Core.Block, public blockVersions?: IBlockoBlockVersionShortDetail[], public changeVersionCallback?: ((block: Blocks.TSBlock, versionId: string) => void)) {
+    constructor(public block: Core.Block, public blockVersions?: IBlockVersion[], public changeVersionCallback?: ((block: Blocks.TSBlock, versionId: string) => void)) {
         super();
     }
 }
@@ -38,7 +38,7 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
     formModelVersion: string = null;
 
     configPropertyType = Types.ConfigPropertyType;
-    blockVersions: IBlockoBlockVersionShortDetail[] = [];
+    blockVersions: IBlockVersion[] = [];
 
     constructor(protected zone: NgZone) {
 

@@ -8,14 +8,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {
-    ILibrary, ILibraryShortDetail, ILibraryVersionShortDetail, IMProgramShortDetailForBlocko,
-    IMProjectShortDetailForBlocko
-} from '../backend/TyrionAPI';
+import { ILibrary, ILibraryVersion } from '../backend/TyrionAPI';
 
 
 export class ModalsCodeLibraryVersionModel extends ModalModel {
-    constructor(public libraryId: string, public selectedLibraryVersionId: string = null,  public libraryVersion: ILibraryVersionShortDetail = null) {
+    constructor(public libraryId: string, public selectedLibraryVersionId: string = null,  public libraryVersion: ILibraryVersion = null) {
         super();
     }
 }
@@ -34,14 +31,14 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
 
     library: ILibrary = null;
 
-    selectedLibraryVersion: ILibraryVersionShortDetail = null;
+    selectedLibraryVersion: ILibraryVersion = null;
 
     loading = false;
 
     constructor(private backendService: TyrionBackendService) {
     }
 
-    onLibraryVersionClick(libraryVersion: ILibraryVersionShortDetail) {
+    onLibraryVersionClick(libraryVersion: ILibraryVersion) {
         this.selectedLibraryVersion = libraryVersion;
     }
 
@@ -54,7 +51,7 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
                     this.library = l;
                     if (this.modalModel.selectedLibraryVersionId) {
                         l.versions.forEach((v) => {
-                            if (v.version_id === this.modalModel.selectedLibraryVersionId) {
+                            if (v.id === this.modalModel.selectedLibraryVersionId) {
                                 this.selectedLibraryVersion = v;
                             }
                         });

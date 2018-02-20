@@ -47,7 +47,6 @@ let CONFIG = {
     methodsReplace: {
 
         // "" for ignore
-        'get:/websocket/becki/{secure_token}': '',
         'get:/websocket/homer_server/{identificator}': '',
         'get:/websocket/compilation_server/{identificator}': '',
         'put:/websocket/terminal/identificator': '',
@@ -271,11 +270,6 @@ definitionsKeys.forEach((defName) => {
 
             let prop = props[propKey];
             let required = (propsRequired.indexOf(propKey) > -1) ? '' : '?';
-
-            // TODO: check if this is okay!
-            if (prop['readOnly'] === true) {
-                required = '';
-            }
 
             let type = solveType(prop);
 

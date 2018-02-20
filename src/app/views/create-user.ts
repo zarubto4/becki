@@ -38,9 +38,10 @@ export class CreateUserComponent implements OnInit, OnDestroy {
 
     ) {
         this.CreateUserForm = this.formBuilder.group({
-            'email': ['', [Validators.required, BeckiValidators.email], BeckiAsyncValidators.validateEntity(this.backendService, 'mail')],
+            'email': ['', [Validators.required, BeckiValidators.email], BeckiAsyncValidators.validateEntity(this.backendService, 'email')],
             'nick_name': ['', [Validators.required, Validators.minLength(5), Validators.maxLength(60)], BeckiAsyncValidators.validateEntity(this.backendService, 'nick_name')],
-            'full_name': ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60)]],
+            'first_name': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
+            'last_name': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
             'password': ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60)]],
             'passwordConfirm': ['', [BeckiValidators.passwordSame(() => this.CreateUserForm, 'password'), Validators.required, Validators.minLength(8), Validators.maxLength(60)]]
 
@@ -62,9 +63,10 @@ export class CreateUserComponent implements OnInit, OnDestroy {
     sendCreateUser(): void {
         this.backendService.personCreate({
             nick_name: this.CreateUserForm.controls['nick_name'].value,
-            mail: this.CreateUserForm.controls['email'].value,
+            email: this.CreateUserForm.controls['email'].value,
             password: this.CreateUserForm.controls['password'].value,
-            full_name: this.CreateUserForm.controls['full_name'].value
+            first_name: this.CreateUserForm.controls['first_name'].value,
+            last_name: this.CreateUserForm.controls['last_name'].value
         })
             .then(() => {
                 this.notificationService.addFlashMessage(new FlashMessageSuccess(this.translateService.translate('flash_email_was_send', this)));

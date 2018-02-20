@@ -4,13 +4,13 @@
  */
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 
 @Component({
     selector: 'bk-view-dashboard',
     templateUrl: './dashboard.html'
 })
-export class DashboardComponent extends BaseMainComponent implements OnInit {
+export class DashboardComponent extends _BaseMainComponent implements OnInit {
 
     constructor(injector: Injector) {
         super(injector);

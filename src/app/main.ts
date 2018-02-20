@@ -29,12 +29,10 @@ import { FormColorPickerComponent } from './components/FormColorPickerComponent'
 import { FormFAIconSelectComponent } from './components/FormFAIconSelectComponent';
 import { FormInputComponent } from './components/FormInputComponent';
 import { FormSelectComponent } from './components/FormSelectComponent';
-import { BlockoViewComponent } from './components/BlockoViewComponent';
 import { CodeIDEComponent } from './components/CodeIDEComponent';
 import { CProgramVersionSelectorComponent } from './components/CProgramVersionSelectorComponent';
 import { DraggableDirective } from './components/DraggableDirective';
 import { FileTreeComponent } from './components/FileTreeComponent';
-import { GridViewComponent } from './components/GridViewComponent';
 import { Error404Component } from './views/error404';
 import { LoginComponent } from './views/login';
 import { LogoutComponent } from './views/logout';
@@ -42,18 +40,11 @@ import { DashboardComponent } from './views/dashboard';
 import { ProjectsComponent } from './views/projects';
 import { ProjectsProjectComponent } from './views/projects-project';
 import { ProjectsProjectHardwareComponent } from './views/projects-project-hardware';
-import { ProjectsProjectBlockoComponent } from './views/projects-project-blocko';
-import { ProjectsProjectCodeComponent } from './views/projects-project-code';
-import { ProjectsProjectBlockoBlockoComponent } from './views/projects-project-blocko-blocko';
-import { ProjectsProjectCodeCodeComponent } from './views/projects-project-code-code';
 import { NotificationsComponent } from './views/notifications';
 import { ProfileComponent } from './views/profile';
 import { ForgotPasswordComponent } from './views/login-forgot-password';
 import { PasswordRestartComponent } from './views/login-password-restart';
-import { ProjectsProjectBlocksComponent } from './views/projects-project-blocks';
-import { ProjectsProjectBlocksBlocksBlockComponent } from './views/projects-project-blocks-blocks-block';
 import { CreateUserComponent } from './views/create-user';
-import { ProjectsProjectGridComponent } from './views/projects-project-grid';
 import { RedirectOkComponent } from './components/redirect-ok';
 import { ProductRegistrationComponent } from './views/financial-product-registration';
 import { ModalsProjectPropertiesComponent } from './modals/project-properties';
@@ -79,16 +70,12 @@ import { ModalsInstanceEditDescriptionComponent } from './modals/instance-edit-d
 import { ModalsWidgetsTypePropertiesComponent } from './modals/widgets-type-properties';
 import { BlockUIService } from './services/BlockUIService';
 import { BlockUIComponent } from './components/BlockUIComponent';
-import { ProjectsProjectBlocksBlocksComponent } from './views/projects-project-blocks-blocks';
-import { ProjectsProjectGridGridsComponent } from './views/projects-project-grid-grids';
-import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-grid-grids-grid';
+
 import { FinancialComponent } from './views/financial';
 import { NotificationsOverlayComponent } from './components/NotificationsOverlayComponent';
 import { NotificationsListComponent } from './components/NotificationsListComponent';
 import { ModalsBlockoVersionSelectComponent } from './modals/blocko-version-select';
 import { FinancialProductComponent } from './views/financial-product';
-import { ProjectsProjectInstancesComponent } from './views/projects-project-instances';
-import { ProjectsProjectInstancesInstanceComponent } from './views/projects-project-instances-instance';
 import { HardwareComponent } from './views/hardware';
 import { HardwareHardwareTypeComponent } from './views/hardware-hardware_type';
 import { ProjectsProjectMembersComponent } from './views/projects-project-members';
@@ -99,11 +86,8 @@ import { FinancialProductInvoicesInvoiceComponent } from './views/financial-prod
 import { FinancialProductBillingComponent } from './views/financial-product-billing';
 import { StringReplacerPipe } from './pipes/StringReplacerPipe';
 import { StorageService } from './services/StorageService';
-import { ProjectsProjectWidgetsComponent } from './views/projects-project-widgets';
-import { ProjectsProjectWidgetsWidgetsComponent } from './views/projects-project-widgets-widgets';
 import { ServerComponent } from './views/admin-server';
 import { ModalsWidgetsWidgetPropertiesComponent } from './modals/widgets-widget-properties';
-import { ProjectsProjectWidgetsWidgetsWidgetComponent } from './views/projects-project-widgets-widgets-widget';
 import { MonacoEditorComponent } from './components/MonacoEditorComponent';
 import { UpdateStateComponent } from './components/UpdateStateComponent';
 import { MonacoEditorLoaderService } from './services/MonacoEditorLoaderService';
@@ -123,11 +107,9 @@ import { TranslateTablePipe } from './pipes/TranslationTablePipe';
 import { TranslatePipe } from './pipes/TranslationPipe';
 import { Md2HtmlPipe } from './pipes/Md2HtmlPipe';
 import { ModalsHardwareBootloaderUpdateComponent } from './modals/hardware-bootloader-update';
-import { InstanceHistoryTimelineComponent } from './components/InstanceHistoryTimelineComponent';
+import { InstanceHistoryTimeLineComponent } from './components/InstanceHistoryTimeLineComponent';
 import { QRCodeComponent } from './components/QRCodeComponent';
-import { ProjectsProjectLibrariesComponent } from './views/projects-project-libraries';
 import { ModalsLibraryPropertiesComponent } from './modals/library-properties';
-import { ProjectsProjectLibrariesLibraryComponent } from './views/projects-project-libraries-library';
 import { ModalsCodeAddLibraryComponent } from './modals/code-add-library';
 import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version';
 import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardware-code-program-version-select';
@@ -191,16 +173,16 @@ import { TyrionComponent } from './views/admin-tyrion';
 import { OnlineStateComponent } from './components/OnlineStateComponent';
 import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
 import { CompilationStatusComponent } from './components/CompilationStatusComponent';
-import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
 import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalPickHardwareTerminalComponent } from './modals/pick-hardware-terminal';
 import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerComponent } from './modals/hardware-change-server';
-import { TimeZoneSelectorComponent } from './components/TimeZoneSelector';
+import { TimeZoneSelectorComponent } from './components/TimeZoneComponent';
 import { BeckiClickOutsideDirective } from './helpers/ClickDetection';
 import { ModalsCodeSelectComponent } from './modals/code-select';
 import { BeckiBooleanButtonComponent } from './components/BooleanButtonComponent';
+import { NothingToShowComponent } from './components/NothingToShowComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -239,7 +221,7 @@ let routes: Routes = [
 
     { path: 'hardware', data: { breadName: 'Hardware types' }, component: HardwareComponent, canActivate: [AuthGuard] },
     { path: 'hardware/:hardware_type', data: { breadName: ':last' }, component: HardwareHardwareTypeComponent, canActivate: [AuthGuard] },
-    { path: 'hardware/:hardware_type/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
+    // { path: 'hardware/:hardware_type/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     { path: 'device/:hardware', data: { breadName: ':last' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
 
 
@@ -247,28 +229,28 @@ let routes: Routes = [
     { path: 'projects/:project', data: { breadName: ':project' }, component: ProjectsProjectComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware', data: { breadName: 'HARDWARE devices' }, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware/:hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
-    { path: 'projects/:project/code', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
-    { path: 'projects/:project/blocks', data: { breadName: 'BLOCKO blocks' }, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/blocks/:blocks', data: { breadName: ':blocks' }, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/blocks/:blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
-    { path: 'projects/:project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
+   // { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
+   // { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
+    // { path: 'projects/:project/code', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
+    //  { path: 'projects/:project/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
+    // { path: 'projects/:project/blocks', data: { breadName: 'BLOCKO blocks' }, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard] },
+    //  { path: 'projects/:project/blocks/:blocks', data: { breadName: ':blocks' }, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard] },
+    //  { path: 'projects/:project/blocks/:blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+    // { path: 'projects/:project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
 
-    { path: 'projects/:project/actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
+    //  { path: 'projects/:project/actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
 
-    { path: 'projects/:project/grid', data: { breadName: 'GRID projects' }, component: ProjectsProjectGridComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/grid/:grids', data: { breadName: ':grids' }, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/grid/:grids/:grid', data: { breadName: ':grid' }, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
-    { path: 'projects/:project/instances', data: { breadName: 'CLOUD instances' }, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/grid', data: { breadName: 'GRID projects' }, component: ProjectsProjectGridComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/grid/:grids', data: { breadName: ':grids' }, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/grid/:grids/:grid', data: { breadName: ':grid' }, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+    // { path: 'projects/:project/instances', data: { breadName: 'CLOUD instances' }, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
 
-    { path: 'projects/:project/widgets', data: { breadName: 'GRID widgets' }, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/widgets/:widgets', data: { breadName: ':widgets' }, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/widgets/:widgets/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+    // { path: 'projects/:project/widgets', data: { breadName: 'GRID widgets' }, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/widgets/:widgets', data: { breadName: ':widgets' }, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/widgets/:widgets/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
     { path: 'producers', data: { breadName: 'Producers' }, component: ProducersComponent, canActivate: [AuthGuard] },
     { path: 'producers/:producer', data: { breadName: ':producer' }, component: ProducersProducerComponent, canActivate: [AuthGuard] },
@@ -282,19 +264,19 @@ let routes: Routes = [
     { path: 'admin', data: { breadName: 'Admin Site' }, component: AdminDashboardComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/hardware', data: { breadName: 'Hardware' }, component: AdminHardwareComponent, canActivate: [AuthGuard] },
-    { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
-    { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
+    //  { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
+    // { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
-    { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
-    { path: 'admin/widgets/:widgets', data: {breadName: 'widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
-    { path: 'admin/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
-    { path: 'admin/widget/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},  // Only for community decisions - Link without project path
+    // { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    //  { path: 'admin/widgets/:widgets', data: {breadName: 'widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
+    // { path: 'admin/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
+    // { path: 'admin/widget/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},  // Only for community decisions - Link without project path
 
 
-    { path: 'admin/blocks', data: {breadName: 'Blocko Groups'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
-    { path: 'admin/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
-    { path: 'admin/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
-    { path: 'admin/block/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]}, // Only for community decisions - Link without project path
+    // { path: 'admin/blocks', data: {breadName: 'Blocko Groups'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
+    // { path: 'admin/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
+    // { path: 'admin/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
+    // { path: 'admin/block/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]}, // Only for community decisions - Link without project path
 
     { path: 'admin/bugs', data: {breadName: 'Bugs'}, component: BugsComponent, canActivate: [AuthGuard]},
     { path: 'admin/bugs/:bug', data: {breadName: ':bug'}, component: BugsBugComponent, canActivate: [AuthGuard]},
@@ -484,7 +466,6 @@ class BeckiErrorHandler implements ErrorHandler {
         FormTextAreaComponent,
         FormSelectComponent,
         FormJsonNiceTextAreaComponent,
-        BlockoViewComponent,
         FilterPagerComponent,
         CodeIDEComponent,
         TableListComponent,
@@ -492,11 +473,10 @@ class BeckiErrorHandler implements ErrorHandler {
         DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
-        GridViewComponent,
         NotificationsOverlayComponent,
         NotificationsListComponent,
         ConsoleLogComponent,
-        InstanceHistoryTimelineComponent,
+        InstanceHistoryTimeLineComponent,
         QRCodeComponent,
         DatePickerComponent,
         TimePickerComponent,
@@ -505,6 +485,7 @@ class BeckiErrorHandler implements ErrorHandler {
         OnlineStateComponent,
         TypeOfUpdateComponent,
         TimeZoneSelectorComponent,
+        NothingToShowComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -526,48 +507,48 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,
-        ProjectsProjectBlockoComponent,
-        ProjectsProjectBlockoBlockoComponent,
-        ProjectsProjectCodeComponent,
-        ProjectsProjectCodeCodeComponent,
+        // ProjectsProjectBlockoComponent,
+        // ProjectsProjectBlockoBlockoComponent,
+        // ProjectsProjectCodeComponent,
+        // ProjectsProjectCodeCodeComponent,
         NotificationsComponent,
         ProfileComponent,
         ForgotPasswordComponent,
         PasswordRestartComponent,
-        ProjectsProjectBlocksComponent,
+        // ProjectsProjectBlocksComponent,
         CreateUserComponent,
         RedirectOkComponent,
         GarfieldComponent,
         GarfieldGarfieldComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
-        ProjectsProjectBlocksBlocksComponent,
-        ProjectsProjectBlocksBlocksBlockComponent,
-        ProjectsProjectGridComponent,
-        ProjectsProjectGridGridsComponent,
-        ProjectsProjectGridGridsGridComponent,
+        // ProjectsProjectBlocksBlocksComponent,
+        // ProjectsProjectBlocksBlocksBlockComponent,
+        // ProjectsProjectGridComponent,
+        // ProjectsProjectGridGridsComponent,
+        // ProjectsProjectGridGridsGridComponent,
         ProductRegistrationComponent,
-        ProjectsProjectInstancesComponent,
-        ProjectsProjectInstancesInstanceComponent,
+        // ProjectsProjectInstancesComponent,
+        // ProjectsProjectInstancesInstanceComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
         ProjectsProjectMembersComponent,
-        ProjectsProjectWidgetsComponent,
-        ProjectsProjectWidgetsWidgetsWidgetComponent,
+        // ProjectsProjectWidgetsComponent,
+        // ProjectsProjectWidgetsWidgetsWidgetComponent,
         ServerComponent,
         TyrionComponent,
-        ProjectsProjectWidgetsWidgetsComponent,
+        // ProjectsProjectWidgetsWidgetsComponent,
         ProjectsProjectHardwareHardwareComponent,
         ProducersComponent,
         ProducersProducerComponent,
-        ProjectsProjectLibrariesComponent,
-        ProjectsProjectLibrariesLibraryComponent,
+        // ProjectsProjectLibrariesComponent,
+        // ProjectsProjectLibrariesLibraryComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
         SupportComponent,
         ServerRegistrationComponent,
         CompilationStatusComponent,
-        ProjectsProjectActualizationProcedureComponent,
+        // ProjectsProjectActualizationProcedureComponent,
         FirmwareTypeComponent,
         // Modals components
         ModalsLogLevelComponent,

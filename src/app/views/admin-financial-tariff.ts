@@ -4,7 +4,7 @@
  */
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import {
     IApplicableProduct, IProductExtension, IProductExtensionType, ITariff,
     ITariffLabel
@@ -19,7 +19,7 @@ import { ModalsExtensionModel } from '../modals/extension';
     selector: 'bk-view-admin-financial',
     templateUrl: './admin-financial-tariff.html'
 })
-export class AdminFinancialTariffComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class AdminFinancialTariffComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     tariff: ITariff = null;
     extensionTypes: IProductExtensionType[] = null;

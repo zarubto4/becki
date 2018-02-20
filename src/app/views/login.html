@@ -14,7 +14,7 @@
 
         <div class="alert alert-danger" *ngIf="loginError">
             <button class="close" (click)="onCloseAlertClick($event)"></button>
-            <span [innerHTML]="loginError | bkNl2Br"></span>
+            <span [innerHTML]="loginError"></span>
             <div *ngIf="resendVertification">
                 <br>
                 <br>

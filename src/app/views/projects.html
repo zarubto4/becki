@@ -67,6 +67,7 @@
 
         <h4 *ngIf="!products && !projects" class="text-center">{{'loading'|bkTranslate:this}}</h4>
         <div *ngIf="projects && !projects.length" class="list-no-items">
+
             <!-- if there is no products -->
             <template [ngIf]="products && !products.length && !projects.length">
                 <p class="list-no-items__main-label">{{'label_no_product'|bkTranslate:this}}</p>

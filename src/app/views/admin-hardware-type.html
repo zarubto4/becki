@@ -107,18 +107,18 @@
                                             </span>
                                         </div>
                                     </span>
-                                    <a (click)="onDeviceClick_Admin(device)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+                                    <a (click)="onDeviceClick_Admin(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                                 </td>
                                 <td class="vert-align no-wrap">{{device.id}}</td>
                                 <td class="vert-align no-wrap">{{device.description}}</td>
                                 <td class="vert-align no-wrap">{{device.registration_hash}}</td>
                                 <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
                                 <td class="vert-align no-wrap">
-                                    <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
-                                    <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
-                                    <span *ngIf="device.online_state == 'synchronization_in_progress'" class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
-                                    <span *ngIf="device.online_state == 'not_yet_first_connected'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
-                                    <span *ngIf="device.online_state == 'unknown_lost_connection_with_server'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                    <span *ngIf="device.online_state == 'ONLINE'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                    <span *ngIf="device.online_state == 'OFFLINE'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                    <span *ngIf="device.online_state == 'SYNCHRONIZATION_IN_PROGRESS'" class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span *ngIf="device.online_state == 'NOT_YET_FIRST_CONNECTED'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                    <span *ngIf="device.online_state == 'UNKNOWN_LOST_CONNECTION_WITH_SERVER'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_state'}}</span>
                                 </td>
                                 <td class="vert-align no-wrap">
 

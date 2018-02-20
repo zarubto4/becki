@@ -3,7 +3,7 @@
  */
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IGitHubReleases, IServerUpdate, IServerUpdates } from '../backend/TyrionAPI';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
@@ -13,7 +13,7 @@ import * as moment from 'moment';
     selector: 'bk-view-admin-tyrion',
     templateUrl: './admin-tyrion.html'
 })
-export class TyrionComponent extends BaseMainComponent implements OnInit {
+export class TyrionComponent extends _BaseMainComponent implements OnInit {
 
     updates: IServerUpdates = null;
 

@@ -3,7 +3,7 @@
  */
 
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { NotificationService, Notification, FlashMessage } from '../services/NotificationService';
 import { TyrionBackendService } from '../services/BackendService';
 import { FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
@@ -12,13 +12,13 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import { IFloatingPersonToken, IPerson, ISecurityRole } from '../backend/TyrionAPI';
+import { IAuthorizationToken, IPerson, IRole } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-profile',
     templateUrl: './profile.html'
 })
-export class ProfileComponent extends BaseMainComponent implements OnInit {
+export class ProfileComponent extends _BaseMainComponent implements OnInit {
 
     emailForm: FormGroup;
     passwordForm: FormGroup;
@@ -27,10 +27,10 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
     personId: string;
 
     person: IPerson = null;
-    roles: ISecurityRole[] = null;
+    roles: IRole[] = null;
 
     email: string;
-    login_tokens: IFloatingPersonToken[] = null;
+    login_tokens: IAuthorizationToken[] = null;
 
     countryList: FormSelectComponentOption[] = StaticOptionLists.countryList;
     genderList: FormSelectComponentOption[] = StaticOptionLists.genderList;
@@ -53,7 +53,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         });
 
         this.infoForm = this.formBuilder.group({
-            'fullName': ['', [Validators.required, Validators.minLength(8)]],
+            'first_name': ['', [Validators.required, Validators.minLength(2)]],
+            'last_name': ['', [Validators.required, Validators.minLength(2)]],
             'nickName': ['', [Validators.required, Validators.minLength(4)]],
             'interests': ['', [Validators.required, Validators.minLength(8)]],
             'state': ['', [Validators.required, Validators.minLength(4)]],
@@ -88,7 +89,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                 this.person = iLoginResult.person;
                 this.roles = iLoginResult.roles;
 
-                this.infoForm.controls['fullName'].setValue(this.person.full_name);
+                this.infoForm.controls['first_name'].setValue(this.person.first_name);
+                this.infoForm.controls['last_name'].setValue(this.person.last_name);
                 this.infoForm.controls['nickName'].setValue(this.person.nick_name);
                 this.infoForm.controls['state'].setValue(this.person.country);
                 this.infoForm.controls['gender'].setValue(this.person.gender);
@@ -142,8 +144,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             });
     }
 
-    onLoginTokenDeleteClick(token: IFloatingPersonToken): void {
-        this.backendService.personDeleteLoggedConnections(token.connection_id)
+    onLoginTokenDeleteClick(token: IAuthorizationToken): void {
+        this.backendService.personDeleteLoggedConnections(token.id)
             .then(() => {
                 this.refresh_login_tokens();
             })
@@ -176,7 +178,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     changeEmail(): void {
         this.blockUI();
-        this.backendService.entityValidation({ key: 'mail', value: this.emailForm.controls['newEmail'].value }).then(response => {
+        this.backendService.entityValidation({ key: 'email', value: this.emailForm.controls['newEmail'].value }).then(response => {
             if (response.valid) {
                 this.backendService.personEditProperty({
                     property: 'email',
@@ -210,7 +212,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         this.backendService.personEdit(this.personId, {
             nick_name: this.infoForm.controls['nickName'].value,
             country: this.infoForm.controls['state'].value,
-            full_name: this.infoForm.controls['fullName'].value,
+            first_name: this.infoForm.controls['first_name'].value,
+            last_name: this.infoForm.controls['last_name'].value,
             gender: this.infoForm.controls['gender'].value
         })
             .then((ok) => {

@@ -1,7 +1,7 @@
 
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IApplicableProduct, IProductExtensionType, ITariff } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -12,7 +12,7 @@ import { ModalsExtensionModel } from '../modals/extension';
     selector: 'bk-view-admin-financial',
     templateUrl: './admin-financial.html'
 })
-export class AdminFinancialComponent extends BaseMainComponent implements OnInit {
+export class AdminFinancialComponent extends _BaseMainComponent implements OnInit {
 
     tariffs: ITariff[] = null;
     extensions: ITariff[] = null;

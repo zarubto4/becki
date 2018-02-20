@@ -8,11 +8,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { IMProgramShortDetailForBlocko, IMProjectShortDetailForBlocko } from '../backend/TyrionAPI';
+import { IGridProject } from '../backend/TyrionAPI';
 
 
 export class ModalsBlockoAddGridModel extends ModalModel {
-    constructor(public gridProjects: IMProjectShortDetailForBlocko[], public selectedGridProject: IMProjectShortDetailForBlocko = null) {
+    constructor(public gridProjects: IGridProject[], public selectedGridProject: IGridProject = null) {
         super();
     }
 }
@@ -34,7 +34,6 @@ export class ModalsBlockoAddGridComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-
         this.form = this.formBuilder.group({
             'grid': ['', [Validators.required]]
         });

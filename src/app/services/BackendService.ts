@@ -4,13 +4,12 @@
  */
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { NotificationService, FlashMessageError } from './NotificationService';
 import { Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Rx';
-import { TyrionApiBackend, RestRequest, RestResponse } from '../backend/BeckiBackend';
-import { TranslationService } from '../services/TranslationService';
+import { TyrionApiBackend } from '../backend/BeckiBackend';
+import { TranslationService } from './TranslationService';
+import {RestRequest, RestResponse} from "./_backend_class/Responses";
 
 @Injectable()
 export class TyrionBackendService extends TyrionApiBackend {

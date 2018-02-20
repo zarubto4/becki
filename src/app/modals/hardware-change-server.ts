@@ -12,7 +12,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { IHardware, IHardwareNewPassword, IHomerServer} from '../backend/TyrionAPI';
+import { IHardware, IHomerServer, IHomerServerList } from '../backend/TyrionAPI';
 import { FlashMessageSuccess } from '../services/NotificationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
@@ -74,9 +74,12 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
     }
 
     findAllAccessibleServers(): void {
-        this.backendService.homerServersGetList()
-            .then((servers: IHomerServer[]) => {
-                this.servers = servers;
+        this.backendService.homerServersGetList(0, {
+            project_id : this.modalModel.board.project_id,
+            server_types : ['PUBLIC', 'PRIVATE', 'MAIN']
+        })
+            .then((servers: IHomerServerList) => {
+                this.servers = servers.content;
                 this.servers_options = this.servers.map((pv) => {
                     let status = this.translationService.translateTable(pv.server_type, this, 'server_type');
 

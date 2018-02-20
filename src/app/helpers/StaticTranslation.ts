@@ -99,7 +99,7 @@ export class StaticTranslation {
                 'title': 'Create new Bootloader',
                 'label_name': 'Name',
                 'label_description': 'Description',
-                'label_version_identificator': 'Version Hardware Identification',
+                'label_version_identifier': 'Version Hardware Identification',
                 'label_changing_note': 'Changing Note (Markdown)'
             }, 'ModalsCreateHardwareTypeBatchComponent': {
                 'title': 'Create new Production Batch or Revision',
@@ -361,6 +361,8 @@ export class StaticTranslation {
 
             }, 'ModalsInstanceEditDescriptionComponent': {
                 'title': 'CLOUD Instance Properties',
+                'label_instance_name': 'Instance name (Your private Tag name)',
+                'label_instance_description': 'Instance description (Your private description)',
 
             }, 'ModalsLibraryPropertiesComponent': {
                 'title_edit': '<strong class="font-color-code">CODE</strong> Library Properties',
@@ -470,8 +472,8 @@ export class StaticTranslation {
                 'label_Remove_project': 'Remove project',
                 'label_no_projects': 'There is not any project',
                 'label_no_projects_comment': 'Create your first project, program, connect hardware and start slowly control the world. <br> Step by step.',
-                'label_no_product': 'Mr. Salieri likes things in order and leads an accounting book...',
-                'label_no_product_comment': 'If you want to create a project, you must have a <span class="bold"> financial product</span>. For add product click the link below.',
+                'label_no_product': '<strong class="font-color-hardware">Mr. Salieri</strong> likes things in order and leads an <strong class="font-color-hardware">accounting book...</strong>',
+                'label_no_product_comment': 'If you want to create a project, please create <span class="bold"> Financial product</span> first.',
                 'label_create_product_below': 'You can create it by click on button bellow.',
 
 
@@ -937,7 +939,7 @@ export class StaticTranslation {
                 'btn_create_account': 'Create an account',
                 'btn_login': 'Login',
                 'btn_resend': 'Resend',
-                'msg_login_user_cant_login': 'The user could not be logged in.\n {0}',
+                'msg_login_user_cant_login': 'The user could not be logged in.',
                 'msg_login_resend_vertification': '{0} \n Press the resend button to send verification E-mail again',
                 'msg_login_error': 'Error has occurred, when trying to log in.',
                 'msg_login_email_sent': 'Verification E-mail was sent',
@@ -1216,8 +1218,8 @@ export class StaticTranslation {
                 'label_instance': 'Instance ID',
                 'label_main_server_not_found': 'Device is not connected to Server yet',
                 'label_not_in_instance': 'Device is not connected to an instance',
-                'label_online': 'online',
-                'label_offline': 'offline',
+                'label_online': 'ONLINE',
+                'label_offline': 'OFFLINE',
                 'label_none': 'none',
                 'label_unknown_value': 'none',
                 'label_cant_load_device': 'Device cannot be loaded. {0}',
@@ -1982,7 +1984,7 @@ export class StaticTranslation {
                 'label_tab_menu_not_found': 'Unable to find TabMenu named {0}.',
 
             }, 'NotificationService': {
-                'flash_communication_failed': 'Communication with the server failed, {0}.',
+                'flash_communication_failed': 'Connection to Server for Real Time synchronization and Notification subscription failed.',
                 'flash_cant_confirm_notification': 'Unable to confirm notification, {0}.',
                 'flash_cant_remove_notification': 'Unable to remove notification, {0}.',
 
@@ -2042,6 +2044,9 @@ export class StaticTranslation {
 
             }, 'NotificationsListComponent': {
                 'label_no_notifications': 'No notifications.',
+            },
+            'NothingToShowComponent' : {
+               'loading' : 'Loading'
             },
             'BlockoViewComponent': {
                 'error_execution_cant_change': 'Unable to change execution status.',
@@ -2332,8 +2337,8 @@ export class StaticTranslation {
             'label_password': 'Password',
             'label_console': 'Console',
             'label_configuration': 'Configuration',
-            'label_offline': 'offline',
-            'label_online': 'online',
+            'label_offline': 'OFFLINE',
+            'label_online': 'ONLINE',
             'label_date': 'Date',
             'label_time': 'Time',
             'label_version': 'Version',
@@ -2394,12 +2399,13 @@ export class StaticTranslation {
                 'PLANNED_UPDATE': 'Update is scheduled in the future.',
             },
             'online_state': {
-                'online': 'online',
-                'offline': 'offline',
-                'synchronization_in_progress': 'Synchronizing',
-                'not_yet_first_connected': 'We have no idea - (never logged before)',
-                'unknown_lost_connection_with_server': 'Lost connection with external server',
-                'shut_down': 'Shut Downed',
+                'ONLINE': 'Online',
+                'OFFLINE': 'Offline',
+                'FREEZED': 'Freeze',
+                'SYNCHRONIZATION_IN_PROGRESS': 'Synchronizing',
+                'NOT_YET_FIRST_CONNECTED': 'We have no idea - (never logged before)',
+                'UNKNOWN_LOST_CONNECTION_WITH_SERVER': 'Lost connection with external server',
+                'SHUT_DOWN': 'Shut Downed',
             },
             'server_type': {
                 'public_server': 'Public Byzance Server',
@@ -2503,7 +2509,7 @@ export class StaticTranslation {
                 'default': 'There is a problem with this device.',
 
             }, 'entity_not_valid': {
-                'mail': 'E-mail address is already taken.',
+                'email': 'E-mail address is already taken.',
                 'nick_name': 'Nickname is already taken.',
                 'vat_number': 'Wrong VAT number (type it without spaces, dashes etc.).',
                 'default': 'Unknown error, {0}.',

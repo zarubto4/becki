@@ -8,7 +8,7 @@
 
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsFinancialProductModel } from '../modals/financial-product';
@@ -18,7 +18,7 @@ import { ModalsFinancialProductModel } from '../modals/financial-product';
     selector: 'bk-view-financial',
     templateUrl: './financial.html'
 })
-export class FinancialComponent extends BaseMainComponent implements OnInit {
+export class FinancialComponent extends _BaseMainComponent implements OnInit {
 
     products: IProduct[];
 
@@ -30,14 +30,9 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
         this.refresh();
     }
 
-    onProductClick(product: IProduct): void {
-        this.router.navigate(['/financial', product.id]);
-    }
-
     onAddProductClick(): void {
         this.router.navigate(['/financial/product-registration']);
     }
-
 
     onEditClick(product: IProduct): void {
         let model = new ModalsFinancialProductModel(

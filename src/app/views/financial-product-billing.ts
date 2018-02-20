@@ -7,7 +7,7 @@
  */
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { ICustomer, IPaymentDetails, IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError } from '../services/NotificationService';
@@ -18,7 +18,7 @@ import { ModalsCompanyInformationModel } from '../modals/company-information';
     selector: 'bk-view-financial-product-billing',
     templateUrl: './financial-product-billing.html'
 })
-export class FinancialProductBillingComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class FinancialProductBillingComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 
@@ -89,18 +89,19 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
                 this.blockUI();
                 this.tyrionBackendService.productEditPaymentDetails(this.productPaymentDetails.id, {
                     city: model.city,
+                    company_account: true,
                     company_authorized_email: model.company_authorized_email,
                     company_authorized_phone: model.company_authorized_phone,
                     company_name: model.company_name,
+                    company_registration_no: model.company_registration_no,
+                    company_vat_number: model.company_vat_number,
                     company_web: model.company_web,
                     country: model.country,
                     invoice_email: model.invoice_email,
+                    method: model.method,
                     street: model.street,
                     street_number: model.street_number,
-                    company_registration_no: model.company_registration_no,
-                    company_vat_number: model.company_vat_number,
-                    zip_code: model.zip_code,
-                    method: 'bank_transfer'     // TODO
+                    zip_code: model.zip_code
                 })
                     .then(() => {
                         this.refresh();

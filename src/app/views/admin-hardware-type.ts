@@ -4,7 +4,7 @@
  */
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IHardwareList, IProcessor, IProducer, IHardwareType, IHardware } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateProducerModel } from '../modals/create-producer';
@@ -18,7 +18,7 @@ import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-descript
     selector: 'bk-view-admin-hardware-type',
     templateUrl: './admin-hardware-type.html'
 })
-export class AdminHardwareComponent extends BaseMainComponent implements OnInit {
+export class AdminHardwareComponent extends _BaseMainComponent implements OnInit {
 
     hardwareTypes: IHardwareType[] = null;
     processors: IProcessor[] = null;
@@ -197,14 +197,6 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         });
     }
 
-    onHardwareTypeClick(boardTypeId: string): void {
-        this.router.navigate(['/hardware', boardTypeId]);
-    }
-
-    onProducerClick(producer: string): void {
-        this.router.navigate(['/producers', producer]);
-    }
-
     onHardwareTypeDeleteClick(hardwareType: IHardwareType): void {
         this.modalService.showModal(new ModalsRemovalModel(hardwareType.name)).then((success) => {
             if (success) {
@@ -263,7 +255,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                 this.blockUI();
                 this.tyrionBackendService.hardwareCreateManual({
                     full_id: model.processorId,
-                    hardware_type_id: model.hardwareType
+                    hardware_type_id: model.hardwareTypeId
                 })
                     .then(() => {
                         this.onFilterHardware();
@@ -283,7 +275,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
 
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
-            type_of_board_ids: boardTypes
+            hardware_type_ids: boardTypes
         })
             .then((values) => {
                 this.boardsFiler = values;

@@ -21,9 +21,9 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
 import {IProject} from "../backend/TyrionAPI";
-
-
-export abstract class BaseMainComponent {
+/* tslint:disable:class-name  */
+export abstract class _BaseMainComponent {
+/* tslint:disable:class-name  */
 
     protected beckiImageLinks: BeckiImageLinks = null;
     protected tyrionBackendService: TyrionBackendService = null;
@@ -129,21 +129,30 @@ export abstract class BaseMainComponent {
         this.router.navigate(['/financial', product_id]);
     }
 
-    public onProducerClick(producer_id: string): void {
-        this.navigate(['/producers', producer_id]);
-    }
-
     public onHardwareTypeClick(hardware_id: string): void {
         this.navigate(['/hardware', hardware_id]);
+    }
+
+    public onProducerClick(producer: string): void {
+        this.router.navigate(['/producers', producer]);
     }
 
     public onDeviceClick(device_id: string): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'hardware', device_id]);
     }
 
+    public onLibraryClick(library_id: string): void {
+        this.navigate(['/admin/hardware/libraries', library_id]);
+    }
+
     public onCProgramClick(cProgram_id: string): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'code', cProgram_id]);
     }
+
+    public onCProgramAdminClick(c_program_id: string): void {
+        this.router.navigate(['/admin/hardware/code', c_program_id]);
+    }
+
     public onDeviceClick_Admin(device_id: string): void {
         this.navigate(['/device', device_id]);
     }

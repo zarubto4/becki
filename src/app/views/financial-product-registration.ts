@@ -8,7 +8,7 @@
  */
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { ITariff, IProductExtension, IProductNew, IInvoice, IProduct, ICustomer } from '../backend/TyrionAPI';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
@@ -22,9 +22,9 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 
 @Component({
     selector: 'bk-view-product-registration',
-    templateUrl: './financial-product-registration.html'
+    templateUrl: './financial-product-registration.html',
 })
-export class ProductRegistrationComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProductRegistrationComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     formPaymentDetail: FormGroup;        // Default registration informations - IPaymentDetails
     formCustomerSelectedCompany: FormGroup; // Only for select in option List

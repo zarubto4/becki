@@ -4,10 +4,15 @@
  */
 
 
-import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin } from './TyrionAPI';
+import { TyrionAPI, INotification, IPerson, ILoginResult, ISocialNetworkLogin, IWebSocketToken } from './TyrionAPI';
 import { HomerAPI } from './HomerAPI';
 import * as Rx from 'rxjs';
 import { ConsoleLogType } from '../components/ConsoleLogComponent';
+import {
+    BadRequest, BugFoundError, CodeCompileError,
+    CodeError, InternalServerError, InvalidBody, LostConnectionError, PermissionMissingError, RestRequest, RestResponse,
+    UnauthorizedError, UserNotValidatedError
+} from '../services/_backend_class/Responses';
 
 declare const BECKI_VERSION: string;
 
@@ -29,6 +34,9 @@ export interface IBProgramConnectorValue {
     connectorName: string;
     value: number;
 }
+
+
+// INTERFACES - WEBSOCKET
 
 export interface IWebSocketMessage {
     message_id: string;
@@ -89,237 +97,31 @@ export interface IWebsocketTerminalState {
     reason: string;
 }
 
-export interface ICodeCompileErrorMessage {
-    filename: string;
-    type: string;
-    text: string;
-    codeWhitespace: string;
-    code: string;
 
-    line: number;
-    column: number;
-    adjustedColumn: number;
-    startIndex: number;
-    endIndex: number;
-}
+
 
 // REQUEST CLASSES
 
-export class RestRequest {
 
-    method: string;
 
-    url: string;
 
-    headers: { [name: string]: string };
+// 422
+export class ObjectNotFound extends Error {
 
-    body: Object;
+    code: number = 404;
+    name = 'Response_NotFound';
+    message: string = null;
 
-    constructor(method: string, url: string, headers: { [name: string]: string } = {}, body?: Object) {
-        this.method = method;
-        this.url = url;
-        this.headers = {};
-        for (let header in headers) {
-            if (headers.hasOwnProperty(header)) {
-                this.headers[header] = headers[header];
-            }
-        }
-        this.headers['Accept'] = 'application/json';
-        this.headers['Content-Type'] = 'application/json';
-        this.body = body;
+    static fromRestResponse(response: RestResponse): ObjectNotFound {
+        return new ObjectNotFound(response);
+    }
+
+    constructor(response: RestResponse) {
+        super(response.body['message']);
+        this.message = response.body['message'];
     }
 }
 
-export class RestResponse {
-
-    status: number;
-
-    body: Object;
-
-    constructor(status: number, body: Object) {
-        this.status = status;
-        this.body = body;
-    }
-}
-
-// ERROR CLASSES
-
-export class GenericError extends Error {
-    state: string;
-    code: number;
-    message: string;
-}
-
-export class BugFoundError extends GenericError {
-
-
-    name = 'bug found error';
-
-    adminMessage: string;
-
-    userMessage: string;
-
-    body: any;
-
-    static fromRestResponse(response: RestResponse): BugFoundError {
-        let content = response.body;
-        let message: string;
-        if (response.status === 400) {
-            content = (<{ exception: Object }>response.body).exception;
-            message = (<{ message: string }>response.body).message;
-            if (!message) {
-                message = (<{ error: string }>response.body).error;
-            }
-        }
-        return new BugFoundError(response.body, `response ${response.status}: ${JSON.stringify(content)}`, message);
-    }
-
-    static fromWsResponse(response: IWebSocketErrorMessage): BugFoundError {
-        return new BugFoundError(null, `response ${JSON.stringify(response)}`, response.error);
-    }
-
-    static composeMessage(adminMessage: string): string {
-        return `bug found in client or server: ${adminMessage}`;
-    }
-
-    constructor(body: any, adminMessage: string, userMessage?: string) {
-        super(BugFoundError.composeMessage(adminMessage));
-        this.name = 'BugFoundError';
-        this.message = BugFoundError.composeMessage(adminMessage);
-        this.adminMessage = adminMessage;
-        this.userMessage = userMessage;
-        this.body = body;
-
-        Object.setPrototypeOf(this, BugFoundError.prototype);
-    }
-}
-
-export class CodeError extends Error {
-
-    static fromRestResponse(response: RestResponse): CodeError {
-        let content = response.body;
-        if ((<any>content).message) {
-            return new CodeError((<any>content).message);
-        }
-        if (response.status === 477) {
-            return new CodeError(`External server is offline: ${JSON.stringify(content)}`);
-        }
-        if (response.status === 478) {
-            return new CodeError(`External server side error: ${JSON.stringify(content)}`);
-        }
-        return new CodeError('Unknown error');
-    }
-
-    constructor(msg: string) {
-        super(msg);
-        this.name = 'CodeError';
-        this.message = msg;
-
-        Object.setPrototypeOf(this, CodeError.prototype);
-    }
-
-}
-
-export class CodeCompileError extends Error {
-
-    errors: ICodeCompileErrorMessage[] = [];
-
-    static fromRestResponse(response: RestResponse): CodeCompileError {
-        let cce = new CodeCompileError(`Compile error.`);
-        if (Array.isArray(response.body)) {
-            cce.errors = <ICodeCompileErrorMessage[]>response.body;
-        }
-        return cce;
-    }
-
-    constructor(msg: string) {
-        super(msg);
-        this.name = 'CodeCompileError';
-        this.message = msg;
-
-        Object.setPrototypeOf(this, CodeCompileError.prototype);
-    }
-
-}
-
-export class UserNotValidatedError extends Error {
-
-    static MESSAGE = 'Validation required';
-
-    name = 'User not validated error';
-
-    userMessage: string;
-
-    static fromRestResponse(response: RestResponse): UserNotValidatedError {
-        return new UserNotValidatedError((<{ message: string }>response.body).message);
-    }
-
-    constructor(userMessage: string) {
-        super(UserNotValidatedError.MESSAGE);
-        this.name = 'UserNotValidatedError';
-        this.message = UserNotValidatedError.MESSAGE;
-        this.userMessage = userMessage;
-
-        Object.setPrototypeOf(this, UserNotValidatedError.prototype);
-    }
-
-}
-
-export class UnauthorizedError extends Error {
-
-    name = 'request unauthorized error';
-
-    userMessage: string;
-
-    static fromRestResponse(response: RestResponse): UnauthorizedError {
-        return new UnauthorizedError((<{ message: string }>response.body).message);
-    }
-
-    constructor(userMessage: string, message = 'authorized authentication token required') {
-        super(message);
-        this.name = 'UnauthorizedError';
-        this.message = message;
-        this.userMessage = userMessage;
-
-        Object.setPrototypeOf(this, UnauthorizedError.prototype);
-    }
-
-}
-
-export class PermissionMissingError extends UnauthorizedError {
-
-    static MESSAGE = 'permission required';
-
-    name = 'permission missing error';
-
-    userMessage: string;
-
-    static fromRestResponse(response: RestResponse): PermissionMissingError {
-        return new PermissionMissingError((<{ message: string }>response.body).message);
-    }
-
-    constructor(userMessage: string) {
-        super(PermissionMissingError.MESSAGE);
-        this.name = 'PermissionMissingError';
-        this.message = PermissionMissingError.MESSAGE;
-        this.userMessage = userMessage;
-
-        Object.setPrototypeOf(this, PermissionMissingError.prototype);
-    }
-
-}
-
-export class RequestError extends Error {
-
-    constructor(public readonly userMessage: string) {
-        super('Request failed');
-        this.message = 'Request failed';
-        this.name = 'RequestError';
-
-        Object.setPrototypeOf(this, RequestError.prototype);
-    }
-
-}
 
 export interface OnlineChangeStatus {
     model: ('Board' | 'HomerInstance' | 'HomerServer' | 'CompilationServer');
@@ -454,12 +256,17 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     public requestRest<T>(method: string, url: string, body: Object, success: number[]): Promise<T> {
+        // Create Request
         let request: RestRequest = new RestRequest(method, url, {}, body);
-        // TODO: https://github.com/angular/angular/issues/7438
+
+        // Set Token if Exist
         if (this.tokenExist()) {
             request.headers['X-Auth-Token'] = this.getToken();
         }
+        // Set Becki Headers to Request
         request.headers['Becki-Version'] = BECKI_VERSION;
+
+        // Set Task - New Try
         this.tasks += 1;
         return this.requestRestGeneral(request)
             .then((response: RestResponse) => {
@@ -474,26 +281,39 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                     return <T>res;
                 }
                 switch (response.status) {
+                    case 400: {
+                        if (response['state'] === 'error') {
+                            throw BadRequest.fromRestResponse(response);
+                        } else if (response['state'] === 'invalid_body') {
+                            throw InvalidBody.fromRestResponse(response);
+                        }
+                        // If there is not a state - Make a Critical error for sure
+                        throw InternalServerError.fromRestResponse(response);
+                    }
                     case 401:
                         throw UnauthorizedError.fromRestResponse(response);
                     case 403:
                         throw PermissionMissingError.fromRestResponse(response);
+                    case 404:
+                        throw ObjectNotFound.fromRestResponse(response);
                     case 422:
                         throw CodeCompileError.fromRestResponse(response);
                     case 477:
                         throw CodeError.fromRestResponse(response);
                     case 478:
                         throw CodeError.fromRestResponse(response);
+                    case 500:
+                        throw InternalServerError.fromRestResponse(response);
                     case 705:
                         throw UserNotValidatedError.fromRestResponse(response);
                     case 0:
-                        throw new RequestError('Request failed, please check your internet connection.');
+                        throw new LostConnectionError();
                     default:
                         throw BugFoundError.fromRestResponse(response);
                 }
             })
             .catch((e: any) => {
-                console.error(e);
+                console.error('Error from Response', e);
                 this.tasks -= 1;
                 throw e;
             });
@@ -520,6 +340,9 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         return !!window.localStorage.getItem('auth_token');
     }
 
+    /**
+     * Remove Token from Becki Memmory (Browser Memmory)
+     */
     protected unsetToken(): void {
         window.localStorage.removeItem('auth_token');
         this.refreshPersonInfo();
@@ -527,21 +350,20 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     // LOGIN / LOGOUT
 
-    public login(mail: string, password: string): Promise<any> {
-        if (!mail || !password) {
+    public login(email: string, password: string): Promise<any> {
+        if (!email || !password) {
             throw new Error('email and password required');
         }
 
         return this.__login({
-            email: mail,
+            email: email,
             password: password
-        })
-            .then((body) => {
-                this.setToken(body.auth_token);
-                return body;
-            }).then(body => {
-                return JSON.stringify(body);
-            });
+        }).then((body) => {
+            this.setToken(body.auth_token);
+            return body;
+        }).then(body => {
+            return JSON.stringify(body);
+        });
     }
 
     public loginFacebook(redirectUrl: string): Promise<string> {
@@ -642,13 +464,10 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         this.sendWebSocketMessageQueue();
     }
 
-
-
     public sendWebSocketTerminalMessage(message: IWebSocketMessage): void {
         this.webSocketTerminalMessageQueue.push(message);
         this.sendWebSocketTerminalMessageQueue();
     }
-
 
     private sendWebSocketTerminalMessageQueue(): void {
 
@@ -848,7 +667,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
                 this.websocketErrorShown = false;
 
-                this.webSocket = new WebSocket(`${this.wsProtocol}://${this.host}/websocket/becki/${webSocketToken.websocket_token}`);
+                this.webSocket = new WebSocket(`${this.wsProtocol}://${this.host}/websocket/portal/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener('close', this.reconnectWebSocketAfterTimeout);
                 let opened = Rx.Observable
                     .fromEvent<void>(this.webSocket, 'open');

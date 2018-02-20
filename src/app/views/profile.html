@@ -38,7 +38,8 @@
                 <!-- PERSONAL TAB -->
                     <div class="tab-pane" [class.active]="openTabName == 'personal'">
                         <form>
-                            <bk-form-input [label]="'label_full_name'|bkTranslate:this" type="text" [control]="infoForm.controls['fullName']"></bk-form-input>
+                            <bk-form-input [label]="'label_first_name'|bkTranslate:this" type="text" [control]="infoForm.controls['first_name']"></bk-form-input>
+                            <bk-form-input [label]="'label_last_name'|bkTranslate:this" type="text" [control]="infoForm.controls['last_name']"></bk-form-input>
                             <bk-form-input [label]="'label_nick_name'|bkTranslate:this" type="text" [control]="infoForm.controls['nickName']"></bk-form-input>
                             <bk-form-select [label]="'label_gender'|bkTranslate:this"   [options]="genderList" [control]="infoForm.controls['gender']"></bk-form-select>
                             <bk-form-select [label]="'label_state'|bkTranslate:this"     [options]="countryList" [control]="infoForm.controls['state']"></bk-form-select>

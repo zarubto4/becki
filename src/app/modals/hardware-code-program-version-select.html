@@ -10,11 +10,11 @@
             <span *ngIf="selectedProgram">{{'label_program'|bkTranslate:this}}: <strong>{{selectedProgram.name}}</strong></span>
         </h4>
         <hr>
-        <h4 class="text-center" *ngIf="loading">
+        <h4 class="text-center" *ngIf="!codePrograms">
              {{'loading'|bkTranslate:this}}
         </h4>
-        <template [ngIf]="!loading && codePrograms && !programVersions">
-            <h4 class="text-center" *ngIf="!(codePrograms && codePrograms.length)">
+        <template [ngIf]="codePrograms && !programVersions">
+            <h4 class="text-center" *ngIf="!(codePrograms && codePrograms.content)">
                  {{'label_no_program'|bkTranslate:this}}
             </h4>
             <template [ngIf]="codePrograms && codePrograms.length">
@@ -24,7 +24,7 @@
                 </div>
             </template>
         </template>
-        <template [ngIf]="!loading && programVersions">
+        <template [ngIf]="programVersions">
             <h4 class="text-center" *ngIf="!(programVersions && programVersions.length)">
                  {{'label_no_version'|bkTranslate:this}}
             </h4>

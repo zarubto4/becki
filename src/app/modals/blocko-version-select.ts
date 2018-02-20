@@ -9,12 +9,12 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IBProgramVersion, IBProgramVersionShortDetail } from '../backend/TyrionAPI';
+import { IBProgram, IBProgramVersion } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsBlockoVersionSelectModel extends ModalModel {
-    constructor(public programVersions: IBProgramVersionShortDetail[], public programVersion: string = '') {
+    constructor(public programVersions: IBProgramVersion[], public programVersion: string = '') {
         super();
     }
 }
@@ -45,8 +45,8 @@ export class ModalsBlockoVersionSelectComponent implements OnInit {
     ngOnInit() {
         this.options = this.modalModel.programVersions.map((pv) => {
             return {
-                label: pv.version_name + (pv.version_description ? ' - ' + pv.version_description : ''),
-                value: pv.version_id
+                label: pv.name + (pv.description ? ' - ' + pv.description : ''),
+                value: pv.name
             };
         });
         // (<FormControl>(this.form.controls['programVersion'])).setValue(this.modalModel.programVersion);

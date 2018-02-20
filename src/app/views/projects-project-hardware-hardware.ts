@@ -3,7 +3,7 @@
  */
 
 import { Component, Injector, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import {
     IActualizationProcedureTaskList, IHardware,
     IHardwareType
@@ -49,7 +49,7 @@ export interface ConfigParameters {
     selector: 'bk-view-projects-project-hardware-hardware',
     templateUrl: './projects-project-hardware-hardware.html'
 })
-export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     init: boolean = false;  // Only for title and sutitle menu (for slow internet there was sometimes
     // issue with no project for admin view or for project view but with slow
@@ -61,7 +61,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     routeParamsSubscription: Subscription;
     actualizationTaskFilter: IActualizationProcedureTaskList = null;
 
-    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     hardwareTab: string = 'overview';
     commandTab: string = 'terminal';
@@ -309,7 +309,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
 
             if (this.hardware.server && this.hardware.server.server_url && this.hardware.server.hardware_logger_port) {
-                this.terminalFirstRun(this.device);
+                this.terminalFirstRun(this.hardware);
             } else {
                 this.terminalHardware.push({ // pokud nemá device jak URL tak i PORT tak ho přidáme do seznamu, ale nepřipojíme ho
                     'id': this.hardware.id,
@@ -370,8 +370,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     refresh(): void {
         this.blockUI();
         this.tyrionBackendService.boardGet(this.hardwareId) // TODO [permission]: Project.read_permission
-            .then((board) => {
-                this.device = board;
+            .then((hardware) => {
+                this.hardware = hardware;
                 this.config_array();
 
                 this.tyrionBackendService.onlineStatus.subscribe(status => {
@@ -380,7 +380,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     }
                 });
 
-                return this.tyrionBackendService.hardwareTypeGet(board.hardware_type_id);
+                return this.tyrionBackendService.hardwareTypeGet(this.hardware.hardware_type_id);
 
             })
             .then((hardwareType) => {
@@ -536,7 +536,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardUploadPicture(this.hardware.id, { // TODO [permission]: update_permission
+                this.tyrionBackendService.hardwareUploadPicture(this.hardware.id, {
                     file: model.file
                 })
                     .then(() => {
@@ -611,14 +611,14 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onGenerateNewPassword(): void {
-        let model = new ModalsHardwareRestartMQTTPassModel(this.device);
+        let model = new ModalsHardwareRestartMQTTPassModel(this.hardware);
         this.modalService.showModal(model).then((success) => {
             if (success) { }
         });
     }
 
     onChangeServer(): void {
-        let model = new ModalsHardwareChangeServerModel(this.device);
+        let model = new ModalsHardwareChangeServerModel(this.hardware);
         this.modalService.showModal(model).then((success) => {
             if (success) { }
         });
@@ -626,7 +626,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     onSwitchToBootloaderDeviceClick(): void {
         this.tyrionBackendService.boardCommandExecution({
-            board_id: this.hardware.id,
+            hardware_id: this.hardware.id,
             command: 'SWITCH_TO_BOOTLOADER'
         })
             .then(() => {
@@ -668,7 +668,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onUpdateBootloaderClick(): void {
-        if (!this.device) {
+        if (!this.hardware) {
             return;
         }
 
@@ -697,16 +697,13 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedureTask(pageNumber: number = 0,
-        states: ('complete' | 'canceled' | 'bin_file_not_found' | 'not_start_yet' | 'in_progress' | 'overwritten' | 'not_updated' | 'waiting_for_device' | 'instance_inaccessible' | 'homer_server_is_offline' | 'homer_server_never_connected' | 'critical_error')[] = ['complete', 'canceled', 'bin_file_not_found', 'not_start_yet', 'in_progress', 'not_updated', 'waiting_for_device', 'instance_inaccessible', 'homer_server_is_offline', 'homer_server_never_connected', 'critical_error'],
+        states: ('COMPLETE' | 'CANCELED'|'BIN_FILE_MISSING' | 'NOT_YET_STARTED' | 'IN_PROGRESS' | 'OBSOLETE' | 'NOT_UPDATED' | 'WAITING_FOR_DEVICE' | 'INSTANCE_INACCESSIBLE' | 'HOMER_SERVER_IS_OFFLINE' | 'HOMER_SERVER_NEVER_CONNECTED' | 'CRITICAL_ERROR')[] = ['COMPLETE', 'CANCELED', 'BIN_FILE_MISSING', 'NOT_YET_STARTED','IN_PROGRESS', 'OBSOLETE', 'NOT_UPDATED', 'WAITING_FOR_DEVICE', 'INSTANCE_INACCESSIBLE', 'HOMER_SERVER_IS_OFFLINE', 'HOMER_SERVER_NEVER_CONNECTED', 'CRITICAL_ERROR'],
         type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL', 'MANUALLY_BY_USER_BLOCKO_GROUP', 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME', 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE', 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
         this.blockUI();
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
-            actualization_procedure_ids: null,
-            board_ids: [this.hardware.id],
-            instance_ids: [],
+            hardware_ids: [this.hardware.id],
             update_states: states,
-            update_status: [],
             type_of_updates: type_of_updates
         })
             .then((values) => {
@@ -739,18 +736,19 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     /* tslint:disable:max-line-length ter-indent*/
 
     onAutobackupSwitchClick(backup_mode: string): void {
-        if (!this.device) {
+
+        if (!this.hardware) {
             return;
         }
 
         if (backup_mode === 'STATIC_BACKUP') {
-            let m = new ModalsHardwareCodeProgramVersionSelectModel(this.projectId, this.hardware.type_of_board_id);
+            let m = new ModalsHardwareCodeProgramVersionSelectModel(this.projectId, this.hardware.hardware_type_id);
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.tyrionBackendService.boardUpdateBackup({ // TODO [permission]: Board.update_permission
-                            board_backup_pair_list: [
+                        this.tyrionBackendService.boardUpdateBackup({
+                            hardware_backup_pairs: [
                                 {
                                     hardware_id: this.hardware.id,
                                     backup_mode: false,
@@ -769,10 +767,10 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
         } else {
             this.blockUI();
-            this.tyrionBackendService.boardUpdateBackup({ // TODO [permission]: Board.update_permission
-                board_backup_pair_list: [
+            this.tyrionBackendService.boardUpdateBackup({
+                hardware_backup_pairs: [
                     {
-                        board_id: this.hardware.id,
+                        hardware_id: this.hardware.id,
                         backup_mode: true
                     }
                 ]

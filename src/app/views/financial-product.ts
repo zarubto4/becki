@@ -8,7 +8,7 @@
  */
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -19,7 +19,7 @@ import { ModalsFinancialProductModel } from '../modals/financial-product';
     selector: 'bk-view-financial-product',
     templateUrl: './financial-product.html'
 })
-export class FinancialProductComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class FinancialProductComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 

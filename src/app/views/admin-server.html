@@ -63,8 +63,8 @@
                                     <a href="https://github.com/ByzanceIoT/homer-core/releases/tag/{{homer_server.server_version}}" class="no-wrap"><strong>{{homer_server.server_version}}</strong></a>
                                 </td>
                                 <td class="vert-align no-wrap">
-                                    <span *ngIf="homer_server.online_state == 'online'" class="font-green-jungle bold">{{homer_server.online_state|bkTranslateTable:this:'online_state'}}</span>
-                                    <span *ngIf="homer_server.online_state == 'offline'" class="font-red bold">{{homer_server.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                    <span *ngIf="homer_server.online_state == 'ONLINE'" class="font-green-jungle bold">{{homer_server.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                    <span *ngIf="homer_server.online_state == 'OFFLINE'" class="font-red bold">{{homer_server.online_state|bkTranslateTable:this:'online_state'}}</span>
                                 </td>
 
                                 <td class="vert-align no-wrap">
@@ -128,8 +128,8 @@
                                 <td class="vert-align no-wrap">{{compilations_server.id}}</td>
 
                                 <td class="vert-align no-wrap">
-                                    <span *ngIf="compilations_server.online_state == 'online'" class="font-green-jungle bold">{{compilations_server.online_state|bkTranslateTable:this:'online_state'}}</span>
-                                    <span *ngIf="compilations_server.online_state == 'offline'" class="font-red bold">{{compilations_server.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                    <span *ngIf="compilations_server.online_state == 'ONLINE'" class="font-green-jungle bold">{{compilations_server.online_state|bkTranslateTable:this:'online_state'}}</span>
+                                    <span *ngIf="compilations_server.online_state == 'OFFLINE'" class="font-red bold">{{compilations_server.online_state|bkTranslateTable:this:'online_state'}}</span>
                                 </td>
 
                                 <td class="vert-align text-right no-wrap">

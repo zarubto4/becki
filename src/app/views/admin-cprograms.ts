@@ -1,15 +1,10 @@
 
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { BaseMainComponent } from './BaseMainComponent';
-import {
-    ICProgram, ICProgramFilter, ICProgramList, ICProgram, ILibraryFilter, ILibraryList, ILibraryShortDetail,
-    IRoleShortDetai,
-    IHardwareType
-} from '../backend/TyrionAPI';
+import { _BaseMainComponent } from './_BaseMainComponent';
+import { ICProgram, ICProgramFilter, ICProgramList, ILibraryFilter, ILibraryList, ILibrary, IRole, IHardwareType } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsPermissionGroupModel } from '../modals/permission-group';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 
@@ -17,7 +12,7 @@ import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
     selector: 'bk-view-admin-cprograms',
     templateUrl: './admin-cprograms.html'
 })
-export class CommunityCProgramComponent extends BaseMainComponent implements OnInit {
+export class CommunityCProgramComponent extends _BaseMainComponent implements OnInit {
 
     cPrograms: ICProgramList = null;
     cProgramsNotApproved: ICProgramList = null;
@@ -163,19 +158,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         });
     }
 
-    onCProgramClick(cProgram: ICProgram): void {
-        this.router.navigate(['/admin/hardware/code', cProgram.id]);
-    }
-
-    onHardwareTypeTypeClick(boardTypeId: string): void {
-        this.router.navigate(['/hardware', boardTypeId]);
-    }
-
-    onLibraryClick(library: ILibraryShortDetail): void {
-        this.navigate(['/admin/hardware/libraries', library.id]);
-    }
-
-    onLibraryEditClick(library: ILibraryShortDetail): void {
+    onLibraryEditClick(library: ILibrary): void {
         let model = new ModalsLibraryPropertiesModel(library.name, library.description, true, library.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -196,7 +179,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         });
     }
 
-    onLibraryRemoveClick(library: ILibraryShortDetail): void {
+    onLibraryRemoveClick(library: ILibrary): void {
         this.modalService.showModal(new ModalsRemovalModel(library.name)).then((success) => {
             if (success) {
                 this.blockUI();

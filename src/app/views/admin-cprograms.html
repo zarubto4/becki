@@ -58,7 +58,7 @@
                             <tbody>
                                 <tr *ngFor="let code of cPrograms.content">
 
-                                    <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{code.name}}</a></td>
+                                    <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
                                     <td class="vert-align">{{code.description}}</td>
                                     <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                                     <td class="vert-align no-wrap text-right">
@@ -114,7 +114,7 @@
 
                                     <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{code.name}}</a></td>
                                     <td class="vert-align">{{code.description}}</td>
-                                    <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                                    <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
                                     <td class="vert-align no-wrap text-right">
 
                                         <style type="text/css">
