@@ -56,6 +56,9 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
 
 
     onPortletClick(action: string): void {
+
+        console.log("Project:: Cliknuto na " + action);
+
         if (action === 'edit_project') {
             this.onEditClick();
         }

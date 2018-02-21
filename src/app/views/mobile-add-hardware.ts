@@ -50,7 +50,7 @@ export class MobileAddHardwareComponent extends _BaseMainComponent implements On
         this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
             project_id: this.blockForm.controls['project'].value
         }).then(groups => {
-            this.group_options_available = groups.map((pv) => {
+            this.group_options_available = groups.content.map((pv) => {
                 return {
                     label: pv.name,
                     value: pv.id

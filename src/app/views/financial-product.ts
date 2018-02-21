@@ -85,7 +85,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
                 this.tyrionBackendService.productDeactivate(this.product_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_deactivated')));
-                        this.onFinancleClick();
+                        this.onFinanceClick();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_deactivate_product'), reason));

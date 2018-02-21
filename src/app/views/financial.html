@@ -4,7 +4,7 @@
  */
  -->
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
-    <div class="portlet portlet light bordered">
+
 
         <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
         <bk-portlet-title
@@ -14,15 +14,18 @@
             [btns]="[
                 {
                     condition: (products && products.length > 0),
-                    label: ('btn_new_subscription'|bkTranslate:this),
-                    icon: 'fa-plus-circle'
+                    btn_label_for_person: ('btn_new_subscription'|bkTranslate:this),
+                    colorType: 'ADD',
+                    icon: 'fa-plus-circle',
+                     btn_tag: 'add'
                 }
             ]"></bk-portlet-title>
         <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-        <!-- Page Content -- START -->
-        <div *ngIf="(products && products.length)" class="table-scrollable">
-            <table class="table table-hover">
+   <!-- Page Content -- START -->
+    <div class="portlet-body">
+        <div *ngIf="(products && products.length)" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
                 <thead>
                     <tr>
                         <th>{{'table_name'|bkTranslate:this}}</th>
@@ -60,6 +63,10 @@
                         </td>
                         <td class="vert-align">{{product.subscription_id}}</td>
                         <td class="vert-align text-right">
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
                             <button (click)="onEditClick(product)" [disabled]="product.update_permission" title="Settings" class="btn green btn-icon-only white">
                                 <i class="fa fa-gear"></i>
                             </button>
@@ -68,7 +75,7 @@
                 </tbody>
             </table>
         </div>
-        <!-- Page Content -- END -->
+
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(products == null)"
@@ -78,6 +85,6 @@
                             [btn_label]="'btn_new_subscription'|bkTranslate:this"
                             (onButtonClick)="onAddProductClick()"></bk-nothing-to-show>
         <!-- Temporary page content if content is being loaded or if there is no content -- END -->
-
     </div>
+    <!-- Page Content -- END -->
 </bk-layout-main>

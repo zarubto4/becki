@@ -117,7 +117,7 @@ import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
 import { TableListComponent } from './components/TableListComponent';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
-import { AdminDashboardComponent } from './views/admin-dashboard';
+import { AdminDashboardComponent } from './views/admin';
 import { ModalsCreateHomerServerComponent } from './modals/homer-server-create';
 import { ModalsUpdateHomerServerComponent } from './modals/homer-server-update';
 import { ModalsCreateCompilationServerComponent } from './modals/compiler-server-create';
@@ -186,6 +186,7 @@ import { NothingToShowComponent } from './components/NothingToShowComponent';
 import { PortletTitleComponent } from './components/PortletTitleComponent';
 import { PaymentMethodComponent } from './components/PaymentMehtodComponent';
 import { PortletPanelMenuComponent } from './components/PortletPanelMenu';
+import { ModalsHardwareFindHashComponent } from './modals/hardware-find-hash';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -629,6 +630,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsHardwareRestartMQTTPassComponent,
         ModalsHardwareChangeServerComponent,
         ModalsCodeSelectComponent,
+        ModalsHardwareFindHashComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

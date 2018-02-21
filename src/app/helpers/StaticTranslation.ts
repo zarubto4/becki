@@ -280,6 +280,10 @@ export class StaticTranslation {
                 'label_deactivate': 'deactivate',
                 'label_activate': 'activate',
                 'label_attention': 'Warning',
+            }, 'ModalsHardwareFindHashComponent': {
+                'title': 'Find <strong class="font-color-hardware">HARDWARE</strong> Hash for Registration ',
+                'label_full_id': 'Full ID!',
+                'btn_find': 'Find',
 
             }, 'ModalsHardwareRestartMQTTPassComponent': {
                 'title': 'Generate new MQTT Connection Secrets',
@@ -2142,7 +2146,7 @@ export class StaticTranslation {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Hardware Management',
 
-                'title': 'Basic Overview of components',
+                'title': 'Hardware Overview of all components',
                 'label_name': 'Name',
                 'label_description': 'Description',
 
@@ -2152,6 +2156,7 @@ export class StaticTranslation {
                 'label_test_firmware': 'Test firmware',
 
                 'tab_hardware_list': 'Hardware List (Filter)',
+                'tab_hardware_registration_hash': 'Registration Hash\'s',
                 'tab_hardware_type': 'Hardware Types',
                 'tab_processor': 'Processors',
                 'tab_producers': 'Producers',
@@ -2172,6 +2177,14 @@ export class StaticTranslation {
                 'label_no_producer_comment': 'You can create new Producer, it can by your client or you!',
                 'label_no_processor': 'No Processors',
                 'label_no_processor_comment': 'You can create new Processor',
+                'label_speed': 'Speed',
+
+                'btn_label_create_manually_hardware' : 'Manual HW Registration',
+                'btn_label_add_new_with_full_flow' : 'Garfield Registration',
+                'btn_label_synchronize_hardware' : 'Synchronize with CA',
+                'btn_label_create_type_of_board' : 'Create',
+                'btn_label_create_producer' : 'Create',
+                'btn_label_create_processor' : 'Create'
 
             }, 'CommunityCProgramComponent': {
                 'main_title': 'Platform administration',

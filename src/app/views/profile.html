@@ -6,131 +6,148 @@
 
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
 
-    <div class="portlet portlet light bordered">
-        <div class="portlet-title tabbable-line">
-            <div class="becki-caption">
-                <span class="font-blue-dark uppercase">
-                    <i class="fa fa-fw fa-user"></i>
-                    {{'title'|bkTranslate:this}}
-                </span>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-user'"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name] = "tab"
+        [tabBtns]="[
+                        {
+                            condition: (person.update_permission),
+                            tab_name: 'personal',
+                            tab_color: 'BYZANCE',
+                            tab_label: ('nav_personal_info'|bkTranslate:this)
+                        },
+                        {
+                         condition: (person.update_permission),
+                            tab_name: 'avatar',
+                            tab_color: 'BYZANCE',
+                            tab_label: ('nav_avatar'|bkTranslate:this)
+                        },
+                        {
+                             condition: (person.update_permission),
+                            tab_name: 'password',
+                            tab_color: 'BYZANCE',
+                            tab_label: ('nav_password'|bkTranslate:this)
+                        },
+                        {
+                             condition: (person.update_permission),
+                            tab_name: 'email',
+                            tab_color: 'BYZANCE',
+                            tab_label: ('nav_email'|bkTranslate:this)
+                        },
+                        {
+                             condition: (person.update_permission),
+                            tab_name: 'logins',
+                            tab_color: 'HARDBYZANCEWARE',
+                            tab_label: ('nav_logins'|bkTranslate:this)
+                        }
+                    ]"
+    >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
+        <div *ngIf="person" class="tab-content">
+
+            <!-- PERSONAL TAB -->
+            <div class="tab-pane" [class.active]="openTabName == 'personal'">
+                <form>
+                    <bk-form-input [label]="'label_first_name'|bkTranslate:this" type="text" [control]="infoForm.controls['first_name']"></bk-form-input>
+                    <bk-form-input [label]="'label_last_name'|bkTranslate:this" type="text" [control]="infoForm.controls['last_name']"></bk-form-input>
+                    <bk-form-input [label]="'label_nick_name'|bkTranslate:this" type="text" [control]="infoForm.controls['nickName']"></bk-form-input>
+                    <bk-form-select [label]="'label_gender'|bkTranslate:this"   [options]="genderList" [control]="infoForm.controls['gender']"></bk-form-select>
+                    <bk-form-select [label]="'label_state'|bkTranslate:this"     [options]="countryList" [control]="infoForm.controls['state']"></bk-form-select>
+
+                    <div *ngIf="person.update_permission" class="margin-top-10">
+                        <button (click)="changeInfo()" class="btn green">{{'btn_save'|bkTranslate:this}}</button>
+                    </div>
+                </form>
             </div>
-            <ul *ngIf="person" class="nav nav-tabs">
-                <li *ngIf="person.update_permission" [class.active]="openTabName == 'personal'">
-                    <a (click)="onTabClick('personal')">{{'nav_personal_info'|bkTranslate:this}}</a>
-                </li>
-                <li *ngIf="person.update_permission" [class.active]="openTabName == 'avatar'">
-                    <a (click)="onTabClick('avatar')">{{'nav_avatar'|bkTranslate:this}}</a>
-                </li>
-                <li *ngIf="person.update_permission" [class.active]="openTabName == 'password'">
-                    <a (click)="onTabClick('password')">{{'nav_password'|bkTranslate:this}}</a>
-                </li>
-                <li *ngIf="person.update_permission" [class.active]="openTabName == 'email'">
-                    <a (click)="onTabClick('email')">{{'nav_email'|bkTranslate:this}}</a>
-                </li>
-                <li *ngIf="person.update_permission" [class.active]="openTabName == 'logins'">
-                    <a (click)="onTabClick('logins')">{{'nav_logins'|bkTranslate:this}}</a>
-                </li>
-            </ul>
-        </div>
-        <div class="portlet-body">
-            <div *ngIf="person" class="tab-content">
+            <!-- END PERSONAL TAB -->
 
-                <!-- PERSONAL TAB -->
-                    <div class="tab-pane" [class.active]="openTabName == 'personal'">
-                        <form>
-                            <bk-form-input [label]="'label_first_name'|bkTranslate:this" type="text" [control]="infoForm.controls['first_name']"></bk-form-input>
-                            <bk-form-input [label]="'label_last_name'|bkTranslate:this" type="text" [control]="infoForm.controls['last_name']"></bk-form-input>
-                            <bk-form-input [label]="'label_nick_name'|bkTranslate:this" type="text" [control]="infoForm.controls['nickName']"></bk-form-input>
-                            <bk-form-select [label]="'label_gender'|bkTranslate:this"   [options]="genderList" [control]="infoForm.controls['gender']"></bk-form-select>
-                            <bk-form-select [label]="'label_state'|bkTranslate:this"     [options]="countryList" [control]="infoForm.controls['state']"></bk-form-select>
 
-                            <div *ngIf="person.update_permission" class="margin-top-10">
-                                <button (click)="changeInfo()" class="btn green">{{'btn_save'|bkTranslate:this}}</button>
-                            </div>
-                        </form>
+            <!-- AVATAR TAB -->
+            <div *ngIf="person.update_permission" class="tab-pane center-align center text-center" [class.active]="openTabName == 'avatar'">
+                <img *ngIf="person.picture_link" class="preview img-circle center-align center" [src]="person.picture_link" width="128" height="128">
+                <img *ngIf="!person.picture_link" class="preview img-circle empty center-align center" width="128" height="128">
+
+                <p class="text-center"><a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+            </div>
+            <!-- END AVATAR TAB -->
+
+
+            <!-- PASSWORD TAB -->
+            <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'password'">
+                <form>
+                    <bk-form-input [label]="'label_current_password'|bkTranslate:this" type="password" [control]="passwordForm.controls['currentPassword']"></bk-form-input>
+                    <bk-form-input [label]="'label_new_password'|bkTranslate:this" type="password" [control]="passwordForm.controls['newPassword']"></bk-form-input>
+                    <bk-form-input [label]="'label_new_password_again'|bkTranslate:this" type="password" [control]="passwordForm.controls['newPasswordConfirm']"></bk-form-input>
+
+                    <div *ngIf="person.update_permission" class="margin-top-10">
+                        <button type="submit" (click)="changePassword()" class="btn green" [disabled]="!passwordForm.valid">{{'btn_change_password'|bkTranslate:this}}</button>
                     </div>
-                <!-- END PERSONAL TAB -->
+                </form>
+            </div>
+            <!-- END PASSWORD TAB -->
 
 
-                <!-- AVATAR TAB -->
-                    <div *ngIf="person.update_permission" class="tab-pane center-align center text-center" [class.active]="openTabName == 'avatar'">
-                        <img *ngIf="person.picture_link" class="preview img-circle center-align center" [src]="person.picture_link" width="128" height="128">
-                        <img *ngIf="!person.picture_link" class="preview img-circle empty center-align center" width="128" height="128">
+            <!-- EMAIL TAB -->
+            <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'email'">
+                <form>
+                    <bk-form-input [label]="'label_current_email'|bkTranslate:this" type="email" [control]="emailForm.controls['currentEmail']"></bk-form-input>
+                    <bk-form-input [label]="'label_new_email'|bkTranslate:this" type="email" [control]="emailForm.controls['newEmail']"></bk-form-input>
+                    <bk-form-input [label]="'label_new_email_again'|bkTranslate:this" type="email" [control]="emailForm.controls['newEmailConfirm']"></bk-form-input>
 
-                        <p class="text-center"><a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+                    <div *ngIf="person.update_permission" class="margin-top-10">
+                        <button type="submit" (click)="changeEmail()" class="btn green" [disabled]="!emailForm.valid">{{'btn_change_email'|bkTranslate:this}}</button>
                     </div>
-                <!-- END AVATAR TAB -->
+                </form>
+            </div>
+            <!-- END EMAIL TAB -->
 
+            <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'logins'">
+                <div *ngIf="login_tokens && login_tokens.length" class="table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th class="center-align">{{'table_system_component'|bkTranslate:this}}</th>
+                            <th class="center-align">{{'table_user_agent'|bkTranslate:this}}</th>
+                            <th class="center-align">{{'table_created'|bkTranslate:this}}</th>
+                            <th class="center-align">{{'table_access_age'|bkTranslate:this}}</th>
+                            <th class="center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let login_token of login_tokens">
+                            <td class="vert-align">
+                                <span *ngIf="login_token.where_logged == 'BECKI_WEBSITE'">Byzance Portal</span>
+                            </td>
+                            <td class="vert-align">{{login_token.user_agent}}</td>
+                            <td class="vert-align no-wrap">{{login_token.created|bkUnixTimeToDate}}</td>
+                            <td class="vert-align no-wrap">{{login_token.access_age|bkUnixTimeToDate}}</td>
 
-                <!-- PASSWORD TAB -->
-                    <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'password'">
-                        <form>
-                            <bk-form-input [label]="'label_current_password'|bkTranslate:this" type="password" [control]="passwordForm.controls['currentPassword']"></bk-form-input>
-                            <bk-form-input [label]="'label_new_password'|bkTranslate:this" type="password" [control]="passwordForm.controls['newPassword']"></bk-form-input>
-                            <bk-form-input [label]="'label_new_password_again'|bkTranslate:this" type="password" [control]="passwordForm.controls['newPasswordConfirm']"></bk-form-input>
+                            <td class="vert-align text-right no-wrap">
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
 
-                            <div *ngIf="person.update_permission" class="margin-top-10">
-                                <button type="submit" (click)="changePassword()" class="btn green" [disabled]="!passwordForm.valid">{{'btn_change_password'|bkTranslate:this}}</button>
-                            </div>
-                        </form>
-                    </div>
-                <!-- END PASSWORD TAB -->
-
-
-                <!-- EMAIL TAB -->
-                    <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'email'">
-                        <form>
-                            <bk-form-input [label]="'label_current_email'|bkTranslate:this" type="email" [control]="emailForm.controls['currentEmail']"></bk-form-input>
-                            <bk-form-input [label]="'label_new_email'|bkTranslate:this" type="email" [control]="emailForm.controls['newEmail']"></bk-form-input>
-                            <bk-form-input [label]="'label_new_email_again'|bkTranslate:this" type="email" [control]="emailForm.controls['newEmailConfirm']"></bk-form-input>
-
-                            <div *ngIf="person.update_permission" class="margin-top-10">
-                                <button type="submit" (click)="changeEmail()" class="btn green" [disabled]="!emailForm.valid">{{'btn_change_email'|bkTranslate:this}}</button>
-                            </div>
-                        </form>
-                    </div>
-                <!-- END EMAIL TAB -->
-
-                <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'logins'">
-                    <div *ngIf="login_tokens && login_tokens.length" class="table-scrollable">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th class="center-align">{{'table_system_component'|bkTranslate:this}}</th>
-                                    <th class="center-align">{{'table_user_agent'|bkTranslate:this}}</th>
-                                    <th class="center-align">{{'table_created'|bkTranslate:this}}</th>
-                                    <th class="center-align">{{'table_access_age'|bkTranslate:this}}</th>
-                                    <th class="center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr *ngFor="let login_token of login_tokens">
-                                    <td class="vert-align">
-                                        <span *ngIf="login_token.where_logged == 'BECKI_WEBSITE'">Byzance Portal</span>
-                                    </td>
-                                    <td class="vert-align">{{login_token.user_agent}}</td>
-                                    <td class="vert-align no-wrap">{{login_token.created|bkUnixTimeToDate}}</td>
-                                    <td class="vert-align no-wrap">{{login_token.access_age|bkUnixTimeToDate}}</td>
-
-                                    <td class="vert-align text-right no-wrap">
-                                        <style type="text/css">
-                                            table tr button { opacity:0.05;}
-                                            table tr:hover button { opacity:1 }
-                                        </style>
-
-                                        <button *ngIf="login_token.delete_permission" title="{{'label_token_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onLoginTokenDeleteClick(login_token)">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                    </div>
-                    <h3  *ngIf="!login_tokens" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                                <button *ngIf="login_token.delete_permission" title="{{'label_token_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onLoginTokenDeleteClick(login_token)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-
+                <h3  *ngIf="!login_tokens" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
             </div>
+
         </div>
     </div>
+    <!-- Page Content -- END -->
 
 </bk-layout-main>

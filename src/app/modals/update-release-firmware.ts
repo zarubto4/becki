@@ -10,7 +10,7 @@ import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import {
     IHardwareGroup, IBootLoader, IActualizationProcedureMakeHardwareType, ICProgramFilter, ICProgramList, ICProgram,
-    IHardwareType
+    IHardwareType, IHardwareGroupList
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
@@ -20,7 +20,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
         public project_id: string = null,
-        public deviceGroup: IHardwareGroup[] = [],         // All possible Hardware groups for settings
+        public deviceGroup: IHardwareGroupList = null,         // All possible Hardware groups for settings
         public deviceGroupStringIdSelected: string = '',   // List with group ids for hardware update,
         public firmwareType: string = 'firmware',
         public groups: IActualizationProcedureMakeHardwareType[] = [],
@@ -103,10 +103,10 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         (<FormControl>(this.form.controls['versionSelected'])).setValue(null);
         let devgroup: IHardwareGroup = null;
 
-        for (let i: number = 0; i < this.modalModel.deviceGroup.length; i++) {
+        for (let i: number = 0; i < this.modalModel.deviceGroup.content.length; i++) {
 
-            if (this.modalModel.deviceGroup[i].id === value ) {
-                devgroup = this.modalModel.deviceGroup[i];
+            if (this.modalModel.deviceGroup.content[i].id === value ) {
+                devgroup = this.modalModel.deviceGroup.content[i];
                 devgroup.hardware_types.forEach((tp: IHardwareType) => {
 
 
@@ -164,7 +164,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     ngOnInit() {
         this.set_firmware();
 
-        this.groupsForSelect = this.modalModel.deviceGroup.map((pv) => {
+        this.groupsForSelect = this.modalModel.deviceGroup.content.map((pv) => {
             return {
                 label: pv.name,
                 value: pv.id

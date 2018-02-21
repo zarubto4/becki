@@ -4,27 +4,29 @@
   -->
 
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
-    <div class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark uppercase">
-                    <i class="fa fa-fw fa-bell-o"></i>
-                    {{'title'|bkTranslate:this}}
-                </span>
-            </div>
-        </div>
-        <div class="portlet-body">
-            <h4>
-                <span [innerHTML]="'label_displaying_notif'|bkTranslate:this:notificationService.notifications.length: notificationService.unreadNotificationsCount"></span>
-                <span *ngIf="notificationService.unreadNotificationsCount" [innerHTML]="'label_notif_undead'|bkTranslate:this:notificationService.unreadNotificationsCount"></span>
-            </h4>
-            <bk-notifications-list class="no-margin"></bk-notifications-list>
-            <div>
-                <button class="btn blue-oleo btn-block notification-load-more-btn" (click)="onLoadOlderClick()" [disabled]="loading || !canLoadMore()">
-                    <span *ngIf="loading">{{'loading'|bkTranslate:this}}</span>
-                    <span *ngIf="!loading">{{'label_load_older'|bkTranslate:this}}</span>
-                </button>
-            </div>
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-bell-o'"
+        >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
+        <h4>
+            <span [innerHTML]="'label_displaying_notif'|bkTranslate:this:notificationService.notifications.length: notificationService.unreadNotificationsCount"></span>
+            <span *ngIf="notificationService.unreadNotificationsCount" [innerHTML]="'label_notif_undead'|bkTranslate:this:notificationService.unreadNotificationsCount"></span>
+        </h4>
+        <bk-notifications-list class="no-margin"></bk-notifications-list>
+        <div>
+            <button class="btn blue-oleo btn-block notification-load-more-btn" (click)="onLoadOlderClick()" [disabled]="loading || !canLoadMore()">
+                <span *ngIf="loading">{{'loading'|bkTranslate:this}}</span>
+                <span *ngIf="!loading">{{'label_load_older'|bkTranslate:this}}</span>
+            </button>
         </div>
     </div>
+    <!-- Page Content -- END -->
+
 </bk-layout-main>

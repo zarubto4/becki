@@ -13,6 +13,7 @@ import { ModalsCreateHardwareTypeModel } from '../modals/type-of-board-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsAdminCreateHardwareModel } from '../modals/admin-create-hardware';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
+import {ModalsHardwareFindHash, ModalsHardwareFindHashComponent} from "../modals/hardware-find-hash";
 
 @Component({
     selector: 'bk-view-admin-hardware-type',
@@ -57,6 +58,33 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
         this.tab = tab;
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'add_hardware') {
+            this.onCreateHardwareClick();
+        }
+
+        if (action === 'register_new_hardware') {
+            this.onGarfieldClick();
+        }
+
+        if (action === 'synchronize_hardware') {
+            this.onHardwareSynchronize();
+        }
+
+        if (action === 'new_hardware_type') {
+            this.onCreateHardwareTypeClick();
+        }
+
+        if (action === 'add_producer') {
+            this.onCreateProducerClick();
+        }
+
+        if (action === 'add_processor') {
+            this.onCreateProcessorClick();
+        }
+    }
+
+    // Hardware Type Operations  ---------------------------------------------------------------------------------------
 
     onCreateHardwareTypeClick(): void {
         let model = new ModalsCreateHardwareTypeModel(this.processors, this.producers);
@@ -77,87 +105,6 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
-                    });
-            }
-        });
-    }
-
-    onCreateProducerClick(): void {
-        let model = new ModalsCreateProducerModel();
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.producerCreate({
-                    description: model.description,
-                    name: model.name
-                })
-                    .then(() => {
-                        this.refresh();
-                    }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                        this.unblockUI();
-                        this.refresh();
-                    });
-            }
-        });
-    }
-
-    onCreateProcessorClick(): void {
-        let model = new ModalsCreateProcessorModel();
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.processorCreate({
-                    description: model.description,
-                    processor_code: model.processor_code,
-                    name: model.name,
-                    speed: model.speed
-                })
-                    .then(() => {
-                        this.refresh();
-                    }).catch(reason => {
-                        this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                        this.refresh();
-                    });
-            }
-        });
-    }
-
-    onProcessorEditClick(processor: IProcessor): void {
-        let model = new ModalsCreateProcessorModel(processor.description, processor.processor_code, processor.name, processor.speed, true);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.processorEdit(processor.id, {
-                    description: model.description,
-                    processor_code: model.processor_code,
-                    name: model.name,
-                    speed: model.speed
-                })
-                    .then(() => {
-                        this.refresh();
-                    }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                        this.refresh();
-                    });
-            }
-        });
-    }
-
-    onProducerEditClick(producer: IProducer): void {
-        let model = new ModalsCreateProducerModel(producer.description, producer.name, true);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.producerEdit(producer.id, {
-                    description: model.description,
-                    name: model.name
-                })
-                    .then(() => {
-                        this.refresh();
-                    }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                     });
             }
         });
@@ -214,6 +161,51 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
         });
     }
 
+    // Procesor Operations  --------------------------------------------------------------------------------------------
+
+    onCreateProcessorClick(): void {
+        let model = new ModalsCreateProcessorModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.processorCreate({
+                    description: model.description,
+                    processor_code: model.processor_code,
+                    name: model.name,
+                    speed: model.speed
+                })
+                    .then(() => {
+                        this.refresh();
+                    }).catch(reason => {
+                    this.unblockUI();
+                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                    this.refresh();
+                });
+            }
+        });
+    }
+
+    onProcessorEditClick(processor: IProcessor): void {
+        let model = new ModalsCreateProcessorModel(processor.description, processor.processor_code, processor.name, processor.speed, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.processorEdit(processor.id, {
+                    description: model.description,
+                    processor_code: model.processor_code,
+                    name: model.name,
+                    speed: model.speed
+                })
+                    .then(() => {
+                        this.refresh();
+                    }).catch(reason => {
+                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                    this.refresh();
+                });
+            }
+        });
+    }
+
     onProcessorDeleteClick(processor: IProcessor): void {
         this.modalService.showModal(new ModalsRemovalModel(processor.name)).then((success) => {
             if (success) {
@@ -227,6 +219,46 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
+            }
+        });
+    }
+
+    // Producer Operations  --------------------------------------------------------------------------------------------
+
+    onCreateProducerClick(): void {
+        let model = new ModalsCreateProducerModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.producerCreate({
+                    description: model.description,
+                    name: model.name
+                })
+                    .then(() => {
+                        this.refresh();
+                    }).catch(reason => {
+                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                    this.unblockUI();
+                    this.refresh();
+                });
+            }
+        });
+    }
+
+    onProducerEditClick(producer: IProducer): void {
+        let model = new ModalsCreateProducerModel(producer.description, producer.name, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.producerEdit(producer.id, {
+                    description: model.description,
+                    name: model.name
+                })
+                    .then(() => {
+                        this.refresh();
+                    }).catch(reason => {
+                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                });
             }
         });
     }
@@ -248,6 +280,8 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
         });
     }
 
+    // Hardware Operations  --------------------------------------------------------------------------------------------
+
     onCreateHardwareClick(): void {
         let model = new ModalsAdminCreateHardwareModel(this.hardwareTypes);
         this.modalService.showModal(model).then((success) => {
@@ -261,31 +295,11 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.onFilterHardware();
                         this.unblockUI();
                     }).catch(reason => {
-                        this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                    });
+                    this.unblockUI();
+                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                });
             }
         });
-    }
-
-    selectedFilterPageHardware(event: { index: number}) {
-        this.onFilterHardware(event.index);
-    }
-
-    onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
-
-        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
-            hardware_type_ids: boardTypes
-        })
-            .then((values) => {
-                this.boardsFiler = values;
-
-                this.unblockUI();
-            })
-            .catch((reason) => {
-                this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
-            });
     }
 
     onRemoveHardwareClick(board: IHardware): void {
@@ -346,6 +360,35 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
             .catch(reason => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
+            });
+    }
+
+    // Hardware Hash ----------------------------------------------------------------------------------------------------
+
+    onGetHardwareHash(): void {
+        let model = new ModalsHardwareFindHash();
+        this.modalService.showModal(model).then((success) => {});
+    }
+
+    // Hardware Filter --------------------------------------------------------------------------------------------------
+
+    selectedFilterPageHardware(event: { index: number}) {
+        this.onFilterHardware(event.index);
+    }
+
+    onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
+
+        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+            hardware_type_ids: boardTypes
+        })
+            .then((values) => {
+                this.boardsFiler = values;
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
 

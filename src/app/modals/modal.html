@@ -5,6 +5,9 @@
 
 
 
+            <template [ngSwitchCase]="'ModalsHardwareFindHash'">
+                <bk-modals-hardware-find-hash-component [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-find-hash-component>
+            </template>
             <template [ngSwitchCase]="'ModalsUpdateHomerServerModel'">
                 <bk-modals-homer-update-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-homer-update-server>
             </template>

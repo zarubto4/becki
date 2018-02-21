@@ -32,9 +32,12 @@
         <div style="text-align: center">
             <button type="button" class="btn btn-lg blue" (click)="onGenerateClick()">{{'btn_generate'|bkTranslate:this}}</button>
         </div>
+        <div *ngIf="error_message">
+            <span class="font-red bold">{{error_message}}</span>
+        </div>
 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_close'|bkTranslate:this}}</button> <!-- mohli bychom opozdit prokliknutelnost tlačítka aby uživatel opravdu musel přečíst co se děje -->
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_close'|bkTranslate:this}}</button>
     </div>
 </div>

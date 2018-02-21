@@ -3,7 +3,10 @@
  * directory of this distribution.
  */
 
-import { Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges, NgZone } from '@angular/core';
+import {
+    Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges, NgZone,
+    ViewEncapsulation
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TyrionBackendService } from '../services/BackendService';
 import { BreadcrumbsService } from '../services/BreadcrumbsService';
@@ -15,11 +18,11 @@ declare const BECKI_VERSION: string;
 declare const BECKI_VERSION_ID: number;
 declare const BECKI_VERSION_DATE: string;
 
-const BODY_CLASSES = ['page-header-fixed', 'page-container-bg-solid'];
+const BODY_CLASSES = ['page-header-fixed', 'page-content-white'];
 
 @Component({
     selector: 'bk-layout-main',
-    templateUrl: './main.html'
+    templateUrl: './main.html',
 })
 export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
 
@@ -28,6 +31,9 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input()
     subtitle: string = '';
+
+    @Input()
+    show_title: boolean = true;
 
     @Input()
     tabMenu: string = null;

@@ -2,11 +2,10 @@
   ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
   ~ of this distribution.
   -->
-<div class="page-wrapper">
+<div class="page-content-wrapper">
     <div class="page-header navbar navbar-fixed-top">
         <!-- BEGIN HEADER INNER -->
         <div class="page-header-inner">
-
 
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->
             <a class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
@@ -83,6 +82,7 @@
 
     <bk-notifications-overlay></bk-notifications-overlay>
     <!-- END HEADER -->
+
     <div class="page-container">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper page-sidebar-fixed">
@@ -121,7 +121,6 @@
                     <!-- BEGIN SIDEBAR MENU Admin Part-->
                     <!-- DOC: Filter all navigations with admin parameter on option -->
                     <ng-container *ngIf="backendService.personPermissions && backendService.personPermissions.length">
-
 
                         <li *ngFor="let page of navigation" [class.heading]="!page.link" [class.nav-item]="page.link" [class.hide]="!page.options['adminNavigation']">
 
@@ -168,9 +167,6 @@
 
                         </li>
                     </ng-container>
-
-
-
                 </ul>
             </div>
         </div>
@@ -178,6 +174,7 @@
         <div class="page-content-wrapper">
             <!-- BEGIN CONTENT BODY -->
             <div class="page-content">
+
                 <div class="page-bar">
                     <ul class="page-breadcrumb">
                         <li *ngFor="let breadcrumb of breadcrumbsService.breadcrumbs; let last = last">
@@ -190,14 +187,16 @@
                     </ul>
                 </div>
 
-                <h1 *ngIf="title" class="page-title text-center">
-                    {{title}}
+                <h1 *ngIf="title && show_title"
+                    class="page-title text-center">
+                        {{title}}
                     <div *ngIf="subtitle" class="page-subtitle text-center">
                         {{subtitle}}
                     </div>
                 </h1>
 
-                <div [class.tabbable-line]="tabMenuItems">
+                <!----- Tab Menu BEGIN ---->
+                <div [class.tabbable-line]="tabMenuItems" class="p">
                     <ul *ngIf="tabMenuItems" class="nav nav-tabs becki-tab-menu">
                         <li *ngFor="let tabItem of tabMenuItems; let index = index" class="{{tabItem.options['styleClass']}}" [class.spacer]="!tabItem.options['items'] && !tabItem.link"
                             [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
@@ -220,15 +219,18 @@
                             </ul>
                         </li>
                     </ul>
+                </div>
+                <!----- Tab Menu END ---->
 
-                    <div [class.tab-content]="tabMenuItems">
-                        <div class="active" [class.tab-pane]="tabMenuItems">
+                <!----- Site Content START ---->
+                <div [class.tab-content]="tabMenuItems">
+                    <div class="active" [class.tab-pane]="tabMenuItems">
+                        <div class="portlet light">
                             <ng-content></ng-content>
                         </div>
                     </div>
                 </div>
-
-
+                <!----- Site Content END ---->
             </div>
             <!-- END CONTENT BODY -->
         </div>

@@ -35,7 +35,7 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
     countryList: FormSelectComponentOption[] = StaticOptionLists.countryList;
     genderList: FormSelectComponentOption[] = StaticOptionLists.genderList;
 
-    openTabName = 'personal';
+    tab = 'personal';
 
     constructor(injector: Injector, public backendService: TyrionBackendService, protected notificationService: NotificationService) {
         super(injector);
@@ -64,7 +64,7 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
     };
 
     onTabClick(tabName: string) {
-        this.openTabName = tabName;
+        this.tab = tabName;
 
         if (tabName === 'logins' && this.login_tokens == null) {
             this.refresh_login_tokens();

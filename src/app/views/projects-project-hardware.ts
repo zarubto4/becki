@@ -3,22 +3,23 @@
  * of this distribution.
  */
 
-import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import {Component, OnInit, Injector, OnDestroy, ViewChild} from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
-    IProject, IHardware, IHardwareList, IHardwareGroup, IHardwareUpdate,
+    IProject, IHardware, IHardwareList, IHardwareUpdate,
     IActualizationProcedureTaskList, ICProgram, IBootLoader, IActualizationProcedureList, IUpdateProcedure,
-    IHardwareGroupList
+    IHardwareGroupList, IHardwareGroup
 } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareGroupPropertiesModel } from '../modals/hardware-group-properties';
 import { ModalsHardwareGroupDeviceSettingsModel } from '../modals/hardware-group-device-settings';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
+import { PortletPanelMenuComponent } from '../components/PortletPanelMenu';
 
 @Component({
     selector: 'bk-view-projects-project-hardware',
@@ -32,7 +33,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-
     devicesFilter: IHardwareList = null;
     deviceGroup: IHardwareGroupList = null;
     actualizationFilter: IActualizationProcedureList = null;
@@ -40,6 +40,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     tab: string = 'hardware_list';
+
 
     constructor(injector: Injector) {
         super(injector);
@@ -74,6 +75,10 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     onToggleTab(tab: string) {
         this.tab = tab;
 
+        if (tab === 'hardware_list' && this.devicesFilter == null) {
+            this.onFilterHardware();
+        }
+
         if (tab === 'hardware_groups' && this.deviceGroup == null) {
             this.onFilterHardwareGroup();
         }
@@ -84,6 +89,19 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'add_hardware') {
+            this.onHardwareAddClick();
+        }
+
+        if (action === 'add_hardware_group') {
+            this.onGroupAddClick();
+        }
+
+        if (action === 'new_release') {
+            this.onProcedureCreateClick();
+        }
+    }
 // Hardware   ----------------------------------------------------------------------------------------------------------
 
     onHardwareEditClick(device: IHardware): void {
@@ -152,7 +170,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
                 project_id: this.projectId
             })
-                .then((values) => {
+                .then((values: IHardwareGroupList) => {
                     this.unblockUI();
                     this.deviceGroup = values;
                     this.onDeviceEditGroupClick(device);

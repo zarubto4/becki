@@ -3,42 +3,48 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
-    <div class="portlet portlet light bordered">
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
-        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-        <bk-portlet-title
-            [title_name]="'title'|bkTranslate:this"
-            [icon]="'fa-users'"
-            (onClick)="onMembersAddClick()"
-            [btns]="[
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-users'"
+        (onClick)="onMembersAddClick()"
+        [btns]="[
                 {
                     condition: (project && project.participants.length > 1),
-                    label: ('btn_add_members'|bkTranslate:this),
+                    btn_label_for_person: ('btn_add_members'|bkTranslate:this),
                     colorType: 'ADD',
-                    icon: 'fa-plus-circle'
+                    icon: 'fa-plus-circle',
+                          btn_tag: 'add'
                 }
-            ]"></bk-portlet-title>
-        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+            ]">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
 
         <!-- Page Content -- START -->
-        <div *ngIf="(project && project.participants.length > 1)" class="table-scrollable">
-            <table class="table table-hover">
+        <div *ngIf="(project && project.participants.length > 1)" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
                 <thead>
                     <tr>
-                        <th>{{'label_email'|bkTranslate:this}}</th>
-                        <th>{{'table_name'|bkTranslate:this}}</th>
-                        <th class="full-width">{{'table_state'|bkTranslate:this}}</th>
-                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                        <th class="col col-lg-3">{{'label_email'|bkTranslate:this}}</th>
+                        <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-3">{{'table_state'|bkTranslate:this}}</th>
+                        <th class="col col-lg-3 text-right no-wrap">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let member of project.participants">
-                        <td class="vert-align no-wrap bold">{{member.email}}</td>
+                        <td class="vert-align no-wrap">{{member.email}}</td>
                         <td class="vert-align no-wrap">{{member.full_name}}</td>
-                        <td class="vert-align">{{readableState(member.state)}}</td>
-                        <td class="vert-align no-wrap">
+                        <td class="vert-align no-wrap">{{readableState(member.state)}}</td>
+                        <td class="vert-align no-wrap text-right">
                             <style type="text/css">
                                 table tr button { opacity:0.05;}
                                 table tr:hover button { opacity:1 }
@@ -71,4 +77,6 @@
 
 
     </div>
+    <!-- Page Content -- END -->
+
 </bk-layout-main>

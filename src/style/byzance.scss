@@ -1265,6 +1265,7 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
 .becki-caption {
     float: left;
     display: inline-block;
+    margin-right: 20px;
     font-size: 18px;
     line-height: 18px;
     padding: 13px 0;
@@ -1353,6 +1354,8 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
 }
 
 .nav.nav-tabs.becki-tab-menu {
+
+    padding-top: 18px;
 
     li.dropdown .dropdown-icon {
         width: 2px;
@@ -2644,6 +2647,7 @@ textarea.form-control {
 
     &__sub-label {
         margin: 0;
+        margin-bottom: 10px;
         font-size: 18px;
         font-weight: 100;
     }

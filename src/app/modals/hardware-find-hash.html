@@ -1,0 +1,27 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
+    </div>
+    <div class="modal-body">
+
+        <form [formGroup]="form">
+            <bk-form-input [control]="form.controls.full_id" [label]="'label_full_id'|bkTranslate:this"></bk-form-input>
+        </form>
+
+        <div style="text-align: center">
+            <button type="button" class="btn btn-lg blue" (click)="onFindClick()">{{'btn_find'|bkTranslate:this}}</button>
+        </div>
+
+        <div *ngIf="hash">
+            <strong>{{hash}}</strong>
+        </div>
+        <div *ngIf="error_message">
+            <br>
+            <span class="font-red bold">{{error_message}}</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_close'|bkTranslate:this}}</button>
+    </div>
+</div>

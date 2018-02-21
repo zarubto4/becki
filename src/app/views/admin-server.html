@@ -89,7 +89,7 @@
                     <h3 *ngIf="!homer_servers" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
                     <div *ngIf="homer_servers && homer_servers.length == 0" class="list-no-items">
                         <p class="list-no-items__main-label">{{'label_no_servers'|bkTranslate:this}}</p>
-                        <p class="list-no-items__sub-label">{{'label_no_servers_comment'|bkTranslate:this}} </p>
+                        <p class="list-no-items">{{'label_no_servers_comment'|bkTranslate:this}} </p>
                         <p>
                             <button class="btn blue" (click)="onCreateHomerServerClick()">
                                 <i class="fa fa-plus-circle"></i> {{'btn_create_server'|bkTranslate:this}}

@@ -3,68 +3,71 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main [title]="'main_title'|bkTranslate:this">
-    <div class="portlet portlet light bordered">
+<bk-layout-main
+    [title]="'main_title'|bkTranslate:this"
+    [show_title]="false">
 
-        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-        <bk-portlet-title
-            [title_name]="'title'|bkTranslate:this"
-            [icon]="'fa-briefcase'"
-            (onClick)="onAddClick()"
-            [btns]="[
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-briefcase'"
+        (onClick)="onAddClick($event)"
+        [btns]="[
                 {
                     condition: (products != null && products.length > 0 && projects != null &&  projects.length > 0),
-                    label: ('btn_add_project'|bkTranslate:this),
+                    btn_label_for_person: ('btn_add_project'|bkTranslate:this),
                     colorType: 'ADD',
-                    icon: 'fa-plus-circle'
+                    icon: 'fa-plus-circle',
+                    btn_tag: 'add'
                 }
-            ]"></bk-portlet-title>
-        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+            ]">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-
-        <!-- Page Content -- START -->
-        <div *ngIf="projects && projects.length" class="table-scrollable">
-            <table class="table table-hover byzance-table">
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
+        <div *ngIf="projects && projects.length" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
                 <thead>
-                    <tr>
-                        <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-5">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_product'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                    </tr>
+                <tr>
+                    <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="col col-lg-5">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="col col-lg-2">{{'table_product'|bkTranslate:this}}</th>
+                    <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let project of projects">
+                <tr *ngFor="let project of projects">
 
-                        <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a></td>
+                    <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a></td>
 
-                        <td class="vert-align" *ngIf="!project.active">
-                            <strong>{{project.name}}</strong>
-                            <br>
-                            <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
-                        </td>
+                    <td class="vert-align" *ngIf="!project.active">
+                        <strong>{{project.name}}</strong>
+                        <br>
+                        <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
+                    </td>
 
-                        <td class="vert-align">{{project.description}}</td>
+                    <td class="vert-align">{{project.description}}</td>
 
-                        <td class="vert-align">
-                            <a (click)="onProductClick(project.product.id)">{{project.product.name}}</a>
-                        </td>
+                    <td class="vert-align">
+                        <a (click)="onProductClick(project.product.id)">{{project.product.name}}</a>
+                    </td>
 
-                        <td class="no-wrap text-right vert-align">
+                    <td class="no-wrap text-right vert-align">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
 
-                            <button title="{{'label_Project_Properties'|bkTranslate}}" class="btn btn-icon-only blue" [disabled]="!project.update_permission || !project.active" (click)="onEditClick(project)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_Remove_project'|bkTranslate}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active" (click)="onRemoveClick(project)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                        <button title="{{'label_Project_Properties'|bkTranslate}}" class="btn btn-icon-only blue" [disabled]="!project.update_permission || !project.active" (click)="onEditClick(project)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="{{'label_Remove_project'|bkTranslate}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active" (click)="onRemoveClick(project)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -88,7 +91,8 @@
                                 [btn_label]="'btn_add_project'|bkTranslate:this"
                                 (onButtonClick)="onAddClick()"></bk-nothing-to-show>
         </template>
-        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
     </div>
+    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
 </bk-layout-main>

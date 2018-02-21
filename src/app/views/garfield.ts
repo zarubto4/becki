@@ -129,9 +129,6 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
         });
     }
 
-    onGarfieldClick(garfield: IGarfield) {
-        this.navigate(['/admin/garfield', garfield.id]);
-    }
 
 }
 

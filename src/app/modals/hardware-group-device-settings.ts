@@ -6,14 +6,14 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IHardwareGroup, IHardware } from '../backend/TyrionAPI';
+import { IHardwareGroup, IHardware, IHardwareGroupList} from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { FormSwitchTwoListSelectComponent } from '../components/FormSwitchTwoListSelectComponent';
 
 export class ModalsHardwareGroupDeviceSettingsModel extends ModalModel {
     constructor(
         public device: IHardware,
-        public deviceGroup: IHardwareGroup[] = [],         // All possible Hardware groups for settings
+        public deviceGroup: IHardwareGroupList = null,         // All possible Hardware groups for settings
         public deviceGroupStringIdsAvailable: string[] = [],    // List with group ids for hardware update
         public deviceGroupStringIdsSelected: string[] = []     // List with group ids for hardware update
     ) {
@@ -54,7 +54,7 @@ export class ModalsHardwareGroupDeviceSettingsComponent implements OnInit {
         });
 
         // Here are all except in group_options_selected
-        this.modalModel.deviceGroup.forEach((group) => {
+        this.modalModel.deviceGroup.content.forEach((group) => {
             if (!this.alreadyContain(group.id)) {
                 this.group_options_available.push({
                     label: group.name,

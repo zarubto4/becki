@@ -56,7 +56,7 @@ export class ModalsHardwareRestartMQTTPassComponent implements OnInit {
                 this.pass = pass;
             })
             .catch((reason) => {
-                this.error_message = reason;
+                this.error_message = reason.body['message'];
             });
     }
 

@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { IHardwareGroup } from '../backend/TyrionAPI';
+import { IHardwareGroup, IHardwareGroupList } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessageError, FlashMessage } from '../services/NotificationService';
@@ -19,7 +19,7 @@ import { TranslationService } from '../services/TranslationService';
 export class ModalsAddHardwareModel extends ModalModel {
     constructor(
         public project_id: string,
-        public deviceGroup: IHardwareGroup[] = []
+        public deviceGroup: IHardwareGroupList = null
     ) {
         super();
     }
@@ -94,7 +94,7 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     ngOnInit() {
 
-        this.group_options_available = this.modalModel.deviceGroup.map((pv) => {
+        this.group_options_available = this.modalModel.deviceGroup.content.map((pv) => {
             return {
                 label: pv.name,
                 value: pv.id
@@ -110,7 +110,7 @@ export class ModalsAddHardwareComponent implements OnInit {
         this.registredDevices = [];
         this.failedDevices = [];
 
-        if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.length > 0) {
+        if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.content.length > 0) {
             this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
         }
 
@@ -153,7 +153,7 @@ export class ModalsAddHardwareComponent implements OnInit {
 
         let groupIDs: string[] = [];
 
-        if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.length > 0) {
+        if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.content.length > 0) {
             this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
         }
 

@@ -3,37 +3,40 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main [tabMenu]="'projects-project'" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
-    <div class="portlet portlet light bordered">
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
-        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-        <bk-portlet-title
-            [title_name]="'title'|bkTranslate:this"
-            [icon]="'fa-tachometer'"
-            (onClick)="onPortletClick($event)"
-            [btns]="[
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-tachometer'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
              {
                   condition: (true),
-                  label: ('label_project_properties'|bkTranslate:this),
+                  btn_label_for_person: ('label_project_properties'|bkTranslate:this),
                   icon: 'fa-cog',
                   permission: (project && project.update_permission),
                   colorType: 'EDIT',
-                  btn_identification: 'edit_project'
+                  btn_tag: 'edit_project'
              },
              {
                   condition: (true),
-                  label: ('label_project_remove'|bkTranslate:this),
+                  btn_label_for_person: ('label_project_remove'|bkTranslate:this),
                   icon: 'fa-trash',
                   permission: (project && project.delete_permission),
                   colorType: 'REMOVE',
-                  btn_identification: 'remove_project'
+                  btn_tag: 'remove_project'
              }
             ]">
-        </bk-portlet-title>
-        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
 
-        <!-- Page Content -- START -->
         <div class="row" *ngIf="project && project.project_stats">
 
             <div class="col-md-4">
@@ -125,7 +128,6 @@
             </div>
 
         </div>
-        <!-- Page Content -- END -->
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(project == null)"
@@ -136,5 +138,8 @@
                             </bk-nothing-to-show>
         <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
+
     </div>
+    <!-- Page Content -- END -->
+
 </bk-layout-main>

@@ -117,9 +117,14 @@ export abstract class _BaseMainComponent {
 
 // -- ON CLIC ----------------------------------------------------------------------------------------------------------------
 
-    public onFinancleClick(): void {
+    public onFinanceClick(): void {
         this.navigate(['/financial']);
     }
+
+    public onGarfieldClick(): void {
+        this.navigate(['/admin/garfield']);
+    }
+
 
     public onRoleClick(role_id: string): void {
         this.navigate(['admin/permission-group/', role_id]);

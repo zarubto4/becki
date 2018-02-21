@@ -37,7 +37,7 @@
                         <tbody>
                         <tr *ngFor="let garfield of garfield_s">
                             <td class="vert-align no-wrap">
-                                <a (click)="onGarfieldClick(garfield)" class="no-wrap"><strong>{{garfield.name}}</strong></a>
+                                <a (click)="onGarfieldClick(garfield.id)" class="no-wrap"><strong>{{garfield.name}}</strong></a>
                             </td>
                             <td class="vert-align no-wrap">
                                 <a (click)="onHardwareTypeClick(garfield.type_of_board)" class="no-wrap"><strong>{{garfield.type_of_board.name}}</strong></a>

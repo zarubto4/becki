@@ -2,77 +2,70 @@
                 [subtitle]="producer?producer.description:''"
                 [lastBreadName]="producer?producer.name:''">
 
-    <div *ngIf="producer" class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-industry"></i>
-                    {{'title'|bkTranslate:this}} <strong>{{producer.name}}</strong>
-                </span>
-            </div>
-        </div>
-        <div>
-            <div>
-                {{producer.description}}
-            </div>
-        </div>
-    </div>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [title_object_name]="producer.name"
+        [title_object_description]="producer.description"
+        [icon]="'fa-industry'">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-    <div *ngIf="devices && devices.length" class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-microchip"></i>
-                    {{'label_available_devices'|bkTranslate:this}}
-                </span>
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
+
+        <div *ngIf="devices && devices.length" class="portlet portlet light bordered">
+            <div class="portlet-title">
+                <div class="becki-caption">
+                    <span class="font-blue-dark">
+                        <i class="fa fa-fw fa-microchip"></i>
+                        {{'label_available_devices'|bkTranslate:this}}
+                    </span>
+                </div>
             </div>
-        </div>
-        <div class="mt-element-card mt-element-overlay">
-            <div class="row">
-                <div *ngFor="let device of devices; let index = index" class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                    <a class="hardware-card" (click)="onDeviceClick(device.id)">
-                        <div class="mt-card-item">
-                            <div class="mt-card-avatar">
-                                <img class="img" *ngIf="device.picture_link" src="{{device.picture_link}}">
-                                <div class="img-placeholder" *ngIf="!device.picture_link">
-                                    <i class="fa fa-fw fa-microchip"></i>
+            <div class="mt-element-card mt-element-overlay">
+                <div class="row">
+                    <div *ngFor="let device of devices; let index = index" class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <a class="hardware-card" (click)="onDeviceClick(device.id)">
+                            <div class="mt-card-item">
+                                <div class="mt-card-avatar">
+                                    <img class="img" *ngIf="device.picture_link" src="{{device.picture_link}}">
+                                    <div class="img-placeholder" *ngIf="!device.picture_link">
+                                        <i class="fa fa-fw fa-microchip"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-card-content">
+                                    <h3 class="mt-card-name font-dark">{{device.name}}</h3>
+                                    <p class="mt-card-desc font-grey-mint">{{device.description}}</p>
+                                    <!--div class="mt-card-social">
+                                        <ul>
+                                            <li *ngIf="device.connectible_to_internet">
+                                                <i class="fa fa-fw fa-plug font-grey-mint" title="Ethernet"></i>
+                                            </li>
+                                            <li *ngIf="device.connectible_to_internet">
+                                                <i class="fa fa-fw fa-wifi font-grey-mint" title="Wi-Fi"></i>
+                                            </li>
+                                            <li *ngIf="!device.connectible_to_internet">
+                                                <span class="bold font-red bg-yellow-lemon">TODO</span>
+                                            </li>
+                                        </ul>
+                                    </div-->
                                 </div>
                             </div>
-                            <div class="mt-card-content">
-                                <h3 class="mt-card-name font-dark">{{device.name}}</h3>
-                                <p class="mt-card-desc font-grey-mint">{{device.description}}</p>
-                                <!--div class="mt-card-social">
-                                    <ul>
-                                        <li *ngIf="device.connectible_to_internet">
-                                            <i class="fa fa-fw fa-plug font-grey-mint" title="Ethernet"></i>
-                                        </li>
-                                        <li *ngIf="device.connectible_to_internet">
-                                            <i class="fa fa-fw fa-wifi font-grey-mint" title="Wi-Fi"></i>
-                                        </li>
-                                        <li *ngIf="!device.connectible_to_internet">
-                                            <span class="bold font-red bg-yellow-lemon">TODO</span>
-                                        </li>
-                                    </ul>
-                                </div-->
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div *ngIf="!devices || (devices && devices.length==0)" class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-microchip"></i>
-                    {{'label_available_devices'|bkTranslate:this}}
-                </span>
-            </div>
-        </div>
-        <div class="mt-element-card mt-element-overlay">
-            <h3 *ngIf="!devices" class="text-center">{{'loading'|bkTranslate:this}}</h3>
-            <h3 *ngIf="devices && devices.length==0" class="text-center">{{'label_no_device'|bkTranslate:this}}</h3>
-        </div>
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(devices == null)"
+                            [condition_empty]="(devices != null && devices.length == 0)"
+                            [main_message_link]="'label_no_device'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_device_comment'|bkTranslate:this"
+                            [show_button]="false">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
     </div>
 </bk-layout-main>

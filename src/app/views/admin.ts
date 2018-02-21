@@ -9,7 +9,7 @@ import { IReportAdminDashboard } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-admin-dashboard',
-    templateUrl: './admin-dashboard.html'
+    templateUrl: './admin.html'
 })
 export class AdminDashboardComponent extends _BaseMainComponent implements OnInit {
 
