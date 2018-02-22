@@ -3,251 +3,240 @@
      [title]="'main_title'|bkTranslate:this"
      [subtitle]="'main_subtitle'|bkTranslate:this">
 
-    <div *ngIf="hardwareTypes" class="row">
-        <div class="col-md-12">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-server"></i>
-                              {{'title'|bkTranslate:this}}
-                        </span>
-                    </div>
-                </div>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+                      [title]="'title'|bkTranslate:this"
+                      [icon]="'fa-server'"
+                      (onTabClick)="onToggleTab($event)"
+                      [tab_selected_name] = "tab"
+                      [tabBtns]="[
+                            {
+                                tab_name: 'public_c_programs',
+                                tab_color: 'CODE',
+                                tab_label: ('tab_public_c_programs'|bkTranslate:this)
+                            },
+                            {
+                                tab_name: 'public_c_libraries',
+                                tab_color: 'CODE',
+                                tab_label: ('tab_public_c_libraries'|bkTranslate:this)
+                            },
+                            {
+                                tab_name: 'c_programs_for_decisions',
+                                tab_color: 'CODE',
+                                tab_label: ('tab_c_programs_for_decisions'|bkTranslate:this)
+                            },
+                            {
+                                tab_name: 'c_libraries_for_decisions',
+                                tab_color: 'CODE',
+                                tab_label: ('tab_c_libraries_for_decisions'|bkTranslate:this)
+                            }
+                        ]">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-                <div class="portlet-title tabbable-line">
+    <div class="portlet-body">
 
-                    <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
-                    <ul class="nav nav-tabs pull-left">
-                        <li [class.active]="tab == 'public_c_programs'">
-                          <a class="cursor-pointer" (click)="onToggleTab('public_c_programs')"><i class="fa fa-code"></i> {{'tab_public_c_programs'|bkTranslate:this}}</a>
-                        </li>
-                        <li [class.active]="tab == 'public_c_libraries'">
-                       <a class="cursor-pointer" (click)="onToggleTab('public_c_libraries')"><i class="fa fa-file-code-o"></i> {{'tab_public_c_libraries'|bkTranslate:this}}</a>
-                        </li>
-                        <li [class.active]="tab == 'c_programs_for_decisions'">
-                            <a class="cursor-pointer" (click)="onToggleTab('c_programs_for_decisions')"><i class="fa fa-bolt"></i> {{'tab_c_programs_for_decisions'|bkTranslate:this}}</a>
-                        </li>
-                        <li [class.active]="tab == 'c_libraries_for_decisions'">
-                            <a class="cursor-pointer" (click)="onToggleTab('c_libraries_for_decisions')"><i class="fa fa-bolt"></i> {{'tab_c_libraries_for_decisions'|bkTranslate:this}}</a>
-                        </li>
-                    </ul>
-                </div>
+        <!-- Public Programs-->
 
-                <!-- Public Programs-->
+        <div *ngIf="tab == 'public_c_programs'">
 
-                <div *ngIf="tab == 'public_c_programs'">
-                    <div *ngIf="(cPrograms && cPrograms.total > O)"  class="becki-actions">
-
-                    </div>
-                    <!-- Filter Parameters -->
-                    <div>
-
-                    </div>
-
-                    <div *ngIf="(cPrograms && cPrograms.content.length)" class="table-scrollable">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                                    <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                                    <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                                    <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let code of cPrograms.content">
-
-                                    <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
-                                    <td class="vert-align">{{code.description}}</td>
-                                    <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
-                                    <td class="vert-align no-wrap text-right">
-
-                                        <style type="text/css">
-                                            table tr button { opacity:0.05;}
-                                            table tr:hover button { opacity:1 }
-                                        </style>
-
-                                        <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.update_permission" (click)="onCProgramEditClick(code)">
-                                            <i class="fa fa-cog"></i>
-                                        </button>
-
-                                        <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <h3 *ngIf="!cPrograms" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-                    <div *ngIf="cPrograms && cPrograms.total < 1" class="list-no-items">
-                        <p class="list-no-items__main-label">{{'label_no_c_programs'|bkTranslate:this}}</p>
-                        <p class="list-no-items__sub-label">{{'label_no_c_programs_comment'|bkTranslate:this}} </p>
-                        <p>
-                            As administrator, you have to create own project with own programs and share everything as a classic users.
-                        </p>
-                    </div>
-                </div>
-
-                <div *ngIf="tab == 'c_programs_for_decisions'">
-                    <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.total > O)"  class="becki-actions">
-
-
-                    </div>
-                    <!-- Filter Parameters -->
-                    <div>
-
-                    </div>
-                    <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)" class="table-scrollable">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                                    <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                                    <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                                    <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let code of cProgramsNotApproved.content">
-
-                                    <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{code.name}}</a></td>
-                                    <td class="vert-align">{{code.description}}</td>
-                                    <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
-                                    <td class="vert-align no-wrap text-right">
-
-                                        <style type="text/css">
-                                            table tr button { opacity:0.05;}
-                                            table tr:hover button { opacity:1 }
-                                        </style>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <h3 *ngIf="!cProgramsNotApproved" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-                    <div *ngIf="cProgramsNotApproved && cProgramsNotApproved.total < 1" class="list-no-items">
-                        <p class="list-no-items__main-label">{{'label_no_c_programs'|bkTranslate:this}}</p>
-                        <p class="list-no-items__sub-label">{{'label_no_c_programs_comment'|bkTranslate:this}} </p>
-                        <p>
-                            As administrator, you have to create own project with own programs and share everything as a classic users.
-                        </p>
-                    </div>
-                </div>
-
-
-                <!-- Public Libraries -->
-                <div *ngIf="tab == 'public_c_libraries'">
-                    <div *ngIf="(libraries && libraries.total > O)"  class="becki-actions">
-
-                    </div>
-                    <!-- Filter Parameters -->
-                    <div>
-
-                    </div>
-
-                    <div *ngIf="(libraries && libraries.content.length)" class="table-scrollable">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                                <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let library of libraries.content">
-
-                                <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{library.name}}</a></td>
-                                <td class="vert-align">{{library.description}}</td>
-                                <td class="vert-align no-wrap">
-                                    <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeTypeClick(board.id)">{{board.name}}, </a>
-                                </td>
-                                <td class="vert-align no-wrap text-right">
-
-                                    <style type="text/css">
-                                        table tr button { opacity:0.05;}
-                                        table tr:hover button { opacity:1 }
-                                    </style>
-
-                                    <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission" (click)="onLibraryEditClick(library)">
-                                        <i class="fa fa-cog"></i>
-                                    </button>
-
-                                    <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onLibraryRemoveClick(library)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-
-                    </div>
-                    <h3 *ngIf="!libraries" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-                    <div *ngIf="libraries && libraries.total < 1" class="list-no-items">
-                        <p class="list-no-items__main-label">{{'label_no_c_library'|bkTranslate:this}}</p>
-                        <p class="list-no-items__sub-label">{{'label_no_c_library_comment'|bkTranslate:this}} </p>
-                        <p>
-                            As administrator, you have to create own project with own programs and share everything as a classic users.
-                        </p>
-                    </div>
-                </div>
-
-                <div *ngIf="tab == 'c_libraries_for_decisions'">
-                    <div *ngIf="(librariesNotApproved && librariesNotApproved.total > O)"  class="becki-actions">
-
-
-                    </div>
-                    <!-- Filter Parameters -->
-                    <div>
-
-                    </div>
-                    <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)" class="table-scrollable">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                                <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let library of librariesNotApproved.content">
-
-                                <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
-                                <td class="vert-align">{{library.description}}</td>
-                                <td class="vert-align no-wrap">
-                                    <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeTypeClick(board.id)">{{board.name}}, </a>
-                                </td>
-                                <td class="vert-align no-wrap text-right">
-
-                                    <style type="text/css">
-                                        table tr button { opacity:0.05;}
-                                        table tr:hover button { opacity:1 }
-                                    </style>
-
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <h3 *ngIf="!librariesNotApproved" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-                    <div *ngIf="librariesNotApproved && librariesNotApproved.total < 1" class="list-no-items">
-                        <p class="list-no-items__main-label">{{'label_no_c_programs'|bkTranslate:this}}</p>
-                        <p class="list-no-items__sub-label">{{'label_no_c_programs_comment'|bkTranslate:this}} </p>
-                        <p>
-                            As administrator, you have to create own project with own programs and share everything as a classic users.
-                        </p>
-                    </div>
-                </div>
-
+            <!-- Filter Parameters -->
+            <div>
             </div>
+
+            <div *ngIf="(cPrograms && cPrograms.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let code of cPrograms.content">
+
+                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
+                        <td class="vert-align">{{code.description}}</td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+
+                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.update_permission" (click)="onCProgramEditClick(code)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+
+                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(cPrograms == null)"
+                                [condition_empty]="(cPrograms != null && cPrograms.content.length == 0)"
+                                [main_message_link]="'label_no_batch'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_programs'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
         </div>
+
+        <div *ngIf="tab == 'c_programs_for_decisions'">
+
+            <!-- Filter Parameters -->
+            <div>
+            </div>
+            <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let code of cProgramsNotApproved.content">
+
+                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
+                        <td class="vert-align">{{code.description}}</td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+
+                            <!-- No buttons ?-->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(cProgramsNotApproved == null)"
+                                [condition_empty]="(cProgramsNotApproved != null && cProgramsNotApproved.content.length == 0)"
+                                [main_message_link]="'label_no_c_programs'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_programs_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
+
+
+        <!-- Public Libraries -->
+        <div *ngIf="tab == 'public_c_libraries'">
+
+            <div *ngIf="(libraries && libraries.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let library of libraries.content">
+
+                        <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{library.name}}</a></td>
+                        <td class="vert-align">{{library.description}}</td>
+                        <td class="vert-align no-wrap">
+                            <a *ngFor="let type of library.hardware_types" (click)="onHardwareTypeClick(type.id)">{{type.name}}, </a>
+                        </td>
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+
+                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission" (click)="onLibraryEditClick(library)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+
+                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onLibraryRemoveClick(library)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(libraries == null)"
+                                [condition_empty]="(libraries != null && libraries.content.length == 0)"
+                                [main_message_link]="'label_no_batch'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_library'|bkTranslate:this"
+                                [btn_label]="'label_no_c_library_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+        </div>
+
+        <div *ngIf="tab == 'c_libraries_for_decisions'">
+
+            <!-- Filter Parameters -->
+            <div>
+            </div>
+            <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let library of librariesNotApproved.content">
+
+                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
+                        <td class="vert-align">{{library.description}}</td>
+                        <td class="vert-align no-wrap">
+                            <a *ngFor="let type of library.hardware_types" (click)="onHardwareTypeClick(type.id)">{{type.name}}, </a>
+                        </td>
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(librariesNotApproved == null)"
+                                [condition_empty]="(librariesNotApproved != null && librariesNotApproved.content.length == 0)"
+                                [main_message_link]="'label_no_batch'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_library'|bkTranslate:this"
+                                [btn_label]="'label_no_c_library_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
+
     </div>
 
 </bk-layout-main>

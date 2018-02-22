@@ -91,7 +91,7 @@ export class PortletTitleComponent {
         icon: string,
         permission?: boolean,                                                       // for example project.delete_permission
         colorType?: ('ADD'| 'EDIT' | 'CREATE' | 'REMOVE' | 'ACTIVE' | 'DEACTIVE'),  // DEFAULT in HTML is EDIT
-        btn_tag: string // Only if you have more that one Button!
+        btn_tag: string,    // Only if you have more that one Button!
     }[] = null;
 
     @Output()
@@ -123,7 +123,6 @@ export class PortletTitleComponent {
     }
 
     onClickButton(onClick: string) {
-        console.log("Cliknuto na " + onClick);
         this.onClick.emit(onClick);
     }
 

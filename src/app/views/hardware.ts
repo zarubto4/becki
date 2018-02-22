@@ -13,7 +13,7 @@ import { IHardwareType } from '../backend/TyrionAPI';
 })
 export class HardwareComponent extends _BaseMainComponent implements OnInit {
 
-    devices: IHardwareType[] = null;
+    hardwareTypes: IHardwareType[] = null;
 
     constructor(injector: Injector) {
         super(injector);
@@ -27,8 +27,7 @@ export class HardwareComponent extends _BaseMainComponent implements OnInit {
         this.blockUI();
         this.tyrionBackendService.hardwareTypesGetAll()
             .then((hardwareTypes) => {
-                this.devices = hardwareTypes;
-                // console.log(hardwareTypes);
+                this.hardwareTypes = hardwareTypes;
                 this.unblockUI();
             })
             .catch((reason) => {

@@ -54,8 +54,8 @@ export class ModalsHardwareFindHashComponent implements OnInit {
             .then((result: IHardwareRegistrationHash) => {
                 this.hash = result.hash;
             })
-            .catch(reason => {
-                this.error_message = reason.body['message'];
+            .catch((reason) => {
+                this.error_message = reason.message;
             });
     }
 

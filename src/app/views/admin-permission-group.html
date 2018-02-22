@@ -3,72 +3,71 @@
     [title]="'main_title'|bkTranslate:this"
     [subtitle]="'main_subtitle'|bkTranslate:this">
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                          <span class="font-blue-dark"><i class="fa fa-fw fa-users"></i>
-                               {{'title'|bkTranslate:this}}
-                           </span>
-                    </div>
-                    <div class="becki-actions">
-                        <button title="{{'label_create_role'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onRoleCreateClick()">
-                            <i class="fa fa-plus-circle"></i>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title [title_name]="'title'|bkTranslate:this"
+                      [icon]="'fa-users'"
+                      (onClick)="onPortletClick($event)"
+                      [btns]="[
+                         {
+                              condition: (true),
+                              btn_label_for_person: ('label_create_role'|bkTranslate:this),
+                              icon: 'fa-plus-circle',
+                              colorType: 'EDIT',
+                              btn_tag: 'create_role'
+                        }
+                      ]">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <div class="portlet-body">
+
+        <div *ngIf="(securityRole && securityRole.length)" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
+                <thead>
+                <tr>
+                    <th>{{'label_name'|bkTranslate:this}}</th>
+                    <th>{{'label_description'|bkTranslate:this}}</th>
+                    <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let role of securityRole">
+
+                    <td class="vert-align no-wrap">
+                        <a (click)="onRoleClick(role.id)" class="no-wrap"><strong>{{role.name}}</strong></a>
+                    </td>
+
+                    <td class="vert-align no-wrap">
+                        {{role.description}}
+                    </td>
+
+                    <td class="vert-align text-right no-wrap">
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+                        <button title="{{'label_role_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!role.update_permission" (click)="onRoleEditClick(role)">
+                            <i class="fa fa-cog"></i>
                         </button>
-                    </div>
-                </div>
-
-                <div *ngIf="(securityRole && securityRole.length)" class="table-scrollable">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>{{'label_name'|bkTranslate:this}}</th>
-                            <th>{{'label_description'|bkTranslate:this}}</th>
-                            <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let role of securityRole">
-
-                            <td class="vert-align no-wrap">
-                                <a (click)="onRoleClick(role.id)" class="no-wrap"><strong>{{role.name}}</strong></a>
-                            </td>
-
-                            <td class="vert-align no-wrap">
-                                {{role.description}}
-                            </td>
-
-                            <td class="vert-align text-right no-wrap">
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
-                                <button title="{{'label_role_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!role.update_permission" (click)="onRoleEditClick(role)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="{{'label_role_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!role.delete_permission" (click)="onRoleRemoveClick(role)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <h3 *ngIf="!securityRole" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-                <div *ngIf="securityRole && securityRole.length == 0" class="list-no-items">
-                    <p class="list-no-items__main-label">{{'label_no_role'|bkTranslate:this}}</p>
-                    <p class="list-no-items__sub-label">{{'label_no_role_comment'|bkTranslate:this}} </p>
-                    <p>
-                        <button class="btn blue" (click)="onRoleCreateClick()">
-                            <i class="fa fa-plus-circle"></i> {{'btn_create'|bkTranslate:this}}
+                        <button title="{{'label_role_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!role.delete_permission" (click)="onRoleRemoveClick(role)">
+                            <i class="fa fa-trash"></i>
                         </button>
-                    </p>
-                </div>
-            </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(securityRole == null)"
+                            [condition_empty]="(securityRole != null && securityRole.length == 0)"
+                            [main_message_link]="'label_no_role'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_role_comment'|bkTranslate:this"
+                            [btn_label]="'btn_create'|bkTranslate:this"
+                            (onButtonClick)="onRoleCreateClick()">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
     </div>
 
 </bk-layout-main>

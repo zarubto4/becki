@@ -14,7 +14,7 @@ export abstract class Notification {
 
     visited: boolean = false;
 
-    htmlBody: string = null;
+    htmlBody: string = '';
     elementsBody: INotificationElement[] = null;
 
     isTop: boolean = false;
@@ -79,25 +79,35 @@ export abstract class Notification {
     }
 
     constructor(public id: string, public type: string, public icon: string, body: string | INotificationElement[], public time: number, reason?: Object) {
+
         if (typeof body === 'string') {
             this.htmlBody = body;
             let userMessage = NullSafe(() => <string>(<any>reason).userMessage);
             let error = NullSafe(() => <string>(<any>reason).error);
             let bodyMesseage = NullSafe(() => <string>(<any>reason).body.message);
             if (userMessage) {
-                this.htmlBody += '<br><b>' + userMessage + '</b>';
+                this.htmlBody += '<b>' + userMessage + '</b>' + '<br>';
 
             } else if (bodyMesseage) {
-                this.htmlBody += '<br><b>' + bodyMesseage + '</b>';
+                this.htmlBody += '<<b>' + bodyMesseage + '</b>' + '<br>';
             } else if (error) {
-                this.htmlBody += '<br><b>' + error + '</b>';
-            } else if (reason) {
-                this.htmlBody += '<br><b>' + reason + '</b>';
-
+                this.htmlBody += '<b>' + error + '</b>' + '<br>';
             }
         } else {
             this.elementsBody = body;
         }
+
+        // ITs Reason Error IError object
+        if (reason != null) {
+            this.htmlBody += '<b>Error Status:: ' + reason['code'] + '<br>';
+            this.htmlBody += '<b>Name: <b>' + reason['name'] + '<br>';
+            this.htmlBody += '<b>Message: </b>' + reason['message'] + '<br>';
+            if ('exception' in reason) {
+                this.htmlBody += '<b> Exception::</b>' + '<br>';
+                this.htmlBody += JSON.stringify(reason['exception'], null, 3);
+            }
+        }
+
         if (this.htmlBody && this.htmlBody.length) {
             this.closeTime = ((((this.htmlBody.length / 5) / 180) * 60) * 1000) + 1500;
         } else {

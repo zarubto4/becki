@@ -41,7 +41,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     tab: string = 'hardware_list';
 
-
     constructor(injector: Injector) {
         super(injector);
     };
@@ -273,10 +272,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     // FILTER ----------------------------------------------------------------------------------------------------------
 
-    selectedFilterPageHardware(event: { index: number }) {
-        this.onFilterHardware(event.index);
-    }
-
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
         this.blockUI();
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
@@ -302,10 +297,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             });
     }
 
-
-    selectedFilterPageActualizationProcedure(event: { index: number }) {
-        this.onFilterActualizationProcedure(event.index);
-    }
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedure(pageNumber: number = 0,

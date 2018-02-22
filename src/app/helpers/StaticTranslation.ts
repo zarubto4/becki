@@ -862,7 +862,7 @@ export class StaticTranslation {
 
                 'label_type_of_boards_properties': 'Edit basic description',
                 'label_type_of_boards_remove': 'Remove this Board type',
-                'label_no_bootloaders': 'No Nootloaders',
+                'label_no_bootloaders': 'No <strong class="font-color-code">BootLoaders</strong> ',
                 'label_no_bootloaders_comment': 'We didn\'t find any Bootloaders, please set new one',
                 'label_bootloader_create_description': 'Create Bootloader',
                 'label_default_c_program_setting': 'Default C Program',
@@ -870,7 +870,7 @@ export class StaticTranslation {
                 'label_main_c_program_version_set_as_main': 'Set this version as Main',
 
                 'label_revisions': 'Revisions & Production Batches',
-                'label_revision_create_description': 'Create new Revisions or Production Batch',
+                'label_revision_create_description': 'Create new Revision',
                 'table_revision': 'Revision',
                 'table_production_batch': 'Production Batch',
                 'table_mac_range': 'MacAddress Range',
@@ -879,7 +879,7 @@ export class StaticTranslation {
                 'table_assembly_time': 'Assembly Date',
 
                 'label_c_program_version_set_as_main': 'Set this version as a main',
-                'label_no_c_program_versions': 'No version found',
+                'label_no_c_program_versions': 'No <strong class="font-color-code">Version</strong> found',
                 'label_no_c_program_versions_comment': 'We didn\'t find any versions, please create new one',
                 'label_no_batch': 'No Revisions or Batches',
                 'label_no_batch_comment': 'We didn\'t find any revisions or production batches, please create new one',
@@ -900,6 +900,13 @@ export class StaticTranslation {
 
                 'btn_create_c_program_version': 'Create new Version',
                 'btn_create_bootloader': 'Create first Bootloader',
+                'btn_add_c_program_version': 'Add Version',
+                'btn_edit_c_program': 'Edit Program',
+
+                'tab_overview': 'Overview',
+                'tab_bootloaders': 'Bootloaders',
+                'tab_admin_code': 'Code Settings',
+                'tab_batches': 'Manufacture Batches',
 
             }, 'HardwareComponent': {
                 'main_title': 'Hardware Types',
@@ -2169,10 +2176,10 @@ export class StaticTranslation {
                 'label_hash': 'Hash Token',
                 'label_table_status': 'Online status',
 
-                'label_no_type_of_boards': 'No Boards Types',
-                'label_no_type_of_boards_comment': 'No accessible Boards Type, create new one. You have to create Processor and Producer',
-                'label_no_boards': 'There is no Hardware',
-                'label_no_boards_comment': 'Change filter parameters to find more items',
+                'label_no_type_of_boards': 'No strong <strong class="font-color-hardware">HARDWARE</strong> Types',
+                'label_no_type_of_boards_comment': 'No accessible <strong>Hardware</strong> Type, create new one. You also have to create Processor and Producer',
+                'label_no_boards': 'There is no <strong class="font-color-hardware">HARDWARE</strong>',
+                'label_no_boards_comment': 'Change filter parameters to find more items. Attention! The hardware in the list is only the one that was registered to the project by the user!',
                 'label_no_producer': 'No Producers',
                 'label_no_producer_comment': 'You can create new Producer, it can by your client or you!',
                 'label_no_processor': 'No Processors',
@@ -2180,6 +2187,7 @@ export class StaticTranslation {
                 'label_speed': 'Speed',
 
                 'btn_label_create_manually_hardware' : 'Manual HW Registration',
+                'btn_label_hardware_hash' : 'Find HASH',
                 'btn_label_add_new_with_full_flow' : 'Garfield Registration',
                 'btn_label_synchronize_hardware' : 'Synchronize with CA',
                 'btn_label_create_type_of_board' : 'Create',
@@ -2203,11 +2211,11 @@ export class StaticTranslation {
 
                 'flash_code_add': 'Community Code Add. Don\'t forget to set first Version and publish program',
 
-                'label_no_c_programs': 'No Programs',
-                'label_no_c_programs_comment': 'Create new Program, or change Filter property',
+                'label_no_c_programs': 'No <strong class="font-color-code">CODE</strong> Programs',
+                'label_no_c_programs_comment': 'No <strong>Code</strong> for decision or change Filter property',
 
-                'label_no_c_library': 'No Libraries',
-                'label_no_c_library_comment': 'Create new Library, or change Filter property',
+                'label_no_c_library': 'No <strong class="font-color-code">CODE</strong> libraries ',
+                'label_no_c_library_comment': 'Create new <strong>Library</strong>, or change Filter property',
 
             }, 'GarfieldGarfieldComponent': {
                 'main_title': 'Platform administration',

@@ -20,7 +20,8 @@ import { StorageService } from '../services/StorageService';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
-import {IProject} from "../backend/TyrionAPI";
+import { IProject } from '../backend/TyrionAPI';
+import { IError } from '../services/_backend_class/Responses';
 /* tslint:disable:class-name  */
 export abstract class _BaseMainComponent {
 /* tslint:disable:class-name  */
@@ -103,13 +104,13 @@ export abstract class _BaseMainComponent {
         return fm;
     }
 
-    protected fmWarning(msg: string, reason?: Object): FlashMessage {
+    protected fmWarning(msg: string, reason?: IError): FlashMessage {
         let fm = new FlashMessageWarning(msg, reason);
         this.addFlashMessage(fm);
         return fm;
     }
 
-    protected fmError(msg: string, reason?: Object): FlashMessage {
+    protected fmError(msg: string, reason?: IError): FlashMessage {
         let fm = new FlashMessageError(msg, reason);
         this.addFlashMessage(fm);
         return fm;

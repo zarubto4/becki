@@ -19,6 +19,7 @@ import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
 import { ModalsFileUploadModel } from '../modals/file-upload';
 import { ModalsCreateHardwareTypeBatchModel } from '../modals/type-of-board-batch-create';
+import {IError} from "../services/_backend_class/Responses";
 
 @Component({
     selector: 'bk-view-hardware-hardware-type',
@@ -31,7 +32,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
     hardwareTypeId: string;
     routeParamsSubscription: Subscription;
 
-    savedPicture: boolean = false;
+    tab: string = 'hardware_type_overview';
 
     constructor(injector: Injector) {
         super(injector);
@@ -46,6 +47,37 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+    }
+
+    onPortletClick(action: string): void {
+        if (action === 'update') {
+            this.onEditClick();
+        }
+        if (action === 'remove') {
+            this.onRemoveClick();
+        }
+        if (action === 'bootloader_add') {
+            this.onCreateBootloaderClick();
+        }
+        if (action === 'batches_add') {
+            this.onCreateRevisionClick();
+        }
+        if (action === 'c_program_main_test_add') {
+            this.onCProgramAdminClick(this.hardwareType.main_test_c_program.id);
+        }
+        if (action === 'c_program_main_add') {
+            this.onCProgramAdminClick(this.hardwareType.main_test_c_program.id);
+        }
+        if (action === 'c_program_main_edit') {
+            this.onCProgramEditClick(this.hardwareType.main_c_program);
+        }
+        if (action === 'c_program_main_test_edit') {
+            this.onCProgramEditClick(this.hardwareType.main_test_c_program);
+        }
+    }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
     }
 
     refresh(): void {
@@ -389,8 +421,8 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                    .catch((reason: IError) => {
+                        this.fmError(null, reason);
                         this.unblockUI();
                     });
             }

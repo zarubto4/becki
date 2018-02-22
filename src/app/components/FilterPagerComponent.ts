@@ -54,7 +54,7 @@ export class FilterPagerComponent implements OnInit {
     pageList: number[] = [];
 
     @Output()
-    onSelect: EventEmitter<{index: number}> = new EventEmitter<{index: number}>();
+    onSelect: EventEmitter<number> = new EventEmitter<number>();
 
     constructor(public notificationService: NotificationService) {}
 
@@ -72,7 +72,7 @@ export class FilterPagerComponent implements OnInit {
             return;
         }
 
-        this.onSelect.emit({index});
+        this.onSelect.emit(index);
         this.selectedPage = index;
     }
 

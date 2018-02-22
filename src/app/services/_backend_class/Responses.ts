@@ -104,30 +104,29 @@ export class BugFoundError extends Error {
 }
 
 
+export abstract class IError extends Error {
+    code: number;
+    name: string = null;
+    message: string = null;
+    exception: any = null;
+}
+
 /**
  * Default Error Response From Tyrion
  */
 
-export class LostConnectionError extends Error {
-
-    code: number = 0;
-    name = 'Response_BadRequest';
-    message: string = 'Request failed, please check your internet connection.';
+export class LostConnectionError extends IError {
 
     constructor() {
         super();
-        super.message = this.message;
+        this.code = 0;
+        this.name = 'Response_BadRequest';
+        this. message = 'Request failed, please check your internet connection.';
     }
 }
 
-
-
 // 400 - Something is wrong
-export class BadRequest extends Error {
-
-    code: number = 400;
-    name = 'Response_BadRequest';
-    message: string = null;
+export class BadRequest extends IError {
 
     public static fromRestResponse(response: RestResponse): BadRequest {
         return new BadRequest(response);
@@ -135,16 +134,14 @@ export class BadRequest extends Error {
 
     constructor(response: RestResponse) {
         super(response.body['message']);
+        this.code = 400;
+        this.name = 'Response_BadRequest';
         this.message = response.body['message'];
     }
 }
 
 // 400 - InvalidBody - Probably Message only for developers
-export class InvalidBody extends Error {
-
-    code: number = 400;
-    name = 'Response_InvalidBody';
-    message: string = null;
+export class InvalidBody extends IError {
 
     public static fromRestResponse(response: RestResponse): InvalidBody {
         return new InvalidBody(response);
@@ -152,16 +149,15 @@ export class InvalidBody extends Error {
 
     constructor(response: RestResponse) {
         super(response.body['message']);
+        this.code = 400;
+        this.name = 'Response_InvalidBody';
         this.message = response.body['message'];
+        this.exception = response.body['exception'];
     }
 }
 
 // 400 - InvalidBody - Probably Message only for developers
-export class UnsupportedException extends Error {
-
-    code: number = 400;
-    name = 'unsupported_exception';
-    message: string = null;
+export class UnsupportedException extends IError {
 
     public static fromRestResponse(response: RestResponse): UnsupportedException {
         return new UnsupportedException(response);
@@ -169,16 +165,16 @@ export class UnsupportedException extends Error {
 
     constructor(response: RestResponse) {
         super(response.body['message']);
+        super(response.body['message']);
+        this.code = 400;
+        this.name = 'Unsupported_exception';
         this.message = response.body['message'];
     }
 }
 
 // 401
-export class UnauthorizedError extends Error {
+export class UnauthorizedError extends IError {
 
-    code: number = 401;
-    name = 'Response_Unauthorized';
-    message: string = null;
 
     static fromRestResponse(response: RestResponse): UnauthorizedError {
         return new UnauthorizedError(response);
@@ -186,12 +182,14 @@ export class UnauthorizedError extends Error {
 
     constructor(response: RestResponse) {
         super(response.body['message']);
+        this.code = 401;
+        this.name = 'Response_Unauthorized';
         this.message = response.body['message'];
     }
 }
 
 // 403
-export class PermissionMissingError extends Error {
+export class PermissionMissingError extends IError {
 
     code: number = 403;
     name = 'Response_Forbidden';
@@ -208,11 +206,7 @@ export class PermissionMissingError extends Error {
 }
 
 // 404
-export class ObjectNotFound extends Error {
-
-    code: number = 404;
-    name = 'Response_NotFound';
-    message: string = null;
+export class ObjectNotFound extends IError {
 
     static fromRestResponse(response: RestResponse): ObjectNotFound {
         return new ObjectNotFound(response);
@@ -220,16 +214,14 @@ export class ObjectNotFound extends Error {
 
     constructor(response: RestResponse) {
         super(response.body['message']);
+        this.code = 400;
+        this.name = 'Response_NotFound';
         this.message = response.body['message'];
     }
 }
 
 // 500
-export class InternalServerError extends Error {
-
-    code: number = 500;
-    name = 'Response_CriticalError';
-    message: string = null;
+export class InternalServerError extends IError {
 
     static fromRestResponse(response: RestResponse): InternalServerError {
         return new InternalServerError(response);
@@ -237,6 +229,8 @@ export class InternalServerError extends Error {
 
     constructor(response: RestResponse) {
         super('Critical Server Side Error!');
+        this.code = 500;
+        this.name = 'Response_CriticalError';
         if ( response.body['message']) {
             this.message = response.body['message'];
         }else {
@@ -247,11 +241,7 @@ export class InternalServerError extends Error {
 }
 
 // 705 - User has not validated email yet! - Byzance private token head
-export class UserNotValidatedError extends Error {
-
-    code: number = 705;
-    name = 'Response_ValidationRequired';
-    message: string = null;
+export class UserNotValidatedError extends IError {
 
     static fromRestResponse(response: RestResponse): UserNotValidatedError {
         return new InternalServerError(response);
@@ -260,6 +250,8 @@ export class UserNotValidatedError extends Error {
     constructor(response: RestResponse) {
         super('Email Validation is Required');
         this.message = 'Email Validation is Required';
+        this.code = 705;
+        this.name = 'Response_ValidationRequired';
     }
 }
 
@@ -268,33 +260,34 @@ export class UserNotValidatedError extends Error {
  * Special Response From Tyrion Server about Compilation
  */
 // 477
-export class CodeError extends Error {
+export class CodeError extends IError {
 
     static fromRestResponse(response: RestResponse): CodeError {
         let content = response.body;
         if ((<any>content).message) {
-            return new CodeError((<any>content).message);
+            return new CodeError(response.status, (<any>content).message);
         }
         if (response.status === 477) {
-            return new CodeError(`External server is offline: ${JSON.stringify(content)}`);
+            return new CodeError(477, `External server is offline: ${JSON.stringify(content)}`);
         }
         if (response.status === 478) {
-            return new CodeError(`External server side error: ${JSON.stringify(content)}`);
+            return new CodeError(478, `External server side error: ${JSON.stringify(content)}`);
         }
-        return new CodeError('Unknown error');
+        return new CodeError(478, 'Unknown error');
     }
 
-    constructor(msg: string) {
+    constructor(code: number, msg: string) {
         super(msg);
         this.name = 'CodeError';
         this.message = msg;
+        this.code = code;
 
         Object.setPrototypeOf(this, CodeError.prototype);
     }
 
 }
 // 478
-export class CodeCompileError extends Error {
+export class CodeCompileError extends IError {
 
     errors: ICodeCompileErrorMessage[] = [];
 
@@ -310,7 +303,7 @@ export class CodeCompileError extends Error {
         super(msg);
         this.name = 'CodeCompileError';
         this.message = msg;
-
+        this.code = 478;
         Object.setPrototypeOf(this, CodeCompileError.prototype);
     }
 

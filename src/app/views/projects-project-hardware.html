@@ -150,7 +150,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"  [totalPages]="devicesFilter.pages" (onSelect)="selectedFilterPageHardware($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"  [totalPages]="devicesFilter.pages" (onSelect)="onFilterHardware($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
@@ -312,7 +312,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="actualizationFilter.from" [to]="actualizationFilter.to" [total]="actualizationFilter.total"  [totalPages]="actualizationFilter.pages" (onSelect)="selectedFilterPageActualizationProcedure($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="actualizationFilter.from" [to]="actualizationFilter.to" [total]="actualizationFilter.total"  [totalPages]="actualizationFilter.pages" (onSelect)="onFilterActualizationProcedure($event)"></bk-filter-page-component>
             </div>
 
 

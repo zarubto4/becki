@@ -66,6 +66,9 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
         if (action === 'register_new_hardware') {
             this.onGarfieldClick();
         }
+        if (action === 'find_hardware_hash') {
+            this.onGetHardwareHash();
+        }
 
         if (action === 'synchronize_hardware') {
             this.onHardwareSynchronize();
@@ -371,10 +374,6 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
     }
 
     // Hardware Filter --------------------------------------------------------------------------------------------------
-
-    selectedFilterPageHardware(event: { index: number}) {
-        this.onFilterHardware(event.index);
-    }
 
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
 

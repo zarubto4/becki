@@ -103,7 +103,15 @@ export class ModalsCreateHardwareTypeBatchComponent implements OnInit {
         this.modalModel.mac_address_start = this.form.controls['mac_address_start'].value;
         this.modalModel.mac_address_end = this.form.controls['mac_address_end'].value;
         this.modalModel.ean_number = this.form.controls['ean_number'].value;
-        this.modalModel.date_of_assembly = this.form.controls['date_of_assembly'].value;
+
+        console.log('ModalsCreateHardwareTypeBatchComponent: control', this.form.controls['date_of_assembly'].value);
+        console.log('ModalsCreateHardwareTypeBatchComponent: control', this.form.controls['date_of_assembly'].value.formatted);
+        console.log('ModalsCreateHardwareTypeBatchComponent: control', this.form.controls['date_of_assembly'].value.jsdate);
+
+        if (this.form.controls['date_of_assembly'].value.formatted) {
+            this.modalModel.date_of_assembly = this.form.controls['date_of_assembly'].value.formatted;
+        }
+
         this.modalModel.customer_product_name = this.form.controls['customer_product_name'].value;
         this.modalModel.customer_company_name = this.form.controls['customer_company_name'].value;
         this.modalModel.customer_company_made_description = this.form.controls['customer_company_made_description'].value;

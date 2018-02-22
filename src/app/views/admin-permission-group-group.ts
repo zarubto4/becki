@@ -45,6 +45,22 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
         this.routeParamsSubscription.unsubscribe();
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'edit_role') {
+            this.onRoleEditClick();
+        }
+        if (action === 'remove_role') {
+            this.onRoleRemoveClick();
+        }
+
+        if (action === 'add_members') {
+            this.onMembersAddClick();
+        }
+        if (action === 'add_permission') {
+            this.onPermissionAddClick();
+        }
+    }
+
     refresh(): void {
         this.blockUI();
         Promise.all<any>([this.tyrionBackendService.roleGet(this.id)])

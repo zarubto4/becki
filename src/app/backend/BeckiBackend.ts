@@ -10,7 +10,8 @@ import * as Rx from 'rxjs';
 import { ConsoleLogType } from '../components/ConsoleLogComponent';
 import {
     BadRequest, BugFoundError, CodeCompileError,
-    CodeError, InternalServerError, InvalidBody, LostConnectionError, PermissionMissingError, RestRequest, RestResponse,
+    CodeError, InternalServerError, InvalidBody, LostConnectionError, ObjectNotFound, PermissionMissingError,
+    RestRequest, RestResponse,
     UnauthorizedError, UnsupportedException, UserNotValidatedError
 } from '../services/_backend_class/Responses';
 
@@ -101,26 +102,6 @@ export interface IWebsocketTerminalState {
 
 
 // REQUEST CLASSES
-
-
-
-
-// 422
-export class ObjectNotFound extends Error {
-
-    code: number = 404;
-    name = 'Response_NotFound';
-    message: string = null;
-
-    static fromRestResponse(response: RestResponse): ObjectNotFound {
-        return new ObjectNotFound(response);
-    }
-
-    constructor(response: RestResponse) {
-        super(response.body['message']);
-        this.message = response.body['message'];
-    }
-}
 
 
 export interface OnlineChangeStatus {
@@ -282,13 +263,16 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                 }
                 switch (response.status) {
                     case 400: {
-                        if (response['state'] === 'error') {
+
+                        if (response.body['state'] === 'error') {
                             throw BadRequest.fromRestResponse(response);
-                        } else if (response['state'] === 'invalid_body') {
+                        } else if (response.body['state'] === 'invalid_body') {
                             throw InvalidBody.fromRestResponse(response);
-                        } else if (response['state'] === 'unsupported_exception') {
+                        } else if (response.body['state'] === 'unsupported_exception') {
                             throw UnsupportedException.fromRestResponse(response);
                         }
+
+                        console.error('Incoming response.status: 400: state not recognize - ERROR 500: Incoming Response:: ', response);
                         // If there is not a state - Make a Critical error for sure
                         throw InternalServerError.fromRestResponse(response);
                     }

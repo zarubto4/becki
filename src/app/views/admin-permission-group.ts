@@ -26,6 +26,12 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
         this.refresh();
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'create_role') {
+            this.onRoleCreateClick();
+        }
+    }
+
     refresh(): void {
         this.blockUI();
 

@@ -4,7 +4,7 @@
  */
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { ICompilationServer, IHomerServer } from '../backend/TyrionAPI';
+import { ICompilationServer, IHomerServer, IHomerServerFilter, IHomerServerList } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
@@ -17,7 +17,7 @@ import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
 })
 export class ServerComponent extends _BaseMainComponent implements OnInit {
 
-    homer_servers: IHomerServer[] = null;
+    homer_servers: IHomerServerList = null;
     compilations_servers: ICompilationServer[] = null;
 
     tab: string = 'homer_server';
@@ -27,27 +27,50 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
     };
 
     ngOnInit(): void {
-        this.refresh();
+        this.onFilterHomerServer();
+        this.onFilterCompilationServer();
     }
 
-    refresh(): void {
+    onPortletClick(action: string): void {
+        if (action === 'homer_server_add') {
+            this.onCreateHomerServerClick();
+        }
+        if (action === 'compilation_server_add') {
+            this.onCreateCompilationServerClick();
+        }
+    }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
+
+    onFilterHomerServer(pageNumber: number = 0): void {
         this.blockUI();
-
-        Promise.all<any>([this.tyrionBackendService.homerServersGetList(0, {
+        this.tyrionBackendService.homerServersGetList(pageNumber, {
             server_types : ['PUBLIC', 'BACKUP', 'MAIN', 'TEST']
-        }), this.tyrionBackendService.compilationServersGetList()])
-            .then((values: [IHomerServer[], ICompilationServer[]]) => {
-
-                this.homer_servers = values[0];
-                this.homer_servers.forEach((server, index, obj) => {
+        })
+            .then((value) => {
+                this.homer_servers = value;
+                this.homer_servers.content.forEach((server, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'HomerServer' && server.id === status.model_id) {
                             server.online_state = status.online_state;
                         }
                     });
                 });
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
 
-                this.compilations_servers = values[1];
+    onFilterCompilationServer(pageNumber: number = 0): void {
+        this.blockUI();
+        this.tyrionBackendService.compilationServersGetList()
+            .then((value) => {
+                this.compilations_servers = value;
                 this.compilations_servers.forEach((server, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'CompilationServer' && server.id === status.model_id) {
@@ -55,19 +78,14 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                         }
                     });
                 });
-
                 this.unblockUI();
-
             })
             .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
                 this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
 
-    onToggleTab(tab: string) {
-        this.tab = tab;
-    }
 
     onCreateHomerServerClick(): void {
         let model = new ModalsCreateHomerServerModel();

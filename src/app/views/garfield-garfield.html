@@ -162,7 +162,7 @@
                                 </span>
                                 <span *ngIf="printer_label_1">
                                     <span *ngIf="printer_label_1.state =='ONLINE'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
-                                    <span *ngIf="printer_label_1.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <span *ngIf="printer_label_1.state !='ONLINE'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
                                     <i class="fa fa-print font-green-jungle cursor-hand" (click)="onTestPrinter(printer_label_1.id)"></i>
                                 </span>
                             </div>
@@ -174,7 +174,7 @@
                                 </span>
                                 <span *ngIf="printer_label_2">
                                     <span *ngIf="printer_label_2.state =='ONLINE'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
-                                    <span *ngIf="printer_label_2.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <span *ngIf="printer_label_2.state !='ONLINE'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
                                     <i  class="fa fa-print font-green-jungle cursor-hand" (click)="onTestPrinter(printer_label_2.id)"></i>
                                 </span>
                             </div>

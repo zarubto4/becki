@@ -1,5 +1,5 @@
 import { IMyDpOptions, IMyDate, IMyDateModel } from 'mydatepicker';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { Validators, FormGroup, FormBuilder, AbstractControl, FormControl } from '@angular/forms';
 // other imports here...
 
@@ -56,7 +56,7 @@ export class DatePickerComponent {
     onChange: EventEmitter<IMyDateModel>;
 
     onDateChanged(event: IMyDateModel) {
-
+        this.onChange.emit(event);
     }
 
     constructor() { }

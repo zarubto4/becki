@@ -17,6 +17,7 @@ import { INotificationElement, INotificationButton } from '../backend/TyrionAPI'
         <div class="notification-inner n-{{notification.type}}" [class.n-state-over]="notification.overed" (mouseover)="onOver(notification)" (mouseout)="onOut(notification)">
             <i class="n-icon fa fa-{{notification.icon}}"></i>
             <button *ngIf="!notification.highImportance || !(notification.buttons && notification.buttons.length)" type="button" class="n-close" (click)="onCloseClick(notification, $event)"><i class="fa fa-close"></i></button>
+            
             <span class="n-text" *ngIf="notification.htmlBody" [innerHTML]="notification.htmlBody"></span>
             
             <!-- Notification Parser-->
