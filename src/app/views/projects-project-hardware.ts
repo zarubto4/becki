@@ -101,6 +101,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             this.onProcedureCreateClick();
         }
     }
+
 // Hardware   ----------------------------------------------------------------------------------------------------------
 
     onHardwareEditClick(device: IHardware): void {

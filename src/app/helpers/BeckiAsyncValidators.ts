@@ -56,8 +56,10 @@ export class BeckiAsyncValidators {
     public static validateEntity(backEnd: TyrionBackendService, inputKey: ('email'|'nick_name'|'vat_number')): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
-
-                backEnd.entityValidation({key: inputKey, value: control.value})
+                backEnd.entityValidation({
+                    key: inputKey,
+                    value: control.value
+                })
                     .then(entity => {
                         // console.log(entity);
                         if (entity.valid) {
@@ -97,60 +99,41 @@ export class BeckiAsyncValidators {
         });
     }
 
-
-    public static hardwareDeviceId(backEnd: TyrionBackendService): AsyncValidatorFn {
-        return AsyncValidatorDebounce.debounce((control: FormControl) => {
-            return new Promise<any>((resolve) => {
-                backEnd.boardCheckRegistrationStatus(control.value) // TODO [permission]: Project.read_permission
-                    .then((status) => {
-                        if (status.status === 'CAN_REGISTER') {
-                            resolve(null); // valid
-                        } else {
-                            resolve({'hardwareDeviceId': status.status}); // invalid
-                        }
-                    })
-                    .catch(() => {
-                        resolve({'hardwareDeviceId': true});
-                    });
-            });
-        });
-    }
-
     // blockoNameTaken validator is not used
     /*
-    public static blockoNameTaken(backEnd: TyrionBackendService, projectId: string|(() => string)): AsyncValidatorFn {
-        return AsyncValidatorDebounce.debounce((control: FormControl) => {
-            return new Promise<any>((resolve) => {
-                let projId: string = null;
-                if (typeof projectId === 'string') {
-                    projId = <string>projectId;
-                }
-                if (typeof projectId === 'function') {
-                    projId = (<() => string>projectId)();
-                }
-                if (!projId) {
-                    resolve({'blockoNameTaken': true}); // invalid
-                    return;
-                }
-                backEnd.getProject(projId)
-                    .then((project) => {
-                        Promise.all<IBProgram>(project.b_programs.map((b_program) => {
-                            return backEnd.getBProgram(b_program.id); // TODO [permission]: Project.read_permission
-                        }))
-                            .then((blockoPrograms: IBProgram[]) => {
-                                if (blockoPrograms.find((blockoProgram: IBProgram) => blockoProgram.name === control.value)) {
-                                    resolve({'blockoNameTaken': true}); // invalid
-                                } else {
-                                    resolve(null); // valid
-                                }
-                            });
-                    })
-                    .catch(() => {
+        public static blockoNameTaken(backEnd: TyrionBackendService, projectId: string|(() => string)): AsyncValidatorFn {
+            return AsyncValidatorDebounce.debounce((control: FormControl) => {
+                return new Promise<any>((resolve) => {
+                    let projId: string = null;
+                    if (typeof projectId === 'string') {
+                        projId = <string>projectId;
+                    }
+                    if (typeof projectId === 'function') {
+                        projId = (<() => string>projectId)();
+                    }
+                    if (!projId) {
                         resolve({'blockoNameTaken': true}); // invalid
-                    });
+                        return;
+                    }
+                    backEnd.getProject(projId)
+                        .then((project) => {
+                            Promise.all<IBProgram>(project.b_programs.map((b_program) => {
+                                return backEnd.getBProgram(b_program.id); // TODO [permission]: Project.read_permission
+                            }))
+                                .then((blockoPrograms: IBProgram[]) => {
+                                    if (blockoPrograms.find((blockoProgram: IBProgram) => blockoProgram.name === control.value)) {
+                                        resolve({'blockoNameTaken': true}); // invalid
+                                    } else {
+                                        resolve(null); // valid
+                                    }
+                                });
+                        })
+                        .catch(() => {
+                            resolve({'blockoNameTaken': true}); // invalid
+                        });
+                });
             });
-        });
-    }
+        }
     */
 
     public static condition(conditionCallback: (value: string) => boolean, validator: AsyncValidatorFn) {

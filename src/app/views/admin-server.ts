@@ -101,10 +101,10 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     hardware_logger_port: model.hardware_logger_port
                 })
                     .then(() => {
-                        this.refresh();
+                        this.onFilterHomerServer();
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                        this.refresh();
+                        this.onFilterHomerServer();
                     });
             }
         });
@@ -114,16 +114,15 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
         let model = new ModalsCreateCompilerServerModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.blockUI();
+                this.unblockUI();
                 this.tyrionBackendService.compilationServerCreate({
                     personal_server_name: model.personal_server_name,
                     server_url: model.server_url
                 })
                     .then(() => {
-                        this.refresh();
+                        this.onFilterCompilationServer();
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                        this.refresh();
                     });
             }
         });
@@ -163,10 +162,10 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                             hardware_logger_port: model.hardware_logger_port
                         })
                             .then(() => {
-                                this.refresh();
+                                this.onFilterHomerServer();
                             }).catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                                this.refresh();
+                                this.onFilterHomerServer();
                             });
                     }
                 });
@@ -195,11 +194,11 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                 this.tyrionBackendService.homerServerDelete(serverShortDetail.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
-                        this.refresh(); // also unblockUI
+                        this.onFilterHomerServer(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
-                        this.refresh(); // also unblockUI
+                        this.onFilterHomerServer(); // also unblockUI
                     });
             }
         });
@@ -219,10 +218,10 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     server_url: model.server_url
                 })
                     .then(() => {
-                        this.refresh();
+                        this.onFilterCompilationServer(); // also unblockUI
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                        this.refresh();
+                        this.onFilterCompilationServer(); // also unblockUI
                     });
             }
         });
@@ -235,11 +234,11 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                 this.tyrionBackendService.compilationServersDelete(server.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
-                        this.refresh(); // also unblockUI
+                        this.onFilterCompilationServer(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
-                        this.refresh(); // also unblockUI
+                        this.onFilterCompilationServer(); // also unblockUI
                     });
             }
         });

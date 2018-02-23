@@ -65,12 +65,6 @@
 
         <div *ngIf="tab == 'hardware_list'">
 
-            <!--Filter Parameters -- START -->
-            <div>
-
-            </div>
-            <!--Filter Parameters -- END -->
-
             <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
@@ -80,6 +74,7 @@
                         <th class="no-wrap">{{'table_description'|bkTranslate:this}}</th>
                         <th class="no-wrap"><strong class="font-color-hardware">Hardware</strong>{{'label_type'|bkTranslate:this}}</th>
                         <th class="no-wrap">{{'table_groups'|bkTranslate:this}}</th>
+                        <th class="no-wrap">{{'table_project_status'|bkTranslate:this}}</th>
                         <th class="no-wrap">{{'table_status'|bkTranslate:this}}</th>
                         <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
@@ -101,7 +96,7 @@
                         <td class="vert-align no-wrap">{{device.id}}</td>
                         <td class="vert-align no-wrap">{{device.description}}</td>
                         <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
-                        <td class="vert-align no-wrap">
+                        <td class="vert-align no-wrap text-right">
 
                             <div *ngIf="!device.hardware_groups">
                                 -
@@ -114,10 +109,18 @@
                                 ]
                             </div>
 
-
                         </td>
 
                         <td class="vert-align no-wrap">
+                            device.dominant_entity
+                            <span *ngIf="device.dominant_entity"  class="font-green-jungle bold">{{'active'|bkTranslateTable:this}}</span>
+                            <span *ngIf="!device.dominant_entity" class="font-red-flamingo bold">{{'not_active'|bkTranslateTable:this}}</span>
+                            <div *ngIf="!device.dominant_entity">
+
+                            </div>
+                        </td>
+                        <td class="vert-align no-wrap">
+
                             <bk-online-state [online_state]="device.online_state"></bk-online-state>
                         </td>
                         <td class="vert-align no-wrap">
@@ -167,8 +170,8 @@
 
 
         <div *ngIf="tab == 'hardware_groups'">
-            <div *ngIf="(deviceGroup && deviceGroup.content.length > 0)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(deviceGroup && deviceGroup.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
@@ -184,7 +187,7 @@
                         <td class="vert-align no-wrap">{{group.description}}</td>
                         <td class="vert-align no-wrap">{{group.size}}</td>
 
-                        <td class="vert-align no-wrap">
+                        <td class="vert-align text-right no-wrap">
 
                             <style type="text/css">
                                 table tr button {
@@ -227,8 +230,8 @@
 
 
         <div *ngIf="tab == 'updates'">
-            <div *ngIf="(actualizationFilter && actualizationFilter.content.length > 0)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(actualizationFilter && actualizationFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>

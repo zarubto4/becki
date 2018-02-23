@@ -7,13 +7,14 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import {AsyncValidatorDebounce, BeckiAsyncValidators} from '../helpers/BeckiAsyncValidators';
 import { IHardwareGroup, IHardwareGroupList } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessageError, FlashMessage } from '../services/NotificationService';
 import { TranslatePipe } from '../pipes/TranslationPipe';
 import { TranslationService } from '../services/TranslationService';
+import {stat} from "fs";
 
 
 export class ModalsAddHardwareModel extends ModalModel {
@@ -43,7 +44,6 @@ export class ModalsAddHardwareComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-
     @Output()
     flashMesseage = new EventEmitter<FlashMessage>();
 
@@ -66,22 +66,22 @@ export class ModalsAddHardwareComponent implements OnInit {
     @ViewChild('groupList')
     listGroup: MultiSelectComponent;
 
+    single_error_status: string = null;
     single_error_message: string = null;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
-
         this.form = this.formBuilder.group({
-            'id': ['', [Validators.required], BeckiAsyncValidators.hardwareDeviceId(backendService)],
+            'id' : ['', [Validators.required]]
         });
 
         this.multiForm = this.formBuilder.group({
             'listOfIds': ['', [Validators.required]]
         });
+
         this.deviceInfoTextForm = this.formBuilder.group({
             'successfulDevices': ['', []],
             'failedDevices': ['', []],
         });
-
     }
 
     set_multipleRegistration() {
@@ -104,6 +104,23 @@ export class ModalsAddHardwareComponent implements OnInit {
         (<FormControl>(this.form.controls['id'])).setValue('');
         (<FormControl>(this.multiForm.controls['listOfIds'])).setValue('');
 
+    }
+
+    /**
+     * Only for Individual HW registration
+     * @param hw_value
+     * @returns {(control:FormControl)=>Promise<T>}
+     */
+    onChangeIndividualHashValue(hw_value: string) {
+        this.single_error_status = null;
+        this.backendService.boardCheckRegistrationStatus(hw_value, this.modalModel.project_id)
+            .then((result) => {
+                // CAN_REGISTER, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE
+                this.single_error_status = result.status;
+            })
+            .catch(() => {
+
+            });
     }
 
     sequenceRegistration() {

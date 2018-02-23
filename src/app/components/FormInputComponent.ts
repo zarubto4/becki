@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
@@ -17,9 +17,9 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
         <i class="fa fa-check" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
         <i class="fa fa-warning" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
         <i class="fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
-        <input class="form-control" [class.input-small]="widthSize == 'small'" [class.input-medium]="widthSize == 'medium'" [class.input-xlarge]="widthSize == 'large'" [attr.type]="type" [attr.placeholder]="(placeholder?placeholder:label)" [formControl]="control" [readonly]="readonly">
+        <input class="form-control" (ngModelChange)="onSelectedChange($event)" [class.input-small]="widthSize == 'small'" [class.input-medium]="widthSize == 'medium'" [class.input-xlarge]="widthSize == 'large'" [attr.type]="type" [attr.placeholder]="(placeholder?placeholder:label)" [formControl]="control" [readonly]="readonly">
     </div>
-    <span class="help-block" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
+    <span class="help-block" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" >{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
 </div>
 `
 /* tslint:enable */
@@ -50,6 +50,9 @@ export class FormInputComponent implements OnInit {
     @Input()
     widthSize: ('small' | 'medium' | 'large' | 'fluid') = 'fluid';  // Fluid - from left to right 100% content
 
+    @Output()
+    valueChange: EventEmitter<string> = new EventEmitter<string>();
+
     constructor(public validatorErrorsService: ValidatorErrorsService) {
     }
 
@@ -61,6 +64,11 @@ export class FormInputComponent implements OnInit {
             }
         }
 
+    }
+
+    onSelectedChange(newValue: string) {
+        this.valueChange.emit(newValue);
+        console.log("FormInputComponent:newValue: " + newValue);
     }
 
 }

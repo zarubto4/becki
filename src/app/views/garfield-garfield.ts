@@ -200,8 +200,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
                 this.batchOptions = this.hardwareType.batchs.map((pv) => {
                     return {
-                        label: pv.revision + ' ' + pv.production_batch + ' (' + pv.assembled + ')',
-                        value: pv.id
+                        label: pv.revision + ' ' + pv.production_batch + ' (' + pv.date_of_assembly + ')',
+                        value: pv.batch_id
                     };
                 });
 

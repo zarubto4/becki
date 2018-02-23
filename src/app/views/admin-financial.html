@@ -3,177 +3,182 @@
      [title]="'main_title'|bkTranslate:this"
      [subtitle]="'main_subtitle'|bkTranslate:this">
 
-    <div *ngIf="tariffs" class="row">
-        <div class="col-md-12">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-server"></i>
-                              {{'title'|bkTranslate:this}}
-                        </span>
-                    </div>
-                </div>
 
-                <div class="portlet-title tabbable-line">
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-dollar'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                {
+                    condition: (tab == 'tariffs'),
+                    btn_label_for_person: ('label_tariff_create'|bkTranslate:this),
+                    colorType: 'ADD',
+                    icon: 'fa-plus-circle',
+                    btn_tag: 'add_tariff'
+                },
+                {
+                    condition: (tab == 'extensions'),
+                    btn_label_for_person: ('label_extension_create'|bkTranslate:this),
+                    colorType: 'ADD',
+                    icon: 'fa-plus-circle',
+                    btn_tag: 'add_extension'
+                }
+            ]"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name] = "tab"
+        [tabBtns]="[
+                        {
+                            tab_name: 'tariffs',
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_tariffs'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'extensions',
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_extensions'|bkTranslate:this)
+                        }
+                    ]">
+        </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-                    <div *ngIf="tab == 'tariffs'"  class="becki-actions">
-                        <button title="{{'label_tariff_create'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onTariffAddClick()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
-                    </div>
+    <div class="portlet-body">
 
-                    <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
-                    <ul class="nav nav-tabs pull-left">
-                        <li [class.active]="tab == 'tariffs'">
-                          <a class="cursor-pointer" (click)="onToggleTab('tariffs')"><i class="fa fa-usd"></i> {{'tab_tariffs'|bkTranslate:this}}</a>
-                        </li>
-                        <li [class.active]="tab == 'extensions'">
-                            <a class="cursor-pointer" (click)="onToggleTab('extensions')"><i class="fa fa-usd"></i> {{'tab_extensions'|bkTranslate:this}}</a>
-                        </li>
-                    </ul>
-                </div>
+        <!-- Tariffs-->
+        <div *ngIf="tab == 'tariffs'">
 
-                <!-- Tariffs-->
-                <div *ngIf="tab == 'tariffs'">
-                        <div *ngIf="(tariffs && tariffs.length)" class="table-scrollable">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th class="col col-lg-1">{{'table_icon'|bkTranslate:this}}</th>
-                                    <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                                    <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                                    <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr *ngFor="let tariff of tariffs">
+            <div *ngIf="(tariffs && tariffs.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-1">{{'table_icon'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let tariff of tariffs">
 
-                                    <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
-                                    <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
-                                        <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
-                                        <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
-                                    </td>
-                                    <td class="vert-align">{{tariff.description}}</td>
-                                    <td class="vert-align no-wrap text-right">
+                        <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
+                            <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
+                            <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
+                        </td>
+                        <td class="vert-align">{{tariff.description}}</td>
+                        <td class="vert-align no-wrap text-right">
 
-                                        <style type="text/css">
-                                            table tr button { opacity:0.05;}
-                                            table tr:hover button { opacity:1 }
-                                        </style>
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
 
-                                        <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
-                                            <i class="fa fa-cog"></i>
-                                        </button>
-
-                                        <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftUpClick(tariff)">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </button>
-
-                                        <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftDownClick(tariff)">
-                                            <i class="fa fa-chevron-down"></i>
-                                        </button>
-
-                                        <button *ngIf="!tariff.active" title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivate(tariff)">
-                                            <i class="fa fa-power-off"></i>
-                                        </button>
-                                        <button  *ngIf="tariff.active" title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivate(tariff)">
-                                            <i class="fa fa-power-off"></i>
-                                        </button>
-                                        <button title="{{'label_delete_tariff'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!tariff.update_permission" (click)="onTariffRemoveClick(tariff)">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-
-
-                        </div>
-                        <h3 *ngIf="!tariffs" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-                        <div *ngIf="tariffs && tariffs.length < 1" class="list-no-items">
-                            <p class="list-no-items__main-label">{{'label_no_tariffs'|bkTranslate:this}}</p>
-                            <p class="list-no-items__sub-label">{{'label_no_tariffs_comment'|bkTranslate:this}} </p>
-                            <p>
-                                <button class="btn blue" (click)="onTariffAddClick()">
-                                    <i class="fa fa-plus-circle"></i> {{'btn_create'|bkTranslate:this}}
-                                </button>
-                            </p>
-                        </div>
-                </div>
-
-                <!-- Tariffs-->
-                <div *ngIf="tab == 'extensions'">
-                    <div *ngIf="(extensions && extensions.length)" class="table-scrollable">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col col-lg-1">{{'table_icon'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                                <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let extension of extensions">
-
-                                <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
-                                <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
-                                    <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
-                                    <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
-                                </td>
-                                <td class="vert-align">{{tariff.description}}</td>
-                                <td class="vert-align no-wrap text-right">
-
-                                    <style type="text/css">
-                                        table tr button { opacity:0.05;}
-                                        table tr:hover button { opacity:1 }
-                                    </style>
-
-                                    <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
-                                        <i class="fa fa-cog"></i>
-                                    </button>
-
-                                    <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftUpClick(tariff)">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </button>
-
-                                    <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftDownClick(tariff)">
-                                        <i class="fa fa-chevron-down"></i>
-                                    </button>
-
-                                    <button *ngIf="!tariff.active" title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivate(tariff)">
-                                        <i class="fa fa-power-off"></i>
-                                    </button>
-                                    <button  *ngIf="tariff.active" title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivate(tariff)">
-                                        <i class="fa fa-power-off"></i>
-                                    </button>
-                                    <button title="{{'label_delete_tariff'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!tariff.update_permission" (click)="onTariffRemoveClick(tariff)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-
-                    </div>
-                    <h3 *ngIf="!extensions" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-                    <div *ngIf="extensions && extensions.length < 1" class="list-no-items">
-                        <p class="list-no-items__main-label">{{'label_no_extensions'|bkTranslate:this}}</p>
-                        <p class="list-no-items__sub-label">{{'label_no_extensions_comment'|bkTranslate:this}} </p>
-                        <p>
-                            <button class="btn blue" (click)="onExtensionCreate()">
-                                <i class="fa fa-plus-circle"></i> {{'btn_create'|bkTranslate:this}}
+                            <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
+                                <i class="fa fa-cog"></i>
                             </button>
-                        </p>
-                    </div>
-                </div>
 
+                            <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftUpClick(tariff)">
+                                <i class="fa fa-chevron-up"></i>
+                            </button>
+
+                            <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftDownClick(tariff)">
+                                <i class="fa fa-chevron-down"></i>
+                            </button>
+
+                            <button *ngIf="!tariff.active" title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivate(tariff)">
+                                <i class="fa fa-power-off"></i>
+                            </button>
+                            <button  *ngIf="tariff.active" title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivate(tariff)">
+                                <i class="fa fa-power-off"></i>
+                            </button>
+                            <button title="{{'label_delete_tariff'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!tariff.update_permission" (click)="onTariffRemoveClick(tariff)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(tariffs == null)"
+                                [condition_empty]="(tariffs != null && tariffs.length == 0)"
+                                [main_message_link]="'label_no_tariffs'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_tariffs_comment'|bkTranslate:this"
+                                [btn_label]="'btn_create'|bkTranslate:this"
+                                (onButtonClick)="onTariffAddClick()">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
         </div>
+
+        <!-- Tariffs-->
+        <div *ngIf="tab == 'extensions'">
+            <div *ngIf="(extensions && extensions.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                        <tr>
+                            <th class="col col-lg-1">{{'table_icon'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let extension of extensions">
+
+                            <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
+                            <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
+                                <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
+                                <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
+                            </td>
+                            <td class="vert-align">{{tariff.description}}</td>
+                            <td class="vert-align no-wrap text-right">
+
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
+
+                                <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+
+                                <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftUpClick(tariff)">
+                                    <i class="fa fa-chevron-up"></i>
+                                </button>
+
+                                <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftDownClick(tariff)">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+
+                                <button *ngIf="!tariff.active" title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivate(tariff)">
+                                    <i class="fa fa-power-off"></i>
+                                </button>
+                                <button  *ngIf="tariff.active" title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivate(tariff)">
+                                    <i class="fa fa-power-off"></i>
+                                </button>
+                                <button title="{{'label_delete_tariff'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!tariff.update_permission" (click)="onTariffRemoveClick(tariff)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(extensions == null)"
+                                [condition_empty]="(extensions != null && extensions.length == 0)"
+                                [main_message_link]="'label_no_extensions'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_extensions_comment'|bkTranslate:this"
+                                [btn_label]="'btn_create'|bkTranslate:this"
+                                (onButtonClick)="onExtensionCreate()">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+        </div>
+
     </div>
 
 </bk-layout-main>

@@ -28,6 +28,16 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
         this.refresh();
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'add_tariff') {
+            this.onTariffAddClick();
+        }
+
+        if (action === 'add_extension') {
+            this.onExtensionCreate();
+        }
+    }
+
     refresh(): void {
         this.blockUI();
 

@@ -13,7 +13,7 @@ import { ModalsCreateHardwareTypeModel } from '../modals/type-of-board-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsAdminCreateHardwareModel } from '../modals/admin-create-hardware';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
-import {ModalsHardwareFindHash, ModalsHardwareFindHashComponent} from "../modals/hardware-find-hash";
+import { ModalsHardwareFindHash, ModalsHardwareFindHashComponent } from '../modals/hardware-find-hash';
 
 @Component({
     selector: 'bk-view-admin-hardware-type',
@@ -68,10 +68,6 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
         }
         if (action === 'find_hardware_hash') {
             this.onGetHardwareHash();
-        }
-
-        if (action === 'synchronize_hardware') {
-            this.onHardwareSynchronize();
         }
 
         if (action === 'new_hardware_type') {
@@ -180,9 +176,9 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                    this.unblockUI();
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                    this.refresh();
+                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.refresh();
                 });
             }
         });
@@ -240,10 +236,10 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                    this.unblockUI();
-                    this.refresh();
-                });
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.unblockUI();
+                        this.refresh();
+                    });
             }
         });
     }
@@ -298,9 +294,9 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.onFilterHardware();
                         this.unblockUI();
                     }).catch(reason => {
-                    this.unblockUI();
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                });
+                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                    });
             }
         });
     }
@@ -337,21 +333,6 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     });
             }
         });
-    }
-
-
-    onHardwareSynchronize(): void {
-        this.blockUI();
-        this.tyrionBackendService.boardSynchronizeAllWithCentralRegistrationAuthority()
-            .then(() => {
-                this.unblockUI();
-                this.onFilterHardware(0);
-            })
-            .catch(reason => {
-                this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
-
-            });
     }
 
     onPrintLabelHardwareClick(device: IHardware): void {

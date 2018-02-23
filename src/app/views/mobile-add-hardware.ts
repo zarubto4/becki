@@ -30,11 +30,12 @@ export class MobileAddHardwareComponent extends _BaseMainComponent implements On
 
     projects: FormSelectComponentOption[];
 
+
     constructor(injector: Injector) {
         super(injector);
         this.blockForm = this.formBuilder.group({
-            'id': ['', [Validators.required, BeckiAsyncValidators.hardwareDeviceId(this.tyrionBackendService)]],
             'project': ['', [Validators.required]],
+            'id': ['', [Validators.required]],
         });
 
         this.blockForm.controls['project'].valueChanges.subscribe(newProjectId => { this.reloadGroupOptions(); });

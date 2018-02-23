@@ -136,10 +136,10 @@
                             <td class="vert-align no-wrap"><strong>{{bootloader.id.substr(0,8)}}</strong> </td>
                             <!-- Main Mark - Only for settings for Type of Board -->
                             <td class="vert-align">
-                                                 <span class="icon-hint-wraper green" *ngIf="bootloader.main_bootloader">
-                                                        <i class="fa fa-lg fa-flag font-green-jungle"></i>
-                                                        <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
-                                                </span>
+                                <span class="icon-hint-wraper green" *ngIf="bootloader.main_bootloader">
+                                       <i class="fa fa-lg fa-flag font-green-jungle"></i>
+                                       <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                                 </span>
                             </td>
                             <td class="vert-align no-wrap">{{bootloader.name}}</td>
                             <td class="vert-align no-wrap">{{bootloader.version_identifier}}</td>
@@ -159,16 +159,16 @@
                                     </button>
                                 </a>
 
-                                <button *ngIf="hardwareType.bootloader_update_permission" title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onBootloaderEditClick(bootloader)">
+                                <button *ngIf="hardwareType.bootloader_edit_permission" title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onBootloaderEditClick(bootloader)">
                                     <i class="fa fa-cog"></i>
                                 </button>
-                                <button *ngIf="hardwareType.bootloader_update_permission && !bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!bootloader.update_permission" (click)="onBootloaderSetMainClick(bootloader)">
+                                <button *ngIf="hardwareType.bootloader_edit_permission && !bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" (click)="onBootloaderSetMainClick(bootloader)">
                                     <i class="fa fa-flag"></i>
                                 </button>
-                                <button *ngIf="hardwareType.bootloader_update_permission && !bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!bootloader.update_permission" (click)="onBootloaderUpdateFile(bootloader)">
+                                <button *ngIf="hardwareType.bootloader_edit_permission && !bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" (click)="onBootloaderUpdateFile(bootloader)">
                                     <i class="fa fa-file-code-o"></i>
                                 </button>
-                                <button *ngIf="hardwareType.bootloader_update_permission" title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onBootloaderDeleteClick(bootloader)">
+                                <button *ngIf="hardwareType.bootloader_edit_permission" title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onBootloaderDeleteClick(bootloader)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
@@ -482,16 +482,13 @@
 
                         <td class="vert-align">
                             {{batch.mac_address_start}} - {{batch.mac_address_end}} <br>
-                            {{batch.mac_address_start.toString(16)}} - {{batch.mac_address_end.toString(16)}}
+                            {{ onConvertToMacAddress(batch.mac_address_start) }} - {{ onConvertToMacAddress(batch.mac_address_end)}}
                         </td>
 
                         <td class="vert-align">
                             <template [ngIf]="batch.latest_used_mac_address">
                                 {{batch.latest_used_mac_address}} <br>
-                                {{batch.latest_used_mac_address.toString(16)}}
-                            </template>
-                            <template [ngIf]="!batch.latest_used_mac_address">
-                                ?????????????????
+                                {{onConvertToMacAddress(batch.latest_used_mac_address)}}
                             </template>
                         </td>
 
@@ -500,7 +497,7 @@
                         </td>
 
                         <td class="vert-align">
-                            {{batch.assembled}}
+                            {{batch.date_of_assembly}}
                         </td>
 
                         <!-- ACTIONS -->
@@ -515,12 +512,12 @@
                                 }
                             </style>
 
-                            <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!batch.update_permission"
+                            <button *ngIf="hardwareType.update_permission" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
                                     (click)="onEditRevisionClick(batch)">
                                 <i class="fa fa-cog"></i>
                             </button>
 
-                            <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!batch.delete_permission"
+                            <button *ngIf="hardwareType.update_permission" title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red"
                                     (click)="onDeleteRevisionClick(batch)">
                                 <i class="fa fa-trash"></i>
                             </button>

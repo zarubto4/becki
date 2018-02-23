@@ -19,7 +19,7 @@ import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
 import { ModalsFileUploadModel } from '../modals/file-upload';
 import { ModalsCreateHardwareTypeBatchModel } from '../modals/type-of-board-batch-create';
-import {IError} from "../services/_backend_class/Responses";
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-hardware-hardware-type',
@@ -394,7 +394,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
             batch.mac_address_start,
             batch.mac_address_end,
             batch.ean_number,
-            batch.assembled,
+            batch.date_of_assembly,
             batch.customer_product_name,
             batch.customer_company_name,
             batch.customer_company_made_description,
@@ -402,7 +402,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.hardwareBatchEdit(batch.id, {
+                this.tyrionBackendService.hardwareBatchEdit(batch.batch_id, {
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
@@ -433,7 +433,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
         this.modalService.showModal(new ModalsRemovalModel(batch.revision + ' ' + batch.production_batch)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.hardwareBatchDelete(batch.id)
+                this.tyrionBackendService.hardwareBatchDelete(batch.batch_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.navigate(['admin/garfield/']);
@@ -444,6 +444,10 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                     });
             }
         });
+    }
+
+    onConvertToMacAddress(num: string) {
+        return Number(num).toString(16);
     }
 
 }
