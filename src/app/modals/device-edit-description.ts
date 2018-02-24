@@ -9,10 +9,11 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import {IHardware} from "../backend/TyrionAPI";
 
 
 export class ModalsDeviceEditDescriptionModel extends ModalModel {
-    constructor(public id: string = '',  public name: string = '', public description: string = '') {
+    constructor(public id: string = '',  public name: string = '', public description: string = '', public dominant: boolean = false, public can_be_activated: boolean = false) {
         super();
     }
 }
@@ -31,7 +32,7 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             'name': [''],
@@ -42,6 +43,26 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
     ngOnInit() {
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
+    }
+
+    onHardwareDeactivate(): void {
+        this.tyrionBackendService.projectDeactiveHW(this.modalModel.id)
+            .then((values) => {
+                this.onSubmitClick();
+            })
+            .catch((reason) => {
+                this.onSubmitClick();
+            });
+    }
+
+    onHardwareActivate(): void {
+        this.tyrionBackendService.projectActiveHW(this.modalModel.id)
+            .then((values) => {
+                this.onSubmitClick();
+            })
+            .catch((reason) => {
+                this.onSubmitClick();
+            });
     }
 
     onSubmitClick(): void {

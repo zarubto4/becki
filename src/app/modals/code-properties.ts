@@ -17,7 +17,7 @@ export class ModalsCodePropertiesModel extends ModalModel {
         public hardwareTypes: IHardwareType[],
         public name: string = '',
         public description: string = '',
-        public deviceType: string = '',
+        public hardware_type_id: string = '',
         public edit: boolean = false,
         public exceptName: string = null,
         public copy: boolean = false,
@@ -55,7 +55,7 @@ export class ModalsCodePropertiesComponent implements OnInit {
         };
 
         if (this.modalModel.edit === false) {
-            input['deviceType'] = [this.modalModel.deviceType, [Validators.required]];
+            input['hardware_type_id'] = [this.modalModel.hardware_type_id, [Validators.required]];
         }
 
         this.form = this.formBuilder.group(input);
@@ -65,7 +65,7 @@ export class ModalsCodePropertiesComponent implements OnInit {
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
         if (this.modalModel.edit === false) {
-            this.modalModel.deviceType = this.form.controls['deviceType'].value;
+            this.modalModel.hardware_type_id = this.form.controls['hardware_type_id'].value;
         }
         this.modalClose.emit(true);
     }

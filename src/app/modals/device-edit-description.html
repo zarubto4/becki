@@ -8,14 +8,28 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name"       [label]="'label_hardware_device'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.name"        [label]="'label_hardware_device'|bkTranslate:this"></bk-form-input>
             <bk-form-input [control]="form.controls.description" [label]="'label_device_description'|bkTranslate:this" aria-valuetext="Hardware description"></bk-form-input>
         </form>
     </div>
+    <div class="text-center">
+          <small *ngIf="modalModel.dominant == true" class="bold">
+              <a (click)="onHardwareDeactivate()">
+                  <span [innerHTML]="'Deactivate in this project'"></span>
+              </a>
+          </small>
+          <small *ngIf="modalModel.can_be_activated == true" class="bold">
+              <a (click)="onHardwareActivate()">
+                  <span [innerHTML]="'Activate for this project'"></span>
+              </a>
+          </small>
+          <br>
+    </div>
+    <br>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
         <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_update'|bkTranslate:this}}</button>

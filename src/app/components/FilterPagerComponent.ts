@@ -9,29 +9,37 @@ import { INotificationElement, INotificationButton } from '../backend/TyrionAPI'
 @Component({
     selector: 'bk-filter-page-component',
 /* tslint:disable */
-    template: `        
+    template: `      
+    <div>
+        <br>
+        <br>      
+    </div>
+
     <div class="row">
-        
-        <div class="col-md-5 col-sm-12">
-            <div class="dataTables_info" style="margin-left: 10px" role="status" aria-live="polite">Showing {{from  == 0 ? 1 : from }} to {{to}} of {{total}} entries</div>
+        <div class="col col-lg-3 text-left">
+            <div class="dataTables_info" style="margin-left: 30px; margin-top: 10px;" role="status" aria-live="polite">Showing {{from  == 0 ? 1 : from }} to {{to}} of {{total}} entries</div>
         </div>
-        
-        <div class="col-md-7 col-sm-12">
-            <div class="dataTables_paginate paging_bootstrap_number" id="sample_2_paginate">
+        <div class="col col-lg-6 text-center pagination-centered">
+            <div class="dataTables_paginate paging_bootstrap_number">
                 <ul class="pagination" style="visibility: visible;">
-    
-                    
+
+
                     <li class="prev" [class.disabled]="selectedPage <= 1"><a title="Prev" (click)="onPageClick(selectedPage-1)"><i class="fa fa-angle-left"></i></a></li>
-                    
+
                     <li *ngFor="let page of pageList" class="mt-element-ribbon bg-grey-steel" [class.active]="selectedPage == page">
                         <a (click)="onPageClick(page)">{{page}}</a>
                     </li>
-                    
+
                     <li  class="next" [class.disabled]="(totalPages + 1) <= selectedPage"><a title="Next" (click)="onPageClick(selectedPage+1)"><i class="fa fa-angle-right"></i></a></li>
                 </ul>
             </div>
         </div>
-    </div>
+        <div class="col col-lg-2">
+        </div>
+        <div class="col col-lg-1">
+        </div>
+    </div>    
+  
 `
 /* tslint:enable */
 })

@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import {Component, OnInit, Injector, OnDestroy, ViewChild} from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
@@ -105,20 +105,22 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 // Hardware   ----------------------------------------------------------------------------------------------------------
 
     onHardwareEditClick(device: IHardware): void {
-        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
+        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description, device.dominant_entity, (!device.dominant_entity && device.dominant_project_active == null));
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.onFilterHardware();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.onFilterHardware();
                     });
             }
+        }).catch((reason) => {
+            this.onFilterHardware();
         });
     }
 

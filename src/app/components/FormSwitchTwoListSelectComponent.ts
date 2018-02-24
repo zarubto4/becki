@@ -15,20 +15,73 @@ import { MultiSelectComponent } from './MultiSelectComponent';
     template: `
 <div>
     <div class="row">
-        <div class="col-md-5">
+
+        <div class="col-md-6">
             <h4 *ngIf="labelComment" [innerHTML]="left_label"></h4>
-            <bk-multi-select [items]="options_left" #left [labelComment]="false"></bk-multi-select>
+            <div class="table-scrollable table-scrollable-borderless">
+                <table  class="table table-hover table-light byzance-table" style="border-collapse: separate;">
+                    <thead>
+                        <tr>
+                            <td class="col col-lg-10"></td>
+                            <td class="col col-lg-2"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of options_left">
+                            <style type="text/css">
+                                table tr button {
+                                    opacity: 0.05;
+                                }
+                                table tr:hover button {
+                                    opacity: 1
+                                }
+                            </style>
+                            <td class="vert-align no-wrap">
+                                {{item.label}}
+                            </td>
+                            <td class="vert-align">
+                                <button class="btn btn-icon-only btn-default" (click)="command_right(item.value)">
+                                    <i class="fa fa-caret-right"></i>&nbsp;
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="col-md-2 text-center" style="vertical-align:middle;">
-            <br>
-            <br>
-            <br>
-            <button class="btn btn-icon-only blue" (click)="command_right()"><i class="fa fa-chevron-right"></i></button>
-            <button class="btn btn-icon-only red-flamingo" (click)="command_left()"><i class="fa fa-chevron-left"></i></button>
-        </div>
-        <div class="col-md-5">
+        
+        <div class="col-md-6">
             <h4 *ngIf="labelComment" [innerHTML]="right_label"></h4>
-            <bk-multi-select [items]="options_right" #right [labelComment]="false"></bk-multi-select>
+            <div class="table-scrollable table-scrollable-borderless">
+                <table  class="table table-hover table-light byzance-table" style="border-collapse: separate;">
+                    <thead>
+                    <tr>
+                        <td class="col col-lg-2"></td>
+                        <td class="col col-lg-10"></td>
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr *ngFor="let item of options_right">
+                        <style type="text/css">
+                            table tr button {
+                                opacity: 0.05;
+                            }
+                            table tr:hover button {
+                                opacity: 1
+                            }
+                        </style>
+                        <td class="vert-align">
+                            <button class="btn btn-icon-only btn-default" (click)="command_left(item.value)">
+                                <i class="fa fa-caret-left"></i>&nbsp;
+                            </button>
+                        </td>
+                        <td class="vert-align no-wrap">
+                            {{item.label}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -61,12 +114,6 @@ export class FormSwitchTwoListSelectComponent implements OnInit {
     @Input()
     options_right: FormSelectComponentOption[] = [];
 
-    @ViewChild('right')
-    right: MultiSelectComponent;
-
-    @ViewChild('left')
-    left: MultiSelectComponent;
-
     constructor(public validatorErrorsService: ValidatorErrorsService) {
     }
 
@@ -74,22 +121,30 @@ export class FormSwitchTwoListSelectComponent implements OnInit {
 
     }
 
-    command_right() {
-        let c: FormSelectComponentOption[] = this.left.getAndRemoveSelectedItems();
-        this.right.addItems(c);
+    command_right(value: string) {
+        for (let i: number = this.options_left.length - 1; i >= 0; i--) {
+            if (this.options_left[i].value === value) {
+                this.options_right.push(this.options_left[i]);
+                this.options_left.splice(i, 1);
+            }
+        }
     }
 
-    command_left() {
-        let c: FormSelectComponentOption[] = this.right.getAndRemoveSelectedItems();
-        this.left.addItems(c);
+    command_left(value: string) {
+        for (let i: number = this.options_right.length - 1; i >= 0; i--) {
+            if (this.options_right[i].value === value) {
+                this.options_left.push(this.options_right[i]);
+                this.options_right.splice(i, 1);
+            }
+        }
     }
 
     get_left(): FormSelectComponentOption[] {
-        return this.left.items;
+        return this.options_left;
     }
 
     get_right(): FormSelectComponentOption[] {
-        return this.right.items;
+        return this.options_right;
     }
 
 }

@@ -22,7 +22,7 @@
                           btn_tag: 'add_hardware'
                       },
                       {
-                          condition: (tab == 'hardware_groups' && (deviceGroup && deviceGroup.length)),
+                          condition: (tab == 'hardware_groups' && (deviceGroup && deviceGroup.content.length)),
                           btn_label_for_person: ('btn_add_hardware_group'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
@@ -69,34 +69,34 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="">{{'table_hardware_name'|bkTranslate:this}}</th>
-                        <th class="">{{'table_hardware_id'|bkTranslate:this}}</th>
-                        <th class="no-wrap">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="no-wrap"><strong class="font-color-hardware">Hardware</strong>{{'label_type'|bkTranslate:this}}</th>
-                        <th class="no-wrap">{{'table_groups'|bkTranslate:this}}</th>
-                        <th class="no-wrap">{{'table_project_status'|bkTranslate:this}}</th>
-                        <th class="no-wrap">{{'table_status'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col">{{'table_hardware_name'|bkTranslate:this}}</th>
+                        <th class="col">{{'table_hardware_id'|bkTranslate:this}}</th>
+                        <th class="col">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col text-center"><span [innerHTML]="'label_type'|bkTranslate:this"></span></th>
+                        <th class="col text-center">{{'table_groups'|bkTranslate:this}}</th>
+                        <th class="col text-center">{{'table_project_status'|bkTranslate:this}}</th>
+                        <th class="col text-center">{{'table_status'|bkTranslate:this}}</th>
+                        <th class="col text-center">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let device of devicesFilter.content">
-                        <td class="vert-align no-wrap">
+                        <td class="vert-align">
                             <div class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
                                 <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
                                 <div class="hint-fixed">
-                                                <span class="hint right">
-                                                    <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
-                                                </span>
+                                    <span class="hint right">
+                                         <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
+                                    </span>
                                 </div>
                             </div>
                             <a (click)="onDeviceClick(device.id)"
                                class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                         </td>
-                        <td class="vert-align no-wrap">{{device.id}}</td>
+                        <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
                         <td class="vert-align no-wrap">{{device.description}}</td>
-                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
-                        <td class="vert-align no-wrap text-right">
+                        <td class="vert-align text-center no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
+                        <td class="vert-align text-center no-wrap">
 
                             <div *ngIf="!device.hardware_groups">
                                 -
@@ -111,19 +111,22 @@
 
                         </td>
 
-                        <td class="vert-align no-wrap">
-                            device.dominant_entity
-                            <span *ngIf="device.dominant_entity"  class="font-green-jungle bold">{{'active'|bkTranslateTable:this}}</span>
-                            <span *ngIf="!device.dominant_entity" class="font-red-flamingo bold">{{'not_active'|bkTranslateTable:this}}</span>
-                            <div *ngIf="!device.dominant_entity">
-
+                        <td class="vert-align text-center no-wrap">
+                            <span *ngIf="device.dominant_entity">{{'label_project_active'|bkTranslate:this}}</span>
+                            <span *ngIf="!device.dominant_entity && device.dominant_project_active" class="font-red-flamingo">{{'label_project_not_active'|bkTranslate:this}}</span>
+                            <div *ngIf="!device.dominant_entity && device.dominant_project_active">
+                                <span>Active In:</span><br>
+                                <small><a (click)="onProjectClick(device.dominant_project_active.id)">{{device.dominant_project_active.name}}</a></small>
+                            </div>
+                            <div *ngIf="!device.dominant_entity && !device.dominant_project_active">
+                                <span class="font-green-jungle">Can Be Activated</span>
                             </div>
                         </td>
-                        <td class="vert-align no-wrap">
+                        <td class="vert-align text-center no-wrap">
 
                             <bk-online-state [online_state]="device.online_state"></bk-online-state>
                         </td>
-                        <td class="vert-align no-wrap">
+                        <td class="vert-align text-right no-wrap">
 
                             <style type="text/css">
                                 table tr button {
@@ -174,10 +177,11 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-5">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_size'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="">{{'table_hardware_group_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_size'|bkTranslate:this}}</th>
+                        <th class="text-center"><span [innerHTML]="'label_type'|bkTranslate:this"></span></th>
+                        <th class="text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -185,7 +189,20 @@
 
                         <td class="vert-align no-wrap">{{group.name}}</td>
                         <td class="vert-align no-wrap">{{group.description}}</td>
-                        <td class="vert-align no-wrap">{{group.size}}</td>
+                        <td class="vert-align text-center no-wrap">{{group.size}}</td>
+                        <td class="vert-align text-center no-wrap">
+                            <div *ngIf="!group.hardware_types">
+                                -
+                            </div>
+                            <div *ngIf="group.hardware_types">
+                                [
+                                <span *ngFor="let hw_type of group.hardware_types; let last = last">
+                                        <a (click)="onHardwareTypeClick(hw_type.id)">{{hw_type.name}}</a>
+                                        <span *ngIf="!last">, </span>
+                                 </span>
+                                ]
+                            </div>
+                        </td>
 
                         <td class="vert-align text-right no-wrap">
 
@@ -233,86 +250,83 @@
             <div *ngIf="(actualizationFilter && actualizationFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
-                    <tr>
-                        <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_firmware_type'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_details'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_update_type'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                    </tr>
+                        <tr>
+                            <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_firmware_type'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_details'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_update_type'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
+                            <th class="vert-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let procedure of actualizationFilter.content">
+                        <tr *ngFor="let procedure of actualizationFilter.content">
+                            <td class="vert-align">
+                                <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', procedure.id]">{{procedure.id.substr(0, 12)}}</a>
+                            </td>
+                            <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
+                            <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                            <td class="vert-align">
+                                <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                                <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                            </td>
 
-                        <td class="vert-align">
-                            <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', procedure.id]">{{procedure.id.substr(0, 12)}}</a>
-                        </td>
-                        <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
-                        <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
-                        <td class="vert-align">
-                            <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
-                            <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
-                        </td>
-
-                        <td class="vert-align">
-                            <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
-                        </td>
-                        <td class="vert-align">
-                            <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
-                                <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
-                                    <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
-                                    -
-                                    <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
+                            <td class="vert-align">
+                                <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
+                            </td>
+                            <td class="vert-align">
+                                <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
+                                    <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
+                                        <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
+                                        -
+                                        <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
+                                    </template>
+                                    <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
+                                        <a *ngIf="procedure.bootloader" class="bold" [routerLink]="['/hardware', procedure.bootloader.bootloader_id]">{{procedure.bootloader.bootloader_name}}</a>
+                                    </template>
                                 </template>
-                                <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
-                                    <a *ngIf="procedure.program" class="bold" [routerLink]="['/hardware', procedure.bootloader.type_of_board_id]">{{procedure.bootloader.bootloader_name}}</a>
-                                </template>
-                            </template>
-                        </td>
+                            </td>
 
-                        <td class="vert-align">
-                            <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
-                        </td>
-                        <td class="vert-align">
-                            <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
-                            <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
-                        </td>
+                            <td class="vert-align">
+                                <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
+                            </td>
+                            <td class="vert-align">
+                                <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
+                                <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
+                            </td>
 
-                        <!-- Update State -->
-                        <td class="vert-align">
-                            <bk-update-state [updateState]="procedure.state"></bk-update-state>
-                        </td>
+                            <!-- Update State -->
+                            <td class="vert-align">
+                                <bk-update-state [updateState]="procedure.state"></bk-update-state>
+                            </td>
 
+                            <td class="vert-align text-right">
+                                <style type="text/css">
+                                    table tr button {
+                                        opacity: 0.05;
+                                    }
 
-                        <td class="vert-align no-wrap">
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
+                                    table tr:hover button {
+                                        opacity: 1
+                                    }
+                                </style>
+                                <button title="{{'label_change_update_parameters'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                        [disabled]="!procedure.update_permission"
+                                        (click)="onUpdateProcedureUpdateClick(procedure)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                        [disabled]="!procedure.update_permission"
+                                        (click)="onUpdateProcedureCancelClick(procedure)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
 
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-                            <button title="{{'label_change_update_parameters'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                    [disabled]="!procedure.update_permission"
-                                    (click)="onUpdateProcedureUpdateClick(procedure)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                    [disabled]="!procedure.update_permission"
-                                    (click)="onUpdateProcedureCancelClick(procedure)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-
-                        </td>
-
-                    </tr>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <bk-filter-page-component [from]="actualizationFilter.from" [to]="actualizationFilter.to" [total]="actualizationFilter.total"  [totalPages]="actualizationFilter.pages" (onSelect)="onFilterActualizationProcedure($event)"></bk-filter-page-component>

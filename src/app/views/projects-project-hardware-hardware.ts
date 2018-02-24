@@ -123,6 +123,19 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         });
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'update_hardware') {
+            this.onEditClick(this.hardware);
+        }
+
+        if (action === 'deactivate_hardware') {
+
+        }
+
+        if (action === 'active_hardware') {
+        }
+    }
+
     logRecived(log: any) {
         if (log.id) {
 
@@ -283,7 +296,9 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         }
     }
 
-    onToggleHardwareTab(tab: string) {
+    onToggleTab(tab: string) {
+
+        this.hardwareTab = tab;
 
         if (tab === 'updates' && this.actualizationTaskFilter == null) {
             this.onFilterActualizationProcedureTask();
@@ -363,8 +378,6 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             });
 
         }
-
-        this.hardwareTab = tab;
     }
 
     refresh(): void {
@@ -457,7 +470,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     }
 
     onEditClick(device: IHardware): void {
-        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
+        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description, device.dominant_entity, (!device.dominant_entity && device.dominant_project_active == null));
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -689,10 +702,6 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         });
                 }
             });
-    }
-
-    selectedFilterPageActualizationProcedureTask(event: { index: number }) {
-        this.onFilterActualizationProcedureTask(event.index);
     }
 
     /* tslint:disable:max-line-length ter-indent */

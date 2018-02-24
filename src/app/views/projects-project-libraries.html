@@ -1,0 +1,147 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [show_title]="false"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-microchip'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                      {
+                          condition: (tab == 'my_libraries'),
+                          btn_label_for_person: ('btn_add_library'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'ADD',
+                          btn_tag: 'add_library'
+                      }
+                    ]"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name] = "tab"
+        [tabBtns]="[
+                        {
+                            tab_name: 'my_libraries',
+                            tab_color: 'CODE',
+                            tab_label: ('tab_my_libraries'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'public_libraries',
+                            tab_color: 'CODE',
+                            tab_label: ('tab_public_libraries'|bkTranslate:this)
+                        }
+                    ]"
+    >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <div class="portlet-body">
+
+        <div *ngIf="tab == 'my_libraries'">
+            <div *ngIf="(libraries && libraries.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                        <tr>
+                            <th class="">{{'table_name'|bkTranslate:this}}</th>
+                            <th class="">{{'table_description'|bkTranslate:this}}</th>
+                            <th class=" text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let library of libraries">
+                            <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
+                            <td class="vert-align no-wrap">{{library.description}}</td>
+                            <td class="vert-align no-wrap text-right">
+
+                                <style type="text/css">
+                                    table tr button {
+                                        opacity: 0.05;
+                                    }
+
+                                    table tr:hover button {
+                                        opacity: 1
+                                    }
+                                </style>
+
+                                <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission"
+                                    (click)="onEditClick(library)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+                                <button title="{{'label_remove_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission"
+                                    (click)="onRemoveClick(library)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <bk-filter-page-component [from]="privateLibraries.from" [to]="privateLibraries.to" [total]="privateLibraries.total"  [totalPages]="privateLibraries.pages" (onSelect)="onFilterPrivateLibraries($event)"></bk-filter-page-component>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(privateLibraries == null)"
+                                [condition_empty]="(privateLibraries != null && privateLibraries.content.length == 0)"
+                                [main_message_link]="'label_libraries'|bkTranslate:this"
+                                [main_message_comment_link]="'label_libraries_comment'|bkTranslate:this"
+                                [btn_label]="'btn_add_library'|bkTranslate:this"
+                                (onButtonClick)="onAddClick()">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+        </div>
+
+        <div *ngIf="tab == 'public_libraries'">
+
+            <div *ngIf="(publicLibraries && publicLibraries.content.length)" class="table-scrollable table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let library of publicLibraries.content">
+                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
+                        <td class="vert-align">{{library.description}}</td>
+                        <td class="vert-align no-wrap">
+                            <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeClick(board.id)">{{board.name}}, </a>
+                        </td>
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(library)">
+                                <i class="fa fa-clone"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <bk-filter-page-component [from]="publicLibraries.from" [to]="publicLibraries.to" [total]="publicLibraries.total"  [totalPages]="publicLibraries.pages" (onSelect)="onFilterPublicLibraries($event)"></bk-filter-page-component>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(publicLibraries == null)"
+                                [condition_empty]="(publicLibraries != null && publicLibraries.content.length == 0)"
+                                [main_message_link]="'label_no_public_library'|bkTranslate:this"
+                                [main_message_comment_link]="'label_create_public_library_comment'|bkTranslate:this"
+                                [show_button]="false"
+            >
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
+
+    </div>
+
+</bk-layout-main>

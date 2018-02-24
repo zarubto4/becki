@@ -15,7 +15,7 @@ import { FormSelectComponentOption } from './FormSelectComponent';
                     </tr> 
                 </thead> 
                 <tbody *ngFor="let item of items"> 
-                    <tr class="bk-hover-pick" [class.bg-green-meadow]="selectedItems.indexOf(item) > -1" (click)="itemSelected(item)"> 
+                    <tr class="bk-hover-pick" [class.bg-green-meadow]="selectedItems.indexOf(item) > -1" (click)="itemSelected(item)">
                         <td class="vert-align no-wrap"> 
                            {{item.label}}
                         </td>

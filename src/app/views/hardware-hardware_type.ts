@@ -161,7 +161,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                     description: model.description,
                     name: model.name,
                     changing_note: model.changing_note,
-                    version_identifier: model.version_identifier
+                    version_identifier: model.name
                 })
                     .then(() => {
                         this.refresh();

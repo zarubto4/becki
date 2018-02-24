@@ -318,7 +318,7 @@ export class StaticTranslation {
                 'label_select_avatar': 'Select file',
 
             }, 'ModalsDeviceEditDescriptionComponent': {
-                'title': 'Hardware Device basic Properties',
+                'title': '<strong class="font-color-hardware">Hardware</strong> basic Properties',
                 'label_hardware_device': 'Name (private)',
                 'label_device_description': 'Description (private)',
 
@@ -913,7 +913,7 @@ export class StaticTranslation {
                 'flash_project_cant_load': 'Projects could not be loaded, {0}.'
 
             }, 'ModalsHardwareGroupDeviceSettingsComponent': {
-                'main_title': 'Hardware Groups Device Settings',
+                'main_title': '<strong class="font-color-hardware">HARDWARE</strong> Groups Device Settings',
                 'label_available': 'Available Groups',
                 'title_in_group': 'In Groups'
 
@@ -1132,7 +1132,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_id': 'Full ID',
                 'label_description': 'Description',
-                'label_type': 'Type',
+                'label_type': '<strong class="font-color-hardware">Hardware</strong> Type',
                 'label_status': 'Status',
                 'label_actions': 'Actions',
                 'btn_add_hardware': 'Add a Device',
@@ -1147,6 +1147,8 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
                 'label_time_missing_in_json': 'Not Yet',
+                'label_project_active': 'This one',
+                'label_project_not_active': 'Freeze',
 
                 'tab_hardware_list': 'Hardware List',
                 'tab_hardware_groups': 'Hardware Groups',
@@ -1155,6 +1157,7 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_id': 'Updates',
                 'table_update_id': 'Update HASH',
+                'table_project_status': 'Project Assign',
                 'table_finished': 'Finished',
                 'table_created': 'Created',
                 'table_planed': 'Planed',
@@ -1166,8 +1169,9 @@ export class StaticTranslation {
                 'table_firmware_type': 'Type',
                 'table_update_progress': 'Progress',
                 'table_update_state': 'State',
-                'table_hardware_id': 'Hardware ID',
-                'table_name': 'Alias Name',
+                'table_hardware_id': 'ID',
+                'table_hardware_name': 'Alias Name',
+                'table_hardware_group_name': 'Group Name',
                 'table_groups': 'Groups',
                 'table_actions': 'Actions',
                 'table_size': 'Size []',
@@ -1181,7 +1185,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectHardwareHardwareComponent': {
 
-                'title': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> - DEVICE <strong>{0}</strong>',
+                'title': '<strong class="font-color-hardware">HARDWARE</strong> DashBoard',
                 'main_administration_title': 'Platform administration',
                 'main_subtitle': 'Embedded Hardware Settings',
                 'tab_overview': 'Overview',
@@ -1198,6 +1202,8 @@ export class StaticTranslation {
                 'label_id': 'ID',
                 'label_web_link': 'Hardware Web view',
                 'label_ethernet_address': 'Ethernet MAC address',
+                'label_device_is_not_dominant': 'Hardware is not actually assigned to this project. You can create new commands, schedule updates, but nothing will be done until Hardware be signed under this project again.',
+                'label_device_project_dominant': 'Currently, Hardware is actively used in the Project:',
                 'label_wifi_address': 'Wi-Fi MAC address',
                 'label_device_status': 'Device status',
                 'label_server': 'Server Name',
@@ -1205,6 +1211,7 @@ export class StaticTranslation {
                 'label_bootloader_version': 'Version',
                 'label_last_seen_unknow': '(Unknown)',
                 'label_update_to': 'Update to',
+                'label_full_id': 'Processor ID:',
                 'label_update_in_que': 'Update in Que',
                 'label_developer_settings': 'Developer settings',
                 'label_port': 'Port',
@@ -1222,7 +1229,7 @@ export class StaticTranslation {
                 'label_image': 'Image',
                 'label_set_own_picture': 'Set your own photo',
                 'label_no_running_update_on_hardware': 'No <strong class="font-color-code">FIRMWARE </strong> release',
-                'label_no_running_update_on_hardware_comment': 'There is no update for this device yet. Create new Code program orr set new release',
+                'label_no_running_update_on_hardware_comment': 'There is no update for this device yet. Create new <strong class="font-color-code">Code</strong> program or set new release',
                 'label_main_server': 'Main Server',
                 'label_instance': 'Instance ID',
                 'label_main_server_not_found': 'Device is not connected to Server yet',
@@ -1259,6 +1266,8 @@ export class StaticTranslation {
                 'label_cloud': 'CLOUD',
                 'label_remove_device': 'Remove device',
                 'label_device_properties': 'Device properties',
+                'label_deactivate_device': 'Deactive for this project',
+                'label_active_device': 'Active for this project',
                 'label_terminal': 'terminal',
                 'label_settings_terminal': 'settings',
                 'label_no_hardware_to_show': 'No hardware to show',
@@ -1426,8 +1435,8 @@ export class StaticTranslation {
 
                 'label_program_properties': 'CODE program properties',
                 'label_remove_program': 'Remove CODE program',
-                'label_list_no_item_main': 'There is not any code library in this project',
-                'label_list_no_item_sub': 'You can create it by click on the button bellow.',
+                'label_libraries': 'No <strong class="font-color-code">CODE</strong> libraries',
+                'label_libraries_comment': 'Make an impression on your <strong>Mom</strong> and create a dream Library. And do not forget to share it!',
                 'label_no_public_library': 'No public <strong class="font-color-code">CODE</strong> Libraries',
                 'label_create_public_library_comment': 'If you do not see your dream library, create it and share it with others.',
 
@@ -1846,15 +1855,15 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectCodeComponent': {
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL PROGRAMS',
-                'btn_add_code_program': 'New Program',
-                'label_code_program_properties': 'CODE program properties',
+                'label_no_code': 'New <strong class="font-color-code">CODE</strong> Program',
+                'label_no_code_comment': 'Time to create another miracle.. or to find an alternative path to your nerd life',
                 'label_remove_code_program': 'Remove CODE program',
 
-                'label_no_code': 'No <strong class="font-color-code">CODE</strong> program available.',
                 'label_create_code_text': 'Click on the button bellow to create a program.',
+                'btn_add_code_program': 'Create new Program',
 
-                'label_no_public_code': 'No <strong class="font-color-code">CODE</strong> program available.',
-                'label_create_public_code_text': 'If you do not see your dream program, create it and share it with others.',
+                'label_no_public_code': 'No <strong class="font-color-code">CODE</strong> programs available.',
+                'label_create_public_code_text': 'If you do not see your dream program, create it and share it with others',
 
                 'table_name': 'Name',
                 'table_hardware_type': '<strong class="font-color-hardware">Hardware</strong> device type',
@@ -2423,7 +2432,7 @@ export class StaticTranslation {
                 'OFFLINE': 'Offline',
                 'FREEZED': 'Freeze',
                 'SYNCHRONIZATION_IN_PROGRESS': 'Synchronizing',
-                'NOT_YET_FIRST_CONNECTED': 'We have no idea - (never logged before)',
+                'NOT_YET_FIRST_CONNECTED': 'We have no idea <br><small>(never logged before)</small>',
                 'UNKNOWN_LOST_CONNECTION_WITH_SERVER': 'Lost connection with external server',
                 'SHUT_DOWN': 'Shut Downed',
             },

@@ -9,7 +9,7 @@
         <form [formGroup]="form">
             <bk-form-input [control]="form.controls.name" [label]="'label_program_name'|bkTranslate:this"></bk-form-input>
             <bk-form-input [control]="form.controls.description" [label]="'label_program_description'|bkTranslate:this"></bk-form-input>
-            <bk-form-select *ngIf="!modalModel.edit" [control]="form.controls.deviceType" [label]="'label_device_type'|bkTranslate:this" [options]="options"></bk-form-select>
+            <bk-form-select *ngIf="!modalModel.edit" [control]="form.controls.hardware_type_id" [label]="'label_device_type'|bkTranslate:this" [options]="options"></bk-form-select>
         </form>
     </div>
     <div class="modal-footer">

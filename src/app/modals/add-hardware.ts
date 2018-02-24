@@ -14,7 +14,7 @@ import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessageError, FlashMessage } from '../services/NotificationService';
 import { TranslatePipe } from '../pipes/TranslationPipe';
 import { TranslationService } from '../services/TranslationService';
-import {stat} from "fs";
+import { stat } from "fs";
 
 
 export class ModalsAddHardwareModel extends ModalModel {

@@ -1,0 +1,141 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [show_title]="false"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-microchip'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                      {
+                          condition: (tab == 'my_programs'),
+                          btn_label_for_person: ('btn_add_code_program'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'ADD',
+                          btn_tag: 'add_code'
+                      }
+                    ]"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name] = "tab"
+        [tabBtns]="[
+                        {
+                            tab_name: 'my_programs',
+                            tab_color: 'CODE',
+                            tab_label: ('tab_my_programs'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'public_c_programs',
+                            tab_color: 'CODE',
+                            tab_label: ('tab_public_c_programs'|bkTranslate:this)
+                        }
+                    ]"
+    >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <div class="portlet-body">
+
+        <div *ngIf="tab == 'my_programs'">
+            <div *ngIf="(privatePrograms && privatePrograms.content.length)" class="table-scrollable">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="">{{'table_name'|bkTranslate:this}}</th>
+                            <th class="">{{'table_description'|bkTranslate:this}}</th>
+                            <th class=""> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                            <th class=" text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let code of privatePrograms.content">
+                        <td class="vert-align no-wrap bold"><a (click)="onCodeClick(code.id)">{{code.name}}</a></td>
+                        <td class="vert-align no-wrap">{{code.description}}</td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+
+                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!code.update_permission" (click)="onEditClick(code)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to" [total]="privatePrograms.total"  [totalPages]="privatePrograms.pages" (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
+                </table>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(privatePrograms == null)"
+                                [condition_empty]="(privatePrograms != null && privatePrograms.content.length == 0)"
+                                [main_message_link]="'label_no_code'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_code_comment'|bkTranslate:this"
+                                [btn_label]="'btn_add_code_program'|bkTranslate:this"
+                                (onButtonClick)="onAddClick()">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+        </div>
+
+        <div *ngIf="tab == 'public_c_programs'">
+
+            <div *ngIf="(publicPrograms && publicPrograms.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let code of publicPrograms.content">
+                        <td class="vert-align no-wrap bold"><a (click)="onCodeClick(code)">{{code.name}}</a></td>
+                        <td class="vert-align">{{code.description}}</td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(code)">
+                                <i class="fa fa-clone"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <bk-filter-page-component [from]="publicPrograms.from" [to]="publicPrograms.to" [total]="publicPrograms.total"  [totalPages]="publicPrograms.pages" (onSelect)="onFilterPublicPrograms($event)"></bk-filter-page-component>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(publicPrograms == null)"
+                                [condition_empty]="(publicPrograms != null && publicPrograms.content.length == 0)"
+                                [main_message_link]="'label_no_public_code'|bkTranslate:this"
+                                [main_message_comment_link]="'label_create_public_code_text'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+        </div>
+
+    </div>
+
+</bk-layout-main>

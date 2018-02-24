@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{'main_title'|bkTranslate:this}}</h4>
+        <h4 class="modal-title" [innerHTML]="'main_title'|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
         <bk-form-two-switch-list-select [left_label]="'label_available'|bkTranslate:this" [right_label]="'title_in_group'|bkTranslate:this" [options_left]="group_options_available" [options_right]="group_options_selected" #listGroup></bk-form-two-switch-list-select>
