@@ -1,0 +1,80 @@
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [show_title]="false"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-server'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                  {
+                    condition: (homer_servers && homer_servers.content.length > 0),
+                    btn_label_for_person: ('btn_create_server'|bkTranslate:this),
+                    icon: 'fa-plus-circle',
+                    colorType: 'CREATE',
+                    btn_tag: 'homer_server_add'
+                  }
+                ]">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+    <div class="portlet-body">
+        <div *ngIf="(homer_servers && homer_servers.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
+                <thead>
+                <tr>
+                    <th class="col col-lg-3">{{'label_server_name'|bkTranslate:this}}</th>
+                    <th class="col col-lg-5">{{'label_id'|bkTranslate:this}}</th>
+                    <th class="col col-lg-3">{{'label_server_version'|bkTranslate:this}}</th>
+                    <th class="col col-lg-2">{{'label_status'|bkTranslate:this}}</th>
+                    <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let homer_server of homer_servers.content">
+                    <td class="vert-align no-wrap">
+                        <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.personal_server_name?homer_server.personal_server_name:homer_server.id}}</strong></a>
+                    </td>
+                    <td class="vert-align no-wrap">{{homer_server.id}}</td>
+                    <td class="vert-align no-wrap">
+                        <a href="https://github.com/ByzanceIoT/homer-core/releases/tag/{{homer_server.server_version}}" class="no-wrap"><strong>{{homer_server.server_version}}</strong></a>
+                    </td>
+                    <td class="vert-align no-wrap">
+                        <bk-online-state [online_state]="homer_server.online_state"></bk-online-state>
+                    </td>
+
+                    <td class="vert-align no-wrap">
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+                        <button *ngIf="(homer_server.online_state == 'ONLINE')" title="{{'label_server_update'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!homer_server.update_permission" (click)="onHomerServerUpdateServer(homer_server)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="{{'label_server_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!homer_server.update_permission" (click)="onHomerServerEditClick(homer_server)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="{{'label_delete_server'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!homer_server.delete_permission" (click)="onHomerServerDeleteClick(homer_server)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(homer_servers == null)"
+                            [condition_empty]="(homer_servers != null && homer_servers.content.length == 0)"
+                            [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59d652ed519b320001863842_cloud%20e3.svg'"
+                            [main_message_link]="'label_no_servers'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_servers_comment'|bkTranslate:this"
+                            [btn_label]="'btn_create_server'|bkTranslate:this"
+                            (onButtonClick)="onCreateHomerServerClick()">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+    </div>
+
+</bk-layout-main>

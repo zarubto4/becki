@@ -10,7 +10,7 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                       {
-                          condition: (tab == 'homer_server' && homer_servers && homer_servers.length > 0),
+                          condition: (tab == 'homer_server' && homer_servers && homer_servers.content.length > 0),
                           btn_label_for_person: ('btn_create_server'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'CREATE',

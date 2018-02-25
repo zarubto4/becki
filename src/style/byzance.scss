@@ -28,6 +28,16 @@
     color: #FFF;
 }
 
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
 
 .byzance-blue {
     background-color: #00ABE9;

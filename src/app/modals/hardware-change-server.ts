@@ -84,7 +84,7 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
                     let status = this.translationService.translateTable(pv.server_type, this, 'server_type');
 
                     if (this.modalModel.board.server.id === pv.id) {
-                        status += ' - ' + this.translationService.translateTable('already_on', this, 'server_type') + '!!';
+                        status += ' - ' + this.translationService.translateTable('ALREADY_ON', this, 'server_type') + '!!';
                     }
                     return {
                         label: pv.personal_server_name + ' - ' + status,

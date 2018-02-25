@@ -5,7 +5,6 @@ Anout Us Page
 /* BEGIN HEADER */
 .about-header {
   height: 500px;
-  background-image: url("../media/bg/5.jpg");
   background-position: center;
   text-align: center;
   margin: 0 -20px; }

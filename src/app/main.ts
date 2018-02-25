@@ -189,7 +189,9 @@ import { PortletPanelMenuComponent } from './components/PortletPanelMenu';
 import { ModalsHardwareFindHashComponent } from './modals/hardware-find-hash';
 import { ProjectsProjectCodeComponent } from './views/projects-project-code';
 import { ProjectsProjectLibrariesComponent } from './views/projects-project-libraries';
-import {ProjectsProjectInstancesComponent} from "./views/projects-project-instances";
+import { ProjectsProjectInstancesComponent } from './views/projects-project-instances';
+import { ProjectsProjectServersComponent } from './views/projects-project-servers';
+import { ModalsInstanceCreateComponent } from "./modals/instance-create";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -251,6 +253,8 @@ let routes: Routes = [
     // { path: 'projects/:project/grid', data: { breadName: 'GRID projects' }, component: ProjectsProjectGridComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/grid/:grids', data: { breadName: ':grids' }, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/grid/:grids/:grid', data: { breadName: ':grid' }, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+    { path: 'projects/:project/servers', data: { breadName: 'CLOUD servers' }, component: ProjectsProjectServersComponent, canActivate: [AuthGuard] },
+    // { path: 'projects/:project/servers', data: { breadName: 'breadName :servers' }, component: ProjectsProjectServersComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/instances', data: { breadName: 'CLOUD instances' }, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
@@ -548,6 +552,7 @@ class BeckiErrorHandler implements ErrorHandler {
         HardwareComponent,
         HardwareHardwareTypeComponent,
         ProjectsProjectMembersComponent,
+        ProjectsProjectServersComponent,
         // ProjectsProjectWidgetsComponent,
         // ProjectsProjectWidgetsWidgetsWidgetComponent,
         ServerComponent,
@@ -612,6 +617,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsDeviceEditDescriptionComponent,
         ModalsDeviceEditDeveloperParameterValueComponent,
         ModalsInstanceEditDescriptionComponent,
+        ModalsInstanceCreateComponent,
         ModalsBlockoVersionSelectComponent,
         ModalsMembersAddComponent,
         ModalsWidgetsTypePropertiesComponent,

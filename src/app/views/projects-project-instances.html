@@ -9,19 +9,27 @@
     [title]="currentParamsService.currentProjectNameSnapshot"
     [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
-    <div class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-cloud"></i>
-                        <span [innerHTML]="'title'|bkTranslate:this"></span>
-                </span>
-            </div>
-            <div class="becki-actions">
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-cloud'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                     {
+                          condition: (instanceFilter && instanceFilter.content > 0),
+                          btn_label_for_person: ('btn_create_new_instance'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'ADD',
+                          btn_tag: 'add_instance'
+                      }
+                ]"
+    >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-            </div>
-        </div>
-        <div *ngIf="(instanceFilter && instanceFilter.content.length)" class="table-scrollable">
+    <div class="portlet-body">
+
+        <div *ngIf="(instanceFilter && instanceFilter.content.length)" class="table-scrollable table-scrollable-borderless">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -62,37 +70,45 @@
 
 
                             <button title="{{'label_instance_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!instance.update_permission" (click)="onInstanceEditClick(instance)">
-                            <i class="fa fa-cog"></i>
-                        </button>
+                                <i class="fa fa-cog"></i>
+                            </button>
 
-                            <span *ngIf="instance.online_state  == 'shut_down'">
+                            <div *ngIf="instance.online_state  == 'SHUT_DOWN'">
                                 <button title="{{'label_upload_latest_used_version'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission" (click)="onInstanceStartOrShutdownClick(instance, true)">
                                     <i class="fa fa-power-off"></i>
                                 </button>
-                            </span>
+                            </div>
 
-                            <span *ngIf="instance.online_state  == 'online'">
+                            <div *ngIf="instance.online_state  == 'ONLINE'">
                                 <button title="{{'label_shutdown_instance'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission" (click)="onInstanceStartOrShutdownClick(instance, false)">
                                     <i class="fa fa-power-off"></i>
                                 </button>
-                            </span>
+                            </div>
 
-                            <span *ngIf="instance.online_state == 'offline' ">
+                            <div *ngIf="instance.online_state == 'OFFLINE' ">
                                 <button title="{{'label_start'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission" (click)="onInstanceStartOrShutdownClick(instance, true)">
                                     <i class="fa fa-power-off"></i>
                                 </button>
-                            </span>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <bk-filter-page-component [from]="instanceFilter.from" [to]="instanceFilter.to" [total]="instanceFilter.total"  [totalPages]="instanceFilter.pages" (onSelect)="selectedFilterPage($event)"></bk-filter-page-component>
+            <bk-filter-page-component [from]="instanceFilter.from" [to]="instanceFilter.to" [total]="instanceFilter.total"  [totalPages]="instanceFilter.pages" (onSelect)="onFilterInstances($event)"></bk-filter-page-component>
         </div>
-        <h3 *ngIf="!instanceFilter" class="text-center">{{'loading'|bkTranslate:this}}</h3>
-        <div *ngIf="instanceFilter && instanceFilter.content.length == 0" class="list-no-items">
-            <p class="list-no-items__main-label" [innerHTML]="'label_no_item'|bkTranslate:this"></p>
-            <p class="list-no-items__sub-label" [innerHTML]="'label_you_can_create'|bkTranslate:this"></p>
-        </div>
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(instanceFilter == null)"
+                            [condition_empty]="(instanceFilter != null && instanceFilter.content.length == 0)"
+                            [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59e4ca6a566a9600019a4bfe_container.svg'"
+                            [image_description]="'label_instance_documentation_description'|bkTranslate:this"
+                            [main_message_link]="'label_no_instances'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_instances_comment'|bkTranslate:this"
+                            [btn_label]="'btn_create_instance'|bkTranslate:this"
+                            (onButtonClick)="onAddClick()">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
     </div>
 
 </bk-layout-main>

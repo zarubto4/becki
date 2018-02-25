@@ -36,7 +36,6 @@ import './style/assets/global/css/components.css';
 // import './public/assets/global/css/plugins.css';
 import './style/assets/layouts/layout/css/layout.css';
 import './style/assets/layouts/layout/css/themes/darkblue.css';
-import './style/assets/layouts/layout/css/custom.css';
 import './style/assets/pages/css/login.min.css';
 import './style/assets/pages/css/error.min.css';
 import './style/assets/pages/css/pricing.css';

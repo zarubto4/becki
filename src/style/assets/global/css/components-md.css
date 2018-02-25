@@ -1,5 +1,5 @@
 /*****************************************
- METRONIC MATERIAL DESIGN STYLE COMPONENTS 
+ METRONIC MATERIAL DESIGN STYLE COMPONENTS
 ******************************************/
 /* Cubic Bezier Transition */
 /***
@@ -15,8 +15,8 @@ body {
   font-size: 14px; }
 
 /*
- Internet Explorer 10 doesn't differentiate device width from viewport width, and thus doesn't 
- properly apply the media queries in Bootstrap's CSS. To address this, 
+ Internet Explorer 10 doesn't differentiate device width from viewport width, and thus doesn't
+ properly apply the media queries in Bootstrap's CSS. To address this,
  you can optionally include the following CSS and JavaScript to work around this problem until Microsoft issues a fix.
 */
 @-webkit-viewport {
@@ -35,8 +35,8 @@ body {
   width: device-width; }
 
 /*
- Internet Explorer 10 doesn't differentiate device width from viewport width, 
- and thus doesn't properly apply the media queries in Bootstrap's CSS. To address this, following CSS code applied 
+ Internet Explorer 10 doesn't differentiate device width from viewport width,
+ and thus doesn't properly apply the media queries in Bootstrap's CSS. To address this, following CSS code applied
 */
 @-ms-viewport {
   width: auto !important; }
@@ -1408,7 +1408,7 @@ Simple Line Icons Demo
   .simplelineicons-demo .item-box {
     width: 33.333%; } }
 
-/*** 
+/***
 Glyphicons Demo
 ***/
 .glyphicons-demo ul {
@@ -1563,7 +1563,7 @@ Custom buttons based on bootstrap SASS
   line-height: 1.44; }
 
 /***
-Custom color buttons 
+Custom color buttons
 ***/
 .btn.white:not(.btn-outline) {
   color: #666;
@@ -4932,7 +4932,7 @@ Chats
       transition: all 0.3s; }
 
 /***
-Customized Bootstrap Close Icon 
+Customized Bootstrap Close Icon
 ***/
 .close {
   display: inline-block;
@@ -5592,7 +5592,7 @@ Forms
   color: #c5cdda; }
 
 /***
-Custom color buttons 
+Custom color buttons
 ***/
 .form-control.white {
   border-color: #ffffff; }
@@ -6782,7 +6782,6 @@ Metro icons
   margin-top: 3px;
   line-height: 14px;
   vertical-align: top;
-  background-image: url(../img/syncfusion-icons.png);
   background-position: 0 0;
   background-repeat: no-repeat; }
 
@@ -6792,7 +6791,6 @@ Metro icons
   height: 30px;
   margin: 6px;
   vertical-align: middle;
-  background-image: url(../img/syncfusion-icons.png);
   background-position: 0 0px;
   background-repeat: no-repeat; }
 
@@ -6849,7 +6847,7 @@ Metro icons
   background-position: -78px -28px; }
 
 /***
-Customized Bootstrap Modal 
+Customized Bootstrap Modal
 ***/
 .modal {
   z-index: 10050;
@@ -7050,7 +7048,6 @@ Customized Bootstrap Panels
     display: block;
     padding: 10px 15px; }
   .accordion .panel .panel-title .accordion-toggle.accordion-toggle-styled {
-    background: url("../img/accordion-plusminus.png") no-repeat;
     background-position: right -19px;
     margin-right: 15px; }
   .accordion .panel .panel-title .accordion-toggle.accordion-toggle-styled.collapsed {
@@ -7486,7 +7483,7 @@ Portlets
   box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.03); }
 
 /***
-Custom colored portlets 
+Custom colored portlets
 ***/
 .portlet > .portlet-body.white,
 .portlet.white {
@@ -12134,80 +12131,7 @@ Social Icons
       -webkit-transition: all 0.3s ease-in-out; }
     .social-icons li:hover > a {
       background-position: 0 -38px; }
-    .social-icons li .amazon {
-      background: url(../img/social/amazon.png) no-repeat; }
-    .social-icons li .behance {
-      background: url(../img/social/behance.png) no-repeat; }
-    .social-icons li .blogger {
-      background: url(../img/social/blogger.png) no-repeat; }
-    .social-icons li .deviantart {
-      background: url(../img/social/deviantart.png) no-repeat; }
-    .social-icons li .dribbble {
-      background: url(../img/social/dribbble.png) no-repeat; }
-    .social-icons li .dropbox {
-      background: url(../img/social/dropbox.png) no-repeat; }
-    .social-icons li .evernote {
-      background: url(../img/social/evernote.png) no-repeat; }
-    .social-icons li .facebook {
-      background: url(../img/social/facebook.png) no-repeat; }
-    .social-icons li .forrst {
-      background: url(../img/social/forrst.png) no-repeat; }
-    .social-icons li .github {
-      background: url(../img/social/github.png) no-repeat; }
-    .social-icons li .googleplus {
-      background: url(../img/social/googleplus.png) no-repeat; }
-    .social-icons li .jolicloud {
-      background: url(../img/social/jolicloud.png) no-repeat; }
-    .social-icons li .last-fm {
-      background: url(../img/social/last-fm.png) no-repeat; }
-    .social-icons li .linkedin {
-      background: url(../img/social/linkedin.png) no-repeat; }
-    .social-icons li .picasa {
-      background: url(../img/social/picasa.png) no-repeat; }
-    .social-icons li .pintrest {
-      background: url(../img/social/pintrest.png) no-repeat; }
-    .social-icons li .rss {
-      background: url(../img/social/rss.png) no-repeat; }
-    .social-icons li .skype {
-      background: url(../img/social/skype.png) no-repeat; }
-    .social-icons li .spotify {
-      background: url(../img/social/spotify.png) no-repeat; }
-    .social-icons li .stumbleupon {
-      background: url(../img/social/stumbleupon.png) no-repeat; }
-    .social-icons li .tumblr {
-      background: url(../img/social/tumblr.png) no-repeat; }
-    .social-icons li .twitter {
-      background: url(../img/social/twitter.png) no-repeat; }
-    .social-icons li .vimeo {
-      background: url(../img/social/vimeo.png) no-repeat; }
-    .social-icons li .wordpress {
-      background: url(../img/social/wordpress.png) no-repeat; }
-    .social-icons li .xing {
-      background: url(../img/social/xing.png) no-repeat; }
-    .social-icons li .yahoo {
-      background: url(../img/social/yahoo.png) no-repeat; }
-    .social-icons li .youtube {
-      background: url(../img/social/youtube.png) no-repeat; }
-    .social-icons li .vk {
-      background: url(../img/social/vk.png) no-repeat; }
-    .social-icons li .instagram {
-      background: url(../img/social/instagram.png) no-repeat; }
-    .social-icons li .reddit {
-      background: url(../img/social/reddit.png) no-repeat; }
-    .social-icons li .aboutme {
-      background: url(../img/social/aboutme.png) no-repeat; }
-    .social-icons li .flickr {
-      background: url(../img/social/flickr.png) no-repeat; }
-    .social-icons li .foursquare {
-      background: url(../img/social/foursquare.png) no-repeat; }
-    .social-icons li .gravatar {
-      background: url(../img/social/gravatar.png) no-repeat; }
-    .social-icons li .klout {
-      background: url(../img/social/klout.png) no-repeat; }
-    .social-icons li .myspace {
-      background: url(../img/social/myspace.png) no-repeat; }
-    .social-icons li .quora {
-      background: url(../img/social/quora.png) no-repeat; }
+
   .social-icons.social-icons-color > li > a {
     opacity: 0.7;
     background-position: 0 -38px !important; }
@@ -12237,117 +12161,6 @@ Inline Social Icons
   -webkit-transition: all 0.3s ease-in-out; }
   .social-icon.social-icon-circle {
     border-radius: 25px !important; }
-
-.social-icon.amazon {
-  background: url(../img/social/amazon.png) no-repeat; }
-
-.social-icon.behance {
-  background: url(../img/social/behance.png) no-repeat; }
-
-.social-icon.blogger {
-  background: url(../img/social/blogger.png) no-repeat; }
-
-.social-icon.deviantart {
-  background: url(../img/social/deviantart.png) no-repeat; }
-
-.social-icon.dribbble {
-  background: url(../img/social/dribbble.png) no-repeat; }
-
-.social-icon.dropbox {
-  background: url(../img/social/dropbox.png) no-repeat; }
-
-.social-icon.evernote {
-  background: url(../img/social/evernote.png) no-repeat; }
-
-.social-icon.facebook {
-  background: url(../img/social/facebook.png) no-repeat; }
-
-.social-icon.forrst {
-  background: url(../img/social/forrst.png) no-repeat; }
-
-.social-icon.github {
-  background: url(../img/social/github.png) no-repeat; }
-
-.social-icon.googleplus {
-  background: url(../img/social/googleplus.png) no-repeat; }
-
-.social-icon.jolicloud {
-  background: url(../img/social/jolicloud.png) no-repeat; }
-
-.social-icon.last-fm {
-  background: url(../img/social/last-fm.png) no-repeat; }
-
-.social-icon.linkedin {
-  background: url(../img/social/linkedin.png) no-repeat; }
-
-.social-icon.picasa {
-  background: url(../img/social/picasa.png) no-repeat; }
-
-.social-icon.pintrest {
-  background: url(../img/social/pintrest.png) no-repeat; }
-
-.social-icon.rss {
-  background: url(../img/social/rss.png) no-repeat; }
-
-.social-icon.skype {
-  background: url(../img/social/skype.png) no-repeat; }
-
-.social-icon.spotify {
-  background: url(../img/social/spotify.png) no-repeat; }
-
-.social-icon.stumbleupon {
-  background: url(../img/social/stumbleupon.png) no-repeat; }
-
-.social-icon.tumblr {
-  background: url(../img/social/tumblr.png) no-repeat; }
-
-.social-icon.twitter {
-  background: url(../img/social/twitter.png) no-repeat; }
-
-.social-icon.vimeo {
-  background: url(../img/social/vimeo.png) no-repeat; }
-
-.social-icon.wordpress {
-  background: url(../img/social/wordpress.png) no-repeat; }
-
-.social-icon.xing {
-  background: url(../img/social/xing.png) no-repeat; }
-
-.social-icon.yahoo {
-  background: url(../img/social/yahoo.png) no-repeat; }
-
-.social-icon.youtube {
-  background: url(../img/social/youtube.png) no-repeat; }
-
-.social-icon.vk {
-  background: url(../img/social/vk.png) no-repeat; }
-
-.social-icon.instagram {
-  background: url(../img/social/instagram.png) no-repeat; }
-
-.social-icon.reddit {
-  background: url(../img/social/reddit.png) no-repeat; }
-
-.social-icon.aboutme {
-  background: url(../img/social/aboutme.png) no-repeat; }
-
-.social-icon.flickr {
-  background: url(../img/social/flickr.png) no-repeat; }
-
-.social-icon.foursquare {
-  background: url(../img/social/foursquare.png) no-repeat; }
-
-.social-icon.gravatar {
-  background: url(../img/social/gravatar.png) no-repeat; }
-
-.social-icon.klout {
-  background: url(../img/social/klout.png) no-repeat; }
-
-.social-icon.myspace {
-  background: url(../img/social/myspace.png) no-repeat; }
-
-.social-icon.quora {
-  background: url(../img/social/quora.png) no-repeat; }
 
 .social-icon:hover {
   background-position: 0 -38px; }
@@ -12624,7 +12437,7 @@ Light Table
   background: #f3f4f6 !important; }
 
 /***
-Customized Bootstrap Tabs 
+Customized Bootstrap Tabs
 ***/
 /* Tabs and pills */
 .nav-tabs,
@@ -13750,7 +13563,7 @@ AngularJS Basic Animations
     margin: 0px 0; } }
 
 /***
-Timeline 
+Timeline
 ***/
 .timeline {
   margin: 0;
@@ -14088,7 +13901,7 @@ Timeline 2
     padding-top: 10px; } }
 
 /***
-Horizontal Timeline 
+Horizontal Timeline
 ***/
 /* PLUGIN CSS */
 .cd-horizontal-timeline {
@@ -14504,7 +14317,7 @@ Horizontal Timeline
     margin: 0 !important; } }
 
 /***
-Tasks Widget 
+Tasks Widget
 ***/
 .tasks-widget:after {
   clear: both; }
@@ -19113,7 +18926,7 @@ Tasks Widget
     transform: translate3d(0, 0, 0); }
 
 /***
-Custom color buttons 
+Custom color buttons
 ***/
 .bg-white {
   background: #ffffff !important; }

@@ -3,7 +3,9 @@
         <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
 
 
-
+            <template [ngSwitchCase]="'ModalsInstanceCreateModel'">
+                <bk-modals-instance-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-create>
+            </template>
 
             <template [ngSwitchCase]="'ModalsHardwareFindHash'">
                 <bk-modals-hardware-find-hash-component [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-find-hash-component>

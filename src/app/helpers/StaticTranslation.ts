@@ -216,6 +216,13 @@ export class StaticTranslation {
                 'label_block_code_version': 'Block code version',
                 'label_detached_version': 'detached version'
 
+            }, 'ModalsInstanceCreateComponent': {
+                'title': 'Create <strong class="font-color-cloud">INSTANCE</strong>',
+                'label_instance_name': 'Instance Name',
+                'label_instance_description': 'Description',
+                'label_select_server': 'Select destination <strong class="font-color-cloud">SERVER</strong>',
+                'label_select_b_program': 'Select <strong class="font-color-blocko">BLOCKO</strong> program'
+
             }, 'ModalsBlocksTypePropertiesComponent': {
                 'title_edit': 'BLOCKs Group Properties',
                 'title_add': 'New Group',
@@ -1304,6 +1311,24 @@ export class StaticTranslation {
                 'flash_conection_failed': 'device connection failed',
                 'modal_unsubscribe_device': 'Are you sure you want to unsubribe {0}?\n (It can be subscribed again)',
 
+            }, 'ProjectsProjectServersComponent': {
+
+                'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> SERVERS',
+                'label_no_servers': 'Not any <strong class="font-color-cloud">CLOUD</strong> Servers',
+                'label_no_servers_comment': 'Your own Server will allow you to run your <strong class="font-color-blocko">BLOCKO</strong> instances.<br>You can install the Server on your own Servers or leave everything to us',
+                'label_id': 'Server ID',
+                'label_server_name': 'Name',
+                'label_server_version': 'Version',
+                'label_status': 'Online Status',
+                'label_server_update': 'Update',
+                'label_server_properties': 'Server settings',
+                'label_delete_server': 'Remove server',
+                'label_deactivate_server': 'Activate',
+                'label_activate_server': 'Deactivate',
+                'label_actions': 'Actions',
+
+                'btn_create_server': 'Create Server',
+
             }, 'ProjectsProjectInstancesComponent': {
 
                 'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> - ALL INSTANCES',
@@ -1323,13 +1348,15 @@ export class StaticTranslation {
                 'label_upload_instance_modal': 'Deploy to Cloud',
                 'label_upload_instance_modal_comment': 'The last used <strong class="font-color-blocko">BLOCKO</strong> configuration will be uploaded to the server.',
                 'label_upload_error': 'Unable to shutdown this instance, {0}.',
-                'label_no_item': 'No instances found in <strong class="font-color-cloud">CLOUD</strong>.',
-                'label_you_can_create': 'Are you sure to upload <strong class="font-color-blocko">BLOCKO</strong> and deploy instance to the Cloud?',
+                'label_no_instances': 'No <strong class="font-color-cloud">Instances</strong> found in <strong class="font-color-cloud">CLOUD</strong>',
+                'label_no_instances_comment': 'If You already create <strong class="font-color-blocko">BLOCKO</strong>, you are ready to deploy it!',
+                'label_instance_documentation_description': '<p><strong class="font-color-cloud">INSTANCE</strong>  is a <strong>container</strong> for a running application created in the <strong class="font-color-blocko">BLOCKO</strong> editor.<br><strong class="font-color-cloud">CLOUD</strong> Server is a <strong>container manager</strong>.</p><p>The server handles Hardware via MQTT and applications connected via the websocket and passes data safely to the container and from the container to the end devices. Each container (<strong class="font-color-cloud">INSTANCE</strong>) is totally separate from others. The more the instance is computationally more demanding, the fewer the Server can handle.<br>You can have an <strong class="font-color-cloud">INSTANCE</strong> in restricted mode on a public server or <strong>on your own servers.</strong></p>',
                 'label_shutdown_instance': 'Shutdown instance',
                 'label_upload_latest_used_version': 'Upload Latest Configuration to Cloud',
                 'label_start': 'Start instance',
                 'label_instance_properties': 'Instance properties',
                 'label_own_name_and_description': 'You can set your own name and description',
+                'btn_create_instance': 'Create Instance',
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
@@ -2135,6 +2162,7 @@ export class StaticTranslation {
                 'tab_homer_server': 'Homer Servers',
                 'tab_compilation_server': 'Compilation Servers',
                 'label_server_name': 'Server Name',
+                'label_server_version': 'Version',
                 'label_server_type': 'Server Type',
                 'label_id': 'Id',
                 'label_status': 'Status',
@@ -2437,12 +2465,12 @@ export class StaticTranslation {
                 'SHUT_DOWN': 'Shut Downed',
             },
             'server_type': {
-                'public_server': 'Public Byzance Server',
-                'private_server': 'Private Server',
-                'backup_server': 'Public Byzance Backup Server',
-                'main_server': 'Public Byzance Main Server',
-                'test_server': 'Test Server',
-                'already_on': 'Already on',
+                'PUBLIC': 'Public Byzance Server',
+                'PRIVATE': 'Private Server',
+                'BACKUP': 'Public Byzance Backup Server',
+                'MAIN': 'Public Byzance Main Server',
+                'TEST': 'Test Server',
+                'ALREADY_ON': 'Already on'
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',
