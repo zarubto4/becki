@@ -7,12 +7,11 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { ITag } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsWidgetsWidgetCopyModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '',  public tags: ITag[] = [], public type_of_widget: string = '') {
+    constructor(public name: string = '', public description: string = '',  public tags: string[] = [], public type_of_widget: string = '') {
         super();
     }
 }

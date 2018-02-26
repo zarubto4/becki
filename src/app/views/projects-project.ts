@@ -10,6 +10,7 @@ import { IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { ModalsRemovalModel } from '../modals/removal';
+import { FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'bk-view-projects-project',
@@ -26,11 +27,19 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
+    form: FormGroup;
+
     constructor(injector: Injector) {
         super(injector);
     };
 
+
     ngOnInit(): void {
+
+        this.form = this.formBuilder.group({
+            'tags': ['', [Validators.required, Validators.minLength(4)]],
+        });
+
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.project_id = params['project'];
             this.projectSubscription = this.storageService.project(this.project_id).subscribe((project) => {
@@ -56,9 +65,6 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
 
 
     onPortletClick(action: string): void {
-
-        console.log("Project:: Cliknuto na " + action);
-
         if (action === 'edit_project') {
             this.onEditClick();
         }

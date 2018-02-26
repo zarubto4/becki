@@ -152,11 +152,14 @@ export class StaticTranslation {
                 'label_grid_port': 'Grid port',
                 'label_web_view_port': 'Web View port',
                 'label_hardware_log_port': 'Hardware Logger Stream port',
+                'label_hardware_rest_api_port': 'Rest Api',
                 'label_hash_certificate': 'Hash',
                 'label_connection_identifier': 'Connection Token',
             }, 'ModalsUpdateHomerServerComponent': {
                 'title': 'Update Server',
                 'label_personal_server_name': 'Server name',
+            }, 'FormInputTagsComponent': {
+                'label_place_holder': 'Type Tags and hit enter..',
             }, 'ModalsGarfieldComponent': {
                 'title': 'Garfield',
                 'label_name': 'Garfield Identification',
@@ -2164,6 +2167,7 @@ export class StaticTranslation {
                 'label_server_name': 'Server Name',
                 'label_server_version': 'Version',
                 'label_server_type': 'Server Type',
+                'label_server_url': 'Server Link',
                 'label_id': 'Id',
                 'label_status': 'Status',
                 'label_actions': 'Actions',

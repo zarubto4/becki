@@ -9,6 +9,10 @@
         <form [formGroup]="form">
             <bk-form-input [control]="form.controls.name" [label]="'label_program_name'|bkTranslate:this"></bk-form-input>
             <bk-form-input [control]="form.controls.description" [label]="'label_program_description'|bkTranslate:this"></bk-form-input>
+
+            <!-- Tags -->
+            <bk-form-tag-input [control]="form.controls.tags" [label]="'Optional Tags'"></bk-form-tag-input>
+
             <bk-form-select *ngIf="!modalModel.edit" [control]="form.controls.hardware_type_id" [label]="'label_device_type'|bkTranslate:this" [options]="options"></bk-form-select>
         </form>
     </div>
@@ -20,3 +24,7 @@
         <button *ngIf="modalModel.copy"  type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_copy")|bkTranslate:this}}</button>
     </div>
 </div>
+
+
+
+

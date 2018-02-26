@@ -11,13 +11,13 @@ import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { IHardwareType } from '../backend/TyrionAPI';
 
-// TODO Rozdělit kopírování a pak Crate a Edit! ( Dva modaly prostě) - Je to upodmínkované jako piča [TZ]
 export class ModalsCodePropertiesModel extends ModalModel {
     constructor(
         public hardwareTypes: IHardwareType[],
         public name: string = '',
         public description: string = '',
         public hardware_type_id: string = '',
+        public tags: string[] = [],
         public edit: boolean = false,
         public exceptName: string = null,
         public copy: boolean = false,
@@ -51,7 +51,8 @@ export class ModalsCodePropertiesComponent implements OnInit {
         }
         let input: { [key: string]: any } = {
             'name': [this.modalModel.name, [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
-            'description': [this.modalModel.description]
+            'description': [this.modalModel.description],
+            'tags': [this.modalModel.tags]
         };
 
         if (this.modalModel.edit === false) {

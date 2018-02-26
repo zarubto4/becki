@@ -98,6 +98,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     server_url: model.server_url,
                     mqtt_port: model.mqtt_port,
                     grid_port: model.grid_port,
+                    rest_api_port: model.rest_api_port,
                     hardware_logger_port: model.hardware_logger_port
                 })
                     .then(() => {
@@ -132,50 +133,39 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
         // TODO dodělat stránku server??
     }
 
-    onHomerServerEditClick(serverShortDetail: IHomerServer): void {
-        // Get full detail object first
-        Promise.all<any>([this.tyrionBackendService.homerServerGet(serverShortDetail.id)])
-            .then((values: [IHomerServer]) => {
-
-                let server: IHomerServer = values[0];
-
-                let model = new ModalsCreateHomerServerModel(
-                    server.personal_server_name,
-                    server.mqtt_port,
-                    server.grid_port,
-                    server.web_view_port,
-                    server.hardware_logger_port,
-                    server.server_url,
-                    server.hash_certificate,
-                    server.connection_identificator,
-                    true
-                );
-                this.modalService.showModal(model).then((success) => {
-                    if (success) {
-                        this.blockUI();
-                        this.tyrionBackendService.homerServerEdit(server.id, {
-                            personal_server_name: model.personal_server_name,
-                            web_view_port: model.web_view_port,
-                            server_url: model.server_url,
-                            mqtt_port: model.mqtt_port,
-                            grid_port: model.grid_port,
-                            hardware_logger_port: model.hardware_logger_port
-                        })
-                            .then(() => {
-                                this.onFilterHomerServer();
-                            }).catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                                this.onFilterHomerServer();
-                            });
-                    }
-                });
-
-                this.unblockUI();
-            })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
-                this.unblockUI();
-            });
+    onHomerServerEditClick(server: IHomerServer): void {
+        let model = new ModalsCreateHomerServerModel(
+            server.personal_server_name,
+            server.mqtt_port,
+            server.grid_port,
+            server.web_view_port,
+            server.hardware_logger_port,
+            server.rest_api_port,
+            server.server_url,
+            server.hash_certificate,
+            server.connection_identificator,
+            true
+        );
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.homerServerEdit(server.id, {
+                    personal_server_name: model.personal_server_name,
+                    web_view_port: model.web_view_port,
+                    server_url: model.server_url,
+                    mqtt_port: model.mqtt_port,
+                    grid_port: model.grid_port,
+                    rest_api_port: model.rest_api_port,
+                    hardware_logger_port: model.hardware_logger_port
+                })
+                    .then(() => {
+                        this.onFilterHomerServer();
+                    }).catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.onFilterHomerServer();
+                    });
+            }
+        });
     }
 
     onHomerServerUpdateServer(server: IHomerServer): void {

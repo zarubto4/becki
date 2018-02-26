@@ -139,7 +139,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
             this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
 
-        let model = new ModalsCodePropertiesModel(this.hardwareTypes, code.name, code.description, '', true, code.name);
+        let model = new ModalsCodePropertiesModel(this.hardwareTypes, code.name, code.description, '', code.tags, true, code.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

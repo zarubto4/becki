@@ -50,12 +50,13 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-3">{{'label_server_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-5">{{'label_id'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3">{{'label_server_type'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3">{{'label_server_version'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'label_status'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="">{{'label_server_name'|bkTranslate:this}}</th>
+                        <th class="">{{'label_id'|bkTranslate:this}}</th>
+                        <th class="">{{'label_server_type'|bkTranslate:this}}</th>
+                        <th class="">{{'label_server_url'|bkTranslate:this}}</th>
+                        <th class="">{{'label_server_version'|bkTranslate:this}}</th>
+                        <th class="">{{'label_status'|bkTranslate:this}}</th>
+                        <th class="text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -65,11 +66,14 @@
                         </td>
                         <td class="vert-align no-wrap">{{homer_server.id}}</td>
                         <td class="vert-align no-wrap">
-                            <span *ngIf="homer_server.server_type == 'main_server'"     class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
-                            <span *ngIf="homer_server.server_type == 'backup_server'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
-                            <span *ngIf="homer_server.server_type == 'public_server'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
-                            <span *ngIf="homer_server.server_type == 'private_server'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
+                            <span *ngIf="homer_server.server_type == 'MAIN'"     class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
+                            <span *ngIf="homer_server.server_type == 'BACKUP'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
+                            <span *ngIf="homer_server.server_type == 'PUBLIC'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
+                            <span *ngIf="homer_server.server_type == 'PRIVATE'"   class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
                         </td>
+                        <td class="vert-align no-wrap">
+                            <a href="http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}" class="no-wrap"><strong>http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}</strong></a>
+                       </td>
                         <td class="vert-align no-wrap">
                             <a href="https://github.com/ByzanceIoT/homer-core/releases/tag/{{homer_server.server_version}}" class="no-wrap"><strong>{{homer_server.server_version}}</strong></a>
                         </td>
@@ -77,7 +81,7 @@
                             <bk-online-state [online_state]="homer_server.online_state"></bk-online-state>
                         </td>
 
-                        <td class="vert-align no-wrap">
+                        <td class="text-right vert-align no-wrap">
                             <style type="text/css">
                                 table tr button { opacity:0.05;}
                                 table tr:hover button { opacity:1 }

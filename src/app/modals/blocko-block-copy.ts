@@ -8,12 +8,11 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { ITag } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsBlockoBlockCopyModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '',  public tags: ITag[] = [], public type_of_blocks: string = '') {
+    constructor(public name: string = '', public description: string = '',  public tags: string[] = [], public type_of_blocks: string = '') {
         super()
     }
 }
@@ -47,8 +46,8 @@ export class ModalsBlockoBlockCopyComponent implements OnInit {
 
         this.options = this.modalModel.tags.map((pv) => {
             return {
-                label: pv.value,
-                value: pv.id
+                label: pv,
+                value: pv
             };
         });
 

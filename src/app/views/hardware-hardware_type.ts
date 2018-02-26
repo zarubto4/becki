@@ -200,7 +200,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
     }
 
     onCProgramEditClick(code: ICProgram) {
-        let model = new ModalsCodePropertiesModel(null, code.name, code.description, '', true, code.name);
+        let model = new ModalsCodePropertiesModel(null, code.name, code.description, '', code.tags, true, code.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

@@ -28,6 +28,7 @@ import { HomerService } from './services/HomerService';
 import { FormColorPickerComponent } from './components/FormColorPickerComponent';
 import { FormFAIconSelectComponent } from './components/FormFAIconSelectComponent';
 import { FormInputComponent } from './components/FormInputComponent';
+import { FormInputTagsComponent } from './components/FormInputTagsComponent';
 import { FormSelectComponent } from './components/FormSelectComponent';
 import { CodeIDEComponent } from './components/CodeIDEComponent';
 import { CProgramVersionSelectorComponent } from './components/CProgramVersionSelectorComponent';
@@ -193,6 +194,7 @@ import { ProjectsProjectServersComponent } from './views/projects-project-server
 import { ModalsInstanceCreateComponent } from './modals/instance-create';
 import { ProjectsProjectBlockoComponent } from './views/projects-project-blocko';
 import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
+import { TagComponent } from './components/TagComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -480,6 +482,7 @@ class BeckiErrorHandler implements ErrorHandler {
         FormColorPickerComponent,
         FormFAIconSelectComponent,
         FormInputComponent,
+        FormInputTagsComponent,
         FormTextAreaComponent,
         FormSelectComponent,
         FormJsonNiceTextAreaComponent,
@@ -502,6 +505,7 @@ class BeckiErrorHandler implements ErrorHandler {
         OnlineStateComponent,
         TypeOfUpdateComponent,
         TimeZoneSelectorComponent,
+        TagComponent,
         NothingToShowComponent,
         PortletTitleComponent,
         PaymentMethodComponent,

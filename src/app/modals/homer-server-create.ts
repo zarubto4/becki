@@ -18,6 +18,7 @@ export class ModalsCreateHomerServerModel extends ModalModel {
         public grid_port: number = 8053,
         public web_view_port: number = 8052,
         public hardware_logger_port: number = 8054,
+        public rest_api_port: number = 3000,
         public server_url: string = '',
         public hash_certificate: string = null,
         public connection_identificator: string = null,
@@ -49,6 +50,7 @@ export class ModalsCreateHomerServerComponent implements OnInit {
             'grid_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'web_view_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'hardware_logger_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'rest_api_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'server_url': ['', [Validators.required]],    // TODO Valid URL
             'hash_certificate': [''],   // TODO Valid URL
             'connection_identificator': ['']    // TODO Valid URL
@@ -61,6 +63,7 @@ export class ModalsCreateHomerServerComponent implements OnInit {
         (<FormControl>(this.form.controls['grid_port'])).setValue(this.modalModel.grid_port);
         (<FormControl>(this.form.controls['web_view_port'])).setValue(this.modalModel.web_view_port);
         (<FormControl>(this.form.controls['hardware_logger_port'])).setValue(this.modalModel.hardware_logger_port);
+        (<FormControl>(this.form.controls['rest_api_port'])).setValue(this.modalModel.rest_api_port);
         (<FormControl>(this.form.controls['server_url'])).setValue(this.modalModel.server_url);
         (<FormControl>(this.form.controls['hash_certificate'])).setValue(this.modalModel.hash_certificate);
         (<FormControl>(this.form.controls['connection_identificator'])).setValue(this.modalModel.connection_identificator);
@@ -72,6 +75,7 @@ export class ModalsCreateHomerServerComponent implements OnInit {
         this.modalModel.grid_port = this.form.controls['grid_port'].value;
         this.modalModel.web_view_port = this.form.controls['web_view_port'].value;
         this.modalModel.hardware_logger_port = this.form.controls['hardware_logger_port'].value;
+        this.modalModel.rest_api_port = this.form.controls['rest_api_port'].value;
         this.modalModel.server_url = this.form.controls['server_url'].value;
         this.modalClose.emit(true);
     }

@@ -104,7 +104,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
     }
 
     onMakeClone(library: ILibrary): void {
-        let model = new ModalsCodePropertiesModel(null, library.name, library.description, '', true, library.name, true);
+        let model = new ModalsCodePropertiesModel(null, library.name, library.description, '', library.tags, true, library.name, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

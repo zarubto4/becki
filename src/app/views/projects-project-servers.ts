@@ -83,6 +83,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                     server_url: model.server_url,
                     mqtt_port: model.mqtt_port,
                     grid_port: model.grid_port,
+                    rest_api_port: model.rest_api_port,
                     hardware_logger_port: model.hardware_logger_port,
                     project_id: this.project_id
                 })
@@ -113,6 +114,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                     server.grid_port,
                     server.web_view_port,
                     server.hardware_logger_port,
+                    server.rest_api_port,
                     server.server_url,
                     server.hash_certificate,
                     server.connection_identificator,
@@ -127,6 +129,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                             server_url: model.server_url,
                             mqtt_port: model.mqtt_port,
                             grid_port: model.grid_port,
+                            rest_api_port: model.rest_api_port,
                             hardware_logger_port: model.hardware_logger_port
                         })
                             .then(() => {
