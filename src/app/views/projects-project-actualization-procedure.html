@@ -1,0 +1,140 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-fw fa-sitemap fa-rotate-90'"
+        (onClick)="onPortletClick($event)"
+        >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+
+        <div *ngIf="procedure">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>{{'label_type_of_update'|bkTranslate:this}}</strong>: <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
+                    <br>
+                    <br>
+
+                    {{'label_created'|bkTranslate:this}}: {{procedure.created|bkUnixTimeToDate}}
+                    <br>
+
+                    {{'label_planed'|bkTranslate:this}}: {{procedure.date_of_planing|bkUnixTimeToDate}}
+                    <br>
+
+                    {{'label_finished'|bkTranslate:this}}
+                    <span *ngIf="!procedure.date_of_finish" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                    <span *ngIf="procedure.date_of_finish">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+
+                </div>
+                <div class="col-md-4">
+                    <template [ngIf]="procedure.program">
+                        <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
+                            <a class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_version_name}}</a>
+                        </template>
+                        <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
+                            <a class="bold" [routerLink]="['/projects', projectId, 'hardware', procedure.bootloader.hardware_type_id]">{{procedure.bootloader.bootloader_name}}</a>
+                        </template>
+                    </template>
+                </div>
+                <div class="col-md-4" style="text-align: center">
+                    <h1> Progress:
+                        <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
+                        <span *ngIf="!procedure.procedure_size_all ||procedure_size_all == 0 " class="bold">-/-</span>
+                    </h1>
+                    <h4>
+                        Status: <bk-update-state [updateState]="procedure.state"></bk-update-state>
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
+
+        <div *ngIf="actualizationTaskFilter && actualizationTaskFilter.content.length > 0"  class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
+                <thead>
+                <tr>
+                    <th>{{'table_id'|bkTranslate:this}}</th>
+                    <th [innerHTML]="'table_hardware'|bkTranslate:this"></th>
+                    <th>{{'table_finished'|bkTranslate:this}}</th>
+                    <th>{{'table_type'|bkTranslate:this}}</th>
+                    <th>
+                        <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}
+                    </th>
+                    <th>
+                        <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_version'|bkTranslate:this}}
+                    </th>
+
+                    <th>{{'table_status'|bkTranslate:this}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let update of actualizationTaskFilter.content">
+
+                    <td class="vert-align">{{update.id.substr(0, 12)}}</td>
+                    <td class="vert-align">
+                        <a class="bold" [routerLink]="['/projects', projectId, 'hardware', update.hardware.id]">{{ update.hardware.name ? update.hardware.name : update.hardware.id}}</a>
+                    </td>
+
+                    <td class="vert-align">
+                        <span *ngIf="!update.date_of_finish" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                        <span *ngIf="update.date_of_finish">{{update.date_of_finish|bkUnixTimeToDate}}</span>
+                    </td>
+
+                    <td class="vert-align">
+                        <bk-firmware-type [firmware_type]="update.firmware_type"></bk-firmware-type>
+                    </td>
+
+                    <!-- Firmware -->
+                    <template [ngIf]="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'">
+                        <td class="vert-align font-grey-mint">
+                            <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', projectId, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_program_name}}</a>
+                            <span *ngIf="!update.c_program_detail.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                        </td>
+                        <td class="font-grey-mint">
+                            <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', projectId, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_version_name}}</a>
+                            <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                        </td>
+                    </template>
+
+                    <!-- BootLoader -->
+                    <template [ngIf]="update.firmware_type == 'BOOTLOADER'">
+                        <td class="vert-align font-grey-mint"></td>
+                        <td class="vert-align font-grey-mint">
+                            <span *ngIf="update.bootloader_detail" class="font-grey-mint bold"> {{update.bootloader_detail.version_identificator}}</span>
+                        </td>
+                    </template>
+
+                    <!-- Update State -->
+                    <td class="vert-align">
+                        <bk-update-state [updateState]="update.state" [error_code]="update.error_code"></bk-update-state>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <bk-filter-page-component [from]="actualizationTaskFilter.from" [to]="actualizationTaskFilter.to" [total]="actualizationTaskFilter.total"  [totalPages]="actualizationTaskFilter.pages" (onSelect)="onFilterActualizationProcedureTask($event)"></bk-filter-page-component>
+        </div>
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(actualizationTaskFilter == null)"
+                            [condition_empty]="(actualizationTaskFilter != null && actualizationTaskFilter.content.length == 0)"
+                            [main_message_link]="'label_no_running_update_on_hardware'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_running_update_on_hardware_comment'|bkTranslate:this"
+                            [show_button]="false">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+    </div>
+
+</bk-layout-main>

@@ -161,6 +161,7 @@
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(devicesFilter == null)"
+
                                 [condition_empty]="(devicesFilter != null && devicesFilter.content.length == 0)"
                                 [main_message_link]="'label_no_hardware'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_hardware_comment'|bkTranslate:this"

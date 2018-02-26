@@ -70,7 +70,6 @@ import { ModalsInstanceEditDescriptionComponent } from './modals/instance-edit-d
 import { ModalsWidgetsTypePropertiesComponent } from './modals/widgets-type-properties';
 import { BlockUIService } from './services/BlockUIService';
 import { BlockUIComponent } from './components/BlockUIComponent';
-
 import { FinancialComponent } from './views/financial';
 import { NotificationsOverlayComponent } from './components/NotificationsOverlayComponent';
 import { NotificationsListComponent } from './components/NotificationsListComponent';
@@ -191,7 +190,9 @@ import { ProjectsProjectCodeComponent } from './views/projects-project-code';
 import { ProjectsProjectLibrariesComponent } from './views/projects-project-libraries';
 import { ProjectsProjectInstancesComponent } from './views/projects-project-instances';
 import { ProjectsProjectServersComponent } from './views/projects-project-servers';
-import { ModalsInstanceCreateComponent } from "./modals/instance-create";
+import { ModalsInstanceCreateComponent } from './modals/instance-create';
+import { ProjectsProjectBlockoComponent } from './views/projects-project-blocko';
+import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -238,17 +239,17 @@ let routes: Routes = [
     { path: 'projects/:project', data: { breadName: ':project' }, component: ProjectsProjectComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware', data: { breadName: 'HARDWARE devices' }, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware/:hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
-   // { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
    // { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
     { path: 'projects/:project/code', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
     //  { path: 'projects/:project/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
     // { path: 'projects/:project/blocks', data: { breadName: 'BLOCKO blocks' }, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard] },
     //  { path: 'projects/:project/blocks/:blocks', data: { breadName: ':blocks' }, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard] },
     //  { path: 'projects/:project/blocks/:blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
-     { path: 'projects/:project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
 
-    //  { path: 'projects/:project/actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
+    { path: 'projects/:project/actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
 
     // { path: 'projects/:project/grid', data: { breadName: 'GRID projects' }, component: ProjectsProjectGridComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/grid/:grids', data: { breadName: ':grids' }, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard] },
@@ -275,11 +276,11 @@ let routes: Routes = [
     { path: 'admin', data: { breadName: 'Admin Site' }, component: AdminDashboardComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/hardware', data: { breadName: 'Hardware' }, component: AdminHardwareComponent, canActivate: [AuthGuard] },
-    //  { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
+    // { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     // { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
     // { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
-    //  { path: 'admin/widgets/:widgets', data: {breadName: 'widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
+    // { path: 'admin/widgets/:widgets', data: {breadName: 'widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
     // { path: 'admin/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
     // { path: 'admin/widget/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},  // Only for community decisions - Link without project path
 
@@ -526,7 +527,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,
-        // ProjectsProjectBlockoComponent,
+        ProjectsProjectBlockoComponent,
         // ProjectsProjectBlockoBlockoComponent,
         ProjectsProjectCodeComponent,
         // ProjectsProjectCodeCodeComponent,
@@ -568,7 +569,7 @@ class BeckiErrorHandler implements ErrorHandler {
         SupportComponent,
         ServerRegistrationComponent,
         CompilationStatusComponent,
-        // ProjectsProjectActualizationProcedureComponent,
+        ProjectsProjectActualizationProcedureComponent,
         FirmwareTypeComponent,
         // Modals components
         ModalsLogLevelComponent,
