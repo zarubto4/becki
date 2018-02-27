@@ -45,8 +45,8 @@
     <div class="portlet-body">
 
         <div *ngIf="tab == 'my_programs'">
-            <div *ngIf="(privatePrograms && privatePrograms.content.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(privatePrograms && privatePrograms.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
                     <thead>
                         <tr>
                             <th class="">{{'table_name'|bkTranslate:this}}</th>
@@ -56,28 +56,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let code of privatePrograms.content">
-                        <td class="vert-align no-wrap bold"><a (click)="onCodeClick(code.id)">{{code.name}}</a></td>
-                        <td class="vert-align no-wrap">{{code.description}}</td>
-                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
-                        <td class="vert-align no-wrap text-right">
+                        <tr *ngFor="let code of privatePrograms.content">
+                            <td class="vert-align no-wrap bold"><a (click)="onCodeClick(code.id)">{{code.name}}</a></td>
+                            <td class="vert-align no-wrap">{{code.description}}</td>
+                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
+                            <td class="vert-align no-wrap text-right">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
 
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!code.update_permission" (click)="onEditClick(code)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                                <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!code.update_permission" (click)="onEditClick(code)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
-                    <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to" [total]="privatePrograms.total"  [totalPages]="privatePrograms.pages" (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
                 </table>
+                <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to" [total]="privatePrograms.total"  [totalPages]="privatePrograms.pages" (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->

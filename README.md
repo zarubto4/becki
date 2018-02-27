@@ -28,6 +28,14 @@ available at same address as you have in browser and port 9000.
 
 * `npm instal` to install all dependencies needed for develop
 
+## Deploy To servers:
+
+### Stage Server
+    
+    SSH:  ssh becki@52.166.22.0
+    Pass: PbSXLpb8-GAFML3D-eha-FAF-SSFAG
+
+
 ## Commands
 
 * `npm start` (or `npm run start` or `npm run server`) to start *webpack-dev-server*
