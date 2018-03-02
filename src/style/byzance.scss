@@ -2130,6 +2130,15 @@ ul.hw-list li ul li, ul.grid-list li ul li {
     }
 }
 
+.byzance-note-selected{
+    border-color: #0079b2 !important;
+    border-style: solid;
+    border-width: 1px !important;
+    color: black;
+}
+
+
+
 .icon-hint-wraper .hint-fixed {
     position: fixed;
     z-index: 99;
@@ -2172,6 +2181,7 @@ ul.hw-list li ul li, ul.grid-list li ul li {
         }
     }
 }
+
 
 
 .pricing-center {

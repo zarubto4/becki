@@ -4,13 +4,17 @@
  */
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {ICompilationServer, IHomerServer, IHomerServerFilter, IHomerServerList, IProject} from '../backend/TyrionAPI';
+import {
+    ICompilationServer, IHomerServer, IHomerServerFilter, IHomerServerList, IProject,
+    IServerRegistrationFormData
+} from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
 import {Subscription} from "rxjs";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
     selector: 'bk-view-projects-project-server',
@@ -27,6 +31,14 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     project: IProject = null;
 
 
+    tab: string = 'create_server';
+
+    // Everything for serv er registration
+    registration_information: IServerRegistrationFormData = null;
+    selected_server_slug: string = null;
+    selected_destination_slug: string = null;
+    form: FormGroup;
+
     constructor(injector: Injector) {
         super(injector);
     };
@@ -38,6 +50,13 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                 this.project = project;
             });
             this.onFilterHomerServer();
+            this.onHomerServerGerRegistrationComponents();
+        });
+
+        this.form = this.formBuilder.group({
+            'personal_server_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+            'selected_server_slug': ['', [Validators.required]],
+            'selected_destination_slug': ['', [Validators.required]],
         });
     }
 
@@ -46,6 +65,17 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
             this.onCreateHomerServerClick();
         }
     }
+
+    onServerSlugClick(slug: string): void {
+        this.selected_server_slug = slug;
+        (<FormControl>(this.form.controls['selected_server_slug'])).setValue(slug);
+    }
+
+    onDestinationSlugClick(slug: string): void {
+        this.selected_destination_slug = slug;
+        (<FormControl>(this.form.controls['selected_destination_slug'])).setValue(slug);
+    }
+
 
 
     onFilterHomerServer(pageNumber: number = 0): void {
@@ -158,6 +188,16 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         });
     }
 
+    onHomerServerGerRegistrationComponents(): void {
+        this.tyrionBackendService.homerServerGetRegistrationComponents()
+            .then((components) => {
+                this.registration_information = components;
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+            });
+    }
+
     onHomerServerDeleteClick(server: IHomerServer): void {
         this.modalService.showModal(new ModalsRemovalModel(server.personal_server_name)).then((success) => {
             if (success) {
@@ -173,6 +213,10 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                     });
             }
         });
+    }
+
+    onCreateAutomaticalyServerClick(): void {
+
     }
 
 }

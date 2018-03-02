@@ -1336,7 +1336,12 @@ export class StaticTranslation {
                 'label_deactivate_server': 'Activate',
                 'label_activate_server': 'Deactivate',
                 'label_actions': 'Actions',
+                'label_personal_server_name': 'Server name',
+                'label_no_server_size_found': 'No Server Components...',
+                'label_no_server_size_found_comment': 'This message should never show you .... very interesting ... obviously something went wrong ... now is the time to turn to technical support.,',
 
+                'label_select_size': 'Select Server Size',
+                'label_select_destination': 'Select Destination',
                 'btn_create_server': 'Create Server',
 
             }, 'ProjectsProjectInstancesComponent': {

@@ -157,7 +157,6 @@ import { MobileAddHardwareComponent } from './views/mobile-add-hardware';
 import { ModalsWidgetsWidgetCopyComponent } from './modals/widgets-widget-copy';
 import { ModalsBlockoBlockCopyComponent } from './modals/blocko-block-copy';
 import { SupportComponent } from './views/support';
-import { ServerRegistrationComponent } from './views/server-registration';
 import { BeckiImageLinks } from './helpers/BeckiImageLinks';
 import { MyDatePickerModule } from 'mydatepicker';
 import { BugsComponent } from './views/admin-bugs';
@@ -200,6 +199,7 @@ import { BlockoViewComponent } from './components/BlockoViewComponent';
 import { FileTreeLineComponent } from './components/FileTreeLineCompinent';
 import { IconComponent } from './components/FileTreeComponent';
 import { IconFileComponent } from './components/FileTreeComponent';
+import {ServerSizeSelectorComponent} from "./components/ServerSizeSelectorComponent";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -276,9 +276,6 @@ let routes: Routes = [
 
     { path: 'support', data: { breadName: 'Producers' }, component: SupportComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
     { path: 'support/:ticket', data: { breadName: ':ticket' }, component: ProducersProducerComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
-
-    { path: 'server', data: { breadName: 'Server' }, component: ServerRegistrationComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
-
 
     { path: 'admin', data: { breadName: 'Admin Site' }, component: AdminDashboardComponent, canActivate: [AuthGuard] },
 
@@ -519,6 +516,7 @@ class BeckiErrorHandler implements ErrorHandler {
         PortletTitleComponent,
         PaymentMethodComponent,
         PortletPanelMenuComponent,
+        ServerSizeSelectorComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -580,7 +578,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ReaderQrComponent,
         MobileAddHardwareComponent,
         SupportComponent,
-        ServerRegistrationComponent,
         CompilationStatusComponent,
         ProjectsProjectActualizationProcedureComponent,
         FirmwareTypeComponent,
