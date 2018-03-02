@@ -4636,7 +4636,7 @@ Custom color buttons
 /* Circle Buttons */
 .btn-circle {
   border-radius: 25px !important;
-  overflow: hidden; }
+  overflow: hidden;  }
 
 .btn-circle-right {
   border-radius: 0 25px 25px 0 !important; }

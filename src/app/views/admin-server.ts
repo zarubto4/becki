@@ -199,7 +199,13 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
     }
 
     onCompilationServerEditClick(server: ICompilationServer): void {
-        let model = new ModalsCreateCompilerServerModel(server.personal_server_name, server.server_url, true);
+        let model = new ModalsCreateCompilerServerModel(
+            server.personal_server_name,
+            server.server_url,
+            server.id,
+            server.hash_certificate,
+            server.connection_identificator,
+            true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

@@ -150,6 +150,15 @@ export class CodeIDEComponent implements OnChanges {
     @Input()
     enableLibraryButtons: boolean = false;
 
+    @Input()
+    enableSaveButton: boolean = false;
+
+    @Input()
+    enableBuildButton: boolean = false;
+
+    @Input()
+    buildInProgress: boolean = false;
+
     @Output()
     fileContentChange = new EventEmitter<{ fileFullPath: string, content: string }>();
 
@@ -157,7 +166,16 @@ export class CodeIDEComponent implements OnChanges {
     onAddLibraryClick = new EventEmitter<any>();
 
     @Output()
+    onAddHardwareClick = new EventEmitter<any>();
+
+    @Output()
     onChangeLibraryVersionClick = new EventEmitter<CodeFile>();
+
+    @Output()
+    onSaveClick = new EventEmitter<boolean>();
+
+    @Output()
+    onBuildClick = new EventEmitter<boolean>();
 
     directories: CodeDirectory[] = [];
 
@@ -168,6 +186,13 @@ export class CodeIDEComponent implements OnChanges {
     rootFileTreeObject: FileTreeObject<CodeFileSystemObject>;
 
     selectedFto: FileTreeObject<CodeFileSystemObject>;
+
+
+    private _show_files_portlet: boolean = true;
+    private _show_libraries_portlet: boolean = false;
+    private _show_integrated_hardware_portlet: boolean = false;
+    private _show_blocko_interface_portlet: boolean = false;
+
 
     constructor(protected modalService: ModalService, private translationService: TranslationService) {
 
@@ -219,6 +244,10 @@ export class CodeIDEComponent implements OnChanges {
 
     toolbarAddLibraryClick(e: any) {
         this.onAddLibraryClick.emit(e);
+    }
+
+    toolbarAddHardwareClick(e: boolean) {
+        this.onAddHardwareClick.emit(true);
     }
 
     toolbarLibraryChangeVersionClick(e: any) {
@@ -447,10 +476,14 @@ export class CodeIDEComponent implements OnChanges {
         this.refreshRootFileTree();
     }
 
-    toolbarAddFileClick() {
+    toolbarAddFileClick(fto: FileTreeObject<any>) {
+
+        console.log("toolbarAddFileClick ", fto);
+
+
         let selectedDir: CodeDirectory = null;
-        if (this.selectedFto && this.selectedFto.data instanceof CodeDirectory) {
-            selectedDir = this.selectedFto.data;
+        if (fto instanceof CodeDirectory) {
+            selectedDir = fto.data;
         }
         let model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.AddFile, '', this.directories, selectedDir);
         this.modalService.showModal(model).then((success) => {
@@ -470,10 +503,13 @@ export class CodeIDEComponent implements OnChanges {
         });
     }
 
-    toolbarAddDirectoryClick() {
+    toolbarAddDirectoryClick(fto: FileTreeObject<any>) {
+
+        console.log("toolbarAddDirectoryClick ", fto);
+
         let selectedDir: CodeDirectory = null;
-        if (this.selectedFto && this.selectedFto.data instanceof CodeDirectory) {
-            selectedDir = this.selectedFto.data;
+        if (fto.data instanceof CodeDirectory) {
+            selectedDir = fto.data;
         }
         let model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.AddDirectory, '', this.directories, selectedDir);
         this.modalService.showModal(model).then((success) => {
@@ -575,15 +611,14 @@ export class CodeIDEComponent implements OnChanges {
         }
     }
 
-    toolbarRenameClick() {
-        if (!this.selectedFto) {
-            return;
-        }
-        if (!this.selectedFto.data) {
+    toolbarRenameClick(fto: FileTreeObject<any>) {
+
+        if (!fto.data) {
             this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename_directory'));
             return;
         }
-        let selData = this.selectedFto.data;
+
+        let selData = fto.data;
         if (selData instanceof CodeFile) {
 
             if (selData.fixedPath) {
@@ -656,15 +691,12 @@ export class CodeIDEComponent implements OnChanges {
         }
     }
 
-    toolbarRemoveClick() {
-        if (!this.selectedFto) {
-            return;
-        }
-        if (!this.selectedFto.data) {
+    toolbarRemoveClick(fto: FileTreeObject<any>) {
+        if (!fto.data) {
             this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_remove_base_directory'));
             return;
         }
-        let selData = this.selectedFto.data;
+        let selData = fto.data;
         if (selData instanceof CodeFile) {
 
 
@@ -732,5 +764,31 @@ export class CodeIDEComponent implements OnChanges {
 
         }
     }
+
+
+    onToolBarSaveClick() {
+        this.onSaveClick.emit(true);
+    }
+
+    onToolBarBuildClick() {
+        this.onBuildClick.emit(true);
+    }
+
+    show_files_portlet(show: boolean) {
+        this._show_files_portlet = show;
+    }
+
+    show_libraries_portlet(show: boolean) {
+        this._show_libraries_portlet = show;
+    }
+
+    show_integrated_hardware_portlet(show: boolean) {
+        this._show_integrated_hardware_portlet = show;
+    }
+    show_blocko_interface_portlet(show: boolean) {
+        this._show_blocko_interface_portlet = show;
+    }
+
+
 
 }

@@ -13,6 +13,9 @@ export class ModalsCreateCompilerServerModel extends ModalModel {
     constructor(
         public personal_server_name: string = '',
         public server_url: string = '',
+        public server_id: string = '',
+        public hash_certificate: string = '',
+        public connection_identificator: string = '',
         public edit: boolean = false
     ) {
         super();
@@ -37,13 +40,17 @@ export class ModalsCreateCompilationServerComponent implements OnInit {
 
         this.form = this.formBuilder.group({
             'personal_server_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
-            'server_url': ['', [Validators.required]]   // TODO Valid URL
+            'server_url': ['', [Validators.required]],   // TODO Valid URL
+            'hash_certificate': [''],
+            'connection_identificator': ['']
         });
     }
 
     ngOnInit() {
         (<FormControl>(this.form.controls['personal_server_name'])).setValue(this.modalModel.personal_server_name);
         (<FormControl>(this.form.controls['server_url'])).setValue(this.modalModel.server_url);
+        (<FormControl>(this.form.controls['hash_certificate'])).setValue(this.modalModel.hash_certificate);
+        (<FormControl>(this.form.controls['connection_identificator'])).setValue(this.modalModel.connection_identificator);
     }
 
     onSubmitClick(): void {

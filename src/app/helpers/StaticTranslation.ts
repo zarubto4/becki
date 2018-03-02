@@ -86,7 +86,9 @@ export class StaticTranslation {
             }, 'ModalsCreateCompilationServerComponent': {
                 'title': 'Create new Server',
                 'label_personal_server_name': 'Server name',
-                'label_server_url': 'Server url (without http..)'
+                'label_server_url': 'Server url (without http..)',
+                'label_hash_certificate': 'Hash',
+                'label_connection_identifier': 'Connection Token',
             }, 'ModalsCreateProducerComponent': {
                 'title': 'Producer',
                 'label_name': 'Name',
@@ -409,9 +411,11 @@ export class StaticTranslation {
                 'body_text': 'Some settings may have fatal consequences. Please reconsider what you are doing! Are you sure that you want to set the parameter as a default?',
 
             }, 'ModalsSelectHardwareComponent': {
-                'title': 'Select Hardware Device',
+                'title': 'Select <strong class="font-color-hardware">HARDWARE</strong>',
                 'label_hardware': 'Hardware Device',
                 'placeholder_hardware': 'Select',
+                'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
+                'label_no_hardware_comment': 'First, add the hardware to the project',
 
             }, 'ModalsVersionDialogComponent': {
                 'title_edit': 'Edit Version',
@@ -1819,23 +1823,25 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectCodeCodeComponent': {
 
-                'title': 'Byzance<strong class="font-color-code">CODE</strong> - PROGRAM <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> <strong>IDE</strong>',
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Code Editor',
 
                 'label_library_version': 'Library Version',
-                'label_program_properties': 'CODE program properties',
-                'label_remove_program': 'Remove CODE program',
+                'label_program_properties': 'Settings',
+                'label_remove_program': 'Remove',
+                'label_make_copy': 'Make a Copy',
                 'label_version_properties': 'Version properties',
                 'label_remove_version': 'Remove CODE version',
                 'label_code_name': '<strong class="font-color-code">CODE</strong> Program Name: <strong>{0}</strong>',
                 'label_code_description': '<strong class="font-color-code">CODE</strong> Program Description: <strong>{0}</strong>',
                 'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Type',
-                'label_ide': 'IDE',
-                'label_version': 'Version',
-                'label_build_error': 'Build Errors',
+                'tab_ide': 'IDE',
+                'tab_label_version': 'Saved Versions',
+                'tab_error_list': 'Build Errors',
+                'tab_online_terminal': 'Terminal',
+                'tab_versions': 'Versions',
                 'label_file_and_line': 'File: <b>{0}</b> Line: <b>{1}</b>',
-                'label_blocko_interface_preview': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> INTERFACE PREVIEW',
                 'label_saved_versions': 'SAVED VERSIONS',
                 'label_public_comment': 'This is public Program, you can only test program or make a copy.',
 
@@ -2137,6 +2143,10 @@ export class StaticTranslation {
 
                 'label_library': ' library',
                 'label_file': ' file',
+                'label_panel_hardware': 'Assigned <strong class="font-color-hardware">HARDWARE</strong>',
+                'label_panel_blocko_interface_preview': '<strong class="font-color-blocko">BLOCKO</strong> Interface Preview',
+                'label_panel_libraries': 'External Libraries',
+                'label_panel_files': 'Files',
 
                 'btn_add_file': 'New File',
                 'btn_add_directory': 'New Directory',
@@ -2145,6 +2155,7 @@ export class StaticTranslation {
                 'btn_move': 'Move',
 
                 'label_open_file_browser': 'Open file in file browser',
+                'btn_build': 'Build',
 
             }, 'TableListComponent': {
                 'type_of_board_name': 'Type of board',
@@ -2522,17 +2533,17 @@ export class StaticTranslation {
                 'edited': 'The program has been edited for another iteraction. ',
             },
             'version_status': {
-                'compilation_in_progress': 'Compilation is in progress.',
-                'successfully_compiled_and_restored': 'Successfully compiled.',
-                'server_was_offline': 'Server error (offline). The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
-                'successfully_compiled_not_restored': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
+                'IN_PROGRESS': 'Compilation is in progress.',
+                'SUCCESS': 'Successfully compiled.',
+                'SERVER_OFFLINE': 'Server error (offline). The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
+                'SUCCESS_DOWNLOAD_FAILED': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'compiled_with_code_errors': 'Code compilation finished with errors.',
-                'file_with_code_not_found': 'Code file not found. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
-                'compilation_server_error': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
-                'json_code_is_broken': 'Json Code is Broken. Please try again later.',
-                'hardware_unstable': 'Some of your devices with this version of the program had a critical error and had to be restored from a backup. This version is not recommended to use in production until you have solved the cause of the error.',
-                'undefined': 'Version status is unknown.',
-                'main_version': 'Version is set as Main or Default'
+                'FILE_NOT_FOUND': 'Code file not found. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
+                'SERVER_ERROR': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
+                'BROKEN_JSON': 'Json Code is Broken. Please try again later.',
+                'UNSTABLE': 'Some of your devices with this version of the program had a critical error and had to be restored from a backup. This version is not recommended to use in production until you have solved the cause of the error.',
+                'UNDEFINED': 'Version status is unknown.',
+                'MAIN_VERSION': 'Version is set as Main or Default'
             },
             'error_code': {
                 '1': 'Missing Label in update procedure - probably incompatible previous firmware'

@@ -1,51 +1,150 @@
 <div>
+
+    <!--
     <div class="row">
         <div class="col-md-12">
-            <button type="button" class="btn default green-haze" (click)="toolbarAddFileClick()">
-                <i class="fa fa-file-text"></i> {{'btn_add_file'|bkTranslate:this}}
-            </button>
-            <button type="button" class="btn default green-haze" (click)="toolbarAddDirectoryClick()">
-                <i class="fa fa-folder"></i> {{'btn_add_directory'|bkTranslate:this}}
-            </button>
-            <button *ngIf="enableLibraryButtons" type="button" class="btn default purple-plum" (click)="toolbarAddLibraryClick($event)">
-                <i class="fa fa-briefcase"></i> {{'btn_add_library'|bkTranslate:this}}
-            </button>
-            <button *ngIf="enableLibraryButtons" type="button" class="btn default purple-plum" (click)="toolbarLibraryChangeVersionClick($event)">
+            <button *ngIf="enableLibraryButtons" type="button" class="btn default purple-plum"
+                    (click)="toolbarLibraryChangeVersionClick($event)">
                 <i class="fa fa-code-fork"></i> {{'btn_change_library_version'|bkTranslate:this}}
             </button>
             <button type="button" class="btn default blue-steel" (click)="toolbarMoveClick()">
                 <i class="fa fa-arrow-circle-right"></i> {{'btn_move'|bkTranslate:this}}
             </button>
-            <button type="button" class="btn default blue-steel" (click)="toolbarRenameClick()">
-                <i class="fa fa-i-cursor"></i> {{'btn_rename'|bkTranslate:this}}
-            </button>
-            <button type="button" class="btn default red" (click)="toolbarRemoveClick()">
-                <i class="fa fa-trash"></i> {{'btn_remove'|bkTranslate:this}}
-            </button>
         </div>
     </div>
-    <div class="row"><div class="spacer15"></div></div>
+    -->
+
     <div class="row">
-        <div class="col-md-3">
-            <div class="jstree jstree-default portlet light bordered" style="overflow-x: auto;">
-                <ul class="jstree-container-ul jstree-children">
-                    <bk-file-tree [fileTreeObject]="rootFileTreeObject" (newSelected)="selectFto($event)"></bk-file-tree>
-                </ul>
+        <div class="col-lg-2 col-md-3 col-sm-4">
+            <!--- files -->
+            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
+                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
+                    <div class="caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-file"></i>
+                              <span [innerHTML]="'label_panel_files'|bkTranslate:this"></span>
+                        </span>
+                    </div>
+                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
+                        <a *ngIf="_show_files_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_files_portlet(false)">
+                            <i class="fa fa-angle-up"></i>
+                        </a>
+                        <a *ngIf="!_show_files_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_files_portlet(true)">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <bk-file-tree *ngIf="_show_files_portlet"
+                    [fileTreeObject]="rootFileTreeObject"
+                    (newSelected)="selectFto($event)"
+                    (newFolderNewClick)="toolbarAddDirectoryClick($event)"
+                    (newFileNewClick)="toolbarAddFileClick($event)"
+                    (removeClick)="toolbarRemoveClick($event)"
+                    (editClick)="toolbarRenameClick($event)">
+                </bk-file-tree>
             </div>
+
+            <!--- Libraries -->
+            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
+                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
+                    <div class="caption">
+                          <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-files-o"></i>
+                                <span [innerHTML]="'label_panel_libraries'|bkTranslate:this"></span>
+                          </span>
+                    </div>
+                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
+                        <a class="btn btn-circle btn-icon-only btn-default" (click)="toolbarAddLibraryClick($event)">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        <a *ngIf="_show_libraries_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_libraries_portlet(false)">
+                            <i class="fa fa-angle-up"></i>
+                        </a>
+                        <a *ngIf="!_show_libraries_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_libraries_portlet(true)">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!--- Integrated Developer Hardware -->
+            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
+                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
+                    <div class="caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-microchip"></i>
+                              <span [innerHTML]="'label_panel_hardware'|bkTranslate:this"></span>
+                        </span>
+                    </div>
+                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
+                        <a class="btn btn-circle btn-icon-only btn-default" (click)="toolbarAddHardwareClick($event)">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        <a *ngIf="_show_integrated_hardware_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_integrated_hardware_portlet(false)">
+                            <i class="fa fa-angle-up"></i>
+                        </a>
+                        <a *ngIf="!_show_integrated_hardware_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_integrated_hardware_portlet(true)">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--- Blocko View -->
+            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
+                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
+                    <div class="caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-microchip"></i>
+                              <span [innerHTML]="'label_panel_blocko_interface_preview'|bkTranslate:this"></span>
+                        </span>
+                    </div>
+                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
+                        <a *ngIf="_show_blocko_interface_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_blocko_interface_portlet(false)">
+                            <i class="fa fa-angle-up"></i>
+                        </a>
+                        <a *ngIf="!_show_blocko_interface_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_blocko_interface_portlet(true)">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div *ngIf="_show_blocko_interface_portlet">
+                    <bk-blocko-view [disableExecution]="true" [canConfig]="false" [readonly]="true" [simpleMode]="false" [autosize]="true" class="blocko-overflow-visible blocko-no-borders-and-bg blocko-code-view"></bk-blocko-view>
+                </div>
+            </div>
+
+
         </div>
-        <div class="col-md-9 no-padding-left">
+
+        <div class="col-lg-10 col-md-9 col-sm-8 no-padding-left">
+
             <div class="tabbable-custom">
                 <ul class="nav nav-tabs nav-tabs-with-spacer">
-                    <li *ngFor="let file of openFiles; let i = index" [class.active]="i == openFilesTabIndex" (click)="openFilesOpenTab(i)">
+                    <li *ngFor="let file of openFiles; let i = index" [class.active]="i == openFilesTabIndex"
+                        (click)="openFilesOpenTab(i)">
                         <a title="/{{file.objectFullPath}}">
                             {{file.objectName}}
                             <i class="fa fa-times" (click)="openFilesCloseTab(file)" role="button"></i>
                         </a>
                     </li>
+                    <button *ngIf="enableBuildButton" type="button" class="btn default yellow-gold pull-right" (click)="onToolBarBuildClick()" [disabled]="buildInProgress">
+                        <i class="fa fa-play" *ngIf="!buildInProgress"></i> <i class="fa fa-spinner fa-spin" *ngIf="buildInProgress"></i> {{'btn_build'|bkTranslate:this}}
+                    </button>
+                    <button *ngIf="enableSaveButton" type="button" class="btn default green-haze pull-right" (click)="onToolBarSaveClick()" style="margin-right: 3px;">
+                        <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
+                    </button>
                 </ul>
+
+
                 <div class="tab-content">
-                    <li *ngFor="let file of openFiles; let i = index" class="tab-pane" [class.active]="i == openFilesTabIndex">
-                        <bk-monaco-editor [code]="file.content" (codeChange)="onCodeChange($event, file)" [language]="langFromFilename(file)" [readonly]="file.readonly"></bk-monaco-editor>
+                    <li *ngFor="let file of openFiles; let i = index" class="tab-pane"
+                        [class.active]="i == openFilesTabIndex">
+                        <bk-monaco-editor [code]="file.content" (codeChange)="onCodeChange($event, file)"
+                                          [language]="langFromFilename(file)"
+                                          [readonly]="file.readonly"></bk-monaco-editor>
                     </li>
                     <li *ngIf="openFiles.length == 0" class="tab-pane active">
                         <h3 style="margin: 10px 0;">

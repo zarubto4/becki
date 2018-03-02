@@ -23,7 +23,7 @@ import {TranslationService} from "../services/TranslationService";
                    </div>
                </div>
                <div style="padding-top: 10px">
-                     <bk-form-input (onEnterEvent)="onEnter($event)" [placeholder]="placeholder!==null ? placeholder:'label_place_holder'|bkTranslate:this" [control]="form.controls.tag" [showLabel]="false" [widthSize]="widthSize"></bk-form-input>
+                     <bk-form-input (onEnterEvent)="onEnter($event)" [placeholder]="placeholder!==null ? placeholder:'label_place_holder'|bkTranslate:this" [control]="private_form.controls.tag_label" [showLabel]="false" [widthSize]="widthSize"></bk-form-input>
                </div>
            </div>
        </div>
@@ -57,19 +57,24 @@ export class FormInputTagsComponent implements OnInit {
     valueChange: EventEmitter<string[]> = new EventEmitter<string[]>();
 
     // Private Form for Label Reader & Enter Action
-    form: FormGroup;
+    private_form: FormGroup;
 
-    private tags: string[] = null;
+    // List of tags
+    private tags: string[] = [];
 
     constructor(public validatorErrorsService: ValidatorErrorsService, private formBuilder: FormBuilder, public translationService: TranslationService) {
-        this.form = this.formBuilder.group({
-            'tag': ['', []],
-        });
-
-        this.tags = [];
     }
 
     ngOnInit() {
+
+        this.private_form = this.formBuilder.group({
+            'tag_label': [''],
+        });
+
+        if (this.control.value == null) {
+            this.control.setValue([]);
+        }
+
         // Not wait for tuch if control.value is not null (for example edit)
         if (this.waitForTouch) {
             if (this.control !== null && this.control.value !== null && this.control.value !== '') {
@@ -79,8 +84,9 @@ export class FormInputTagsComponent implements OnInit {
     }
 
     onEnter() {
-
-        let tag: string = this.form.controls['tag'].value;
+        console.log('FormInputTagsComponent::onEnter');
+        let tag: string = this.private_form.controls['tag_label'].value;
+        console.log('FormInputTagsComponent::onEnter label:: ', tag);
 
         // Ignore empty or illegal values
         if (tag === '' || tag === null) {
@@ -88,7 +94,8 @@ export class FormInputTagsComponent implements OnInit {
         }
 
         // Clear Value from Label
-        (<FormControl>(this.form.controls['tag'])).setValue('');
+        (<FormControl>(this.private_form.controls['tag_label'] )).setValue('');
+
 
         // Add Tag to Array if array not contains this Tag
 
@@ -101,7 +108,7 @@ export class FormInputTagsComponent implements OnInit {
         this.onChange();
     }
 
-    onRemoveClick(tag: string){
+    onRemoveClick(tag: string) {
         for (let i = this.tags.length - 1; i >= 0; i--) {
             if (this.tags[i] === tag) {
                 this.tags.splice(i, 1);
@@ -112,7 +119,7 @@ export class FormInputTagsComponent implements OnInit {
     }
 
     onChange() {
-        this.control.value = this.tags;
+        this.control.setValue(this.tags);
         this.valueChange.emit(this.tags);
     }
 

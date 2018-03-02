@@ -155,7 +155,7 @@ export abstract class _BaseMainComponent {
         this.navigate(['/admin/hardware/libraries', library_id]);
     }
 
-    onLibraryClick(library_id: string): void {
+    public onLibraryClick(library_id: string): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries', library_id]);
     }
 

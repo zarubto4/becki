@@ -71,14 +71,13 @@ export class FormInputComponent implements OnInit {
 
     onEnter(event: any) {
         if (event.keyCode === 13) {
-            console.log("FormInputComponent: onEnter:", event.key);
+            console.log('Enter click');
             this.onEnterEvent.emit(event);
         }
     }
 
     onSelectedChange(newValue: string) {
         this.valueChange.emit(newValue);
-        console.log("FormInputComponent:onSelectedChange: " + newValue);
     }
 
 }

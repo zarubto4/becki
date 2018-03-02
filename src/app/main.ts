@@ -195,7 +195,11 @@ import { ModalsInstanceCreateComponent } from './modals/instance-create';
 import { ProjectsProjectBlockoComponent } from './views/projects-project-blocko';
 import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
 import { TagComponent } from './components/TagComponent';
-import {ProjectsProjectCodeCodeComponent} from "./views/projects-project-code-code";
+import { ProjectsProjectCodeCodeComponent } from './views/projects-project-code-code';
+import { BlockoViewComponent } from './components/BlockoViewComponent';
+import { FileTreeLineComponent } from './components/FileTreeLineCompinent';
+import { IconComponent } from './components/FileTreeComponent';
+import { IconFileComponent } from './components/FileTreeComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -476,12 +480,15 @@ class BeckiErrorHandler implements ErrorHandler {
         TranslatePipe,
         TranslateTablePipe,
         HtmlSanitizeBypassPipe,
+        IconFileComponent,
         // Components
         MultiSelectComponent,
+        BlockoViewComponent,
         BeckiBooleanButtonComponent,
         MonacoEditorComponent,
         FormColorPickerComponent,
         FormFAIconSelectComponent,
+        IconComponent,
         FormInputComponent,
         FormInputTagsComponent,
         FormTextAreaComponent,
@@ -494,6 +501,7 @@ class BeckiErrorHandler implements ErrorHandler {
         DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
+        FileTreeLineComponent,
         NotificationsOverlayComponent,
         NotificationsListComponent,
         ConsoleLogComponent,

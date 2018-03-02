@@ -40,12 +40,10 @@ export class ModalsLibraryPropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-        let input: { [key: string]: any } = {
+        this.form = this.formBuilder.group({
             'name': [this.modalModel.name, [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
             'description': [this.modalModel.description]
-        };
-
-        this.form = this.formBuilder.group(input);
+        });
     }
 
     onSubmitClick(): void {

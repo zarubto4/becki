@@ -6,10 +6,11 @@ import { Router } from '@angular/router';
     /* tslint:disable */
     template: `
             <div class="portlet-title">
-                <div class="becki-caption" style="padding-bottom: 0px; padding-top: 10px;">
+                <div *ngIf="show_title" class="becki-caption" style="padding-bottom: 0px; padding-top: 10px;">
                     <span class="font-blue-dark uppercase">
                         <i class="fa fa-fw {{icon}}"></i>
                           <span [innerHTML]="title_name"></span>
+                          <span *ngIf="title_object_name" class="bold" [innerHTML]="' - ' + title_object_name"></span>
                     </span>
                 </div>
                 <div *ngIf="btns && btns.length > 0" class="becki-actions">
@@ -26,7 +27,7 @@ import { Router } from '@angular/router';
                         </button>
                     </template>
                 </div>
-                <div *ngIf="tabBtns && btns.length > 0" class="tabbable-line">
+                <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line">
                     <ul class="nav nav-tabs becki-tab-menu" style="padding-top: 0px;">
                         <li *ngFor="let btn of tabBtns" [class.active]="tab_selected_name == btn.tab_name"
                             [class.color-hardware]="btn.tab_color === 'HARDWARE'"
@@ -56,6 +57,9 @@ export class PortletTitleComponent {
     title_name: string = 'NOT SET!';
 
     @Input()
+    show_title: boolean = true;
+
+    @Input()
     title_object_name: string = null;
 
     @Input()
@@ -63,27 +67,6 @@ export class PortletTitleComponent {
 
 // BUTTONS ------------------------------------------------------------------------------------------------------------------------------
 
-    /**
-     *
-     * If You are Using only one Button you can set onClick whatever you want
-     *
-     * ForExample here::
-            <bk-portlet-title
-                 [title_name]="'title'|bkTranslate:this"
-                 [icon]="'fa-briefcase'"
-                 (onClick)="onAddClick()"onAddProductClick
-                 [btns]="[
-                        {
-                         condition: (products != null && products.length > 0),
-                         label: ('btn_add_project'|bkTranslate:this),
-                         icon: 'fa-plus-circle',
-                        }
-                    ]"
-                 >
-            </bk-portlet-title>
-     * But For more Buttons
-     * @type {any}
-     */
     @Input()
     btns: {
         condition: boolean,

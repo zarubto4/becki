@@ -3,7 +3,7 @@
  * of this distribution.
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var program = require("commander");
 var fs_1 = require("fs");
 var moment = require("moment");
@@ -43,9 +43,9 @@ var CONFIG = {
         // like 'get:/websocket/becki/{secure_token}': '',
         // normal replaces
         'post:/login': '__login',
-        'post:/logout': '__logout',
+        'post:/logout': '__logout'
     },
-    methodsOkCodes: [200, 201, 202],
+    methodsOkCodes: [200, 201, 202]
 };
 var throwError = function (msg) {
     console.log(chalk.red(msg + ''));
@@ -352,7 +352,7 @@ for (var pathUrl in paths) {
             console.log(chalk.green('Adding method \"' + m + '\" to list.', ' path Method:: (' + pathMethod + ':' + pathUrl + ')'));
             methodsParams[m] = {
                 pathUrl: pathUrl,
-                pathMethod: pathMethod,
+                pathMethod: pathMethod
             };
             methodsNames.push(m);
         }

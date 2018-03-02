@@ -9,11 +9,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {IHardware, IHardwareType} from '../backend/TyrionAPI';
+import { IHardware, IHardwareList, IHardwareType } from '../backend/TyrionAPI';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
-    constructor(public project_id: string, public hardware_type: IHardwareType, public selected_hardware: string[] = []) {
+    constructor(public project_id: string, public hardware_type: IHardwareType, public selected_hardware: IHardware[] = []) {
         super();
     }
 }
@@ -30,30 +30,58 @@ export class ModalsSelectHardwareComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    options: FormSelectComponentOption[] = null;
+    devicesFilter: IHardwareList = null;
 
-    form: FormGroup;
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
-
-        this.form = this.formBuilder.group({
-            'board': ['', [Validators.required]]
-        });
     }
 
     ngOnInit() {
-        this.options = this.modalModel.boards.map((b) => {
-            let collisionTranslated = this.translationService.translateTable(b.collision, this, 'board_state');
-            return {
-                value: b.id,
-                label: b.id + ' [' + b.name + ']' + (b.collision ? ' (' + collisionTranslated + ')' : '')
-            };
-        });
-        (<FormControl>(this.form.controls['board'])).setValue(this.modalModel.selectedBoard ? this.modalModel.selectedBoard : '');
+        this.onFilterHardware();
     }
 
+    onFilterHardware(pageNumber: number = 0 ): void {
+        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+            projects: [this.modalModel.project_id],
+            hardware_type_ids: [this.modalModel.hardware_type.id]
+        })
+            .then((values) => {
+
+                this.devicesFilter = values;
+                this.devicesFilter.content.forEach((device, index, obj) => {
+                    this.tyrionBackendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'Board' && device.id === status.model_id) {
+                            device.online_state = status.online_state;
+                        }
+                    });
+                });
+
+            })
+            .catch((reason) => {
+
+            });
+    }
+
+    onAddToList(hardware: IHardware): void {
+        for (let i = this.modalModel.selected_hardware.length - 1; i >= 0; i--) {
+            if (this.modalModel.selected_hardware[i].id === hardware.id) {
+                return;
+            }
+        }
+
+        this.modalModel.selected_hardware.push(hardware);
+    }
+
+    onRemoveFromList(hardware: IHardware): void {
+        for (let i = this.modalModel.selected_hardware.length - 1; i >= 0; i--) {
+            if (this.modalModel.selected_hardware[i].id === hardware.id) {
+                this.modalModel.selected_hardware.splice(i, 1);
+            }
+        }
+    }
+
+
     onSubmitClick(): void {
-        this.modalModel.selectedBoard = this.modalModel.boards.find((b) => (this.form.controls['board'].value === b.id));
         this.modalClose.emit(true);
     }
 

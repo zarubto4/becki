@@ -15,7 +15,6 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { NullSafe } from '../helpers/NullSafe';
 import { ModalsSelectHardwareComponent, ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { getAllInputOutputs, getInputsOutputs } from '../helpers/CodeInterfaceHelpers';
-import { BlockoViewComponent } from '../../../../../Desktop/Neroztridena_Becki/components/BlockoViewComponent';
 import { ModalsCodeAddLibraryModel } from '../modals/code-add-library';
 import moment = require('moment/moment');
 import { ModalsCodeLibraryVersionModel } from '../modals/code-library-version';
@@ -28,6 +27,7 @@ import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { FormGroup, Validators } from '@angular/forms';
 import { CodeCompileError, ICodeCompileErrorMessage } from '../services/_backend_class/Responses';
+import { BlockoViewComponent } from '../components/BlockoViewComponent';
 
 @Component({
     selector: 'bk-view-projects-project-code-code',
@@ -53,7 +53,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     reloadInterval: any = null;
     hardwareType: IHardwareType = null;
 
-    allDevices: IHardware[];
+    selected_hardware: IHardware[];
     projectSubscription: Subscription;
 
     @ViewChild(BlockoViewComponent)
@@ -62,6 +62,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     @ViewChild(CodeIDEComponent)
     codeIDE: CodeIDEComponent;
 
+    tab: string = 'ide';
+    tab_under_ide: string = 'error_list';
 
     // List of all Version for compilation (for this type_of_board)
     libraryCompilationVersionOptions: FormSelectComponentOption[] = null;
@@ -72,7 +74,6 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     fileChangeTimeout: any = null;
 
     protected exitConfirmationService: ExitConfirmationService = null;
-
 
     constructor(injector: Injector) {
         super(injector);
@@ -126,6 +127,14 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
         }
     }
 
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
+
+    onToggleIDETab(tab: string) {
+        this.tab_under_ide = tab;
+    }
+
     ngAfterViewInit(): void {
         this.refreshInterface();
     }
@@ -159,7 +168,6 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
             && version.status === 'SUCCESS'
             && !version.main_mark;
     }
-
 
     onCProgramPublishResult(version: ICProgramVersion): void {
         let model = new ModalsPublicShareResponseModel(
@@ -462,12 +470,14 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
         let ios = getAllInputOutputs(main, userFiles);
 
+        /*
         this.blockoView.setInterfaces([{
             'color': '#99ccff',
             'targetId': 'dummy_id',
             'displayName': 'Program ' + this.codeProgram.name,
             'interface': ios
         }]);
+        */
     }
 
     reloadVersions(): void {
@@ -508,30 +518,30 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
         this.selectedProgramVersion = programVersion;
 
         let codeFiles: CodeFile[] = [];
-        if (Array.isArray(programVersion.files)) {
-            codeFiles = (programVersion.files).map((uf) => {
+        if (Array.isArray(programVersion.program.files)) {
+            codeFiles = (programVersion.program.files).map((uf) => {
                 return new CodeFile(uf.file_name, uf.content);
             });
         }
 
-        let main = new CodeFile('main.cpp', programVersion.main);
+        let main = new CodeFile('main.cpp', programVersion.program.main);
         main.fixedPath = true;
         codeFiles.push(main);
 
-        if (Array.isArray(programVersion.imported_libraries)) {
-            programVersion.imported_libraries.forEach((uf) => {
+        if (Array.isArray(programVersion.program.imported_libraries)) {
+            programVersion.program.imported_libraries.forEach((uf) => {
 
-                let cf = new CodeFile(this.translate('codefile_library_version_dont_have_readme', uf.library_short_detail.name, uf.library_version_short_detail.version_name,
-                    uf.library_short_detail.name, uf.library_version_short_detail.version_name));
+                let cf = new CodeFile(this.translate('codefile_library_version_dont_have_readme', uf.library.name, uf.library_version.name,
+                    uf.library.name, uf.library_version.name));
                 cf.fixedPath = true;
                 cf.library = true;
                 cf.readonly = true;
 
-                cf.libraryId = uf.library_short_detail.id;
-                cf.libraryName = uf.library_short_detail.name;
-                cf.libraryVersionId = uf.library_version_short_detail.version_id;
+                cf.libraryId = uf.library.id;
+                cf.libraryName = uf.library.name;
+                cf.libraryVersionId = uf.library_version.id;
 
-                this.tyrionBackendService.libraryVersionGet(uf.library_version_short_detail.version_id)
+                this.tyrionBackendService.libraryVersionGet(uf.library_version.id)
                     .then((lv) => {
                         if (lv && lv.files) {
                             lv.files.forEach((f) => {
@@ -759,20 +769,11 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
         });
     }
 
-    onUploadClick(version: ICProgramVersion) {
+    onAddDeveloperHardwareClick() {
+        console.log('project-code-onAddDeveloperHardwareClick');
         let m = new ModalsSelectHardwareModel(this.project_Id, this.hardwareType);
         this.modalService.showModal(m).then((success) => {
-            this.blockUI();
-            this.tyrionBackendService.cProgramUploadIntoHardware({
-                hardware_ids: m.selected_hardware,
-                c_program_version_id: version.id
-            }).then((result) => {
-                this.fmSuccess(this.translate('flash_update_success'));
-                this.unblockUI();
-            }).catch((e) => {
-                this.fmError(this.translate('flash_cant_upload_code'));
-                this.unblockUI();
-            });
+            this.selected_hardware = m.selected_hardware;
         });
     }
 }

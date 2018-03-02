@@ -11,6 +11,8 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FormGroup, Validators } from '@angular/forms';
+import {FileTreeObject} from "../components/FileTreeComponent";
+import {CodeFileSystemObject} from "../components/CodeIDEComponent";
 
 @Component({
     selector: 'bk-view-projects-project',
@@ -37,7 +39,7 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
     ngOnInit(): void {
 
         this.form = this.formBuilder.group({
-            'tags': ['', [Validators.required, Validators.minLength(4)]],
+            'tags': ['', []],
         });
 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {

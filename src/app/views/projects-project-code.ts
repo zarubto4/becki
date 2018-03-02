@@ -76,10 +76,6 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
         }
     }
 
-    onCodeClick(code: ICProgram): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'code', code.id]);
-    }
-
 
     onRemoveClick(code: ICProgram): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {

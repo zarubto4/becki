@@ -5,7 +5,6 @@
 
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-
 export interface FileTreeObjectInterface {
     color: string;
     icon?: string;
@@ -21,6 +20,7 @@ export class FileTreeObject<T extends FileTreeObjectInterface> {
     data: T = null;
 
     selected: boolean = false;
+    show_icons: boolean = false;
 
     private _icon: string = null;
     private _color: string = 'silver';
@@ -136,10 +136,73 @@ export class FileTreeObject<T extends FileTreeObjectInterface> {
     }
 }
 
+/* tslint:disable */
 @Component({
     selector: 'bk-file-tree',
-    templateUrl: './FileTreeComponent.html'
+    template: `
+        <div *ngIf="fileTreeObject">
+            
+            <!-- Vykresím řádek s hlavičkou  !-->
+            <div tabindex="-1"
+                  (click)="onCloseList()"
+                  [style.font-weight]="fileTreeObject.bold?'800':'normal'"
+                  (mouseover)="hoover(fileTreeObject, true)" (mouseleave)="hoover(fileTreeObject, false)">
+               
+                <!-- Ikonka složky -->
+                <bk-icon-file-component [icon]="fileTreeObject.open?'fa-folder':'fa-folder-open'" [color]="fileTreeObject.color"></bk-icon-file-component>
+                
+                <!-- Název ikonky -->
+                {{fileTreeObject.name}}
+                
+                <!-- Ikonky vpravo !-->
+                <div *ngIf="fileTreeObject && fileTreeObject.show_icons" class="pull-right">
+                    <bk-icon-component [condition]="!root" [icon]="'fa-trash'" (onClickEvent)="onRemoveClick(fileTreeObject)"></bk-icon-component>
+                    <bk-icon-component [condition]="!root" [icon]="'fa-pencil'" (onClickEvent)="onEditClick(fileTreeObject)"></bk-icon-component>
+                    <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="onAddFileClick(fileTreeObject)"></bk-icon-component>
+                    <bk-icon-component [condition]="true" [icon]="'fa-folder'" (onClickEvent)="onAddFolderClick(fileTreeObject)"></bk-icon-component>
+                </div>
+            </div>
+
+            
+            <!-- Pokud je open !--> 
+            <div *ngIf="fileTreeObject.open">
+                <div style="padding-left: 20px; list-style-type: none;">
+                    <div *ngFor="let child of fileTreeObject.children; let last = last">
+
+                        <!-- Pokud child directory - vykreslím directory !-->
+                        <bk-file-tree *ngIf="child.directory" 
+                                      [fileTreeObject]="child" 
+                                      [last]="last" 
+                                      [root]="false" 
+                                      (internalObjClicked)="internalObjClick($event)"
+                                      (newFolderNewClick)="onAddFolderClick($event)"
+                                      (newFileNewClick)="onAddFileClick($event)"
+                                      (removeClick)="onEditClick($event)"
+                                      (editClick)="toolbarRenameClick($event)"
+                                      [onlyDirectiories]="onlyDirectiories">
+                        </bk-file-tree>
+                        
+                        <div *ngIf="!child.directory" (mouseover)="hoover(child, true)" (mouseleave)="hoover(child, false)">
+                            <i class=""></i>
+                            <span tabindex="-1"
+                                  (click)="internalObjClick(child)"
+                                  role="button"
+                                  [style.font-weight]="child.bold?'800':'normal'">
+                                  <bk-icon-file-component [name]="child.name" [icon]="child.icon" [color]="child.color"></bk-icon-file-component>
+                                  {{child.name}}
+                            </span>
+                            <div class="pull-right">
+                                <bk-icon-component [condition]="child && child.show_icons" [icon]="'fa-trash'" (onClickEvent)="onRemoveClick(child)"></bk-icon-component>
+                                <bk-icon-component [condition]="child && child.show_icons" [icon]="'fa-pencil'" (onClickEvent)="onEditClick(child)"></bk-icon-component>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
 })
+/* tslint:enable */
 export class FileTreeComponent {
 
     @Input()
@@ -153,7 +216,6 @@ export class FileTreeComponent {
 
     @Input()
     privateOpen = false;
-    _open = true;
 
     @Input()
     onlyDirectiories = false;
@@ -164,20 +226,45 @@ export class FileTreeComponent {
     @Output()
     internalObjClicked = new EventEmitter<FileTreeObject<any>>();
 
-    toggleOpenClick() {
-        if (this.privateOpen) {
-            this._open = !this._open;
-        } else {
-            this.fileTreeObject.open = !this.fileTreeObject.open;
-        }
+    @Output()
+    newFolderNewClick = new EventEmitter<FileTreeObject<any>>();
+
+    @Output()
+    newFileNewClick = new EventEmitter<FileTreeObject<any>>();
+
+    @Output()
+    removeClick = new EventEmitter<FileTreeObject<any>>();
+
+    @Output()
+    editClick = new EventEmitter<FileTreeObject<any>>();
+
+
+    onEditClick(fto: FileTreeObject<any>) {
+        this.editClick.emit(fto);
+    }
+
+    onRemoveClick(fto: FileTreeObject<any>) {
+        this.removeClick.emit(fto);
+    }
+
+    onAddFileClick(fto: FileTreeObject<any>) {
+        this.newFileNewClick.emit(fto);
+    }
+
+    onAddFolderClick(fto: FileTreeObject<any>) {
+        this.newFolderNewClick.emit(fto);
+    }
+
+    hoover(fileTreeObject: FileTreeObject<any>, show: boolean) {
+        fileTreeObject.show_icons = show;
     }
 
     get open(): boolean {
-        if (this.privateOpen) {
-            return this._open;
-        } else {
-            return this.fileTreeObject.open;
-        }
+        return this.fileTreeObject.open;
+    }
+
+    onCloseList() {
+        this.fileTreeObject.open = !this.fileTreeObject.open;
     }
 
     internalObjClick(fto: FileTreeObject<any>) {
@@ -186,6 +273,67 @@ export class FileTreeComponent {
         if (this.root && this.fileTreeObject) {
             this.fileTreeObject.select(fto);
         }
+    }
+
+}
+
+
+/* tslint:disable */
+@Component({
+    selector: 'bk-icon-component',
+    template: `
+        <i *ngIf="condition"  class="fa {{icon}}" (click)="onIconClick()" [class.fa-lg]="_hoover" [class.bold]="_hoover" (mouseover)="hoover(true)" (mouseleave)="hoover(false)"></i>
+    `,
+})
+/* tslint:enable */
+export class IconComponent {
+
+    @Input()
+    condition = false;
+
+    @Input()
+    icon: string = '';
+
+    @Output()
+    onClickEvent = new EventEmitter<boolean>();
+
+    _hoover: boolean = false;
+
+    hoover(show: boolean) {
+        this._hoover = show;
+    }
+
+    onIconClick() {
+        this.onClickEvent.emit(true);
+    }
+}
+
+/* tslint:disable */
+@Component({
+    selector: 'bk-icon-file-component',
+    template: `
+        <i *ngIf="icon" class="fa {{icon}}" [style.color]="color"></i>
+        <i *ngIf="name" class="fa {{icon}}" [style.color]="color"></i>
+    `,
+})
+/* tslint:enable */
+export class IconFileComponent {
+
+    @Input()
+    color: string;
+
+    @Input()
+    icon: string = null;
+
+    @Input()
+    name: string = ''; // File Parser by last file type after dot for Exampme .cpp  .tp .md
+
+    @Input()
+    file_name: string = '';
+
+    get_name_icon_type(): string {
+        console.log('FileType: ', name);
+        return null;
     }
 
 }

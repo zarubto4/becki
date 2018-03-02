@@ -52,8 +52,8 @@ export class ModalsCreateHomerServerComponent implements OnInit {
             'hardware_logger_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'rest_api_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'server_url': ['', [Validators.required]],    // TODO Valid URL
-            'hash_certificate': [''],   // TODO Valid URL
-            'connection_identificator': ['']    // TODO Valid URL
+            'hash_certificate': [''],
+            'connection_identificator': ['']
         });
     }
 

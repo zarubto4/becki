@@ -3,13 +3,82 @@
         <button type="button" class="close" (click)="onCloseClick()"></button>
         <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
-    <div *ngIf="modalModel.boards" class="modal-body">
-        <form [formGroup]="form">
-            <bk-form-select [control]="form.controls.board" [label]="'label_hardware'|bkTranslate:this" [placeholder]="'placeholder_hardware'|bkTranslate:this" [options]="options"></bk-form-select>
-        </form>
+    <div class="modal-body">
+
+        <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+
+        </div>
+
+
+        <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
+                <thead>
+                <tr>
+                    <th class="col">{{'table_hardware_name'|bkTranslate:this}}</th>
+                    <th class="col">{{'table_hardware_id'|bkTranslate:this}}</th>
+                    <th class="col">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="col text-center">{{'table_status'|bkTranslate:this}}</th>
+                    <th class="col text-center">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let device of devicesFilter.content">
+                    <td class="vert-align">
+                        <strong>{{device.name?device.name:device.id}}</strong>
+                    </td>
+                    <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
+                    <td class="vert-align no-wrap">{{device.description}}</td>
+                    <td class="vert-align text-center no-wrap">
+                        <div *ngIf="!device.hardware_groups">
+                            -
+                        </div>
+                        <div *ngIf="device.hardware_groups">
+                            [
+                            <span *ngFor="let group of device.hardware_groups; let last = last">
+                                  {{group.name}}<span *ngIf="!last">, </span>
+                             </span>
+                            ]
+                        </div>
+                    </td>
+
+                    <td class="vert-align text-center no-wrap">
+                        <bk-online-state [online_state]="device.online_state"></bk-online-state>
+                    </td>
+
+                    <td class="vert-align text-right no-wrap">
+
+                        <style type="text/css">
+                            table tr button {
+                                opacity: 0.05;
+                            }
+                            table tr:hover button {
+                                opacity: 1
+                            }
+                        </style>
+                        <button title="{{'label_add_hardware'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                (click)="onAddToList(device)">
+                                <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"  [totalPages]="devicesFilter.pages" (onSelect)="onFilterHardware($event)"></bk-filter-page-component>
+        </div>
+
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(devicesFilter == null)"
+                            [condition_empty]="(devicesFilter != null && devicesFilter.content.length == 0)"
+                            [main_message_link]="'label_no_hardware'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_hardware_comment'|bkTranslate:this"
+                            [show_button]="false">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
     </div>
 </div>
