@@ -1163,10 +1163,13 @@ export class StaticTranslation {
                 'label_time_missing_in_json': 'Not Yet',
                 'label_project_active': 'This one',
                 'label_project_not_active': 'Freeze',
+                'label_release_documentation_description' : '<p>Here you can create group orders. For example, update hardware in <strong>"North Korea"</strong> or execute <strong><a target="_blank" href="https://www.youtube.com/watch?v=xSN6BOgrSSU">order 66</a></strong>.<p/><p class="text-center"> Heavy times for the republic..</p>',
 
                 'tab_hardware_list': 'Hardware List',
                 'tab_hardware_groups': 'Hardware Groups',
                 'tab_updates': 'Updates',
+
+                'label_hardware_group_documentation_description' : '<p>Hardware can be registered to any number of groups. Using groups, you can more easily filter hardware.</p><br><p class="text-center"> <span class="text-center">Import it. Export. Create statistics. And other miracles.<br> But only if we have already implemented it.</p><br><p class="text-center">Trololo...</p>',
 
                 'table_description': 'Description',
                 'table_id': 'Updates',
@@ -1844,6 +1847,9 @@ export class StaticTranslation {
                 'label_file_and_line': 'File: <b>{0}</b> Line: <b>{1}</b>',
                 'label_saved_versions': 'SAVED VERSIONS',
                 'label_public_comment': 'This is public Program, you can only test program or make a copy.',
+
+                'label_no_c_program_versions': 'No <strong class="font-color-code">Version</strong> found',
+                'label_no_c_program_versions_comment': 'Create a new one!',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -2527,17 +2533,17 @@ export class StaticTranslation {
                 'WIFI': 'Wi-Fi '
             },
             'publish_status': {
-                'pending': 'Your request has been submitted, <br> please wait for the administrator\'s decision.',
-                'approved': 'Your program has been approved. <br> You can find it with a slight modification in the list of public programs. <strong>Thank you!</strong>',
-                'disapproved': 'We apologize, but the administrator did not approve your program. More information was sent to you by email and notification.',
-                'edited': 'The program has been edited for another iteraction. ',
+                'PENDING': 'Your request has been submitted, <br> please wait for the administrator\'s decision.',
+                'APPROVED': 'Your program has been approved. <br> You can find it with a slight modification in the list of public programs. <strong>Thank you!</strong>',
+                'DISAPPROVED': 'We apologize, but the administrator did not approve your program. More information was sent to you by email and notification.',
+                'EDITED': 'The program has been edited for another iteraction. ',
             },
             'version_status': {
                 'IN_PROGRESS': 'Compilation is in progress.',
                 'SUCCESS': 'Successfully compiled.',
                 'SERVER_OFFLINE': 'Server error (offline). The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'SUCCESS_DOWNLOAD_FAILED': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
-                'compiled_with_code_errors': 'Code compilation finished with errors.',
+                'FAILED': 'Code compilation finished with errors.',
                 'FILE_NOT_FOUND': 'Code file not found. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'SERVER_ERROR': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'BROKEN_JSON': 'Json Code is Broken. Please try again later.',

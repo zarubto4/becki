@@ -237,6 +237,8 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(deviceGroup == null)"
                                 [condition_empty]="(deviceGroup != null && deviceGroup.content.length == 0)"
+                                [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5a0c3d37ef4a3c00018002aa_Kreslic%C3%AD%20pl%C3%A1tno%206-fin1.svg'"
+                                [image_description]="'label_hardware_group_documentation_description'|bkTranslate:this"
                                 [main_message_link]="'label_no_hardware_group'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_hardware_group_comment'|bkTranslate:this"
                                 [btn_label]="'btn_add_hardware_group'|bkTranslate:this"
@@ -337,6 +339,8 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(actualizationFilter == null)"
                                 [condition_empty]="(actualizationFilter != null && actualizationFilter.content.length == 0)"
+                                [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5a0c3d316b2b6e0001417b9b_Kreslic%C3%AD%20pl%C3%A1tno%2016-fin1.svg'"
+                                [image_description]="'label_release_documentation_description'|bkTranslate:this"
                                 [main_message_link]="'label_no_updates'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_updates_comment'|bkTranslate:this"
                                 [btn_label]="'btn_add_new_update'|bkTranslate:this"

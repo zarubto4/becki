@@ -97,6 +97,12 @@
             <bk-filter-page-component [from]="instanceFilter.from" [to]="instanceFilter.to" [total]="instanceFilter.total"  [totalPages]="instanceFilter.pages" (onSelect)="onFilterInstances($event)"></bk-filter-page-component>
         </div>
 
+
+        <p>Hardware can be registered to any number of groups. Using groups, you can more easily filter hardware.<br>  <span class="text-center">Import it. Export. Create statistics. And other miracles.<br> But only if we have already implemented it.</span></p> <p class="text-center">Trololo...</p>
+
+        <p>Here you can create group orders. For example, update hardware in <strong>"North Korea"</strong> or execute <strong>order 66</strong>.<br> Heavy times for the republic..</p>
+
+
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(instanceFilter == null)"
                             [condition_empty]="(instanceFilter != null && instanceFilter.content.length == 0)"

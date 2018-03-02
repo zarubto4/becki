@@ -25,7 +25,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
                     </p>
                 </div>
            
-                    <div *ngIf="image_description" class="portlet light bordered" style="margin-left: 10%; margin-right: 10%;">
+                    <div *ngIf="image_description && condition_empty && !condition_loading" class="portlet light bordered" style="margin-left: 10%; margin-right: 10%;">
                         <div class="portlet-title">
                             <div class="caption font-grey-salsap">
                                 <i class="icon-speech font-grey-salsa"></i>

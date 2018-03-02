@@ -225,18 +225,18 @@
                         <table class="table table-condensed table-hover">
                             <thead>
                             <tr>
-                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                                <th class="">{{'table_name'|bkTranslate:this}}</th>
                                 <th></th>
-                                <th class="col col-lg-6">{{'table_description'|bkTranslate:this}}</th>
-                                <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
-                                <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
-                                <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                <th class="">{{'table_description'|bkTranslate:this}}</th>
+                                <th class="">{{'table_author'|bkTranslate:this}}</th>
+                                <th class="">{{'table_status'|bkTranslate:this}}</th>
+                                <th class=" text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr *ngFor="let version of hardwareType.main_c_program.program_versions">
                                 <!-- NAME -->
-                                <td class="vert-align bold">
+                                <td class="no-wrap vert-align bold">
                                     <a [routerLink]="[hardwareType.main_c_program.id]">
                                         {{version.name}}
                                     </a>
@@ -250,11 +250,12 @@
                                 </td>
                                 <!-- Description -->
                                 <td class="vert-align">
-                                    {{version.version_description}}
+                                    {{version.description}}
                                 </td>
                                 <!-- Author -->
-                                <td class="vert-align">
-                                    {{version.author.nick_name}}
+                                <td class="no-wrap vert-align">
+                                    <span *ngIf="version.author">{{version.author.nick_name}}</span>
+                                    <span *ngIf="!version.author">?</span>
                                 </td>
                                 <!-- STATUS -->
                                 <td class="vert-align">
@@ -278,7 +279,7 @@
                                         <i class="fa fa-cog"></i>
                                     </button>
 
-                                    <button *ngIf="version.status=='successfully_compiled_and_restored' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                                    <button *ngIf="version.status=='SUCCESS' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
                                         <i class="fa fa-flag"></i>
                                     </button>
 
@@ -298,7 +299,7 @@
                                         [main_message_link]="'label_no_c_program_versions'|bkTranslate:this"
                                         [main_message_comment_link]="'label_no_c_program_versions_comment'|bkTranslate:this"
                                         [btn_label]="'btn_create_c_program_version'|bkTranslate:this"
-                                        (onButtonClick)="onCProgramClick(hardwareType.main_c_program.id)">
+                                        (onButtonClick)="onCProgramAdminClick(hardwareType.main_c_program.id)">
                     </bk-nothing-to-show>
                     <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
@@ -342,24 +343,24 @@
                         <table class="table table-condensed table-hover">
                             <thead>
                             <tr>
-                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                                <th class="">{{'table_name'|bkTranslate:this}}</th>
                                 <th></th>
-                                <th class="col col-lg-6">{{'table_description'|bkTranslate:this}}</th>
-                                <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
-                                <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
-                                <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                <th class="">{{'table_description'|bkTranslate:this}}</th>
+                                <th class="">{{'table_author'|bkTranslate:this}}</th>
+                                <th class="">{{'table_status'|bkTranslate:this}}</th>
+                                <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr *ngFor="let version of hardwareType.main_test_c_program.program_versions">
                                 <!-- NAME -->
-                                <td class="vert-align bold">
+                                <td class="vert-align bold no-wrap">
                                     <a [routerLink]="[hardwareType.main_test_c_program.id]">
                                         {{version.name}}
                                     </a>
                                 </td>
                                 <!-- Main Mark - Only for settings for Type of Board -->
-                                <td class="vert-align">
+                                <td class="vert-align no-wrap">
                                      <span class="icon-hint-wraper green" *ngIf="version.main_mark">
                                             <i class="fa fa-lg fa-flag font-green-jungle"></i>
                                             <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
@@ -367,42 +368,16 @@
                                 </td>
                                 <!-- Description -->
                                 <td class="vert-align">
-                                    {{version.version_description}}
+                                    {{version.description}}
                                 </td>
                                 <!-- Author -->
-                                <td class="vert-align">
-                                    {{version.author.nick_name}}
+                                <td class="vert-align no-wrap">
+                                    <span *ngIf="version.author">{{version.author.nick_name}}</span>
+                                    <span *ngIf="!version.author">?</span>
                                 </td>
                                 <!-- STATUS -->
-                                <td class="vert-align">
-
-                                    <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
-                                            <i class="fa fa-exclamation-triangle font-red-mint"></i>
-                                        </span>
-                                    <span class="icon-hint-wraper orange" *ngIf="version.status=='compiled_with_code_errors'">
-                                            <i class="fa fa-thumbs-down font-yellow"></i>
-                                            <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
-
-                                    <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
-                                            <i class="fa fa-heartbeat font-red-mint"></i>
-                                            <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
-
-                                    <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored' || version.status=='undefined' || version.status=='file_with_code_not_found' || version.status=='compilation_server_error' || version.status=='json_code_is_broken'">
-                                            <i class="fa fa-npm wrench font-yellow"></i>
-                                            <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
-
-                                    <span class="icon-hint-wraper gray" *ngIf="version.status=='compilation_in_progress'">
-                                            <i class="fa fa-spinner fa-spin"></i>
-                                            <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
-
-                                    <span class="icon-hint-wraper green" *ngIf="version.status=='successfully_compiled_and_restored'">
-                                            <i class="fa fa-check font-green-jungle"></i>
-                                            <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
+                                <td class="vert-align no-wrap">
+                                    <bk-compilation-status-component [status]="version.status"></bk-compilation-status-component>
                                 </td>
 
                                 <!-- ACTIONS -->
@@ -422,7 +397,7 @@
                                         <i class="fa fa-cog"></i>
                                     </button>
 
-                                    <button *ngIf="version.status=='successfully_compiled_and_restored' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                                    <button *ngIf="version.status=='SUCCESS' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
                                         <i class="fa fa-flag"></i>
                                     </button>
 
@@ -443,7 +418,7 @@
                                         [main_message_link]="'label_no_c_program_versions'|bkTranslate:this"
                                         [main_message_comment_link]="'label_no_c_program_versions_comment'|bkTranslate:this"
                                         [btn_label]="'btn_create_c_program_version'|bkTranslate:this"
-                                        (onButtonClick)="onCProgramClick(hardwareType.main_test_c_program.id)">
+                                        (onButtonClick)="onCProgramAdminClick(hardwareType.main_test_c_program.id)">
                     </bk-nothing-to-show>
                     <!-- Temporary page content if content is being loaded or if there is no content -- END -->
                 </div>

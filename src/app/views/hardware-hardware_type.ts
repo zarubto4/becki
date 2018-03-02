@@ -74,6 +74,12 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
         if (action === 'c_program_main_test_edit') {
             this.onCProgramEditClick(this.hardwareType.main_test_c_program);
         }
+        if (action === 'c_program_version_main_add') {
+            this.onCProgramAdminClick(this.hardwareType.main_c_program.id);
+        }
+        if (action === 'c_program_version_main_test_add') {
+            this.onCProgramAdminClick(this.hardwareType.main_test_c_program.id);
+        }
     }
 
     onToggleTab(tab: string) {
