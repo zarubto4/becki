@@ -87,7 +87,7 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
                         status += ' - ' + this.translationService.translateTable('ALREADY_ON', this, 'server_type') + '!!';
                     }
                     return {
-                        label: pv.personal_server_name + ' - ' + status,
+                        label: pv.name + ' - ' + status,
                         value: pv.id,
                     };
                 });

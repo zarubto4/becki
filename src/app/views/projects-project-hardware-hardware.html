@@ -157,7 +157,7 @@
                         <div *ngIf="hardware.server!=null">
                             {{'label_server'|bkTranslate:this}}:
                             <span *ngIf="hardware.server" class="font-grey-mint bold">{{hardware.server.online_state|bkTranslateTable:this:'online_state'}}</span>
-                            <span *ngIf="hardware.server" class="font-grey-mint bold">{{hardware.server.personal_server_name}}</span>
+                            <span *ngIf="hardware.server" class="font-grey-mint bold">{{hardware.server.name}}</span>
                         </div>
 
                     </div>
@@ -340,8 +340,8 @@
 
                             <div *ngIf="hardware.server!=null">
                                 <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server'|bkTranslate:this}}:
-                                <span *ngIf="hardware.server.personal_server_name" class="font-grey-mint bold">{{hardware.server.personal_server_name}}</span>
-                                <span *ngIf="!hardware.server.personal_server_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                <span *ngIf="hardware.server.name" class="font-grey-mint bold">{{hardware.server.name}}</span>
+                                <span *ngIf="!hardware.server.name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                 <bk-online-state [online_state]="hardware.server.online_state"></bk-online-state>
                             </div>
 

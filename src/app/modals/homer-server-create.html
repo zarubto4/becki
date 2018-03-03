@@ -5,7 +5,8 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.personal_server_name" [label]="'label_personal_server_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.name" [label]="'label_personal_server_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" [label]="'label_personal_server_description'|bkTranslate:this"></bk-form-input>
 
             <div>
                 <span>{{'label_server_url_comment'|bkTranslate:this}}</span>

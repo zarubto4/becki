@@ -401,7 +401,7 @@ export class CurrentParamsService {
                 this.currentHomerServerNameSubject.next(this.currentHomerServerNameSnapshot);
             } else {
                 this.backendService.homerServerGet(params['homer_server']).then((server) => {
-                    this.currentHomerServerNameSnapshot = server.personal_server_name;
+                    this.currentHomerServerNameSnapshot = server.name;
                     this.currentHomerServerNameSubject.next(this.currentHomerServerNameSnapshot);
                 });
             }

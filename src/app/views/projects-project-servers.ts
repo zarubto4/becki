@@ -13,8 +13,9 @@ import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-creat
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
-import {Subscription} from "rxjs";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import { Subscription } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
     selector: 'bk-view-projects-project-server',
@@ -27,6 +28,8 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
+
+    currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     project: IProject = null;
 
@@ -54,7 +57,8 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         });
 
         this.form = this.formBuilder.group({
-            'personal_server_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+            'description': ['', [Validators.maxLength(65)]],
             'selected_server_slug': ['', [Validators.required]],
             'selected_destination_slug': ['', [Validators.required]],
         });
@@ -62,7 +66,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
 
     onPortletClick(action: string): void {
         if (action === 'homer_server_add') {
-            this.onCreateHomerServerClick();
+            this.tab = 'create_server';
         }
     }
 
@@ -75,8 +79,6 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         this.selected_destination_slug = slug;
         (<FormControl>(this.form.controls['selected_destination_slug'])).setValue(slug);
     }
-
-
 
     onFilterHomerServer(pageNumber: number = 0): void {
         this.blockUI();
@@ -102,13 +104,14 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     }
 
 
-    onCreateHomerServerClick(): void {
+    onCreateHomerServerManuallyClick(): void {
         let model = new ModalsCreateHomerServerModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.homerServerCreate({
-                    personal_server_name: model.personal_server_name,
+                this.tyrionBackendService.homerServerCreateManualy({
+                    name: model.name,
+                    description: model.description,
                     web_view_port: model.web_view_port,
                     server_url: model.server_url,
                     mqtt_port: model.mqtt_port,
@@ -127,6 +130,22 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         });
     }
 
+    onCreateHomerServerAutomaticalyClick(): void {
+        this.blockUI();
+        this.tyrionBackendService.homerServerCreateAutomatically({
+            name: this.form.controls['name'].value,
+            description: this.form.controls['description'].value,
+            size_slug: this.form.controls['selected_server_slug'].value,
+            region_slug: this.form.controls['selected_destination_slug'].value,
+            project_id: this.project_id
+        }).then(() => {
+            this.onFilterHomerServer();
+        }).catch(reason => {
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+            this.onFilterHomerServer();
+        });
+    }
+
     onHomerServerClick(serverShortDetail: IHomerServer): void {
         // TODO dodělat stránku server??
     }
@@ -139,7 +158,8 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                 let server: IHomerServer = values[0];
 
                 let model = new ModalsCreateHomerServerModel(
-                    server.personal_server_name,
+                    server.name,
+                    server.description,
                     server.mqtt_port,
                     server.grid_port,
                     server.web_view_port,
@@ -154,7 +174,8 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                     if (success) {
                         this.blockUI();
                         this.tyrionBackendService.homerServerEdit(server.id, {
-                            personal_server_name: model.personal_server_name,
+                            name: model.name,
+                            description: model.description,
                             web_view_port: model.web_view_port,
                             server_url: model.server_url,
                             mqtt_port: model.mqtt_port,
@@ -199,7 +220,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     }
 
     onHomerServerDeleteClick(server: IHomerServer): void {
-        this.modalService.showModal(new ModalsRemovalModel(server.personal_server_name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(server.name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.homerServerDelete(server.id)
@@ -213,10 +234,6 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                     });
             }
         });
-    }
-
-    onCreateAutomaticalyServerClick(): void {
-
     }
 
 }

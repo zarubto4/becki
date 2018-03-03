@@ -226,11 +226,10 @@
                                 </span>
                                 <span *ngIf="mainServer" style="margin-left: 4px">
                                     <span class="font-red-flamingo">
-                                        {{mainServer.personal_server_name}}
+                                        {{mainServer.name}}
                                     </span>
-                                    <span *ngIf="mainServer.online_state == 'ONLINE'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
-                                    <span *ngIf="mainServer.online_state != 'ONLINE'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
-                                    <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', mainServer.id]"></i>
+                                    <bk-online-state [online_state]="mainServer.online_state"></bk-online-state>
+                                     <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', mainServer.id]"></i>
                                 </span>
                             </div>
                             <hr>
@@ -241,10 +240,9 @@
                                 </span>
                                 <span *ngIf="backupServer" style="margin-left: 4px">
                                     <span class="font-red-flamingo">
-                                        {{backupServer.personal_server_name}}
+                                        {{backupServer.name}}
                                     </span>
-                                    <span *ngIf="backupServer.online_state == 'ONLINE'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
-                                    <span *ngIf="backupServer.online_state != 'ONLINE'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <bk-online-state [online_state]="backupServer.online_state"></bk-online-state>
                                     <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', backupServer.id]"></i>
                                 </span>
                             </div>

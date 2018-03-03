@@ -92,8 +92,9 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.homerServerCreate({
-                    personal_server_name: model.personal_server_name,
+                this.tyrionBackendService.homerServerCreateManualy({
+                    name: model.name,
+                    description: model.description,
                     web_view_port: model.web_view_port,
                     server_url: model.server_url,
                     mqtt_port: model.mqtt_port,
@@ -135,7 +136,8 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
 
     onHomerServerEditClick(server: IHomerServer): void {
         let model = new ModalsCreateHomerServerModel(
-            server.personal_server_name,
+            server.name,
+            server.description,
             server.mqtt_port,
             server.grid_port,
             server.web_view_port,
@@ -150,7 +152,8 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.homerServerEdit(server.id, {
-                    personal_server_name: model.personal_server_name,
+                    name: model.name,
+                    description: model.description,
                     web_view_port: model.web_view_port,
                     server_url: model.server_url,
                     mqtt_port: model.mqtt_port,
@@ -178,7 +181,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
     }
 
     onHomerServerDeleteClick(serverShortDetail: IHomerServer): void {
-        this.modalService.showModal(new ModalsRemovalModel(serverShortDetail.personal_server_name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(serverShortDetail.name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.homerServerDelete(serverShortDetail.id)

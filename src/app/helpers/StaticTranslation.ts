@@ -1341,7 +1341,7 @@ export class StaticTranslation {
                 'label_no_server_size_found_comment': 'This message should never show you .... very interesting ... obviously something went wrong ... now is the time to turn to technical support.,',
 
                 'label_select_size': 'Select Server Size',
-                'label_select_destination': 'Select Destination',
+                'label_select_destination': 'Choose a datacenter region',
                 'btn_create_server': 'Create Server',
 
             }, 'ProjectsProjectInstancesComponent': {

@@ -13,7 +13,8 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 
 export class ModalsCreateHomerServerModel extends ModalModel {
     constructor(
-        public personal_server_name: string = '',
+        public name: string = '',
+        public description: string = '',
         public mqtt_port: number = 1883,
         public grid_port: number = 8053,
         public web_view_port: number = 8052,
@@ -45,7 +46,8 @@ export class ModalsCreateHomerServerComponent implements OnInit {
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'personal_server_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+            'description': ['', [Validators.maxLength(65)]],
             'mqtt_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'grid_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'web_view_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
@@ -58,7 +60,8 @@ export class ModalsCreateHomerServerComponent implements OnInit {
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['personal_server_name'])).setValue(this.modalModel.personal_server_name);
+        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
+        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['mqtt_port'])).setValue(this.modalModel.mqtt_port);
         (<FormControl>(this.form.controls['grid_port'])).setValue(this.modalModel.grid_port);
         (<FormControl>(this.form.controls['web_view_port'])).setValue(this.modalModel.web_view_port);
@@ -70,7 +73,8 @@ export class ModalsCreateHomerServerComponent implements OnInit {
     }
 
     onSubmitClick(): void {
-        this.modalModel.personal_server_name = this.form.controls['personal_server_name'].value;
+        this.modalModel.name = this.form.controls['name'].value;
+        this.modalModel.description = this.form.controls['description'].value;
         this.modalModel.mqtt_port = this.form.controls['mqtt_port'].value;
         this.modalModel.grid_port = this.form.controls['grid_port'].value;
         this.modalModel.web_view_port = this.form.controls['web_view_port'].value;

@@ -60,7 +60,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
 
                     let status = this.translationService.translateTable(pv.server_type, this, 'server_type');
                     return {
-                        label: pv.personal_server_name + ' (' + status + ')',
+                        label: pv.name + ' (' + status + ')',
                         value: pv.id,
                     };
                 });
