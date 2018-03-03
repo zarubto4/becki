@@ -75,12 +75,12 @@
                                 [main_message_link]="'label_no_servers'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_servers_comment'|bkTranslate:this"
                                 [btn_label]="'btn_create_server'|bkTranslate:this"
-                                (onButtonClick)="onPortletClick('create_server')">
+                                (onButtonClick)="onPortletClick('homer_server_add')">
             </bk-nothing-to-show>
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
         </div>
-        <div  *ngIf="tab == 'create_server'">
+        <div *ngIf="tab == 'create_server'">
 
 
             <div class="mt-element-card mt-element-overlay">
@@ -95,20 +95,24 @@
                 <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
 
+                <!-- Select Server size -->
                 <div *ngIf="registration_information" class="row">
                     <H2 [innerHTML]="'label_select_size'|bkTranslate:this"></H2>
                     <div *ngFor="let server_size of registration_information.server_sizes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
-                        <bk-server-size-componet [server_size]="server_size" [selected_slug]="selected_server_slug" (onClick)="onServerSlugClick($event)"></bk-server-size-componet>
+                        <bk-server-size-componet [server_size]="server_size" [selected_slug]="selected_server_slug" (onClick)="onServerSizeSlugClick($event)"></bk-server-size-componet>
                     </div>
                     <br>
                 </div>
 
+                <!-- Select Server Region -->
                 <div *ngIf="selected_server_slug" class="row">
                     <H2 [innerHTML]="'label_select_destination'|bkTranslate:this"></H2>
-
+                    <div *ngFor="let region of selected_server_slug.regions" class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
+                        <bk-server-region-component [server_region]="region" [selected_slug]="selected_destination_slug" (onClick)="onServerRegionSlugClick($event)"></bk-server-region-component>
+                    </div>
                 </div>
 
-
+                <!-- Name It -->
                 <div *ngIf="registration_information" class="row">
                     <div class="col-lg-5 col-md-4 col-sm-3 col-xs-12">
                     </div>

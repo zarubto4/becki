@@ -199,7 +199,7 @@ import { BlockoViewComponent } from './components/BlockoViewComponent';
 import { FileTreeLineComponent } from './components/FileTreeLineCompinent';
 import { IconComponent } from './components/FileTreeComponent';
 import { IconFileComponent } from './components/FileTreeComponent';
-import {ServerSizeSelectorComponent} from "./components/ServerSizeSelectorComponent";
+import {ServerRegionSelectorComponent, ServerSizeSelectorComponent} from "./components/ServerSizeSelectorComponent";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -517,6 +517,7 @@ class BeckiErrorHandler implements ErrorHandler {
         PaymentMethodComponent,
         PortletPanelMenuComponent,
         ServerSizeSelectorComponent,
+        ServerRegionSelectorComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,

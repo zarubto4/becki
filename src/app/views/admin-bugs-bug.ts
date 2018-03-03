@@ -33,6 +33,15 @@ export class BugsBugComponent extends _BaseMainComponent implements OnInit, OnDe
     ngOnDestroy(): void {
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'report_bug') {
+            this.onReportBug();
+        }
+
+        if (action === 'remove_bug') {
+            this.onDeleteBug();
+        }
+    }
     refresh(): void {
         this.blockUI();
         this.tyrionBackendService.getBug(this.bugId)
@@ -53,6 +62,7 @@ export class BugsBugComponent extends _BaseMainComponent implements OnInit, OnDe
             .then((bug) => {
                 this.bug = bug;
                 this.unblockUI();
+                this.fmSuccess(this.translate('flash_report_success'));
             })
             .catch((reason) => {
                 this.unblockUI();

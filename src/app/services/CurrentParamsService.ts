@@ -426,7 +426,7 @@ export class CurrentParamsService {
                 this.currentBugSummarySubject.next(this.currentBugSummarySnapshot);
             } else {
                 this.backendService.getBug(params['bug']).then((bug) => {
-                    this.currentBugSummarySnapshot = bug.stack_trace;
+                    this.currentBugSummarySnapshot = bug.name;
                     this.currentBugSummarySubject.next(this.currentBugSummarySnapshot);
                 });
             }

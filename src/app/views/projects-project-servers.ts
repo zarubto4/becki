@@ -6,7 +6,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import {
     ICompilationServer, IHomerServer, IHomerServerFilter, IHomerServerList, IProject,
-    IServerRegistrationFormData
+    IServerRegistrationFormData, IServerRegistrationFormDataServerRegion, IServerRegistrationFormDataServerSize
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
@@ -34,12 +34,12 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     project: IProject = null;
 
 
-    tab: string = 'create_server';
+    tab: string = 'server_list';
 
     // Everything for serv er registration
     registration_information: IServerRegistrationFormData = null;
-    selected_server_slug: string = null;
-    selected_destination_slug: string = null;
+    selected_server_slug: IServerRegistrationFormDataServerSize = null;
+    selected_destination_slug: IServerRegistrationFormDataServerRegion = null;
     form: FormGroup;
 
     constructor(injector: Injector) {
@@ -65,19 +65,24 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     }
 
     onPortletClick(action: string): void {
+        console.log('onPortletClick:: ', action);
         if (action === 'homer_server_add') {
+            console.log('onPortletClick:: == homer_server_add');
             this.tab = 'create_server';
         }
     }
 
-    onServerSlugClick(slug: string): void {
+    onServerSizeSlugClick(slug: IServerRegistrationFormDataServerSize): void {
+        console.log('Doručení do prooject-server: new size slug', slug.slug);
+        console.log('Doručení do prooject-server: Selected server slug Region', slug.regions);
         this.selected_server_slug = slug;
-        (<FormControl>(this.form.controls['selected_server_slug'])).setValue(slug);
+        (<FormControl>(this.form.controls['selected_server_slug'])).setValue(slug.slug);
     }
 
-    onDestinationSlugClick(slug: string): void {
+    onServerRegionSlugClick(slug: IServerRegistrationFormDataServerRegion): void {
+        console.log('Doručení do prooject-server: new destination slug', slug.slug);
         this.selected_destination_slug = slug;
-        (<FormControl>(this.form.controls['selected_destination_slug'])).setValue(slug);
+        (<FormControl>(this.form.controls['selected_destination_slug'])).setValue(slug.slug);
     }
 
     onFilterHomerServer(pageNumber: number = 0): void {
@@ -139,6 +144,8 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
             region_slug: this.form.controls['selected_destination_slug'].value,
             project_id: this.project_id
         }).then(() => {
+            this.tab = 'server_list';
+            this.unblockUI();
             this.onFilterHomerServer();
         }).catch(reason => {
             this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));

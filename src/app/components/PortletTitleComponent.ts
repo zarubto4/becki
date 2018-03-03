@@ -15,16 +15,36 @@ import { Router } from '@angular/router';
                 </div>
                 <div *ngIf="btns && btns.length > 0" class="becki-actions">
                     <template ngFor let-element="$implicit" [ngForOf]="btns">
-                        <button *ngIf="element.condition" class="btn"  
-                                [class.red-sunglo]="element.colorType=='REMOVE'" 
-                                [class.yellow-crusta]="element.colorType=='EDIT'" 
-                                [class.blue-madison]="element.colorType=='ACTIVE'" 
-                                [class.purple-plum]="element.colorType=='DEACTIVE'"
-                                [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
-                                [class.grey-cascade]="element.colorType == '' || element.colorType == null"
-                                (click)="onClickButton(element.btn_tag)">
-                            <i class="fa {{element.icon}}"></i> {{element.btn_label_for_person}}
-                        </button>
+                        
+                        <!-- Only if not a external link link !-->
+                        <span *ngIf="!btn_link">
+                            <button *ngIf="element.condition" class="btn"
+                                    [class.red-sunglo]="element.colorType=='REMOVE'"
+                                    [class.yellow-crusta]="element.colorType=='EDIT'"
+                                    [class.blue-madison]="element.colorType=='ACTIVE'"
+                                    [class.purple-plum]="element.colorType=='DEACTIVE'"
+                                    [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
+                                    [class.grey-cascade]="element.colorType == '' || element.colorType == null"
+                                    (click)="onClickButton(element.btn_tag)">
+                                <i class="fa {{element.icon}}"></i> {{element.btn_label_for_person}}
+                            </button>
+                        </span>
+
+                        <!-- Only if its a external link - Stupid but easy to write !-->
+                        <a  *ngIf="btn_link" href="btn_link" target="_blank">
+                            <button *ngIf="element.condition" class="btn"  
+                                    [class.red-sunglo]="element.colorType=='REMOVE'" 
+                                    [class.yellow-crusta]="element.colorType=='EDIT'" 
+                                    [class.blue-madison]="element.colorType=='ACTIVE'" 
+                                    [class.purple-plum]="element.colorType=='DEACTIVE'"
+                                    [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
+                                    [class.grey-cascade]="element.colorType == '' || element.colorType == null"
+                                    (click)="onClickButton(element.btn_tag)">
+                                <i class="fa {{element.icon}}"></i> {{element.btn_label_for_person}}
+                            </button>
+                        </a>
+                        
+                        
                     </template>
                 </div>
                 <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line">
@@ -75,6 +95,7 @@ export class PortletTitleComponent {
         permission?: boolean,                                                       // for example project.delete_permission
         colorType?: ('ADD'| 'EDIT' | 'CREATE' | 'REMOVE' | 'ACTIVE' | 'DEACTIVE'),  // DEFAULT in HTML is EDIT
         btn_tag: string,    // Only if you have more that one Button!
+        btn_link?: string,  // External link
     }[] = null;
 
     @Output()
