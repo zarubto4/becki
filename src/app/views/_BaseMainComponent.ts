@@ -122,13 +122,17 @@ export abstract class _BaseMainComponent {
         this.navigate(['/financial']);
     }
 
-    public onGarfieldClick(): void {
+    public onGarfieldClick(garfield_id: string): void {
+        this.navigate(['/admin/garfield/', garfield_id]);
+    }
+
+    public onGarfieldListClick(): void {
         this.navigate(['/admin/garfield']);
     }
 
 
     public onRoleClick(role_id: string): void {
-        this.navigate(['admin/permission-group/', role_id]);
+        this.navigate(['admin/permission-group', role_id]);
     }
 
     public onProjectClick(project_id: string): void {
@@ -165,6 +169,10 @@ export abstract class _BaseMainComponent {
 
     public onCProgramAdminClick(c_program_id: string): void {
         this.router.navigate(['/admin/hardware/code', c_program_id]);
+    }
+
+    public onBProgramClick(bProgram_id: string): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgram_id]);
     }
 
     public onDeviceClick_Admin(device_id: string): void {

@@ -52,13 +52,13 @@
                             <th class="">{{'table_name'|bkTranslate:this}}</th>
                             <th class="">{{'table_description'|bkTranslate:this}}</th>
                             <th class=""> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                            <th class=" text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let code of privatePrograms.content">
-                            <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
-                            <td class="vert-align no-wrap">{{code.description}}</td>
+                            <td class="vert-align no-wrap"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
+                            <td class="vert-align">{{code.description}}</td>
                             <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
                             <td class="vert-align no-wrap text-right">
 

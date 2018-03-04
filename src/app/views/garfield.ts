@@ -40,6 +40,13 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
             });
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'create') {
+            this.onCreateGarfield();
+        }
+    }
+
+
     onCreateGarfield() {
         this.blockUI();
         Promise.all<any>([this.tyrionBackendService.producersGetAll(), this.tyrionBackendService.hardwareTypesGetAll()])

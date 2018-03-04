@@ -89,6 +89,13 @@
                             <i class="fa fa-angle-down"></i>
                         </a>
                     </div>
+                    <div *ngIf="_show_integrated_hardware_portlet">
+                        <!-- Hardware máme - HW nemáme -->
+                        <div *ngIf="">
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
@@ -98,7 +105,7 @@
                 <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
                     <div class="caption">
                         <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-microchip"></i>
+                            <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
                               <span [innerHTML]="'label_panel_blocko_interface_preview'|bkTranslate:this"></span>
                         </span>
                     </div>
@@ -116,7 +123,31 @@
                 </div>
             </div>
 
-
+            <!--- Under IDE -->
+            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
+                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
+                    <div class="caption">
+                            <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-cogs"></i>
+                                  <span [innerHTML]="'label_panel_code_settings'|bkTranslate:this"></span>
+                            </span>
+                    </div>
+                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
+                        <a *ngIf="_show_code_settings_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_code_settings_portlet(false)">
+                            <i class="fa fa-angle-up"></i>
+                        </a>
+                        <a *ngIf="!_show_code_settings_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_code_settings_portlet(true)">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div *ngIf="_show_code_settings_portlet">
+                    <div  *ngIf="compilation_version_library_tag && libraryCompilationVersionOptions">
+                        <bk-form-select [control]="compilation_version_library_tag" [label]="'label_library_version'|bkTranslate:this"
+                                        [regexFirstOption]="'[v][0-9.]*(?![-])$'" [options]="libraryCompilationVersionOptions"></bk-form-select>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="col-lg-10 col-md-9 col-sm-8 no-padding-left">

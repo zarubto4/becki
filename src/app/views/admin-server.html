@@ -62,7 +62,7 @@
                     <tbody>
                     <tr *ngFor="let homer_server of homer_servers.content">
                         <td class="vert-align no-wrap">
-                            <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.personal_server_name?homer_server.personal_server_name:homer_server.id}}</strong></a>
+                            <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.name?homer_server.name:homer_server.id}}</strong></a>
                         </td>
                         <td class="vert-align no-wrap">{{homer_server.id}}</td>
                         <td class="vert-align no-wrap">

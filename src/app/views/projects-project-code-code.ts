@@ -91,7 +91,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
         this.refreshInterface();
 
         this.formLibrarySelector = this.formBuilder.group({
-            'tag_name': ['', [Validators.required]]
+            'compilation_version_library_tag': ['', [Validators.required]]
         });
 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -647,7 +647,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                     description: m.description,
                     main: main,
                     files: userFiles,
-                    library_compilation_version: this.formLibrarySelector.controls['tag_name'].value
+                    library_compilation_version: this.formLibrarySelector.controls['compilation_version_library_tag'].value
                 })
                     .then(() => {
                         this.fmSuccess(this.translate('flash_code_version_save', m.name));

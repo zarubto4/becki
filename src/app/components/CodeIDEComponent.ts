@@ -9,6 +9,8 @@ import { ModalsCodeFileDialogModel, ModalsCodeFileDialogType } from '../modals/c
 import { ModalService } from '../services/ModalService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { TranslationService } from '../services/TranslationService';
+import {FormSelectComponentOption} from "./FormSelectComponent";
+import {AbstractControl} from "@angular/forms";
 
 export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
 
@@ -171,6 +173,14 @@ export class CodeIDEComponent implements OnChanges {
     @Output()
     onChangeLibraryVersionClick = new EventEmitter<CodeFile>();
 
+    // Compilation version
+    @Input()
+    compilation_version_library_tag: AbstractControl = null;
+
+    // List of all Version for compilation (for this type_of_board)
+    @Input()
+    libraryCompilationVersionOptions: FormSelectComponentOption[] = null;
+
     @Output()
     onSaveClick = new EventEmitter<boolean>();
 
@@ -192,6 +202,7 @@ export class CodeIDEComponent implements OnChanges {
     private _show_libraries_portlet: boolean = false;
     private _show_integrated_hardware_portlet: boolean = false;
     private _show_blocko_interface_portlet: boolean = false;
+    private _show_code_settings_portlet: boolean = false;
 
 
     constructor(protected modalService: ModalService, private translationService: TranslationService) {
@@ -787,6 +798,9 @@ export class CodeIDEComponent implements OnChanges {
     }
     show_blocko_interface_portlet(show: boolean) {
         this._show_blocko_interface_portlet = show;
+    }
+    show_code_settings_portlet(show: boolean) {
+        this._show_code_settings_portlet = show;
     }
 
 

@@ -567,7 +567,7 @@ export class StaticTranslation {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Garfield - Test & Burn Kits',
 
-                'title': 'List of Roles',
+                'title': 'Garfield Testers',
                 'label_create_role': 'Create new Role',
 
                 'label_name': 'Name',
@@ -2156,8 +2156,10 @@ export class StaticTranslation {
                 'label_file': ' file',
                 'label_panel_hardware': 'Assigned <strong class="font-color-hardware">HARDWARE</strong>',
                 'label_panel_blocko_interface_preview': '<strong class="font-color-blocko">BLOCKO</strong> Interface Preview',
+                'label_panel_code_settings': 'Settings',
                 'label_panel_libraries': 'External Libraries',
                 'label_panel_files': 'Files',
+                'label_library_version': 'Core Library Version',
 
                 'btn_add_file': 'New File',
                 'btn_add_directory': 'New Directory',

@@ -41,7 +41,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let blocko of privatePrograms.content">
-                    <td class="vert-align no-wrap bold"><a (click)="onBlockoClick(blocko)">{{blocko.name}}</a></td>
+                    <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(blocko.id)">{{blocko.name}}</a></td>
                     <td class="vert-align">{{blocko.description}}</td>
                     <td class="vert-align no-wrap text-right">
 
@@ -61,6 +61,7 @@
                 </tr>
                 </tbody>
             </table>
+            <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to" [total]="privatePrograms.total"  [totalPages]="privatePrograms.pages" (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
         </div>
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->

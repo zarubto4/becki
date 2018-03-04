@@ -64,7 +64,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
         }
 
         if (action === 'register_new_hardware') {
-            this.onGarfieldClick();
+            this.onGarfieldListClick();
         }
         if (action === 'find_hardware_hash') {
             this.onGetHardwareHash();
@@ -179,7 +179,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
-                });
+                    });
             }
         });
     }
@@ -198,9 +198,9 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                    this.refresh();
-                });
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.refresh();
+                    });
             }
         });
     }
@@ -256,8 +256,8 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                });
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                    });
             }
         });
     }
