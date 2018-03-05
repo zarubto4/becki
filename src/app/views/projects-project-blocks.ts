@@ -1,0 +1,249 @@
+/**
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
+ */
+
+
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import { _BaseMainComponent } from './_BaseMainComponent';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { Subscription } from 'rxjs/Rx';
+import { ModalsRemovalModel } from '../modals/removal';
+import { IProject, IBlock, IBlockList } from '../backend/TyrionAPI';
+import { ModalsBlocksTypePropertiesModel } from '../modals/blocks-type-properties';
+import { ModalsBlocksBlockPropertiesModel } from '../modals/blocks-block-properties';
+import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsBlockoBlockCopyModel } from '../modals/blocko-block-copy';
+
+@Component({
+    selector: 'bk-view-projects-project-blocks',
+    templateUrl: './projects-project-blocks.html',
+})
+export class ProjectsProjectBlocksComponent extends _BaseMainComponent implements OnInit, OnDestroy {
+
+    projectId: string;
+
+    routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
+
+    project: IProject = null;
+
+    blockList: IBlockList = null;
+    blockPublicList: IBlockList = null;
+    blockListNotApproved: IBlockList = null;
+
+    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+
+    tab: string = 'my_blocks';
+
+    constructor(injector: Injector) {
+        super(injector);
+    };
+
+    ngOnInit(): void {
+        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+            this.projectId = params['project'];
+            if (this.projectId) {
+                this.onShowProgramPrivateBlocksFilter();
+            }else {
+                this.onShowProgramPendingBlocksFilter();
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) {
+            this.projectSubscription.unsubscribe();
+        }
+    }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
+
+        if (tab === 'my_blocks' && this.blockList == null) {
+            this.onShowProgramPrivateBlocksFilter();
+        }
+
+        if (tab === 'public_blocks' && this.blockPublicList == null) {
+            this.onShowProgramPrivateBlocksFilter();
+        }
+    }
+
+    onPortletClick(action: string): void {
+        if (action === 'add_block') {
+            this.onBlockAddClick();
+        }
+    }
+
+    onBlockClick(block: IBlock): void {
+        if (this.projectId) {
+            this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', block.id]);
+        } else {
+            this.navigate(['/admin/blocks/', block.id]);
+        }
+    }
+
+    onMakeClone(block: IBlock): void {
+        let model = new ModalsBlockoBlockCopyModel(block.name, block.description, this.project.tags);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.blockClone({
+                    block_id: block.id,
+                   // tags: model.tags,
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));
+                        this.unblockUI();
+
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail'), reason));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+
+    onBlockAddClick(): void {
+
+        let model = new ModalsBlocksBlockPropertiesModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.blockCreate({
+                    name: model.name,
+                    description: model.description,
+                    project_id: this.projectId
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_add')));
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        } else {
+                            this.onShowProgramPrivateBlocksFilter();
+                        }
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block'), reason));
+                        this.onShowProgramPrivateBlocksFilter();
+                    });
+            }
+        });
+    }
+
+    onBlockEditClick(block: IBlock): void {
+
+        let model = new ModalsBlocksBlockPropertiesModel(block.name, block.description, block.tags, true, block.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.blockEdit(block.id, {
+                    name: model.name,
+                    description: model.description,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_edit')));
+                        this.onShowProgramPrivateBlocksFilter();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block'), reason));
+                        this.onShowProgramPrivateBlocksFilter();
+                    });
+            }
+        });
+
+    }
+
+    onBlockDeleteClick(block: IBlock): void {
+
+        this.modalService.showModal(new ModalsRemovalModel(block.id)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.blockDelete(block.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
+                        this.onShowProgramPrivateBlocksFilter();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block'), reason));
+                        this.onShowProgramPrivateBlocksFilter();
+                    });
+            }
+        });
+    }
+
+    onBlockActivateClick(block: IBlock): void {
+        this.blockUI();
+        this.tyrionBackendService.blockActivate(block.id)
+            .then(() => {
+                this.onShowProgramPrivateBlocksFilter();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+                this.onShowProgramPendingBlocksFilter();
+            });
+    }
+
+    onBlockDeactivateClick(block: IBlock): void {
+        this.blockUI();
+        this.tyrionBackendService.blockDeactivate(block.id)
+            .then(() => {
+                this.onShowProgramPrivateBlocksFilter();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+                this.onShowProgramPendingBlocksFilter();
+            });
+    }
+
+    onShowProgramPrivateBlocksFilter(page: number = 0): void {
+        this.blockUI();
+        this.tyrionBackendService.blockGetByFilter(page, {
+            project_id: this.projectId,
+        })
+            .then((list) => {
+                this.blockList = list;
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+                this.unblockUI();
+            });
+    }
+
+    onShowProgramPublicBlocksFilter(page: number = 0): void {
+        this.blockUI();
+        this.tyrionBackendService.blockGetByFilter(page, {
+            public_programs: true,
+        })
+            .then((list) => {
+                this.blockPublicList = list;
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Blocko cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onShowProgramPendingBlocksFilter(page: number = 0): void {
+        this.blockUI();
+        this.tyrionBackendService.blockGetByFilter(page, {
+            pending_blocks: true,       // For public its required
+        })
+            .then((list) => {
+                this.blockListNotApproved = list;
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Blocko cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+}

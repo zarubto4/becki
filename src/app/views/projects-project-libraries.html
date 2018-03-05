@@ -15,14 +15,14 @@
         [icon]="'fa-microchip'"
         (onClick)="onPortletClick($event)"
         [btns]="[
-                      {
+                    {
                           condition: (tab == 'my_libraries'),
                           btn_label_for_person: ('btn_add_library'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
                           btn_tag: 'add_library'
-                      }
-                    ]"
+                    }
+                 ]"
         (onTabClick)="onToggleTab($event)"
         [tab_selected_name] = "tab"
         [tabBtns]="[

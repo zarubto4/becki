@@ -11,7 +11,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsWidgetsWidgetCopyModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '',  public tags: string[] = [], public type_of_widget: string = '') {
+    constructor(public name: string = '', public description: string = '',  public tags: string[] = []) {
         super();
     }
 }
@@ -37,7 +37,7 @@ export class ModalsWidgetsWidgetCopyComponent implements OnInit {
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4)]],
             'description': [''],
-            'type_of_widget': [''],
+            'tags': [''],
         });
     }
 

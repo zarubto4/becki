@@ -12,7 +12,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsBlockoBlockCopyModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '',  public tags: string[] = [], public type_of_blocks: string = '') {
+    constructor(public name: string = '', public description: string = '',  public tags: string[] = []) {
         super()
     }
 }
@@ -38,7 +38,7 @@ export class ModalsBlockoBlockCopyComponent implements OnInit {
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4)]],
             'description': [''],
-            'type_of_block': [''],
+            'tags': [''],
         });
     }
 
@@ -53,13 +53,13 @@ export class ModalsBlockoBlockCopyComponent implements OnInit {
 
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['type_of_blocks'])).setValue(this.modalModel.type_of_blocks);
+        (<FormControl>(this.form.controls['tags'])).setValue(this.modalModel.tags);
     }
 
     onSubmitClick(): void {
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
-        this.modalModel.type_of_blocks = this.form.controls['type_of_blocks'].value;
+        this.modalModel.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

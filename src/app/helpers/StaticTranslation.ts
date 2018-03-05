@@ -1550,6 +1550,7 @@ export class StaticTranslation {
                 'table_state': 'Description',
                 'table_actions': 'Actions',
 
+
                 'no_persons_in_this_projects': 'Forever <strong class="font-color-byzance-blue">Alone?</strong>',
                 'no_persons_in_this_projects_comment': 'It can be easily changed. <strong>Invite your mom</strong>, colleague or anyone you want.',
 
@@ -1569,43 +1570,14 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectWidgetsComponent': {
                 'main_title': 'Platform administration',
-                'main_subtitle': 'Community Grid Administration',
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - ALL WIDGET GROUPS',
-                'table_name': 'Name',
-                'table_description': 'Description',
-                'table_actions': 'Actions',
-                'btn_add_widget_group': 'Create GRID widget group',
-                'tab_public_groups': 'Public Groups',
-                'tab_private_groups': 'Private Groups',
-                'tab_programs_for_decisions': 'Widgets waiting for decision',
-                'table_group_size': 'Number of Widgets',
-
-                'label_no_programs': 'No Widgets',
-                'label_no_program_comment': 'No widgets for community administrator decision',
-                'label_no_groups': 'No public <strong class="font-color-grid">GRID</strong> widgets available',
-                'label_no_groups_comment': 'If you do not see your dream widget, create it and share it with others.',
-                'btn_create_group': 'Create Group',
-
-                'flash_grid_group_add_success': 'Group has been successfully created.',
-                'flash_grid_group_add_fail': 'Unable to create group, ',
-                'flash_grid_group_edit_success': 'Group has been changed.',
-                'flash_grid_group_edit_fail': 'Unable to edit group, ',
-                'flash_grid_group_remove_success': 'Group has been removed.',
-                'flash_grid_group_remove_fail': 'Unable to remove group, ',
-
-                'label_no_item': 'No <strong class="font-color-grid">GRID</strong> widget groups in this project.',
-                'label_you_can_create': 'Click on the button bellow to create a group to collect your own widgets',
-                'label_group_properities': 'Group properties',
-                'label_remove_group': 'Remove group',
-
-            }, 'ProjectsProjectWidgetsWidgetsComponent': {
-                'main_title': 'Platform administration',
                 'main_subtitle': 'Community Widget Group',
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET GROUP <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> widgets',
 
-                'btn_add_widget': 'Create GRID widget',
-                'widget_group_name': 'Group Name',
-                'widget_group_description': '<strong class="font-color-grid">GRID</strong> Widget Group Description: <strong>{0}</strong>',
+                'btn_add_widget': 'Create Widget',
+
+                'tab_my_widgets': 'My Widgets',
+                'tab_public_widgets': 'Public Widgets',
+                'tab_admin_widgets': 'Admin Widgets',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -1628,8 +1600,12 @@ export class StaticTranslation {
                 'flash_widget_edit_success': 'Widget has been edited.',
                 'flash_widget_edit_fail': 'Unable to edit widget, ',
 
-                'label_no_item': 'No <strong class="font-color-grid">GRID</strong> widgets in this group.',
-                'label_you_can_create': 'Click on the button bellow to create a widget.',
+                'label_no_private_widget': 'No <strong class="font-color-grid">GRID</strong> widgets',
+                'label_no_private_widget_comment': 'Click on the button bellow to create a widget.',
+                'label_no_public_widget': 'No public <strong class="font-color-grid">GRID</strong> widgets',
+                'label_no_public_widget_comment': 'Change filter Parameters, or create and share own miracle',
+                'label_no_admin_widget': 'No <strong class="font-color-grid">GRID</strong> widgets',
+                'label_no_admin_widget_comment': 'There is not any widgets to check and valid',
 
             }, 'ProjectsProjectWidgetsWidgetsWidgetComponent': {
 
@@ -1777,57 +1753,27 @@ export class StaticTranslation {
                 'flash_cant_change_version': 'Unable to change version {0}, {1}',
                 'flash_cant_load_block_version': 'Unable to load block version, ',
 
-            }, 'ProjectsProjectBlocksBlocksComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK GROUP <strong>{0}</strong>',
-                'label_group_properties': 'Group properties',
-                'label_group_remove': 'Remove group',
+            }, 'ProjectsProjectBlocksComponent': {
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> Blocks',
                 'label_block_properties': 'BLOCKO block properties',
                 'label_block_remove': 'Remove BLOCKO block',
-
-                'label_blocko_name': '<strong class="font-color-blocko">BLOCKO</strong> Block Group Name: <strong>{0}</strong>',
-                'label_blocko_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Group Description: <strong>{0}</strong>',
-
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
                 'label_no_block_program': 'No <strong class="font-color-blocko">BLOCKO</strong> Block in this group',
                 'label_create_block_text': 'Click on the button bellow to create a Blocko Block.',
 
-                'btn_add_block': 'New Block',
+                'btn_add_block': 'Create Block',
+                'tab_my_blocks': 'My Blocks',
+                'tab_public_blocks': 'Public Blocks',
+                'tab_admin_blocks': 'Admin Blocks',
 
-                'flash_block_groups_edit': 'Block group has been edited.',
-                'flash_cant_edit_block_groups': 'Unable to edit block group, ',
-                'flash_block_groups_remove': 'Block group has been removed.',
-                'flash_cant_remove_block_groups': 'Unable to remove block group, ',
                 'flash_block_add': 'Block has been created.',
                 'flash_cant_add_block': 'Unable to create block, ',
                 'flash_block_edit': 'Block has been edited.',
                 'flash_cant_edit_block': 'Unable to edit block, ',
                 'flash_block_remove': 'Block has been removed.',
                 'flash_cant_remove_block': 'Unable to remove block, ',
-
-            }, 'ProjectsProjectBlocksComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - ALL BLOCK GROUPS',
-                'table_name': 'Name',
-                'table_description': 'Description',
-                'table_actions': 'Actions',
-                'label_group_properties': 'Group properties',
-                'label_group_remove': 'Remove group',
-                'tab_private_groups': 'Private group',
-                'tab_public_groups': 'Public group',
-                'tab_programs_for_decisions': 'Publishing requirements',
-                'label_no_groups': 'No public <strong class="font-color-blocko">BLOCKO</strong> Blocks groups',
-                'label_no_groups_comment': 'If you do not see your dream program, create it and share it with others.',
-
-                'btn_add_blocks_group': 'New Group',
-                'flash_block_group_add': 'Block group has been created.',
-                'flash_cant_add_block_group': 'Unable to create block group,',
-                'flash_block_group_edit': 'Block group has been edited.',
-                'flash_cant_edit_block_group': 'Unable to edit block group,',
-                'flash_block_group_remove': 'Block group has been removed.',
-                'flash_cant_remove_block_group': 'Unable to remove block group,',
-                'label_no_blocko_group': 'No <strong class="font-color-blocko">BLOCKO</strong> Blocks group available',
-                'label_create_blocko_group_text': 'Click on the button bellow to create your first group of Blocko Blocks.',
 
             }, 'ProjectsProjectCodeCodeComponent': {
 

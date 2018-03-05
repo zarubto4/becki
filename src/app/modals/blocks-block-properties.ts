@@ -11,7 +11,7 @@ import { ModalModel } from '../services/ModalService';
 
 
 export class ModalsBlocksBlockPropertiesModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public edit: boolean = false, public exceptName: string = null) {
+    constructor(public name: string = '', public description: string = '', public tags: string[] = [], public edit: boolean = false, public exceptName: string = null) {
         super();
     }
 }
