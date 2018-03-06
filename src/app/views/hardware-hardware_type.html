@@ -456,13 +456,11 @@
                         </td>
 
                         <td class="vert-align">
-                            {{batch.mac_address_start}} - {{batch.mac_address_end}} <br>
                             {{ onConvertToMacAddress(batch.mac_address_start) }} - {{ onConvertToMacAddress(batch.mac_address_end)}}
                         </td>
 
                         <td class="vert-align">
                             <template [ngIf]="batch.latest_used_mac_address">
-                                {{batch.latest_used_mac_address}} <br>
                                 {{onConvertToMacAddress(batch.latest_used_mac_address)}}
                             </template>
                         </td>

@@ -453,7 +453,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
     }
 
     onConvertToMacAddress(num: string) {
-        return Number(num).toString(16);
+        return num;
     }
 
 }
