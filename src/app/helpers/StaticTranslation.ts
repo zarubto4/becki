@@ -146,6 +146,7 @@ export class StaticTranslation {
             }, 'ModalsCreateHomerServerComponent': {
                 'title': 'Create new Server',
                 'label_personal_server_name': 'Server name',
+                'label_personal_server_description': 'Server Description',
                 'label_server_url_comment': 'URL Address without port & schema (ftp, ws, http etc ..) When entering an IP address, it is necessary to specify the correct format according to ISO standard.',
                 'label_server_url': 'Server url (without http..)',
                 'label_mqtt_username': 'Mqtt user name',
@@ -1337,12 +1338,15 @@ export class StaticTranslation {
                 'label_activate_server': 'Deactivate',
                 'label_actions': 'Actions',
                 'label_personal_server_name': 'Server name',
+                'label_personal_server_description': 'Description',
                 'label_no_server_size_found': 'No Server Components...',
                 'label_no_server_size_found_comment': 'This message should never show you .... very interesting ... obviously something went wrong ... now is the time to turn to technical support.,',
 
                 'label_select_size': 'Select Server Size',
                 'label_select_destination': 'Choose a datacenter region',
+                'btn_create_manually_server': 'Create Server API',
                 'btn_create_server': 'Create Server',
+                'btn_create_automatically_server': ' Create SaaS Server',
 
             }, 'ProjectsProjectInstancesComponent': {
 

@@ -65,22 +65,22 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     }
 
     onPortletClick(action: string): void {
-        console.log('onPortletClick:: ', action);
+        console.log("Co přišlo na onPortletClick:: ", action)
         if (action === 'homer_server_add') {
-            console.log('onPortletClick:: == homer_server_add');
-            this.tab = 'create_server';
+            this.tab = 'create_server_selector';
         }
     }
 
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
+
     onServerSizeSlugClick(slug: IServerRegistrationFormDataServerSize): void {
-        console.log('Doručení do prooject-server: new size slug', slug.slug);
-        console.log('Doručení do prooject-server: Selected server slug Region', slug.regions);
         this.selected_server_slug = slug;
         (<FormControl>(this.form.controls['selected_server_slug'])).setValue(slug.slug);
     }
 
     onServerRegionSlugClick(slug: IServerRegistrationFormDataServerRegion): void {
-        console.log('Doručení do prooject-server: new destination slug', slug.slug);
         this.selected_destination_slug = slug;
         (<FormControl>(this.form.controls['selected_destination_slug'])).setValue(slug.slug);
     }

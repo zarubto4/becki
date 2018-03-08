@@ -1,0 +1,767 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main [tabMenu]="'projects-project'"
+                [show_title]="false"
+                [title]="currentParamsService.currentProjectNameSnapshot"
+                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title *ngIf="instance"
+                      [title_name]="'title'|bkTranslate:this"
+                      [title_object_name]="instance.name?instance.name:instance.id"
+                      [title_object_description]="instance.description"
+                      [icon]="'fa-cloud'"
+                      (onClick)="onPortletClick($event)"
+                      [btns]="[
+                      {
+                          condition: (hardwareTab == 'overview'),
+                          btn_label_for_person: ('label_instance_properties'|bkTranslate:this),
+                          icon: 'fa-cog',
+                          colorType: 'EDIT',
+                          btn_tag: 'edit_Instance'
+                      },
+                      {
+                          condition: (hardwareTab == 'overview'),
+                          btn_label_for_person: ('label_deactivate_device'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'DEACTIVE',
+                          btn_tag: 'deactivate_instance'
+                      },
+                      {
+                          condition: (hardwareTab == 'overview'),
+                          btn_label_for_person: ('label_activate_device'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'ACTIVE',
+                          btn_tag: 'active_instance'
+                      },
+                      {
+                          condition: (hardwareTab == 'overview'),
+                          btn_label_for_person: ('btn_select_cloud_version'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'UPDATE',
+                          btn_tag: 'change_version_instance'
+                      }
+                    ]"
+                      (onTabClick)="onToggleTab($event)"
+                      [tab_selected_name] = "hardwareTab"
+                      [tabBtns]="[
+                        {
+                            tab_name: 'overview',
+                            tab_color: 'CLOUD',
+                            tab_label: ('tab_name_overview'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'hardware',
+                            condition: (instance && instance.actual_instance),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_name_hardware'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'grid',
+                            condition: (instance && instance.actual_instance),
+                            tab_color: 'GRID',
+                            tab_label: ('tab_name_grid'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'history',
+                            tab_color: 'CLOUD',
+                            tab_label: ('tab_name_history'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'update',
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_name_update_progress'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'view',
+                            tab_color: 'CLOUD',
+                            tab_label: ('tab_name_update_view'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'logs',
+                            conditions: (false),
+                            tab_color: 'CLOUD',
+                            tab_label: ('tab_name_logs'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'debug',
+                            conditions: (false),
+                            tab_color: 'CLOUD',
+                            tab_label: ('tab_name_debugs'|bkTranslate:this)
+                        }
+                    ]"
+    >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <div class="portlet-body">
+
+        <div *ngIf="instanceTab == 'overview'">
+
+            <div *ngIf="instance" class="row">
+                <h3 *ngIf="instanceStatus">{{instanceStatus.online_state}}</h3>
+                <div class="col-md-8">
+
+                    <div>
+                        <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_instance_name'|bkTranslate:this}}:
+                        <strong>{{instance.name?instance.name:instance.id}}</strong>
+                    </div>
+                    <div>
+                        <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_instance_description'|bkTranslate:this}}:
+                        <strong>{{instance.description}}</strong>
+                    </div>
+                    <div>
+                        <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>
+                        {{'label_instance_id'|bkTranslate:this}}:
+                        <strong>{{instance.id}}</strong>
+                    </div>
+
+                    <br>
+
+                    <div>
+                        <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_server_name'|bkTranslate:this}}:
+                        <strong><span>{{instance.server_name}}</span></strong>
+                        <bk-online-state [online_state]="instance.server_online_state"></bk-online-state>
+
+                    </div>
+
+                    <div>
+
+                        <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_instance_status'|bkTranslate:this}}:
+                        <bk-online-state [online_state]="instance.online_state"></bk-online-state>
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+                    <!-- Place for picture or something else -->
+                </div>
+
+            </div>
+
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="portlet portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="becki-caption">
+                                        <span class="font-blue-dark">
+                                                    <i class="fa fa-fw fa-code"></i>
+                                                    <span [innerHTML]="'label_byzance_blocko'|bkTranslate:this"></span>
+                                        </span>
+                            </div>
+                        </div>
+                        <div>
+
+                            <div *ngIf="instance && instance.actual_instance">
+
+                                <div>
+                                    <strong
+                                        class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_program'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
+                                </div>
+
+                                <div
+                                    *ngIf="instance.actual_instance.b_program_description && instance.actual_instance.b_program_description.length">
+                                    <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_description'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
+                                </div>
+                                <br>
+                                <div>
+                                    <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_version'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold"><a
+                                        (click)="onBlockoProgramVersionClick(instance.actual_instance.b_program_id, instance.actual_instance.b_program_version_id)">{{instance.actual_instance.b_program_version_name}}</a></span>
+                                </div>
+                                <div>
+                                    <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_description'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{instance.actual_instance.b_program_version_description}}</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="instance && !instance.actual_instance">
+
+                                <div>
+                                    <span class="font-grey-mint">Instance is not running in Cloud. (Dopřeložit do Tabulky) </span>
+                                </div>
+
+                                <br>
+
+                                <!-- Do budoucna nebude Instance vázaná na Blocko a tato část se smaže -->
+
+                                <div>
+                                    <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_program'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold"><a
+                                        (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
+                                </div>
+
+                                <div *ngIf="instance.b_program_description && instance.b_program_description.length">
+                                    <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_description'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="portlet portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="becki-caption">
+                                <span class="font-blue-dark">
+                                             <i class="fa fa-fw fa-cloud"></i>
+                                             <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            {{'label_instance_type'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{instance.instance_type|bkTranslateTable:this:'instance_type'}}</span>
+                        </div>
+
+                        <br>
+
+                        <div *ngIf="instance.actual_instance!=null">
+
+                            <div>{{'label_created'|bkTranslate:this}}:
+                                <span class="font-grey-mint bold">{{instance.actual_instance.createdd|bkUnixTimeToDate}}</span>
+                            </div>
+                            <div>
+                                {{'label_running_from'|bkTranslate:this}}:
+                                <span
+                                    class="font-grey-mint bold">{{instance.actual_instance.running_from|bkUnixTimeToDate}}</span>
+                            </div>
+                            <div>
+                                {{'label_running_status'|bkTranslate:this}}:
+                                <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:'instance_status'}}</span>
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="instance.actual_instance==null">
+                            <div>
+                                <span class="font-grey-mint">Cloud not contains any running snapshot of this instance.  (Dopřeložit do Tabulky) </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="instanceTab == 'grid'">
+            <div class="row">
+                <div *ngIf="instance && instance.actual_instance" class="col-6">
+                    <div *ngIf="instance.actual_instance.m_project_snapshot">
+                        <div *ngFor="let grid of instance.actual_instance.m_project_snapshot" style="margin-bottom: 20px;background: #EEE;padding: 0;border: 1px solid #8E44AD !important;">
+                            <div style="margin: 10px;">
+                                <div>
+                                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'label_project'|bkTranslate:this}}:
+                                    <a (click)="onGridProjectClick(grid.m_project_id)" class="font-grey-mint">
+                                        <strong><span style="font-size:1.2em;">{{grid.m_project_name}}</span></strong>
+                                    </a>
+                                </div>
+                                <template [ngIf]="grid.m_project_description && grid.m_project_description.length">
+                                    <div style="font-size:0.9em; color:#555;">
+                                        {{grid.m_project_description}}
+                                    </div>
+                                </template>
+                            </div>
+                            <hr style="margin: 0 10px;border-bottom: 1px solid #DDD;margin-top: 10px;">
+                            <div style="margin-top: 10px;" *ngFor="let gridProgram of grid.m_program_snapshots">
+
+                                <div style="padding: 10px; padding-left: 20px; position: relative;"
+                                     [class.bg-yellow-saffron]="gridProgram.snapshot_settings == 'only_for_project_members'"
+                                     [class.bg-green-meadow]="gridProgram.snapshot_settings == 'absolutely_public'">
+                                    <div>
+                                        <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}:
+                                        <a class="font-grey-mint" (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)">
+                                            <strong><span style="font-size:1.0em;">{{gridProgram.m_program_name}}</span></strong>
+                                        </a>
+                                    </div>
+                                    <template [ngIf]="gridProgram.m_program_description && gridProgram.m_program_description.length">
+                                        <div style="font-size:0.9em; color:#555;">
+                                            {{gridProgram.m_program_description}}
+                                        </div>
+                                    </template>
+                                    <div>
+                                        <strong
+                                            class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}:
+                                        <strong><a class="font-grey-mint"
+                                                   (click)="onGridProgramVersionClick(grid.m_project_id, gridProgram.m_program_id, gridProgram.version_object_id)">{{gridProgram.version_object_name}}</a></strong>
+                                        <template
+                                            [ngIf]="gridProgram.version_object_description && gridProgram.version_object_description.length">
+                                            <span>&nbsp;-&nbsp;{{gridProgram.version_object_description}}</span>
+                                        </template>
+                                    </div>
+
+                                    <div style="position: absolute; right: 10px; top: 10px;">
+                                        <span [class.font-blue-dark]="gridProgram.snapshot_settings == 'only_for_project_members'">{{'only_for_project_members'|bkTranslateTable:this:'snapshot_settings'}}</span>
+                                        <i class="fa cursor-hand"
+                                           style="vertical-align: middle; font-size: 1.5em;"
+                                           [class.fa-toggle-on]="gridProgram.snapshot_settings == 'absolutely_public'"
+                                           [class.fa-toggle-off]="gridProgram.snapshot_settings == 'only_for_project_members'"
+                                           (click)="onGridProgramPublishClick(gridProgram)">
+                                        </i>
+                                        <span [class.font-blue-dark]="gridProgram.snapshot_settings == 'absolutely_public'">{{'absolutely_public'|bkTranslateTable:this:'snapshot_settings'}}</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
+                                    <a target="_blank" href="{{gridProgram.grid_app_url}}">
+                                        <bk-qr-code style="float: left;"
+                                                    [data]="gridProgram.grid_app_url"></bk-qr-code>
+                                    </a>
+                                    <div style="clear:both;"></div>
+                                </div>
+                                <div
+                                    style="margin-top: 10px; margin-left: 20px; margin-right: 20px; margin-bottom: 10px;">
+                                    <input onClick="this.setSelectionRange(0, this.value.length)" type="text"
+                                           style="width: 100%;" value="{{gridProgram.grid_app_url}}"
+                                           readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div
+                        *ngIf="instance.actual_instance.m_project_snapshot && !instance.actual_instance.m_project_snapshot.length"
+                        class="list-no-items">
+                        <p class="list-no-items__main-label"
+                           [innerHTML]="'label_grid_no_grid_in_instance'|bkTranslate:this"></p>
+                        <p class="list-no-items__sub-label"
+                           [innerHTML]="'label_grid_no_grid_in_instance_comments'|bkTranslate:this"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="instanceTab == 'hardware'">
+            <div class="row">
+
+
+                <div *ngIf="instance && instance.actual_instance" class="col-sm-6">
+                    <div *ngFor="let hardware of instance.actual_instance.hardware_group">
+
+                    </div>
+                </div>
+                <div
+                    *ngIf="instance.actual_instance.hardware_group && !instance.actual_instance.hardware_group.length"
+                    class="list-no-items">
+                    <p class="list-no-items__main-label"
+                       [innerHTML]="'label_hardware_no_hardware_in_instance'|bkTranslate:this"></p>
+                    <p class="list-no-items__sub-label"
+                       [innerHTML]="'label_hardware_no_hardware_in_instance_comments'|bkTranslate:this"></p>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="instanceTab == 'history'">
+
+            <div *ngIf="instance && instance.instance_history.length ">
+                <div class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                    <bk-instance-timeline [data]="instance.instance_history.concat().reverse()"
+                                          (onSelect)="selectedHistoryItem($event)"></bk-instance-timeline>
+                </div>
+                <div *ngIf="!currentHistoricInstance" style="text-align: center;">
+                    <div><i class="fa fa-chevron-up"></i></div>
+                    <h3 style="margin-top: 10px">
+                        {{'label_select_version_for_details'|bkTranslate:this}}</h3>
+                </div>
+            </div>
+            <div *ngIf="instance && !instance.instance_history.length" class="list-no-items">
+                <p class="list-no-items__main-label"
+                   [innerHTML]="'label_no_history_in_instance'|bkTranslate:this"></p>
+                <p class="list-no-items__sub-label"
+                   [innerHTML]="'label_no_history_in_instance_comments'|bkTranslate:this"></p>
+            </div>
+
+
+            <div class="row" *ngIf="currentHistoricInstance">
+                <div class="col-sm-12">
+                    <div class="col-sm-6">
+
+                        <h3 class="font-color-blocko"><strong>{{'label_blocko'|bkTranslate:this}}</strong>
+                        </h3>
+
+                        <div>
+                            <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>
+                            {{'label_program'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold"><a
+                                (click)="onBlockoProgramClick(currentHistoricInstance.b_program_id)">{{currentHistoricInstance.b_program_name}}</a></span>
+                        </div>
+                        <div>
+                            <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>
+                            {{'label_description'|bkTranslate:this}}:
+                            <span
+                                class="font-grey-mint bold">{{currentHistoricInstance.b_program_description}}</span>
+                        </div>
+                        <br>
+                        <div>
+                            <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>
+                            {{'label_version'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">
+                                        <a (click)="onBlockoProgramVersionClick(currentHistoricInstance.b_program_id, currentHistoricInstance.b_program_version_id)">{{currentHistoricInstance.b_program_version_name}}</a>
+                                    </span>
+                        </div>
+                        <div>
+                            <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>
+                            {{'label_description'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{currentHistoricInstance.b_program_version_description}}</span>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+
+                        <h3 class="font-color-cloud"><strong> {{'label_cloud'|bkTranslate:this}}</strong>
+                        </h3>
+
+                        <div>
+                            {{'label_created'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{currentHistoricInstance.createdd|bkUnixTimeToDate}}</span>
+                        </div>
+                        <div>
+                            {{'label_running_from'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{currentHistoricInstance.running_from|bkUnixTimeToDate}}</span>
+                        </div>
+                        <div>
+                            {{'label_running_to'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{currentHistoricInstance.running_to|bkUnixTimeToDate}}</span>
+                        </div>
+                        <div>
+                            {{'label_running_status'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{currentHistoricInstance.status|bkTranslateTable:this:'instance_status'}}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-6" *ngIf="currentHistoricInstance">
+                        <div class="col-sm-6">
+                            <h3 class="font-color-hardware">
+                                <strong>{{'label_hardware'|bkTranslate:this}}</strong></h3>
+                            <div *ngFor="let hardware of currentHistoricInstance.hardware_group"
+                                 style="margin-bottom: 20px;background: #EEE;padding: 10px;border: 1px solid #1BA39C !important;">
+                                <div>
+                                    <a (click)="onHardwareClick(hardware.main_board_pair.board_id)"
+                                       style="margin-bottom: 3px;display: block !important;"
+                                       class="font-color-hardware">
+                                        <strong><span style="font-size:1.2em;">{{hardware.main_board_pair.board_name?(hardware.main_board_pair.board_name+' '):('')}}</span></strong>
+                                        <span
+                                            style="font-size:0.9em;">({{hardware.main_board_pair.board_id}})</span>
+                                    </a>
+                                </div>
+                                <template
+                                    [ngIf]="hardware.main_board_pair.board_description && hardware.main_board_pair.board_description.length">
+                                    <div style="font-size:0.9em; color:#888;">
+                                        {{hardware.main_board_pair.board_description}}
+                                    </div>
+                                </template>
+                                <div><strong
+                                    class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>
+                                    {{'label_device_type'|bkTranslate:this}}:
+                                    <strong><a
+                                        class="font-grey-mint"
+                                        (click)="onHardwareTypeClick(hardware.main_board_pair.type_of_board_id)">{{hardware.main_board_pair.type_of_board_name}}</a></strong>
+                                </div>
+                                <br>
+                                <div>
+                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>
+                                    {{'label_program'|bkTranslate:this}}:
+                                    <strong><a
+                                        (click)="onCProgramClick(hardware.main_board_pair.c_program_id)">{{hardware.main_board_pair.c_program_name}}</a></strong>
+                                    <template
+                                        [ngIf]="hardware.main_board_pair.c_program_description && hardware.main_board_pair.c_program_description.length">
+                                        <span>&nbsp;-&nbsp;{{hardware.main_board_pair.c_program_description}}</span>
+                                    </template>
+                                </div>
+                                <div>
+                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>
+                                    {{'label_version'|bkTranslate:this}}:
+                                    <strong><a
+                                        (click)="onCProgramVersionClick(hardware.main_board_pair.c_program_id, hardware.main_board_pair.c_program_version_id)">{{hardware.main_board_pair.c_program_version_name}}</a></strong>
+                                    <template
+                                        [ngIf]="hardware.main_board_pair.c_program_version_description && hardware.main_board_pair.c_program_version_description.length">
+                                        <span>&nbsp;-&nbsp;{{hardware.main_board_pair.c_program_version_description}}</span>
+                                    </template>
+                                </div>
+                                <div style="margin-left: 10px; margin-top: 10px;"
+                                     *ngFor="let slave of hardware.device_board_pairs">
+                                    <div>
+                                        <a (click)="onHardwareClick(slave.board_id)" class="font-color-hardware"
+                                           style="margin-bottom: 3px;display: block !important;margin-top: 20px;">
+                                            <strong><span style="font-size:1.2em;">{{slave.board_name?(slave.board_name+' '):('')}}</span></strong>
+                                            <span style="font-size:0.9em;">({{slave.board_id}})</span>
+                                        </a>
+                                    </div>
+                                    <div><strong class="font-color-hardware">{{'label_hardware_caps'|bkTranslate:this}}</strong>
+                                        {{'table_hardware_type'|bkTranslate:this}}:
+                                        <strong><a (click)="onHardwareTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <strong
+                                            class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>
+                                        {{'table_program'|bkTranslate:this}}:
+                                        <strong><a (click)="onCProgramClick(slave.c_program_id)">{{slave.c_program_name}}</a></strong>
+                                        <template
+                                            [ngIf]="slave.c_program_description && slave.c_program_description.length">
+                                            <span>&nbsp;-&nbsp;{{slave.c_program_description}}</span>
+                                        </template>
+                                    </div>
+                                    <div>
+                                        <strong
+                                            class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>
+                                        {{'label_version'|bkTranslate:this}}:
+                                        <strong><a
+                                            (click)="onCProgramVersionClick(slave.c_program_id, slave.c_program_version_id)">{{slave.c_program_version_name}}</a></strong>
+                                        <template
+                                            [ngIf]="slave.c_program_version_description && slave.c_program_version_description.length">
+                                            <span>&nbsp;-&nbsp;{{slave.c_program_version_description}}</span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                *ngIf="currentHistoricInstance.hardware_group && !currentHistoricInstance.hardware_group.length"
+                                class="list-no-items">
+                                <p class="list-no-items__main-label"
+                                   [innerHTML]="'label_hardware_no_hardware_in_instance'|bkTranslate:this"></p>
+                                <p class="list-no-items__sub-label"
+                                   [innerHTML]="'label_hardware_no_hardware_in_instance_comments'|bkTranslate:this"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <h3 class="font-color-grid"><strong>{{'label_grid'|bkTranslate:this}}</strong>
+                            </h3>
+                            <div *ngFor="let grid of currentHistoricInstance.m_project_snapshot"
+                                 style="margin-bottom: 20px;background: #EEE;padding: 10px;border: 1px solid #8E44AD !important;">
+                                <div>
+                                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'table_project'|bkTranslate:this}}:
+                                    <a (click)="onGridProjectClick(grid.m_project_id)"><strong><span
+                                        style="font-size:1.2em;">{{grid.m_project_name}}</span></strong></a>
+                                </div>
+                                <template
+                                    [ngIf]="grid.m_project_description && grid.m_project_description.length">
+                                    <div style="font-size:0.9em; color:#888;">
+                                        {{grid.m_project_description}}
+                                    </div>
+                                </template>
+                                <hr style="margin: 0;border-bottom: 1px solid #DDD;margin-top: 10px;">
+                                <div style="margin-left: 10px; margin-top: 10px;"
+                                     *ngFor="let gridProgram of grid.m_program_snapshots">
+                                    <div>
+                                        <strong
+                                            class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}:
+                                        <a (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)">
+                                            <strong><span style="font-size:1.0em;">{{gridProgram.m_program_name}}</span></strong>
+                                        </a>
+                                    </div>
+                                    <template
+                                        [ngIf]="gridProgram.m_program_description && gridProgram.m_program_description.length">
+                                        <div style="font-size:0.9em; color:#888;">
+                                            {{gridProgram.m_program_description}}
+                                        </div>
+                                    </template>
+
+                                    <div>
+                                        <strong
+                                            class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong>{{'label_version'|bkTranslate:this}}:
+                                        <strong><a
+                                            (click)="onGridProgramVersionClick(grid.m_project_id, gridProgram.m_program_id, gridProgram.version_object_id)">{{gridProgram.version_object_name}}</a></strong>
+                                        <template
+                                            [ngIf]="gridProgram.version_object_description && gridProgram.version_object_description.length">
+                                            <span>&nbsp;-&nbsp;{{gridProgram.version_object_description}}</span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                *ngIf="currentHistoricInstance.m_project_snapshot && !currentHistoricInstance.m_project_snapshot.length"
+                                class="list-no-items">
+                                <p class="list-no-items__main-label"
+                                   [innerHTML]="'label_grid_no_grid_in_instance'|bkTranslate:this"></p>
+                                <p class="list-no-items__sub-label"
+                                   [innerHTML]="'label_grid_no_grid_in_instance_comments'|bkTranslate:this"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="instanceTab == 'update'">
+
+            <div *ngIf="instance && instance.actual_instance && instance.actual_instance.procedure_short_details.length" class="portlet portlet light bordered">
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-1">{{'table_id'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_started'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_planed'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_finished'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_type'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1 text-center">{{'table_progress'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2 text-center">{{'table_state'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr *ngFor="let procedure of instance.actual_instance.procedure_short_details">
+
+                        <td><a (click)="onProcedureClick(procedure)">{{procedure.id.substr(0,13)}}</a></td>
+                        <td>{{procedure.created|bkUnixTimeToDate}}</td>
+                        <td>{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                        <td>
+                            <span *ngIf="!procedure.date_of_finish" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                            <span *ngIf="procedure.date_of_finish">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                        </td>
+                        <td>{{procedure.type_of_update|bkTranslateTable:this:'type_of_update'}}</td>
+                        <td class="text-center">
+                            <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
+                            <span *ngIf="!procedure.procedure_size_all ||procedure_size_all == 0 " class="bold">-/-</span>
+                        </td>
+                        <td class="text-center">
+                            <bk-update-state [updateState]="procedure.state"></bk-update-state>
+                        </td>
+
+                        <!--div>
+                                    <div *ngIf="procedure.updates.length>0">
+                                        <div class="table-scrollable" *ngIf="procedure.updates.length">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th><strong
+                                                        class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_name'|bkTranslate:this}}
+                                                    </th>
+                                                    <th><strong
+                                                        class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_id'|bkTranslate:this}}
+                                                    </th>
+                                                    <th><strong
+                                                        class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_hardware_type'|bkTranslate:this}}
+                                                    </th>
+                                                    <th>{{'label_finished'|bkTranslate:this}}</th>
+                                                    <th>{{'label_firmware_type'|bkTranslate:this}}</th>
+                                                    <th><strong
+                                                        class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}
+                                                    </th>
+                                                    <th><strong
+                                                        class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}
+                                                    </th>
+                                                    <th>{{'label_status'|bkTranslate:this}}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                <tr *ngFor="let update of procedure.updates">
+
+                                                    <td class="vert-align font-grey-mint"><a
+                                                        (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.name}}</a>
+                                                    </td>
+                                                    <td class="vert-align font-grey-mint"><a
+                                                        (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.board_id}}</a>
+                                                    </td>
+                                                    <td class="vert-align font-grey-mint"><a style="white-space:nowrap"
+                                                                                             (click)="onHardwareTypeClick(update.board_detail.type_of_board_id)">{{update.board_detail.type_of_board_name}}</a>
+                                                    </td>
+
+
+                                                    <td *ngIf="update.date_of_finish" class="vert-align">
+                                                        {{update.date_of_finish|bkUnixTimeToDate}}
+                                                    </td>
+                                                    <td *ngIf="!update.date_of_finish"
+                                                        class="vert-align font-yellow-casablanca">
+                                                        {{'label_unknown_date'|bkTranslate:this}}
+                                                    </td>
+
+
+                                                    <td class="vert-align font-grey-mint">
+                                                        <span *ngIf="update.firmware_type == 'FIRMWARE'"
+                                                              class="bold font-color-grid">{{'label_frimware'|bkTranslate:this}}</span>
+                                                        <span *ngIf="update.firmware_type == 'BACKUP'"
+                                                              class="bold font-color-grid-dark">{{'label_backup'|bkTranslate:this}}</span>
+                                                        <span *ngIf="update.firmware_type == 'BOOTLOADER'"
+                                                              class="bold font-blue">{{'label_bootloader'|bkTranslate:this}}</span>
+                                                    </td>
+
+                                                    <td class="vert-align font-grey-mint"><a
+                                                        (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_program_name}}</a>
+                                                    </td>
+                                                    <td class="vert-align font-grey-mint"><a
+                                                        (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_version_id}}</a>
+                                                    </td>
+
+                                                    <td class="vert-align">
+                                                        <bk-update-state [updateState]=update.state></bk-update-state>
+                                                    </td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="procedure.updates.length == 0" class="list-no-items">
+                                        <p class="list-no-items__main-label">{{'label_no_updates_title'|bkTranslate:this}}</p>
+                                        <p class="list-no-items__sub-label">{{'label_no_update_text'|bkTranslate:this}}</p>
+                                    </div>
+                                </div-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 *ngIf="!instance" class="text-center">{{'loading'|bkTranslate:this}}</h3>
+            <div
+                *ngIf="instance && (!instance.actual_instance || !instance.actual_instance.procedure_short_details.length)"
+                class="list-no-items">
+                <p class="list-no-items__main-label"
+                   [innerHTML]="'label_no_running_update_on_instance'|bkTranslate:this"></p>
+                <p class="list-no-items__sub-label"
+                   [innerHTML]="'label_no_running_update_on_instance_comments'|bkTranslate:this"></p>
+            </div>
+
+        </div>
+
+        <div *ngIf="instanceTab == 'view' ">
+
+            <div *ngIf="instance && instance.online_state == 'online'">
+                <bk-blocko-view [disableExecution]="true" [canConfig]="false" [readonly]="true"
+                                [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
+                <div style="margin-top: 30px">
+                    <bk-console-log maxHeight="400px"></bk-console-log>
+                </div>
+            </div>
+            <div *ngIf="!instance || instance.online_state != 'online'" class="list-no-items">
+                <p class="list-no-items__main-label"
+                   [innerHTML]="'label_instance_info_is_offline'|bkTranslate:this"></p>
+                <p class="list-no-items__sub-label"
+                   [innerHTML]="'label_instance_info_is_offline_comments'|bkTranslate:this"></p>
+            </div>
+
+        </div>
+
+        <div *ngIf="instanceTab == 'logs'">
+        </div>
+
+        <div *ngIf="instanceTab == 'debug'">
+        </div>
+
+    </div>
+
+</bk-layout-main>
