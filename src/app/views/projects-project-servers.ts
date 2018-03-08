@@ -127,9 +127,11 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                 })
                     .then(() => {
                         this.onFilterHomerServer();
+                        this.tab = 'server_list';
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.onFilterHomerServer();
+                        this.tab = 'server_list';
                     });
             }
         });
@@ -150,6 +152,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         }).catch(reason => {
             this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
             this.onFilterHomerServer();
+            this.tab = 'server_list';
         });
     }
 
