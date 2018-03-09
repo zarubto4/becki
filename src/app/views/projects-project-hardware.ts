@@ -339,10 +339,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     /* tslint:disable:max-line-length ter-indent*/
 
 
-    selectedFilterPageHardwareGroup(event: { index: number }) {
-        this.onFilterHardwareGroup(event.index);
-    }
-
     onFilterHardwareGroup(pageNumber: number = 0): void {
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {

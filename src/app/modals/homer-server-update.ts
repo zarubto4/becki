@@ -49,9 +49,9 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
 
     ngOnInit() {
 
-        console.log('URL: ', this.modalModel.homer_server.server_url);
-        console.log('PORT: ', this.modalModel.homer_server.rest_api_port);
-        console.log('http://' + this.modalModel.homer_server.server_url + (this.modalModel.homer_server.rest_api_port !== null  ? `:` + this.modalModel.homer_server.rest_api_port : ``) + `/v1` + `/versions/available_versions`);
+        // console.log('URL: ', this.modalModel.homer_server.server_url);
+        // console.log('PORT: ', this.modalModel.homer_server.rest_api_port);
+        // console.log('http://' + this.modalModel.homer_server.server_url + (this.modalModel.homer_server.rest_api_port !== null  ? `:` + this.modalModel.homer_server.rest_api_port : ``) + `/v1` + `/versions/available_versions`);
         this.tyrionBackendService.serverServerGetListAvailableVersions(this.modalModel.homer_server)
             .then((versions: IAvailableVersion[]) => {
                 this.options_available_version = versions.map((version) => {

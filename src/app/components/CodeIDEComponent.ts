@@ -9,8 +9,8 @@ import { ModalsCodeFileDialogModel, ModalsCodeFileDialogType } from '../modals/c
 import { ModalService } from '../services/ModalService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { TranslationService } from '../services/TranslationService';
-import {FormSelectComponentOption} from "./FormSelectComponent";
-import {AbstractControl} from "@angular/forms";
+import { FormSelectComponentOption } from './FormSelectComponent';
+import { AbstractControl } from '@angular/forms';
 
 export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
 
@@ -489,9 +489,6 @@ export class CodeIDEComponent implements OnChanges {
 
     toolbarAddFileClick(fto: FileTreeObject<any>) {
 
-        console.log("toolbarAddFileClick ", fto);
-
-
         let selectedDir: CodeDirectory = null;
         if (fto instanceof CodeDirectory) {
             selectedDir = fto.data;
@@ -515,8 +512,6 @@ export class CodeIDEComponent implements OnChanges {
     }
 
     toolbarAddDirectoryClick(fto: FileTreeObject<any>) {
-
-        console.log("toolbarAddDirectoryClick ", fto);
 
         let selectedDir: CodeDirectory = null;
         if (fto.data instanceof CodeDirectory) {

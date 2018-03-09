@@ -202,6 +202,7 @@ import { IconFileComponent } from './components/FileTreeComponent';
 import { ServerRegionSelectorComponent, ServerSizeSelectorComponent } from './components/ServerSizeSelectorComponent';
 import { ProjectsProjectBlocksComponent } from './views/projects-project-blocks';
 import { ProjectsProjectWidgetsComponent } from './views/projects-project-widgets';
+import { ProjectsProjectInstancesInstanceComponent } from './views/projects-project-instances-instance';
 import { ProjectsProjectBlockoBlockoComponent } from './views/projects-project-blocko-blocko';
 import { ProjectsProjectBlocksBlockComponent } from './views/projects-project-blocks-block';
 import { ModalsVersionSelectComponent } from './modals/version-select';
@@ -268,7 +269,7 @@ let routes: Routes = [
     // { path: 'projects/:project/grid/:grids/:grid', data: { breadName: ':grid' }, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
     { path: 'projects/:project/servers', data: { breadName: 'CLOUD servers' }, component: ProjectsProjectServersComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/instances', data: { breadName: 'CLOUD instances' }, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard] },
-    // { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
 
     { path: 'projects/:project/widgets', data: { breadName: 'GRID widgets' }, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard] },
@@ -561,7 +562,7 @@ class BeckiErrorHandler implements ErrorHandler {
         // ProjectsProjectGridGridsGridComponent,
         ProductRegistrationComponent,
         ProjectsProjectInstancesComponent,
-        // ProjectsProjectInstancesInstanceComponent,
+        ProjectsProjectInstancesInstanceComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
         ProjectsProjectMembersComponent,

@@ -49,18 +49,20 @@ import { Router } from '@angular/router';
                 </div>
                 <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line">
                     <ul class="nav nav-tabs becki-tab-menu" style="padding-top: 0px;">
-                        <li *ngFor="let btn of tabBtns" [class.active]="tab_selected_name == btn.tab_name"
-                            [class.color-hardware]="btn.tab_color === 'HARDWARE'"
-                            [class.color-cloud]="btn.tab_color === 'CLOUD'"
-                            [class.color-code]="btn.tab_color === 'CODE'"
-                            [class.color-grid]="btn.tab_color === 'GRID'"
-                            [class.color-blocko]="btn.tab_color === 'BLOCKO'"
-                            [class.color-byzance-blue]="btn.tab_color === 'BYZANCE'"
-                            [class.color-default]="btn.tab_color === 'DEFAULT' || btn.tab_color === null">
-                            <a class="cursor-pointer" (click)="onClickTabButton(btn.tab_name)" data-toggle="tab">
-                                <span [innerHTML]="btn.tab_label"></span>
-                            </a>
-                        </li>
+                        <template ngFor let-btn="$implicit" [ngForOf]="tabBtns">
+                            <li *ngIf="btn.condition" [class.active]="tab_selected_name == btn.tab_name"
+                                [class.color-hardware]="btn.tab_color === 'HARDWARE'"
+                                [class.color-cloud]="btn.tab_color === 'CLOUD'"
+                                [class.color-code]="btn.tab_color === 'CODE'"
+                                [class.color-grid]="btn.tab_color === 'GRID'"
+                                [class.color-blocko]="btn.tab_color === 'BLOCKO'"
+                                [class.color-byzance-blue]="btn.tab_color === 'BYZANCE'"
+                                [class.color-default]="btn.tab_color === 'DEFAULT' || btn.tab_color === null">
+                                <a class="cursor-pointer" (click)="onClickTabButton(btn.tab_name)" data-toggle="tab">
+                                    <span [innerHTML]="btn.tab_label"></span>
+                                </a>
+                            </li>
+                        </template>
                     </ul>
                 </div>
             </div>

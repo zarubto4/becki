@@ -100,10 +100,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     onGroupChange(value: string) {
 
         this.selectedDeviceGroup = null;
-        console.log("onGroupChange:: ", value);
-
         if (value === null) {
-            console.log("onGroupChange:: value is null return ");
             return;
         }
 
@@ -114,23 +111,23 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
 
             if (this.modalModel.deviceGroup.content[i].id === value ) {
 
-                console.log("onGroupChange:: Našel jsem skupinu a jmenuje se", this.modalModel.deviceGroup.content[i].name);
-                console.log("onGroupChange:: hardware_types nad skupinou", this.modalModel.deviceGroup.content[i].hardware_types);
+                // console.log("onGroupChange:: Našel jsem skupinu a jmenuje se", this.modalModel.deviceGroup.content[i].name);
+                // console.log("onGroupChange:: hardware_types nad skupinou", this.modalModel.deviceGroup.content[i].hardware_types);
 
                 devgroup = this.modalModel.deviceGroup.content[i];
                 if ( devgroup.hardware_types != null && devgroup.hardware_types.length > 0) {
 
-                    console.log("onGroupChange:: Budu hledat pro každý typ hardware_types");
+                   // console.log("onGroupChange:: Budu hledat pro každý typ hardware_types");
 
                     devgroup.hardware_types.forEach((tp: IHardwareType) => {
 
-                        console.log("onGroupChange:: Pro každého: ", tp.name);
+                     // console.log("onGroupChange:: Pro každého: ", tp.name);
 
                         this.form.addControl(tp.id + '_selectedBootloaderId', new FormControl('', []));
                         this.form.addControl(tp.id + '_selectedCProgramVersionId', new FormControl('', []));
 
                         if (this.cPrograms[tp.id] == null) {
-                            console.log("onGroupChange:: this.cPrograms[tp.id] == null ");
+                           //  console.log("onGroupChange:: this.cPrograms[tp.id] == null ");
                             this.backendService.cProgramGetListByFilter(0, {
                                 project_id: this.modalModel.project_id,
                                 hardware_type_ids: [tp.id]
@@ -147,7 +144,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
                         }
 
                         if (this.bootloaders[tp.id] == null) {
-                            console.log("onGroupChange:: this.bootloaders[tp.id] == null ");
+                           // console.log("onGroupChange:: this.bootloaders[tp.id] == null ");
                             this.backendService.hardwareTypeGet(tp.id)
                                 .then((hardwareType) => {
                                     this.bootloaders[tp.id] = hardwareType.boot_loaders;
@@ -161,13 +158,13 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
                         }
 
                         if (this.cPrograms[tp.id] && this.bootloaders[tp.id]) {
-                            console.log("this.cPrograms[tp.id] && this.bootloaders[tp.id] ");
+                           // console.log("this.cPrograms[tp.id] && this.bootloaders[tp.id] ");
                             this.selectedDeviceGroup = devgroup;
                         }
 
                     });
                 }else {
-                    console.log("onGroupChange:: Nemám žádné skupiny, ukončuju");
+                  //  console.log("onGroupChange:: Nemám žádné skupiny, ukončuju");
                     // No HW groups
                     this.selectedDeviceGroup = devgroup;
                 }

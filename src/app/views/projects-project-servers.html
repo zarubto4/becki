@@ -80,7 +80,33 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
         </div>
-        <div *ngIf="tab == 'create_server'">
+
+        <div *ngIf="tab == 'create_server_selector'">
+            <div class="row" style="padding-right: 25%; padding-left: 25%">
+                <div class="col-lg-6 text-center">
+                    <img style="width: auto; height: 90%;" src="https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5aa164daae3ca60001aa4c50_server%20modry.svg">
+                    <h3>Server as a Service<br>
+                    <small>Scalable compute IoT server with security to easily run your Instances.</small>
+                    </h3>
+                    <br>
+                    <button class="btn blue" (click)="onToggleTab('create_server_automatically')">
+                        <i class="fa fa-plus-circle"></i> {{'btn_create_automatically_server'|bkTranslate:this}}
+                    </button>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img style="width: auto; height: 90%;" src="https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5aa164e6efcfd2000162a317_server%20oranzovy.svg">
+                    <h3>On Premise Server<br>
+                    <small>You install the server yourself on your hardware</small>
+                    </h3>
+                    <br>
+                    <button class="btn blue" (click)="onCreateHomerServerManuallyClick()">
+                        <i class="fa fa-plus-circle"></i> {{'btn_create_manually_server'|bkTranslate:this}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="tab == 'create_server_automatically'">
 
 
             <div class="mt-element-card mt-element-overlay">

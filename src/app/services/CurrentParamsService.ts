@@ -336,7 +336,7 @@ export class CurrentParamsService {
                 this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
             } else {
                 this.backendService.instanceGet(params['instance']).then((instance) => {
-                    this.currentInstanceIdSnapshot = instance.name != null ? (instance.id + ' (' + instance.name + ')') : instance.id;
+                    this.currentInstanceIdSnapshot = instance.name;
                     this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
                 });
             }

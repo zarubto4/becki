@@ -41,7 +41,10 @@
                         <tbody>
                         <tr *ngFor="let bug of bugs">
 
-                            <td class="no-wrap bold vert-align"><a (click)="onBugClick(bug)">{{bug.cause_message.substring(0, 65)}}</a><span *ngIf="bug.cause_message.length>65">....</span></td>
+                            <td class="no-wrap bold vert-align">
+                                <a *ngIf="bug.cause_message" (click)="onBugClick(bug)">{{bug.cause_message.substring(0, 65)}}</a>
+                                <span *ngIf="bug.cause_message && bug.cause_message.length>65">....</span>
+                            </td>
 
                             <td class="vert-align">{{bug.created|bkUnixTimeToDate}}</td>
 

@@ -10,7 +10,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
-import {ModalsInstanceCreateComponent, ModalsInstanceCreateModel} from "../modals/instance-create";
+import { ModalsInstanceCreateComponent, ModalsInstanceCreateModel } from '../modals/instance-create';
 
 @Component({
     selector: 'bk-view-projects-project-instances',
@@ -107,7 +107,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.instanceSnapshotShutdown(instance.current_snapshot_id)
+                this.tyrionBackendService.instanceSnapshotShutdown(instance.current_snapshot.id)
                     .then(() => {
                         this.unblockUI();
                         this.onFilterInstances();
