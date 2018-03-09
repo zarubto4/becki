@@ -494,8 +494,9 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
 
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)
-    protected reconnectWebSocketAfterTimeout = () => {
-        // console.log('reconnectWebSocketAfterTimeout()');
+    protected reconnectWebSocketAfterTimeout = (e) => {
+        console.log('reconnectWebSocketAfterTimeout()');
+        console.log(e);
         clearTimeout(this.webSocketReconnectTimeout);
         this.webSocketReconnectTimeout = setTimeout(() => {
             this.connectWebSocket();
@@ -509,12 +510,12 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
         clearTimeout(this.TerminalwebSocketReconnectTimeout);
         this.TerminalwebSocketReconnectTimeout = setTimeout(() => {
-            this.connectWebSocket();
+            // this.connectDeviceTerminalWebSocket(); TODO
         }, 5000);
     }
 
     protected disconnectWebSocket(): void {
-        // console.log('disconnectWebSocket()');
+        console.log('disconnectWebSocket()');
         if (this.webSocket) {
             this.webSocket.removeEventListener('close', this.reconnectWebSocketAfterTimeout);
             this.webSocket.close();
@@ -641,7 +642,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     protected connectWebSocket(): void {
-        // console.log('connectWebSocket()');
+        console.log('connectWebSocket()');
         if (!this.tokenExist()) {
             // console.log('connectWebSocket() :: cannot connect now, user token doesn\'t exists.');
             return;
@@ -744,13 +745,17 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                 errorOccurred
                     .subscribe(this.webSocketErrorOccurred);
 
+                errorOccurred
+                    .subscribe(error => console.log(error));
+
             })
             .catch((error) => {
                 if (!this.websocketErrorShown) {
                     this.websocketErrorShown = true;
                     this.webSocketErrorOccurred.next(error);
                 }
-                this.reconnectWebSocketAfterTimeout();
+                console.log('caught error', error);
+                this.reconnectWebSocketAfterTimeout(null);
             });
     }
 

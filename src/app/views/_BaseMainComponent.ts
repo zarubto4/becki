@@ -182,9 +182,4 @@ export abstract class _BaseMainComponent {
     public onInstanceClick(instance_id: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'instances', instance_id]);
     }
-
-    public onBlockoProgramClick(b_program_id: string) {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', b_program_id]);
-    }
-
 }

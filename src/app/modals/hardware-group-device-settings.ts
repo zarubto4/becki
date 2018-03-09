@@ -3,10 +3,10 @@
  * of this distribution.
  */
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IHardwareGroup, IHardware, IHardwareGroupList} from '../backend/TyrionAPI';
+import { IHardware, IHardwareGroupList } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { FormSwitchTwoListSelectComponent } from '../components/FormSwitchTwoListSelectComponent';
 

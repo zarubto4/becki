@@ -4,12 +4,10 @@
  */
 
 
-import { Input, Output, EventEmitter, Component, OnInit, ViewChild, NgZone } from '@angular/core';
+import { Input, Output, EventEmitter, Component, OnInit, NgZone } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ModalModel } from '../services/ModalService';
 import { Blocks } from 'blocko';
-import { MonacoEditorComponent } from '../components/MonacoEditorComponent';
-
 
 export class ModalsBlockoBlockCodeEditorModel extends ModalModel {
     constructor(public block: Blocks.TSBlock) {
@@ -62,7 +60,6 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
                 backgroundColor: this.blockForm.controls['color'].value,
                 displayName: this.blockForm.controls['icon'].value,
                 description: this.blockForm.controls['description'].value,
-                type_of_block: this.modalModel.block.typeOfBlock,
                 blockVersion: null
             });
             this.modalModel.block.setDesignJson(designJson);

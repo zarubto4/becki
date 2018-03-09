@@ -101,7 +101,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.widgetMakeClone({
+                this.tyrionBackendService.gridWidgetMakeClone({
                     widget_id: widget.id,
                     project_id: this.projectId,
                     name: model.name,
@@ -188,7 +188,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onWidgetActivateClick(widget: IWidget): void {
         this.blockUI();
-        this.tyrionBackendService.widgetActivate(widget.id)
+        this.tyrionBackendService.gridWidgetActivate(widget.id)
             .then(() => {
                 this.refresh();
             })
@@ -200,7 +200,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onWidgetDeactivateClick(widget: IWidget): void {
         this.blockUI();
-        this.tyrionBackendService.widgetDeactivate(widget.id)
+        this.tyrionBackendService.gridWidgetDeactivate(widget.id)
             .then(() => {
                 this.refresh();
             })
@@ -212,7 +212,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onShowProgramPrivateWidgetFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.widgetGetByFilter(page, {
+        this.tyrionBackendService.gridWidgetGetByFilter(page, {
             project_id: this.projectId,
         })
             .then((list) => {
@@ -227,7 +227,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onShowProgramPublicWidgetFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.widgetGetByFilter(page, {
+        this.tyrionBackendService.gridWidgetGetByFilter(page, {
             public_programs: true,
         })
             .then((list) => {
@@ -242,8 +242,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onShowProgramPendingWidgetFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.widgetGetByFilter(page, {
-            pending_widgets: true,       // For public its required
+        this.tyrionBackendService.gridWidgetGetByFilter(page, {
+            // pending_widgets: true,       // For public its required
         })
             .then((list) => {
                 this.widgetListNotApproved = list;

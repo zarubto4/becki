@@ -1068,6 +1068,7 @@ export class StaticTranslation {
                 'tab_grid': 'Grid',
                 'tab_blocko': 'Blocko',
                 'tab_blocks': 'Blocks',
+                'tab_interfaces': 'Interfaces',
                 'tab_hw_groups': 'HW Groups',
                 'tab_instance_in_cloud': 'Instance in cloud',
                 'tab_saved_versions': 'Saved Versions',
@@ -1696,7 +1697,7 @@ export class StaticTranslation {
                 'flash_blocko_update': 'Program has been updated.',
                 'flash_blocko_cant_update': 'Unable to update program, ',
 
-            }, 'ProjectsProjectBlocksBlocksBlockComponent': {
+            }, 'ProjectsProjectBlocksBlockComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK <strong>{0}</strong>',
                 'label_name': '<strong class="font-color-blocko">BLOCKO</strong> Block Name:',
                 'label_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Description:',

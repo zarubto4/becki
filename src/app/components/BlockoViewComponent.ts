@@ -67,7 +67,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @ViewChild('field')
     field: ElementRef;
 
-    groupRemovedCallback: (block: Blocks.BaseInterfaceBlockGroup) => void;
+    groupRemovedCallback: (boundInterface: BlockoCore.BoundInterface) => void;
 
     constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, private translationService: TranslationService) {
         this.zone.runOutsideAngular(() => {
@@ -149,9 +149,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                     this.onLog.emit({ block: block, type: type, message: message });
                 });
             });
-            this.blockoController.registerBlockRemovedCallback((block: BlockoCore.Block) => {
-                if (this.groupRemovedCallback && block instanceof Blocks.BaseInterfaceBlockGroup) {
-                    this.groupRemovedCallback(block);
+            this.blockoController.registerInterfaceBoundCallback((boundInterface: BlockoCore.BoundInterface) => {
+                if (this.groupRemovedCallback) {
+                    this.groupRemovedCallback(boundInterface);
                 }
             });
             this.blockoController.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
@@ -348,21 +348,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return s;
     }
 
-    setInterfaces(ifaces: BlockoTargetInterface[]): void {
+    addInterface(iface: BlockoTargetInterface): void {
         this.zone.runOutsideAngular(() => {
-            this.blockoController.setInterfaces(ifaces);
-        });
-    }
-
-    setGroups(ifaces: BlockoTargetInterface[]): void {
-        this.zone.runOutsideAngular(() => {
-            this.blockoController.setGroups(ifaces);
-        });
-    }
-
-    addInterfaceGroup(iface: BlockoTargetInterface): void {
-        this.zone.runOutsideAngular(() => {
-            this.blockoController.addInterfaceGroup(iface);
+            this.blockoController.addInterface(iface);
         });
     }
 
@@ -381,7 +369,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });*/
     }
 
-    registerGroupRemovedCallback(callback: (block: Blocks.BaseInterfaceBlockGroup) => void) {
+    registerInterfaceBoundCallback(callback: (boundInterface: BlockoCore.BoundInterface) => void) {
         this.groupRemovedCallback = callback;
     }
 }

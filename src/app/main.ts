@@ -202,6 +202,9 @@ import { IconFileComponent } from './components/FileTreeComponent';
 import { ServerRegionSelectorComponent, ServerSizeSelectorComponent } from './components/ServerSizeSelectorComponent';
 import { ProjectsProjectBlocksComponent } from './views/projects-project-blocks';
 import { ProjectsProjectWidgetsComponent } from './views/projects-project-widgets';
+import { ProjectsProjectBlockoBlockoComponent } from './views/projects-project-blocko-blocko';
+import { ProjectsProjectBlocksBlockComponent } from './views/projects-project-blocks-block';
+import { ModalsVersionSelectComponent } from './modals/version-select';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -249,12 +252,12 @@ let routes: Routes = [
     { path: 'projects/:project/hardware', data: { breadName: 'HARDWARE devices' }, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware/:hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
-    // Strana IDE Blocka { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
+    { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
     { path: 'projects/:project/code', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
     { path: 'projects/:project/blocks', data: { breadName: 'BLOCKO blocks' }, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard] },
     //  { path: 'projects/:project/blocks/:blocks', data: { breadName: ':blocks' }, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard] },
-    //  { path: 'projects/:project/blocks/:blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+    { path: 'projects/:project/blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
     { path: 'projects/:project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
 
@@ -538,7 +541,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,
         ProjectsProjectBlockoComponent,
-        // ProjectsProjectBlockoBlockoComponent,
+        ProjectsProjectBlockoBlockoComponent,
         ProjectsProjectCodeComponent,
         ProjectsProjectCodeCodeComponent,
         NotificationsComponent,
@@ -552,7 +555,7 @@ class BeckiErrorHandler implements ErrorHandler {
         GarfieldGarfieldComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
-        // ProjectsProjectBlocksBlocksBlockComponent,
+        ProjectsProjectBlocksBlockComponent,
         // ProjectsProjectGridComponent,
         // ProjectsProjectGridGridsComponent,
         // ProjectsProjectGridGridsGridComponent,
@@ -649,6 +652,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsHardwareChangeServerComponent,
         ModalsCodeSelectComponent,
         ModalsHardwareFindHashComponent,
+        ModalsVersionSelectComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

@@ -7,10 +7,8 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import {
-    IHardwareGroup, IBootLoader, IActualizationProcedureMakeHardwareType, ICProgramFilter, ICProgramList, ICProgram,
-    IHardwareType, IHardwareGroupList
+    IHardwareGroup, IBootLoader, IActualizationProcedureMakeHardwareType, ICProgramList, IHardwareType, IHardwareGroupList
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';

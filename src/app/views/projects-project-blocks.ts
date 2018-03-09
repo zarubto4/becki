@@ -10,7 +10,6 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, IBlock, IBlockList } from '../backend/TyrionAPI';
-import { ModalsBlocksTypePropertiesModel } from '../modals/blocks-type-properties';
 import { ModalsBlocksBlockPropertiesModel } from '../modals/blocks-block-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsBlockoBlockCopyModel } from '../modals/blocko-block-copy';
@@ -76,11 +75,11 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         }
     }
 
-    onBlockClick(block: IBlock): void {
+    onBlockClick(blockId: string): void {
         if (this.projectId) {
-            this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', block.id]);
+            this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', blockId]);
         } else {
-            this.navigate(['/admin/blocks/', block.id]);
+            this.navigate(['/admin/blocks/', blockId]);
         }
     }
 
@@ -219,7 +218,6 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
     onShowProgramPublicBlocksFilter(page: number = 0): void {
         this.blockUI();
         this.tyrionBackendService.blockGetByFilter(page, {
-            public_programs: true,
         })
             .then((list) => {
                 this.blockPublicList = list;
