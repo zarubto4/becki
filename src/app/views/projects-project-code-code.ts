@@ -712,7 +712,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
             main: main,
             files: userFiles,
             hardware_type_id: this.codeProgram.hardware_type_id,
-            library_compilation_version: this.formLibrarySelector.controls['tag_name'].value
+            library_compilation_version: this.formLibrarySelector.controls['compilation_version_library_tag'].value
         })
             .then((success) => {
                 this.buildInProgress = false;

@@ -265,7 +265,6 @@
                             <th class="">{{'table_description'|bkTranslate:this}}</th>
                             <th class="text-center">{{'table_size'|bkTranslate:this}}</th>
                             <th class="text-center"><span [innerHTML]="'label_type'|bkTranslate:this"></span></th>
-                            <th class="text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -286,30 +285,6 @@
                                  </span>
                                     ]
                                 </div>
-                            </td>
-
-                            <td class="vert-align text-right no-wrap">
-
-                                <style type="text/css">
-                                    table tr button {
-                                        opacity: 0.05;
-                                    }
-
-                                    table tr:hover button {
-                                        opacity: 1
-                                    }
-                                </style>
-
-                                <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                        [disabled]="!group.update_permission"
-                                        (click)="onGroupEditClick(group)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                        [disabled]="!group.delete_permission"
-                                        (click)="onGroupDeleteClick(group)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -341,7 +316,6 @@
                             <th class="col text-center">{{'table_groups'|bkTranslate:this}}</th>
                             <th class="col text-center">{{'table_project_status'|bkTranslate:this}}</th>
                             <th class="col text-center">{{'table_status'|bkTranslate:this}}</th>
-                            <th class="col text-center">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -390,33 +364,6 @@
                             <td class="vert-align text-center no-wrap">
 
                                 <bk-online-state [online_state]="device.online_state"></bk-online-state>
-                            </td>
-                            <td class="vert-align text-right no-wrap">
-
-                                <style type="text/css">
-                                    table tr button {
-                                        opacity: 0.05;
-                                    }
-                                    table tr:hover button {
-                                        opacity: 1
-                                    }
-                                </style>
-
-                                <button title="{{'label_hardware_group'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
-                                        [disabled]="!device.update_permission"
-                                        (click)="onDeviceEditGroupClick(device)">
-                                    <i class="fa fa-object-group"></i>
-                                </button>
-                                <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                        [disabled]="!device.update_permission"
-                                        (click)="onHardwareEditClick(device)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                        [disabled]="!device.delete_permission"
-                                        (click)="onHardwareRemoveClick(device)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
                             </td>
                         </tr>
                         </tbody>

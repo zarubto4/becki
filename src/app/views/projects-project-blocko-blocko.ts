@@ -782,7 +782,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         }
 
         this.blockUI();
-        this.tyrionBackendService.bProgramVersionGet(programVersion.id) // TODO [permission]: B_program.read_permission
+        this.tyrionBackendService.bProgramVersionGet(programVersion.id)
             .then((programVersionFull) => {
 
                 this.unsavedChanges = false;
@@ -790,14 +790,14 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
                 this.selectedProgramVersion = programVersionFull;
                 this.selectedGridProgramVersions = {};
-                programVersionFull.b_program_version_snapshots.forEach((pps) => {
-                    this.selectedGridProgramVersions[pps.grid_project_id] = {};
-                    if (pps.m_program_snapshots) {
-                        pps.m_program_snapshots.forEach((ps) => {
-                            this.selectedGridProgramVersions[pps.grid_project_id][ps.grid_program_id] = ps.version_id;
+
+                programVersionFull.grid_project_snapshots.forEach((pps) => {
+                    this.selectedGridProgramVersions[pps.grid_project.id] = {};
+                    if (pps.grid_programs) {
+                        pps.grid_programs.forEach((ps) => {
+                            this.selectedGridProgramVersions[pps.grid_project.id][ps.id] = ps.grid_program_version.id;
                         });
                     }
-
                 });
 
                 this.blockoView.setDataJson(this.selectedProgramVersion.program);

@@ -28,16 +28,19 @@
         [tabBtns]="[
                         {
                             tab_name: 'my_blocks',
+                            condition: (true),
                             tab_color: 'BLOCKO',
                             tab_label: ('tab_my_blocks'|bkTranslate:this)
                         },
                         {
                             tab_name: 'public_blocks',
+                            condition: (true),
                             tab_color: 'BLOCKO',
                             tab_label: ('tab_public_blocks'|bkTranslate:this)
                         },
                         {
                             tab_name: 'admin_blocks',
+                            condition: (projectId == null),
                             tab_color: 'BLOCKO',
                             tab_label: ('tab_admin_blocks'|bkTranslate:this)
                         }

@@ -3,8 +3,8 @@
  * of this distribution.
  */
 import {
-    IInstanceSnapshot, IInstance, IInstanceGridAppSettings, IBProgram, IMProgramInstanceParameter,
-    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList
+    IInstanceSnapshot, IInstance, IBProgram,
+    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
@@ -176,12 +176,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     }
 
-    onGridProgramPublishClick(gridProgram: IMProgramInstanceParameter) {
+    onGridProgramPublishClick(gridProgram: ITerminalConnectionSummary) {
         this.blockUI();
-        this.tyrionBackendService.instanceUpdateGridSettings({
-            m_program_parameter_id: gridProgram.id,
-            snapshot_settings: gridProgram.snapshot_settings === 'PUBLIC' ? 'PROJECT' : 'PUBLIC'
-        })
+        this.tyrionBackendService.instanceUpdateGridSettings(this.instance.current_snapshot.id, this.instance.current_snapshot.settings)
             .then(() => {
                 this.refresh();
             })

@@ -81,8 +81,9 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
 
     onAddClick() {
         let model = new ModalsInstanceCreateModel(this.project_id);
-        this.modalService.showModal(model)
-
+        this.modalService.showModal(model).then(() => {
+            this.onFilterInstances();
+        });
     }
 
     onInstanceEditClick(instance: IInstance) {
