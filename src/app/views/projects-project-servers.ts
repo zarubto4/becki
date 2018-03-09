@@ -65,7 +65,6 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     }
 
     onPortletClick(action: string): void {
-        console.log("Co přišlo na onPortletClick:: ", action)
         if (action === 'homer_server_add') {
             this.tab = 'create_server_selector';
         }

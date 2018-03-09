@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, Injector, ViewEncapsulation } from '@angular/core';
-import {IServerRegistrationFormDataServerRegion, IServerRegistrationFormDataServerSize} from '../backend/TyrionAPI';
+import { IServerRegistrationFormDataServerRegion, IServerRegistrationFormDataServerSize } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-server-size-componet',

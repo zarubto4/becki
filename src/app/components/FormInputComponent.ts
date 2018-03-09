@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
@@ -71,7 +71,6 @@ export class FormInputComponent implements OnInit {
 
     onEnter(event: any) {
         if (event.keyCode === 13) {
-            console.log('Enter click');
             this.onEnterEvent.emit(event);
         }
     }

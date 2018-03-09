@@ -45,7 +45,7 @@
                     <tr *ngFor="let instance of instanceFilter.content">
 
                         <td class="vert-align no-wrap bold">
-                            <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
+                            <a (click)="onInstanceClick(instance.id)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
                             <span *ngIf="!instance.name" class="icon-hint-wraper gray">
                                 <i  title="{{'label_own_name_and_description'|bkTranslate:this}}" class="fa fa-info-circle font-color-byzance-blue"></i>
                             </span>

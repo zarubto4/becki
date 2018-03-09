@@ -29,7 +29,7 @@ export class TimeZoneSelectorComponent implements OnInit {
     @Input()
     waitForTouch: boolean = true;
 
-    private _options: FormSelectComponentOption[] = null;
+    public _options: FormSelectComponentOption[] = null;
 
     private opp: TimeZones[] = [
         {

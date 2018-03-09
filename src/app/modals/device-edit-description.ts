@@ -9,7 +9,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import {IHardware} from "../backend/TyrionAPI";
+import { IHardware } from '../backend/TyrionAPI';
 
 
 export class ModalsDeviceEditDescriptionModel extends ModalModel {

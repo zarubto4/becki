@@ -3,10 +3,10 @@
  * of this distribution.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
-import {TranslationService} from "../services/TranslationService";
+import { TranslationService } from '../services/TranslationService';
 
 @Component({
     selector: 'bk-form-tag-input',
@@ -84,10 +84,7 @@ export class FormInputTagsComponent implements OnInit {
     }
 
     onEnter() {
-        console.log('FormInputTagsComponent::onEnter');
         let tag: string = this.private_form.controls['tag_label'].value;
-        console.log('FormInputTagsComponent::onEnter label:: ', tag);
-
         // Ignore empty or illegal values
         if (tag === '' || tag === null) {
             return;

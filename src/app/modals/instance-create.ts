@@ -8,7 +8,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { IBProgramList, IHomerServerList } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { TranslationService } from "../services/TranslationService";
+import { TranslationService } from '../services/TranslationService';
 
 
 export class ModalsInstanceCreateModel extends ModalModel {

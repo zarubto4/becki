@@ -15,7 +15,7 @@ import { INotificationElement, INotificationButton } from '../backend/TyrionAPI'
         <br>      
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="total>25">
         <div class="col col-lg-3 text-left">
             <div class="dataTables_info" style="margin-left: 30px; margin-top: 10px;" role="status" aria-live="polite">Showing {{from  == 0 ? 1 : from }} to {{to}} of {{total}} entries</div>
         </div>

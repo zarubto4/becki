@@ -39,7 +39,6 @@ export class BeckiBooleanButtonComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log(changes);
         this.componentValue = changes.baseValue.currentValue;
     }
 

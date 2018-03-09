@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { Router, CanDeactivate } from '@angular/router';
 import { StaticTranslation } from './../helpers/StaticTranslation';
 import { NullSafe } from '../helpers/NullSafe';
-import {isArray} from "rxjs/util/isArray";
+import { isArray } from 'rxjs/util/isArray';
 
 
 @Injectable()

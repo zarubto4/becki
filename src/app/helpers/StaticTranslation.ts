@@ -1379,7 +1379,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
-                'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> - instance <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-cloud">INSTANCE</strong>',
 
                 'tab_name_overview': 'Overview',
                 'tab_name_hardware': '<strong class="font-color-hardware">HARDWARE</strong>',
@@ -1387,6 +1387,8 @@ export class StaticTranslation {
                 'tab_name_history': 'History',
                 'tab_name_update_progress': 'Update Progress',
                 'tab_name_update_view': 'Realtime Overview',
+                'tab_name_logs': 'Logs',
+                'tab_name_debugs': 'Debugs',
 
                 'table_name': 'Name',
                 'table_id': 'ID',
@@ -1410,7 +1412,7 @@ export class StaticTranslation {
                 'label_instance_name': 'Name',
                 'label_instance_description': 'Description',
                 'label_instance_id': 'ID',
-                'label_server_name': 'Server',
+                'label_server_name': '<strong class="font-color-cloud">CLOUD</strong> Server',
                 'label_instance_status': 'Status',
                 'label_status': 'Status',
                 'label_info': 'Info',
@@ -1419,7 +1421,13 @@ export class StaticTranslation {
                 'label_created': 'Created',
                 'label_running_from': 'Running from',
                 'label_running_to': 'Running until',
-                'label_running_status': 'Status',
+                'label_deactivate_instance': 'Activated',
+                'label_activate_instance': 'Deactivated',
+                'label_b_program_name': '<strong class="font-color-blocko">BLOCKO</strong> Program',
+                'label_b_program_description': 'Description',
+                'label_b_program_version_name': 'Version Name',
+                'label_b_program_version_description': 'Description',
+                'label_running_status': '<strong class="font-color-cloud">INSTANCE</strong> Status',
                 'label_planned': 'Planned',
                 'label_progress': 'Progress',
                 'label_update_state': 'Update state',
@@ -1446,7 +1454,7 @@ export class StaticTranslation {
                 'label_instance_not_running_in_cloud': 'Instance is not running in Cloud.',
 
                 'label_cloud': 'CLOUD',
-                'label_blocko': 'BLOCKO',
+                'label_blocko': '<strong class="font-color-blocko">BLOCKO</strong> Program',
                 'label_grid': 'GRID',
                 'label_code': 'CODE',
                 'label_hardware': 'Hardware',
@@ -1456,6 +1464,16 @@ export class StaticTranslation {
                 'label_unknown_date': 'Not yet (Unknown)',
                 'label_hardware_caps': 'HARDWARE',
                 'label_select_version_for_details': 'Select version to see details',
+
+                'label_no_running_update_on_hardware': 'No <strong class="font-color-code">FIRMWARE</strong> release',
+                'label_no_running_update_on_hardware_comment': 'There is no update for this device yet. Create new <strong class="font-color-code">Code</strong> program or set new release',
+                'label_hardware_groups': '<strong class="font-color-hardware">HARDWARE</strong> Groups',
+                'label_hardware_in_instance': '<strong class="font-color-hardware">HARDWARE</strong> in Instance',
+
+                'label_no_hardware_groups_in_snapshot': 'No <strong class="font-color-hardware">HARDWARE</strong> Groups',
+                'label_no_hardware_groups_in_snapshot_comment': 'In actual Snapshot of instance, you have not integrated any <strong class="font-color-hardware">HARDWARE</strong> groups',
+                'label_no_hardware_in_snapshot': 'No <strong class="font-color-hardware">HARDWARE</strong> devices',
+                'label_no_hardware_in_snapshot_comment': 'In actual Snapshot of instance, you have not integrated any <strong class="font-color-hardware">HARDWARE</strong> devices',
 
                 'label_modal_shutdown_instance': 'Shutdown instance',
                 'label_modal_confirm_shutdown_instance': 'Are you sure to shutdown the running instance?',
@@ -2453,10 +2471,6 @@ export class StaticTranslation {
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',
                 'RESTART_REQUIRED': 'Device restart is required.'
-            },
-            'instance_type': {
-                'VIRTUAL': 'Virtual Instance only for ',
-                'INDIVIDUAL': 'Instance is set individually.'
             },
             'instance_status': {
                 'FUTURE': 'Scheduled',

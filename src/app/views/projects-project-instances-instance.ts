@@ -2,23 +2,26 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-import { IInstanceSnapshot, IInstance, IInstanceGridAppSettings } from './../backend/TyrionAPI';
+import {
+    IInstanceSnapshot, IInstance, IInstanceGridAppSettings, IBProgram, IMProgramInstanceParameter,
+    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList
+} from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import { IBProgram, IHomerInstance, IMProgramInstanceParameter } from '../backend/TyrionAPI';
 import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { HomerService, HomerDao } from '../services/HomerService';
 import { ModalsConfirmModel } from '../modals/confirm';
-import { InstanceHistoryTimelineComponent } from '../components/InstanceHistoryTimelineComponent';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
 import { OnlineChangeStatus } from '../backend/BeckiBackend';
+import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
+
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -31,19 +34,22 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     routeParamsSubscription: Subscription;
 
     instance: IInstance = null;
+    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    devicesFilter: IHardwareList = null;
+    deviceGroupFilter: IHardwareGroupList = null;
 
     gridUrl: string = '';
 
     instanceStatus: OnlineChangeStatus;
 
-    currentHistoricInstance: IInstanceSnapshot;
-
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    currentHistoricInstance: IInstanceSnapshot = null;
+
 
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
 
-    @ViewChild(InstanceHistoryTimelineComponent)
+    @ViewChild(InstanceHistoryTimeLineComponent)
 
     @ViewChild('historyEventsList')
     historyEventsList: ElementRef;
@@ -99,18 +105,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             this.instanceId = params['instance'];
             this.refresh();
         });
-
-        /** Supported by Tyrion
-            if (location.hostname.indexOf('portal.stage.') === 0) {
-                this.gridUrl = 'https://app.stage.byzance.cz/program/';
-            } else {
-                this.gridUrl = 'http://localhost:8888/program/';
-            }
-        */
     }
 
     ngAfterContentChecked() {
-        if (this.instanceTab === 'view') {
+        if (this.tab === 'view') {
             if (!this.liveViewLoaded && this.blockoView) {
                 this.loadBlockoLiveView();
                 this.liveViewLoaded = true;
@@ -123,10 +121,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     this.homerDao = null;
                 }
             }
-        }
-
-        if (this.instanceTab !== 'history') {
-            this.currentHistoricInstance = null;
         }
     }
 
@@ -142,56 +136,51 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     refresh(): void {
         this.blockUI();
         // this.instance.actual_instance.procedures.forEach(proc => proc.updates.forEach(update => update.));
-        this.tyrionBackendService.instanceGet(this.instanceId) // TODO [permission]: "B_program.update_permission"
+        this.tyrionBackendService.instanceGet(this.instanceId)
             .then((instance) => {
 
                 this.instance = instance;
                 this.loadBlockoLiveView();
-                this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
 
                 this.tyrionBackendService.onlineStatus.subscribe((status) => {
-                    if (status.model === 'HomerServer' && this.instance.server_id === status.model_id) {
-                        this.instance.server_online_state = status.online_state;
+                    if (status.model === 'HomerServer' && this.instance.server.id === status.model_id) {
+                        this.instance.server.online_state = status.online_state;
                     }
                 });
-
-                if (this.instance.actual_instance) {
-
-                    this.router.navigate(['/', 'projects', this.projectId, 'instances', this.instanceId]);
-
-                    this.instance.actual_instance.hardware_group.forEach((deviceGroup, index, obj) => {
-
-                        this.tyrionBackendService.onlineStatus.subscribe((status) => {
-                            if (status.model === 'Board' && deviceGroup.main_board_pair.board_id === status.model_id) {
-                                deviceGroup.main_board_pair.online_state = status.online_state;
-                            }
-                        });
-                    });
-                }
             })
             .catch(reason => {
                 this.fmError(`Instances ${this.projectId} cannot be loaded.`, reason);
-                this.router.navigate(['/', 'projects', this.projectId, 'instances', this.instanceId]);
                 this.unblockUI();
             });
     }
 
     onPortletClick(action: string): void {
-        if (action === 'add_instance') {
-            this.onAddClick();
-        }
+
     }
 
     onToggleTab(tab: string) {
         this.tab = tab;
+
+        if (tab === 'update' && !this.actualizationTaskFilter) {
+            this.onFilterActualizationProcedureTask();
+        }
+
+        if (tab === 'hardware' && !this.devicesFilter) {
+            this.onFilterHardware();
+        }
+
+        if (tab === 'hardware' && !this.deviceGroupFilter) {
+            this.onFilterHardwareGroup();
+        }
+
     }
 
     onGridProgramPublishClick(gridProgram: IMProgramInstanceParameter) {
         this.blockUI();
         this.tyrionBackendService.instanceUpdateGridSettings({
             m_program_parameter_id: gridProgram.id,
-            snapshot_settings: gridProgram.snapshot_settings === 'absolutely_public' ? 'only_for_project_members' : 'absolutely_public'
+            snapshot_settings: gridProgram.snapshot_settings === 'PUBLIC' ? 'PROJECT' : 'PUBLIC'
         })
             .then(() => {
                 this.refresh();
@@ -202,62 +191,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
     }
 
-    connectionsHwCount() {
-        let yodaCount = NullSafeDefault(() => this.instance.actual_instance.hardware_group, []).length;
-        let padawansCount = 0;
-        NullSafeDefault(() => this.instance.actual_instance.hardware_group, []).forEach((sh) => {
-            padawansCount += sh.device_board_pairs.length;
-        });
-        return yodaCount + ' + ' + padawansCount;
-
-    }
-
-    onChangeVersionClick(): void {
-        /**if (!this. || !this.blockoProgramVersions.length) {
-            this.fmWarning('Must create some version first.');  // TODO domimplementovat
-            return;
-        }*/
-        if (this.instance.online_state === 'online') {
-            let mConfirm = new ModalsConfirmModel(this.translate('label_modal_change_instance_version'), this.translate('label_modal_change_running_instance_version'));
-            this.modalService.showModal(mConfirm)
-                .then((success) => {
-                    if (success) {
-                        this.changeVersionAction();
-                    }
-                });
-        } else {
-            this.changeVersionAction();
-        }
-    }
-
-    changeVersionAction() {
-
-        this.tyrionBackendService.bProgramGet(this.instance.actual_instance.b_program_id).then((blocko) => {
-            let m = new ModalsBlockoVersionSelectModel(blocko.program_versions, NullSafe(() => this.instance.actual_instance.b_program_version_id));
-            this.modalService.showModal(m)
-                .then((success) => {
-                    if (success) {
-                        this.blockUI();
-                        this.tyrionBackendService.bProgramVersionUploadToCloud(m.programVersion, {}) // TODO [permission]: B_program.update_permission
-                            .then(() => {
-                                this.storageService.projectRefresh(this.projectId);
-                                this.refresh();
-                            })
-                            .catch((err) => {
-                                this.unblockUI();
-                                this.fmError(this.translate('label_cannot_change_version', err));
-                            });
-                    }
-                });
-        });
-    }
-
     selectedHistoryItem(event: { index: number, item: IInstanceSnapshot }) {
         this.currentHistoricInstance = event.item;
-    }
-
-    connectionsGridCount() {
-        return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshot, []).length;
     }
 
     onEditClick() {
@@ -268,94 +203,154 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         // TODO
     }
 
+    onInstanceShutdownClick() { // start (True) for Start or (False) for Shutdown
+        let model = new ModalsConfirmModel(this.translate('label_shut_down_instance_modal'), this.translate('label_shut_down_instance_modal_comment'));
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceSnapshotShutdown(this.instance.current_snapshot.id)
+                    .then(() => {
+                        this.unblockUI();
+                        this.refresh();
+                    })
+                    .catch((err) => {
+                        this.unblockUI();
+                        this.fmError(this.translate('label_upload_error', err));
+                    });
+            }
+        });
+    }
 
-    onInstanceStartOrShutdownClick(start: boolean) { // start (True) for Start or (False) for Shutdown
-        let m = null;
+    onInstanceStartClick() {
+        let model = new ModalsConfirmModel(this.translate('label_upload_instance_modal'), this.translate('label_upload_instance_modal_comment'));
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceSnapshotDeploy({
+                    snapshot_id: this.instance.id,
+                    upload_time: 0
+                })
+                    .then(() => {
+                        this.unblockUI();
+                        this.refresh();
+                    })
+                    .catch((err) => {
+                        this.unblockUI();
+                        this.fmError(this.translate('label_upload_error', err));
+                    });
+            }
+        });
+    }
 
-        if (start) {  // start (True) for Start or (False) for Shutdown
-            m = new ModalsConfirmModel(this.translate('label_modal_shutdown_instance'), this.translate('label_modal_confirm_run_latest_version'));
-        } else {
-            m = new ModalsConfirmModel(this.translate('label_modal_shutdown_instance'), this.translate('label_modal_confirm_shutdown_instance'));
-        }
 
-        this.modalService.showModal(m)
-            .then((success) => {
-                if (success) {
-                    this.blockUI();
-                    this.tyrionBackendService.instanceSetStartOrShutDown(this.instanceId)
-                        .then(() => {
-                            this.storageService.projectRefresh(this.projectId);
-                            this.unblockUI();
-                            this.refresh();
-                        })
-                        .catch((err) => {
-                            this.unblockUI();
-                            this.fmError(this.translate('label_cannot_execute', err));
-                        });
-                }
+    onFilterHardwareGroup(pageNumber: number = 0): void {
+        this.blockUI();
+        this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
+            project_id : this.projectId,
+            instance_snapshots: [this.instance.current_snapshot.id]
+        })
+            .then((values) => {
+                this.deviceGroupFilter = values;
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
 
-    onBlockoClick() {
+    onFilterHardware(pageNumber: number = 0): void {
+        this.blockUI();
+        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+            projects: [this.projectId],
+            instance_snapshots: [this.instance.current_snapshot.id]
+        })
+            .then((values) => {
+                this.devicesFilter = values;
 
+                this.devicesFilter.content.forEach((device, index, obj) => {
+                    this.tyrionBackendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'Board' && device.id === status.model_id) {
+                            device.online_state = status.online_state;
+                        }
+                    });
+                });
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
     }
 
 
-    onGridProjectClick(projectId: string) {
-        this.router.navigate(['projects', this.projectId, 'grid', projectId]);
-    }
+    /* tslint:disable:max-line-length ter-indent */
+    onFilterActualizationProcedureTask(pageNumber: number = 0,
+                                       status: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = ['successful_complete', 'complete' , 'complete_with_error' , 'canceled' , 'in_progress' , 'not_start_yet'],
+                                      ): void {
+        this.blockUI();
 
-    onGridProgramClick(projectId: string, programId: string) {
-        this.router.navigate(['projects', this.projectId, 'grid', projectId, programId]);
-    }
+        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
+            actualization_procedure_ids: null,
+            instance_snapshot_ids: [this.instance.current_snapshot.id],
+            hardware_ids: null,
+            instance_ids: null,
+            update_status: status,
+            update_states: []
+        })
+            .then((values) => {
 
-    onGridProgramVersionClick(projectId: string, programId: string, versionId: string) {
-        this.router.navigate(['projects', this.projectId, 'grid', projectId, programId, { version: versionId }]);
-    }
+                this.actualizationTaskFilter = values;
+                this.unblockUI();
 
-    onHardwareClick(hardwareId: string) {
-        this.router.navigate(['projects', this.projectId, 'hardware', hardwareId]);
-    }
+                this.actualizationTaskFilter.content.forEach((task, index, obj) => {
+                    this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((online_status) => {
+                        if (online_status.model === 'CProgramUpdatePlan' && task.id === online_status.model_id) {
 
-    onCProgramClick(programId: string) {
-        this.router.navigate(['projects', this.projectId, 'code', programId]);
-    }
+                            this.tyrionBackendService.actualizationTaskGet(task.id)
+                                .then((value) => {
+                                    task.state = value.state;
+                                    task.date_of_finish = value.date_of_finish;
+                                })
+                                .catch((reason) => {
+                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                });
 
-    onCProgramVersionClick(programId: string, versionId: string) {
-        this.router.navigate(['projects', this.projectId, 'code', programId, { version: versionId }]);
+                        }
+                    });
+                });
+
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
     }
+    /* tslint:disable:max-line-length ter-indent*/
 
     loadBlockoLiveView() {
         this.zone.runOutsideAngular(() => {
-            if (this.blockoView && this.instance.actual_instance && this.instance.actual_instance.b_program_version_id) {
-                this.tyrionBackendService.bProgramVersionGet(this.instance.actual_instance.b_program_version_id) // TODO [permission]: B_program.read_permission
-                    .then((programVersionFull) => {
-                        const selectedProgramVersion = programVersionFull;
-                        console.info(JSON.stringify(selectedProgramVersion.program));
-                        this.blockoView.setDataJson(selectedProgramVersion.program);
+            if (this.blockoView && this.instance.current_snapshot) {
+                console.info(JSON.stringify(this.instance.current_snapshot.program));
+                this.blockoView.setDataJson(this.instance.current_snapshot.program);
 
-                        if (this.instance.instance_remote_url) {
-                            const authToken = this.tyrionBackendService.getToken();
-                            this.homerDao = this.homerService.connectToHomer(this.instance.instance_remote_url, authToken);
+                if (this.instance.instance_remote_url) {
+                    const authToken = this.tyrionBackendService.getToken();
+                    this.homerDao = this.homerService.connectToHomer(this.instance.instance_remote_url, authToken);
 
-                            this.homerDao.onOpenCallback = (e) => {
-                                this.homerDao.sendMessage({
-                                    message_type: 'get_values'
-                                });
-
-                                this.homerDao.sendMessage({
-                                    message_type: 'get_logs'
-                                });
-                            };
-
-                            this.homerDao.onMessageCallback = (m: any) => this.homerMessageReceived(m);
-                        }
-                    })
-                    .catch((err) => {
-                        this.zone.run(() => {
-                            this.fmError(this.translate('flash_cant_load_version', this.instance.actual_instance.b_program_version_name, err));
+                    this.homerDao.onOpenCallback = (e) => {
+                        this.homerDao.sendMessage({
+                            message_type: 'get_values'
                         });
-                    });
+
+                        this.homerDao.sendMessage({
+                            message_type: 'get_logs'
+                        });
+                    };
+
+                    this.homerDao.onMessageCallback = (m: any) => this.homerMessageReceived(m);
+                }
             }
         });
     }
@@ -497,3 +492,4 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 }
+

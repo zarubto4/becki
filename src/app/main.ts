@@ -202,7 +202,7 @@ import { IconFileComponent } from './components/FileTreeComponent';
 import { ServerRegionSelectorComponent, ServerSizeSelectorComponent } from './components/ServerSizeSelectorComponent';
 import { ProjectsProjectBlocksComponent } from './views/projects-project-blocks';
 import { ProjectsProjectWidgetsComponent } from './views/projects-project-widgets';
-import {ProjectsProjectInstancesInstanceComponent} from "./views/projects-project-instances-instance";
+import { ProjectsProjectInstancesInstanceComponent } from './views/projects-project-instances-instance';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
