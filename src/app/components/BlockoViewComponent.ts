@@ -22,6 +22,9 @@ import { TranslationService } from '../services/TranslationService';
 export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     @Input()
+    id: string = '';
+
+    @Input()
     disableExecution: boolean = false;
 
     @Input()
@@ -352,6 +355,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.zone.runOutsideAngular(() => {
             this.blockoController.addInterface(iface);
         });
+    }
+
+    isDeployable() {
+        return this.blockoController.isDeployable();
     }
 
     getBlockoController(): BlockoCore.Controller {

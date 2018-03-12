@@ -4,39 +4,51 @@
  */
 import {
     IInstanceSnapshot, IInstance, IBProgram,
-    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary
+    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary, IBProgramVersion,
+    IInterface
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
-import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
+import {
+    Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef, ViewChildren, QueryList,
+    AfterViewInit
+} from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { HomerService, HomerDao } from '../services/HomerService';
 import { ModalsConfirmModel } from '../modals/confirm';
-import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
+import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
-import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
 import { OnlineChangeStatus } from '../backend/BeckiBackend';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
+import { ModalsSelectVersionModel } from '../modals/version-select';
+import { DraggableEventParams } from '../components/DraggableDirective';
 
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
     templateUrl: './projects-project-instances-instance.html',
 })
-export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponent implements OnInit, OnDestroy, AfterContentChecked {
+export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponent implements OnInit, OnDestroy, AfterContentChecked, AfterViewInit {
 
     projectId: string;
     instanceId: string;
     routeParamsSubscription: Subscription;
 
     instance: IInstance = null;
+    instanceSnapshot: IInstanceSnapshot = null;
+    bProgram: IBProgram = null;
+    bProgramVersion: IBProgramVersion = null;
     actualizationTaskFilter: IActualizationProcedureTaskList = null;
     devicesFilter: IHardwareList = null;
     deviceGroupFilter: IHardwareGroupList = null;
+
+    allHw: IHardwareList = null;
+    allHwGroups: IHardwareGroupList = null;
+
+    bindings: BlockoCore.BoundInterface[] = [];
 
     gridUrl: string = '';
 
@@ -46,8 +58,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     currentHistoricInstance: IInstanceSnapshot = null;
 
 
-    @ViewChild(BlockoViewComponent)
-    blockoView: BlockoViewComponent;
+    @ViewChildren(BlockoViewComponent)
+    blockoViews: QueryList<BlockoViewComponent>;
+
+    editorView: BlockoViewComponent;
+
+    liveView: BlockoViewComponent;
 
     @ViewChild(InstanceHistoryTimeLineComponent)
 
@@ -63,6 +79,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     homerDao: HomerDao;
 
     tab: string = 'overview';
+
+    draggableOptions: JQueryUI.DraggableOptions = {
+        helper: 'clone',
+        containment: 'document',
+        cursor: 'move',
+        cursorAt: { left: -5, top: -5 }
+    };
 
     private homerService: HomerService = null;
     private liveViewLoaded: boolean = false;
@@ -107,9 +130,58 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
+    ngAfterViewInit() {
+        this.blockoViews.changes.subscribe((views: QueryList<BlockoViewComponent>) => {
+
+            this.editorView = views.find((view) => {
+                return view.id === 'snapshot_editor';
+            });
+
+            if (this.editorView) {
+
+                if (this.instanceSnapshot) {
+                    this.editorView.setDataJson(this.instanceSnapshot.program);
+                } else if (this.bProgramVersion) {
+                    this.editorView.setDataJson(this.bProgramVersion.program);
+                }
+
+                this.editorView.registerInterfaceBoundCallback((iface) => {
+                    let index = this.bindings.findIndex((i) => { return i.targetId === iface.targetId; });
+
+                    if (index === -1) {
+                        this.bindings.push(iface);
+                    } else {
+                        this.bindings[index] = iface;
+                    }
+                });
+            }
+
+            this.liveView = views.find((view) => {
+                return view.id === 'liveview';
+            });
+        });
+
+        // Preload hw and groups
+        this.tyrionBackendService.boardsGetWithFilterParameters(0, {
+            projects: [this.projectId]
+        }).then((value) => {
+            this.allHw = value;
+        }).catch((reason) => {
+            this.fmError(this.translate('flash_hardware_load_fail'), reason);
+        });
+
+        this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
+            project_id: this.projectId
+        }).then((value) => {
+            this.allHwGroups = value;
+        }).catch((reason) => {
+            this.fmError(this.translate('flash_hardware_group_load_fail'), reason);
+        });
+    }
+
     ngAfterContentChecked() {
         if (this.tab === 'view') {
-            if (!this.liveViewLoaded && this.blockoView) {
+            if (!this.liveViewLoaded && this.liveView) {
                 this.loadBlockoLiveView();
                 this.liveViewLoaded = true;
             }
@@ -140,8 +212,23 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             .then((instance) => {
 
                 this.instance = instance;
+
+                if (this.instance.current_snapshot) {
+                    this.instanceSnapshot = this.instance.current_snapshot;
+                } else if (this.instance.snapshots.length > 0) {
+                    this.instanceSnapshot = this.instance.snapshots[0];
+                }
+
                 this.loadBlockoLiveView();
                 this.unblockUI();
+
+                this.tyrionBackendService.bProgramGet(this.instance.b_program.id)
+                    .then((bp) => {
+                        this.bProgram = bp;
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_bprogram_load_fail'), reason);
+                    });
 
                 this.tyrionBackendService.onlineStatus.subscribe((status) => {
                     if (status.model === 'HomerServer' && this.instance.server.id === status.model_id) {
@@ -156,12 +243,17 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onPortletClick(action: string): void {
-
+        switch (action) {
+            case 'change_version_instance': {
+                this.onCreateNewSnapshot();
+                break;
+            }
+            default: console.warn('TODO action for:', action);
+        }
     }
 
     onToggleTab(tab: string) {
         this.tab = tab;
-
         if (tab === 'update' && !this.actualizationTaskFilter) {
             this.onFilterActualizationProcedureTask();
         }
@@ -176,9 +268,115 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     }
 
+    onDragStop(params: DraggableEventParams) {
+
+        switch (params.type) {
+            case 'hardware': {
+
+                let controller = this.editorView.getBlockoController();
+
+                controller.bindInterface(params.data.id);
+
+                break;
+            }
+
+            default: this.fmError(this.translate('flash_cant_add_blocko_block'));
+        }
+    }
+
+    onCreateNewSnapshot() {
+        let m: ModalsSelectVersionModel = new ModalsSelectVersionModel(this.bProgram.program_versions);
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success && m.selectedId) {
+                    this.tyrionBackendService.bProgramVersionGet(m.selectedId)
+                        .then((bpv) => {
+                            this.bProgramVersion = bpv;
+                            this.tab = 'editor';
+                            if (this.editorView) {
+                                this.editorView.setDataJson(this.bProgramVersion.program);
+                            }
+                        })
+                        .catch((reason) => {
+                            this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                        });
+                }
+            });
+    }
+
+    onEditorPortletClick(action: string) {
+        switch (action) {
+            case 'save_snapshot': {
+                this.onSaveSnapshotClick();
+                break;
+            }
+            case 'change_version': {
+                this.onChangeVersion();
+                break;
+            }
+            default: console.warn('undefined for:', action);
+        }
+    }
+
+    onSaveSnapshotClick = () => {
+        if (this.editorView.isDeployable()) {
+
+            let version_id = null;
+
+            if (this.instanceSnapshot) {
+                version_id = this.instanceSnapshot.b_program_version.id;
+            } else if (this.bProgramVersion) {
+                version_id = this.bProgramVersion.id;
+            }
+
+            let interfaces: IInterface[] = [];
+
+            this.bindings.forEach((binding) => {
+                interfaces.push({
+                    target_id: binding.targetId,
+                    interface_id: binding.interfaceId,
+                    type: binding.targetId.length === 24 ? 'hardware' : 'group'
+                });
+            });
+
+            this.tyrionBackendService.instanceSnapshotCreate({
+                instance_id: this.instanceId,
+                version_id: version_id,
+                interfaces: interfaces,
+                snapshot: this.editorView.getDataJson()
+            }).then((snapshot) => {
+                this.instanceSnapshot = snapshot;
+            }).catch((reason) => {
+                this.fmError(this.translate('flash_snapshot_save_fail'), reason);
+            });
+        } else {
+            this.fmError(this.translate('flash_not_deployable'));
+        }
+    }
+
+    onChangeVersion() {
+        let m: ModalsSelectVersionModel = new ModalsSelectVersionModel(this.bProgram.program_versions);
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success && m.selectedId) {
+                    this.tyrionBackendService.bProgramVersionGet(m.selectedId)
+                        .then((bpv) => {
+                            this.bProgramVersion = bpv;
+                            this.tab = 'editor';
+                            if (this.editorView) {
+                                this.editorView.setDataJson(this.bProgramVersion.program);
+                            }
+                        })
+                        .catch((reason) => {
+                            this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                        });
+                }
+            });
+    }
+
     onGridProgramPublishClick(gridProgram: ITerminalConnectionSummary) {
         this.blockUI();
-        this.tyrionBackendService.instanceUpdateGridSettings(this.instance.current_snapshot.id, this.instance.current_snapshot.settings)
+        this.tyrionBackendService.instanceUpdateGridSettings(this.instanceSnapshot.id, this.instanceSnapshot.settings)
             .then(() => {
                 this.refresh();
             })
@@ -205,7 +403,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.instanceSnapshotShutdown(this.instance.current_snapshot.id)
+                this.tyrionBackendService.instanceSnapshotShutdown(this.instanceSnapshot.id)
                     .then(() => {
                         this.unblockUI();
                         this.refresh();
@@ -224,7 +422,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.instanceSnapshotDeploy({
-                    snapshot_id: this.instance.id,
+                    snapshot_id: this.instanceSnapshot.id,
                     upload_time: 0
                 })
                     .then(() => {
@@ -244,7 +442,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
             project_id : this.projectId,
-            instance_snapshots: [this.instance.current_snapshot.id]
+            instance_snapshots: [this.instanceSnapshot.id]
         })
             .then((values) => {
                 this.deviceGroupFilter = values;
@@ -260,7 +458,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.blockUI();
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
             projects: [this.projectId],
-            instance_snapshots: [this.instance.current_snapshot.id]
+            instance_snapshots: [this.instanceSnapshot.id]
         })
             .then((values) => {
                 this.devicesFilter = values;
@@ -290,7 +488,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
             actualization_procedure_ids: null,
-            instance_snapshot_ids: [this.instance.current_snapshot.id],
+            instance_snapshot_ids: [this.instanceSnapshot.id],
             hardware_ids: null,
             instance_ids: null,
             update_status: status,
@@ -328,9 +526,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     loadBlockoLiveView() {
         this.zone.runOutsideAngular(() => {
-            if (this.blockoView && this.instance.current_snapshot) {
+            if (this.liveView && this.instance.current_snapshot) {
                 console.info(JSON.stringify(this.instance.current_snapshot.program));
-                this.blockoView.setDataJson(this.instance.current_snapshot.program);
+                this.liveView.setDataJson(this.instance.current_snapshot.program);
 
                 if (this.instance.instance_remote_url) {
                     const authToken = this.tyrionBackendService.getToken();
@@ -354,7 +552,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     homerMessageReceived(m: any) {
         this.zone.runOutsideAngular(() => {
-            const controller = this.blockoView.getBlockoController();
+            const controller = this.liveView.getBlockoController();
 
             if (m.message_type === 'new_input_connector_value') {
                 controller.setInputConnectorValue(m.block_id, m.interface_name, typeof m.value === 'object' ? new BlockoCore.Message(m.value) : m.value);

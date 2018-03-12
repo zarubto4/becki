@@ -31,13 +31,6 @@
                           btn_tag: 'register_new_hardware'
                       },
                       {
-                          condition: (tab == 'hardware_list'),
-                          btn_label_for_person: ('btn_label_synchronize_hardware'|bkTranslate:this),
-                          icon: 'fa-plus-circle',
-                          colorType: 'ACTIVE',
-                          btn_tag: 'synchronize_hardware'
-                      },
-                      {
                           condition: (tab == 'hardware_type' && hardwareTypes && hardwareTypes.length),
                           btn_label_for_person: ('btn_label_create_type_of_board'|bkTranslate:this),
                           icon: 'fa-plus-circle',

@@ -1383,6 +1383,7 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-cloud">INSTANCE</strong>',
 
                 'tab_name_overview': 'Overview',
+                'tab_name_editor': 'Editor',
                 'tab_name_hardware': '<strong class="font-color-hardware">HARDWARE</strong>',
                 'tab_name_grid': '<strong class="font-color-grid">GRID</strong> Apps',
                 'tab_name_history': 'History',
@@ -1390,6 +1391,8 @@ export class StaticTranslation {
                 'tab_name_update_view': 'Realtime Overview',
                 'tab_name_logs': 'Logs',
                 'tab_name_debugs': 'Debugs',
+                'tab_hardware': 'Hardware',
+                'tab_hardware_group': 'Hardware Groups',
 
                 'table_name': 'Name',
                 'table_id': 'ID',
@@ -1409,6 +1412,7 @@ export class StaticTranslation {
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
                 'btn_select_cloud_version': 'Select & Upload Version to Cloud',
                 'btn_turn_off_instance': 'Shut Down',
+                'btn_change_version': 'Change version',
                 'label_instance_properties': 'properties',
                 'label_instance_name': 'Name',
                 'label_instance_description': 'Description',
@@ -1465,6 +1469,8 @@ export class StaticTranslation {
                 'label_unknown_date': 'Not yet (Unknown)',
                 'label_hardware_caps': 'HARDWARE',
                 'label_select_version_for_details': 'Select version to see details',
+                'label_snapshot_editor': 'Editor',
+                'label_no_hardware': 'Nothing here',
 
                 'label_no_running_update_on_hardware': 'No <strong class="font-color-code">FIRMWARE</strong> release',
                 'label_no_running_update_on_hardware_comment': 'There is no update for this device yet. Create new <strong class="font-color-code">Code</strong> program or set new release',
@@ -1493,6 +1499,8 @@ export class StaticTranslation {
                 'flash_cant_load_version': 'Cannot load version <b>{0}</b>, {1}',
                 'flash_instance_edit_success': 'Instance information was changed.',
                 'flash_instance_edit_fail': 'Unable to change instance information, ',
+                'flash_hardware_load_fail': 'Unable to load hardware',
+                'flash_hardware_group_load_fail': 'Unable to load hardware groups',
 
             }, 'ProjectsProjectLibrariesComponent': {
 

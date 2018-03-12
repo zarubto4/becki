@@ -206,6 +206,7 @@ import { ProjectsProjectInstancesInstanceComponent } from './views/projects-proj
 import { ProjectsProjectBlockoBlockoComponent } from './views/projects-project-blocko-blocko';
 import { ProjectsProjectBlocksBlockComponent } from './views/projects-project-blocks-block';
 import { ModalsVersionSelectComponent } from './modals/version-select';
+import { ModalsProgramVersionSelectComponent } from './modals/program-version-select';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -654,6 +655,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsCodeSelectComponent,
         ModalsHardwareFindHashComponent,
         ModalsVersionSelectComponent,
+        ModalsProgramVersionSelectComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

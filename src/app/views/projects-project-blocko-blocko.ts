@@ -57,7 +57,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     blocksCache: { [blockId_versionId: string]: IBlockVersion } = {};
 
     // grid:
-    allGridProjects: IGridProject[] = null;
+    allGridProjects: IGridProject[] = [];
 
     selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string } } = {};
 
