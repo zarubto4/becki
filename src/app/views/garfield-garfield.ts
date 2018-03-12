@@ -531,7 +531,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 message_type: 'device_binary',
                 message_id: this.tyrionBackendService.uuid(),
                 url: this.bootLoader.file_path,
-                type: 'bootloader'
+                type: 'BOOTLOADER'
             };
 
             this.send(message, 30000)
@@ -557,7 +557,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 message_type: 'device_binary',
                 message_id: this.tyrionBackendService.uuid(),
                 url: this.firmwareTestMainVersion.download_link_bin_file,
-                type: 'firmware'
+                type: 'FIRMWARE'
             };
 
             this.send(message, 60000)
@@ -608,7 +608,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 message_type: 'device_binary',
                 message_id: this.tyrionBackendService.uuid(),
                 url: this.firmwareMainVersion.download_link_bin_file,
-                type: 'firmware'
+                type: 'FIRMWARE'
             };
 
             this.send(message, 60000)

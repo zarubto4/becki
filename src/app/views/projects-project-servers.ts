@@ -53,7 +53,6 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                 this.project = project;
             });
             this.onFilterHomerServer();
-            this.onHomerServerGerRegistrationComponents();
         });
 
         this.form = this.formBuilder.group({
@@ -67,6 +66,9 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     onPortletClick(action: string): void {
         if (action === 'homer_server_add') {
             this.tab = 'create_server_selector';
+            if(this.registration_information == null){
+                this.onHomerServerGerRegistrationComponents();
+            }
         }
     }
 

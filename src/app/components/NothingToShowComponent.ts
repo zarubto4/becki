@@ -7,7 +7,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
     template: `
         <div [class.row]="image_link != null" [class.vertical-align]="image_link!= null">
             <div *ngIf="!condition_loading && condition_empty && image_link" [class.col-md-5]="image_link != null" [class.vcenter]="image_link!= null">
-                <img class="text-center" style="width: auto; height: 90%;" src="{{image_link}}">
+                <img class="text-center" style="width: auto; height: 70%;" src="{{image_link}}">
             </div>
             <div [class.col-md-7]="image_link != null" [class.vcenter]="image_link != null">
                 <h3 *ngIf="condition_loading" class="text-center">{{'loading' | bkTranslate:this}}</h3>

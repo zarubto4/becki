@@ -81,15 +81,15 @@ export interface IWebSocketGarfieldDeviceTestResult extends IWebSocketSuccessMes
 
 export interface IWebSocketGarfieldDeviceBinary extends IWebSocketMessage {
     url: string;
-    type: ('bootloader' | 'firmware');
+    type: ('BOOTLOADER' | 'FIRMWARE');
 }
 
 export interface IWebSocketGarfieldDeviceBinaryResult extends IWebSocketSuccessMessage {
-    type: ('bootloader' | 'firmware');
+    type: ('BOOTLOADER' | 'FIRMWARE');
 }
 
 export interface IWebSocketNotification extends INotification, IWebSocketMessage {
-    state: ('created' | 'updated' | 'confirmed' | 'deleted');
+    state: ('CREATED' | 'UPDATED' | 'CONFIRMED' | 'DELETED');
 }
 
 export interface IWebsocketTerminalState {
@@ -111,7 +111,7 @@ export interface OnlineChangeStatus {
 }
 
 export interface ModelChangeStatus {
-    model: ('ProjectsRefreshAfterInvite' | 'Project' | 'Board' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure' | 'CProgramUpdatePlan');
+    model: ('ProjectsRefreshAfterInvite' | 'Project' | 'HomerServer' | 'Board' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure' | 'CProgramUpdatePlan');
     model_id: 'string';
 }
 
@@ -241,8 +241,8 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         let request: RestRequest = new RestRequest(method, url, {}, body);
 
         // Set Token if Exist
-        if (this.tokenExist()) {
-            request.headers['X-Auth-Token'] = this.getToken();
+        if (TyrionApiBackend.tokenExist()) {
+            request.headers['X-Auth-Token'] = TyrionApiBackend.getToken();
         }
         // Set Becki Headers to Request
         request.headers['Becki-Version'] = BECKI_VERSION;
@@ -307,8 +307,11 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     // TOKEN MANIPULATIONS
 
-    public getToken(): string {
+    public static getToken(): string {
         return window.localStorage.getItem('auth_token');
+    }
+    public static tokenExist(): boolean {
+        return !!window.localStorage.getItem('auth_token');
     }
 
     public getBeckiBeta(): boolean {
@@ -322,9 +325,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         }
     }
 
-    public tokenExist(): boolean {
-        return !!window.localStorage.getItem('auth_token');
-    }
+
 
     /**
      * Remove Token from Becki Memmory (Browser Memmory)
@@ -390,7 +391,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     public refreshPersonInfo(): void {
         this.personInfoSnapshotDirty = true;
-        if (this.tokenExist()) {
+        if (TyrionApiBackend.tokenExist()) {
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
                     this.personPermissions = lr.permissions;
@@ -564,7 +565,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
             }
         }
 
-        websocket = new WebSocket(`${this.wsProtocol}://${server_url}:${port}/${this.getToken()}`); // inicializace připojení
+        websocket = new WebSocket(`${this.wsProtocol}://${server_url}:${port}/${TyrionApiBackend.getToken()}`); // inicializace připojení
 
         websocket.addEventListener('close', ws => {
             this.reconnectTerminalWebSocketAfterTimeout(); // přidání WS listenerů a toho co mají udělat,  tomto případě že při "closed" se pokusí recconectnout a pošle status
@@ -607,9 +608,11 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
 
 
-    /*if(this.terminalConnection.find(connection => connection.id == deviceId)){
+    /*
+    if(this.terminalConnection.find(connection => connection.id == deviceId)){
         return
-}*/
+    }
+    */
 
     public closeHardwareTerminalWebsocket(websocketURL: string) {
         if (websocketURL === 'all') { // zkratka pro zavření všech WS
@@ -643,8 +646,8 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     protected connectWebSocket(): void {
         console.log('connectWebSocket()');
-        if (!this.tokenExist()) {
-            // console.log('connectWebSocket() :: cannot connect now, user token doesn\'t exists.');
+        if (!TyrionApiBackend.tokenExist()) {
+            console.error('connectWebSocket() :: cannot connect now, user token doesn\'t exists.');
             return;
         }
         this.disconnectWebSocket();

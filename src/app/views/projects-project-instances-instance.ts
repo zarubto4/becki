@@ -21,7 +21,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
-import { OnlineChangeStatus } from '../backend/BeckiBackend';
+import { OnlineChangeStatus, TyrionApiBackend } from '../backend/BeckiBackend';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 import { ModalsSelectVersionModel } from '../modals/version-select';
 import { DraggableEventParams } from '../components/DraggableDirective';
@@ -531,7 +531,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.liveView.setDataJson(this.instance.current_snapshot.program);
 
                 if (this.instance.instance_remote_url) {
-                    const authToken = this.tyrionBackendService.getToken();
+                    const authToken = TyrionApiBackend.getToken();
                     this.homerDao = this.homerService.connectToHomer(this.instance.instance_remote_url, authToken);
 
                     this.homerDao.onOpenCallback = (e) => {

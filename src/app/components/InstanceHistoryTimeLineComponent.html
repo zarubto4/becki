@@ -11,8 +11,8 @@
             <div class="slider" [style.left]="position+'%'">
 
                 <a *ngFor="let instance of data; let i = index" [class.selected]="i == selected" (click)="itemClick(i, instance)">
-                    <span style="text-overflow: ellipsis; display:block; overflow: hidden;white-space: nowrap;">{{instance.b_program_version_name}}</span>
-                    <span class="font-grey-salsa" style="display: block; font-size: 70%">{{instance.createdd|bkUnixTimeToDate}}</span>
+                    <span style="text-overflow: ellipsis; display:block; overflow: hidden;white-space: nowrap;">{{instance.b_program_version.name}}</span>
+                    <span class="font-grey-salsa" style="display: block; font-size: 70%">{{instance.created|bkUnixTimeToDate}}</span>
                 </a>
 
             </div>

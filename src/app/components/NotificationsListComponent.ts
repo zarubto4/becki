@@ -21,11 +21,11 @@ import { INotificationElement, INotificationButton } from '../backend/TyrionAPI'
         <!-- Notification Parser-->
         <span class="n-text" *ngIf="notification.elementsBody">
             <template ngFor let-element="$implicit" [ngForOf]="notification.elementsBody">
-                <span *ngIf="element.type == 'text'" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</span>
-                <span *ngIf="element.type == 'date'" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text|bkUnixTimeToDate}}</span>
-                <br *ngIf="element.type == 'newLine'"><br *ngIf="element.type == 'newLine'"> <!-- It is intentionally written twice - First for new line, second for new empty line-->
-                <a *ngIf="element.type == 'object'" (click)="onObjectClick(notification, element)" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</a>
-                <a *ngIf="element.type == 'link'" [href]="element.url" target="_blank" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</a>
+                <span *ngIf="element.type == 'TEXT'" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</span>
+                <span *ngIf="element.type == 'DATE'" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text|bkUnixTimeToDate}}</span>
+                <br *ngIf="element.type == 'NEWLINE'"><br *ngIf="element.type == 'newLine'"> <!-- It is intentionally written twice - First for new line, second for new empty line-->
+                <a *ngIf="element.type == 'OBJECT'" (click)="onObjectClick(notification, element)" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</a>
+                <a *ngIf="element.type == 'LINK'" [href]="element.url" target="_blank" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</a>
             </template>
         </span>
         
