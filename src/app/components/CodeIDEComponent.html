@@ -142,10 +142,10 @@
                     </div>
                 </div>
                 <div *ngIf="_show_code_settings_portlet">
-                    <div  *ngIf="compilation_version_library_tag && libraryCompilationVersionOptions">
-                        <bk-form-select [control]="compilation_version_library_tag" [label]="'label_library_version'|bkTranslate:this"
-                                        [regexFirstOption]="'[v][0-9.]*(?![-])$'" [options]="libraryCompilationVersionOptions"></bk-form-select>
-                    </div>
+                    <bk-form-select [control]="formLibrarySelector.controls['compilation_version_library_tag']"
+                                    [label]="'label_library_version'|bkTranslate:this"
+                                    [regexFirstOption]="'[v][0-9.]*(?![-])$'"
+                                    [options]="libraryCompilationVersionOptions"></bk-form-select>
                 </div>
             </div>
         </div>

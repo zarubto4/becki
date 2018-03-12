@@ -59,7 +59,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
 
-    @ViewChild(CodeIDEComponent)
+    @ViewChild('CodeIDEComponent')
     codeIDE: CodeIDEComponent;
 
     tab: string = 'ide';
@@ -67,7 +67,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
     // List of all Version for compilation (for this type_of_board)
     libraryCompilationVersionOptions: FormSelectComponentOption[] = null;
-    formLibrarySelector: FormGroup;
+
 
     protected afterLoadSelectedVersionId: string = null;
 
@@ -89,10 +89,6 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
         this.selectedCodeFiles = [main];
 
         this.refreshInterface();
-
-        this.formLibrarySelector = this.formBuilder.group({
-            'compilation_version_library_tag': ['', [Validators.required]]
-        });
 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.codeId = params['code'];
@@ -322,7 +318,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
             this.unblockUI();
 
-            this.tyrionBackendService.hardwareTypeGet(this.codeProgram.hardware_type_id)
+            this.tyrionBackendService.hardwareTypeGet(this.codeProgram.hardware_type.id)
                 .then((response) => {
                     this.hardwareType = response;
                     this.onMakeListOfCompilationVersion();
@@ -647,7 +643,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                     description: m.description,
                     main: main,
                     files: userFiles,
-                    library_compilation_version: this.formLibrarySelector.controls['compilation_version_library_tag'].value
+                    library_compilation_version: this.codeIDE.formLibrarySelector.controls['compilation_version_library_tag'].value
                 })
                     .then(() => {
                         this.fmSuccess(this.translate('flash_code_version_save', m.name));
@@ -711,8 +707,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
             imported_libraries: libs,
             main: main,
             files: userFiles,
-            hardware_type_id: this.codeProgram.hardware_type_id,
-            library_compilation_version: this.formLibrarySelector.controls['compilation_version_library_tag'].value
+            hardware_type_id: this.codeProgram.hardware_type.id,
+            library_compilation_version: this.codeIDE.formLibrarySelector.controls['compilation_version_library_tag'].value
         })
             .then((success) => {
                 this.buildInProgress = false;

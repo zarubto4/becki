@@ -10,7 +10,7 @@ import { ModalService } from '../services/ModalService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { TranslationService } from '../services/TranslationService';
 import { FormSelectComponentOption } from './FormSelectComponent';
-import { AbstractControl } from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
 
@@ -173,10 +173,6 @@ export class CodeIDEComponent implements OnChanges {
     @Output()
     onChangeLibraryVersionClick = new EventEmitter<CodeFile>();
 
-    // Compilation version
-    @Input()
-    compilation_version_library_tag: AbstractControl = null;
-
     // List of all Version for compilation (for this type_of_board)
     @Input()
     libraryCompilationVersionOptions: FormSelectComponentOption[] = null;
@@ -197,18 +193,22 @@ export class CodeIDEComponent implements OnChanges {
 
     selectedFto: FileTreeObject<CodeFileSystemObject>;
 
+    formLibrarySelector: FormGroup = null;
 
     private _show_files_portlet: boolean = true;
     private _show_libraries_portlet: boolean = false;
     private _show_integrated_hardware_portlet: boolean = false;
     private _show_blocko_interface_portlet: boolean = false;
-    private _show_code_settings_portlet: boolean = false;
+    private _show_code_settings_portlet: boolean = true;
 
 
-    constructor(protected modalService: ModalService, private translationService: TranslationService) {
+    constructor(protected modalService: ModalService, private translationService: TranslationService,  private formBuilder: FormBuilder) {
 
         this.refreshRootFileTree();
 
+        this.formLibrarySelector = this.formBuilder.group({
+            'compilation_version_library_tag': ['', [Validators.required]]
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {

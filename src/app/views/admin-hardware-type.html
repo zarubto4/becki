@@ -57,21 +57,25 @@
         [tabBtns]="[
                         {
                             tab_name: 'hardware_list',
+                            condition: (true),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_hardware_list'|bkTranslate:this)
                         },
                         {
                             tab_name: 'hardware_type',
+                            condition: (true),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_hardware_type'|bkTranslate:this)
                         },
                         {
                             tab_name: 'processor',
+                            condition: (true),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_processor'|bkTranslate:this)
                         },
                         {
                             tab_name: 'producers',
+                            condition: (true),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_producers'|bkTranslate:this)
                         }
@@ -177,12 +181,12 @@
                             <span *ngIf="!hardwareType.main_boot_loader" class="font-red-flamingo bold">Missing!</span>
                         </td>
                         <td class="vert-align no-wrap">
-                            <span *ngIf="hardwareType.main_c_program.program_versions.length >0" class="font-green-jungle bold">{{hardwareType.main_c_program.program_versions[0].version_name}}</span>
-                            <span *ngIf="hardwareType.main_c_program.program_versions.length == 0" class="font-red-flamingo bold">Missing!</span>
+                            <span *ngIf="hardwareType.main_c_program.default_version" class="font-green-jungle bold">{{hardwareType.main_c_program.default_version.name}}</span>
+                            <span *ngIf="!hardwareType.main_c_program.default_version" class="font-red-flamingo bold">Missing!</span>
                         </td>
                         <td class="vert-align no-wrap">
-                            <span *ngIf="hardwareType.main_test_c_program.program_versions.length > 0" class="font-green-jungle bold">{{hardwareType.main_test_c_program.program_versions[0].version_name}}</span>
-                            <span *ngIf="hardwareType.main_test_c_program.program_versions.length == 0" class="font-red-flamingo bold">Missing!</span>
+                            <span *ngIf="hardwareType.main_test_c_program.default_version" class="font-green-jungle bold">{{hardwareType.main_test_c_program.default_version.name}}</span>
+                            <span *ngIf="!hardwareType.main_test_c_program.default_version" class="font-red-flamingo bold">Missing!</span>
                         </td>
                         <td class="vert-align no-wrap">
                             <a (click)="onProducerClick(hardwareType.producer_id)" class="no-wrap"><strong>{{hardwareType.producer_name}}</strong></a>

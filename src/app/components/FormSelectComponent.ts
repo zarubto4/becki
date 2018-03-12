@@ -115,14 +115,17 @@ export class FormSelectComponent {
                 });
                 if (toPick === -1) {
                     this.selectedValue = option[0].value;
+                    console.log('Set 1 Value',  option[0].value);
                     this.control.setValue(option[0].value);
                 } else {
                     this.selectedValue = option[toPick].value;
+                    console.log('Set 2 Value',  option[toPick].value);
                     this.control.setValue(option[toPick].value);
                 }
             } else if (this.positionFirstOption && this.positionFirstOption > -1 && this.positionFirstOption < option.length) {
 
                 this.selectedValue = option[this.positionFirstOption].value;
+                console.log('Set 3 Value', option[this.positionFirstOption].value);
                 this.control.setValue(option[this.positionFirstOption].value);
 
             } else {
@@ -130,11 +133,14 @@ export class FormSelectComponent {
                 if (option.length > 0) {
                     // console.log("options:: pickFirstOption selected ");
                     this.selectedValue = option[0].value;
+                    console.log('Set 4 Value', option[0].value);
                     this.control.setValue(option[0].value);
                 }
             }
 
             this._options = option;
+        } else {
+            console.error('options is empty');
         }
     }
 
@@ -142,10 +148,10 @@ export class FormSelectComponent {
 
         this.control.updateValueAndValidity();
 
-        // console.log("onSelectedChange:: Selected value:: ", newValue);
+        console.log("onSelectedChange:: Selected value:: ", newValue);
         // Select first
         if (newValue == null) {
-            // console.log("onSelectedChange:: Selected value == null ");
+            console.log("onSelectedChange:: Selected value == null ");
             return;
         }
 

@@ -118,9 +118,9 @@ export abstract class Notification {
                 this.htmlBody += JSON.stringify(reason['exception'], null, 3);
             }
         }
-        if (this.htmlBody.length) {
+        if (this.elementsBody != null && this.elementsBody.length) {
             this.closeTime = ((((this.elementsBody.length / 5) / 180) * 60) * 1000) + 1500;
-        } else if (this.htmlBody.length) {
+        } else if (this.htmlBody != null && this.htmlBody.length) {
             this.closeTime = ((((this.htmlBody.length / 5) / 180) * 60) * 1000) + 1500;
         } else {
             this.closeTime = 4000;

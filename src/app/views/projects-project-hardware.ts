@@ -106,13 +106,18 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.boardEditPersonalDescription(device.id, {
+                    name: model.name,
+                    description: model.description
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                        this.unblockUI();
                         this.onFilterHardware();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
+                        this.unblockUI();
                         this.onFilterHardware();
                     });
             }
@@ -279,6 +284,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             hardware_type_ids: boardTypes
         })
             .then((values) => {
+                this.unblockUI();
                 this.devicesFilter = values;
 
                 this.devicesFilter.content.forEach((device, index, obj) => {
@@ -288,8 +294,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                         }
                     });
                 });
-
-                this.unblockUI();
             })
             .catch((reason) => {
                 this.unblockUI();

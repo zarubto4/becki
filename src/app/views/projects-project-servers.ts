@@ -66,7 +66,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     onPortletClick(action: string): void {
         if (action === 'homer_server_add') {
             this.tab = 'create_server_selector';
-            if(this.registration_information == null){
+            if (this.registration_information == null) {
                 this.onHomerServerGerRegistrationComponents();
             }
         }

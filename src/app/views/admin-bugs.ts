@@ -25,12 +25,17 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
     ngOnDestroy(): void {
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'remove_all') {
+            this.onDeleteAllBugs();
+        }
+    }
+
     refresh(): void {
         this.blockUI();
         this.tyrionBackendService.getBugsAll()
             .then((bugs) => {
                 this.bugs = bugs;
-
                 this.unblockUI();
             })
             .catch((reason) => {
@@ -40,6 +45,14 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
     }
 
     onDeleteAllBugs() {
+        this.blockUI();
+        this.tyrionBackendService.deleteBugAll()
+            .then(() => {
+                this.refresh();
+            }).catch((reason) => {
+                this.fmError( this.translate('flash_cant_remove', reason));
+                this.refresh();
+            });
     }
 
     onBugClick(bug: IServerError) {

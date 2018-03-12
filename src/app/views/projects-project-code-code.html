@@ -79,15 +79,13 @@
                      (onAddLibraryClick)="onAddLibraryClick()"
                      (onAddHardwareClick)="onAddDeveloperHardwareClick()"
                      (onChangeLibraryVersionClick)="onChangeLibraryVersionClick($event)"
-                     [compilation_version_library_tag]="formLibrarySelector.controls['compilation_version_library_tag']"
                      [libraryCompilationVersionOptions]="libraryCompilationVersionOptions"
-        >
+        #CodeIDEComponent>
         </bk-code-ide>
         <!--- IDE END -->
 
     </div>
     <!-- Page Content IDE -- END -->
-
 
     <!-- Page Content UNDER IDE -- START -->
     <div class="portlet-body">

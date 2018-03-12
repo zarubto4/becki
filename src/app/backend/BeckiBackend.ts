@@ -106,13 +106,13 @@ export interface IWebsocketTerminalState {
 
 export interface OnlineChangeStatus {
     model: ('Board' | 'HomerInstance' | 'HomerServer' | 'CompilationServer');
-    model_id: 'string';
+    model_id: 'uuid';
     online_state: ('NOT_YET_FIRST_CONNECTED'|'FREEZED'|'SHUT_DOWN'|'SYNCHRONIZATION_IN_PROGRESS'|'OFFLINE'|'ONLINE'|'UNKNOWN_LOST_CONNECTION_WITH_SERVER');
 }
 
 export interface ModelChangeStatus {
     model: ('ProjectsRefreshAfterInvite' | 'Project' | 'HomerServer' | 'Board' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure' | 'CProgramUpdatePlan');
-    model_id: 'string';
+    model_id: 'uuid';
 }
 
 // BECKI BACKEND
@@ -737,7 +737,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                     .filter(message => message.message_type === 'newInputConnectorValue')
                     .subscribe(this.BProgramInputConnectorValueReceived);
                 channelReceived
-                    .filter(message => message.message_type === 'online_state_change')
+                    .filter(message => message.message_type === 'online_status_change')
                     .subscribe(this.onlineStatus);
                 channelReceived
                     .filter(message => message.message_type === 'becki_object_update')
