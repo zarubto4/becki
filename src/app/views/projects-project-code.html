@@ -61,7 +61,7 @@
                         <tr *ngFor="let code of privatePrograms.content">
                             <td class="vert-align no-wrap"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
                             <td class="vert-align">{{code.description}}</td>
-                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.names}}</a></td>
+                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a></td>
                             <td class="vert-align no-wrap text-right">
 
                                 <style type="text/css">
