@@ -344,7 +344,7 @@
                                     [
                                     <span *ngFor="let group of device.hardware_groups; let last = last">
                                                 {{group.name}}<span *ngIf="!last">, </span>
-                                            </span>
+                                    </span>
                                     ]
                                 </div>
 
@@ -401,7 +401,44 @@
         <div *ngIf="tab == 'grid'">
             <div *ngIf="(instance && instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
+                    <div *ngIf="(instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)" class="table-scrollable table-scrollable-borderless">
+                        <ul>
+                            <li *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last">
+                                <span><a (click)="onGridProjectClick(m_project.grid_project.id)">{{program.grid_project.name}}</a></span>
+                                <span>{{project.grid_project.description}}</span>
+                                <table class="table table-hover table-light byzance-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="">{{'table_grid_program_name'|bkTranslate:this}}</th>
+                                        <th class="">{{'table_grid_program_description'|bkTranslate:this}}</th>
+                                        <th class="">{{'table_grid_program_version_name'|bkTranslate:this}}</th>
+                                        <th class="">{{'table_grid_program_version_description'|bkTranslate:this}}</th>
+                                        <th class="">{{'table_grid_program_version_description'|bkTranslate:this}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let program of m_project.grid_programs">
 
+                                        <td class="vert-align no-wrap"><a (click)="onGridProgramClick(m_project.grid_project.id, program.grid_program.id)">{{program.grid_program.name}}</a></td>
+                                        <td class="vert-align no-wrap">{{program.grid_program.description}}</td>
+                                        <td class="vert-align text-center no-wrap"><a (click)="onGridProgramVersionClick(m_project.grid_project.id, program.grid_program.id, program.grid_program_version.id)">{{program.grid_program_version.name}}</a></td>
+                                        <td class="vert-align text-center no-wrap">{{program.grid_program_version.description}}</td>
+
+                                        <td class="vert-align text-center no-wrap">
+                                            PRIVATE
+                                        </td>
+                                        <td class="vert-align text-center no-wrap">
+                                            <a target="_blank" href="{{gridProgram.grid_app_url}}">
+                                                <bk-qr-code style="float: right;" [data]="gridProgram.grid_app_url"></bk-qr-code>
+                                            </a>
+                                            <bk-form-input [label]="gridProgram.grid_app_url" [readonly]="true"></bk-form-input>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </li>
+                        </ul>
+                    </div>
                 </table>
             </div>
         </div>

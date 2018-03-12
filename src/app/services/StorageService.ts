@@ -2,6 +2,7 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
+
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';

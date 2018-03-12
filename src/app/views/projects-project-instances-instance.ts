@@ -19,7 +19,7 @@ import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogCom
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
-import { OnlineChangeStatus } from '../backend/BeckiBackend';
+import {OnlineChangeStatus, TyrionApiBackend} from '../backend/BeckiBackend';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 
 
@@ -333,7 +333,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.blockoView.setDataJson(this.instance.current_snapshot.program);
 
                 if (this.instance.instance_remote_url) {
-                    const authToken = this.tyrionBackendService.getToken();
+                    const authToken = TyrionApiBackend.getToken();
                     this.homerDao = this.homerService.connectToHomer(this.instance.instance_remote_url, authToken);
 
                     this.homerDao.onOpenCallback = (e) => {

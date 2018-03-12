@@ -11,6 +11,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { ModalsInstanceCreateComponent, ModalsInstanceCreateModel } from '../modals/instance-create';
+import {ModalsRemovalModel} from "../modals/removal";
 
 @Component({
     selector: 'bk-view-projects-project-instances',
@@ -98,6 +99,22 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
+                    });
+            }
+        });
+    }
+
+    onInstanceRemoveClick(instance: IInstance) {
+        this.modalService.showModal(new ModalsRemovalModel(instance.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceRemove(instance.id)
+                    .then(() => {
+                        this.onFilterInstances();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
+                        this.onFilterInstances();
                     });
             }
         });

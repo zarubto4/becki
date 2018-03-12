@@ -1,13 +1,16 @@
 /**
- * Created by DominikKrisztof on 22/08/16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
+
 import moment = require('moment/moment');
 import { Injectable, NgZone } from '@angular/core';
 import { TyrionBackendService } from './BackendService';
 import { INotification, INotificationElement, INotificationButton } from '../backend/TyrionAPI';
 import { NullSafe } from '../helpers/NullSafe';
 import { Router } from '@angular/router';
-import { TranslationService } from '../services/TranslationService';
+import { TranslationService } from './TranslationService';
 
 
 export abstract class Notification {
@@ -35,6 +38,8 @@ export abstract class Notification {
 
 
     public static fromINotification(n: INotification): Notification {
+
+        // console.log('fromINotification notificaton:', n);
 
         let out: Notification = null;
 
@@ -80,20 +85,26 @@ export abstract class Notification {
 
     constructor(public id: string, public type: string, public icon: string, body: string | INotificationElement[], public time: number, reason?: Object) {
 
+        // console.log('Notification Constructor notificaton id:', id, ' type: ', type, 'icon', icon, 'body: ', body, 'time', time, 'reason: ', reason);
+
         if (typeof body === 'string') {
+
+            // console.log('Notification Constructor - Body type is string');
+
             this.htmlBody = body;
             let userMessage = NullSafe(() => <string>(<any>reason).userMessage);
             let error = NullSafe(() => <string>(<any>reason).error);
-            let bodyMesseage = NullSafe(() => <string>(<any>reason).body.message);
+            let bodyMessage = NullSafe(() => <string>(<any>reason).body.message);
             if (userMessage) {
                 this.htmlBody += '<b>' + userMessage + '</b>' + '<br>';
 
-            } else if (bodyMesseage) {
-                this.htmlBody += '<<b>' + bodyMesseage + '</b>' + '<br>';
+            } else if (bodyMessage) {
+                this.htmlBody += '<<b>' + bodyMessage + '</b>' + '<br>';
             } else if (error) {
                 this.htmlBody += '<b>' + error + '</b>' + '<br>';
             }
         } else {
+            // console.log('Notification Constructor - Body type is INotificationElement');
             this.elementsBody = body;
         }
 
@@ -107,12 +118,14 @@ export abstract class Notification {
                 this.htmlBody += JSON.stringify(reason['exception'], null, 3);
             }
         }
-
-        if (this.htmlBody && this.htmlBody.length) {
+        if (this.htmlBody.length) {
+            this.closeTime = ((((this.elementsBody.length / 5) / 180) * 60) * 1000) + 1500;
+        } else if (this.htmlBody.length) {
             this.closeTime = ((((this.htmlBody.length / 5) / 180) * 60) * 1000) + 1500;
         } else {
             this.closeTime = 4000;
         }
+
         this.tick(0);
     }
 
@@ -277,7 +290,7 @@ export class NotificationService {
     protected highImportanceOverlayTimeout: any = null;
 
     constructor(protected backendService: TyrionBackendService, protected router: Router, protected zone: NgZone, protected translationService: TranslationService) {
-        console.info('NotificationService init');
+        // console.info('NotificationService init');
 
         // tick for overlay notifs
         this.zone.runOutsideAngular(() => {
@@ -327,13 +340,15 @@ export class NotificationService {
 
         // subscribe websocket notifications
         this.backendService.notificationReceived.subscribe(notification => {
+            // console.log('backendService.notificationReceived.subscribe: ', notification);
             if (notification.message_type === 'subscribe_notification' || notification.message_type === 'unsubscribe_notification') {
                 // console.log('(un)subscribed');
             } else {
-                // console.log(notification);
+                // console.log('Notification:', notification);
                 this.zone.runOutsideAngular(() => {
-                    if (notification.state === 'created') {
+                    if (notification.state === 'CREATED') {
                         if (notification.id && this.isNotificationExists(notification.id)) {
+                            // console.log('notification Exist');
                             let notif = this.notifications.find((n) => n.id === notification.id);
                             if (notif) {
                                 let oldWasRead = notif.wasRead;
@@ -345,6 +360,7 @@ export class NotificationService {
                             }
 
                         } else if (notification.id && this.overlayNotifications.find((n) => n.id === notification.id)) {
+                            // console.log('overlayNotifications');
                             let notif = this.overlayNotifications.find((n) => n.id === notification.id);
                             if (notif) {
                                 let oldWasRead = notif.wasRead;
@@ -355,7 +371,9 @@ export class NotificationService {
                                 }
                             }
                         } else {
+                            // console.log('i will parse fromINotification');
                             let notif: Notification = Notification.fromINotification(notification);
+                            // console.log('backendService.notificationReceived.subscribe: ', notif);
                             switch (notification.notification_importance) {
                                 case 'LOW':
                                     this.addOverlayNotification(notif);
@@ -380,7 +398,7 @@ export class NotificationService {
                                     break;
                             }
                         }
-                    } else if ((notification.state === 'updated' || notification.state === 'confirmed') && notification.id) {
+                    } else if ((notification.state === 'UPDATED' || notification.state === 'CONFIRMED') && notification.id) {
                         let notif = this.notifications.find((n) => n.id === notification.id);
                         if (notif) {
                             let oldWasRead = notif.wasRead;
@@ -390,7 +408,7 @@ export class NotificationService {
                                 this.unreadNotificationsCount--;
                             }
                         }
-                    } else if (notification.state === 'deleted' && notification.id) {
+                    } else if (notification.state === 'DELETED' && notification.id) {
                         let notif = this.removeNotificationById(notification.id);
                         if (notif && notif.wasRead === false) {
                             this.unreadNotificationsCount--;
@@ -602,7 +620,7 @@ export class NotificationService {
                     this.unreadNotificationsCount = list.unread_total;
                     this.totalNotificationsCount = list.total;
 
-                    // console.log(list);
+                    console.log(list);
 
                     list.content.forEach((n) => {
                         // TODO: maybe update it!

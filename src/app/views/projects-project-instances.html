@@ -68,25 +68,22 @@
                                 }
                             </style>
 
-
                             <button title="{{'label_instance_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!instance.update_permission" (click)="onInstanceEditClick(instance)">
                                 <i class="fa fa-cog"></i>
                             </button>
 
+                            <button title="{{'label_instance_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission" (click)="onInstanceRemoveClick(instance)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+
                             <div *ngIf="instance.online_state  == 'SHUT_DOWN'">
-                                <button title="{{'label_upload_latest_used_version'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission" (click)="onInstanceStartOrShutdownClick(instance, true)">
+                                <button title="{{'label_upload_latest_used_version'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission" (click)="onInstanceStartClick(instance, true)">
                                     <i class="fa fa-power-off"></i>
                                 </button>
                             </div>
 
                             <div *ngIf="instance.online_state  == 'ONLINE'">
-                                <button title="{{'label_shutdown_instance'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission" (click)="onInstanceStartOrShutdownClick(instance, false)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                            </div>
-
-                            <div *ngIf="instance.online_state == 'OFFLINE' ">
-                                <button title="{{'label_start'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission" (click)="onInstanceStartOrShutdownClick(instance, true)">
+                                <button title="{{'label_shutdown_instance'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission" (click)="onInstanceShutdownClick(instance)">
                                     <i class="fa fa-power-off"></i>
                                 </button>
                             </div>

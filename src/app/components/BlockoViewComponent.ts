@@ -13,6 +13,7 @@ import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-prope
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
 import { IBlock, IBlockVersion } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
+import {TyrionApiBackend} from "../backend/BeckiBackend";
 
 
 @Component({
@@ -113,7 +114,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
              */
             const serviceConfiguration = {
                 fetchParameters: {
-                    auth_token: this.backendService.getToken()
+                    auth_token: TyrionApiBackend.getToken()
                 },
                 proxyServerUrl: this.backendService.requestProxyServerUrl
             };

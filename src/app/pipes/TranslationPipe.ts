@@ -1,9 +1,10 @@
 /**
- * Created by dominikkrisztof on 13.03.17.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { TranslationService } from './../services/TranslationService';
+import { TranslationService } from '../services/TranslationService';
 
 @Pipe({
     name: 'bkTranslate'

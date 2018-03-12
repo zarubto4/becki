@@ -182,4 +182,16 @@ export abstract class _BaseMainComponent {
     public onInstanceClick(instance_id: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'instances', instance_id]);
     }
+
+    public onGridProjectClick(grid_project_id: string) {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', grid_project_id]);
+    }
+
+    public onGridProgramClick(grid_project_id: string, grid_program_id: string) {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', grid_project_id, grid_program_id]);
+    }
+
+    public onGridProgramVersionClick(grid_project_id: string, grid_program_id: string, grid_program_version_id: string) {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', grid_project_id, grid_program_id, grid_program_version_id]);
+    }
 }
