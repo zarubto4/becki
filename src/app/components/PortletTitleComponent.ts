@@ -1,5 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, Injector, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 
 @Component({
     selector: 'bk-portlet-title',
@@ -25,7 +24,7 @@ import { Router } from '@angular/router';
                                     [class.purple-plum]="element.colorType=='DEACTIVE'"
                                     [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
                                     [class.grey-cascade]="element.colorType == '' || element.colorType == null"
-                                    (click)="element.on_click ? element.on_click() : onClickButton(element.btn_tag)">
+                                    (click)="element.onClick ? element.onClick() : onClickButton(element.btn_tag)">
                                 <i class="fa {{element.icon}}"></i> {{element.btn_label_for_person}}
                             </button>
                         </span>
@@ -98,7 +97,7 @@ export class PortletTitleComponent {
         colorType?: ('ADD'| 'EDIT' | 'CREATE' | 'REMOVE' | 'ACTIVE' | 'DEACTIVE'),  // DEFAULT in HTML is EDIT
         btn_tag: string,    // Only if you have more that one Button!
         btn_link?: string,  // External link
-        on_click?: () => void
+        onClick?: () => void
     }[] = null;
 
     @Output()

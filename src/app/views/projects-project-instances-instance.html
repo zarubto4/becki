@@ -38,7 +38,7 @@
                           btn_tag: 'active_instance'
                       },
                       {
-                          condition: (tab == 'overview'),
+                          condition: (tab === 'overview' && instance.snapshots.length === 0),
                           btn_label_for_person: ('btn_select_cloud_version'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'UPDATE',
@@ -261,25 +261,26 @@
         <div *ngIf="tab == 'editor'">
             <div class="row">
                 <div class="col-md-9 portlet light bordered">
-                    <bk-portlet-title [title_name]="'label_snapshot_editor'|bkTranslate:this"
-                                      (onClick)="this.onEditorPortletClick($event)"
-                    [btns]="[
-                      {
-                        condition: (true),
-                        btn_label_for_person: ('btn_save'|bkTranslate:this),
-                        icon: 'fa-share',
-                        colorType: 'ADD',
-                        btn_tag: 'save_snapshot',
-                        on_click: this.onSaveSnapshotClick
-                      },
-                      {
-                        condition: (true),
-                        btn_label_for_person: ('btn_change_version'|bkTranslate:this),
-                        icon: 'fa-cog',
-                        colorType: 'EDIT',
-                        btn_tag: 'change_version'
-                      }
-                    ]"></bk-portlet-title>
+                    <bk-portlet-title
+                        [title_name]="'label_snapshot_editor'|bkTranslate:this"
+                        [btns]="[
+                            {
+                              condition: (true),
+                              btn_label_for_person: ('btn_save'|bkTranslate:this),
+                              icon: 'fa-share',
+                              colorType: 'ADD',
+                              btn_tag: 'save_snapshot',
+                              onClick: this.onSaveSnapshotClick
+                            },
+                            {
+                              condition: (true),
+                              btn_label_for_person: ('btn_change_version'|bkTranslate:this),
+                              icon: 'fa-cog',
+                              colorType: 'EDIT',
+                              btn_tag: 'change_version',
+                              onClick: this.onChangeVersion
+                            }
+                        ]"></bk-portlet-title>
                     <div class="portlet-body">
                         <bk-blocko-view [id]="'snapshot_editor'" [disableExecution]="true" [canConfig]="false" [readonly]="false"
                         [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
@@ -297,13 +298,15 @@
                         </div>
                         <div class="portlet-body">
                             <div *ngIf="allHw && allHw.content.length > 0" class="panel-group accordion blocko-blocks-group-list">
-                                <div *ngFor="let hardware of allHw.content;" [bkDraggable]="draggableOptions" [bkDraggableData]="hardware" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
-                                    <div class="blocko-block-mask"></div>
-                                    <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
-                                    <i class="fa fa-exclamation"></i>
-                                    <span>{{hardware.name}}</span>
-                                    <span style="font-size: 0.8em">{{hardware.full_id}}</span>
-                                </div>
+                                <ng-container *ngFor="let hardware of allHw.content;">
+                                    <div *ngIf="!isBound(hardware.full_id)" [bkDraggable]="draggableOptions" [bkDraggableData]="hardware.full_id" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
+                                        <div class="blocko-block-mask"></div>
+                                        <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
+                                        <i class="fa fa-exclamation"></i>
+                                        <span>{{hardware.name}}</span>
+                                        <span style="font-size: 0.8em">{{hardware.full_id}}</span>
+                                    </div>
+                                </ng-container>
                             </div>
                             <bk-nothing-to-show [condition_loading]="(allHw == null)"
                                                 [condition_empty]="(allHw != null && allHw.content.length == 0)"
@@ -323,13 +326,15 @@
                         </div>
                         <div class="portlet-body">
                             <div *ngIf="allHwGroups && allHwGroups.content.length > 0" class="panel-group accordion blocko-blocks-group-list">
-                                <div *ngFor="let hardware of allHwGroups.content;" [bkDraggable]="draggableOptions" [bkDraggableData]="hardware" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
-                                    <div class="blocko-block-mask"></div>
-                                    <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
-                                    <i class="fa fa-exclamation"></i>
-                                    <span>{{hardware.name}}</span>
-                                    <span style="font-size: 0.8em">{{hardware.id}}</span>
-                                </div>
+                                <ng-container *ngFor="let hardware of allHwGroups.content;">
+                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions" [bkDraggableData]="hardware.id" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
+                                        <div class="blocko-block-mask"></div>
+                                        <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
+                                        <i class="fa fa-exclamation"></i>
+                                        <span>{{hardware.name}}</span>
+                                        <span style="font-size: 0.8em">{{hardware.id}}</span>
+                                    </div>
+                                </ng-container>
                             </div>
                             <bk-nothing-to-show [condition_loading]="(allHwGroups == null)"
                                                 [condition_empty]="(allHwGroups != null && allHwGroups.content.length == 0)"

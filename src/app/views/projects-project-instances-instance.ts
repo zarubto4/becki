@@ -145,6 +145,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     this.editorView.setDataJson(this.bProgramVersion.program);
                 }
 
+                setTimeout(() => { // Must load bindings with little delay
+                    this.bindings = this.editorView.getBindings();
+                }, 100);
+
                 this.editorView.registerInterfaceBoundCallback((iface) => {
                     let index = this.bindings.findIndex((i) => { return i.targetId === iface.targetId; });
 
@@ -275,7 +279,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 let controller = this.editorView.getBlockoController();
 
-                controller.bindInterface(params.data.id);
+                controller.bindInterface(params.data);
 
                 break;
             }
@@ -354,7 +358,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }
     }
 
-    onChangeVersion() {
+    onChangeVersion = () => {
         let m: ModalsSelectVersionModel = new ModalsSelectVersionModel(this.bProgram.program_versions);
         this.modalService.showModal(m)
             .then((success) => {
@@ -365,6 +369,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.tab = 'editor';
                             if (this.editorView) {
                                 this.editorView.setDataJson(this.bProgramVersion.program);
+                                this.bindings = this.editorView.getBindings();
                             }
                         })
                         .catch((reason) => {
@@ -372,6 +377,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         });
                 }
             });
+    }
+
+    isBound(targetId: string): boolean {
+        return this.bindings.findIndex((binding) => {
+            return binding.targetId === targetId;
+        }) > -1;
     }
 
     onGridProgramPublishClick(gridProgram: ITerminalConnectionSummary) {

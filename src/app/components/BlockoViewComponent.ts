@@ -358,6 +358,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
     }
 
+    getBindings(): Array<BlockoCore.BoundInterface> {
+        return this.blockoController.getBindings();
+    }
+
     isDeployable() {
         return this.blockoController.isDeployable();
     }
