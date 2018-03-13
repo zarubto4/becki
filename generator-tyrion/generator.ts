@@ -290,7 +290,7 @@ definitionsKeys.forEach((defName) => {
                 number_of_bugs++;
                 console.log( chalk.yellow('Something is wrong with property name \"')
                     + chalk.red(propKey) + chalk.yellow('\" of definition \"') + chalk.red(defName)
-                    + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s Bis size Latter?')
+                    + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s BiG size Latter?')
                     );
             }
 
