@@ -67,10 +67,10 @@ export class ModalsPictureUploadComponent implements OnInit {
             // image cropper settings
             this.cropperSettings = new CropperSettings();
             this.cropperSettings.noFileInput = true;
-            this.cropperSettings.width = 256;
-            this.cropperSettings.height = 256;
-            this.cropperSettings.croppedWidth = 256;
-            this.cropperSettings.croppedHeight = 256;
+            this.cropperSettings.width = 512;
+            this.cropperSettings.height = 512;
+            this.cropperSettings.croppedWidth = 1024;
+            this.cropperSettings.croppedHeight = 1024;
             this.cropperSettings.canvasWidth = 512;
             this.cropperSettings.canvasHeight = 512;
             this.cropperSettings.minWidth = 50;

@@ -15,7 +15,7 @@ export class ModalsCreateHomerServerModel extends ModalModel {
     constructor(
         public name: string = '',
         public description: string = '',
-        public mqtt_port: number = 1883,
+        public mqtt_port: number = 1881,
         public grid_port: number = 8053,
         public web_view_port: number = 8052,
         public hardware_logger_port: number = 8054,

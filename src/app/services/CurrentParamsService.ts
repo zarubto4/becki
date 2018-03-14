@@ -190,7 +190,7 @@ export class CurrentParamsService {
                 this.currentHardwareNameSubject.next(this.currentHardwareNameSnapShot);
             } else {
                 this.backendService.boardGet(params['hardware']).then((hardware) => {
-                    this.currentHardwareNameSnapShot = hardware.name != null ? (hardware.id + ' (' + hardware.name + ')') : hardware.id;
+                    this.currentHardwareNameSnapShot = hardware.name != null ? hardware.name : hardware.id;
                     this.currentHardwareNameSubject.next(this.currentHardwareNameSnapShot);
                 });
             }

@@ -17,7 +17,7 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                       {
-                          condition: (tab == 'my_programs'),
+                          condition: (tab == 'my_programs' && privatePrograms && privatePrograms.content.length > 0),
                           btn_label_for_person: ('btn_add_code_program'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',

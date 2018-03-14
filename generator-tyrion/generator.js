@@ -1,8 +1,8 @@
+"use strict";
 /**
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-"use strict";
 exports.__esModule = true;
 var program = require("commander");
 var fs_1 = require("fs");
@@ -232,7 +232,7 @@ definitionsKeys.forEach(function (defName) {
                 number_of_bugs++;
                 console.log(chalk.yellow('Something is wrong with property name \"')
                     + chalk.red(propKey) + chalk.yellow('\" of definition \"') + chalk.red(defName)
-                    + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s Bis size Latter?'));
+                    + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s BiG size Latter?'));
             }
             fileWriteLine('    /**');
             fileWriteLine('     * @name ' + propKey);

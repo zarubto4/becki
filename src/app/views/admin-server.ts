@@ -92,7 +92,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.homerServerCreateManualy({
+                this.tyrionBackendService.homerServerCreateManually({
                     name: model.name,
                     description: model.description,
                     web_view_port: model.web_view_port,

@@ -115,7 +115,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.homerServerCreateManualy({
+                this.tyrionBackendService.homerServerCreateManually({
                     name: model.name,
                     description: model.description,
                     web_view_port: model.web_view_port,
@@ -245,6 +245,33 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                     });
             }
         });
+    }
+
+    onHomerServerShutDownClick(server: IHomerServer): void {
+        this.tyrionBackendService.homerServerShutdown(server.id)
+            .then(() => {})
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                this.onFilterHomerServer(); // also unblockUI
+            });
+    }
+
+    onHomerServerStartClick(server: IHomerServer): void {
+        this.tyrionBackendService.homerServerStart(server.id)
+            .then(() => {})
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                this.onFilterHomerServer(); // also unblockUI
+            });
+    }
+
+    onHomerServerRestartClick(server: IHomerServer): void {
+        this.tyrionBackendService.homerServerRestart(server.id)
+            .then(() => {})
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                this.onFilterHomerServer(); // also unblockUI
+            });
     }
 
 }

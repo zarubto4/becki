@@ -54,7 +54,7 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['serverPort'])).setValue(1883);
+        (<FormControl>(this.form.controls['serverPort'])).setValue(1881);
         (<FormControl>(this.form.controls['serverSelector'])).setValue('');
         (<FormControl>(this.form.controls['serverUrl'])).setValue('');
         this.findAllAccessibleServers();

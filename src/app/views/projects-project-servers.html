@@ -59,6 +59,19 @@
                             <button title="{{'label_server_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!homer_server.update_permission" (click)="onHomerServerEditClick(homer_server)">
                                 <i class="fa fa-cog"></i>
                             </button>
+
+
+                            <button  *ngIf="(homer_server.online_state == 'ONLINE')" title="{{'label_shut_down'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!homer_server.update_permission" (click)="onHomerServerShutDownClick(homer_server)">
+                                <i class="fa fa-power-off"></i>
+                            </button>
+                            <button  *ngIf="(homer_server.online_state == 'SHUT_DOWN')" title="{{'label_shut_down'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!homer_server.update_permission" (click)="onHomerServerStartClick(homer_server)">
+                                <i class="fa fa-power-off"></i>
+                            </button>
+                            <button  *ngIf="(homer_server.online_state == 'ONLINE')" title="{{'label_restart'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!homer_server.update_permission" (click)="onHomerServerRestartClick(homer_server)">
+                                <i class="fa fa-reddit"></i>
+                            </button>
+
+                            <!-- Total delete -->
                             <button title="{{'label_delete_server'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!homer_server.delete_permission" (click)="onHomerServerDeleteClick(homer_server)">
                                 <i class="fa fa-trash"></i>
                             </button>

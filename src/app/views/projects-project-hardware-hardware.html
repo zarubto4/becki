@@ -152,16 +152,11 @@
                             <bk-online-state [online_state]="hardware.online_state"></bk-online-state>
                         </div>
                         <div>
-                            <div *ngIf="!hardware.latest_online">
+                            <div *ngIf="hardware.online_state == 'OFFLINE' && !hardware.latest_online">
                                 <span> {{'label_device_last_seen'|bkTranslate:this}}:</span>
                                 <span *ngIf="hardware.latest_online" class="font-grey-mint bold">{{hardware.latest_online|bkUnixTimeToDate}}</span>
                                 <span *ngIf="!hardware.latest_online" class="font-grey-mint bold">({{'label_last_seen_unknow'|bkTranslate:this}})</span>
                             </div>
-                        </div>
-                        <div *ngIf="hardware.server!=null">
-                            {{'label_server'|bkTranslate:this}}:
-                            <span *ngIf="hardware.server" class="font-grey-mint bold">{{hardware.server.online_state|bkTranslateTable:this:'online_state'}}</span>
-                            <span *ngIf="hardware.server" class="font-grey-mint bold">{{hardware.server.name}}</span>
                         </div>
 
                     </div>

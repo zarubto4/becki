@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 export class UpdateStateComponent {
 
     @Input()
-    updateState: string = 'waiting_for_device';
+    updateState: string = 'WAITING_FOR_DEVICE';
 
     @Input()
     error_code: number = null;
