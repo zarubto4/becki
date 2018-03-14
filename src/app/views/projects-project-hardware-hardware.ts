@@ -1,6 +1,3 @@
-/**
- * Created by Tomas Kupcek on 12.01.2017.
- */
 
 import { Component, Injector, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
@@ -27,6 +24,7 @@ import { ModalsHardwareRestartMQTTPassModel } from '../modals/hardware-restart-m
 import * as Rx from 'rxjs';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-server';
+import {_BaseMainComponent} from "./_BaseMainComponent";
 
 export interface TerminalParameters {
     id: string;
