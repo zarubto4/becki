@@ -2562,7 +2562,7 @@ export class StaticTranslation {
                 'INSTANCE_INACCESSIBLE': 'Instance is not accessible.',
                 'HOMER_SERVER_NEVER_CONNECTED': 'Never connected',
                 'COMPLETE_WITH_ERROR': 'Complete with error',
-                'SUCCESSFUL_COMPLETE': 'Successfully completed',
+                'SUCCESSFULLY_COMPLETE': 'Successfully completed',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu

@@ -493,7 +493,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedureTask(pageNumber: number = 0,
-                                       status: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = ['successful_complete', 'complete' , 'complete_with_error' , 'canceled' , 'in_progress' , 'not_start_yet'],
+                                       status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE' , 'COMPLETE_WITH_ERROR' , 'CANCELED' , 'IN_PROGRESS' , 'NOT_START_YET'],
                                       ): void {
         this.blockUI();
 
