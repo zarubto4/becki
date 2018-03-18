@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { TranslationService } from './../services/TranslationService';
+import { TranslationService } from '../services/TranslationService';
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
@@ -13,7 +13,7 @@ import { IHardware, IHardwareList, IHardwareType } from '../backend/TyrionAPI';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
-    constructor(public project_id: string, public hardware_type: IHardwareType, public selected_hardware: IHardware[] = []) {
+    constructor(public project_id: string, public hardware_type: IHardwareType = null, public selected_hardware: IHardware[] = []) {
         super();
     }
 }
@@ -31,6 +31,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
     modalClose = new EventEmitter<boolean>();
 
     devicesFilter: IHardwareList = null;
+    selectedList: { [id: string]: IHardware } = {};
 
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
 
@@ -43,10 +44,9 @@ export class ModalsSelectHardwareComponent implements OnInit {
     onFilterHardware(pageNumber: number = 0 ): void {
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
             projects: [this.modalModel.project_id],
-            hardware_type_ids: [this.modalModel.hardware_type.id]
+            hardware_type_ids: [ (this.modalModel.hardware_type != null) ? this.modalModel.hardware_type.id : null]
         })
             .then((values) => {
-
                 this.devicesFilter = values;
                 this.devicesFilter.content.forEach((device, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
@@ -55,7 +55,6 @@ export class ModalsSelectHardwareComponent implements OnInit {
                         }
                     });
                 });
-
             })
             .catch((reason) => {
 
@@ -63,25 +62,16 @@ export class ModalsSelectHardwareComponent implements OnInit {
     }
 
     onAddToList(hardware: IHardware): void {
-        for (let i = this.modalModel.selected_hardware.length - 1; i >= 0; i--) {
-            if (this.modalModel.selected_hardware[i].id === hardware.id) {
-                return;
-            }
-        }
-
-        this.modalModel.selected_hardware.push(hardware);
+        this.selectedList[hardware.id] = hardware;
     }
 
     onRemoveFromList(hardware: IHardware): void {
-        for (let i = this.modalModel.selected_hardware.length - 1; i >= 0; i--) {
-            if (this.modalModel.selected_hardware[i].id === hardware.id) {
-                this.modalModel.selected_hardware.splice(i, 1);
-            }
-        }
+        delete this.selectedList[hardware.id];
     }
 
 
     onSubmitClick(): void {
+        this.modalModel.selected_hardware = Object.values(this.selectedList);
         this.modalClose.emit(true);
     }
 

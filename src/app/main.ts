@@ -169,11 +169,10 @@ import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoList
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
 import { TyrionComponent } from './views/admin-tyrion';
-import { OnlineStateComponent } from './components/OnlineStateComponent';
+import { LogLevelComponent, OnlineStateComponent} from './components/OnlineStateComponent';
 import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
 import { CompilationStatusComponent } from './components/CompilationStatusComponent';
 import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
-import { ModalPickHardwareTerminalComponent } from './modals/pick-hardware-terminal';
 import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerComponent } from './modals/hardware-change-server';
@@ -207,6 +206,7 @@ import { ProjectsProjectBlockoBlockoComponent } from './views/projects-project-b
 import { ProjectsProjectBlocksBlockComponent } from './views/projects-project-blocks-block';
 import { ModalsVersionSelectComponent } from './modals/version-select';
 import { ModalsProgramVersionSelectComponent } from './modals/program-version-select';
+import { TerminalLogSubscriberComponent } from './components/TerminalLogSubscriberComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -521,6 +521,8 @@ class BeckiErrorHandler implements ErrorHandler {
         PortletPanelMenuComponent,
         ServerSizeSelectorComponent,
         ServerRegionSelectorComponent,
+        TerminalLogSubscriberComponent,
+        LogLevelComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -649,13 +651,13 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsHardwareGroupPropertiesComponent,
         ModalsHardwareGroupDeviceSettingsComponent,
         ModalsUpdateReleaseFirmwareComponent,
-        ModalPickHardwareTerminalComponent,
         ModalsHardwareRestartMQTTPassComponent,
         ModalsHardwareChangeServerComponent,
         ModalsCodeSelectComponent,
         ModalsHardwareFindHashComponent,
         ModalsVersionSelectComponent,
         ModalsProgramVersionSelectComponent,
+
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

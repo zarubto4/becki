@@ -4,7 +4,7 @@
  */
 
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
-import { TranslationService } from '../services/TranslationService';
+import { TranslationService } from './TranslationService';
 
 export abstract class ModalModel {
     modalWide: boolean = false;

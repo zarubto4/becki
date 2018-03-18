@@ -7,14 +7,13 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import {AsyncValidatorDebounce, BeckiAsyncValidators} from '../helpers/BeckiAsyncValidators';
+import { AsyncValidatorDebounce, BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IHardwareGroup, IHardwareGroupList } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessageError, FlashMessage } from '../services/NotificationService';
 import { TranslatePipe } from '../pipes/TranslationPipe';
 import { TranslationService } from '../services/TranslationService';
-import { stat } from "fs";
 
 
 export class ModalsAddHardwareModel extends ModalModel {

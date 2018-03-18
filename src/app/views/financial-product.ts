@@ -38,6 +38,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
     }
 
     onPortletClick(action: string): void {
+        console.log('onPortletClick:', action);
         if (action === 'edit_product') {
             this.onEditClick();
         }

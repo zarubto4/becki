@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TranslationService } from '../services/TranslationService';
+import { TranslationService } from './TranslationService';
 
 @Injectable()
 export class ExitConfirmationService {

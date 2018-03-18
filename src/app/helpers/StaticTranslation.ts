@@ -417,6 +417,10 @@ export class StaticTranslation {
                 'placeholder_hardware': 'Select',
                 'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
                 'label_no_hardware_comment': 'First, add the hardware to the project',
+                'table_hardware_id': 'ID',
+                'table_hardware_name': 'Alias',
+                'table_actions': 'Actions',
+                'table_status': 'Status',
 
             }, 'ModalsVersionDialogComponent': {
                 'title_edit': 'Edit Version',
@@ -1165,13 +1169,13 @@ export class StaticTranslation {
                 'label_time_missing_in_json': 'Not Yet',
                 'label_project_active': 'This one',
                 'label_project_not_active': 'Freeze',
-                'label_release_documentation_description' : '<p>Here you can create group orders. For example, update hardware in <strong>"North Korea"</strong> or execute <strong><a target="_blank" href="https://www.youtube.com/watch?v=xSN6BOgrSSU">order 66</a></strong>.<p/><p class="text-center"> Heavy times for the republic..</p>',
+                'label_release_documentation_description': '<p>Here you can create group orders. For example, update hardware in <strong>"North Korea"</strong> or execute <strong><a target="_blank" href="https://www.youtube.com/watch?v=xSN6BOgrSSU">order 66</a></strong>.<p/><p class="text-center"> Heavy times for the republic..</p>',
 
                 'tab_hardware_list': 'Hardware List',
                 'tab_hardware_groups': 'Hardware Groups',
                 'tab_updates': 'Updates',
 
-                'label_hardware_group_documentation_description' : '<p>Hardware can be registered to any number of groups. Using groups, you can more easily filter hardware.</p><br><p class="text-center"> <span class="text-center">Import it. Export. Create statistics. And other miracles.<br> But only if we have already implemented it.</p><br><p class="text-center">Trololo...</p>',
+                'label_hardware_group_documentation_description': '<p>Hardware can be registered to any number of groups. Using groups, you can more easily filter hardware.</p><br><p class="text-center"> <span class="text-center">Import it. Export. Create statistics. And other miracles.<br> But only if we have already implemented it.</p><br><p class="text-center">Trololo...</p>',
 
                 'table_description': 'Description',
                 'table_id': 'Updates',
@@ -1201,6 +1205,25 @@ export class StaticTranslation {
                 'flash_edit_device_fail': 'Device information could not be updated. ',
                 'flash_remove_device_success': 'Device has been removed.',
                 'flash_remove_device_fail': 'Device could not be removed, ',
+
+            }, 'TerminalLogSubscriberComponent': {
+                'title': '<strong class="font-color-hardware">HARDWARE</strong> Terminal',
+                'label_terminal': 'Terminal',
+                'label_settings_terminal': 'Settings',
+                'label_no_hardware_to_show': 'No hardware to show',
+                'label_no_hardware_to_show_comment': 'Nothing now...',
+                'label_change_log_level': 'Change log level',
+                'btn_add_hardware': 'Add hardware',
+                'btn_clear_console': 'clear console',
+                'table_actions': 'Actions',
+                'table_color': 'Terminal color',
+                'table_logLevel': 'Log Level',
+                'table_state': 'Subscribe State',
+                'table_id': 'Hardware',
+                'table_connection': 'Online status',
+                'table_connection_confirmed': 'Connected',
+                'label_select_logLevel': 'Select Log Level',
+                'label_select_color': 'Select Log Color',
 
             }, 'ProjectsProjectHardwareHardwareComponent': {
 
@@ -1240,7 +1263,7 @@ export class StaticTranslation {
                 'label_core_configuration': 'Core Bootloader Configuration',
                 'label_core_configuration_comment': '<p>Please keep in mind that you have God\'s power. You can remotely change anything out of common flow. Please change key configuration parameters only if you know what you are doing.</p>',
                 'label_core_registers': 'Registers',
-                'label_restart_device': 'Restart Device',
+                'label_restart_hardware': 'Restart Device',
                 'label_restart_to_bootloader': 'Restart to Bootloader',
                 'label_change_mqtt_pass': 'Restart MQTT Password',
                 'label_change_server': 'Change Server',
@@ -1287,12 +1310,7 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_deactivate_device': 'Deactive for this project',
                 'label_active_device': 'Active for this project',
-                'label_terminal': 'terminal',
-                'label_settings_terminal': 'settings',
-                'label_no_hardware_to_show': 'No hardware to show',
-                'label_change_log_level': 'Change log level',
-                'btn_add_hardware': 'Add hardware',
-                'btn_clear_console': 'clear console',
+
 
                 'table_id': 'Update ID',
                 'table_program': 'Program',
@@ -1304,11 +1322,6 @@ export class StaticTranslation {
                 'table_state': 'Status',
                 'table_version': 'Version',
                 'table_status': 'Status',
-                'table_color': 'Terminal color',
-                'table_actions': 'Actions',
-                'table_logLevel': 'Log Level',
-                'table_connection': 'Connection status',
-                'table_connection_confirmed': 'Connected',
 
                 'flash_cant_add_hardware': 'Unable to add hardware ',
                 'flash_no_more_device': 'No more Device to add',

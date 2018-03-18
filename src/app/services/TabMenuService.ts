@@ -7,7 +7,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { LabeledLink } from '../helpers/LabeledLink';
 import { CurrentParamsService } from './CurrentParamsService';
-import { TranslationService } from '../services/TranslationService';
+import { TranslationService } from './TranslationService';
 
 
 @Injectable()

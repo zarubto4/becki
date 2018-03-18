@@ -51,7 +51,6 @@
     "systemjs": "^0.19.47",
     "the-grid": "git+ssh://git@github.com/ByzanceIoT/the-grid.git#v0.1.164",
     "tslib": "^1.9.0",
-    "typescript": "^2.7.2",
     "web-app-browserconfig-loader": "0.0.0",
     "xml-loader": "^1.2.1",
     "zone.js": "^0.7.8"
@@ -65,6 +64,7 @@
     "@types/jqueryui": "^1.12.2",
     "@types/moment-timezone": "^0.5.4",
     "@types/node": "^7.0.56",
+    "typescript": "2.4.1",
     "angular2-template-loader": "^0.6.0",
     "autoprefixer": "^6.3.2",
     "awesome-typescript-loader": "^3.5.0",

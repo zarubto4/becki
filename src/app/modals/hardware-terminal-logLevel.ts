@@ -13,7 +13,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsLogLevelModel extends ModalModel {
-    constructor(public logLevel: string = 'info') {
+    constructor(public logLevel: ('error' | 'warn' | 'info' | 'log') = 'info') {
         super();
     }
 }

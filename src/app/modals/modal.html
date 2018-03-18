@@ -91,9 +91,6 @@
             <template [ngSwitchCase]="'ModalsBootloaderPropertyModel'">
                 <bk-modals-bootloader-property [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-bootloader-property>
             </template>
-            <template [ngSwitchCase]="'ModalPickHardwareTerminalModel'">
-                <bk-modals-pick-hardware-terminal [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-pick-hardware-terminal>
-            </template>
             <template [ngSwitchCase]="'ModalsSetAsMainModel'">
                 <bk-modals-set-as-main [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-set-as-main>
             </template>

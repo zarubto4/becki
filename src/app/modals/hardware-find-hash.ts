@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import {IHardwareRegistrationHash} from "../backend/TyrionAPI";
+import { IHardwareRegistrationHash } from '../backend/TyrionAPI';
 
 
 export class ModalsHardwareFindHash extends ModalModel {

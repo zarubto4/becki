@@ -1,9 +1,0 @@
-
-<span *ngIf="online_state == 'ONLINE'" class="font-green-jungle bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>
-<span *ngIf="online_state == 'OFFLINE'" class="font-red-flamingo bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>
-<span *ngIf="online_state == 'FREEZED'" class="font-red-flamingo bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>
-
-<span *ngIf="online_state == 'SYNCHRONIZATION_IN_PROGRESS'" class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
-<span *ngIf="online_state == 'NOT_YET_FIRST_CONNECTED'" class="font-grey-mint bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>
-<span *ngIf="online_state == 'UNKNOWN_LOST_CONNECTION_WITH_SERVER'" class="font-grey-mint bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>
-<span *ngIf="online_state == 'SHUT_DOWN'" class="font-grey-mint bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>

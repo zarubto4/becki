@@ -13,7 +13,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 export class ModalsBlockoBlockCopyModel extends ModalModel {
     constructor(public name: string = '', public description: string = '',  public tags: string[] = []) {
-        super()
+        super();
     }
 }
 

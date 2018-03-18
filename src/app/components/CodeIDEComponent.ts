@@ -10,7 +10,7 @@ import { ModalService } from '../services/ModalService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { TranslationService } from '../services/TranslationService';
 import { FormSelectComponentOption } from './FormSelectComponent';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
 

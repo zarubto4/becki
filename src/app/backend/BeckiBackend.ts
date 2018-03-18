@@ -306,13 +306,15 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     // TOKEN MANIPULATIONS
-
+    /* tslint:disable */
     public static getToken(): string {
         return window.localStorage.getItem('auth_token');
     }
+
     public static tokenExist(): boolean {
         return !!window.localStorage.getItem('auth_token');
     }
+    /* tslint:enable */
 
     public getBeckiBeta(): boolean {
         return this.beckiBeta;
@@ -516,7 +518,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     protected disconnectWebSocket(): void {
-        console.log('disconnectWebSocket()');
+        console.error('disconnectWebSocket()');
         if (this.webSocket) {
             this.webSocket.removeEventListener('close', this.reconnectWebSocketAfterTimeout);
             this.webSocket.close();
@@ -764,7 +766,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     // WebSocket Messages:
 
-    public requestDeviceTerminalSubcribe(deviceId: string, webSocketURL: string, logLevel: string): void {
+    public requestDeviceTerminalSubcribe(deviceId: string, webSocketURL: string, logLevel: ('error' | 'warn' | 'info' | 'log')): void {
         if (this.hardwareTerminalwebSockets) {
 
             let message = {

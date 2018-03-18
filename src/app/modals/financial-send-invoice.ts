@@ -11,7 +11,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { BeckiValidators } from './../helpers/BeckiValidators';
+import { BeckiValidators } from '../helpers/BeckiValidators';
 
 
 export class ModalsSendInvoiceModel extends ModalModel {

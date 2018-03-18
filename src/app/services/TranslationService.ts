@@ -3,7 +3,7 @@
 */
 
 import { Injectable } from '@angular/core';
-import { StaticTranslation } from './../helpers/StaticTranslation';
+import { StaticTranslation } from '../helpers/StaticTranslation';
 import { NullSafe } from '../helpers/NullSafe';
 
 @Injectable()

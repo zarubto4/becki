@@ -768,7 +768,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     onAddDeveloperHardwareClick() {
         let m = new ModalsSelectHardwareModel(this.project_Id, this.hardwareType);
         this.modalService.showModal(m).then((success) => {
-            this.selected_hardware = m.selected_hardware;
+            this.selected_hardware.push.apply(this.selected_hardware, m.selected_hardware);
         });
     }
 }

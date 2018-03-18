@@ -620,8 +620,6 @@ export class NotificationService {
                     this.unreadNotificationsCount = list.unread_total;
                     this.totalNotificationsCount = list.total;
 
-                    console.log(list);
-
                     list.content.forEach((n) => {
                         // TODO: maybe update it!
                         if (!this.isNotificationExists(n.id)) {

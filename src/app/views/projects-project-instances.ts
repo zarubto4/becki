@@ -11,7 +11,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { ModalsInstanceCreateComponent, ModalsInstanceCreateModel } from '../modals/instance-create';
-import {ModalsRemovalModel} from "../modals/removal";
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-projects-project-instances',

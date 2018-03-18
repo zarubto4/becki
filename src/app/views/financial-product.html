@@ -11,7 +11,7 @@
 
 
         <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-        <bk-portlet-title
+        <bk-portlet-title *ngIf="product"
             [title_name]="'title'|bkTranslate:this"
             [icon]="'fa-tachometer'"
             (onClick)="onPortletClick($event)"
@@ -20,13 +20,13 @@
                                     condition: (true),
                                     label: ('label_financial_product_properties'|bkTranslate:this),
                                     icon: 'fa-cog',
-                                    colorType: 'DEACTIVE',
+                                    colorType: 'EDIT',
                                     btn_identification: 'edit_product'
                                 },
                                 {
-                                    condition: (!product.active),
+                                    condition: (product.active),
                                     label: ('label_deactivate_product'|bkTranslate:this),
-                                    icon: 'fa-stop-circl',
+                                    icon: 'fa-stop-circle',
                                     colorType: 'DEACTIVE',
                                     btn_identification: 'deactivate_product'
                                 },
