@@ -31,7 +31,7 @@
                         <br>
                     </div>
 
-                    <div *ngIf="selectedDeviceGroup.hardware_types.length > 0">
+                    <div *ngIf="selectedDeviceGroup.hardware_types && selectedDeviceGroup.hardware_types.length > 0">
                         <div *ngIf="type == 'firmware'">
 
                             <div *ngIf="cPrograms">

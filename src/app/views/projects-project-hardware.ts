@@ -50,12 +50,8 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
                 this.onFilterHardware();
 
-                /**
-                if (this.devices.find((device, index, obj) => { return !!(device.alert_list && device.alert_list.length); })) {
-                    this.bootloaderRequred = true;
-                } else {
-                    this.bootloaderRequred = false;
-                }*/
+                // Pak smazat TODO
+                this.onToggleTab('updates');
 
             });
         });

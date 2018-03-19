@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { TranslationService } from '../services/TranslationService';
-import {LogComponent, ConsoleLogType, ConsoleLogComponent} from './ConsoleLogComponent';
+import { ConsoleLogType, ConsoleLogComponent} from './ConsoleLogComponent';
 import { IHardware } from '../backend/TyrionAPI';
 import { ITerminalWebsocketMessage, IWebsocketTerminalState } from '../backend/BeckiBackend';
 import { FlashMessageError } from '../services/NotificationService';
@@ -294,7 +294,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
             }
 
             if (this.consoleLog) {
-                console.log('onMessage: some message from Hardware', msq);
+                console.log('onMessage: some message from Hardware', msg);
                 this.consoleLog.add(msg.level, msg.message, (hardware.name ? hardware.name : msg.hardware_id), msg.hardware_id); // přidání zprávy do consoleComponent
 
             }
@@ -354,7 +354,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param logLevel
      * @param hardware
      */
-    onUserChangeLogLevelClick(logLevel: string, hardware: IHardware): void { // změna log levelu
+    onUserChangeLogLevelClick(logLevel: ('error' | 'warn' | 'info' | 'log'), hardware: IHardware): void { // změna log levelu
 
         console.log('onUserChangeLogLevelClick:: Hardware', hardware.id, 'LogLevel', logLevel);
 
