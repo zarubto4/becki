@@ -71,7 +71,6 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
 
     onSubmitClick(): void {
-
         for (let i in this.selectedList) {
             if (this.selectedList.hasOwnProperty(i)) {
                 this.modalModel.selected_hardware.push(this.selectedList[i]);

@@ -337,7 +337,9 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param hardware
      */
     onHardwareUnSubscribeClick(hardware: IHardware): void {
-        this.tyrionBackendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.server.server_url + ':' + hardware.server.hardware_logger_port); // pošleme unsubscribe request na WS
+        if(hardware.server) {
+            this.tyrionBackendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.server.server_url + ':' + hardware.server.hardware_logger_port); // pošleme unsubscribe request na WS
+        }
     }
 
     /**
@@ -346,7 +348,9 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param logLevel
      */
     onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'log')): void {
-        this.tyrionBackendService.requestDeviceTerminalSubcribe(hardware.id, hardware.server.server_url + ':' + hardware.server.hardware_logger_port, logLevel); // pošleme unsubscribe request na WS
+        if(hardware.server) {
+            this.tyrionBackendService.requestDeviceTerminalSubcribe(hardware.id, hardware.server.server_url + ':' + hardware.server.hardware_logger_port, logLevel); // pošleme unsubscribe request na WS
+        }
     }
 
     /**
@@ -433,7 +437,9 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
                     return true;
                 }
             })) {
-            this.tyrionBackendService.connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString());
+            if(hardware.server) {
+                this.tyrionBackendService.connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString());
+            }
         }
 
 

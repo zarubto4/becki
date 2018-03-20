@@ -89,13 +89,36 @@
                             <i class="fa fa-angle-down"></i>
                         </a>
                     </div>
-                    <div *ngIf="_show_integrated_hardware_portlet">
-                        <!-- Hardware máme - HW nemáme -->
-                        <div *ngIf="">
-
-                        </div>
-
+                </div>
+                <div *ngIf="_show_integrated_hardware_portlet">
+                    <!-- Hardware máme - HW nemáme -->
+                    <div *ngIf="selectedHardware.length > 0">
+                        <table class="table table-hover table-light byzance-table">
+                            <tbody>
+                                <tr *ngFor="let hardware of selectedHardware">
+                                    <td class="vert-align no-wrap">
+                                        {{hardware.name}}
+                                    </td>
+                                    <td class="vert-align no-wrap">
+                                        {{hardware.online_state}}
+                                    </td>
+                                    <td class="vert-align no-wrap">
+                                        <bk-icon-component [condition]="true" [icon]="'fa-trash'" (onClickEvent)="toolbarRemoveHardwareClick(hardware)"></bk-icon-component>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+
+                    <div *ngIf="selectedHardware.length == 0">
+                        <br>
+                        <div class="text-center">
+                            <h4>Not Selected Hardware</h4>
+                            <button class="btn blue" (click)="toolbarAddHardwareClick()"><i class="fa fa-plus-circle"></i> Add</button>
+                        </div>
+                        <br>
+                    </div>
+
                 </div>
             </div>
 
@@ -119,7 +142,7 @@
                     </div>
                 </div>
                 <div *ngIf="_show_blocko_interface_portlet">
-                    <bk-blocko-view [disableExecution]="true" [canConfig]="false" [readonly]="true" [simpleMode]="false" [autosize]="true" class="blocko-overflow-visible blocko-no-borders-and-bg blocko-code-view"></bk-blocko-view>
+                    <bk-blocko-view [id]="'block_view'"  [disableExecution]="true" [canConfig]="false" [readonly]="true" [simpleMode]="false" [autosize]="true" class="blocko-overflow-visible blocko-no-borders-and-bg blocko-code-view"></bk-blocko-view>
                 </div>
             </div>
 
@@ -150,9 +173,10 @@
             </div>
         </div>
 
-        <div class="col-lg-10 col-md-9 col-sm-8 no-padding-left">
+        <div class="col-lg-10 col-md-9 col-sm-8 no-padding-left" style="height: 85%">
 
             <div class="tabbable-custom">
+
                 <ul class="nav nav-tabs nav-tabs-with-spacer">
                     <li *ngFor="let file of openFiles; let i = index" [class.active]="i == openFilesTabIndex"
                         (click)="openFilesOpenTab(i)">

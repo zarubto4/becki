@@ -53,11 +53,9 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     reloadInterval: any = null;
     hardwareType: IHardwareType = null;
 
-    selected_hardware: IHardware[];
+    selected_hardware: IHardware[] = [];
     projectSubscription: Subscription;
 
-    @ViewChild(BlockoViewComponent)
-    blockoView: BlockoViewComponent;
 
     @ViewChild('CodeIDEComponent')
     codeIDE: CodeIDEComponent;
@@ -128,8 +126,13 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     onToggleIDETab(tab: string) {
-        this.tab_under_ide = tab;
+        if (this.tab_under_ide === tab) {
+            this.tab_under_ide = ''; // Hide tab
+        }else {
+            this.tab_under_ide = tab;
+        }
     }
+
 
     ngAfterViewInit(): void {
         this.refreshInterface();
@@ -448,6 +451,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
     refreshInterface() {
 
+        console.log('Refresh Interface');
         if (!this.codeProgram) {
             return;
         }
@@ -466,14 +470,9 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
         let ios = getAllInputOutputs(main, userFiles);
 
-        /*
-        this.blockoView.setInterfaces([{
-            'color': '#99ccff',
-            'targetId': 'dummy_id',
-            'displayName': 'Program ' + this.codeProgram.name,
-            'interface': ios
-        }]);
-        */
+        console.log('Interface: ', ios);
+        this.codeIDE.refreshInterface(ios);
+
     }
 
     reloadVersions(): void {
@@ -770,5 +769,13 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
         this.modalService.showModal(m).then((success) => {
             this.selected_hardware.push.apply(this.selected_hardware, m.selected_hardware);
         });
+    }
+
+    onRemoveDeveloperHardwareClick(hardware: IHardware) {
+        for (let i =  this.selected_hardware.length - 1; i >= 0; i--) {
+            if (this.selected_hardware[i].id === hardware.id) {
+                this.selected_hardware.splice(i, 1);
+            }
+        }
     }
 }

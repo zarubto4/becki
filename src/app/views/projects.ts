@@ -28,20 +28,24 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit {
     };
 
     ngOnInit(): void {
+
         this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'ProjectsRefreshAfterInvite') {
                 this.refresh();
             }
         });
+
         this.refresh();
     }
 
     refresh(): void {
+        console.log('Refresh: All Projects time:', new Date().getTime());
         this.blockUI();
         Promise.all<any>([this.tyrionBackendService.projectGetByLoggedPerson(), this.tyrionBackendService.productsGetUserCanUsed()])
             .then((values: [IProject[], IApplicableProduct[]]) => {
                 this.projects = values[0];
                 this.products = values[1];
+                console.log('Refresh: Response:   ', new Date().getTime());
                 this.unblockUI();
             })
             .catch((reason) => {

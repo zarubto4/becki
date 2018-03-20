@@ -3,7 +3,10 @@
  * of this distribution.
  */
 
-import { Component, OnChanges, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
+import {
+    Component, OnChanges, Input, Output, SimpleChanges, EventEmitter, ViewChild, OnInit,
+    AfterViewInit, QueryList, ViewChildren
+} from '@angular/core';
 import { FileTreeObject, FileTreeObjectInterface } from './FileTreeComponent';
 import { ModalsCodeFileDialogModel, ModalsCodeFileDialogType } from '../modals/code-file-dialog';
 import { ModalService } from '../services/ModalService';
@@ -11,6 +14,9 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { TranslationService } from '../services/TranslationService';
 import { FormSelectComponentOption } from './FormSelectComponent';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IHardware } from '../backend/TyrionAPI';
+import { BlockoViewComponent } from './BlockoViewComponent';
+import { BlockoTargetInterface } from 'blocko/dist';
 
 export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
 
@@ -114,7 +120,6 @@ export class CodeFile extends CodeFileSystemObject {
         return 'file-text';
     }
 
-
     get bold(): boolean {
         return this.open;
     }
@@ -141,7 +146,7 @@ export class CodeDirectory extends CodeFileSystemObject {
     selector: 'bk-code-ide',
     templateUrl: './CodeIDEComponent.html'
 })
-export class CodeIDEComponent implements OnChanges {
+export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
 
     @Input()
     files: CodeFile[] = null;
@@ -161,6 +166,9 @@ export class CodeIDEComponent implements OnChanges {
     @Input()
     buildInProgress: boolean = false;
 
+    @Input()
+    selectedHardware: IHardware[] = [];
+
     @Output()
     fileContentChange = new EventEmitter<{ fileFullPath: string, content: string }>();
 
@@ -168,7 +176,10 @@ export class CodeIDEComponent implements OnChanges {
     onAddLibraryClick = new EventEmitter<any>();
 
     @Output()
-    onAddHardwareClick = new EventEmitter<any>();
+    onAddHardwareClick = new EventEmitter<boolean>();
+
+    @Output()
+    onRemoveHardwareClick = new EventEmitter<IHardware>();
 
     @Output()
     onChangeLibraryVersionClick = new EventEmitter<CodeFile>();
@@ -195,12 +206,16 @@ export class CodeIDEComponent implements OnChanges {
 
     formLibrarySelector: FormGroup = null;
 
+    @ViewChildren(BlockoViewComponent)
+    blockoViews: QueryList<BlockoViewComponent>;
+
     private _show_files_portlet: boolean = true;
     private _show_libraries_portlet: boolean = false;
     private _show_integrated_hardware_portlet: boolean = false;
     private _show_blocko_interface_portlet: boolean = false;
     private _show_code_settings_portlet: boolean = true;
-
+    private _latest_blockoInterface = null;
+    private _editorView: BlockoViewComponent = null;
 
     constructor(protected modalService: ModalService, private translationService: TranslationService,  private formBuilder: FormBuilder) {
 
@@ -235,6 +250,24 @@ export class CodeIDEComponent implements OnChanges {
         }
     }
 
+    ngOnInit(): void {
+
+    }
+
+    ngAfterViewInit(): void {
+        this.blockoViews.changes.subscribe((views: QueryList<BlockoViewComponent>) => {
+
+            this._editorView = views.find((view) => {
+                return view.id === 'block_view';
+            });
+
+            if (this._editorView) {
+                this._editorView.addInterface(this._latest_blockoInterface);
+            }
+
+        });
+    }
+
     translate(key: string, ...args: any[]): string {
         return this.translationService.translate(key, this, null, args);
     }
@@ -257,8 +290,13 @@ export class CodeIDEComponent implements OnChanges {
         this.onAddLibraryClick.emit(e);
     }
 
-    toolbarAddHardwareClick(e: boolean) {
-        this.onAddHardwareClick.emit(true);
+    toolbarAddHardwareClick( e: boolean = true) {
+        this.onAddHardwareClick.emit(e);
+        this._show_integrated_hardware_portlet = true;
+    }
+
+    toolbarRemoveHardwareClick(hardware: IHardware) {
+        this.onRemoveHardwareClick.emit(hardware);
     }
 
     toolbarLibraryChangeVersionClick(e: any) {
@@ -290,6 +328,27 @@ export class CodeIDEComponent implements OnChanges {
             fileFullPath: fileObj.objectFullPath,
             content: code
         });
+    }
+
+    refreshInterface(ios: any = this._latest_blockoInterface) {
+
+        if (ios == null) {
+            return;
+        }
+
+        this._latest_blockoInterface = {
+            interfaceId : 'dummy_id',
+            displayName: 'Program',
+            color: '#99ccff',
+            interface : ios,
+            pos_x : 50,
+            pos_y : 20
+        };
+
+        if (this._editorView) {
+            this._editorView.addInterface(this._latest_blockoInterface);
+        }
+
     }
 
     generateDirectoriesFromFiles() {
@@ -793,6 +852,9 @@ export class CodeIDEComponent implements OnChanges {
     }
     show_blocko_interface_portlet(show: boolean) {
         this._show_blocko_interface_portlet = show;
+        if (show) {
+            // this.refreshInterface();
+        }
     }
     show_code_settings_portlet(show: boolean) {
         this._show_code_settings_portlet = show;

@@ -3,7 +3,10 @@
  * of this distribution.
  */
 
-import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
+import {
+    Input, Output, EventEmitter, Component, OnInit, ViewChild, AfterViewChecked,
+    ChangeDetectorRef
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
@@ -33,7 +36,7 @@ export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     selector: 'bk-modals-update-release-firmware',
     templateUrl: './update-release-firmware.html'
 })
-export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
+export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewChecked {
 
     @Input()
     modalModel: ModalsUpdateReleaseFirmwareModel;
@@ -78,7 +81,14 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         inline: false
     };
 
-    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+
+    ngAfterViewChecked() {
+        if (this.selectedDeviceGroup  != null) { // check if it change, tell CD update view
+            this.cdRef.detectChanges();
+        }
+    }
+
+    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef) {
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]],
             'firmwareType': ['', [Validators.required]],
@@ -98,7 +108,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     }
 
     onGroupChange(value: string) {
-        console.log('onGroupChange value:: ', value);
+      // console.log('onGroupChange value:: ', value);
         this.selectedDeviceGroup = null;
         if (value === null) {
             return;
@@ -111,23 +121,23 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
 
             if (this.modalModel.deviceGroup.content[i].id === value ) {
 
-                console.log("onGroupChange:: Našel jsem skupinu a jmenuje se", this.modalModel.deviceGroup.content[i].name);
-                console.log("onGroupChange:: hardware_types nad skupinou", this.modalModel.deviceGroup.content[i].hardware_types);
+              // console.log("onGroupChange:: Našel jsem skupinu a jmenuje se", this.modalModel.deviceGroup.content[i].name);
+              // console.log("onGroupChange:: hardware_types nad skupinou", this.modalModel.deviceGroup.content[i].hardware_types);
 
                 devgroup = this.modalModel.deviceGroup.content[i];
                 if ( devgroup.hardware_types != null && devgroup.hardware_types.length > 0) {
 
-                   console.log("onGroupChange:: Budu hledat pro každý typ hardware_types");
+                 // console.log("onGroupChange:: Budu hledat pro každý typ hardware_types");
 
                     devgroup.hardware_types.forEach((tp: IHardwareType) => {
 
-                     console.log("onGroupChange:: Pro každého: ", tp.name);
+                   // console.log("onGroupChange:: Pro každého: ", tp.name);
 
                         this.form.addControl(tp.id + '_selectedBootloaderId', new FormControl('', []));
                         this.form.addControl(tp.id + '_selectedCProgramVersionId', new FormControl('', []));
 
                         if (this.cPrograms[tp.id] == null) {
-                            console.log("onGroupChange:: this.cPrograms[tp.id] == null ");
+                          // console.log("onGroupChange:: this.cPrograms[tp.id] == null ");
                             this.backendService.cProgramGetListByFilter(0, {
                                 project_id: this.modalModel.project_id,
                                 hardware_type_ids: [tp.id]
@@ -158,13 +168,13 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
                         }
 
                         if (this.cPrograms[tp.id] && this.bootloaders[tp.id]) {
-                            console.log("this.cPrograms[tp.id] && this.bootloaders[tp.id] ");
+                            // console.log("this.cPrograms[tp.id] && this.bootloaders[tp.id] ");
                             this.selectedDeviceGroup = devgroup;
                         }
 
                     });
                 }else {
-                    console.log("onGroupChange:: Nemám žádné skupiny, ukončuju a přiřazuji skupinu :", devgroup);
+                  // console.log("onGroupChange:: Nemám žádné skupiny, ukončuju a přiřazuji skupinu :", devgroup);
                     // No HW groups
                     this.selectedDeviceGroup = devgroup;
                 }

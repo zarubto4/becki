@@ -32,7 +32,7 @@ import { ModalService } from '../services/ModalService';
         </select>
         <select *ngIf="selectedProgram && (selectedVersions && selectedVersions.length)" class="form-control" [ngModel]="selectedProgramVersionId" (ngModelChange)="onSelectedProgramVersionIdChange($event)">
             <option [value]="null" disabled>Select version</option>
-            <option *ngFor="let cProgramVersion of selectedVersions" [value]="cProgramVersion.version_id">{{cProgramVersion.version_name}}{{cProgramVersion.version_description?" - " + cProgramVersion.version_description:""}}</option>
+            <option *ngFor="let cProgramVersion of selectedVersions" [value]="cProgramVersion.id">{{cProgramVersion.name}}{{cProgramVersion.description?" - " + cProgramVersion.description:""}}</option>
         </select>
     </div>
     <div class="clearfix"></div>

@@ -50,9 +50,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
                 this.onFilterHardware();
 
-                // Pak smazat TODO
-                this.onToggleTab('updates');
-
             });
         });
     }
