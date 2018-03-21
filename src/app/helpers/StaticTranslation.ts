@@ -1233,7 +1233,7 @@ export class StaticTranslation {
                 'tab_overview': 'Overview',
                 'tab_update': 'Update progress',
                 'tab_developer': 'Developer Settings',
-                'tab_advance_command_center': 'Advance Command center',
+                'tab_advance_command_center': 'Online Terminal',
 
                 'label_name': 'Name',
                 'label_version': 'Version',

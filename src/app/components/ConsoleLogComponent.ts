@@ -14,8 +14,9 @@ export interface ConsoleLogItem {
     timestamp: string;
     type: string;
     message: string;
+    alias?: string;
     source?: string;
-    sourceColorId?: string;
+    color?: string;
 }
 
 export interface ConsoleSourceColor {
@@ -23,7 +24,7 @@ export interface ConsoleSourceColor {
     color: string;
 }
 
-export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
+export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn' | 'debug' | 'trace';
 
 @Component({
     selector: 'bk-console-log',
@@ -32,18 +33,34 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
 <div class="console-log-table-wrapper" [style.min-height]="(startOnMaxHeight?maxHeight:'20px')" [style.max-height]="maxHeight">
     <table class="table table-fixed table-hover table-light">
         <tbody>
-            <tr *ngFor="let log of items;" class="console-log-tr log-{{log.type}}">
+            <tr *ngFor="let log of items;" class="console-log-tr">
                 <td>
                     <div class="console-log-head">
-                        <span class="console-log-timestamp">{{log.timestamp}}</span>
-                        <i class="console-log-icon fa fa-fw fa-angle-double-right" *ngIf="log.type == 'log'"></i>
-                        <i class="console-log-icon fa fa-fw fa-times-circle font-red" *ngIf="log.type == 'error'"></i>
-                        <i class="console-log-icon fa fa-fw fa-sign-out font-green-jungle" *ngIf="log.type == 'output'"></i>
-                        <i class="console-log-icon fa fa-fw fa-info-circle font-blue" *ngIf="log.type == 'info'"></i>
-                        <i class="console-log-icon fa fa-fw fa-exclamation-triangle font-yellow-saffron" *ngIf="log.type == 'warn'"></i>
+                        <span class="console-log-timestamp">{{log.timestamp}}&nbsp;</span>
+                        <span *ngIf="log.type == 'error'" class="font-red">[Error]</span>
+                        <span *ngIf="log.type == 'warn'"  class="font-yellow">[Warn]</span>
+                        <span *ngIf="log.type == 'debug'" class="font-purple">[Debug]</span>
+                        <span *ngIf="log.type == 'trace'" class="font-grey-salsa">[Trace]</span>
+                        <span *ngIf="log.type == 'info'"  class="font-color-byzance-blue">[Info]&nbsp;&nbsp;</span>
+                        <span *ngIf="log.type == 'log'"   class="font-grey-salsae">[Info]</span>
                     </div>
-                    <div class="console-log-message"><span *ngIf="log.source" [style.color]="(sourceColor[log.sourceColorId]?sourceColor[log.sourceColorId]:'#222')" >{{log.source}}<i class="fa fa-fw fa-angle-right"></i></span><span [innerHTML]="log.message"></span></div>
-                    </td>
+                    <div class="console-log-message">
+                        
+                        <template [ngIf]="log.source || log.alias">
+                            <span [style.color]="sourceColor[log.source] ? sourceColor[log.source].color : ''" class="bold">{{log.alias?log.alias:log.source}}</span>
+                            <i class="fa fa-fw fa-angle-right"></i>
+                        </template>
+                        
+                        <span 
+                            [class.font-red]="log.type == 'error'"
+                            [class.font-yellow]="log.type == 'warn'"
+                            [class.font-grey-salsa]="log.type == 'debug'"
+                            [class.font-grey-salsa]="log.type == 'trace'"
+                            [class.font-grey-salsa]="log.type == 'info'"
+                            [class.font-grey-salsa]="log.type == 'log'"
+                            [innerHTML]="log.message"></span>
+                    </div>
+                </td>
             </tr>
             <tr *ngIf="items.length == 0">
                 <td class="text-center">
@@ -66,7 +83,9 @@ export class ConsoleLogComponent {
 
     items: ConsoleLogItem[] = [];
 
-    sourceColor = {};
+    sourceColor: {[source_id: string]: {
+        color: string
+    }} = {};
 
     constructor(private translationService: TranslationService) {
     }
@@ -79,12 +98,18 @@ export class ConsoleLogComponent {
         return this.translationService.translate(key, this, null, args);
     }
 
-
-    addSourceColor(sourceID: string, color: string) {
-        this.sourceColor[sourceID] = color;
+    set_color(source: string, color: string) {
+        console.log('set_Color: source', source, 'color', color);
+        if (!this.sourceColor[source]) {
+            this.sourceColor[source] = {
+                color: color
+            };
+        } else {
+            this.sourceColor[source].color = color;
+        }
     }
 
-    add(type: ConsoleLogType, message: string, source?: string, sourceColorId?: string, timestamp?: string) {
+    add(type: ConsoleLogType, message: string, source?: string, alias?: string, timestamp?: string) {
         if (!timestamp) {
             timestamp = moment().format('HH:mm:ss.SSS');
         }
@@ -93,7 +118,7 @@ export class ConsoleLogComponent {
             type: type,
             message: message.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
             source: source,
-            sourceColorId: sourceColorId
+            alias: alias
         });
     }
 

@@ -1,8 +1,8 @@
+"use strict";
 /**
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const program = require("commander");
 const fs_1 = require("fs");

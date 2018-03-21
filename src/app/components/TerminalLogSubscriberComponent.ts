@@ -10,14 +10,18 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { TranslationService } from '../services/TranslationService';
 import { ConsoleLogType, ConsoleLogComponent} from './ConsoleLogComponent';
 import { IHardware } from '../backend/TyrionAPI';
-import { ITerminalWebsocketMessage, IWebsocketTerminalState } from '../backend/BeckiBackend';
 import { FlashMessageError } from '../services/NotificationService';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 import { TyrionBackendService } from '../services/BackendService';
-import * as Rx from 'rxjs';
 import { ModalService } from "../services/ModalService";
 import { FormSelectComponentOption } from "./FormSelectComponent";
 import { ModalsSelectHardwareModel } from "../modals/select-hardware";
+import {
+    ITerminalWebsocketMessage,
+    WebsocketClientHardwareLogger
+} from "../services/websocket/Websocket_Client_HardwareLogger";
+import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
+
 @Component({
     selector: 'bk-terminal-log-component',
     template: `
@@ -58,8 +62,8 @@ import { ModalsSelectHardwareModel } from "../modals/select-hardware";
         <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
         <!-- Terminal -->
-        <div *ngIf="tab == 'terminal'">
-            <bk-console-log maxHeight="400px" #console></bk-console-log>
+        <div [hidden]="!(tab == 'terminal')">
+            <bk-console-log maxHeight="800px" #console></bk-console-log>
             <br>
             <button class="btn blue" (click)="consoleLog.clear()">
                 <i class="fa fa-times-circle"></i> {{'btn_clear_console' | bkTranslate:this}}
@@ -67,7 +71,7 @@ import { ModalsSelectHardwareModel } from "../modals/select-hardware";
         </div>
         <!-- Terminal END -->
 
-        <div *ngIf="tab == 'settings'">
+        <div [hidden]="!(tab == 'settings')">
 
             <table *ngIf="selected_hw_for_subscribe && selected_hw_for_subscribe.length >= 1" class="table table-hover">
                 <thead>
@@ -181,7 +185,8 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     // Array With Log Type Parameters
     logLevel: { [hardware_id: string]: {
         log: ('error' | 'warn' | 'info' | 'log'),
-        subscribed: boolean
+        subscribed: boolean,
+        socket: WebsocketClientHardwareLogger
     }} = {};
 
     // First Preselect Tab
@@ -198,9 +203,6 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     @ViewChild('console')
     consoleLog: ConsoleLogComponent;
 
-    hardwareTerminalWS: Rx.Subscription = null; // objekt pro subscribe websocketu (a práci s pouze s touto instancí, takže ve chvíli co použiju  unsubscribe, tak se zruší toto a né Rx.subject v beckibackend)
-    hardwareTerminalStateWS: Rx.Subscription = null; // stejně jako nahoře, more info:   http://reactivex.io/rxjs/manual/overview.html#subscription
-
     lastColorInstance: number = 0; // kvůli barvám sledujeme poslední přidanou instanci
 
     logLevelOptions: FormSelectComponentOption[] = [
@@ -215,20 +217,8 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-        this.hardwareTerminalWS = this.tyrionBackendService.hardwareTerminal.subscribe(msg => this.onMessage(msg));
-        this.hardwareTerminalStateWS = this.tyrionBackendService.hardwareTerminalState.subscribe(msg => this.onStateMessage(msg));
-
         this.colorForm = this.formBuilder.group({
         }); // inicializace prázdného formu pro barvy
-
-        this.colorForm.valueChanges.subscribe(value => {
-            if (this.consoleLog) {
-                Object.keys(value).forEach( // pro každej prvek colorform
-                    colorKey => {
-                        this.consoleLog.addSourceColor(colorKey.substr(5), value[colorKey]); // přidáme jeden sourceColor kterej měníme při jakékoliv změně barvy
-                    });
-            }
-        });
 
         new Promise<any>((resolve) => {
             // todle je takovej "oblouk", protože nevíme kdy se console.log inicializuje, vytvoříme si interval kterej se každejch 100 ms ptá, zda již consoleLog existuje
@@ -256,19 +246,10 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.hardwareTerminalWS) {
-            this.hardwareTerminalWS.unsubscribe();
-        }
-        if (this.hardwareTerminalStateWS) {
-            this.hardwareTerminalStateWS.unsubscribe(); // unsubscribe toho neposedného subscribera, takže se nestane že přijde stejná flash messeage 5x za sebou
-        }
 
         this.selected_hw_for_subscribe.forEach(hardware => {
             this.onHardwareUnSubscribeClick(hardware);
         }); // odhlásíme každej HW co byl připojen
-
-
-        this.tyrionBackendService.closeHardwareTerminalWebsocket('all'); // zavřeme všechny HW websockety na backednu
 
     }
 
@@ -285,72 +266,56 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
 
     onMessage(msg: ITerminalWebsocketMessage) {
+        // console.log('onMessage: Logger Message:: ', msg);
         let hardware = this.selected_hw_for_subscribe.find(device => device.id === msg.hardware_id); // najdeme hardware, kterého se zpráva týká
         if (hardware) {
-
-            if (!this.logLevel[hardware.id].subscribed && msg.message_type === 'subscribe_hardware') {
-                console.log('onMessage: subscribe_hardware response - Success: ', msg);
-                this.logLevel[hardware.id].subscribed = true;
-            }
-
             if (this.consoleLog) {
-                console.log('onMessage: some message from Hardware', msg);
-                this.consoleLog.add(msg.level, msg.message, (hardware.name ? hardware.name : msg.hardware_id), msg.hardware_id); // přidání zprávy do consoleComponent
+                // console.log('onMessage: some message from Hardware', msg);
+                this.consoleLog.add(msg.level, msg.message, hardware.id, hardware.name); // přidání zprávy do consoleComponent
 
             }
         }
     }
-
-    onStateMessage(msg: IWebsocketTerminalState) {
-        let terminalDevice;
-        if (this.selected_hw_for_subscribe) {
-            terminalDevice = this.selected_hw_for_subscribe.find(hardware => {
-                if (msg.websocketUrl && msg.websocketUrl.includes(hardware.server.server_url + ':' + hardware.server.hardware_logger_port)) {
-                    return true;
-                }
-            });
-        }
-
-        switch (msg.reason) { // pro případné samosté obstarávání každého problému co nastane na websocketu
-            case 'cantConnect':
-                this.consoleLog.add('error', 'Shit Happens!!! ', 'Server', 'e6194b', new Date().toDateString());
-                break;
-
-            case 'conectionFailed':
-                terminalDevice.connected = msg.isConnected;
-                break;
-
-            case 'dissconected':
-                terminalDevice.connected = msg.isConnected;
-                break;
-
-            case 'opened':
-                terminalDevice.connected = msg.isConnected; // najdeme odebíraný HW kterého se status update týká a upravíme ho (pokud se nenajde, prostě se to přeskočí)
-                break;
-        }
-    }
-
-
 
     /**
      * Odlášení odběru, ale nikoliv odstranění ze seznamu
      * @param hardware
      */
     onHardwareUnSubscribeClick(hardware: IHardware): void {
-        if(hardware.server) {
-            this.tyrionBackendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.server.server_url + ':' + hardware.server.hardware_logger_port); // pošleme unsubscribe request na WS
-        }
+        console.log('onHardwareUnSubscribeClick: Hardware::', hardware.id);
+
+        this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubcribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
+
+            if(response_message && response_message.status == 'success') {
+                this.logLevel[hardware.id].subscribed = false;
+            }else {
+                console.error('onHardwareUnSubscribeClick:: Hardware', hardware.id, 'LogLevel', 'Error', error);
+            }
+
+        });
     }
 
     /**
      * Odlášení odběru, ale nikoliv odstranění ze seznamu
+     * @param socket
      * @param hardware
      * @param logLevel
      */
-    onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'log')): void {
-        if(hardware.server) {
-            this.tyrionBackendService.requestDeviceTerminalSubcribe(hardware.id, hardware.server.server_url + ':' + hardware.server.hardware_logger_port, logLevel); // pošleme unsubscribe request na WS
-        }
+    onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'log') = 'info'): void {
+
+        console.log('onHardwareSubscribeClick: Hardware::', hardware.id);
+
+        this.logLevel[hardware.id].socket.requestDeviceTerminalSubcribe(hardware.id, logLevel , (response_message: WebsocketMessage, error: any) => {
+
+            console.log('onHardwareSubscribeClick: response_message::', response_message);
+
+            if (response_message && response_message.status == 'success') {
+                this.logLevel[hardware.id].subscribed = true;
+            }else {
+                console.error('onHardwareSubscribeClick:: Hardware', hardware.id, 'LogLevel', logLevel, 'Error', error);
+            }
+
+        });
     }
 
     /**
@@ -361,15 +326,37 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     onUserChangeLogLevelClick(logLevel: ('error' | 'warn' | 'info' | 'log'), hardware: IHardware): void { // změna log levelu
 
         console.log('onUserChangeLogLevelClick:: Hardware', hardware.id, 'LogLevel', logLevel);
+        console.log('onUserChangeLogLevelClick:: Server URL: ', this.logLevel[hardware.id].socket.url);
+        console.log('onUserChangeLogLevelClick:: Log on : ', this.logLevel[hardware.id].log);
+
+        if (this.logLevel[hardware.id].log === logLevel) {
+            console.log('onUserChangeLogLevelClick:: jsou stejné - vracím');
+            return;
+        } else {
+
+        }
 
         // Set New Default Values
-        this.logLevel[hardware.id].log = logLevel;
+        this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubcribe(hardware.id, (response_message_unsubscribe: WebsocketMessage, error_unsubsribe: any) => {
 
+            if (response_message_unsubscribe && response_message_unsubscribe.status == 'success') {
 
-        // Zde se odhlásíme a příhlásíme k s novým loglevelem
-        this.onHardwareUnSubscribeClick(hardware);
-        this.onHardwareSubscribeClick(hardware, this.logLevel[hardware.id].log);
+                this.logLevel[hardware.id].socket.requestDeviceTerminalSubcribe(hardware.id, logLevel , (response_message_subscribe: WebsocketMessage, error_subsrribe: any) => {
 
+                    if (response_message_unsubscribe && response_message_unsubscribe.status == 'success') {
+
+                        this.logLevel[hardware.id].log = logLevel;
+
+                    }else {
+                        console.error('onUserChangeLogLevelClick:: Subsrcibe Hardware', hardware.id, 'LogLevel', logLevel, 'Error', error_subsrribe);
+                    }
+
+                });
+            }else {
+                console.error('onUserChangeLogLevelClick:: Unsubsribe Hardware', hardware.id, 'LogLevel', logLevel, 'Error', error_unsubsribe);
+            }
+
+        });
     }
 
     /**
@@ -381,8 +368,9 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
         console.log('onUserChangeColorClick:: Hardware', hardware.id, 'Color', color);
 
-        // Set New Default Values
-        // TODO změna barvy v tewrminálu
+        this.colorForm.controls['color_' + hardware.id].setValue(color);
+        this.consoleLog.set_color(hardware.id, this.colorForm.controls['color_' + hardware.id].value);
+
     }
 
     /**
@@ -390,6 +378,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param hardware
      */
     removeHardwareFromSubscribeList(hardware: IHardware): void {
+        console.log('removeHardwareFromSubscribeList: Hardware::', hardware.id);
         this.onHardwareUnSubscribeClick(hardware);
         for(let i = this.selected_hw_for_subscribe.length - 1; i >= 0; i--) {
             if(this.selected_hw_for_subscribe[i].id === hardware.id) {
@@ -400,6 +389,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
 
     addNewHardwareToSubscribeModal(): void {
+        console.log('addNewHardwareToSubscribeModal: ');
         let m = new ModalsSelectHardwareModel(this.project_id);
         this.modalService.showModal(m)
             .then((success) => {
@@ -425,35 +415,43 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      */
     public addNewHardwareToSubscribeList(hardware: IHardware, color: string = '#0082c8'): void {
 
+        console.log('addNewHardwareToSubscribeList: hardware:: ', hardware.id, 'color: ', color);
+
         this.colorForm.addControl('color_' + hardware.id, new FormControl('color_' + hardware.id));
         this.colorForm.addControl('log_' + hardware.id, new FormControl('log_' + hardware.id));
 
         this.colorForm.controls['color_' + hardware.id].setValue(color);
         this.colorForm.controls['log_' + hardware.id].setValue('info');
 
-        if (this.selected_hw_for_subscribe.find(hw => {
-                // Pokud nenajdeme HW, se stejným portem nebo server URL, pošleme novej pořadavek na připojení HW
-                if (hw.server.id !== hardware.server.id) {
-                    return true;
+        console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe size: ', this.selected_hw_for_subscribe.length);
+        console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe: ', this.selected_hw_for_subscribe);
+
+
+        this.tyrionBackendService.getWebsocketService()
+            .connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString(),(socket: WebsocketClientHardwareLogger, error: any) => {
+
+                if (socket) {
+
+                    // Set Default Values
+                    this.logLevel[hardware.id] = {
+                        log: 'info',
+                        subscribed: false,
+                        socket: socket
+                    };
+
+                    this.selected_hw_for_subscribe.push(hardware);
+
+                    this.onHardwareSubscribeClick(hardware, this.logLevel[hardware.id].log);
+
+                    socket.onLogsCallback = (log: ITerminalWebsocketMessage) => this.onMessage(log);
+
+                    this.consoleLog.add('output', 'Initializing the device. More information in settings', hardware.id, hardware.name);
+                    this.consoleLog.set_color(hardware.id, this.colorForm.controls['color_' + hardware.id].value);
+
+                }else {
+                    console.error('addNewHardwareToSubscribeList: Connection Error ', error);
                 }
-            })) {
-            if(hardware.server) {
-                this.tyrionBackendService.connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString());
-            }
-        }
-
-
-        // Set Default Values
-        this.logLevel[hardware.id] = {
-            log: 'info',
-            subscribed: false
-        };
-
-        this.selected_hw_for_subscribe.push(hardware);
-
-        this.onHardwareSubscribeClick(hardware, this.logLevel[hardware.id].log);
-        // this.colorForm.controls['color' + board.id].setValue('#0000FF'); // přidáme do console.log barvu
-        this.consoleLog.add('output', 'Initializing the device, more info in settings', hardware.id, hardware.id);
+        });
 
     }
 

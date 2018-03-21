@@ -9,7 +9,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
     selector: 'bk-view-projects-project-actualization-procedure',
     templateUrl: './projects-project-actualization-procedure.html',
 })
-export class ProjectsProjectActualizationProcedureComponent extends _BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectActualizationProcedureComponent extends _BaseMainComponent implements OnInit {
 
     projectId: string;
     project: IProject = null;
@@ -33,13 +33,6 @@ export class ProjectsProjectActualizationProcedureComponent extends _BaseMainCom
             this.projectId = params['project'];
             this.refresh();
         });
-    }
-
-    ngOnDestroy(): void {
-        this.routeParamsSubscription.unsubscribe();
-        if (this.projectSubscription) {
-            this.projectSubscription.unsubscribe();
-        }
     }
 
     refresh(): void {

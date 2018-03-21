@@ -24,7 +24,6 @@ import { BreadcrumbsService } from './services/BreadcrumbsService';
 import { ValidatorErrorsService } from './services/ValidatorErrorsService';
 import { CurrentParamsService } from './services/CurrentParamsService';
 import { NotificationService } from './services/NotificationService';
-import { HomerService } from './services/HomerService';
 import { FormColorPickerComponent } from './components/FormColorPickerComponent';
 import { FormFAIconSelectComponent } from './components/FormFAIconSelectComponent';
 import { FormInputComponent } from './components/FormInputComponent';
@@ -169,7 +168,7 @@ import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoList
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
 import { TyrionComponent } from './views/admin-tyrion';
-import { LogLevelComponent, OnlineStateComponent} from './components/OnlineStateComponent';
+import { LogLevelComponent, OnlineStateComponent } from './components/OnlineStateComponent';
 import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
 import { CompilationStatusComponent } from './components/CompilationStatusComponent';
 import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
@@ -457,7 +456,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ExitConfirmationService,
         GoPayLoaderService,
         TranslationService,
-        HomerService,
         { provide: 'routes', useValue: routes },
         { provide: 'navigation', useValue: navigation },
         { provide: 'tabMenus', useValue: tabMenus },

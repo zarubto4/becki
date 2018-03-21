@@ -52,7 +52,7 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     deviceInfoTextForm: FormGroup;
 
-    registredDevices: string[] = [];
+    registeredDevices: string[] = [];
     failedDevices: string[] = [];
 
     afterFirstConfirm: boolean = false;
@@ -123,7 +123,7 @@ export class ModalsAddHardwareComponent implements OnInit {
     }
 
     sequenceRegistration() {
-        this.registredDevices = [];
+        this.registeredDevices = [];
         this.failedDevices = [];
 
         if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.content.length > 0) {
@@ -145,7 +145,7 @@ export class ModalsAddHardwareComponent implements OnInit {
             })
                 .then(() => {
 
-                    this.registredDevices.push(device);
+                    this.registeredDevices.push(device);
                     devicesForRegistration.splice(devicesForRegistration.indexOf(device), 1);
                 })
                 .catch(reason => {
@@ -153,7 +153,7 @@ export class ModalsAddHardwareComponent implements OnInit {
                 }).then(() => {
                     if (devicesForRegistration.length > 0) {
                         this.multiForm.controls['listOfIds'].setValue(devicesForRegistration.join(';'));
-                        this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registredDevices.join(',  \n'));
+                        this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registeredDevices.join(',  \n'));
                         this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
                     } else {
                         this.modalClose.emit(true);
@@ -167,14 +167,12 @@ export class ModalsAddHardwareComponent implements OnInit {
 
         this.single_error_message = null;
 
-        let groupIDs: string[] = [];
-
         if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.content.length > 0) {
             this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
         }
 
         this.backendService.projectAddHW({
-            group_ids: groupIDs,
+            group_ids: this.multiSelectedHardwareGroups,
             registration_hash: this.form.controls['id'].value,
             project_id: this.modalModel.project_id
         })

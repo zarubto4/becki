@@ -1,10 +1,8 @@
-import { IWebSocketErrorMessage } from '../../backend/BeckiBackend';
-/**
- * Created by zaruba on 19.02.18.
- */
 
 
 // INTERFACES - Compiler
+import { IWebSocketErrorMessage } from '../websocket/Websocket_Client_Tyrion';
+
 export interface ICodeCompileErrorMessage {
     filename: string;
     type: string;

@@ -1,8 +1,8 @@
+"use strict";
 /**
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-"use strict";
 exports.__esModule = true;
 var program = require("commander");
 var fs_1 = require("fs");
@@ -520,3 +520,4 @@ console.log(chalk.magenta('██████╔╝╚██████╔╝�
 console.log(chalk.magenta('╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝'));
 console.log();
 /* tslint:enable */
+//# sourceMappingURL=generator.js.map

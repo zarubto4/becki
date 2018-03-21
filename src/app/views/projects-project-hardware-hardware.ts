@@ -11,14 +11,9 @@ import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
-import { OnlineChangeStatus, TyrionApiBackend, ITerminalWebsocketMessage, IWebsocketTerminalState } from '../backend/BeckiBackend';
-import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import { ConsoleLogComponent, ConsoleLogType, ConsoleLogItem } from '../components/ConsoleLogComponent';
-import { FormGroup, FormControl } from '@angular/forms';
 import { ModalsHardwareRestartMQTTPassModel } from '../modals/hardware-restart-mqtt-pass';
-import * as Rx from 'rxjs';
 import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-server';
 import { _BaseMainComponent } from './_BaseMainComponent';
 
@@ -381,7 +376,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 if (success) {
                     this.blockUI();
                     this.tyrionBackendService.hardwareUpdateBootloader({
-                        device_ids: [this.hardware.id]
+                        device_ids: [this.hardware.id],
+                        bootloader_id: this.hardware.available_latest_bootloader.id
                     })
                         .then(() => {
                             this.refresh();

@@ -16,7 +16,6 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
-import { HomerService, HomerDao } from '../services/HomerService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -25,6 +24,8 @@ import { OnlineChangeStatus, TyrionApiBackend } from '../backend/BeckiBackend';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 import { ModalsSelectVersionModel } from '../modals/version-select';
 import { DraggableEventParams } from '../components/DraggableDirective';
+import { WebsocketClientBlockoView } from '../services/websocket/Websocket_Client_BlockoView';
+import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
 
 
 @Component({
@@ -51,7 +52,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     bindings: BlockoCore.BoundInterface[] = [];
 
     gridUrl: string = '';
-
     instanceStatus: OnlineChangeStatus;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
@@ -76,7 +76,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
 
-    homerDao: HomerDao;
+    homerDao: WebsocketClientBlockoView;
 
     tab: string = 'overview';
 
@@ -87,12 +87,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         cursorAt: { left: -5, top: -5 }
     };
 
-    private homerService: HomerService = null;
     private liveViewLoaded: boolean = false;
 
     constructor(injector: Injector) {
         super(injector);
-        this.homerService = injector.get(HomerService);
 
         this.tyrionBackendService.onlineStatus.subscribe((status) => {
             if (status.model === 'HomerInstance' && this.instanceId === status.model_id) {
@@ -193,7 +191,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             if (this.liveViewLoaded) {
                 this.liveViewLoaded = false;
                 if (this.homerDao) {
-                    this.homerDao.close();
+                    this.homerDao.disconnectWebSocket();
                     this.homerDao = null;
                 }
             }
@@ -204,7 +202,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.routeParamsSubscription.unsubscribe();
 
         if (this.homerDao) {
-            this.homerDao.close();
+            this.homerDao.disconnectWebSocket();
             this.homerDao = null;
         }
     }
@@ -542,20 +540,37 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.liveView.setDataJson(this.instance.current_snapshot.program);
 
                 if (this.instance.instance_remote_url) {
-                    const authToken = TyrionApiBackend.getToken();
-                    this.homerDao = this.homerService.connectToHomer(this.instance.instance_remote_url, authToken);
 
-                    this.homerDao.onOpenCallback = (e) => {
-                        this.homerDao.sendMessage({
-                            message_type: 'get_values'
-                        });
+                    this.tyrionBackendService.getWebsocketService().connectBlockoInstanceWebSocket(this.instance.instance_remote_url, (socket: WebsocketClientBlockoView, error: any) => {
 
-                        this.homerDao.sendMessage({
-                            message_type: 'get_logs'
-                        });
-                    };
+                        if (socket) {
+                            this.homerDao = socket;
 
-                    this.homerDao.onMessageCallback = (m: any) => this.homerMessageReceived(m);
+                            this.homerDao.onOpenCallback = (e) => {
+
+                                this.homerDao.requestGetValues(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
+                                    if (response_message) {
+                                        this.homerMessageReceived(response_message);
+                                    } else {
+                                        console.error('this.homerDao.requestGetValues Error: ', error_response);
+                                    }
+                                });
+
+                                this.homerDao.requestGetLogs(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
+                                    if (response_message) {
+                                        this.homerMessageReceived(response_message);
+                                    } else {
+                                        console.error('this.homerDao.requestGetValues Error: ', error_response);
+                                    }
+                                });
+
+                            };
+
+                        } else {
+                            console.error('connectBlockoInstanceWebSocket:: ', error);
+                        }
+
+                    });
                 }
             }
         });

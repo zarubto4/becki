@@ -614,9 +614,9 @@ span.changes {
 }
 
 .console-log-table-wrapper .table tbody > tr > td {
-    padding: 2px;
+    // padding: 2px;
     font-size: 12px;
-    border-bottom: 1px solid #ccc;
+    // border-bottom: 1px solid #ccc;
 }
 
 .console-log-timestamp {
@@ -635,7 +635,7 @@ span.changes {
     position: relative;
     white-space: nowrap;
     float: left;
-    padding-right: 25px;
+    padding-right: 15px;
 }
 
 .console-log-message {

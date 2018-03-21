@@ -1,21 +1,17 @@
 import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {
-    IHardware, IBootLoader, ICProgramVersion, IGarfield, IHardwareNewSettingsResult, IHomerServer,
-    IPrinter, IHardwareType
-} from '../backend/TyrionAPI';
+import { IHardware, IBootLoader, ICProgramVersion, IGarfield, IHardwareNewSettingsResult, IHomerServer, IPrinter, IHardwareType } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {
-    TyrionApiBackend, IWebSocketGarfieldDeviceConnect, IWebSocketGarfieldDeviceConfigure, IWebSocketMessage,
-    IWebSocketGarfieldDeviceBinary, IWebSocketGarfieldDeviceTest
-} from '../backend/BeckiBackend';
+import { TyrionApiBackend } from '../backend/BeckiBackend';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
+import { WebsocketClientGardfield } from '../services/websocket/Websocket_Client_Gardfield';
+import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
 
 @Component({
     selector: 'bk-view-garfield-garfield',
@@ -29,13 +25,13 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     device: IHardwareNewSettingsResult = null;
     deviceId: string = null;
 
-    firmwareTestMainVersion: ICProgramVersion = null;    // Main Test Firmware
-    firmwareMainVersion: ICProgramVersion = null;        // Main Production Firmware
+    firmwareTestMainVersion: ICProgramVersion = null; // Main Test Firmware
+    firmwareMainVersion: ICProgramVersion = null;     // Main Production Firmware
     bootLoader: IBootLoader = null;
-    mainServer: IHomerServer = null;           // Destination for Server registration
-    backupServer: IHomerServer = null;         // Destination for Server registration (backup)
+    mainServer: IHomerServer = null;   // Destination for Server registration
+    backupServer: IHomerServer = null; // Destination for Server registration (backup)
 
-    productionBatchForm: FormGroup; // Burn Info Batch Form HardwareType.batch
+    productionBatchForm: FormGroup;    // Burn Info Batch Form HardwareType.batch
     batchOptions: FormSelectComponentOption[] = null;
     batch: string = null;
 
@@ -45,9 +41,9 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     printer_label_2: IPrinter = null; // Printer
     print_sticker: IPrinter = null;   // Printer
 
-    garfieldAppConnected: boolean = false; // Flag Register for initialization of connection (garfield desktop app)
-    garfieldTesterConnected: boolean = false; // Flag Register for initialization of connection (garfield Kit)
-    testHardwareConnected: boolean = false; // Flag Register for initialization of connection (Device for testing)
+    garfieldAppConnected: boolean = false;      // Flag Register for initialization of connection (garfield desktop app)
+    garfieldTesterConnected: boolean = false;   // Flag Register for initialization of connection (garfield Kit)
+    testHardwareConnected: boolean = false;     // Flag Register for initialization of connection (Device for testing)
 
     garfieldAppDetection: any = null;
 
@@ -55,7 +51,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
     actions: GarfieldAction[] = [];
 
-    messageBuffer: GarfieldRequest[] = [];
+    // Socket
+    websocket: WebsocketClientGardfield = null;
 
     // For checking online state on printers
     reloadInterval: any = null;
@@ -64,7 +61,6 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     errorStep: number = 0; // Made Step to Red
 
     routeParamsSubscription: Subscription;
-    wsMessageSubscription: Subscription;
 
     testConfig: string = null;
 
@@ -164,26 +160,39 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
             'test_config': ['', [Validators.required]]
         });
 
-        this.wsMessageSubscription = this.tyrionBackendService.garfieldRecived.subscribe(msg => this.onMessage(msg));
 
-        let message: IWebSocketMessage = {
-            message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'subscribe_garfield',
-            message_id: this.tyrionBackendService.uuid()
-        };
+        this.tyrionBackendService.getWebsocketService().connectGarfieldWebSocket( (socket: WebsocketClientGardfield, error: any) =>  {
+            if (socket) {
+                socket.onMessageCallback = (m: WebsocketMessage) => this.onMessage(m);
+                this.websocket = socket;
 
-        this.tyrionBackendService.sendWebSocketMessage(message);
+                this.websocket.requestSubscribe((response_message: WebsocketMessage, error_response: any) =>  {
+                    if (response_message) {
+                        // Nothing
+                        this.fmInfo(this.translate('flash_garfield_connected'));
+                    } else {
+                        console.error('connectGarfieldWebSocket:: requestSubscribe:: Error', error_response);
+                    }
+                });
+
+            } else {
+                console.error('connectGarfieldWebSocket:: Error', error);
+            }
+        });
     }
 
     ngOnDestroy(): void {
-        let message: IWebSocketMessage = {
-            message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'unsubscribe_garfield',
-            message_id: this.tyrionBackendService.uuid()
-        };
 
-        this.tyrionBackendService.sendWebSocketMessage(message);
-        this.wsMessageSubscription.unsubscribe();
+        if (this.websocket) {
+            this.websocket.requestUnSubscribe((response_message: WebsocketMessage, error_response: any) =>  {
+                if (response_message) {
+                    // Nothing
+                } else {
+                    console.error('connectGarfieldWebSocket:: requestSubscribe:: Error', error_response);
+                }
+            });
+        }
+
         clearInterval(this.reloadInterval);
         clearTimeout(this.garfieldAppDetection);
     }
@@ -460,12 +469,15 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
     setDetection() {
         this.garfieldAppDetection = setTimeout(() => {
-            let msg: IWebSocketMessage = {
-                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-                message_type: 'keepalive',
-                message_id: this.tyrionBackendService.uuid()
-            };
-            this.tyrionBackendService.sendWebSocketMessage(msg);
+
+            this.websocket.requestKeepAlive((response_message: WebsocketMessage, error_response: any) =>  {
+                if (response_message) {
+                    // Nothing
+                } else {
+                    console.error('connectGarfieldWebSocket:: requestKeepAlive:: Error', error_response);
+                }
+            });
+
             this.garfieldAppDetection = setTimeout(() => {
                 this.onDisconnectGarfield();
             }, 20000);
@@ -475,6 +487,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     // Method is used to make sure that device is registered and loaded
     deviceSafe(): Promise<IHardwareNewSettingsResult> {
         return new Promise((resolve, reject) => {
+
             if (this.deviceId) {
                 this.getDeviceOrRegister(this.deviceId)
                     .then((device: IHardwareNewSettingsResult) => {
@@ -497,16 +510,35 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         reject(reason);
                     });
             }
+
         });
     }
 
     getDeviceId(): Promise<any> {
-        let message: IWebSocketMessage = {
-            message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'device_id',
-            message_id: this.tyrionBackendService.uuid()
-        };
-        return this.send(message, 15000);
+        return new Promise((resolve, reject) => {
+            this.websocket.requestGetDeviceID((response_message: WebsocketMessage, error_response: any) =>  {
+
+                if (response_message) {
+                    // Nothing
+
+                    /* tslint:disable */
+                    console.log('getDeviceId:: Resoponse for deviceSafe:: ', response_message);
+                    console.log('getDeviceId:: Device ID ', response_message['device_id']);
+                    /* tslint:enable */
+
+                    resolve(response_message['device_id']);
+                } else {
+                    console.error('getDeviceId:: Error', error_response);
+                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
+                        reject('getDeviceId failed - ' + error_response['error']);
+                    } else if (typeof error_response === 'string') {
+                        reject('getDeviceId failed - ' + error_response);
+                    } else {
+                        reject('getDeviceId failed');
+                    }
+                }
+            });
+        });
     }
 
     getDeviceOrRegister(full_id: string): Promise<IHardwareNewSettingsResult> {
@@ -526,104 +558,85 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
     uploadBootLoaderProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
-            let message: IWebSocketGarfieldDeviceBinary = {
-                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-                message_type: 'device_binary',
-                message_id: this.tyrionBackendService.uuid(),
-                url: this.bootLoader.file_path,
-                type: 'BOOTLOADER'
-            };
-
-            this.send(message, 30000)
-                .then((response) => {
+            this.websocket.requestProductionFirmwareProcess( this.bootLoader.file_path, 'BOOTLOADER', (response_message: WebsocketMessage, error_response: any) =>  {
+                if (response_message) {
+                    // Nothing
                     resolve('bootloader upload successful');
-                })
-                .catch((reason) => {
-                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
-                        reject('bootloader upload failed - ' + reason['error']);
-                    } else if (typeof reason === 'string') {
-                        reject('bootloader upload failed - ' + reason);
+
+                } else {
+                    console.error('uploadBootLoaderProcess:: Error', error_response);
+                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
+                        reject('bootloader upload failed - ' + error_response['error']);
+                    } else if (typeof error_response === 'string') {
+                        reject('bootloader upload failed - ' + error_response);
                     } else {
                         reject('bootloader upload failed');
                     }
-                });
+                }
+            });
         });
     }
 
     uploadTestFirmwareProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
-            let message: IWebSocketGarfieldDeviceBinary = {
-                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-                message_type: 'device_binary',
-                message_id: this.tyrionBackendService.uuid(),
-                url: this.firmwareTestMainVersion.download_link_bin_file,
-                type: 'FIRMWARE'
-            };
-
-            this.send(message, 60000)
-                .then((response) => {
+            this.websocket.requestProductionFirmwareProcess(this.firmwareTestMainVersion.download_link_bin_file, 'FIRMWARE', (response_message: WebsocketMessage, error_response: any) =>  {
+                if (response_message) {
+                    // Nothing
                     resolve('test firmware upload successful');
-                })
-                .catch((reason) => {
-                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
-                        reject('test firmware upload failed - ' + reason['error']);
-                    } else if (typeof reason === 'string') {
-                        reject('test firmware upload failed - ' + reason);
+
+                } else {
+                    console.error('uploadTestFirmwareProcess:: Error', error_response);
+                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
+                        reject('test firmware upload faild - ' + error_response['error']);
+                    } else if (typeof error_response === 'string') {
+                        reject('test firmware upload faild - ' + error_response);
                     } else {
-                        reject('test firmware upload failed');
+                        reject('test firmware upload faild');
                     }
-                });
+                }
+            });
         });
     }
 
     testDeviceProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
-            let message: IWebSocketGarfieldDeviceTest = {
-                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-                message_type: 'device_test',
-                message_id: this.tyrionBackendService.uuid(),
-                test_config: JSON.parse(this.formConfigJson.controls['test_config'].value)
-            };
-
-            this.send(message, 30000)
-                .then((response) => {
+            this.websocket.requestTestConfiguration( JSON.parse(this.formConfigJson.controls['test_config'].value), (response_message: WebsocketMessage, error_response: any) =>  {
+                if (response_message) {
+                    // Nothing
                     resolve('device test successful');
-                })
-                .catch((reason) => {
-                    if (typeof reason === 'object' && reason.hasOwnProperty('errors')) {
-                        reject(reason['errors']);
-                    } else if (typeof reason === 'string') {
-                        reject('device test failed - ' + reason);
+
+                } else {
+                    console.error('testDeviceProcess:: Error', error_response);
+                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
+                        reject('device test  failed - ' + error_response['error']);
+                    } else if (typeof error_response === 'string') {
+                        reject('device test failed - ' + error_response);
                     } else {
                         reject('device test failed');
                     }
-                });
+                }
+            });
         });
     }
 
     uploadProductionFirmwareProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
-            let message: IWebSocketGarfieldDeviceBinary = {
-                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-                message_type: 'device_binary',
-                message_id: this.tyrionBackendService.uuid(),
-                url: this.firmwareMainVersion.download_link_bin_file,
-                type: 'FIRMWARE'
-            };
-
-            this.send(message, 60000)
-                .then((response) => {
+            this.websocket.requestProductionFirmwareProcess(this.firmwareMainVersion.download_link_bin_file, 'FIRMWARE', (response_message: WebsocketMessage, error_response: any) =>  {
+                if (response_message) {
+                    // Nothing
                     resolve('firmware upload successful');
-                })
-                .catch((reason) => {
-                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
-                        reject('firmware upload failed - ' + reason['error']);
-                    } else if (typeof reason === 'string') {
-                        reject('firmware upload failed - ' + reason);
+
+                } else {
+                    console.error('backUpProcess:: Error', error_response);
+                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
+                        reject('firmware upload  failed - ' + error_response['error']);
+                    } else if (typeof error_response === 'string') {
+                        reject('firmware upload failed - ' + error_response);
                     } else {
                         reject('firmware upload failed');
                     }
-                });
+                }
+            });
         });
     }
 
@@ -631,38 +644,22 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         return new Promise((resolve, reject) => {
             this.deviceSafe()
                 .then((device: IHardwareNewSettingsResult) => {
-                    let message: IWebSocketGarfieldDeviceConfigure = {
-                        message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-                        message_type: 'device_configure',
-                        message_id: this.tyrionBackendService.uuid(),
-                        configuration: device.configuration
-                    };
-
-                    if (message.configuration.hasOwnProperty('mac')) {
-                        message.configuration['mac'] = message.configuration['mac'].toLowerCase();
-                    }
-
-                    let configJson: any = JSON.parse(this.formConfigJson.controls['config'].value);
-
-                    for (let key in configJson) {
-                        if (configJson.hasOwnProperty(key)) {
-                            message.configuration[key] = configJson[key];
-                        }
-                    }
-
-                    this.send(message, 60000)
-                        .then((response) => {
+                    this.websocket.requestDeviceConfigure(device.configuration, (response_message: WebsocketMessage, error_response: any) =>  {
+                        if (response_message) {
+                            // Nothing
                             resolve('device configuration successful');
-                        })
-                        .catch((reason) => {
-                            if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
-                                reject('device configuration failed - ' + reason['error']);
-                            } else if (typeof reason === 'string') {
-                                reject('device configuration failed - ' + reason);
+
+                        } else {
+                            console.error('configureDeviceProcess:: Error', error_response);
+                            if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
+                                reject('device configuration failed - ' + error_response['error']);
+                            } else if (typeof error_response === 'string') {
+                                reject('device configuration failed - ' + error_response);
                             } else {
                                 reject('device configuration failed');
                             }
-                        });
+                        }
+                    });
                 })
                 .catch((reason) => {
                     if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
@@ -678,25 +675,21 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
     backUpProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
-            let message: IWebSocketMessage = {
-                message_channel: TyrionApiBackend.WS_CHANNEL_GARFIELD,
-                message_type: 'device_backup',
-                message_id: this.tyrionBackendService.uuid(),
-            };
-
-            this.send(message, 30000)
-                .then((response) => {
+            this.websocket.requestBackupProcess((response_message: WebsocketMessage, error_response: any) =>  {
+                if (response_message) {
+                    // Nothing
                     resolve('device backup successful');
-                })
-                .catch((reason) => {
-                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
-                        reject('device backup failed - ' + reason['error']);
-                    } else if (typeof reason === 'string') {
-                        reject('device backup failed - ' + reason);
+                } else {
+                    console.error('backUpProcess:: Error', error_response);
+                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
+                        reject('device backup failed - ' + error_response['error']);
+                    } else if (typeof error_response === 'string') {
+                        reject('device backup failed - ' + error_response);
                     } else {
                         reject('device backup failed');
                     }
-                });
+                }
+            });
         });
     }
 
@@ -714,24 +707,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         }
     }
 
-    onSubscribeGarfieldMessage(message: IWebSocketMessage) {
-        this.resetDetection();
-        if (!this.garfieldAppConnected) {
-            this.garfieldAppConnected = true;
-            this.fmInfo(this.translate('flash_garfield_connected'));
-        }
-        if (!message['status']) {
-            let msg: IWebSocketMessage = <IWebSocketMessage>{
-                message_id: message.message_id,
-                message_type: message.message_type,
-                message_channel: message.message_channel,
-                status: 'success'
-            };
-            this.tyrionBackendService.sendWebSocketMessage(msg);
-        }
-    }
-
-    onDeviceConnectMessage(message: IWebSocketMessage) {
+    onDeviceConnectMessage(message: WebsocketMessage) {
         if (!(this.garfield
                 && this.hardwareType
                 && this.bootLoader
@@ -749,9 +725,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
         this.device = null;
         this.deviceId = null;
-        let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
-        if (msg.device_id) {
-            this.deviceId = msg.device_id;
+        if (message['device_id']) {
+            this.deviceId = message['device_id'];
         }
         this.beginProcess();
     }
@@ -774,107 +749,15 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         this.fmWarning(this.translate('flash_tester_disconnected'));
     }
 
-    handleSingleMessage(message: IWebSocketMessage) {
+    onMessage(message: WebsocketMessage) {
         switch (message.message_type) {
             case 'keepalive': this.onKeepAliveMessage(); break;
-            case 'subscribe_garfield': this.onSubscribeGarfieldMessage(message); break;
-            case 'unsubscribe_garfield': this.onDisconnectGarfield(); break;
             case 'device_connect': this.onDeviceConnectMessage(message); break;
             case 'device_disconnect': this.onDeviceDisconnectedMessage(); break;
             case 'tester_connect': this.onTesterConnectedMessage(); break;
             case 'tester_disconnect': this.onTesterDisconnectedMessage(); break;
             default: console.warn('Got unknown message:', JSON.stringify(message));
         }
-    }
-
-    onMessage(message: IWebSocketMessage) {
-        // Find the message in buffer
-        let index: number = this.messageBuffer.findIndex((req) => {
-            return req.message.message_type === message.message_type && req.message.message_id === message.message_id;
-        });
-
-        if (index === -1) {
-            this.handleSingleMessage(message); // Message was not response on request
-        } else {
-            let request: GarfieldRequest = this.messageBuffer[index];
-            let status: string = message['status'];
-
-            if (status === 'error') {
-                request.reject(message);
-            } else if (status === 'success') {
-                request.resolve(message);
-            } else {
-                console.warn('Got response on request, but without \'status\', message:', JSON.stringify(message));
-            }
-        }
-    }
-
-    send(message: IWebSocketMessage, timeout: number): Promise<any> {
-        return new Promise((resolve, reject) => {
-            let request: GarfieldRequest = new GarfieldRequest(message, timeout);
-
-            // This will happen if no response was received and time is up
-            let onTimeout = (): void => {
-
-                let index: number = this.messageBuffer.findIndex((req) => {
-                    return req.message.message_id === message.message_id;
-                });
-
-                if (index > 0) {
-                    let requests: GarfieldRequest[] = this.messageBuffer.splice(index, 1);
-                    requests.forEach((r) => { r.reject('timeout for response'); });
-                } else {
-                    console.warn('Timeout for response, but could not found the request in buffer.');
-                }
-            };
-
-            request.setCallbacks(resolve, reject, onTimeout.bind(this));
-            request.startTimeout(); // Begin countdown
-            this.messageBuffer.push(request);
-            this.tyrionBackendService.sendWebSocketMessage(message);
-        });
-    }
-}
-
-export class GarfieldRequest {
-
-    public message: IWebSocketMessage;
-
-    private resolveCallback: (response: IWebSocketMessage) => void;
-    private rejectCallback: (reason: any) => void;
-    private timeout: number = 30000;
-    private onTimeout: () => void;
-    private timeoutHandler;
-
-    constructor(message: IWebSocketMessage, timeout: number) {
-        this.message = message;
-        this.timeout = timeout;
-    }
-
-    public setCallbacks(resolve: (response: IWebSocketMessage) => void, reject: (reason: any) => void, onTimeout: () => void): void {
-        this.resolveCallback = resolve;
-        this.rejectCallback = reject;
-        this.onTimeout = onTimeout;
-    }
-
-    public startTimeout(): void {
-        this.timeoutHandler = setTimeout(this.onTimeout, this.timeout);
-    }
-
-    public resolve(response: IWebSocketMessage): void {
-        if (this.timeoutHandler) {
-            clearTimeout(this.timeoutHandler);
-        }
-
-        this.resolveCallback(response);
-    }
-
-    public reject(response: any): void {
-        if (this.timeoutHandler) {
-            clearTimeout(this.timeoutHandler);
-        }
-
-        this.rejectCallback(response);
     }
 }
 
