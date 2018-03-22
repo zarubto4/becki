@@ -339,11 +339,11 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
         // Set New Default Values
         this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubcribe(hardware.id, (response_message_unsubscribe: WebsocketMessage, error_unsubsribe: any) => {
 
-            if (response_message_unsubscribe && response_message_unsubscribe.status == 'success') {
+            if (response_message_unsubscribe && response_message_unsubscribe.status === 'success') {
 
                 this.logLevel[hardware.id].socket.requestDeviceTerminalSubcribe(hardware.id, logLevel , (response_message_subscribe: WebsocketMessage, error_subsrribe: any) => {
 
-                    if (response_message_unsubscribe && response_message_unsubscribe.status == 'success') {
+                    if (response_message_unsubscribe && response_message_unsubscribe.status === 'success') {
 
                         this.logLevel[hardware.id].log = logLevel;
 
@@ -396,7 +396,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
                 m.selected_hardware.forEach((hw) => {
 
                     if (!this.selected_hw_for_subscribe.find(filter_hw => {
-                            if (filter_hw.id == hw.id) {
+                            if (filter_hw.id === hw.id) {
                                 return true;
                             }
                     })) {

@@ -26,7 +26,11 @@ import { ModalsSelectVersionModel } from '../modals/version-select';
 import { DraggableEventParams } from '../components/DraggableDirective';
 import { WebsocketClientBlockoView } from '../services/websocket/Websocket_Client_BlockoView';
 import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
-
+import { ModalsVersionDialogModel } from '../modals/version-dialog';
+import moment = require('moment/moment');
+import {ModalsBlockoPropertiesModel} from "../modals/blocko-properties";
+import {ModalsCodePropertiesModel} from "../modals/code-properties";
+import {ModalsSnapShotInstanceModel} from "../modals/snapshot-properties";
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -247,8 +251,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     onPortletClick(action: string): void {
         switch (action) {
             case 'change_version_instance': {
-                this.onCreateNewSnapshot();
+                this.onCreateNewSnapshotSelectBProgramVersion();
                 break;
+            }
+            case 'edit_Instance': {
+                this.onEditClick();
             }
             default: console.warn('TODO action for:', action);
         }
@@ -286,7 +293,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }
     }
 
-    onCreateNewSnapshot() {
+    onCreateNewSnapshotSelectBProgramVersion() {
         let m: ModalsSelectVersionModel = new ModalsSelectVersionModel(this.bProgram.program_versions);
         this.modalService.showModal(m)
             .then((success) => {
@@ -322,35 +329,47 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onSaveSnapshotClick = () => {
         if (this.editorView.isDeployable()) {
+            let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
+            this.modalService.showModal(m).then((success) => {
+                if (success) {
 
-            let version_id = null;
+                    this.blockUI();
 
-            if (this.instanceSnapshot) {
-                version_id = this.instanceSnapshot.b_program_version.id;
-            } else if (this.bProgramVersion) {
-                version_id = this.bProgramVersion.id;
-            }
+                    let version_id = null;
 
-            let interfaces: IInterface[] = [];
+                    if (this.instanceSnapshot) {
+                        version_id = this.instanceSnapshot.b_program_version.id;
+                    } else if (this.bProgramVersion) {
+                        version_id = this.bProgramVersion.id;
+                    }
 
-            this.bindings.forEach((binding) => {
-                interfaces.push({
-                    target_id: binding.targetId,
-                    interface_id: binding.interfaceId,
-                    type: binding.targetId.length === 24 ? 'hardware' : 'group'
-                });
+                    let interfaces: IInterface[] = [];
+
+                    this.bindings.forEach((binding) => {
+                        interfaces.push({
+                            target_id: binding.targetId,
+                            interface_id: binding.interfaceId,
+                            type: binding.targetId.length === 24 ? 'hardware' : 'group'
+                        });
+                    });
+
+                    this.tyrionBackendService.instanceSnapshotCreate({
+                        name: m.name,
+                        description: m.description,
+                        instance_id: this.instanceId,
+                        version_id: version_id,
+                        interfaces: interfaces,
+                        snapshot: this.editorView.getDataJson()
+                    }).then((snapshot) => {
+                        this.instanceSnapshot = snapshot;
+                        this.unblockUI()
+                        this.refresh();
+                    }).catch((reason) => {
+                        this.fmError(this.translate('flash_snapshot_save_fail'), reason);
+                    });
+                }
             });
 
-            this.tyrionBackendService.instanceSnapshotCreate({
-                instance_id: this.instanceId,
-                version_id: version_id,
-                interfaces: interfaces,
-                snapshot: this.editorView.getDataJson()
-            }).then((snapshot) => {
-                this.instanceSnapshot = snapshot;
-            }).catch((reason) => {
-                this.fmError(this.translate('flash_snapshot_save_fail'), reason);
-            });
         } else {
             this.fmError(this.translate('flash_not_deployable'));
         }
@@ -400,11 +419,40 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onEditClick() {
-        // TODO
+        let model = new ModalsInstanceEditDescriptionModel(this.instance.id, this.instance.name, this.instance.description);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceEdit(this.instance.id, { name: model.name, description: model.description })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
+                    });
+            }
+        });
     }
 
-    onProcedureClick() {
-        // TODO
+    onEditSnapShotClick(snapShot: IInstanceSnapshot) {
+        let model = new ModalsSnapShotInstanceModel(snapShot.name, snapShot.description, snapShot.tags, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceSnapshotEdit(snapShot.id, {
+                    name: model.name,
+                    description: model.description
+                })
+                    .then((snapShotResponse: IInstanceSnapshot) => {
+                        this.unblockUI()
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_snapshot_cant_update'), reason));
+                    });
+            }
+        });
     }
 
     onInstanceShutdownClick() { // start (True) for Start or (False) for Shutdown

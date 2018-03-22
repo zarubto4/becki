@@ -377,9 +377,9 @@ export class StaticTranslation {
                 'btn_select_version': 'Select',
 
             }, 'ModalsInstanceEditDescriptionComponent': {
-                'title': 'CLOUD Instance Properties',
-                'label_instance_name': 'Instance name (Your private Tag name)',
-                'label_instance_description': 'Instance description (Your private description)',
+                'title': '<strong class="font-color-code">CLOUD</strong> Instance Properties',
+                'label_instance_name': 'Instance name',
+                'label_instance_description': 'Instance description',
 
             }, 'ModalsLibraryPropertiesComponent': {
                 'title_edit': '<strong class="font-color-code">CODE</strong> Library Properties',
@@ -1420,6 +1420,8 @@ export class StaticTranslation {
                 'table_type': 'Update type',
                 'table_progress': 'Progress',
                 'table_state': 'Status',
+                'table_b_program_version_name': '<strong class="font-color-blocko">BLOCKO</strong>Version',
+                'table_b_program_version_description': 'Description',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
@@ -1429,6 +1431,8 @@ export class StaticTranslation {
                 'label_instance_properties': 'properties',
                 'label_instance_name': 'Name',
                 'label_instance_description': 'Description',
+                'label_no_instance_history': 'No instance <strong class="font-color-blocko">BLOCKO</strong> Snap Shots',
+                'label_no_instance_history_comment': 'Each <strong class="font-color-blocko">BLOCKO</strong> program and its versions which are paired with <strong class="font-color-blocko">HARDWARE</strong> are stored as a separate Snap Shots.',
                 'label_instance_id': 'ID',
                 'label_server_name': '<strong class="font-color-cloud">CLOUD</strong> Server',
                 'label_instance_status': 'Status',

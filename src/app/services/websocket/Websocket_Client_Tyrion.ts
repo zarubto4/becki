@@ -1,45 +1,68 @@
 import { IndividualWebSocketOutComingMessage, WebsocketClientAbstract } from './Websocket_Client_Abstract';
-import {ModelChangeStatus, OnlineChangeStatus, TyrionApiBackend} from '../../backend/BeckiBackend';
+import { ModelChangeStatus, OnlineChangeStatus, TyrionApiBackend } from '../../backend/BeckiBackend';
 import { WebsocketMessage } from './WebsocketMessage';
 import { INotification, IWebSocketToken } from '../../backend/TyrionAPI';
 
 
 export class WebsocketClientTyrion extends WebsocketClientAbstract {
 
-    private websocket: WebsocketClientAbstract = null;
-
     public constructor(protected backend: TyrionApiBackend, public websocketUrl: string, public wss: boolean = false) {
 
         super(websocketUrl, wss);
-        console.log('WebsocketClientTyrion- GET WebSocket Token for Connection');
-        backend.websocketGetAccessToken()
-            .then((webSocketToken: IWebSocketToken) => {
-                this.websocket.url += webSocketToken.websocket_token;
-                this.connectWs();
-            });
 
         super.onMessageCallback = (m: WebsocketMessage) => this.onMessageReceive(m);
         super.onOpenCallback = (e) => {
-            // Do something
+            this.requestNotificationsSubscribe( (response: WebsocketMessage, error: any) => {
+
+                if (response && response.status === 'success') {
+                    // Nothing
+                }else {
+                    console.error('WebsocketClientTyrion: requestNotificationsSubscribe:: ERRTOR: ',  error);
+                }
+
+            });
         };
+
+        super.onError = (e: any) => this.onErrorOrClose(e);
+    }
+
+    public onReady() {
+        console.log('WebsocketClientTyrion: onReady:: ');
+        this.backend.websocketGetAccessToken()
+            .then((webSocketToken: IWebSocketToken) => {
+                console.log('WebsocketClientTyrion: websocketGetAccessToken:: token:', webSocketToken.websocket_token);
+                this.url = this.websocketUrl + webSocketToken.websocket_token;
+                console.log('WebsocketClientTyrion: websocketGetAccessToken:: total URL:', this.url);
+                this.connectWs();
+            });
+    }
+
+    public onErrorOrClose(e: any) {
+        console.error('WebsocketClientTyrion: onErrorOrClose:: ', e);
+        this.backend.websocketGetAccessToken()
+            .then((webSocketToken: IWebSocketToken) => {
+                this.url = this.websocketUrl + webSocketToken.websocket_token;
+                this.connectWs();
+            });
     }
 
 
     /***** ON MESSAGES *******/
     onMessageReceive(m: WebsocketMessage) {
 
+        console.log('WebsocketClientTyrion:: onMessageReceive:: ', m);
         if (m.message_type === 'ping') {
             let message = new IWebSocketPingResponse();
             message.message_id = m.message_id;
-            this.websocket.send_without_callback(WebsocketMessage.fromOutComingMessage(message));
+            this.send_without_callback(WebsocketMessage.fromOutComingMessage(message));
         }
 
         if (m.message_type === 'online_status_change') {
 
             let status: OnlineChangeStatus = {
-                model: m['model'],
-                model_id: m['model_id'],
-                online_state: m['online_state']
+                model: m.data['model'],
+                model_id: m.data['model_id'],
+                online_state: m.data['online_state']
             };
 
             this.backend.onlineStatus.next(status);
@@ -48,8 +71,8 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
         if (m.message_type === 'becki_object_update') {
 
             let status: ModelChangeStatus = {
-                model: m['model'],
-                model_id: m['model_id'],
+                model: m.data['model'],
+                model_id: m.data['model_id'],
             };
 
             this.backend.objectUpdateTyrionEcho.next(status);
@@ -71,13 +94,13 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
     public requestNotificationsSubscribe(callback: (response_message: WebsocketMessage, error: any) => void) {
 
         let message = new IWebSocketSubscribeNotification();
-        this.websocket.send_with_callback(WebsocketMessage.fromOutComingMessage(message), 2000, 0, 3, callback);
+        this.send_with_callback(WebsocketMessage.fromOutComingMessage(message), 2000, 0, 3, callback);
     }
 
     public requestNotificationsUnsubscribe( callback: (response_message: WebsocketMessage, error: any) => void) {
 
         let message = new IWebSocketUNSubscribeNotification();
-        this.websocket.send_with_callback(WebsocketMessage.fromOutComingMessage(message), 2000, 0, 3, callback);
+        this.send_with_callback(WebsocketMessage.fromOutComingMessage(message), 2000, 0, 3, callback);
     }
 
 }
@@ -96,7 +119,7 @@ export class IWebSocketSubscribeNotification extends IndividualWebSocketOutComin
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.TYRION_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
@@ -108,7 +131,7 @@ export class IWebSocketUNSubscribeNotification extends IndividualWebSocketOutCom
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.TYRION_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
@@ -121,7 +144,7 @@ export class IWebSocketPingResponse extends IndividualWebSocketOutComingMessage 
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.TYRION_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 

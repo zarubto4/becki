@@ -17,6 +17,8 @@ export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
         super.onOpenCallback = (e) => {
             // Do something
         };
+
+        super.onError = (e: any) => this.reconnectWebSocketAfterTimeout(e);
     }
 
 
@@ -70,6 +72,19 @@ export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
         super.send_with_callback(WebsocketMessage.fromOutComingMessage(message), 2000, 0, 3, callback);
     }
 
+    // define function as property is needed to can set it as event listener (class methods is called with wrong this)
+    protected reconnectWebSocketAfterTimeout = (e) => {
+
+        /* tslint:disable */
+        console.log('WebsocketClientHardwareLogger::reconnectWebSocketAfterTimeout()');
+        console.log(e);
+        /* tslint:enable */
+
+        clearTimeout( this._webSocketReconnectTimeout );
+        this._webSocketReconnectTimeout = setTimeout(() => {
+            this.connectWs();
+        }, this._websocketReconnectTime);
+    }
 }
 
 

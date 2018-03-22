@@ -205,6 +205,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     private setToken(token: string, withRefreshPersonalInfo = true): void {
+        console.log('set_token');
         window.localStorage.setItem('auth_token', token);
         if (withRefreshPersonalInfo) {
             this.refreshPersonInfo();
@@ -279,14 +280,18 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     // PERSON INFO
     public refreshPersonInfo(): void {
+        console.log('refreshPersonInfo');
         this.personInfoSnapshotDirty = true;
         if (TyrionApiBackend.tokenExist()) {
+            this.getTyrionWebsocketConnection().onReady();
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
+                    console.log(lr);
                     this.personPermissions = lr.permissions;
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;
                     this.personInfo.next(this.personInfoSnapshot);
+
                 })
                 .catch((error) => {
                     console.error(error);
@@ -294,13 +299,11 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = null;
                     this.personInfo.next(this.personInfoSnapshot);
-                    this.getTyrionWebsocketConnection().disconnectWebSocket();
                 });
         } else {
             this.personInfoSnapshotDirty = false;
             this.personInfoSnapshot = null;
             this.personInfo.next(this.personInfoSnapshot);
-            this.getTyrionWebsocketConnection().disconnectWebSocket();
         }
     }
 

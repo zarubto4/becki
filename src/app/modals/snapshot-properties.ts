@@ -9,36 +9,29 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
-import { IHardwareType } from '../backend/TyrionAPI';
 
-export class ModalsCodePropertiesModel extends ModalModel {
+export class ModalsSnapShotInstanceModel extends ModalModel {
     constructor(
-        public hardwareTypes: IHardwareType[],
         public name: string = '',
         public description: string = '',
-        public hardware_type_id: string = '',
         public tags: string[] = [],
         public edit: boolean = false,
-        public exceptName: string = null,
-        public copy: boolean = false,
     ) {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-code-properties',
+    selector: 'bk-modals-snap-shot-instance',
     templateUrl: './code-properties.html'
 })
-export class ModalsCodePropertiesComponent implements OnInit {
+export class ModalsSnapShotInstanceComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsCodePropertiesModel;
+    modalModel: ModalsSnapShotInstanceModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
-
-    options: FormSelectComponentOption[] = null;
 
     form: FormGroup;
 
@@ -46,18 +39,11 @@ export class ModalsCodePropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (!this.modalModel.edit) {
-            this.options = formSelectComponentOptionsMaker(this.modalModel.hardwareTypes, 'id', 'name');
-        }
         let input: { [key: string]: any } = {
             'name': [this.modalModel.name, [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
             'description': [this.modalModel.description],
             'tags': [this.modalModel.tags]
         };
-
-        if (this.modalModel.edit === false) {
-            input['hardware_type_id'] = [this.modalModel.hardware_type_id, [Validators.required]];
-        }
 
         this.form = this.formBuilder.group(input);
     }
@@ -67,9 +53,6 @@ export class ModalsCodePropertiesComponent implements OnInit {
     onSubmitClick(): void {
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
-        if (this.modalModel.edit === false) {
-            this.modalModel.hardware_type_id = this.form.controls['hardware_type_id'].value;
-        }
         this.modalClose.emit(true);
     }
 

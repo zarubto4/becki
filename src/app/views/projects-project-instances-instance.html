@@ -24,7 +24,7 @@
                           btn_tag: 'edit_Instance'
                       },
                       {
-                          condition: (tab == 'overview' && instance.current_snapshot),
+                          condition: (tab == 'overview' && instance.current_snapshot && instance.online_state != 'SHUT_DOWN'),
                           btn_label_for_person: ('label_deactivate_instance'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'DEACTIVE',
@@ -38,7 +38,7 @@
                           btn_tag: 'active_instance'
                       },
                       {
-                          condition: (tab === 'overview' && instance.snapshots.length === 0),
+                          condition: (tab === 'overview'),
                           btn_label_for_person: ('btn_select_cloud_version'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'UPDATE',
@@ -123,10 +123,10 @@
                         <br>
                         <div>
                             <div>
-                                <span [innerHTML]="'label_b_program_name'|bkTranslate:this"></span>: <a (click)="onBlockoProgramClick(instance.b_program.id)">{{instance.b_program.name}}</a>
+                                <span [innerHTML]="'label_b_program_name'|bkTranslate:this"></span>: <a (click)="onBProgramClick(instance.b_program.id)">{{instance.b_program.name}}</a>
                             </div>
                             <div>
-                                <span [innerHTML]="'label_b_program_description'|bkTranslate:this"></span>{{instance.b_program.description}}
+                                <span [innerHTML]="'label_b_program_description'|bkTranslate:this"></span>: {{instance.b_program.description}}
                             </div>
 
                             <div *ngIf="instance.current_snapshot">
@@ -544,6 +544,58 @@
         <div *ngIf="tab == 'debug'">
         </div>
 
+        <div *ngIf="tab == 'history' && instance">
+
+            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th [innerHTML]="'table_b_program_version_name'|bkTranslate:this"></th>
+                        <th [innerHTML]="'table_b_program_version_description'|bkTranslate:this"></th>
+                        <th class="text-right">{{'table_actions'|bkTranslate:this}}   </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let snapshot of instance.snapshots">
+                        <td class="vert-align">{{snapshot.name}}</td>
+                        <td class="vert-align">{{snapshot.description}}</td>
+                        <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a></td>
+                        <td class="vert-align">{{snapshot.b_program_version.description}}</td>
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+
+
+                            <button title="{{'label_blocko_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!snapshot.update_permission" (click)="onEditSnapShotClick(snapshot)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+                            <button title="{{'label_blocko_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!snapshot.delete_permission" (click)="onRemoveClick(snapshot)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(instance.snapshots == null)"
+                                [condition_empty]="(instance.snapshots != null && instance.snapshots.length == 0)"
+                                [main_message_link]="'label_no_instance_history'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_instance_history_comment'|bkTranslate:this"
+                                [btn_label]="'btn_add_blocko_program'|bkTranslate:this"
+                                (onButtonClick)="onAddClick()">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+
+        </div>
     </div>
 
 </bk-layout-main>

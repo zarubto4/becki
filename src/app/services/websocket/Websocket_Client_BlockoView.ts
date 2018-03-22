@@ -8,6 +8,8 @@ export class WebsocketClientBlockoView extends  WebsocketClientAbstract {
     public constructor(public websocketUrl: string) {
         super(websocketUrl);
         this.connectWs();
+
+        super.onError = (e: any) => this.reconnectWebSocketAfterTimeout(e);
     }
 
     /***** Requests *******/
@@ -43,6 +45,21 @@ export class WebsocketClientBlockoView extends  WebsocketClientAbstract {
         message.version_id = version_id;
 
         super.send_with_callback(WebsocketMessage.fromOutComingMessage(message), 2000, 0, 3, callback);
+    }
+
+
+    // define function as property is needed to can set it as event listener (class methods is called with wrong this)
+    protected reconnectWebSocketAfterTimeout = (e) => {
+
+        /* tslint:disable */
+        console.log('WebsocketClientBlockoView::reconnectWebSocketAfterTimeout()');
+        console.log(e);
+        /* tslint:enable */
+
+        clearTimeout( this._webSocketReconnectTimeout );
+        this._webSocketReconnectTimeout = setTimeout(() => {
+            this.connectWs();
+        }, this._websocketReconnectTime);
     }
 
 }

@@ -214,6 +214,9 @@
             <template [ngSwitchCase]="'ModalsSelectProgramVersionModel'">
                 <bk-modals-program-version-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-program-version-select>
             </template>
+            <template [ngSwitchCase]="'ModalsSnapShotInstanceModel'">
+                <bk-modals-snap-shot-instance [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-snap-shot-instance>
+            </template>
         </div>
     </div>
 </div>

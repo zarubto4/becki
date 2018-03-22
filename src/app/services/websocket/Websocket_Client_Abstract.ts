@@ -21,23 +21,23 @@ export abstract class WebsocketClientAbstract {
     public static HOMER_HARDWARE_SUBSCRIBER = 'hardware-logger';
     public static GARFIELD_CHANNEL_NAME = 'garfield';
     public static TYRION_CHANNEL_NAME = 'tyrion';
+    public static BECKI_CHANNEL_NAME = 'becki';
 
     protected _websocket: WebSocket = null;                      // JS knihovna s Websocketem
     protected _messageBuffer = new WebsocketMessageBuffer();    // Buffer na odeslané zprávy, na které je vyžadovaný callback
     protected _websocketReconnectTime: number = 5000;           // Čas k obnovovení v ms
     protected _webSocketReconnectTimeout: any;
+
+    // Callbacks
     protected _onMessageCallback: ((m: WebsocketMessage) => void);
     protected _onOpenCallback: ((e: any) => void);
-
-    protected _messageCallbacks: ((message: WebsocketMessage, websocket: WebSocket) => boolean)[] = [];
-    protected _notCaughtReplyMessageCallback: (message: string|WebsocketMessage) => string|WebsocketMessage = null;
+    protected _onErrorCallback: ((e: any) => void);
 
     /**
      * @param url: Adresa  -  bez wss Portu pokud je vyžadován (Nepřekryt C_Name doménou)
      * @param wss: true pokud je wss požadováno
      */
     constructor(public url: string, public wss: boolean = false) {
-
         if (!wss) {
             this.url = 'ws://' + url;
         }else {
@@ -45,25 +45,12 @@ export abstract class WebsocketClientAbstract {
         }
     }
 
-    public setNotCaughtReply(messageCallback: (message: string|WebsocketMessage) => string|WebsocketMessage): void {
-        this._notCaughtReplyMessageCallback = messageCallback;
-    }
-
-    public registerMessageCallback(cb: (message: WebsocketMessage, websocket: WebSocket) => boolean): void {
-        this._messageCallbacks.push(cb);
-    }
-
-    public unregisterMessageCallback(cb: (message: WebsocketMessage, websocket: WebSocket) => boolean): void {
-        let i = this._messageCallbacks.indexOf(cb);
-        if (i > -1) {
-            this._messageCallbacks.splice(i, 1);
-        }
-    }
-
     public disconnectWebSocket(): void {
         console.error('disconnectWebSocket()');
         if (this._websocket) {
-            this._websocket.removeEventListener('close', this.reconnectWebSocketAfterTimeout);
+            this._websocket.removeEventListener('close', (e) => this.onError(e));
+            this._websocket.removeEventListener('onerror', (e) => this.onError(e));
+            this._websocket.removeEventListener('onclose', (e) => this.onError(e));
             this._websocket.close();
         }
         this._websocket = null;
@@ -131,34 +118,47 @@ export abstract class WebsocketClientAbstract {
         this._onOpenCallback = callback;
     }
 
+
+    /**
+     *
+     * Set callback to on open event
+     *
+     */
+    public set onErrorCallback(callback: ((e: any) => void)) {
+        this._onErrorCallback = callback;
+    }
     /**
      * Obsluha Knihovny Websocketu.
      * Obnova / Odesílání dat / Příjem Zpráv (Přesměrovány do this.processData(..))
      */
     public connectWs() {
+        if (!(this.url.includes('ws://') || this.url.includes('wss://'))) {
+            if (!this.wss) {
+                this.url = 'ws://' + this.url;
+            }else {
+                this.url = 'wss://' + this.url;
+            }
+        }
         // Logger.info('TyrionWebsocketClient:: MainServer Connection:: reconnect to Main server url:: ',this.websocketUrl);
         this._websocket = new WebSocket(this.url);
-        this._websocket.addEventListener('close', this.reconnectWebSocketAfterTimeout);
+        this._websocket.addEventListener('close', (e) => this.onError(e));
         this._websocket.addEventListener('open', (e) => this.onOpen(e));
         this._websocket.addEventListener('message', (e) => this.onMessageParse(e));
+        this._websocket.addEventListener('onerror', (e) => this.onError(e));
+        this._websocket.addEventListener('onclose', (e) => this.onError(e));
 
     }
 
-    // define function as property is needed to can set it as event listener (class methods is called with wrong this)
-    protected reconnectWebSocketAfterTimeout = (e) => {
-
-        /* tslint:disable */
-        console.log('WebsocketClientAbstract::reconnectWebSocketAfterTimeout()');
-        console.log(e);
-        /* tslint:enable */
-
-        clearTimeout( this._webSocketReconnectTimeout );
-        this._webSocketReconnectTimeout = setTimeout(() => {
-            this.connectWs();
-        }, this._websocketReconnectTime);
+    protected onError = (e) => {
+        console.error('WebsocketClientAbstract::onError or Close::', e);
+        if (this._onErrorCallback) {
+            this._onErrorCallback(e);
+        }
     }
 
-    /**\
+
+
+    /**
      *
      * Connection opened event
      *

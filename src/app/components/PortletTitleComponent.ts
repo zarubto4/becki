@@ -19,7 +19,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                         <span *ngIf="!btn_link">
                             <button *ngIf="element.condition" class="btn"
                                     [class.red-sunglo]="element.colorType=='REMOVE'"
-                                    [class.yellow-crusta]="element.colorType=='EDIT'"
+                                    [class.yellow-crusta]="element.colorType=='EDIT' || element.colorType=='UPDATE'"
                                     [class.blue-madison]="element.colorType=='ACTIVE'"
                                     [class.purple-plum]="element.colorType=='DEACTIVE'"
                                     [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
@@ -32,8 +32,8 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                         <!-- Only if its a external link - Stupid but easy to write !-->
                         <a  *ngIf="btn_link" href="btn_link" target="_blank">
                             <button *ngIf="element.condition" class="btn"  
-                                    [class.red-sunglo]="element.colorType=='REMOVE'" 
-                                    [class.yellow-crusta]="element.colorType=='EDIT'" 
+                                    [class.red-sunglo]="element.colorType=='REMOVE'"
+                                    [class.yellow-crusta]="element.colorType=='EDIT' || element.colorType=='UPDATE'"
                                     [class.blue-madison]="element.colorType=='ACTIVE'" 
                                     [class.purple-plum]="element.colorType=='DEACTIVE'"
                                     [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
@@ -94,7 +94,7 @@ export class PortletTitleComponent {
         btn_label_for_person: string,
         icon: string,
         permission?: boolean,                                                       // for example project.delete_permission
-        colorType?: ('ADD'| 'EDIT' | 'CREATE' | 'REMOVE' | 'ACTIVE' | 'DEACTIVE'),  // DEFAULT in HTML is EDIT
+        colorType?: ('ADD'| 'EDIT' | 'UPDATE' | 'CREATE' | 'REMOVE' | 'ACTIVE' | 'DEACTIVE'),  // DEFAULT in HTML is EDIT
         btn_tag: string,    // Only if you have more that one Button!
         btn_link?: string,  // External link
         onClick?: () => void
