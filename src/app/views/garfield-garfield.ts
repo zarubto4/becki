@@ -1,13 +1,15 @@
 import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IHardware, IBootLoader, ICProgramVersion, IGarfield, IHardwareNewSettingsResult, IHomerServer, IPrinter, IHardwareType } from '../backend/TyrionAPI';
+import {
+    IBootLoader, ICProgramVersion, IGarfield, IHardwareNewSettingsResult, IHomerServer, IPrinter, IHardwareType,
+    IHomerServerList
+} from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { TyrionApiBackend } from '../backend/BeckiBackend';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { WebsocketClientGardfield } from '../services/websocket/Websocket_Client_Gardfield';
@@ -163,7 +165,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
         this.tyrionBackendService.getWebsocketService().connectGarfieldWebSocket( (socket: WebsocketClientGardfield, error: any) =>  {
             if (socket) {
-                socket.onMessageCallback = (m: WebsocketMessage) => this.onMessage(m);
+                socket.tyrion.onMessageCallback = (m: WebsocketMessage) => this.onMessage(m);
                 this.websocket = socket;
 
                 this.websocket.requestSubscribe((response_message: WebsocketMessage, error_response: any) =>  {
@@ -248,37 +250,17 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 this.tyrionBackendService.homerServersGetList(0, {
                     server_types : ['BACKUP', 'MAIN']
                 })
-                    .then((IHomerServer) => {
+                    .then((servers: IHomerServerList) => {
 
-                        for (let key in IHomerServer) {
-
-                            if (!IHomerServer.hasOwnProperty(key)) {
-                                continue;
+                        servers.content.forEach((server: IHomerServer) => {
+                            if (server.server_type === 'MAIN') {
+                                this.mainServer = server;
                             }
 
-                            if (IHomerServer[key].server_type === 'main_server') {
-                                this.tyrionBackendService.homerServerGet(IHomerServer[key].id)
-                                    .then((server) => {
-                                        this.mainServer = server;
-                                    })
-                                    .catch((reason) => {
-                                        this.fmError(this.translate('flash_cant_load_homer_servers_main', reason));
-                                        this.unblockUI();
-                                    });
+                            if (server.server_type === 'BACKUP') {
+                                this.backupServer = server;
                             }
-
-                            if (IHomerServer[key].server_type === 'backup_server') {
-                                this.tyrionBackendService.homerServerGet(IHomerServer[key].id)
-                                    .then((server) => {
-                                        this.backupServer = server;
-                                    })
-                                    .catch((reason) => {
-                                        this.fmError(this.translate('flash_cant_load_homer_servers_backup', reason));
-                                        this.unblockUI();
-                                    });
-                            }
-
-                        }
+                        });
                     })
                     .catch((reason) => {
                         this.fmError(this.translate('flash_cant_load_homer_servers', reason));
@@ -707,6 +689,17 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         }
     }
 
+    onSubscribeGarfieldMessage(message: WebsocketMessage) {
+        this.resetDetection();
+        if (!this.garfieldAppConnected) {
+            this.garfieldAppConnected = true;
+            this.fmInfo(this.translate('flash_garfield_connected'));
+        }
+        if (!message['status']) {
+            this.websocket.respondOnSubscribe(message.message_id);
+        }
+    }
+
     onDeviceConnectMessage(message: WebsocketMessage) {
         if (!(this.garfield
                 && this.hardwareType
@@ -725,8 +718,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
         this.device = null;
         this.deviceId = null;
-        if (message['device_id']) {
-            this.deviceId = message['device_id'];
+        if (message.data['device_id']) {
+            this.deviceId = message.data['device_id'];
         }
         this.beginProcess();
     }
@@ -752,6 +745,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     onMessage(message: WebsocketMessage) {
         switch (message.message_type) {
             case 'keepalive': this.onKeepAliveMessage(); break;
+            case 'subscribe_garfield': this.onSubscribeGarfieldMessage(message); break;
+            case 'unsubscribe_garfield': this.onDisconnectGarfield(); break;
             case 'device_connect': this.onDeviceConnectMessage(message); break;
             case 'device_disconnect': this.onDeviceDisconnectedMessage(); break;
             case 'tester_connect': this.onTesterConnectedMessage(); break;

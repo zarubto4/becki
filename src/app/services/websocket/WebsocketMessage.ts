@@ -42,9 +42,7 @@ export class WebsocketMessage {
 
             let type = typeof object[key];
 
-            if (type === 'string' || type === 'number' || type === 'boolean') {
-                out[key] = object[key];
-            } else if (Array.isArray(object[key])) {
+            if (Array.isArray(object[key])) {
                 out[key] = [];
                 object[key].forEach((val) => {
                     let arrType = typeof val;
@@ -52,6 +50,8 @@ export class WebsocketMessage {
                         out[key].push(val);
                     }
                 });
+            } else if (type === 'string' || type === 'number' || type === 'boolean' || type === 'object') {
+                out[key] = object[key];
             }
         }
 

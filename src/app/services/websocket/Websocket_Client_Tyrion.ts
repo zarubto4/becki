@@ -85,8 +85,6 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
             this.backend.notificationReceived.next(notification);
         }
 
-
-
     }
 
     /***** Requests *******/

@@ -7,11 +7,20 @@ import { WebsocketClientTyrion } from './Websocket_Client_Tyrion';
 
 export class WebsocketClientGardfield extends WebsocketClientAbstract {
 
-    private tyrion: WebsocketClientTyrion;
+    public tyrion: WebsocketClientTyrion;
 
     public constructor(tyrion: WebsocketClientTyrion) {
         super(null);
         this.tyrion = tyrion;
+    }
+
+    /**
+     *
+     * Set callback to on message event, "m" is parsed message as object
+     *
+     */
+    public set onMessageCallback(callback: ((m: any) => void)) {
+        this._onMessageCallback = callback;
     }
 
     public requestSubscribe(callback: (response_message: WebsocketMessage, error: any) => void) {
@@ -66,10 +75,9 @@ export class WebsocketClientGardfield extends WebsocketClientAbstract {
         this.tyrion.send_with_callback(WebsocketMessage.fromOutComingMessage(message), 60000, 0, 3, callback);
     }
 
-
-
-
-
+    public respondOnSubscribe(message_id: string) {
+        this.tyrion.send_without_callback(WebsocketMessage.fromJson({ message_id: message_id, status: 'success', message_type: 'subscribe_garfield', message_channel: 'garfield' }));
+    }
 }
 
 
@@ -84,7 +92,7 @@ export class WebsocketClientGardfield extends WebsocketClientAbstract {
 export class IWebSocketUnsubscribe extends IndividualWebSocketOutComingMessage {
 
     getType(): string {
-        return 'subscribe_garfield';
+        return 'unsubscribe_garfield';
     }
 
     getChannel(): string {
@@ -95,7 +103,7 @@ export class IWebSocketUnsubscribe extends IndividualWebSocketOutComingMessage {
 export class IWebSocketSubscribe extends IndividualWebSocketOutComingMessage {
 
     getType(): string {
-        return 'unsubscribe_garfield';
+        return 'subscribe_garfield';
     }
 
     getChannel(): string {

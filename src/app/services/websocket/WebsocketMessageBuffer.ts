@@ -56,7 +56,7 @@ export class WebsocketMessageBuffer {
         return false;
     }
 
-    public removeSendingMessageById(msgId:string) {
+    public removeSendingMessageById(msgId: string) {
         delete this.message_in_buffer[msgId];
     }
 
