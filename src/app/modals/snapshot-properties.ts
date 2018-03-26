@@ -23,7 +23,7 @@ export class ModalsSnapShotInstanceModel extends ModalModel {
 
 @Component({
     selector: 'bk-modals-snap-shot-instance',
-    templateUrl: './code-properties.html'
+    templateUrl: './snapshot-properties.html'
 })
 export class ModalsSnapShotInstanceComponent implements OnInit {
 

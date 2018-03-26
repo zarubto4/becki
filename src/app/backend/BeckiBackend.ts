@@ -21,7 +21,7 @@ declare const BECKI_VERSION: string;
 
 // REQUEST CLASSES
 export interface OnlineChangeStatus {
-    model: ('Board' | 'HomerInstance' | 'HomerServer' | 'CompilationServer');
+    model: ('Board' | 'Instance' | 'HomerServer' | 'CompilationServer');
     model_id: 'uuid';
     online_state: ('NOT_YET_FIRST_CONNECTED'|'FREEZED'|'SHUT_DOWN'|'SYNCHRONIZATION_IN_PROGRESS'|'OFFLINE'|'ONLINE'|'UNKNOWN_LOST_CONNECTION_WITH_SERVER');
 }

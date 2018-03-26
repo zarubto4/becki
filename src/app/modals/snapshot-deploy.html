@@ -1,0 +1,42 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="('title')|bkTranslate:this"></h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+
+            <bk-form-select [control]="form.controls['selected_snapshot']"
+                            [label]="'label_select'|bkTranslate:this"
+                            [options]="options"></bk-form-select>
+
+            <hr>
+            <div class="text-center">
+                <h4>
+                    <span [innerHTML]="'label_when'|bkTranslate:this"></span>
+                    <br>
+                    <span class="cursor-hand" [class.bold]="immediately" (click)="onBooleanClick(true)" [innerHTML]="'label_immediately'|bkTranslate:this"></span> / <span class="cursor-hand" [class.bold]="!immediately" (click)="onBooleanClick(false)" [innerHTML]="'label_on_time'|bkTranslate:this"></span>
+                </h4>
+            </div>
+            <div *ngIf="!immediately">
+                <br>
+                <bk-date-picker [control]="form.controls.date" [label]="'label_select_date'|bkTranslate:this" [dateOption]="dateOption"></bk-date-picker>
+                <br>
+                <bk-time-picker [control]="form.controls.time" [label]="'label_select_time'|bkTranslate:this"></bk-time-picker>
+                <br>
+                <bk-time-zone-selector [control]="form.controls.timeZoneOffset" [labelEnabled]="true"></bk-time-zone-selector>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_deploy")|bkTranslate:this}}</button>
+    </div>
+</div>
+
+
+
+
+
+

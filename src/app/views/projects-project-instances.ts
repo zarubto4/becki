@@ -58,7 +58,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
 
                 this.instanceFilter.content.forEach((instance, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
-                        if (status.model === 'HomerInstance' && instance.id === status.model_id) {
+                        if (status.model === 'Instance' && instance.id === status.model_id) {
                             instance.online_state = status.online_state;
                         }
                     });
@@ -95,6 +95,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                 this.tyrionBackendService.instanceEdit(instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
+                        this.unblockUI();
                         this.onFilterInstances();
                     })
                     .catch(reason => {
@@ -111,6 +112,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                 this.tyrionBackendService.instanceRemove(instance.id)
                     .then(() => {
                         this.onFilterInstances();
+                        this.unblockUI();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));

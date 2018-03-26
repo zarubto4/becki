@@ -169,7 +169,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 this.websocket = socket;
 
                 this.websocket.requestSubscribe((response_message: WebsocketMessage, error_response: any) =>  {
-                    if (response_message) {
+
+                    if (response_message && response_message.status === 'success') {
                         // Nothing
                         this.fmInfo(this.translate('flash_garfield_connected'));
                     } else {
@@ -187,7 +188,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
         if (this.websocket) {
             this.websocket.requestUnSubscribe((response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message) {
+
+                if (response_message && response_message.status === 'success') {
                     // Nothing
                 } else {
                     console.error('connectGarfieldWebSocket:: requestSubscribe:: Error', error_response);
@@ -302,6 +304,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
     loadProcessAndStart() {
         this.actions = [];
+        this.mainStep = 1;
         this.actions.push(new GarfieldAction(this.uploadBootLoaderProcess.bind(this)));
         this.actions.push(new GarfieldAction(this.uploadTestFirmwareProcess.bind(this)));
         this.actions.push(new GarfieldAction(this.testDeviceProcess.bind(this)));
@@ -453,10 +456,11 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         this.garfieldAppDetection = setTimeout(() => {
 
             this.websocket.requestKeepAlive((response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message) {
+                if (response_message && response_message.status === 'success') {
                     // Nothing
                 } else {
-                    console.error('connectGarfieldWebSocket:: requestKeepAlive:: Error', error_response);
+                    console.error('setDetection:: Error Message: ', response_message);
+                    console.error('setDetection:: Error', error_response);
                 }
             });
 
@@ -500,7 +504,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         return new Promise((resolve, reject) => {
             this.websocket.requestGetDeviceID((response_message: WebsocketMessage, error_response: any) =>  {
 
-                if (response_message) {
+                if (response_message && response_message.status === 'success') {
                     // Nothing
 
                     /* tslint:disable */
@@ -509,15 +513,20 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                     /* tslint:enable */
 
                     resolve(response_message['device_id']);
+
                 } else {
+
+                    console.error('getDeviceId:: Error Message: ', response_message);
                     console.error('getDeviceId:: Error', error_response);
-                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
-                        reject('getDeviceId failed - ' + error_response['error']);
-                    } else if (typeof error_response === 'string') {
-                        reject('getDeviceId failed - ' + error_response);
-                    } else {
-                        reject('getDeviceId failed');
+
+                    if (error_response) {
+                        reject('Get Device ID Process:: Error:' + error_response);
                     }
+
+                    if (response_message) {
+                        reject('Get Device ID Process:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
+                    }
+
                 }
             });
         });
@@ -539,20 +548,23 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
      **************************/
 
     uploadBootLoaderProcess(): Promise<string> {
+        this.mainStep = 3;
         return new Promise((resolve, reject) => {
             this.websocket.requestProductionFirmwareProcess( this.bootLoader.file_path, 'BOOTLOADER', (response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message) {
+
+                if (response_message && response_message.status === 'success') {
                     // Nothing
                     resolve('bootloader upload successful');
-
                 } else {
+                    console.error('uploadBootLoaderProcess:: Error Message: ', response_message);
                     console.error('uploadBootLoaderProcess:: Error', error_response);
-                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
-                        reject('bootloader upload failed - ' + error_response['error']);
-                    } else if (typeof error_response === 'string') {
-                        reject('bootloader upload failed - ' + error_response);
-                    } else {
-                        reject('bootloader upload failed');
+
+                    if (error_response) {
+                        reject('Upload Bootloader Process:: :: Error:' + error_response);
+                    }
+
+                    if (response_message) {
+                        reject('Upload Bootloader Process:: :: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
                     }
                 }
             });
@@ -562,18 +574,23 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     uploadTestFirmwareProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
             this.websocket.requestProductionFirmwareProcess(this.firmwareTestMainVersion.download_link_bin_file, 'FIRMWARE', (response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message) {
+
+                if (response_message && response_message.status === 'success') {
                     // Nothing
                     resolve('test firmware upload successful');
+                    this.mainStep = 4;
 
                 } else {
+
+                    console.error('uploadTestFirmwareProcess:: Error Message: ', response_message);
                     console.error('uploadTestFirmwareProcess:: Error', error_response);
-                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
-                        reject('test firmware upload faild - ' + error_response['error']);
-                    } else if (typeof error_response === 'string') {
-                        reject('test firmware upload faild - ' + error_response);
-                    } else {
-                        reject('test firmware upload faild');
+
+                    if (error_response) {
+                        reject('Upload Test Firmware Process:: :: Error:' + error_response);
+                    }
+
+                    if (response_message) {
+                        reject('Upload Production Firmware Process:: :: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
                     }
                 }
             });
@@ -581,20 +598,23 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     }
 
     testDeviceProcess(): Promise<string> {
+        this.mainStep = 5;
         return new Promise((resolve, reject) => {
             this.websocket.requestTestConfiguration( JSON.parse(this.formConfigJson.controls['test_config'].value), (response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message) {
+                if (response_message && response_message.status === 'success') {
                     // Nothing
                     resolve('device test successful');
-
+                    this.mainStep = 6;
                 } else {
+                    console.error('testDeviceProcess:: Error Message: ', response_message);
                     console.error('testDeviceProcess:: Error', error_response);
-                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
-                        reject('device test  failed - ' + error_response['error']);
-                    } else if (typeof error_response === 'string') {
-                        reject('device test failed - ' + error_response);
-                    } else {
-                        reject('device test failed');
+
+                    if (error_response) {
+                        reject('Test Device Process:: Error:' + error_response);
+                    }
+
+                    if (response_message) {
+                        reject('Test Device Process:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
                     }
                 }
             });
@@ -604,18 +624,20 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     uploadProductionFirmwareProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
             this.websocket.requestProductionFirmwareProcess(this.firmwareMainVersion.download_link_bin_file, 'FIRMWARE', (response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message) {
+                if (response_message && response_message.status === 'success') {
                     // Nothing
                     resolve('firmware upload successful');
 
                 } else {
-                    console.error('backUpProcess:: Error', error_response);
-                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
-                        reject('firmware upload  failed - ' + error_response['error']);
-                    } else if (typeof error_response === 'string') {
-                        reject('firmware upload failed - ' + error_response);
-                    } else {
-                        reject('firmware upload failed');
+                    console.error('uploadProductionFirmwareProcess:: Error Message: ', response_message);
+                    console.error('uploadProductionFirmwareProcess:: Error', error_response);
+
+                    if (error_response) {
+                        reject('Upload Production Firmware Process:: Error:' + error_response);
+                    }
+
+                    if (response_message) {
+                        reject('Upload Production Firmware:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
                     }
                 }
             });
@@ -627,18 +649,21 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
             this.deviceSafe()
                 .then((device: IHardwareNewSettingsResult) => {
                     this.websocket.requestDeviceConfigure(device.configuration, (response_message: WebsocketMessage, error_response: any) =>  {
-                        if (response_message) {
+                        if (response_message && response_message.status === 'success') {
                             // Nothing
                             resolve('device configuration successful');
 
                         } else {
+                            console.error('configureDeviceProcess:: Error Message: ', response_message);
                             console.error('configureDeviceProcess:: Error', error_response);
-                            if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
-                                reject('device configuration failed - ' + error_response['error']);
-                            } else if (typeof error_response === 'string') {
-                                reject('device configuration failed - ' + error_response);
-                            } else {
-                                reject('device configuration failed');
+
+
+                            if (error_response) {
+                                reject('Configuration Process:: Error:' + error_response);
+                            }
+
+                            if (response_message) {
+                                reject('Configuration Process:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
                             }
                         }
                     });
@@ -658,17 +683,21 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     backUpProcess(): Promise<string> {
         return new Promise((resolve, reject) => {
             this.websocket.requestBackupProcess((response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message) {
+
+                if (response_message && response_message.status === 'success') {
                     // Nothing
                     resolve('device backup successful');
                 } else {
+
+                    console.error('backUpProcess:: Error Message: ', response_message);
                     console.error('backUpProcess:: Error', error_response);
-                    if (typeof error_response === 'object' && error_response.hasOwnProperty('error')) {
-                        reject('device backup failed - ' + error_response['error']);
-                    } else if (typeof error_response === 'string') {
-                        reject('device backup failed - ' + error_response);
-                    } else {
-                        reject('device backup failed');
+
+                    if (error_response) {
+                        reject('BackUp Process:: Error:' + error_response);
+                    }
+
+                    if (response_message) {
+                        reject('BackUp Process:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
                     }
                 }
             });

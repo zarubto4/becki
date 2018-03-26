@@ -146,16 +146,17 @@ export abstract class WebsocketClientAbstract {
         this._websocket.addEventListener('message', (e) => this.onMessageParse(e));
         this._websocket.addEventListener('onerror', (e) => this.onError(e));
         this._websocket.addEventListener('onclose', (e) => this.onError(e));
-
     }
 
     protected onError = (e) => {
+        console.error('WebsocketClientAbstract::onError or Close::', e);
+        console.error('WebsocketClientAbstract::onError or Close::', e);
+        console.error('WebsocketClientAbstract::onError or Close::', e);
         console.error('WebsocketClientAbstract::onError or Close::', e);
         if (this._onErrorCallback) {
             this._onErrorCallback(e);
         }
     }
-
 
 
     /**
@@ -165,6 +166,7 @@ export abstract class WebsocketClientAbstract {
      */
     protected onOpen(e: any) {
         console.info('WebsocketClientAbstract:', 'connection_opened');
+
         if (this._onOpenCallback) {
             this._onOpenCallback(e);
         }
@@ -173,7 +175,7 @@ export abstract class WebsocketClientAbstract {
     protected onMessageParse(e: any): void {
         try {
 
-            // console.info('WebsocketClientAbstract:: onMessageParse:', e);
+            console.info('WebsocketClientAbstract:: onMessageParse:', e);
 
             if (e && e.data) {
 

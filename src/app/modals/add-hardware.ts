@@ -123,6 +123,9 @@ export class ModalsAddHardwareComponent implements OnInit {
     }
 
     sequenceRegistration() {
+
+        console.log('Console Registration');
+
         this.registeredDevices = [];
         this.failedDevices = [];
 
@@ -137,7 +140,41 @@ export class ModalsAddHardwareComponent implements OnInit {
         let devicesForRegistration: string[] = data.split(';');
         devicesForRegistration = devicesForRegistration.filter(device => device.length > 0);
 
+
+        let promise_list: Promise<any>[] = [];
+
         devicesForRegistration.forEach(device => {
+            promise_list.push(
+                new Promise((resolve, reject) => {
+                    this.backendService.projectAddHW({
+                        group_ids: this.multiSelectedHardwareGroups,
+                        registration_hash: device,
+                        project_id: this.modalModel.project_id
+                    })
+                        .then(() => {
+
+                            this.registeredDevices.push(device);
+                            devicesForRegistration.splice(devicesForRegistration.indexOf(device), 1);
+                        })
+                        .catch(reason => {
+                            this.failedDevices.push(device + ':  ' + reason.body.message);
+                        }).then(() => {
+                            if (devicesForRegistration.length > 0) {
+                                this.multiForm.controls['listOfIds'].setValue(devicesForRegistration.join(';'));
+                                this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registeredDevices.join(',  \n'));
+                                this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
+                            } else {
+                                this.modalClose.emit(true);
+                            }
+                        });
+                })
+            );
+        });
+    }
+
+    /*
+    sequenceRegistrationPromise(pointer: number) {
+        new Promise((resolve, reject) => {
             this.backendService.projectAddHW({
                 group_ids: this.multiSelectedHardwareGroups,
                 registration_hash: device,
@@ -151,19 +188,24 @@ export class ModalsAddHardwareComponent implements OnInit {
                 .catch(reason => {
                     this.failedDevices.push(device + ':  ' + reason.body.message);
                 }).then(() => {
-                    if (devicesForRegistration.length > 0) {
-                        this.multiForm.controls['listOfIds'].setValue(devicesForRegistration.join(';'));
-                        this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registeredDevices.join(',  \n'));
-                        this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
-                    } else {
-                        this.modalClose.emit(true);
-                    }
-                });
-        });
+                if (devicesForRegistration.length > 0) {
+                    this.multiForm.controls['listOfIds'].setValue(devicesForRegistration.join(';'));
+                    this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registeredDevices.join(',  \n'));
+                    this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
+                } else {
+                    this.modalClose.emit(true);
+                }
+            });
+        })
+
     }
+    */
 
 
-    singleRegistration() {
+
+
+
+        singleRegistration() {
 
         this.single_error_message = null;
 

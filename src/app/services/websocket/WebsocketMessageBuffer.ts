@@ -27,7 +27,7 @@ export class WebsocketMessageBuffer {
         if (this.message_in_buffer[message.message_id]) {
 
             // Zpráva obsahuje Error Code
-            if (message.data['error_code'] != null) {
+            if (message.data['error_code'] != null || message.data['error_code']) {
 
                 /* tslint:disable */
                 console.log('WebsocketMessageBuffer: Incoming Message contains  error_code');

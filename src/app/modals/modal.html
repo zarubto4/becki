@@ -217,6 +217,9 @@
             <template [ngSwitchCase]="'ModalsSnapShotInstanceModel'">
                 <bk-modals-snap-shot-instance [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-snap-shot-instance>
             </template>
+            <template [ngSwitchCase]="'ModalsSnapShotDeployModel'">
+                <bk-modals-snap-shot-deploy [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-snap-shot-deploy>
+            </template>
         </div>
     </div>
 </div>

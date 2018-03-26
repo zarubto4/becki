@@ -1485,6 +1485,14 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
     }
 }
 
+.font-color-instance {
+    color: #ffab4c;
+
+    &-dark {
+        color: #99662d;
+    }
+}
+
 .font-color-code, .font-color-grid, .font-color-blocko {
     color: #fa739c;
 

@@ -31,11 +31,18 @@
                           btn_tag: 'deactivate_instance'
                       },
                       {
-                          condition: (tab == 'overview' && !instance.current_snapshot),
+                          condition: (tab == 'overview' && instance.current_snapshot && instance.online_state == 'SHUT_DOWN' ),
                           btn_label_for_person: ('label_activate_instance'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ACTIVE',
                           btn_tag: 'active_instance'
+                      },
+                      {
+                          condition: ((tab === 'overview' || tab === 'editor') && instance.snapshots != null && instance.snapshots.length > 0),
+                          btn_label_for_person: ('btn_deploy_snapshot'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'ACTIVE',
+                          btn_tag: 'deploy_snapshot'
                       },
                       {
                           condition: (tab === 'overview'),
@@ -128,53 +135,70 @@
                             <div>
                                 <span [innerHTML]="'label_b_program_description'|bkTranslate:this"></span>: {{instance.b_program.description}}
                             </div>
-
-                            <div *ngIf="instance.current_snapshot">
-                                <br>
-                                <span [innerHTML]="'label_b_program_version_name'|bkTranslate:this"></span>: {{instance.current_snapshot.b_program_version.name}}
-                                <span [innerHTML]="'label_b_program_version_description'|bkTranslate:this"></span>: {{instance.current_snapshot.b_program_version.description}}
-                            </div>
                         </div>
 
                     </div>
 
                 </div>
 
-                <div class="col-md-6 portlet light">
+                <div class="col-md-6">
 
-                    <bk-portlet-title [title_name]="'label_byzance_cloud'|bkTranslate:this"
-                                      [icon]="'fa-cloud'"
-                                      (onClick)="onPortletClick($event)">
-                    </bk-portlet-title>
-
-                    <div class="portlet-body" style="padding-left: 20px">
-                        <br>
-                        <div>
+                    <div class="portlet light margin-bottom-15">
+                        <bk-portlet-title [title_name]="'label_byzance_cloud'|bkTranslate:this"
+                                          [icon]="'fa-cloud'"
+                                          (onClick)="onPortletClick($event)">
+                        </bk-portlet-title>
+                        <div class="portlet-body margin-left-15 margin-top-15">
                             <div>
-                                <span [innerHTML]="'label_server_name'|bkTranslate:this"></span>: {{instance.server.name}}
-                            </div>
+                                <div>
+                                    <span [innerHTML]="'label_server_name'|bkTranslate:this"></span>: {{instance.server.name}}
+                                </div>
+                                <div>
+                                    <span [innerHTML]="'label_server_description'|bkTranslate:this"></span>: {{instance.server.description}}
+                                </div>
 
-                            <div>
-                                <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>: <bk-online-state [online_state]="instance.server.online_state"></bk-online-state>
-                            </div>
-                        </div>
-                        <hr>
-                        <div>
-                            <div>
-                                <span [innerHTML]="'label_created'|bkTranslate:this"></span>: {{instance.created|bkUnixTimeToDate}}
-                            </div>
-
-                            <div *ngIf="instance.current_snapshot" >
-                                <span [innerHTML]="'label_running_from'|bkTranslate:this"></span>: {{instance.current_snapshot.created|bkUnixTimeToDate}}
-                            </div>
-
-                            <div>
-                                <span [innerHTML]="'label_running_status'|bkTranslate:this">: </span><bk-online-state [online_state]="instance.online_state"></bk-online-state>
+                                <br>
+                                <div>
+                                    <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>: <bk-online-state [online_state]="instance.server.online_state"></bk-online-state>
+                                </div>
                             </div>
                         </div>
 
+                    </div>
+                    <div class="portlet light">
+                        <bk-portlet-title [title_name]="'label_byzance_instance'|bkTranslate:this"
+                                          [icon]="'fa-cloud'"
+                                          (onClick)="onPortletClick($event)">
+                        </bk-portlet-title>
+                        <div class="portlet-body margin-left-15 margin-top-15">
+                            <div *ngIf="instance.current_snapshot">
+                                <div>
+                                    <span [innerHTML]="'label_instance_version_name'|bkTranslate:this"></span>: {{instance.current_snapshot.b_program_version.name}}
+                                </div>
+                                <div>
+                                    <span [innerHTML]="'label_instance_version_description'|bkTranslate:this"></span>: {{instance.current_snapshot.b_program_version.description}}
+                                </div>
+                                <div class="margin-left-15 margin-top-15 margin-bottom-15">
+                                    <div>
+                                        <span [innerHTML]="'label_b_program_version_name'|bkTranslate:this"></span>: <a (click)="onBProgramClick(instance.current_snapshot.b_program_version.id)">{{instance.current_snapshot.b_program_version.name}}</a>
+                                    </div>
+                                    <div>
+                                        <span [innerHTML]="'label_b_program_version_description'|bkTranslate:this"></span>: {{instance.current_snapshot.b_program_version.description}}
+                                    </div>
+                                </div>
+                                <div>
+                                    <span [innerHTML]="'label_created'|bkTranslate:this"></span>: {{instance.current_snapshot.created|bkUnixTimeToDate}}
+                                </div>
+                                <div>
+                                    <span [innerHTML]="'label_deployed'|bkTranslate:this"></span>: {{instance.current_snapshot.deployed|bkUnixTimeToDate}}
+                                </div>
+                                <br>
+                                <div>
+                                    <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>: <bk-online-state [online_state]="instance.online_state"></bk-online-state>
+                                </div>
+                            </div>
 
-
+                        </div>
                     </div>
 
                 </div>
@@ -299,12 +323,12 @@
                         <div class="portlet-body">
                             <div *ngIf="allHw && allHw.content.length > 0" class="panel-group accordion blocko-blocks-group-list">
                                 <ng-container *ngFor="let hardware of allHw.content;">
-                                    <div *ngIf="!isBound(hardware.full_id)" [bkDraggable]="draggableOptions" [bkDraggableData]="hardware.full_id" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
+                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions" [bkDraggableData]="hardware.id" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
                                         <div class="blocko-block-mask"></div>
                                         <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
                                         <i class="fa fa-exclamation"></i>
                                         <span>{{hardware.name}}</span>
-                                        <span style="font-size: 0.8em">{{hardware.full_id}}</span>
+                                        <span style="font-size: 0.8em">{{hardware.id}}</span>
                                     </div>
                                 </ng-container>
                             </div>
@@ -356,10 +380,10 @@
                     <table class="table table-hover table-light byzance-table">
                         <thead>
                         <tr>
-                            <th class="">{{'table_hardware_group_name'|bkTranslate:this}}</th>
-                            <th class="">{{'table_description'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_size'|bkTranslate:this}}</th>
-                            <th class="text-center"><span [innerHTML]="'label_type'|bkTranslate:this"></span></th>
+                            <th class="" [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_size'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -404,13 +428,13 @@
                     <table class="table table-hover table-light byzance-table">
                         <thead>
                         <tr>
-                            <th class="col">{{'table_hardware_name'|bkTranslate:this}}</th>
-                            <th class="col">{{'table_hardware_id'|bkTranslate:this}}</th>
-                            <th class="col">{{'table_description'|bkTranslate:this}}</th>
-                            <th class="col text-center"><span [innerHTML]="'label_type'|bkTranslate:this"></span></th>
-                            <th class="col text-center">{{'table_groups'|bkTranslate:this}}</th>
-                            <th class="col text-center">{{'table_project_status'|bkTranslate:this}}</th>
-                            <th class="col text-center">{{'table_status'|bkTranslate:this}}</th>
+                            <th class="col" [innerHTML]="'table_hardware_name'|bkTranslate:this"></th>
+                            <th class="col" [innerHTML]="'table_hardware_id'|bkTranslate:this"></th>
+                            <th class="col" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                            <th class="col text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
+                            <th class="col text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
+                            <th class="col text-center" [innerHTML]="'table_project_status'|bkTranslate:this"></th>
+                            <th class="col text-center" [innerHTML]="'table_status'|bkTranslate:this"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -494,48 +518,57 @@
         </div>
 
         <div *ngIf="tab == 'grid'">
-            <div *ngIf="(instance && instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
+
+            <div *ngIf="(instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
-                    <div *ngIf="(instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)" class="table-scrollable table-scrollable-borderless">
-                        <ul>
-                            <li *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last">
-                                <span><a (click)="onGridProjectClick(m_project.grid_project.id)">{{program.grid_project.name}}</a></span>
-                                <span>{{project.grid_project.description}}</span>
-                                <table class="table table-hover table-light byzance-table">
-                                    <thead>
-                                    <tr>
-                                        <th class="">{{'table_grid_program_name'|bkTranslate:this}}</th>
-                                        <th class="">{{'table_grid_program_description'|bkTranslate:this}}</th>
-                                        <th class="">{{'table_grid_program_version_name'|bkTranslate:this}}</th>
-                                        <th class="">{{'table_grid_program_version_description'|bkTranslate:this}}</th>
-                                        <th class="">{{'table_grid_program_version_description'|bkTranslate:this}}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr *ngFor="let program of m_project.grid_programs">
+                            <ul *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last">
+                                <li>
+                                    <span><a (click)="onGridProjectClick(m_project.grid_project.id)">{{program.grid_project.name}}</a></span>
+                                    <span>{{project.grid_project.description}}</span>
+                                    <table class="table table-hover table-light byzance-table">
+                                        <thead>
+                                        <tr>
+                                            <th class="">{{'table_grid_program_name'|bkTranslate:this}}</th>
+                                            <th class="">{{'table_grid_program_description'|bkTranslate:this}}</th>
+                                            <th class="">{{'table_grid_program_version_name'|bkTranslate:this}}</th>
+                                            <th class="">{{'table_grid_program_version_description'|bkTranslate:this}}</th>
+                                            <th class="">{{'table_grid_program_version_description'|bkTranslate:this}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let program of m_project.grid_programs">
 
-                                        <td class="vert-align no-wrap"><a (click)="onGridProgramClick(m_project.grid_project.id, program.grid_program.id)">{{program.grid_program.name}}</a></td>
-                                        <td class="vert-align no-wrap">{{program.grid_program.description}}</td>
-                                        <td class="vert-align text-center no-wrap"><a (click)="onGridProgramVersionClick(m_project.grid_project.id, program.grid_program.id, program.grid_program_version.id)">{{program.grid_program_version.name}}</a></td>
-                                        <td class="vert-align text-center no-wrap">{{program.grid_program_version.description}}</td>
+                                            <td class="vert-align no-wrap"><a (click)="onGridProgramClick(m_project.grid_project.id, program.grid_program.id)">{{program.grid_program.name}}</a></td>
+                                            <td class="vert-align no-wrap">{{program.grid_program.description}}</td>
+                                            <td class="vert-align text-center no-wrap"><a (click)="onGridProgramVersionClick(m_project.grid_project.id, program.grid_program.id, program.grid_program_version.id)">{{program.grid_program_version.name}}</a></td>
+                                            <td class="vert-align text-center no-wrap">{{program.grid_program_version.description}}</td>
 
-                                        <td class="vert-align text-center no-wrap">
-                                            PRIVATE
-                                        </td>
-                                        <td class="vert-align text-center no-wrap">
-                                            <a target="_blank" href="{{gridProgram.grid_app_url}}">
-                                                <bk-qr-code style="float: right;" [data]="gridProgram.grid_app_url"></bk-qr-code>
-                                            </a>
-                                            <bk-form-input [label]="gridProgram.grid_app_url" [readonly]="true"></bk-form-input>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </li>
-                        </ul>
-                    </div>
+                                            <td class="vert-align text-center no-wrap">
+                                                PRIVATE
+                                            </td>
+                                            <td class="vert-align text-center no-wrap">
+                                                <a target="_blank" href="{{gridProgram.grid_app_url}}">
+                                                    <bk-qr-code style="float: right;" [data]="gridProgram.grid_app_url"></bk-qr-code>
+                                                </a>
+                                                <bk-form-input [label]="gridProgram.grid_app_url" [readonly]="true"></bk-form-input>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </li>
+                            </ul>
+
                 </table>
             </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(instance.current_snapshot.m_projects == null)"
+                                [condition_empty]="(instance.current_snapshot.m_projects != null && instance.current_snapshot.m_projects.length == 0)"
+                                [main_message_link]="'label_grid_group_in_snapshot'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_grid_group_in_snapshot_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
         </div>
 
         <div *ngIf="tab == 'logs'">
@@ -574,7 +607,7 @@
                             <button title="{{'label_blocko_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!snapshot.update_permission" (click)="onEditSnapShotClick(snapshot)">
                                 <i class="fa fa-cog"></i>
                             </button>
-                            <button title="{{'label_blocko_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!snapshot.delete_permission" (click)="onRemoveClick(snapshot)">
+                            <button title="{{'label_blocko_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!snapshot.delete_permission" (click)="onRemoveSnapShotClick(snapshot)">
                                 <i class="fa fa-trash"></i>
                             </button>
 
@@ -589,7 +622,7 @@
                                 [condition_empty]="(instance.snapshots != null && instance.snapshots.length == 0)"
                                 [main_message_link]="'label_no_instance_history'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_instance_history_comment'|bkTranslate:this"
-                                [btn_label]="'btn_add_blocko_program'|bkTranslate:this"
+                                [btn_label]="'btn_add_new_snapshot'|bkTranslate:this"
                                 (onButtonClick)="onAddClick()">
             </bk-nothing-to-show>
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->

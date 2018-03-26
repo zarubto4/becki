@@ -5,7 +5,7 @@
 import {
     IInstanceSnapshot, IInstance, IBProgram,
     IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary, IBProgramVersion,
-    IInterface
+    IInstanceSnapshotJsonFileInterface,
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -28,9 +28,9 @@ import { WebsocketClientBlockoView } from '../services/websocket/Websocket_Clien
 import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import moment = require('moment/moment');
-import {ModalsBlockoPropertiesModel} from "../modals/blocko-properties";
-import {ModalsCodePropertiesModel} from "../modals/code-properties";
-import {ModalsSnapShotInstanceModel} from "../modals/snapshot-properties";
+import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
+import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -97,7 +97,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         super(injector);
 
         this.tyrionBackendService.onlineStatus.subscribe((status) => {
-            if (status.model === 'HomerInstance' && this.instanceId === status.model_id) {
+            if (status.model === 'Instance' && this.instanceId === status.model_id) {
                 this.instance.online_state = status.online_state;
             }
         });
@@ -142,7 +142,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             if (this.editorView) {
 
                 if (this.instanceSnapshot) {
-                    this.editorView.setDataJson(this.instanceSnapshot.program);
+                    this.editorView.setDataJson(this.instanceSnapshot.program.snapshot);
                 } else if (this.bProgramVersion) {
                     this.editorView.setDataJson(this.bProgramVersion.program);
                 }
@@ -152,7 +152,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 }, 100);
 
                 this.editorView.registerInterfaceBoundCallback((iface) => {
-                    let index = this.bindings.findIndex((i) => { return i.targetId === iface.targetId; });
+                    let index = this.bindings.findIndex((i) => {
+                        return i.targetId === iface.targetId;
+                    });
 
                     if (index === -1) {
                         this.bindings.push(iface);
@@ -256,8 +258,15 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
             case 'edit_Instance': {
                 this.onEditClick();
+                break;
             }
-            default: console.warn('TODO action for:', action);
+            case 'deploy_snapshot': {
+                this.onInstanceDeployClick();
+                break;
+            }
+            default: {
+                console.warn('TODO action for:', action);
+            }
         }
     }
 
@@ -343,26 +352,25 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         version_id = this.bProgramVersion.id;
                     }
 
-                    let interfaces: IInterface[] = [];
+                    let interfaces: IInstanceSnapshotJsonFileInterface[] = [];
 
                     this.bindings.forEach((binding) => {
                         interfaces.push({
-                            target_id: binding.targetId,
-                            interface_id: binding.interfaceId,
-                            type: binding.targetId.length === 24 ? 'hardware' : 'group'
+                            target_id: binding.targetId,       // hardware.id or group.id
+                            interface_id: binding.interfaceId, // cprogram_version
+                            type: binding.type                 // type
                         });
                     });
 
-                    this.tyrionBackendService.instanceSnapshotCreate({
+                    this.tyrionBackendService.instanceSnapshotCreate( this.instanceId, {
                         name: m.name,
                         description: m.description,
-                        instance_id: this.instanceId,
                         version_id: version_id,
                         interfaces: interfaces,
                         snapshot: this.editorView.getDataJson()
                     }).then((snapshot) => {
                         this.instanceSnapshot = snapshot;
-                        this.unblockUI()
+                        this.unblockUI();
                         this.refresh();
                     }).catch((reason) => {
                         this.fmError(this.translate('flash_snapshot_save_fail'), reason);
@@ -445,11 +453,27 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     description: model.description
                 })
                     .then((snapShotResponse: IInstanceSnapshot) => {
-                        this.unblockUI()
+                        this.unblockUI();
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_snapshot_cant_update'), reason));
+                    });
+            }
+        });
+    }
+
+    onRemoveSnapShotClick(snapShot: IInstanceSnapshot) {
+        this.modalService.showModal(new ModalsRemovalModel(snapShot.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceSnapshotDelete(this.instanceSnapshot.id)
+                    .then(() => {
+                        this.unblockUI();
+                        this.refresh();
+                    }).catch((err) => {
+                        this.unblockUI();
+                        this.fmError(this.translate('label_upload_error', err));
                     });
             }
         });
@@ -473,14 +497,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    onInstanceStartClick() {
-        let model = new ModalsConfirmModel(this.translate('label_upload_instance_modal'), this.translate('label_upload_instance_modal_comment'));
+    onInstanceDeployClick() {
+        let model = new ModalsSnapShotDeployModel(this.instance.snapshots);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.instanceSnapshotDeploy({
-                    snapshot_id: this.instanceSnapshot.id,
-                    upload_time: 0
+                    snapshot_id: model.selected_snapshot_id,
+                    upload_time: model.time
                 })
                     .then(() => {
                         this.unblockUI();
@@ -585,7 +609,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.zone.runOutsideAngular(() => {
             if (this.liveView && this.instance.current_snapshot) {
                 console.info(JSON.stringify(this.instance.current_snapshot.program));
-                this.liveView.setDataJson(this.instance.current_snapshot.program);
+                this.liveView.setDataJson(this.instance.current_snapshot.program.snapshot);
 
                 if (this.instance.instance_remote_url) {
 

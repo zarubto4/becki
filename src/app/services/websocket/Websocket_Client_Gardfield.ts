@@ -20,7 +20,7 @@ export class WebsocketClientGardfield extends WebsocketClientAbstract {
      *
      */
     public set onMessageCallback(callback: ((m: any) => void)) {
-        this._onMessageCallback = callback;
+        this.tyrion.onMessageGarfieldCallback(callback);
     }
 
     public requestSubscribe(callback: (response_message: WebsocketMessage, error: any) => void) {

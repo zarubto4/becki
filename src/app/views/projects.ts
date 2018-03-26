@@ -41,17 +41,18 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit {
     refresh(): void {
         console.log('Refresh: All Projects time:', new Date().getTime());
         this.blockUI();
-        Promise.all<any>([this.tyrionBackendService.projectGetByLoggedPerson(), this.tyrionBackendService.productsGetUserCanUsed()])
-            .then((values: [IProject[], IApplicableProduct[]]) => {
-                this.projects = values[0];
-                this.products = values[1];
-                console.log('Refresh: Response:   ', new Date().getTime());
-                this.unblockUI();
-            })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
+
+        this.tyrionBackendService.projectGetByLoggedPerson()
+            .then((projects: IProject[]) => {
+                this.projects = projects;
                 this.unblockUI();
             });
+
+        this.tyrionBackendService.productsGetUserCanUsed()
+            .then((products: IApplicableProduct[]) => {
+                this.products = products;
+            });
+
     }
 
     onAddClick(): void {

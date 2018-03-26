@@ -72,18 +72,19 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col">{{'table_hardware_name'|bkTranslate:this}}</th>
-                        <th class="col">{{'table_hardware_id'|bkTranslate:this}}</th>
-                        <th class="col">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col text-center"><span [innerHTML]="'label_type'|bkTranslate:this"></span></th>
-                        <th class="col text-center">{{'table_groups'|bkTranslate:this}}</th>
-                        <th class="col text-center">{{'table_project_status'|bkTranslate:this}}</th>
-                        <th class="col text-center">{{'table_status'|bkTranslate:this}}</th>
-                        <th class="col text-center">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="" [innerHTML]="'table_hardware_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_hardware_id'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_project_status'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_status'|bkTranslate:this"></th>
+                        <th class="text-right margin-right-15" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let device of devicesFilter.content">
+
                         <td class="vert-align">
                             <div class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
                                 <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
@@ -181,11 +182,11 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="">{{'table_hardware_group_name'|bkTranslate:this}}</th>
-                        <th class="">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="text-center">{{'table_size'|bkTranslate:this}}</th>
-                        <th class="text-center"><span [innerHTML]="'label_type'|bkTranslate:this"></span></th>
-                        <th class="text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="" [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center"[innerHTML]=" 'table_size'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
+                        <th class="text-right" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                     </tr>
                     </thead>
                     <tbody>

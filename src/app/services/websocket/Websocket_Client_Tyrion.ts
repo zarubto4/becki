@@ -6,6 +6,9 @@ import { INotification, IWebSocketToken } from '../../backend/TyrionAPI';
 
 export class WebsocketClientTyrion extends WebsocketClientAbstract {
 
+    protected pingTimeout;
+    protected _onMessageGarfieldCallback: ((m: WebsocketMessage) => void);
+
     public constructor(protected backend: TyrionApiBackend, public websocketUrl: string, public wss: boolean = false) {
 
         super(websocketUrl, wss);
@@ -26,18 +29,31 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
         super.onError = (e: any) => this.onErrorOrClose(e);
     }
 
+    protected ping() {
+        this._websocket.send(JSON.stringify({
+            message_channel: WebsocketClientAbstract.BECKI_CHANNEL_NAME,
+            message_type: 'ping',
+            message_id : WebsocketMessage.getUUID()
+        }));
+    }
+
     public onReady() {
-        console.log('WebsocketClientTyrion: onReady:: ');
+
+        if (!this.pingTimeout) {
+            this.pingTimeout = setInterval( this.ping.bind(this), 5000);
+        }
         this.backend.websocketGetAccessToken()
             .then((webSocketToken: IWebSocketToken) => {
-                console.log('WebsocketClientTyrion: websocketGetAccessToken:: token:', webSocketToken.websocket_token);
+                // console.log('WebsocketClientTyrion: websocketGetAccessToken:: token:', webSocketToken.websocket_token);
                 this.url = this.websocketUrl + webSocketToken.websocket_token;
-                console.log('WebsocketClientTyrion: websocketGetAccessToken:: total URL:', this.url);
+                // console.log('WebsocketClientTyrion: websocketGetAccessToken:: total URL:', this.url);
                 this.connectWs();
             });
     }
 
     public onErrorOrClose(e: any) {
+        clearTimeout(this.pingTimeout);
+        this.pingTimeout = null;
         console.error('WebsocketClientTyrion: onErrorOrClose:: ', e);
         this.backend.websocketGetAccessToken()
             .then((webSocketToken: IWebSocketToken) => {
@@ -55,6 +71,12 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
             let message = new IWebSocketPingResponse();
             message.message_id = m.message_id;
             this.send_without_callback(WebsocketMessage.fromOutComingMessage(message));
+        }
+
+        if (m.message_channel === WebsocketClientAbstract.GARFIELD_CHANNEL_NAME) {
+            if (this._onMessageGarfieldCallback) {
+                this._onMessageGarfieldCallback(m);
+            }
         }
 
         if (m.message_type === 'online_status_change') {
@@ -85,6 +107,15 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
             this.backend.notificationReceived.next(notification);
         }
 
+    }
+
+    /**
+     *
+     * Set callback to on message event, "m" is parsed message as object
+     *
+     */
+    public set onMessageGarfieldCallback(callback: ((m: any) => void)) {
+        this._onMessageGarfieldCallback = callback;
     }
 
     /***** Requests *******/
