@@ -150,18 +150,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 setTimeout(() => { // Must load bindings with little delay
                     this.bindings = this.editorView.getBindings();
                 }, 100);
-
-                this.editorView.registerInterfaceBoundCallback((iface) => {
-                    let index = this.bindings.findIndex((i) => {
-                        return i.targetId === iface.targetId;
-                    });
-
-                    if (index === -1) {
-                        this.bindings.push(iface);
-                    } else {
-                        this.bindings[index] = iface;
-                    }
-                });
             }
 
             this.liveView = views.find((view) => {
@@ -293,7 +281,17 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 let controller = this.editorView.getBlockoController();
 
-                controller.bindInterface(params.data);
+                let iface = controller.bindInterface(params.data.id, params.data.group);
+
+                let index = this.bindings.findIndex((i) => {
+                    return i.targetId === iface.targetId;
+                });
+
+                if (index === -1) {
+                    this.bindings.push(iface);
+                } else {
+                    this.bindings[index] = iface;
+                }
 
                 break;
             }
@@ -358,7 +356,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         interfaces.push({
                             target_id: binding.targetId,       // hardware.id or group.id
                             interface_id: binding.interfaceId, // cprogram_version
-                            type: binding.type                 // type
+                            type: binding.group ? 'group' : 'hardware'  // type
                         });
                     });
 

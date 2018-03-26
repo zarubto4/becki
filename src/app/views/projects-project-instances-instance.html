@@ -323,7 +323,7 @@
                         <div class="portlet-body">
                             <div *ngIf="allHw && allHw.content.length > 0" class="panel-group accordion blocko-blocks-group-list">
                                 <ng-container *ngFor="let hardware of allHw.content;">
-                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions" [bkDraggableData]="hardware.id" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
+                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions" [bkDraggableData]="{ id: hardware.id, group: false }" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
                                         <div class="blocko-block-mask"></div>
                                         <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
                                         <i class="fa fa-exclamation"></i>
@@ -351,7 +351,7 @@
                         <div class="portlet-body">
                             <div *ngIf="allHwGroups && allHwGroups.content.length > 0" class="panel-group accordion blocko-blocks-group-list">
                                 <ng-container *ngFor="let hardware of allHwGroups.content;">
-                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions" [bkDraggableData]="hardware.id" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
+                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions" [bkDraggableData]="{ id: hardware.id, group: true }" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
                                         <div class="blocko-block-mask"></div>
                                         <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
                                         <i class="fa fa-exclamation"></i>
