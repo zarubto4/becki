@@ -5,7 +5,7 @@
 import {
     IInstanceSnapshot, IInstance, IBProgram,
     IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary, IBProgramVersion,
-    IInstanceSnapshotJsonFileInterface,
+    IInstanceSnapshotJsonFileInterface, IHardwareGroup,
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -156,24 +156,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 return view.id === 'liveview';
             });
         });
-
-        // Preload hw and groups
-        this.tyrionBackendService.boardsGetWithFilterParameters(0, {
-            projects: [this.projectId]
-        }).then((value) => {
-            this.allHw = value;
-        }).catch((reason) => {
-            this.fmError(this.translate('flash_hardware_load_fail'), reason);
-        });
-
-        this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
-            project_id: this.projectId
-        }).then((value) => {
-            this.allHwGroups = value;
-        }).catch((reason) => {
-            this.fmError(this.translate('flash_hardware_group_load_fail'), reason);
-        });
     }
+
 
     ngAfterContentChecked() {
         if (this.tab === 'view') {
@@ -521,10 +505,16 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
             project_id : this.projectId,
-            instance_snapshots: [this.instanceSnapshot.id]
+            instance_snapshots: [this.instanceSnapshot.id],
+
         })
             .then((values) => {
                 this.deviceGroupFilter = values;
+
+                if (this.deviceGroupFilter.content.length > 0 ) {
+                    this.onFilterHardware(0, this.deviceGroupFilter.content);
+                }
+
                 this.unblockUI();
             })
             .catch((reason) => {
@@ -533,11 +523,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
     }
 
-    onFilterHardware(pageNumber: number = 0): void {
+    onFilterHardware(pageNumber: number = 0, groups: IHardwareGroup[] = []): void {
         this.blockUI();
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
             projects: [this.projectId],
-            instance_snapshots: [this.instanceSnapshot.id]
+            instance_snapshots: groups.length > 0? [] : [this.instanceSnapshot.id],
+            hardware_groups_id: groups.map(group => group.id)
         })
             .then((values) => {
                 this.devicesFilter = values;

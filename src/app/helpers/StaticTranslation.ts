@@ -1202,6 +1202,7 @@ export class StaticTranslation {
                 'table_update_progress': 'Progress',
                 'table_update_state': 'State',
                 'table_hardware_id': 'ID',
+                'table_hardware_full_id': 'Full ID',
                 'table_hardware_name': 'Alias Name',
                 'table_hardware_group_name': 'Group Name',
                 'table_groups': 'Groups',

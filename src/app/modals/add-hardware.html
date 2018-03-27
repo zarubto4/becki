@@ -102,18 +102,22 @@
 
             </div>
             <br>
-            <div>
-                <div *ngIf="afterFirstConfirm">
-                    <span>
-                        <i class="font-green-jungle fa fa-check"></i> {{'label_successfully_registered'|bkTranslate:this}}: </span>
-                    <bk-form-text-area [control]="deviceInfoTextForm.controls.successfulDevices" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
-                </div>
-                <br>
-                <br>
-                <div *ngIf="afterFirstConfirm">
-                    <span>
-                        <i class="font-red-thunderbird fa fa-warning"></i> {{'label_failed_to_register'|bkTranslate:this}}: </span>
-                    <bk-form-text-area [control]="deviceInfoTextForm.controls.failedDevices" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
+            <div *ngIf="afterFirstConfirm">
+                <hr>
+                <h3 class="text-center">Registration Result <i *ngIf="inprogress" class="fa fa-spinner fa-spin"></i></h3>
+                <div>
+                    <div>
+                        <span>
+                            <i class="font-green-jungle fa fa-check"></i> {{'label_successfully_registered'|bkTranslate:this}}: </span>
+                        <bk-form-text-area [control]="deviceInfoTextForm.controls.successfulDevices" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
+                    </div>
+                    <br>
+                    <br>
+                    <div>
+                        <span>
+                            <i class="font-red-thunderbird fa fa-warning"></i> {{'label_failed_to_register'|bkTranslate:this}}: </span>
+                        <bk-form-text-area [control]="deviceInfoTextForm.controls.failedDevices" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
+                    </div>
                 </div>
             </div>
             <br>
@@ -123,6 +127,6 @@
 
     <div *ngIf="step" class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" [disabled]="!((multiForm.valid)||(form.valid))" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
+        <button type="button" [disabled]="!((multiForm.valid)||(form.valid)) || inprogress" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
     </div>
 </div>

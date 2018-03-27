@@ -74,6 +74,7 @@
                     <tr>
                         <th class="" [innerHTML]="'table_hardware_name'|bkTranslate:this"></th>
                         <th class="" [innerHTML]="'table_hardware_id'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_hardware_full_id'|bkTranslate:this"></th>
                         <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
@@ -98,6 +99,7 @@
                                class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                         </td>
                         <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
+                        <td class="vert-align no-wrap">{{device.full_id}}</td>
                         <td class="vert-align no-wrap">{{device.description}}</td>
                         <td class="vert-align text-center no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
                         <td class="vert-align text-center no-wrap">

@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { AsyncValidatorDebounce, BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { IHardwareGroup, IHardwareGroupList } from '../backend/TyrionAPI';
+import {IHardware, IHardwareGroup, IHardwareGroupList, IResultBadRequest} from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessageError, FlashMessage } from '../services/NotificationService';
@@ -68,6 +68,10 @@ export class ModalsAddHardwareComponent implements OnInit {
     single_error_status: string = null;
     single_error_message: string = null;
 
+
+    devicesForRegistration: string[] = null;
+    inprogress: boolean = false;
+
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
         this.form = this.formBuilder.group({
             'id' : ['', [Validators.required]]
@@ -125,6 +129,7 @@ export class ModalsAddHardwareComponent implements OnInit {
     sequenceRegistration() {
 
         console.log('Console Registration');
+        this.devicesForRegistration = null;
 
         this.registeredDevices = [];
         this.failedDevices = [];
@@ -133,79 +138,67 @@ export class ModalsAddHardwareComponent implements OnInit {
             this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
         }
 
+        this.inprogress = true;
+
         let data: string = this.multiForm.controls['listOfIds'].value;
-        data.replace(',', ';');
-        data.replace(/(\r?\n|\r)*(\s)*/g, '');
-        data = data + ';';
+
+        data = data.replace(',', ';');
+        data = data.replace(/\s+/g, '');
+        data = data.replace(/(\r?\n|\r)*(\s)*/g, '');
+
+
+        console.log('Result P5ed splitem: ', data);
         let devicesForRegistration: string[] = data.split(';');
-        devicesForRegistration = devicesForRegistration.filter(device => device.length > 0);
+
+        console.log('Result list:', devicesForRegistration);
+        this.devicesForRegistration = devicesForRegistration.filter(device => device.length > 20);
+        console.log('Result list:',  this.devicesForRegistration);
 
 
-        let promise_list: Promise<any>[] = [];
-
-        devicesForRegistration.forEach(device => {
-            promise_list.push(
-                new Promise((resolve, reject) => {
-                    this.backendService.projectAddHW({
-                        group_ids: this.multiSelectedHardwareGroups,
-                        registration_hash: device,
-                        project_id: this.modalModel.project_id
-                    })
-                        .then(() => {
-
-                            this.registeredDevices.push(device);
-                            devicesForRegistration.splice(devicesForRegistration.indexOf(device), 1);
-                        })
-                        .catch(reason => {
-                            this.failedDevices.push(device + ':  ' + reason.body.message);
-                        }).then(() => {
-                            if (devicesForRegistration.length > 0) {
-                                this.multiForm.controls['listOfIds'].setValue(devicesForRegistration.join(';'));
-                                this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registeredDevices.join(',  \n'));
-                                this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
-                            } else {
-                                this.modalClose.emit(true);
-                            }
-                        });
-                })
-            );
-        });
+        this.sequenceRegistrationPromise(0);
     }
 
-    /*
+
     sequenceRegistrationPromise(pointer: number) {
-        new Promise((resolve, reject) => {
-            this.backendService.projectAddHW({
-                group_ids: this.multiSelectedHardwareGroups,
-                registration_hash: device,
-                project_id: this.modalModel.project_id
-            })
-                .then(() => {
 
-                    this.registeredDevices.push(device);
-                    devicesForRegistration.splice(devicesForRegistration.indexOf(device), 1);
-                })
-                .catch(reason => {
-                    this.failedDevices.push(device + ':  ' + reason.body.message);
-                }).then(() => {
-                if (devicesForRegistration.length > 0) {
-                    this.multiForm.controls['listOfIds'].setValue(devicesForRegistration.join(';'));
-                    this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registeredDevices.join(',  \n'));
-                    this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
-                } else {
-                    this.modalClose.emit(true);
-                }
-            });
+        if (pointer >= this.devicesForRegistration.length) {
+            this.inprogress = false;
+            return;
+        }
+
+        console.log("Registurji number: ", pointer, "Pole: ", this.devicesForRegistration[pointer]);
+
+        this.backendService.projectAddHW({
+            group_ids: this.multiSelectedHardwareGroups,
+            registration_hash: this.devicesForRegistration[pointer],
+            project_id: this.modalModel.project_id
         })
+            .then((device: IHardware) => {
 
+                console.error('Podařilo se ', device.id );
+
+                this.registeredDevices.push(device.id + ' - Success');
+                this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registeredDevices.join(',  \n'));
+
+                this.sequenceRegistrationPromise(++pointer);
+
+            })
+            .catch((reason: IResultBadRequest) => {
+                console.error('Nepodařilo se pro ', this.devicesForRegistration[pointer], ' důvod?', reason.message);
+
+                this.failedDevices.push(this.devicesForRegistration[pointer] + ': ' + reason.message);
+                this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
+
+                this.sequenceRegistrationPromise(++pointer);
+            });
     }
-    */
 
 
 
 
 
-        singleRegistration() {
+
+    singleRegistration() {
 
         this.single_error_message = null;
 

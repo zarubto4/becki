@@ -376,6 +376,7 @@
 
                 <!-- List of Integrated HW groups START-->
                 <h4 [innerHTML]="'label_hardware_groups'|bkTranslate:this"></h4>
+
                 <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
                     <table class="table table-hover table-light byzance-table">
                         <thead>
@@ -408,7 +409,6 @@
                         </tr>
                         </tbody>
                     </table>
-                    <bk-filter-page-component [from]="deviceGroup.from" [to]="deviceGroup.to" [total]="deviceGroup.total"  [totalPages]="deviceGroup.pages" (onSelect)="selectedFilterPageHardwareGroup($event)"></bk-filter-page-component>
                 </div>
 
                 <!-- Temporary page content if content is being loaded or if there is no content -- START -->
@@ -440,16 +440,7 @@
                         <tbody>
                         <tr *ngFor="let device of devicesFilter.content">
                             <td class="vert-align">
-                                <div class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
-                                    <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
-                                    <div class="hint-fixed">
-                                    <span class="hint right">
-                                         <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
-                                    </span>
-                                    </div>
-                                </div>
-                                <a (click)="onDeviceClick(device.id)"
-                                   class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+                                <a (click)="onDeviceClick(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                             </td>
                             <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
                             <td class="vert-align no-wrap">{{device.description}}</td>
@@ -497,7 +488,7 @@
                                     [main_message_comment_link]="'label_no_hardware_in_snapshot_comment'|bkTranslate:this"
                                     [show_button]="false">
                 </bk-nothing-to-show>
-                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->¨
             </div>
         </div>
 
