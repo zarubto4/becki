@@ -23,7 +23,13 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
                     console.error('WebsocketClientTyrion: requestNotificationsSubscribe:: ERRTOR: ',  error);
                 }
 
+
+
             });
+
+            if (!this.pingTimeout) {
+                this.pingTimeout = setInterval( this.ping.bind(this), 5000);
+            }
         };
 
         super.onError = (e: any) => this.onErrorOrClose(e);
@@ -38,10 +44,6 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
     }
 
     public onReady() {
-
-        if (!this.pingTimeout) {
-            this.pingTimeout = setInterval( this.ping.bind(this), 5000);
-        }
         this.backend.websocketGetAccessToken()
             .then((webSocketToken: IWebSocketToken) => {
                 // console.log('WebsocketClientTyrion: websocketGetAccessToken:: token:', webSocketToken.websocket_token);

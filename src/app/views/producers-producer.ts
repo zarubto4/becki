@@ -47,7 +47,7 @@ export class ProducersProducerComponent extends _BaseMainComponent implements On
             })
             .then((devices) => {
                 for (let i in devices) {
-                    if (devices[i].producer_id !== this.producerId) {
+                    if (devices[i].producer.id !== this.producerId) {
                         devices.splice(parseInt(i, 10));
                     }
                 }

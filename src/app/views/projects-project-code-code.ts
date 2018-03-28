@@ -50,7 +50,6 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     buildInProgress: boolean = false;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
-    reloadInterval: any = null;
     hardwareType: IHardwareType = null;
 
     selected_hardware: IHardware[] = [];
@@ -140,11 +139,6 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
-
-        if (this.reloadInterval) {
-            clearInterval(this.reloadInterval);
-            this.reloadInterval = null;
-        }
 
         if (this.project_Id != null && this.projectSubscription) {
             this.projectSubscription.unsubscribe();
@@ -451,7 +445,6 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
     refreshInterface() {
 
-        console.log('Refresh Interface');
         if (!this.codeProgram) {
             return;
         }
@@ -470,7 +463,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
         let ios = getAllInputOutputs(main, userFiles);
 
-        console.log('Interface: ', ios);
+
         this.codeIDE.refreshInterface(ios);
 
     }
@@ -646,7 +639,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                 })
                     .then(() => {
                         this.fmSuccess(this.translate('flash_code_version_save', m.name));
-                        this.exitConfirmationService.setConfirmationEnabled(true);
+                        this.exitConfirmationService.setConfirmationEnabled(false);
 
                         this.refresh();
                     })

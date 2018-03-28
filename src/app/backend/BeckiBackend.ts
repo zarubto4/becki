@@ -21,13 +21,13 @@ declare const BECKI_VERSION: string;
 
 // REQUEST CLASSES
 export interface OnlineChangeStatus {
-    model: ('Board' | 'Instance' | 'HomerServer' | 'CompilationServer');
+    model: ('Hardware' | 'Instance' | 'HomerServer' | 'CompilationServer');
     model_id: 'uuid';
     online_state: ('NOT_YET_FIRST_CONNECTED'|'FREEZED'|'SHUT_DOWN'|'SYNCHRONIZATION_IN_PROGRESS'|'OFFLINE'|'ONLINE'|'UNKNOWN_LOST_CONNECTION_WITH_SERVER');
 }
 
 export interface ModelChangeStatus {
-    model: ('ProjectsRefreshAfterInvite' | 'Project' | 'HomerServer' | 'Board' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure' | 'CProgramUpdatePlan');
+    model: ('ProjectsRefreshAfterInvite' | 'Project' | 'HomerServer' | 'Hardware' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure' | 'CProgramUpdatePlan');
     model_id: 'uuid';
 }
 

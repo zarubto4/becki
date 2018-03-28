@@ -281,13 +281,13 @@
                                 <div>
                                     <div>
                                         <span [innerHTML]="'label_actual_program_name'|bkTranslate:this"></span>:
-                                        <a *ngIf="hardware.actual_c_program_name" class="bold" [routerLink]="['/projects', hardware.project_id, 'code', hardware.actual_c_program_id]">{{hardware.actual_c_program_name}}</a>
-                                        <span *ngIf="!hardware.actual_c_program_name" class="bold">{{'label_alerts'|bkTranslate:this}}</span>
+                                        <a *ngIf="hardware.actual_c_program" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', hardware.actual_c_program.id]">{{hardware.actual_c_program.name}}</a>
+                                        <span *ngIf="!hardware.actual_c_program" class="bold">{{'label_alerts'|bkTranslate:this}}</span>
                                     </div>
                                     <div>
                                         <span [innerHTML]="'label_actual_program_version'|bkTranslate:this"></span>:
-                                        <a *ngIf="hardware.actual_c_program_version_name" class="bold" [routerLink]="['/projects', hardware.project_id, 'code', hardware.actual_c_program_id, { version: hardware.actual_c_program_version_id }]">{{hardware.actual_c_program_version_name}}</a>
-                                        <span *ngIf="!hardware.actual_c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                        <a *ngIf="hardware.actual_c_program_version" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', hardware.actual_c_program.id, { version: hardware.actual_c_program_version.id }]">{{hardware.actual_c_program_version.name}}</a>
+                                        <span *ngIf="!hardware.actual_c_program_version" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                     </div>
                                 </div>
                                 <hr>
@@ -311,13 +311,13 @@
                                     <div>
                                         <div>
                                             <span [innerHTML]="'label_actual_backup_program_name'|bkTranslate:this"></span>:
-                                            <a *ngIf="hardware.actual_c_program_backup_name" class="bold" [routerLink]="['/projects', hardware.project_id, 'code', hardware.actual_c_program_backup_id]">{{hardware.actual_c_program_backup_name}}</a>
-                                            <span *ngIf="!hardware.actual_c_program_backup_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                            <a *ngIf="hardware.actual_c_program_backup" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', hardware.actual_c_program_backup.id]">{{hardware.actual_c_program_backup.name}}</a>
+                                            <span *ngIf="!hardware.actual_c_program_backup" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
                                         <div>
                                             <span [innerHTML]="'label_actual_backup_program_version'|bkTranslate:this"></span>:
-                                            <a *ngIf="hardware.actual_c_program_backup_version_name" class=" bold" [routerLink]="['/projects', hardware.project_id, 'code', hardware.actual_c_program_backup_id, { version: hardware.actual_c_program_backup_version_id }]">{{hardware.actual_c_program_backup_version_name}}</a>
-                                            <span *ngIf="!hardware.actual_c_program_backup_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                            <a *ngIf="hardware.actual_c_program_backup_version" class=" bold" [routerLink]="['/projects', hardware.project.id, 'code', hardware.actual_c_program_backup_version.id, {version: hardware.actual_c_program_backup_version.name }]">{{hardware.actual_c_program_backup_version.name}}</a>
+                                            <span *ngIf="!hardware.actual_c_program_backup_version" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -352,7 +352,7 @@
 
                             <div *ngIf="hardware.actual_instance!=null">
                                 <strong class="font-color-cloud">CLOUD</strong>{{'label_instance'|bkTranslate:this}}:
-                                <a *ngIf="hardware.actual_instance.id" [routerLink]="['/projects', hardware.project_id, 'instances', hardware.actual_instance.id]"
+                                <a *ngIf="hardware.actual_instance.id" [routerLink]="['/projects', hardware.project.id, 'instances', hardware.actual_instance.id]"
                                    class="font-grey-mint bold">{{hardware.actual_instance.name?hardware.actual_instance.name:hardware.actual_instance.id}}}</a>
                                 <span *ngIf="!hardware.actual_instance.id" class="font-grey-mint bold">(Device is not connected to an instance)</span>
                                 <bk-online-state [online_state]="hardware.actual_instance.instance_online_state"></bk-online-state>
@@ -362,13 +362,13 @@
 
                             <div *ngIf="hardware.actual_instance!=null">
                                 <strong class="font-color-blocko">BLOCKO</strong>{{'label_name'|bkTranslate:this}}:
-                                <a *ngIf="hardware.actual_instance.b_program_id" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project_id, 'blocko', hardware.actual_instance.b_program_id]">{{hardware.actual_instance.b_program_name}}</a>
-                                <span *ngIf="!hardware.actual_instance.b_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                <a *ngIf="hardware.actual_instance" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project.id, 'blocko', hardware.actual_instance.b_program_id]">{{hardware.actual_instance.b_program_name}}</a>
+                                <span *ngIf="!hardware.actual_instance.name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                             </div>
 
                             <div *ngIf="hardware.actual_instance!=null">
                                 <strong class="font-color-blocko">BLOCKO</strong>{{'label_version'|bkTranslate:this}}:
-                                <a *ngIf="hardware.actual_instance.b_program_version_id" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project_id, 'blocko', hardware.actual_instance.b_program_id, { version: hardware.actual_instance.b_program_version_id }]">{{hardware.actual_instance.b_program_version_name}}</a>
+                                <a *ngIf="hardware.actual_instance.b_program_version_id" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project.id, 'blocko', hardware.actual_instance.b_program_id, { version: hardware.actual_instance.b_program_version_id }]">{{hardware.actual_instance.b_program_version_name}}</a>
                                 <span *ngIf="!hardware.actual_instance.b_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                             </div>
 
@@ -532,11 +532,11 @@
                             <!-- Firmware -->
                             <template [ngIf]="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'">
                                 <td class="vert-align font-grey-mint">
-                                    <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', hardware.project_id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_program_name}}</a>
+                                    <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_program_name}}</a>
                                     <span *ngIf="!update.c_program_detail.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                 </td>
                                 <td class="vert-align font-grey-mint">
-                                    <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', hardware.project_id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_version_name}}</a>
+                                    <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_version_name}}</a>
                                     <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                 </td>
                             </template>

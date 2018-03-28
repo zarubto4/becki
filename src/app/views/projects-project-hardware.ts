@@ -282,7 +282,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
                 this.devicesFilter.content.forEach((device, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
-                        if (status.model === 'Board' && device.id === status.model_id) {
+                        if (status.model === 'Hardware' && device.id === status.model_id) {
                             device.online_state = status.online_state;
                         }
                     });

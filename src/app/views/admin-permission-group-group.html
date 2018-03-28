@@ -4,7 +4,8 @@
                 [lastBreadName]="securityRole?securityRole.name:''">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-    <bk-portlet-title [title_name]="'title'|bkTranslate:this"
+    <bk-portlet-title *ngIf="securityRole"
+                      [title_name]="'title'|bkTranslate:this"
                       [icon]="'fa-users'"
                       (onClick)="onPortletClick($event)"
                       [btns]="[

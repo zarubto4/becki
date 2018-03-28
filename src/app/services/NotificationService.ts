@@ -78,6 +78,8 @@ export abstract class Notification {
 
         if (n.notification_type === 'CHAIN_START' || n.notification_type === 'CHAIN_UPDATE' || n.notification_type === 'CHAIN_END') {
             out.closeTime = null;
+        } else {
+            out.closeTime = 5000;
         }
 
         return out;
@@ -124,6 +126,10 @@ export abstract class Notification {
             this.closeTime = ((((this.htmlBody.length / 5) / 180) * 60) * 1000) + 1500;
         } else {
             this.closeTime = 4000;
+        }
+
+        if (this.closeTime > 20000) {
+            this.closeTime = 20000;
         }
 
         this.tick(0);
@@ -547,7 +553,7 @@ export class NotificationService {
             case 'BProgram':
                 this.router.navigate(['projects', e.project_id, 'blocko', e.id]);
                 break;
-            case 'Board':
+            case 'Hardware':
                 this.router.navigate(['projects', e.project_id, 'hardware', e.id]);
                 break;
             case 'CProgram':

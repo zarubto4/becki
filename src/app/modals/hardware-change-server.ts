@@ -75,7 +75,7 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
 
     findAllAccessibleServers(): void {
         this.backendService.homerServersGetList(0, {
-            project_id : this.modalModel.board.project_id,
+            project_id : this.modalModel.board.project.id,
             server_types : ['PUBLIC', 'PRIVATE', 'MAIN']
         })
             .then((servers: IHomerServerList) => {

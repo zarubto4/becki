@@ -1422,9 +1422,10 @@ export class StaticTranslation {
                 'table_hardware_type': 'Device Type',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
+                'table_update_id': 'Procedure ID',
                 'table_project': 'Project',
                 'table_program': 'Program',
-                'table_started': 'Created',
+                'table_created': 'Created',
                 'table_planed': 'Planed',
                 'table_finished': 'Finished',
                 'table_type': 'Update type',
@@ -1432,6 +1433,7 @@ export class StaticTranslation {
                 'table_state': 'Status',
                 'table_b_program_version_name': '<strong class="font-color-blocko">BLOCKO</strong>Version',
                 'table_b_program_version_description': 'Description',
+                'table_update_progress': 'Progress',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
@@ -1542,7 +1544,7 @@ export class StaticTranslation {
                 'label_cannot_change_program_publicity': 'Unable to change program privacy setting, ',
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
-                'label_time_missing_in_json': 'Time is missing in Json',
+                'label_time_missing_in_json': 'Not yet',
 
                 'flash_cant_load_version': 'Cannot load version <b>{0}</b>, {1}',
                 'flash_instance_edit_success': 'Instance information was changed.',
@@ -2402,7 +2404,7 @@ export class StaticTranslation {
 
             }, 'BugsComponent': {
                 'main_title': 'Platform administration',
-                'main_subtitle': 'Caught Bugs',
+                'title': 'Caught Bugs',
 
                 'label_general_description': 'Bugs that occurred on the backend server. You can browse bugs or report them on YouTrack',
                 'label_delete_bugs_all': 'Delete all bugs',
@@ -2416,7 +2418,7 @@ export class StaticTranslation {
 
             }, 'BugsBugComponent': {
                 'main_title': 'Platform administration',
-                'main_subtitle': 'Bug',
+                'title': 'Bug',
 
                 'label_report_bug': 'Report to YouTrack',
                 'label_view_bug': 'View on YouTrack',

@@ -207,79 +207,72 @@
 
         <div *ngIf="tab == 'update'">
 
-            <div *ngIf="actualizationTaskFilter && actualizationTaskFilter.content.length > 0"  class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th>{{'table_id'|bkTranslate:this}}</th>
-                        <th [innerHTML]="'table_hardware'|bkTranslate:this"></th>
-                        <th>{{'table_finished'|bkTranslate:this}}</th>
-                        <th>{{'table_type'|bkTranslate:this}}</th>
-                        <th>
-                            <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}
-                        </th>
-                        <th>
-                            <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_version'|bkTranslate:this}}
-                        </th>
-
-                        <th>{{'table_status'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
+                        <th class="vert-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let update of actualizationTaskFilter.content">
-
-                        <td class="vert-align">{{update.id.substr(0, 12)}}</td>
+                    <tr *ngFor="let procedure of instance.current_snapshot.updates">
                         <td class="vert-align">
-                            <a class="bold" [routerLink]="['/projects', projectId, 'hardware', update.hardware.id]">{{ update.hardware.name ? update.hardware.name : update.hardware.id}}</a>
+                            <a class="bold" (click)="onActualizationProcedureClick(procedure.id)">{{procedure.id.substr(0, 12)}}</a>
                         </td>
-
+                        <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
+                        <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
                         <td class="vert-align">
-                            <span *ngIf="!update.date_of_finish" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
-                            <span *ngIf="update.date_of_finish">{{update.date_of_finish|bkUnixTimeToDate}}</span>
+                            <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                            <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
                         </td>
-
                         <td class="vert-align">
-                            <bk-firmware-type [firmware_type]="update.firmware_type"></bk-firmware-type>
+                            <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
+                            <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
                         </td>
-
-                        <!-- Firmware -->
-                        <template [ngIf]="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'">
-                            <td class="vert-align font-grey-mint">
-                                <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', projectId, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_program_name}}</a>
-                                <span *ngIf="!update.c_program_detail.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                            </td>
-                            <td class="font-grey-mint">
-                                <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', projectId, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_version_name}}</a>
-                                <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                            </td>
-                        </template>
-
-                        <!-- BootLoader -->
-                        <template [ngIf]="update.firmware_type == 'BOOTLOADER'">
-                            <td class="vert-align font-grey-mint"></td>
-                            <td class="vert-align font-grey-mint">
-                                <span *ngIf="update.bootloader_detail" class="font-grey-mint bold"> {{update.bootloader_detail.version_identificator}}</span>
-                            </td>
-                        </template>
 
                         <!-- Update State -->
                         <td class="vert-align">
-                            <bk-update-state [updateState]="update.state" [error_code]="update.error_code"></bk-update-state>
+                            <bk-update-state [updateState]="procedure.state"></bk-update-state>
+                        </td>
+
+                        <td class="vert-align text-right">
+                            <style type="text/css">
+                                table tr button {
+                                    opacity: 0.05;
+                                }
+
+                                table tr:hover button {
+                                    opacity: 1
+                                }
+                            </style>
+                            <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                    [disabled]="!procedure.update_permission"
+                                    (click)="onUpdateProcedureCancelClick(procedure)">
+                                <i class="fa fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="actualizationTaskFilter.from" [to]="actualizationTaskFilter.to" [total]="actualizationTaskFilter.total"  [totalPages]="actualizationTaskFilter.pages" (onSelect)="onFilterActualizationProcedureTask($event)"></bk-filter-page-component>
             </div>
 
+
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-            <bk-nothing-to-show [condition_loading]="(actualizationTaskFilter == null)"
-                                [condition_empty]="(actualizationTaskFilter != null && actualizationTaskFilter.content.length == 0)"
-                                [main_message_link]="'label_no_running_update_on_hardware'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_running_update_on_hardware_comment'|bkTranslate:this"
+            <bk-nothing-to-show [condition_loading]="(instance.current_snapshot.updates == null)"
+                                [condition_empty]="(instance.current_snapshot.updates != null && instance.current_snapshot.updates.length == 0)"
+                                [main_message_link]="'label_no_updates'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_updates_comment'|bkTranslate:this"
+                                [btn_label]="'btn_add_new_update'|bkTranslate:this"
                                 [show_button]="false">
             </bk-nothing-to-show>
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
         </div>
 
         <div *ngIf="tab == 'editor'">
@@ -424,7 +417,7 @@
                 <hr>
                 <!-- List of Integrated HW by filter START-->
                 <h4 [innerHTML]="'label_hardware_in_instance'|bkTranslate:this"></h4>
-                <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+                <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
                     <table class="table table-hover table-light byzance-table">
                         <thead>
                         <tr>

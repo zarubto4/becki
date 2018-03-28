@@ -55,6 +55,31 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
             });
     }
 
+    onReportBug(bug: IServerError) {
+        this.blockUI();
+        this.tyrionBackendService.reportBug(bug.id)
+            .then(() => {
+                this.unblockUI();
+                this.fmSuccess(this.translate('flash_report_success'));
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.fmError(this.translate('flash_cant_report'), reason);
+            });
+    }
+
+    onDeleteBug(bug: IServerError) {
+        this.blockUI();
+        this.tyrionBackendService.deleteBug(bug.id)
+            .then((response) => {
+                this.fmSuccess(this.translate('flash_report_remove_succesfuly'));
+                this.refresh();
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('flash_cant_remove', reason));
+            });
+    }
+
     onBugClick(bug: IServerError) {
         this.navigate(['/admin/bugs', bug.id]);
     }

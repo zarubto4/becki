@@ -76,17 +76,14 @@
                                 <i class="fa fa-trash"></i>
                             </button>
 
-                            <div *ngIf="instance.online_state  == 'SHUT_DOWN'">
-                                <button title="{{'label_upload_latest_used_version'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission" (click)="onInstanceStartClick(instance, true)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                            </div>
+                            <button *ngIf="instance.online_state  == 'SHUT_DOWN'" title="{{'label_upload_latest_used_version'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission" (click)="onInstanceStartClick(instance, true)">
+                                <i class="fa fa-power-off"></i>
+                            </button>
 
-                            <div *ngIf="instance.online_state  == 'ONLINE'">
-                                <button title="{{'label_shutdown_instance'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission" (click)="onInstanceShutdownClick(instance)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                            </div>
+                            <button *ngIf="instance.online_state  == 'ONLINE'" title="{{'label_shutdown_instance'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission" (click)="onInstanceShutdownClick(instance)">
+                                <i class="fa fa-power-off"></i>
+                            </button>
+
                         </td>
                     </tr>
                 </tbody>

@@ -110,8 +110,8 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                     this.hardwareType.description,
                     this.hardwareType.connectible_to_internet,
                     this.hardwareType.compiler_target_name,
-                    this.hardwareType.processor_id,
-                    this.hardwareType.producer_id,
+                    this.hardwareType.processor.id,
+                    this.hardwareType.producer.id,
                     true
                 );
                 this.modalService.showModal(model).then((success) => {

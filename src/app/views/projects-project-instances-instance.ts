@@ -244,12 +244,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onToggleTab(tab: string) {
         this.tab = tab;
+
         if (tab === 'update' && !this.actualizationTaskFilter) {
             this.onFilterActualizationProcedureTask();
         }
 
-        if (tab === 'hardware' && !this.devicesFilter) {
-            this.onFilterHardware();
+        if (tab === 'editor' && ( !this.allHw || !this.allHwGroups)) {
+            this.onFilterForBlockoSelectHardware();
+            this.onFilterForBlockoSelectHardwareGroup();
         }
 
         if (tab === 'hardware' && !this.deviceGroupFilter) {
@@ -524,10 +526,16 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onFilterHardware(pageNumber: number = 0, groups: IHardwareGroup[] = []): void {
+
+        // Set groupd if we he it
+        if (!groups.length && this.deviceGroupFilter != null) {
+            groups = this.deviceGroupFilter.content;
+        }
+
         this.blockUI();
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
             projects: [this.projectId],
-            instance_snapshots: groups.length > 0? [] : [this.instanceSnapshot.id],
+            instance_snapshots: groups.length > 0 ? [] : [this.instanceSnapshot.id],
             hardware_groups_id: groups.map(group => group.id)
         })
             .then((values) => {
@@ -535,11 +543,45 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 this.devicesFilter.content.forEach((device, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
-                        if (status.model === 'Board' && device.id === status.model_id) {
+                        if (status.model === 'Hardware' && device.id === status.model_id) {
                             device.online_state = status.online_state;
                         }
                     });
                 });
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
+
+    onFilterForBlockoSelectHardware(pageNumber: number = 0): void {
+
+        this.blockUI();
+        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+            projects: [this.projectId]
+        })
+            .then((values) => {
+                this.allHw = values;
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
+
+    onFilterForBlockoSelectHardwareGroup(pageNumber: number = 0): void {
+
+        this.blockUI();
+        this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
+            project_id : this.projectId
+        })
+            .then((values) => {
+                this.allHwGroups = values;
 
                 this.unblockUI();
             })

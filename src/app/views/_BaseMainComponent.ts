@@ -155,6 +155,10 @@ export abstract class _BaseMainComponent {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'hardware', device_id]);
     }
 
+    public onActualizationProcedureClick(procedure_id: string): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'actualization_procedure', procedure_id]);
+    }
+
     public onLibraryAdminClick(library_id: string): void {
         this.navigate(['/admin/hardware/libraries', library_id]);
     }

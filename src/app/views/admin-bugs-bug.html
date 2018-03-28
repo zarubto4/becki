@@ -5,8 +5,9 @@
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title *ngIf="bug"
-        [title]="('title'|bkTranslate:this) + bug.name"
+        [title_name]="('title'|bkTranslate:this)"
         [icon]="'fa-server'"
+        [title_object_name]="bug.name"
         (onClick)="onPortletClick($event)"
         [btns]="[
                 {

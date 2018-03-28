@@ -117,8 +117,8 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
             hardwareType.description,
             hardwareType.connectible_to_internet,
             hardwareType.compiler_target_name,
-            hardwareType.processor_id,
-            hardwareType.producer_id,
+            hardwareType.processor.id,
+            hardwareType.producer.id,
             true
         );
         this.modalService.showModal(model).then((success) => {

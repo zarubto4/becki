@@ -61,7 +61,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         });
 
         this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
-            if (status.model === 'Board' && this.hardwareId === status.model_id) {
+            if (status.model === 'Hardware' && this.hardwareId === status.model_id) {
                 this.refresh();
                 this.onFilterActualizationProcedureTask();
             }
@@ -111,13 +111,13 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.hardware.server.online_state = status.online_state;
                     }
 
-                    if (status.model === 'Board' && this.hardware.id === status.model_id) {
+                    if (status.model === 'Hardware' && this.hardware.id === status.model_id) {
                         this.hardware.online_state = status.online_state;
                     }
 
                 });
 
-                return this.tyrionBackendService.hardwareTypeGet(this.hardware.hardware_type_id);
+                return this.tyrionBackendService.hardwareTypeGet(this.hardware.hardware_type.id);
 
             })
             .then((hardwareType) => {
@@ -437,7 +437,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         }
 
         if (backup_mode === 'STATIC_BACKUP') {
-            let m = new ModalsHardwareCodeProgramVersionSelectModel(this.projectId, this.hardware.hardware_type_id);
+            let m = new ModalsHardwareCodeProgramVersionSelectModel(this.projectId, this.hardware.hardware_type.id);
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success) {
