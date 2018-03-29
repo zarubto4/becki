@@ -92,7 +92,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         this.websocketService = new WebsocketService(this);
 
         // Open Websocket to Tyrion
-        this.websocketService.openTyrionWebsocketConnection(this.host + '/websocket/portal/');
+        this.websocketService.openTyrionWebsocketConnection(this.host + '/websocket/portal/', this.protocol === 'https');
 
     }
 
