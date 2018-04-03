@@ -65,6 +65,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     public constructor() {
         super();
 
+
         if (location && location.hostname) {
             if (location.hostname.indexOf('portal.') === 0) {
                 this.host = location.hostname.replace('portal.', 'tyrion.');

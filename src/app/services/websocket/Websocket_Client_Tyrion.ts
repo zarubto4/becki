@@ -28,7 +28,7 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
             });
 
             if (!this.pingTimeout) {
-                this.pingTimeout = setInterval( this.ping.bind(this), 5000);
+                this.pingTimeout = setInterval( this.ping.bind(this), 25000);
             }
         };
 

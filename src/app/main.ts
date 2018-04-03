@@ -207,7 +207,12 @@ import { ModalsVersionSelectComponent } from './modals/version-select';
 import { ModalsProgramVersionSelectComponent } from './modals/program-version-select';
 import { TerminalLogSubscriberComponent } from './components/TerminalLogSubscriberComponent';
 import { ModalsSnapShotInstanceComponent } from './modals/snapshot-properties';
-import {ModalsSnapShotDeployComponent} from "./modals/snapshot-deploy";
+import { ModalsSnapShotDeployComponent } from './modals/snapshot-deploy';
+import { ProjectsProjectWidgetsWidgetComponent } from './views/projects-project-widgets-widget';
+import { GridViewComponent } from './components/GridViewComponent';
+import { ProjectsProjectGridComponent } from './views/projects-project-grid';
+import { ProjectsProjectGridGridsComponent } from './views/projects-project-grid-grids';
+import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-grid-grids-grid";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -254,28 +259,31 @@ let routes: Routes = [
     { path: 'projects/:project', data: { breadName: ':project' }, component: ProjectsProjectComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware', data: { breadName: 'HARDWARE devices' }, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware/:hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
+
     { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
+    { path: 'projects/:project/blocks', data: { breadName: 'BLOCKO blocks' }, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+
     { path: 'projects/:project/code', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
-    { path: 'projects/:project/blocks', data: { breadName: 'BLOCKO blocks' }, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard] },
-    //  { path: 'projects/:project/blocks/:blocks', data: { breadName: ':blocks' }, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
     { path: 'projects/:project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
 
-    { path: 'projects/:project/actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
+    { path: 'projects/:project/actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard]},
 
-    // { path: 'projects/:project/grid', data: { breadName: 'GRID projects' }, component: ProjectsProjectGridComponent, canActivate: [AuthGuard] },
-    // { path: 'projects/:project/grid/:grids', data: { breadName: ':grids' }, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard] },
-    // { path: 'projects/:project/grid/:grids/:grid', data: { breadName: ':grid' }, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+    { path: 'projects/:project/grid', data: { breadName: 'GRID projects' }, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
+    { path: 'projects/:project/grid/:grids', data: { breadName: ':grids' }, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
+    { path: 'projects/:project/grid/:grids/:grid', data: { breadName: ':grid' }, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+
     { path: 'projects/:project/servers', data: { breadName: 'CLOUD servers' }, component: ProjectsProjectServersComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/instances', data: { breadName: 'CLOUD instances' }, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
+
     { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
 
     { path: 'projects/:project/widgets', data: { breadName: 'GRID widgets' }, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard] },
-    // { path: 'projects/:project/widgets/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+    { path: 'projects/:project/widgets/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
     { path: 'producers', data: { breadName: 'Producers' }, component: ProducersComponent, canActivate: [AuthGuard] },
     { path: 'producers/:producer', data: { breadName: ':producer' }, component: ProducersProducerComponent, canActivate: [AuthGuard] },
@@ -290,13 +298,10 @@ let routes: Routes = [
     // { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
-    // { path: 'admin/widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard]},
-    // { path: 'admin/widget/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard]}, // Only for community decisions - Link without project path
+    { path: 'admin/widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard]},          // Only for community decisions - Link without project path
 
-
-    { path: 'admin/blocks', data: {breadName: 'Blocko Groups'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
-    // { path: 'admin/blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
-    // { path: 'admin/block/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]}, // Only for community decisions - Link without project path
+    { path: 'admin/blocks', data: {breadName: 'Blocko Blocks'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
+    { path: 'admin/blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard]},             // Only for community decisions - Link without project path
 
     { path: 'admin/bugs', data: {breadName: 'Bugs'}, component: BugsComponent, canActivate: [AuthGuard]},
     { path: 'admin/bugs/:bug', data: {breadName: ':bug'}, component: BugsBugComponent, canActivate: [AuthGuard]},
@@ -523,6 +528,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ServerRegionSelectorComponent,
         TerminalLogSubscriberComponent,
         LogLevelComponent,
+        GridViewComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -560,9 +566,9 @@ class BeckiErrorHandler implements ErrorHandler {
         RoleGroupComponent,
         RoleGroupGroupComponent,
         ProjectsProjectBlocksBlockComponent,
-        // ProjectsProjectGridComponent,
-        // ProjectsProjectGridGridsComponent,
-        // ProjectsProjectGridGridsGridComponent,
+        ProjectsProjectGridComponent,
+        ProjectsProjectGridGridsComponent,
+        ProjectsProjectGridGridsGridComponent,
         ProductRegistrationComponent,
         ProjectsProjectInstancesComponent,
         ProjectsProjectInstancesInstanceComponent,
@@ -571,10 +577,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectMembersComponent,
         ProjectsProjectServersComponent,
         ProjectsProjectWidgetsComponent,
-        // ProjectsProjectWidgetsWidgetsWidgetComponent,
         ServerComponent,
         TyrionComponent,
-        // ProjectsProjectWidgetsWidgetsComponent,
+        ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectHardwareHardwareComponent,
         ProducersComponent,
         ProducersProducerComponent,

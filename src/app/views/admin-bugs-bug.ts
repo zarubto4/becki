@@ -73,7 +73,7 @@ export class BugsBugComponent extends _BaseMainComponent implements OnInit, OnDe
     onDeleteBug() {
         this.tyrionBackendService.deleteBug(this.bugId)
             .then((response) => {
-                this.navigate(['/admin/bug']);
+                this.navigate(['/admin/bugs']);
             })
             .catch((reason) => {
                 this.fmError(this.translate('flash_cant_remove', reason));

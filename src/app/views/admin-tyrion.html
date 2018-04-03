@@ -15,10 +15,31 @@
                     </div>
                 </div>
                 <div *ngIf="updates" class="portlet-body">
+
                     <div class="m-heading-1 border-blue m-bordered">
                         <p>{{'label_general_description'|bkTranslate:this}}</p>
                     </div>
-                    <div class="row">
+
+                    <div *ngIf="updates && updates.schedule_release" class="m-heading-1 border-red-flamingo m-bordered">
+                        <p>{{'label_waiting_update_procedure'|bkTranslate:this}}</p>
+                        <div>
+                            <strong>{{'label_required_version'|bkTranslate:this}}:</strong> {{updates.schedule_release}}
+                        </div>
+                        <div>
+                            <strong>{{'label_required_time'|bkTranslate:this}}:</strong> {{updates.schedule_release_time|bkUnixTimeToDate}}
+                        </div>
+
+                        <br>
+                        <button class="btn right-align red-flamingo"
+                                [disabled]="false"
+                                (click)="onScheduleRemove()">
+                            <i class="fa fa-trash"></i>
+                            {{'btn_stop'|bkTranslate:this}}
+                        </button>
+                    </div>
+
+
+                    <div class="row" *ngIf="updates && !updates.schedule_release" >
                         <form [formGroup]="form">
                             <div class="col-md-2">
                                 <div>
@@ -38,9 +59,15 @@
                             <div class="col-md-1">
                                 <button class="btn blue"
                                         [disabled]="false"
-                                        (click)="onScheduleUpdate()">
+                                        (click)="onScheduleUpdate(true)">
                                     <i class="fa fa-cog"></i>
                                     {{'btn_schedule_update'|bkTranslate:this}}
+                                </button>
+                                <button class="btn yellow-casablanca"
+                                        [disabled]="false"
+                                        (click)="onScheduleUpdate(false)">
+                                    <i class="fa fa-cog"></i>
+                                    {{'btn_immediately'|bkTranslate:this}}
                                 </button>
                             </div>
                         </form>

@@ -176,12 +176,10 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.tyrionBackendService.projectRemoveHW(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
         });
@@ -194,12 +192,10 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.tyrionBackendService.projectDeactiveHW(device.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
         });
@@ -212,12 +208,11 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.tyrionBackendService.projectActiveHW(device.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
                     });
             }
         });

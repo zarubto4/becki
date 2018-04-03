@@ -472,6 +472,12 @@ export class StaticTranslation {
 
             'DashboardComponent': {
                 'title_first_steps': 'FIRST STEPS',
+                'title_platform_news': 'Platform News',
+                'tab_general': 'General',
+                'tab_hardware': '<strong class="font-color-hardware">Hardware</strong>',
+                'tab_blocko': '<strong class="font-color-blocko">Blocko</strong>',
+                'tab_code': 'Code',
+                'tab_grid': 'Grid',
                 'main_title': 'Dashboard',
                 'btn_qrcode': 'Scan a QR code',
                 'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',
@@ -1078,14 +1084,16 @@ export class StaticTranslation {
                 'label_remove_blocko_program': 'Remove BLOCKO program',
                 'label_modal_no_padavan': 'No available padavan boards hardware.',
                 'label_used_in_cloud': 'Latest Used in Cloud',
+                'label_saved_versions': 'Saved Versions',
                 'tab_hardware': 'Hardware',
+                'tab_ide': 'IDE',
+                'tab_versions': 'Versions',
                 'tab_grid': 'Grid',
                 'tab_blocko': 'Blocko',
                 'tab_blocks': 'Blocks',
                 'tab_interfaces': 'Interfaces',
                 'tab_hw_groups': 'HW Groups',
                 'tab_instance_in_cloud': 'Instance in cloud',
-                'tab_saved_versions': 'Saved Versions',
                 'btn_add_slave': 'Add Slave Device',
                 'btn_add_master': 'Add Master Device',
                 'btn_add_grid': 'Add GRID project',
@@ -1106,6 +1114,8 @@ export class StaticTranslation {
                 'label_modal_no_main_boards': 'No available Master Devices.',
                 'label_modal_shutdown_instance': 'Shutdown instance',
                 'label_modal_confirm_shutdown_instance': 'Are you sure to shutdown the running instance?',
+                'label_program_versions': 'No <strong class="font-color-blocko" >BLOCKO</strong> versions',
+                'label_program_versions_comment': 'Add some <strong class="font-color-blocko" >Blocks</strong>, <strong class="font-color-grid">Grid</strong> Apps and <strong class="font-color-hardware">Hardware</strong> Interface on <strong>Screen</strong> and save it',
                 'label_no_grid_in_blocko': 'No <strong class="font-color-grid">GRID</strong> projects added in this <strong class="font-color-blocko">BLOCKO</strong> program',
                 'label_modal_cant_save_blocko_hw_without_version': 'Unable to save <strong class="font-color-blocko">BLOCKO</strong>, you have <b>hardware devices</b> without program <b>versions selected</b>.',
                 'label_modal_clear_program': 'Clear Program',
@@ -1688,7 +1698,7 @@ export class StaticTranslation {
                 'label_no_admin_widget': 'No <strong class="font-color-grid">GRID</strong> widgets',
                 'label_no_admin_widget_comment': 'There is not any widgets to check and valid',
 
-            }, 'ProjectsProjectWidgetsWidgetsWidgetComponent': {
+            }, 'ProjectsProjectWidgetsWidgetComponent': {
 
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET <strong>{0}</strong>',
                 'main_title': 'Platform administration',
@@ -1711,6 +1721,8 @@ export class StaticTranslation {
                 'label_remove_widget': 'GRID widget properties',
                 'label_widget_code': 'Widget Code',
                 'label_name': 'Name',
+                'label_properties': 'Edit',
+                'label_remove': 'Remove',
                 'label_description': 'Description',
                 'label_grid_group_name': '<strong class="font-color-grid">GRID</strong> Widget Group',
                 'label_version': 'Version',
@@ -1961,7 +1973,7 @@ export class StaticTranslation {
                 'flash_cant_remove_code': 'Unable to remove program, {0}.',
 
             }, 'ProjectsProjectGridGridsGridComponent': {
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - PROGRAM <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong>',
 
                 'label_program_properties': 'GRID Program properties',
                 'label_program_delete': 'Remove GRID program',
@@ -1970,9 +1982,9 @@ export class StaticTranslation {
                 'label_version': 'Version',
                 'label_grid_size_class': 'GRID size class',
                 'label_saved_versions': 'Saved versions',
-                'label_grid_program_name': '<strong class="font-color-grid" > GRID </strong> Program Name: <strong>{0}</strong>',
-                'label_grid_description': '<strong class="font-color-grid" > GRID </strong> Program Description: <strong>{0}</strong>',
-                'label_grid_grid_project': '<strong class="font-color-grid" > GRID </strong> Program Group Name',
+                'label_grid_program_name': '<strong class="font-color-grid" >GRID </strong> Program Name: <strong>{0}</strong>',
+                'label_grid_description': '<strong class="font-color-grid" >GRID </strong> Program Description: <strong>{0}</strong>',
+                'label_grid_grid_project': '<strong class="font-color-grid" >GRID </strong> Program Group Name',
                 'label_grid': 'GRID',
                 'label_widgets': 'Widgets',
                 'label_no_widgets': 'No <strong class="font-color-grid" > GRID </strong> widgets in this group',
@@ -1982,13 +1994,20 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_author': 'Author',
                 'label_actions': 'Actions',
+                'label_program_versions': 'No <strong class="font-color-grid" >GRID</strong> versions',
+                'label_program_versions_comment': 'Add some <strong class="font-color-grid" >Widgets</strong> on <strong>Screen</strong> and save it',
 
                 'option_mobile': 'Mobile',
                 'option_tablet': 'Tablet',
                 'option_desktop': 'Desktop',
 
+                'tab_ide': 'IDE',
+                'tab_versions': 'Versions',
+
                 'btn_add_page': 'New Page',
                 'btn_clear_console': 'Clear Console',
+                'btn_program_properties': 'Update',
+                'btn_program_delete': 'Delete',
                 'modal_label_grid_size_change': 'Change <strong class="font-color-grid">GRID</strong> size class',
                 'modal_text_grid_size_change': 'Changing <strong class="font-color-grid">GRID</strong> size class <strong>will delete all your pages</strong>, are you sure?',
 
@@ -2007,17 +2026,14 @@ export class StaticTranslation {
                 'flash_cant_remove_version': 'Unable to remove version,',
 
             }, 'ProjectsProjectGridGridsComponent': {
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - PROGRAM GROUP <strong>{0}</strong>',
-                'label_device_properties': 'GRID group properties',
-                'label_device_remove': 'Remove GRID group',
-                'label_program_properties': 'GRID program properties',
-                'label_program_remove': 'Remove GRID program',
-                'label_no_grid': 'No <strong class="font-color-grid">GRID</strong> program available',
-                'label_create_grid_text': 'Click on the button bellow to create a program.',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong>',
 
+                'btn_edit_project': 'Edit Apps Project',
+                'btn_remove_project': 'Remove',
                 'btn_add_grid_program': 'Create GRID Program',
-                'label_grid_project_name': '<strong class="font-color-grid">GRID</strong> Project Name: <strong>{0}</strong>',
-                'label_grid_project_description': '<strong class="font-color-grid">GRID</strong> Description: <strong>{0}</strong>',
+
+                'label_no_grid_programs': 'No <strong class="font-color-grid">GRID</strong> programs available',
+                'label_no_grid_programs_comment': 'Click on the button bellow to create a new one',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -2044,8 +2060,8 @@ export class StaticTranslation {
 
                 'label_group_properties': 'Group properties',
                 'label_group_remove': 'Remove group',
-                'label_no_grid': 'No <strong class="font-color-grid">GRID</strong> projects available.',
-                'label_create_grid_text': 'Click on the button bellow to create a project.',
+                'label_no_grid_projects': 'No <strong class="font-color-grid">GRID</strong> projects available',
+                'label_no_grid_projects_comment': 'Click on the button bellow to create a project.',
 
                 'flash_grid_project_add': 'Project has been created.',
                 'flash_cant_add_grid_project': 'Unable to create project.',
@@ -2431,15 +2447,21 @@ export class StaticTranslation {
                 'label_cause_type': 'Cause type',
                 'label_cause_message': 'Cause message',
                 'label_request': 'Request'
+
             }, 'TyrionComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Tyrion management',
 
                 'title': 'Updates',
+                'label_waiting_update_procedure': 'Planed Update',
+                'label_required_version': 'Required Version',
+                'label_required_time': 'Planed Time',
                 'label_current_version': 'Current version',
                 'label_general_description': 'You can schedule an update of Tyrion server. Select a version from available updates for the current mode of the server.',
                 'flash_cannot_load_updates': 'Cannot load available updates',
                 'btn_schedule_update': 'Schedule',
+                'btn_immediately': 'Immediately',
+                'btn_stop': 'Remove Action!',
             },
 
 

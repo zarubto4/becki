@@ -4,7 +4,8 @@
   -->
 
 <bk-layout-main
-    tabMenu="{{projectId == null ? 'byzance-admin' : 'projects-project'}}"
+    [tabMenu]="projectId == null ? 'byzance-admin' : 'projects-project'"
+    [show_title]="projectId == null"
     [title]="projectId == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
     [subtitle]="projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
@@ -18,7 +19,7 @@
                       [btns]="[
                       {
                           condition: !!block,
-                          btn_label_for_person: ('label_group_properties'|bkTranslate:this),
+                          btn_label_for_person: ('label_properties'|bkTranslate:this),
                           icon: 'fa-cog',
                           colorType: 'EDIT',
                           btn_tag: 'edit_block',
@@ -26,7 +27,7 @@
                       },
                       {
                           condition: !!block,
-                          btn_label_for_person: ('label_group_remove'|bkTranslate:this),
+                          btn_label_for_person: ('label_remove'|bkTranslate:this),
                           icon: 'fa-trash',
                           colorType: 'REMOVE',
                           btn_tag: 'remove_block',

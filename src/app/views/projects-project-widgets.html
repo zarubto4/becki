@@ -49,8 +49,8 @@
 
         <div *ngIf="tab == 'my_widgets'">
 
-            <div *ngIf="(widgetList && widgetList.content.length)" class="table-scrollable">
-            <table class="table table-hover">
+            <div *ngIf="(widgetList && widgetList.content.length)" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
                 <thead>
                 <tr>
                     <th>{{'table_name'|bkTranslate:this}}</th>
@@ -73,7 +73,7 @@
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button *ngIf="projectId && group.publish_type == 'public_program'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(widget)">
+                        <button *ngIf="projectId && widget.publish_type == 'PUBLIC'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(widget)">
                             <i class="fa fa-clone"></i>
                         </button>
                         <button *ngIf="!projectId && !widget.active" title="{{'label_active_group'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.update_permission" (click)="onWidgetActivateClick(widget)">
@@ -107,8 +107,8 @@
 
         <div *ngIf="tab == 'public_widgets'">
 
-            <div *ngIf="(widgetPublicList && widgetPublicList.content.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(widgetPublicList && widgetPublicList.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th>{{'table_name'|bkTranslate:this}}</th>
@@ -152,8 +152,8 @@
 
         <div *ngIf="tab == 'admin_widget'">
 
-            <div *ngIf="(widgetListNotApproved && widgetListNotApproved.content.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(widgetListNotApproved && widgetListNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th>{{'table_name'|bkTranslate:this}}</th>
@@ -176,7 +176,7 @@
                                 table tr:hover button { opacity:1 }
                             </style>
 
-                            <button *ngIf="projectId && group.publish_type == 'public_program'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(widget)">
+                            <button *ngIf="projectId && widget.publish_type == 'PUBLIC'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(widget)">
                                 <i class="fa fa-clone"></i>
                             </button>
                             <button *ngIf="!projectId && !widget.active" title="{{'label_active_group'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.update_permission" (click)="onWidgetActivateClick(widget)">
@@ -206,10 +206,6 @@
             </bk-nothing-to-show>
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
         </div>
-
-
-
-
 
 
     </div>

@@ -120,12 +120,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                     project_id: this.projectId
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_add')));
-                        if (this.projectId) {
-                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        } else {
-                            this.onShowProgramPrivateBlocksFilter();
-                        }
+                        this.onShowProgramPrivateBlocksFilter();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block'), reason));

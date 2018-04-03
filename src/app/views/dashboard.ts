@@ -12,6 +12,8 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 })
 export class DashboardComponent extends _BaseMainComponent implements OnInit {
 
+    tab: string = 'general';
+
     constructor(injector: Injector) {
         super(injector);
     };
@@ -21,6 +23,10 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit {
     }
 
     ngOnInit(): void {
+    }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
     }
 
 

@@ -206,11 +206,9 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                     description: model.description
                 }).then(() => {
                     this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_edit')));
-                    this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     this.refresh();
                 }).catch(reason => {
                     this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block'), reason));
-                    this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     this.refresh();
                 });
             }
@@ -226,12 +224,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.tyrionBackendService.blockDelete(this.block.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks']);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
             }
@@ -246,12 +242,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.tyrionBackendService.blockVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
             }
@@ -531,9 +525,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
-                        if (this.projectId) {
-                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }
+                        this.refresh();
                     });
             }
         });

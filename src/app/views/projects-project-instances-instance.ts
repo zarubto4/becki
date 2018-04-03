@@ -112,12 +112,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.tyrionBackendService.instanceEdit(this.instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
                     });
             }
         });

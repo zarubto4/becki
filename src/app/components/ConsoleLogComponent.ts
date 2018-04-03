@@ -99,7 +99,7 @@ export class ConsoleLogComponent {
     }
 
     set_color(source: string, color: string) {
-        console.log('set_Color: source', source, 'color', color);
+        // console.log('set_Color: source', source, 'color', color);
         if (!this.sourceColor[source]) {
             this.sourceColor[source] = {
                 color: color

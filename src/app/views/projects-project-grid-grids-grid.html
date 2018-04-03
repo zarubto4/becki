@@ -1,0 +1,238 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [show_title]="false"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [title_object_name]="gridProgram != null ? gridProgram.name : ''"
+        [title_object_description]="gridProgram != null ? gridProgram.description : ''"
+        [icon]="'fa-desktop'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                      {
+                          condition: (true),
+                          btn_label_for_person: ('btn_program_properties'|bkTranslate:this),
+                          icon: 'fa-cog',
+                          colorType: 'ADD',
+                          btn_tag: 'edit_program',
+                          permission: (gridProgram &&gridProgram.update_permission)
+                      },
+                      {
+                          condition: (true),
+                          btn_label_for_person: ('btn_program_delete'|bkTranslate:this),
+                          icon: 'fa-trash',
+                          colorType: 'REMOVE',
+                          btn_tag: 'delete_program',
+                          permission: (gridProgram && gridProgram.delete_permission)
+
+                      }
+                 ]"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name] = "tab"
+        [tabBtns]="[
+                        {
+                            tab_name: 'ide',
+                            condition: (true),
+                            tab_color: 'GRID',
+                            tab_label: ('tab_ide'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'versions',
+                            condition: (true),
+                            tab_color: 'GRID',
+                            tab_label: ('tab_versions'|bkTranslate:this)
+                        }
+                    ]"
+    >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <div class="portlet-body">
+        <div [hidden]="!(tab=='ide')" class="row">
+            <div class="col-md-9">
+                <div class="portlet light bordered padding-20">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-th fa-rotate-90"></i>
+                                {{'label_grid'|bkTranslate:this}}
+                            </span>
+                        </div>
+                        <div *ngIf="selectedProgramVersion" class="becki-caption version">
+                            <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedProgramVersion.name}}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="pull-left">
+                            <button type="button" class="btn default green-haze" (click)="onAddPageClick()">
+                                <i class="fa fa-plus"></i> {{'btn_add_page'|bkTranslate:this}}
+                            </button>
+                        </div>
+                        <div class="pull-right">
+                            <label>{{'label_grid_size_class'|bkTranslate:this}}: </label>
+                            <select class="form-control no-full-width" [ngModel]="gridDeviceProfile" (ngModelChange)="onChangeGridDeviceProfile($event)">
+                                <option value="mobile"> {{'option_mobile'|bkTranslate:this}}</option>
+                                <option value="tablet"> {{'option_tablet'|bkTranslate:this}}</option>
+                                <option value="desktop">{{'option_desktop'|bkTranslate:this}}</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div #editor style="margin: 10px 0; overflow-x: auto; position: relative;">
+                        <div class="grid-trash-helper" [class.visible]="trashPosition.visible" [style.left]="trashPosition.x + 'px'" [style.top]="trashPosition.y + 'px'">
+                            <i class="fa fa-trash" style="opacity: 0.5; font-size: 42px; color: red;"></i>
+                        </div>
+                        <bk-grid-view (onChange)="onAnyChange()" (onWidgetDrag)="onWidgetDragMoveEvent($event)" (onRequestWidgetSource)="onWidgetRequestingSource($event)"
+                                      (onWidgetLog)="onWidgetLog($event)" (onWidgetMessage)="onWidgetMessage($event)" (onWidgetError)="onWidgetError($event)"></bk-grid-view>
+                    </div>
+
+                    <div>
+                        <div class="pull-right">
+                            <button type="button" class="btn default green-haze" (click)="onSaveClick()">
+                                <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
+                            </button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+
+
+                <div class="clearfix"></div>
+
+                <div class="portlet light bordered padding-20">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-terminal"></i>
+                                 {{'label_console'|bkTranslate:this}}
+                            </span>
+                        </div>
+                        <div class="pull-right">
+                            <button type="button" class="btn default red" (click)="onClearConsoleClick()">
+                                <i class="fa fa-trash-o"></i> {{'btn_clear_console'|bkTranslate:this}}
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <bk-console-log maxHeight="400px"></bk-console-log>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+                <div class="portlet light bordered padding-20">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-object-group"></i>
+                                 {{'label_widgets'|bkTranslate:this}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div *ngIf="widgets" class="panel-group accordion blocko-blocks-group-list">
+                            <div *ngFor="let widget of widgets.content" class="panel panel-default">
+                                <div class="panel-body no-select">
+                                    <a class="the-grid__widget-drag-handler no-select" [bkDraggable]="draggableOptions"
+                                       (bkDraggableOnDrag)="onWidgetDrag($event)" (mousedown)="onWidgetDown($event,widget)">
+                                        <i class="fa fa-fw fa-object-group" style="position: absolute; right: -25px; bottom: 0px; font-size: 65px; transform: rotate(45deg); opacity: 0.2;"></i>
+                                        {{widget.name}}
+                                    </a>
+                                </div>
+                                <div *ngIf="widgets.content.length == 0" class="text-center">{{'label_no_widgets'|bkTranslate:this}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div [hidden]="!(tab=='versions')">
+            <div class="portlet light">
+
+                <bk-portlet-title
+                    [title_name]="'label_saved_versions'|bkTranslate:this"
+                    [icon]="'fa-code-fork'">
+                </bk-portlet-title>
+
+                <div class="portlet-body">
+
+                    <div *ngIf="gridProgram && gridProgram.program_versions.length" class="table-scrollable table-scrollable-borderless">
+                        <table class="table table-hover table-light byzance-table">
+                            <thead>
+                                <tr>
+                                    <th class="col col-lg-2">{{'label_version_name'|bkTranslate:this}}</th>
+                                    <th class="col col-lg-7">{{'label_description'|bkTranslate:this}}</th>
+                                    <th class="col col-lg-2">{{'label_author'|bkTranslate:this}}</th>
+                                    <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let version of gridProgram.program_versions">
+                                    <td class="vert-align no-wrap" [class.bold]="isSelected(version)">
+                                        <a (click)="onProgramVersionClick(version)">{{version.name}}</a>
+                                    </td>
+                                    <td class="vert-align">
+                                        {{version.description}}
+                                    </td>
+                                    <td class="vert-align">
+                                        {{version.author.nick_name}}
+                                    </td>
+                                    <td class="vert-align no-wrap text-right">
+
+                                        <style type="text/css">
+                                            table tr button {
+                                                opacity: 0.05;
+                                            }
+                                            table tr:hover button {
+                                                opacity: 1
+                                            }
+                                        </style>
+
+                                        <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
+                                                (click)="onEditVersionClick(version)">
+                                            <i class="fa fa-cog"></i>
+                                        </button>
+
+                                        <button title="{{'label_device_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                                (click)="onRemoveVersionClick(version)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                    <bk-nothing-to-show [condition_loading]="(gridProgram == null)"
+                                        [condition_empty]="(gridProgram != null && gridProgram.program_versions.length == 0)"
+                                        [main_message_link]="'label_program_versions'|bkTranslate:this"
+                                        [main_message_comment_link]="'label_program_versions_comment'|bkTranslate:this"
+                                        [show_button]="false">
+                    </bk-nothing-to-show>
+                    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</bk-layout-main>

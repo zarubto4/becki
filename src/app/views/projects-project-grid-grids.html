@@ -1,0 +1,96 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [show_title]="false"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [title_object_name]="gridProject?gridProject.name:''"
+        [title_object_description]="gridProject?gridProject.description:''"
+        [icon]="'fa-desktop'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                      {
+                          condition: true,
+                          btn_label_for_person: ('btn_edit_project'|bkTranslate:this),
+                          icon: 'fa-cog',
+                          colorType: 'UPDATE',
+                          btn_tag: 'edit_project',
+                          permission: (gridProject && gridProject.update_permission)
+                      },
+                      {
+                          condition: true,
+                          btn_label_for_person: ('btn_remove_project'|bkTranslate:this),
+                          icon: 'fa-trash',
+                          colorType: 'REMOVE',
+                          btn_tag: 'remove_project',
+                          permission: (gridProject && gridProject.delete_permission)
+                      },
+                      {
+                          condition: (gridProject && gridProject.m_programs.length),
+                          btn_label_for_person: ('btn_add_grid_program'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'ADD',
+                          btn_tag: 'add_program',
+                          permission: (gridProject && gridProject.update_permission)
+                      }
+                 ]">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+
+    <div class="portlet-body">
+
+        <div *ngIf="gridProject && gridProject.m_programs.length" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
+                <thead>
+                <tr>
+                    <th>{{'table_name'|bkTranslate:this}}</th>
+                    <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let program of gridProject.m_programs">
+                    <td class="vert-align no-wrap bold"><a (click)="onGridProgramClick(gridProject.id, program.id)">{{program.name}}</a></td>
+                    <td class="vert-align">{{program.description}}</td>
+                    <td class="vert-align no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
+                        <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!program.update_permission" (click)="onProgramEditClick(program)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="{{'label_version_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(gridProject == null)"
+                            [condition_empty]="(gridProject != null && gridProject.m_programs.length == 0)"
+                            [main_message_link]="'label_no_grid_programs'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_grid_programs_comment'|bkTranslate:this"
+                            (onButtonClick)="onProgramAddClick()"
+                            [btn_label]="'btn_add_grid_program'|bkTranslate:this">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+    </div>
+
+</bk-layout-main>

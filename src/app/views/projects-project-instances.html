@@ -16,8 +16,8 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                      {
-                          condition: (instanceFilter && instanceFilter.content > 0),
-                          btn_label_for_person: ('btn_create_new_instance'|bkTranslate:this),
+                          condition: (instanceFilter && instanceFilter.content.length > 0),
+                          btn_label_for_person: ('btn_create_instance'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
                           btn_tag: 'add_instance'

@@ -102,15 +102,15 @@
                         <br>
                         <div>
                             {{'label_type'|bkTranslate:this}}:
-                            <a [routerLink]="['/hardware', hardware.hardware_type_id]" class="bold">{{hardware.hardware_type_name}}</a>
+                            <a [routerLink]="['/hardware', hardware.hardware_type.id]" class="bold">{{hardware.hardware_type.name}}</a>
                         </div>
                         <div>
                             {{'label_producer'|bkTranslate:this}}:
-                            <a [routerLink]="['/producers', hardwareType.producer_id]" class="bold">{{hardwareType.producer_name}}</a>
+                            <a [routerLink]="['/producers', hardwareType.producer.id]" class="bold">{{hardwareType.producer.name}}</a>
                         </div>
                         <div>
                             {{'label_revision'|bkTranslate:this}}:
-                            <span class="font-grey-mint bold">{{hardwareType.revision}}</span>
+                            <span class="font-grey-mint bold">{{hardware.revision}}</span>
                         </div>
 
                         <hr style="margin-right: 5%; margin-left: 5%">

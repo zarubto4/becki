@@ -46,9 +46,6 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.project = project;
                 this.onFilterPrivatePrograms();
             });
-            this.hardwareTypesSubscription = this.storageService.hardwareTypes().subscribe((hardwareTypes) => {
-                this.hardwareTypes = hardwareTypes;
-            });
         });
     }
 
@@ -71,9 +68,6 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
-        if (this.hardwareTypesSubscription) {
-            this.hardwareTypesSubscription.unsubscribe();
-        }
     }
 
 
@@ -95,54 +89,57 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
     }
 
     onAddClick(): void {
-        if (!this.hardwareTypes) {
-            this.fmError(this.translate('flash_cant_add_code_to_project'));
-        }
-        let model = new ModalsCodePropertiesModel(this.hardwareTypes);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.cProgramCreate({ // TODO [permission]: C_program.create_permission (Project.update_permission)
-                    project_id: this.project_id,
-                    name: model.name,
-                    description: model.description,
-                    hardware_type_id: model.hardware_type_id
-                })
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.name, reason)));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
-                    });
-            }
-        });
+        this.blockUI();
+        this.tyrionBackendService.hardwareTypesGetAll()
+            .then( (types: IHardwareType[]) => {
+                this.unblockUI();
+                let model = new ModalsCodePropertiesModel(types);
+                this.modalService.showModal(model).then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.tyrionBackendService.cProgramCreate({ // TODO [permission]: C_program.create_permission (Project.update_permission)
+                            project_id: this.project_id,
+                            name: model.name,
+                            description: model.description,
+                            hardware_type_id: model.hardware_type_id
+                        })
+                            .then(() => {
+                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
+                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                            })
+                            .catch(reason => {
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.name, reason)));
+                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                            });
+                    }
+                });
+            });
     }
 
     onEditClick(code: ICProgram): void {
-        if (!this.hardwareTypes) {
-            this.fmError(this.translate('flash_cant_add_code_to_project'));
-        }
-
-        let model = new ModalsCodePropertiesModel(this.hardwareTypes, code.name, code.description, '', code.tags, true, code.name);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.cProgramEdit(code.id, {
-                    name: model.name,
-                    description: model.description
-                })
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
-                    });
-            }
-        });
+        this.blockUI();
+        this.tyrionBackendService.hardwareTypesGetAll()
+            .then( (types: IHardwareType[]) => {
+                this.unblockUI();
+                let model = new ModalsCodePropertiesModel(types, code.name, code.description, '', code.tags, true, code.name);
+                this.modalService.showModal(model).then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.tyrionBackendService.cProgramEdit(code.id, {
+                            name: model.name,
+                            description: model.description
+                        })
+                            .then(() => {
+                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                            })
+                            .catch(reason => {
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                            });
+                    }
+                });
+            });
     }
 
     onMakeClone(code: ICProgram): void {
@@ -188,6 +185,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.unblockUI();
             });
     }
+
     onFilterPublicPrograms(page: number = 0): void {
 
         // Only for first page load - its not neccesery block page - user saw private programs first - soo api have time to load

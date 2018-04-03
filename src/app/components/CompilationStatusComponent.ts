@@ -9,6 +9,13 @@ import { Component, Input } from '@angular/core';
                                         <i class="fa fa-exclamation-triangle font-red-mint"></i>
                                         <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
                                      </span>
+        
+        <span class="icon-hint-wraper green" *ngIf="status == 'SERVER_ERROR'">
+                                        <i class="fa fa-exclamation-triangle font-red-mint"
+                                           style="font-size: 1.6em; margin-left: 5px;"></i>
+                                        <span class="hint"
+                                              [innerHTML]="status|bkTranslateTable:this:'version_status'"></span>
+                                    </span>
 
         <span class="icon-hint-wraper red" *ngIf="status=='BROKEN_JSON'">
                                         <i class="fa fa-exclamation-triangle font-red-mint"></i>
@@ -65,6 +72,7 @@ import { Component, Input } from '@angular/core';
                                         <span class="hint"
                                               [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
+       
     `
 })
 

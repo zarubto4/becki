@@ -9,7 +9,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import {
     IProject, IBProgram, IBlockVersion, IBProgramVersion, IGridProject, IMProgramSnapShot,
-    IMProjectSnapShot, ICProgram, IBlock, ICProgramList, ICProgramVersion, IBlockList
+    IMProjectSnapShot, ICProgram, IBlock, ICProgramList, ICProgramVersion, IBlockList, IGridProjectList
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';
@@ -162,6 +162,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     ];
     /* tslint:enable */
 
+    tab: string = 'ide';
+
     private monacoEditorLoaderService: MonacoEditorLoaderService = null;
     protected afterLoadSelectedVersionId: string = null;
 
@@ -174,6 +176,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
         this.exitConfirmationService.setConfirmationEnabled(false);
     };
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
 
     onPortletClick(action: string): void {
         if (action === 'edit_program') {
@@ -193,7 +199,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 this.tyrionBackendService.bProgramDelete(this.blockoProgram.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.router.navigate(['/projects/' + this.projectId + '/blocko']);
                     })
                     .catch(reason => {
@@ -360,11 +365,11 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 }
 
                 case 'grid': {
-                    /*let m = new ModalsSelectVersionModel(this.allGridProjects[params.data.id].);
+                    let m = new ModalsSelectVersionModel(this.allGridProjects[params.data.id].m_programs);
                     this.modalService.showModal(m)
                         .then((success: boolean) => {
-                            if (success && m.selectedVersionId) {
-                                let cpv = this.getCProgramVersionById(m.selectedVersionId);
+                            if (success && m.selectedId) {
+                                let cpv = this.getCProgramVersionById(m.selectedId);
                                 if (cpv && cpv.virtual_input_output) {
                                     let interfaceData = JSON.parse(cpv.virtual_input_output);
                                     if (interfaceData) {
@@ -380,7 +385,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                                     }
                                 }
                             }
-                        });*/
+                        });
                     break;
                 }
 
@@ -646,12 +651,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 this.tyrionBackendService.bProgramVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
             }
@@ -823,10 +826,14 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             }),
             this.tyrionBackendService.cProgramGetListByFilter(0, {
                 project_id: this.projectId
+            }),
+            this.tyrionBackendService.gridProjectGetByFilter(0, {
+                project_ids: [this.projectId]
             })
-        ]).then((values: [IBlockList, ICProgramList]) => {
+        ]).then((values: [IBlockList, ICProgramList, IGridProjectList]) => {
             let blocks: IBlockList = values[0];
             let cPrograms: ICProgramList = values[1];
+            let gridProjects: IGridProjectList = values[2];
 
             this.blocksLastVersions = {};
             this.blocksColors = {};
@@ -854,7 +861,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
             this.blocks = blocks.content;
 
-            // this.allGridProjects = projects; TODO grid projects
+            this.allGridProjects = gridProjects.content;
             this.codePrograms = cPrograms.content;
 
             return this.tyrionBackendService.bProgramGet(this.blockoId); // TODO [permission]: Project.read_permission

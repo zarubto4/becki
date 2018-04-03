@@ -51,7 +51,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
     ngOnInit() {
         // Find Homer Server
         this.tyrionBackendService.homerServersGetList(0, {
-            server_types : ['PRIVATE'],
+            server_types : ['PRIVATE' , 'PUBLIC'],
             project_id: this.modalModel.project_id
         })
             .then((value) => {

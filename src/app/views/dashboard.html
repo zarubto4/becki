@@ -1,45 +1,97 @@
-<bk-layout-main [title]="'main_title'|bkTranslate:this">
+<bk-layout-main
+    [title]="'main_title'|bkTranslate:this">
 
-    <div class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-flag"></i>
-                    <span [innerHTML]="'title'|bkTranslate:this"></span>
-                </span>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-flag'">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <div class="portlet-body">
+
+        <div class="row">
+
+            <!--- Welcome Row Part -->
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="portlet">
+                    <div class="player player-8ae8476c-0177-4795-bfe0-71b5ac8187ca">
+                        <iframe src="https://player.vimeo.com/video/243828115?autoplay=1&loop=1&autopause=0"
+                                width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Row Part -->
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="portlet light full-height-content full-height-content-scrollable bordered">
+                    <bk-portlet-title
+                        [title_name]="'title_platform_news'|bkTranslate:this"
+                        [tabbable_under_line]="true"
+                        [icon]="'fa-flag'"
+                        (onTabClick)="onToggleTab($event)"
+                        [tab_selected_name]="tab"
+                        [tabBtns]="[
+                                {
+                                    tab_name: 'general',
+                                    condition: (true),
+                                    tab_color: 'BYZANCE',
+                                    tab_label: ('tab_general'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'hardware',
+                                    condition: (true),
+                                    tab_color: 'HARDWARE',
+                                    tab_label: ('tab_hardware'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'code',
+                                    condition: (true),
+                                    tab_color: 'CODE',
+                                    tab_label: ('tab_code'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'blocko',
+                                    condition: (true),
+                                    tab_color: 'BLOCKO',
+                                    tab_label: ('tab_blocko'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'grid',
+                                    condition: (true),
+                                    tab_color: 'GRID',
+                                    tab_label: ('tab_grid'|bkTranslate:this)
+                                }
+                            ]">
+                    </bk-portlet-title>
+                    <div class="portlet-body">
+                        <div class="slimScrollDiv"
+                             style="position: relative; overflow: hidden; width: auto; height: 310px;">
+                            <p> Hi! This is an amazing UI! Is there a way to turn sidebar completely off with a simple
+                                body class, like that which is used to minimize the sidebar? Also, I’m looking for a way
+                                to make portlets fill the vertical space
+                                between the fixed header and fixed footer. I know that full height divs are a chore, but
+                                I’m wondering if you have already written any code that checks the height of the window
+                                and adjusts the height of an element
+                                that I could re-purpose or extend for these full height content areas? If you have, I’d
+                                love a tip on where to find it in app.js or wherever else. Otherwise any other
+                                suggestions you may have. Thanks a ton!Hi! This
+                                is an amazing UI! Is there a way to turn sidebar completely off with a simple body
+                                class, like that which is used to minimize the sidebar? Also, I’m looking for a way to
+                                make portlets fill the vertical space between
+                                the fixed header and fixed footer. I know that full height divs are a chore, but I’m
+                                wondering if you have already written any code that checks the height of the window and
+                                adjusts the height of an element that
+                                I could re-purpose or extend for these full height content areas? If you have, I’d love
+                                a tip on where to find it in app.js or wherever else. Otherwise any other suggestions
+                                you may have. Thanks a ton!Hi!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div style="font-size: 14px; font-weight: 200;">
-            {{'dashboard_info_text'|bkTranslate:this}}
-        </div>
-        <div class="clearfix"></div>
     </div>
-
-    <div class=" hidden-xs portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-question"></i>
-                    {{'title_first_steps'|bkTranslate:this}}
-                </span>
-            </div>
-        </div>
-        <div class="font-blue-dark" style="font-size: 20px; font-weight: 200; line-height: 1.8em;">
-            <div> <span [innerHTML]="'step_one'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
-            <div> <span [innerHTML]="'step_two'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
-            <div> <span [innerHTML]="'step_three'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
-            <div> <span [innerHTML]="'step_four'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-
-    <div class=" row visible-xs visible-sm">
-        <div>
-            <a (click)="onQrClick()" class="btn btn-lg blue"> {{'btn_qrcode'|bkTranslate:this}}
-            <i class="fa fa-camera"></i>
-        </a>
-        </div>
-    </div>
-    <div class="clearfix"></div>
-
 </bk-layout-main>

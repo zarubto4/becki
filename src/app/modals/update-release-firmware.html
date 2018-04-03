@@ -21,6 +21,11 @@
                         <bk-form-select #GroupList [options]="groupsForSelect"  [label]="'label_hardware_group'|bkTranslate:this"  [control]="form.controls.deviceGroupStringIdSelected" (valueChanged)="onGroupChange($event)"></bk-form-select>
                     </div>
                 </div>
+                <div *ngIf="modalModel.deviceGroup != null && !selectedDeviceGroup" class="col-md-6 text-centert">
+                    <br>
+                    <br>
+                    <i class="fa fa-3x fa-spinner fa-spin"></i>
+                </div>
                 <div *ngIf="selectedDeviceGroup" class="col-md-6">
 
                     <div>

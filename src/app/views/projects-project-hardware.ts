@@ -126,11 +126,9 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.tyrionBackendService.projectRemoveHW(hardware.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_remove_device_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
         });
