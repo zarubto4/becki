@@ -75,9 +75,15 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
 
         let personObject = this.backendService.personInfoSnapshot;
 
+
         this.personId = personObject.id;
 
         this.refresh();
+    }
+
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
     }
 
 
@@ -94,6 +100,7 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
                 this.infoForm.controls['nickName'].setValue(this.person.nick_name);
                 this.infoForm.controls['state'].setValue(this.person.country);
                 this.infoForm.controls['gender'].setValue(this.person.gender);
+                this.emailForm.controls['currentEmail'].setValue(this.person.email);
 
                 this.backendService.refreshPersonInfo();
 

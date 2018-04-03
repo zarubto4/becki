@@ -5,7 +5,8 @@
 import {
     IInstanceSnapshot, IInstance, IBProgram,
     IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary, IBProgramVersion,
-    IInstanceSnapshotJsonFileInterface, IHardwareGroup,
+    IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
+    ISwaggerInstanceSnapShotConfigurationProgram,
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -31,6 +32,7 @@ import moment = require('moment/moment');
 import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
 import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
 import { ModalsRemovalModel } from '../modals/removal';
+import {ModalsShowQRModel} from "../modals/show_QR";
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -501,6 +503,27 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
+    getGridConfig(project_id: string, program_id: string): ISwaggerInstanceSnapShotConfigurationProgram {
+
+        if (this.instance.current_snapshot.settings.grids_collections == null || this.instance.current_snapshot.settings.grids_collections.length === 0) {
+            return null;
+        }
+        let program_project: ISwaggerInstanceSnapShotConfigurationFile = this.instance.current_snapshot.settings.grids_collections.find((gr) => {
+            return gr.grid_project_id === project_id;
+        });
+        return program_project.grid_programs.find((gpr) => {
+            return gpr.grid_program_id === program_id;
+        });
+    }
+
+    showGrid(project_id: string, program_id: string) {
+
+        let conf = this.getGridConfig(project_id, program_id);
+        let model = new ModalsShowQRModel(conf.connection_url);
+        this.modalService.showModal(model).then((success) => {
+
+        });
+    }
 
     onFilterHardwareGroup(pageNumber: number = 0): void {
         this.blockUI();
@@ -514,6 +537,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 if (this.deviceGroupFilter.content.length > 0 ) {
                     this.onFilterHardware(0, this.deviceGroupFilter.content);
+                } else {
+                    this.onFilterHardware(0, []);
                 }
 
                 this.unblockUI();
@@ -527,7 +552,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     onFilterHardware(pageNumber: number = 0, groups: IHardwareGroup[] = []): void {
 
         // Set groupd if we he it
-        if (!groups.length && this.deviceGroupFilter != null) {
+        if (groups.length > 0 && this.deviceGroupFilter != null) {
             groups = this.deviceGroupFilter.content;
         }
 

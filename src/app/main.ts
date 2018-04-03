@@ -212,7 +212,8 @@ import { ProjectsProjectWidgetsWidgetComponent } from './views/projects-project-
 import { GridViewComponent } from './components/GridViewComponent';
 import { ProjectsProjectGridComponent } from './views/projects-project-grid';
 import { ProjectsProjectGridGridsComponent } from './views/projects-project-grid-grids';
-import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-grid-grids-grid";
+import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-grid-grids-grid';
+import { ModalsShowQRComponent } from './modals/show_QR';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -619,6 +620,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsPublicShareRequestComponent,
         ModalsCodeFileDialogComponent,
         ModalsSetAsMainComponent,
+        ModalsShowQRComponent,
         ModalsConfirmComponent,
         ModalsGarfieldComponent,
         ModalsVersionDialogComponent,

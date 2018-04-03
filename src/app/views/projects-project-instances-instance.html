@@ -437,7 +437,7 @@
                             </td>
                             <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
                             <td class="vert-align no-wrap">{{device.description}}</td>
-                            <td class="vert-align text-center no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
+                            <td class="vert-align text-center no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a></td>
                             <td class="vert-align text-center no-wrap">
 
                                 <div *ngIf="!device.hardware_groups">
@@ -488,11 +488,18 @@
         <div *ngIf="tab == 'view' ">
 
             <div *ngIf="instance && instance.online_state === 'ONLINE'">
-                <bk-blocko-view [id]="'liveview'" [disableExecution]="true" [canConfig]="false" [readonly]="true"
-                                [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
+
+                <bk-blocko-view [id]="'liveview'"
+                                [disableExecution]="true"
+                                [canConfig]="false"
+                                [readonly]="true"
+                                [simpleMode]="false"
+                                [showBlockNames]="true"></bk-blocko-view>
+
                 <div style="margin-top: 30px">
                     <bk-console-log maxHeight="400px"></bk-console-log>
                 </div>
+
             </div>
             <div *ngIf="!instance || instance.online_state !== 'ONLINE'" class="list-no-items">
                 <p class="list-no-items__main-label" [innerHTML]="'label_instance_info_is_offline'|bkTranslate:this"></p>
@@ -503,46 +510,59 @@
 
         <div *ngIf="tab == 'grid'">
 
-            <div *ngIf="(instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
-                            <ul *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last">
-                                <li>
-                                    <span><a (click)="onGridProjectClick(m_project.grid_project.id)">{{program.grid_project.name}}</a></span>
-                                    <span>{{project.grid_project.description}}</span>
-                                    <table class="table table-hover table-light byzance-table">
-                                        <thead>
-                                        <tr>
-                                            <th class="">{{'table_grid_program_name'|bkTranslate:this}}</th>
-                                            <th class="">{{'table_grid_program_description'|bkTranslate:this}}</th>
-                                            <th class="">{{'table_grid_program_version_name'|bkTranslate:this}}</th>
-                                            <th class="">{{'table_grid_program_version_description'|bkTranslate:this}}</th>
-                                            <th class="">{{'table_grid_program_version_description'|bkTranslate:this}}</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr *ngFor="let program of m_project.grid_programs">
+            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)">
+                <div *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last" class="portlet portlet light">
 
-                                            <td class="vert-align no-wrap"><a (click)="onGridProgramClick(m_project.grid_project.id, program.grid_program.id)">{{program.grid_program.name}}</a></td>
-                                            <td class="vert-align no-wrap">{{program.grid_program.description}}</td>
-                                            <td class="vert-align text-center no-wrap"><a (click)="onGridProgramVersionClick(m_project.grid_project.id, program.grid_program.id, program.grid_program_version.id)">{{program.grid_program_version.name}}</a></td>
-                                            <td class="vert-align text-center no-wrap">{{program.grid_program_version.description}}</td>
+                    <bk-portlet-title
+                        [title_name]="'label_grid_project'|bkTranslate:this"
+                        [title_object_name]="m_project.grid_project.name"
+                        [title_object_description]="m_project.grid_project.description"
+                        [icon]="'fa-cube'">
+                    </bk-portlet-title>
 
-                                            <td class="vert-align text-center no-wrap">
-                                                PRIVATE
-                                            </td>
-                                            <td class="vert-align text-center no-wrap">
-                                                <a target="_blank" href="{{gridProgram.grid_app_url}}">
-                                                    <bk-qr-code style="float: right;" [data]="gridProgram.grid_app_url"></bk-qr-code>
-                                                </a>
-                                                <bk-form-input [label]="gridProgram.grid_app_url" [readonly]="true"></bk-form-input>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </li>
-                            </ul>
+                    <div class="portlet-body " [class.margin-left-30]="instance.current_snapshot.m_projects.length > 1">
+                        <table class="table table-hover table-light byzance-table">
+                            <thead>
+                            <tr>
+                                <th class="" [innerHTML]="'table_grid_program_name'|bkTranslate:this"></th>
+                                <th class="" [innerHTML]="'table_grid_program_description'|bkTranslate:this"></th>
+                                <th class="" [innerHTML]="'table_grid_program_version_name'|bkTranslate:this"></th>
+                                <th class="" [innerHTML]="'table_grid_program_version_description'|bkTranslate:this"></th>
+                                <th class="text-center" [innerHTML]="'table_grid_program_settings'|bkTranslate:this"></th>
+                                <th class="text-center" [innerHTML]="'table_grid_link'|bkTranslate:this"></th>
+                                <th class="text-right margin-right-15" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let program of m_project.grid_programs">
 
-                </table>
+                                <td class="vert-align no-wrap"><a (click)="onGridProgramClick(m_project.grid_project.id, program.grid_program.id)">{{program.grid_program.name}}</a></td>
+                                <td class="vert-align">{{program.grid_program.description}}</td>
+                                <td class="vert-align no-wrap"><a (click)="onGridProgramVersionClick(m_project.grid_project.id, program.grid_program.id, program.grid_program_version.id)">{{program.grid_program_version.name}}</a></td>
+                                <td class="vert-align">{{program.grid_program_version.description}}</td>
+
+                                <td class="vert-align text-center no-wrap">
+                                    {{getGridConfig(m_project.grid_project.id, program.grid_program.id).snapshot_settings}}
+                                </td>
+                                <td class="vert-align text-center no-wrap">
+                                    <a target="_blank" href="{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}">{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}</a>
+                                </td>
+
+
+                                <td class="vert-align text-righ no-wrap">
+                                    <a target="_blank" (click)="showGrid(m_project.grid_project.id, program.grid_program.id)">Show QR</a>
+                                    <!--
+
+                                    !-->
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
@@ -553,6 +573,7 @@
                                 [show_button]="false">
             </bk-nothing-to-show>
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
         </div>
 
         <div *ngIf="tab == 'logs'">

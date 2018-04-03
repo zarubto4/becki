@@ -41,7 +41,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
 
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': ['', [Validators.required]],
+            'description': [''],
             'b_program_id': ['', [Validators.required]],
             'main_server_id': ['', [Validators.required]],
             'backup_server_id': [''],

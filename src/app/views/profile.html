@@ -14,31 +14,31 @@
         [tab_selected_name] = "tab"
         [tabBtns]="[
                         {
-                            condition: (person.update_permission),
+                            condition: (person && person.update_permission),
                             tab_name: 'personal',
                             tab_color: 'BYZANCE',
                             tab_label: ('nav_personal_info'|bkTranslate:this)
                         },
                         {
-                         condition: (person.update_permission),
+                            condition: (person && person.update_permission),
                             tab_name: 'avatar',
                             tab_color: 'BYZANCE',
                             tab_label: ('nav_avatar'|bkTranslate:this)
                         },
                         {
-                             condition: (person.update_permission),
+                            condition: (person && person.update_permission),
                             tab_name: 'password',
                             tab_color: 'BYZANCE',
                             tab_label: ('nav_password'|bkTranslate:this)
                         },
                         {
-                             condition: (person.update_permission),
+                            condition: (person && person.update_permission),
                             tab_name: 'email',
                             tab_color: 'BYZANCE',
                             tab_label: ('nav_email'|bkTranslate:this)
                         },
                         {
-                             condition: (person.update_permission),
+                             condition: (person && person.update_permission),
                             tab_name: 'logins',
                             tab_color: 'HARDBYZANCEWARE',
                             tab_label: ('nav_logins'|bkTranslate:this)
@@ -53,7 +53,7 @@
         <div *ngIf="person" class="tab-content">
 
             <!-- PERSONAL TAB -->
-            <div class="tab-pane" [class.active]="openTabName == 'personal'">
+            <div class="tab-pane" [class.active]="tab == 'personal'">
                 <form>
                     <bk-form-input [label]="'label_first_name'|bkTranslate:this" type="text" [control]="infoForm.controls['first_name']"></bk-form-input>
                     <bk-form-input [label]="'label_last_name'|bkTranslate:this" type="text" [control]="infoForm.controls['last_name']"></bk-form-input>
@@ -70,7 +70,7 @@
 
 
             <!-- AVATAR TAB -->
-            <div *ngIf="person.update_permission" class="tab-pane center-align center text-center" [class.active]="openTabName == 'avatar'">
+            <div class="tab-pane center-align center text-center" [class.active]="tab == 'avatar'">
                 <img *ngIf="person.picture_link" class="preview img-circle center-align center" [src]="person.picture_link" width="128" height="128">
                 <img *ngIf="!person.picture_link" class="preview img-circle empty center-align center" width="128" height="128">
 
@@ -80,7 +80,7 @@
 
 
             <!-- PASSWORD TAB -->
-            <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'password'">
+            <div class="tab-pane" [class.active]="tab === 'password'">
                 <form>
                     <bk-form-input [label]="'label_current_password'|bkTranslate:this" type="password" [control]="passwordForm.controls['currentPassword']"></bk-form-input>
                     <bk-form-input [label]="'label_new_password'|bkTranslate:this" type="password" [control]="passwordForm.controls['newPassword']"></bk-form-input>
@@ -95,7 +95,7 @@
 
 
             <!-- EMAIL TAB -->
-            <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'email'">
+            <div class="tab-pane" [class.active]="tab === 'email'">
                 <form>
                     <bk-form-input [label]="'label_current_email'|bkTranslate:this" type="email" [control]="emailForm.controls['currentEmail']"></bk-form-input>
                     <bk-form-input [label]="'label_new_email'|bkTranslate:this" type="email" [control]="emailForm.controls['newEmail']"></bk-form-input>
@@ -108,7 +108,7 @@
             </div>
             <!-- END EMAIL TAB -->
 
-            <div *ngIf="person.update_permission" class="tab-pane" [class.active]="openTabName == 'logins'">
+            <div class="tab-pane" [class.active]="tab === 'logins'">
                 <div *ngIf="login_tokens && login_tokens.length" class="table-scrollable">
                     <table class="table table-hover">
                         <thead>

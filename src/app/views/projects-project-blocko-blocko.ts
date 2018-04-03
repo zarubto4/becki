@@ -9,7 +9,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import {
     IProject, IBProgram, IBlockVersion, IBProgramVersion, IGridProject, IMProgramSnapShot,
-    IMProjectSnapShot, ICProgram, IBlock, ICProgramList, ICProgramVersion, IBlockList, IGridProjectList
+    IMProjectSnapShot, ICProgram, IBlock, ICProgramList, ICProgramVersion, IBlockList, IGridProjectList, IGridProgram
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';
@@ -286,6 +286,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     onDragStop(params: DraggableEventParams) {
 
+        console.info('onDragStop: ', params);
+
         let dragOffset = params.ui.offset;
         let blockoOffset = $(this.blockoView.field.nativeElement).offset();
         let blockoWidth = $(this.blockoView.field.nativeElement).width();
@@ -365,27 +367,121 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 }
 
                 case 'grid': {
-                    let m = new ModalsSelectVersionModel(this.allGridProjects[params.data.id].m_programs);
-                    this.modalService.showModal(m)
-                        .then((success: boolean) => {
-                            if (success && m.selectedId) {
-                                let cpv = this.getCProgramVersionById(m.selectedId);
-                                if (cpv && cpv.virtual_input_output) {
-                                    let interfaceData = JSON.parse(cpv.virtual_input_output);
-                                    if (interfaceData) {
-                                        this.blockoView.addInterface({
-                                            'grid': true,
-                                            'color': '#30f485',
-                                            'interfaceId': cpv.id,
-                                            'displayName': cpv.id,
-                                            'pos_x': Math.round(x / 22) * 22,
-                                            'pos_y': Math.round(y / 22) * 22,
-                                            'interface': interfaceData
-                                        });
+
+                    let project = this.allGridProjects.find( function(gp) {
+                        console.info('ID: ', gp.id);
+                        return gp.id === params.data.id;
+                    });
+
+                    let out: any = {
+                        analogInputs: {},
+                        digitalInputs: {},
+                        messageInputs: {},
+                        analogOutputs: {},
+                        digitalOutputs: {},
+                        messageOutputs: {},
+                    };
+
+                    if (project.m_programs) {
+                        project.m_programs.forEach((p) => {
+
+                            console.info('onDragStop   project.m_programs.forEach: ');
+                            console.info('onDragStop   p.program_versions:: ', (p.program_versions.length > 0));
+                            console.info('onDragStop   Project ID:: ', project.id);
+                            console.info('onDragStop   Program ID:: ', this.selectedGridProgramVersions[project.id]);
+                            console.info('onDragStop   Program ID:: ', p.id);
+                            console.info('onDragStop   version ID:: ', this.selectedGridProgramVersions[project.id][p.id]);
+
+                            if (p.program_versions && this.selectedGridProgramVersions[project.id] && (this.selectedGridProgramVersions[project.id][p.id])) {
+                                console.info('   if: 3');
+                                let programVersion = p.program_versions.find((pv) => (pv.id === this.selectedGridProgramVersions[project.id][p.id]));
+                                console.info('   Selected Program Version:', programVersion);
+                                if (programVersion) {
+
+                                    let iface: any = {};
+                                    try {
+                                        iface = JSON.parse(programVersion.m_program_virtual_input_output);
+                                    } catch (e) {
+                                        console.error(e);
+                                    }
+
+                                    if (iface.analogInputs) {
+                                        for (let k in iface.analogInputs) {
+                                            if (!iface.analogInputs.hasOwnProperty(k)) { continue; }
+                                            if (!out.analogInputs[k]) {
+                                                out.analogInputs[k] = iface.analogInputs[k];
+                                            }
+                                        }
+                                    }
+
+                                    if (iface.digitalInputs) {
+                                        for (let k in iface.digitalInputs) {
+                                            if (!iface.digitalInputs.hasOwnProperty(k)) { continue; }
+                                            if (!out.digitalInputs[k]) {
+                                                out.digitalInputs[k] = iface.digitalInputs[k];
+                                            }
+                                        }
+                                    }
+
+                                    if (iface.messageInputs) {
+                                        for (let k in iface.messageInputs) {
+                                            if (!iface.messageInputs.hasOwnProperty(k)) { continue; }
+                                            if (!out.messageInputs[k]) {
+                                                out.messageInputs[k] = iface.messageInputs[k];
+                                            }
+                                        }
+                                    }
+
+                                    if (iface.analogOutputs) {
+                                        for (let k in iface.analogOutputs) {
+                                            if (!iface.analogOutputs.hasOwnProperty(k)) { continue; }
+                                            if (!out.analogOutputs[k]) {
+                                                out.analogOutputs[k] = iface.analogOutputs[k];
+                                            }
+                                        }
+                                    }
+
+                                    if (iface.digitalOutputs) {
+                                        for (let k in iface.digitalOutputs) {
+                                            if (!iface.digitalOutputs.hasOwnProperty(k)) { continue; }
+                                            if (!out.digitalOutputs[k]) {
+                                                out.digitalOutputs[k] = iface.digitalOutputs[k];
+                                            }
+                                        }
+                                    }
+
+                                    if (iface.messageOutputs) {
+                                        for (let k in iface.messageOutputs) {
+                                            if (!iface.messageOutputs.hasOwnProperty(k)) { continue; }
+                                            if (!out.messageOutputs[k]) {
+                                                out.messageOutputs[k] = iface.messageOutputs[k];
+                                            }
+                                        }
                                     }
                                 }
                             }
                         });
+                    }
+
+                    if (
+                        Object.keys(out.analogInputs).length ||
+                        Object.keys(out.digitalInputs).length ||
+                        Object.keys(out.messageInputs).length ||
+                        Object.keys(out.analogOutputs).length ||
+                        Object.keys(out.digitalOutputs).length ||
+                        Object.keys(out.messageOutputs).length
+                    ) {
+                        this.blockoView.addInterface({
+                            // 'targetType': 'grid_project',
+                            'color': '#9966ff',  // change color [TZ]
+                            'interfaceId': project.id,
+                            'displayName': project.name,
+                            'pos_x': Math.round(x / 22) * 22,
+                            'pos_y': Math.round(y / 22) * 22,
+                            'interface': out
+                        });
+                    }
+
                     break;
                 }
 
@@ -396,21 +492,46 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     onDragStart(params: DraggableEventParams) {
 
-        // prefetch
-        if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
-            let wantedVersion = this.blocksLastVersions[params.data.id];
-            let wantedVersionName = params.data.id + '_' + wantedVersion.id;
-            if (!this.blocksCache[wantedVersionName]) {
-                this.tyrionBackendService.blockVersionGet(wantedVersion.id)
-                    .then((bbv) => {
-                        this.blocksCache[wantedVersionName] = bbv;
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_block'), reason));
-                    });
+        console.info('onDragStart:', params);
+
+        if (params.type === 'code') {
+            // prefetch
+            if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
+                let wantedVersion = this.blocksLastVersions[params.data.id];
+                let wantedVersionName = params.data.id + '_' + wantedVersion.id;
+                if (!this.blocksCache[wantedVersionName]) {
+                    this.tyrionBackendService.blockVersionGet(wantedVersion.id)
+                        .then((bbv) => {
+                            this.blocksCache[wantedVersionName] = bbv;
+                        })
+                        .catch(reason => {
+                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_block'), reason));
+                        });
+                }
             }
+        }
+
+        if (params.type === 'grid') {
+
+            console.info('onDragStart: Grid ID', params.data.id );
+
+            let project = this.allGridProjects.find( function(gp) {
+                console.info('onDragStart:ID: ', gp.id);
+                return gp.id === params.data.id;
+            });
+
+            console.info('onDragStart:Project: ', project);
+
+            project.m_programs.forEach((mp) => {
+                console.info('onDragStart:Program: ', mp);
+                this.selectedGridProgramVersions[project.id] = {};
+                this.selectedGridProgramVersions[project.id][mp.id] = mp.program_versions[0].id;
+                console.info('onDragStart:Version: ',  this.selectedGridProgramVersions[project.id][mp.id]);
+            });
 
         }
+
+        console.info('this.selectedGridProgramVersions:', this.selectedGridProgramVersions);
 
     }
 
@@ -471,165 +592,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
         return ret;
     }
-
-    /*updateBlockoInterfaces(): void {
-
-        // console.log(this.selectedGridProgramVersions);
-        let outInterface: BlockoTargetInterface[] = [];
-
-        let addInterface = (hwId: string, cProgramVersionId: string) => {
-            if (hwId && cProgramVersionId) {
-                let board = this.boardById[hwId];
-                let targetName: string = null;
-                if (board) {
-                    targetName = this.getTargetNameByBoardTypeId(board.type_of_board_id);
-                }
-                let cpv = this.getCProgramVersionById(cProgramVersionId);
-
-                if (board && targetName && cpv && cpv.virtual_input_output) {
-                    let interfaceData = JSON.parse(cpv.virtual_input_output);
-                    if (interfaceData) {
-                        outInterface.push({
-                            // 'targetType': targetName === 'BYZANCE_YODAG2' ? 'yoda' : 'device', // TODO: make better detection for another generations [DH] - Not supported?? [TZ]
-                            'color': '#99ccff', // change color [TZ]
-                            'targetId': hwId,
-                            'displayName': board.name ? board.name : board.id,
-                            'interface': interfaceData
-                        });
-                    }
-                }
-            }
-        };
-
-        if (this.selectedHardware) {
-
-            this.selectedHardware.forEach((sh) => {
-                if (sh.main_board_pair) {
-                    addInterface(sh.main_board_pair.board_id, sh.main_board_pair.c_program_version_id);
-                }
-                if (sh.device_board_pairs && Array.isArray(sh.device_board_pairs)) {
-                    sh.device_board_pairs.forEach((b) => {
-                        addInterface(b.board_id, b.c_program_version_id);
-                    });
-                }
-            });
-
-
-        }
-
-        if (this.allGridProjects) {
-
-            this.allGridProjects.forEach((gp) => {
-
-                if (!this.selectedGridProgramVersions[gp.id]) {
-                    return;
-                }
-
-                let out: any = {
-                    analogInputs: {},
-                    digitalInputs: {},
-                    messageInputs: {},
-                    analogOutputs: {},
-                    digitalOutputs: {},
-                    messageOutputs: {},
-                };
-
-                if (gp.m_programs) {
-                    gp.m_programs.forEach((p) => {
-
-                        if (p.versions && this.selectedGridProgramVersions[gp.id] && (this.selectedGridProgramVersions[gp.id][p.id])) {
-
-                            let programVersion = p.versions.find((pv) => (pv.id === this.selectedGridProgramVersions[gp.id][p.id]));
-
-                            if (programVersion) {
-
-                                let iface: any = {};
-                                try {
-                                    iface = JSON.parse(programVersion.virtual_input_output);
-                                } catch (e) {
-                                    console.error(e);
-                                }
-
-                                if (iface.analogInputs) {
-                                    for (let k in iface.analogInputs) {
-                                        if (!iface.analogInputs.hasOwnProperty(k)) { continue; }
-                                        if (!out.analogInputs[k]) {
-                                            out.analogInputs[k] = iface.analogInputs[k];
-                                        }
-                                    }
-                                }
-
-                                if (iface.digitalInputs) {
-                                    for (let k in iface.digitalInputs) {
-                                        if (!iface.digitalInputs.hasOwnProperty(k)) { continue; }
-                                        if (!out.digitalInputs[k]) {
-                                            out.digitalInputs[k] = iface.digitalInputs[k];
-                                        }
-                                    }
-                                }
-
-                                if (iface.messageInputs) {
-                                    for (let k in iface.messageInputs) {
-                                        if (!iface.messageInputs.hasOwnProperty(k)) { continue; }
-                                        if (!out.messageInputs[k]) {
-                                            out.messageInputs[k] = iface.messageInputs[k];
-                                        }
-                                    }
-                                }
-
-                                if (iface.analogOutputs) {
-                                    for (let k in iface.analogOutputs) {
-                                        if (!iface.analogOutputs.hasOwnProperty(k)) { continue; }
-                                        if (!out.analogOutputs[k]) {
-                                            out.analogOutputs[k] = iface.analogOutputs[k];
-                                        }
-                                    }
-                                }
-
-                                if (iface.digitalOutputs) {
-                                    for (let k in iface.digitalOutputs) {
-                                        if (!iface.digitalOutputs.hasOwnProperty(k)) { continue; }
-                                        if (!out.digitalOutputs[k]) {
-                                            out.digitalOutputs[k] = iface.digitalOutputs[k];
-                                        }
-                                    }
-                                }
-
-                                if (iface.messageOutputs) {
-                                    for (let k in iface.messageOutputs) {
-                                        if (!iface.messageOutputs.hasOwnProperty(k)) { continue; }
-                                        if (!out.messageOutputs[k]) {
-                                            out.messageOutputs[k] = iface.messageOutputs[k];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-
-                if (
-                    Object.keys(out.analogInputs).length ||
-                    Object.keys(out.digitalInputs).length ||
-                    Object.keys(out.messageInputs).length ||
-                    Object.keys(out.analogOutputs).length ||
-                    Object.keys(out.digitalOutputs).length ||
-                    Object.keys(out.messageOutputs).length
-                ) {
-                    outInterface.push({
-                        // 'targetType': 'grid_project',
-                        'color': '#9966ff',  // change color [TZ]
-                        'targetId': gp.id,
-                        'displayName': gp.name,
-                        'interface': out
-                    });
-                }
-            });
-        }
-
-        // console.log(JSON.stringify(outInterface));
-        this.blockoView.setInterfaces(outInterface);
-    }*/
 
     onProgramVersionClick(programVersion: IBProgramVersion): void {
         this.selectProgramVersion(programVersion);

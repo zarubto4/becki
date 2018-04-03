@@ -220,6 +220,9 @@
             <template [ngSwitchCase]="'ModalsSnapShotDeployModel'">
                 <bk-modals-snap-shot-deploy [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-snap-shot-deploy>
             </template>
+            <template [ngSwitchCase]="'ModalsShowQRModel'">
+                <bk-modals-show-qr [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-show-qr>
+            </template>
         </div>
     </div>
 </div>

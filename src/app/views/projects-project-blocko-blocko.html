@@ -205,12 +205,12 @@
 
                     <bk-portlet-title
                         [title_name]="'tab_interfaces'|bkTranslate:this"
-                        [icon]="'fa-cubes'">
+                        [icon]="'fa-cube'">
                     </bk-portlet-title>
 
                     <div class="portlet-body">
                         <div class="panel-group accordion blocko-blocks-group-list">
-                            <div *ngFor="let iface of allGridProjects;" [bkDraggable]="draggableOptions" [bkDraggableData]="iface" [bkDraggableDataType]="'code'" (bkDraggableOnStop)="onDragStop($event)"
+                            <div *ngFor="let iface of allGridProjects;" [bkDraggable]="draggableOptions" [bkDraggableData]="iface" [bkDraggableDataType]="'grid'" (bkDraggableOnStop)="onDragStop($event)"
                                  (bkDraggableOnStart)="onDragStart($event)" class="blocko-block">
                                 <div class="blocko-block-mask"></div>
                                 <i class="fa fa-fw fa-cubes" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>

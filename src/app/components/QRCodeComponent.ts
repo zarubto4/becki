@@ -32,6 +32,8 @@ export class QRCodeComponent implements OnInit, OnChanges {
                 dark: '#28A8E0FF',
                 light: '#00000000'
             },
+            scale: 17,
+            width: 800,
             margin: 0
         };
 
@@ -40,6 +42,7 @@ export class QRCodeComponent implements OnInit, OnChanges {
                 console.error(error);
             }
         });
+
     }
 
 }

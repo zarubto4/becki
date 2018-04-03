@@ -11,13 +11,39 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
     selector: 'bk-form-input',
 /* tslint:disable:max-line-length */
     template: `
-<div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
+<div class="form-group" 
+     [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" 
+     [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" 
+     [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label *ngIf="showLabel">{{label}}</label>
     <div class="input-icon right">
+        
         <i class="fa fa-check" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
         <i class="fa fa-warning" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
         <i class="fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
-        <input class="form-control" (keydown)="onEnter($event)" (ngModelChange)="onSelectedChange($event)" [class.input-small]="widthSize == 'small'" [class.input-medium]="widthSize == 'medium'" [class.input-xlarge]="widthSize == 'large'" [attr.type]="type" [attr.placeholder]="(placeholder?placeholder:label)" [formControl]="control" [readonly]="readonly">
+       
+        <input  *ngIf="control"  class="form-control" 
+               (keydown)="onEnter($event)"
+               (ngModelChange)="onSelectedChange($event)" 
+               [class.input-small]="widthSize == 'small'" 
+               [class.input-medium]="widthSize == 'medium'"
+               [class.input-xlarge]="widthSize == 'large'" 
+               [attr.type]="type" 
+               [attr.placeholder]="(placeholder?placeholder:label)"
+               [readonly]="readonly"
+               [formControl]="control" 
+               >
+
+        <input *ngIf="!control" class="form-control"
+               (keydown)="onEnter($event)"
+               (ngModelChange)="onSelectedChange($event)"
+               [class.input-small]="widthSize == 'small'"
+               [class.input-medium]="widthSize == 'medium'"
+               [class.input-xlarge]="widthSize == 'large'"
+               [attr.type]="type"
+               [attr.placeholder]="(placeholder?placeholder:label)"
+               [readonly]="readonly">
+
     </div>
     <span class="help-block" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" >{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
 </div>
@@ -60,23 +86,28 @@ export class FormInputComponent implements OnInit {
     }
 
     ngOnInit() {
-        // Not wait for tuch if control.value is not null (for example edit)
-        if (this.waitForTouch) {
-            if (this.control !== null && this.control.value !== null && this.control.value !== '') {
-                this.waitForTouch = false;
+        if (!this.readonly) {
+            // Not wait for tuch if control.value is not null (for example edit)
+            if (this.waitForTouch) {
+                if (this.control !== null && this.control.value !== null && this.control.value !== '') {
+                    this.waitForTouch = false;
+                }
             }
         }
-
     }
 
     onEnter(event: any) {
-        if (event.keyCode === 13) {
-            this.onEnterEvent.emit(event);
+        if (!this.readonly) {
+            if (event.keyCode === 13) {
+                this.onEnterEvent.emit(event);
+            }
         }
     }
 
     onSelectedChange(newValue: string) {
-        this.valueChange.emit(newValue);
+        if (!this.readonly) {
+            this.valueChange.emit(newValue);
+        }
     }
 
 }
