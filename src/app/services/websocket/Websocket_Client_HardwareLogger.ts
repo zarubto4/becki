@@ -15,7 +15,7 @@ export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
 
         super.onMessageCallback = (m: WebsocketMessage) => this.onMessageReceive(m);
         super.onOpenCallback = (e) => {
-            // Do something
+            console.info('WebsocketClientHardwareLogger:: Port Open');
         };
 
         super.onError = (e: any) => this.reconnectWebSocketAfterTimeout(e);
@@ -55,7 +55,7 @@ export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
 
     /***** Requests *******/
 
-    public requestDeviceTerminalSubcribe(deviceId: string, logLevel: ('error' | 'warn' | 'info' | 'log'), callback: (response_message: WebsocketMessage, error: any) => void) {
+    public requestDeviceTerminalSubcribe(deviceId: string, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace'), callback: (response_message: WebsocketMessage, error: any) => void) {
 
         let message = new IWebSocketSubscribeHardware();
         message.hardware_ids = [deviceId];

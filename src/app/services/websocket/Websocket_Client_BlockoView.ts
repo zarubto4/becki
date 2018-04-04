@@ -9,6 +9,7 @@ export class WebsocketClientBlockoView extends  WebsocketClientAbstract {
         super(websocketUrl);
         this.connectWs();
 
+        console.info('WebsocketClientBlockoView connection URL: ', websocketUrl);
         super.onError = (e: any) => this.reconnectWebSocketAfterTimeout(e);
     }
 
@@ -49,11 +50,13 @@ export class WebsocketClientBlockoView extends  WebsocketClientAbstract {
 
 
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)
+
+
     protected reconnectWebSocketAfterTimeout = (e) => {
 
         /* tslint:disable */
-        console.log('WebsocketClientBlockoView::reconnectWebSocketAfterTimeout()');
-        console.log(e);
+        console.info('WebsocketClientBlockoView::reconnectWebSocketAfterTimeout()');
+        console.info(e);
         /* tslint:enable */
 
         clearTimeout( this._webSocketReconnectTimeout );

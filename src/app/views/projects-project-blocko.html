@@ -16,7 +16,7 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                       {
-                          condition: (tab == 'hardware_list' && (devicesFilter && devicesFilter.content.length)),
+                          condition: (privatePrograms && privatePrograms.content.length),
                           btn_label_for_person: ('btn_add_blocko_program'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',

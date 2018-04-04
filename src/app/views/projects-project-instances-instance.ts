@@ -676,6 +676,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.homerDao = socket;
 
                             this.homerDao.onOpenCallback = (e) => {
+                                console.error('Instance WebSocket WebView is open ');
 
                                 this.homerDao.requestGetValues(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
                                     if (response_message) {

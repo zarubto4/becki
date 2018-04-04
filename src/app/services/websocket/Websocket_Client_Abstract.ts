@@ -38,11 +38,15 @@ export abstract class WebsocketClientAbstract {
      * @param wss: true pokud je wss požadováno
      */
     constructor(public url: string, public wss: boolean = false) {
-        if (!wss) {
-            this.url = 'ws://' + url;
-        }else {
-            this.url = 'wss://' + url;
+        if (!(url.includes('ws://') || this.url.includes('wss://'))) {
+            if (!wss) {
+                this.url = 'ws://' + url;
+            } else {
+                this.url = 'wss://' + url;
+            }
         }
+
+        console.info('Konečná podoba URL: ',  this.url);
     }
 
     public disconnectWebSocket(): void {
@@ -139,6 +143,8 @@ export abstract class WebsocketClientAbstract {
                 this.url = 'wss://' + this.url;
             }
         }
+
+        console.info('Adresa Pro připojení: ',  this.url);
         // Logger.info('TyrionWebsocketClient:: MainServer Connection:: reconnect to Main server url:: ',this.websocketUrl);
         this._websocket = new WebSocket(this.url);
         this._websocket.addEventListener('close', (e) => this.onError(e));

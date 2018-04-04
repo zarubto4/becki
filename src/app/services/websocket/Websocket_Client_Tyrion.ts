@@ -23,8 +23,6 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
                     console.error('WebsocketClientTyrion: requestNotificationsSubscribe:: ERRTOR: ',  error);
                 }
 
-
-
             });
 
             if (!this.pingTimeout) {

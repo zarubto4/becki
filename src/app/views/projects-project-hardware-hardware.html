@@ -189,7 +189,7 @@
 
 
                             <!-- Update Bootlaoder on Hardware - There is condition - if user made update already - we must hide this button [TZ]-->
-                            <div *ngIf="!hardware.actual_bootloader && hardware.available_latest_bootloader && !hardware.bootloader_update_in_progress" class="text-center">
+                            <div *ngIf="(!hardware.actual_bootloader || hardware.available_latest_bootloader.id != hardware.actual_bootloader.id) && !hardware.bootloader_update_in_progress" class="text-center">
                                 <br>
                                 <button class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
                                     <i class="fa fa-rocket"></i> {{'label_update_to'|bkTranslate:this}}
@@ -198,7 +198,7 @@
                             </div>
 
                             <!-- Updae in Quue -->
-                            <div *ngIf="hardware.actual_bootloader && hardware.available_latest_bootloader && hardware.bootloader_update_in_progress" class="text-center">
+                            <div *ngIf="hardware.bootloader_update_in_progress" class="text-center">
                                 <br>
                                 <button class="btn default btn-sm disabled">
                                     <i class="fa fa-rocket"></i> {{'label_update_in_que'|bkTranslate:this}}
@@ -207,7 +207,7 @@
 
                         </div>
 
-                        <div *ngIf="hardware.ip_address" style="margin-left: 20px">
+                        <div *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE'" style="margin-left: 20px">
                             <hr style="margin-right: 20px; margin-left: 20px">
                             <div class="font-blue-dark">
                                   <i class="fa fa-lg fa-link"></i>

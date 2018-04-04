@@ -184,7 +184,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
     // Array With Log Type Parameters
     logLevel: { [hardware_id: string]: {
-        log: ('error' | 'warn' | 'info' | 'log'),
+        log: ('error' | 'warn' | 'info' | 'debug' | 'trace'),
         subscribed: boolean,
         socket: WebsocketClientHardwareLogger
     }} = {};
@@ -206,7 +206,8 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     lastColorInstance: number = 0; // kvůli barvám sledujeme poslední přidanou instanci
 
     logLevelOptions: FormSelectComponentOption[] = [
-        { value: 'log', label: 'log' },
+        { value: 'trace', label: 'trace' },
+        { value: 'debug', label: 'debug' },
         { value: 'info', label: 'info' },
         { value: 'warn', label: 'warn' },
         { value: 'error', label: 'error' }
@@ -301,7 +302,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param hardware
      * @param logLevel
      */
-    onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'log') = 'info'): void {
+    onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace') = 'info'): void {
 
         console.log('onHardwareSubscribeClick: Hardware::', hardware.id);
 
@@ -323,7 +324,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param logLevel
      * @param hardware
      */
-    onUserChangeLogLevelClick(logLevel: ('error' | 'warn' | 'info' | 'log'), hardware: IHardware): void { // změna log levelu
+    onUserChangeLogLevelClick(logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace'), hardware: IHardware): void { // změna log levelu
 
         console.log('onUserChangeLogLevelClick:: Hardware', hardware.id, 'LogLevel', logLevel);
         console.log('onUserChangeLogLevelClick:: Server URL: ', this.logLevel[hardware.id].socket.url);
