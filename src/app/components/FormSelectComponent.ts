@@ -106,19 +106,29 @@ export class FormSelectComponent {
         if (option && option.length > 0) {
 
             if (this.regexFirstOption) {
+
+                console.log("FormSelectComponent: Regex: ", this.regexFirstOption);
+                console.log("FormSelectComponent: Option: ", option);
+
                 let toPick: number = 0;
 
                 toPick = option.findIndex(item => {
-                    if (item.label.match(this.regexFirstOption)) {
+                    if (item.value.match(this.regexFirstOption) || item.label.match(this.regexFirstOption)) {
                         return true;
                     }
                 });
+
+                console.log("FormSelectComponent: TO Pick: ", toPick);
+
                 if (toPick === -1) {
                     this.selectedValue = option[0].value;
                     this.control.setValue(option[0].value);
                 } else {
+
                     this.selectedValue = option[toPick].value;
                     this.control.setValue(option[toPick].value);
+
+                    console.log("FormSelectComponent: This Selected Value" , this.selectedValue );
                 }
             } else if (this.positionFirstOption && this.positionFirstOption > -1 && this.positionFirstOption < option.length) {
 

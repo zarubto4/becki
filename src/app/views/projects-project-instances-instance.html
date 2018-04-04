@@ -546,14 +546,26 @@
                                 </td>
                                 <td class="vert-align text-center no-wrap">
                                     <a target="_blank" href="{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}">{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}</a>
+                                    <a class="bold margin-left-15" target="_blank" (click)="showGrid(m_project.grid_project.id, program.grid_program.id)">(Show QR)</a>
                                 </td>
 
 
-                                <td class="vert-align text-righ no-wrap">
-                                    <a target="_blank" (click)="showGrid(m_project.grid_project.id, program.grid_program.id)">Show QR</a>
-                                    <!--
+                                <td class="vert-align text-right no-wrap">
 
-                                    !-->
+                                    <style type="text/css">
+                                        table tr button {
+                                            opacity: 0.05;
+                                        }
+                                        table tr:hover button {
+                                            opacity: 1
+                                        }
+                                    </style>
+
+                                    <button title="{{'label_edit_grid_app'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
+                                            [disabled]="!program.update_permission"
+                                            (click)="onGridProgramPublishClick(m_project, program)">
+                                        <i class="fa fa-cogs"></i>
+                                    </button>
                                 </td>
 
                             </tr>

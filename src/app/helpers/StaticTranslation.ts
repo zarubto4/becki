@@ -2,6 +2,8 @@
  * Created by DominikKrisztof 13.3.2017
  */
 
+import {ModalsGridProgramSettingsComponent} from "../modals/instance-grid-program-settings";
+
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
     /* <!-- <br><br><b>TODO: DELETE ME! -></b> {{'hello_world'|bkTranslate:this:'Becki':55}} -->*/
@@ -455,6 +457,14 @@ export class StaticTranslation {
                 'not_valid_byzance_qr_code': 'not valid Byzance QRcode',
                 'byzance_qr_code_found': 'Byzance QR code found',
                 'btn_rescan': 'Scan again',
+                'btn_confirm_scan': 'Confirm Scan',
+            },
+
+            'ModalsGridProgramSettingsComponent': {
+                'title': '<strong class="font-color-grid">Grid</strong> App settings in <strong class="font-color-instance">Instance</strong> ',
+                'label_select_app_access': 'Access Settings',
+                'label_grid_app_name': '<strong class="font-color-grid">Grid</strong> Program',
+                'label_grid_app_description': '<strong class="font-color-grid">Grid</strong> Program Description',
                 'btn_confirm_scan': 'Confirm Scan',
             },
 

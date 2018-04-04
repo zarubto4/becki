@@ -223,6 +223,9 @@
             <template [ngSwitchCase]="'ModalsShowQRModel'">
                 <bk-modals-show-qr [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-show-qr>
             </template>
+            <template [ngSwitchCase]="'ModalsGridProgramSettingsModel'">
+                <bk-modals-instance-grid-program-settings [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-grid-program-settings>
+            </template>
         </div>
     </div>
 </div>

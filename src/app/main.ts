@@ -214,6 +214,7 @@ import { ProjectsProjectGridComponent } from './views/projects-project-grid';
 import { ProjectsProjectGridGridsComponent } from './views/projects-project-grid-grids';
 import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-grid-grids-grid';
 import { ModalsShowQRComponent } from './modals/show_QR';
+import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-program-settings';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -603,6 +604,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsTariffComponent,
         ModalsPublicShareResponseComponent,
         ModalsCreateProcessorComponent,
+        ModalsGridProgramSettingsComponent,
         ModalsBootloaderPropertyComponent,
         ModalsCreateCompilationServerComponent,
         ModalsRemovalComponent,

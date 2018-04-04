@@ -6,7 +6,8 @@ import {
     IInstanceSnapshot, IInstance, IBProgram,
     IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary, IBProgramVersion,
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
-    ISwaggerInstanceSnapShotConfigurationProgram,
+    ISwaggerInstanceSnapShotConfigurationProgram, ISwaggerInstanceSnapShotConfiguration,
+    IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -32,7 +33,8 @@ import moment = require('moment/moment');
 import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
 import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
 import { ModalsRemovalModel } from '../modals/removal';
-import {ModalsShowQRModel} from "../modals/show_QR";
+import { ModalsShowQRModel } from '../modals/show_QR';
+import { ModalsGridProgramSettingsModel } from '../modals/instance-grid-program-settings';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -45,7 +47,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     routeParamsSubscription: Subscription;
 
     instance: IInstance = null;
-    instanceSnapshot: IInstanceSnapshot = null;
     bProgram: IBProgram = null;
     bProgramVersion: IBProgramVersion = null;
     actualizationTaskFilter: IActualizationProcedureTaskList = null;
@@ -142,8 +143,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             if (this.editorView) {
 
-                if (this.instanceSnapshot) {
-                    this.editorView.setDataJson(this.instanceSnapshot.program.snapshot);
+                if (this.instance) {
+                    this.editorView.setDataJson(this.instance.current_snapshot.program.snapshot);
                 } else if (this.bProgramVersion) {
                     this.editorView.setDataJson(this.bProgramVersion.program);
                 }
@@ -194,12 +195,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 this.instance = instance;
 
-                if (this.instance.current_snapshot) {
-                    this.instanceSnapshot = this.instance.current_snapshot;
-                } else if (this.instance.snapshots.length > 0) {
-                    this.instanceSnapshot = this.instance.snapshots[0];
-                }
-
                 this.loadBlockoLiveView();
                 this.unblockUI();
 
@@ -235,6 +230,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
             case 'deploy_snapshot': {
                 this.onInstanceDeployClick();
+                break;
+            }
+            case 'deactivate_instance': {
+                this.onInstanceShutdownClick();
                 break;
             }
             default: {
@@ -329,13 +328,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                     this.blockUI();
 
-                    let version_id = null;
-
-                    if (this.instanceSnapshot) {
-                        version_id = this.instanceSnapshot.b_program_version.id;
-                    } else if (this.bProgramVersion) {
-                        version_id = this.bProgramVersion.id;
-                    }
+                    let version_id = this.bProgramVersion.id;
 
                     let interfaces: IInstanceSnapshotJsonFileInterface[] = [];
 
@@ -354,7 +347,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         interfaces: interfaces,
                         snapshot: this.editorView.getDataJson()
                     }).then((snapshot) => {
-                        this.instanceSnapshot = snapshot;
                         this.unblockUI();
                         this.refresh();
                     }).catch((reason) => {
@@ -395,16 +387,21 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }) > -1;
     }
 
-    onGridProgramPublishClick(gridProgram: ITerminalConnectionSummary) {
-        this.blockUI();
-        this.tyrionBackendService.instanceUpdateGridSettings(this.instanceSnapshot.id, this.instanceSnapshot.settings)
-            .then(() => {
-                this.refresh();
-            })
-            .catch((reason) => {
-                this.fmError(this.translate('label_cannot_change_version', reason));
-                this.unblockUI();
-            });
+    onGridProgramPublishClick(project: IBProgramVersionSnapGridProject, program: IBProgramVersionSnapGridProjectProgram) {
+        let model = new ModalsGridProgramSettingsModel(project, program, this.instance.current_snapshot.settings);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceUpdateGridSettings(this.instance.current_snapshot.id, model.settings)
+                    .then(() => {
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('label_cannot_change_version', reason));
+                        this.unblockUI();
+                    });
+            }
+        });
     }
 
     selectedHistoryItem(event: { index: number, item: IInstanceSnapshot }) {
@@ -452,7 +449,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.modalService.showModal(new ModalsRemovalModel(snapShot.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.instanceSnapshotDelete(this.instanceSnapshot.id)
+                this.tyrionBackendService.instanceSnapshotDelete(this.instance.current_snapshot.id)
                     .then(() => {
                         this.unblockUI();
                         this.refresh();
@@ -469,7 +466,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.instanceSnapshotShutdown(this.instanceSnapshot.id)
+                this.tyrionBackendService.instanceSnapshotShutdown(this.instance.current_snapshot.id)
                     .then(() => {
                         this.unblockUI();
                         this.refresh();
@@ -511,9 +508,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         let program_project: ISwaggerInstanceSnapShotConfigurationFile = this.instance.current_snapshot.settings.grids_collections.find((gr) => {
             return gr.grid_project_id === project_id;
         });
-        return program_project.grid_programs.find((gpr) => {
+        let program: ISwaggerInstanceSnapShotConfigurationProgram = program_project.grid_programs.find((gpr) => {
             return gpr.grid_program_id === program_id;
         });
+
+        console.log("Instnace: getGridConfig: Program: ", program);
+        console.log("Instnace: getGridConfig: Program snapshot_settings: ", program.snapshot_settings);
+
+        return program;
     }
 
     showGrid(project_id: string, program_id: string) {
@@ -529,7 +531,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
             project_id : this.projectId,
-            instance_snapshots: [this.instanceSnapshot.id],
+            instance_snapshots: [this.instance.current_snapshot.id],
 
         })
             .then((values) => {
@@ -559,7 +561,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.blockUI();
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
             projects: [this.projectId],
-            instance_snapshots: groups.length > 0 ? [] : [this.instanceSnapshot.id],
+            instance_snapshots: groups.length > 0 ? [] : [this.instance.current_snapshot.id],
             hardware_groups_id: groups.map(group => group.id)
         })
             .then((values) => {
@@ -624,7 +626,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
             actualization_procedure_ids: null,
-            instance_snapshot_ids: [this.instanceSnapshot.id],
+            instance_snapshot_ids: [this.instance.current_snapshot.id],
             hardware_ids: null,
             instance_ids: null,
             update_status: status,
