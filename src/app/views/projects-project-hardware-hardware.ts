@@ -80,6 +80,22 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         if (action === 'active_hardware') {
             this.onActiveDeviceClick(this.hardware);
         }
+
+        if (action === 'hardware_restart') {
+            this.onRestartDeviceClick();
+        }
+
+        if (action === 'hardware_restart_bootloader') {
+            this.onSwitchToBootloaderDeviceClick();
+        }
+
+        if (action === 'hardware_restart_pass') {
+            this.onGenerateNewPassword();
+        }
+
+        if (action === 'hardware_change_server') {
+            this.onChangeServer();
+        }
     }
 
     ngOnDestroy(): void {

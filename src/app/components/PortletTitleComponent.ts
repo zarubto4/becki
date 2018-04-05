@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
     selector: 'bk-portlet-title',
     /* tslint:disable */
     template: `
-            <div class="portlet-title" [style.border-bottom]="(tabbable_under_line == true ? '1px solid #eef1f5' : '')">
+            <div class="portlet-title" [style.border-bottom]="(tabbable_under_line == true ? '1px solid #eef1f5' : '')"  [style.padding-bottom]="(tabbable_under_line == true ? '50px' : '')">
                 <div *ngIf="show_title" class="becki-caption" style="padding-bottom: 0px; padding-top: 10px;">
                     <span class="font-blue-dark uppercase">
                         <i class="fa fa-fw {{icon}}"></i>

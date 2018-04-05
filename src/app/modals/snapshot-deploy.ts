@@ -84,7 +84,7 @@ export class ModalsSnapShotDeployComponent implements OnInit {
 
         this.options = this.modalModel.snapshots.map((pv: IInstanceSnapshot) => {
             return {
-                label: pv.name + ' - ' + status,
+                label: pv.name + ' - ' + pv.description,
                 value: pv.id,
             };
         });

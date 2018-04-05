@@ -127,7 +127,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.instanceSnapshotShutdown(instance.current_snapshot.id)
+                this.tyrionBackendService.instanceShutdown(instance.id)
                     .then(() => {
                         this.unblockUI();
                         this.onFilterInstances();

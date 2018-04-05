@@ -475,6 +475,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                             // 'targetType': 'grid_project',
                             'color': '#9966ff',  // change color [TZ]
                             'interfaceId': project.id,
+                            'grid': true,
                             'displayName': project.name,
                             'pos_x': Math.round(x / 22) * 22,
                             'pos_y': Math.round(y / 22) * 22,

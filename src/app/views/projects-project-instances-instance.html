@@ -205,7 +205,7 @@
             </div>
         </div>
 
-        <div *ngIf="tab == 'update'">
+        <div *ngIf="tab == 'update' && instance && instance.current_snapshot">
 
             <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
@@ -364,7 +364,7 @@
             </div>
         </div>
 
-        <div *ngIf="tab == 'hardware'">
+        <div *ngIf="tab == 'hardware' && instance && instance.current_snapshot">
             <div class="row">
 
                 <!-- List of Integrated HW groups START-->
@@ -475,7 +475,7 @@
                 </div>
 
                 <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-                <bk-nothing-to-show [condition_loading]="(devicesFilter == null)"
+                <bk-nothing-to-show [condition_loading]="(devicesFilter == null || deviceGroupFilter == null)"
                                     [condition_empty]="(devicesFilter != null && devicesFilter.content.length == 0)"
                                     [main_message_link]="'label_no_hardware_in_snapshot'|bkTranslate:this"
                                     [main_message_comment_link]="'label_no_hardware_in_snapshot_comment'|bkTranslate:this"
@@ -485,7 +485,7 @@
             </div>
         </div>
 
-        <div *ngIf="tab == 'view' ">
+        <div *ngIf="tab == 'view' && instance && instance.current_snapshot">
 
             <div *ngIf="instance && instance.online_state === 'ONLINE'">
 
@@ -508,9 +508,9 @@
 
         </div>
 
-        <div *ngIf="tab == 'grid'">
+        <div *ngIf="tab == 'grid' && instance && instance.current_snapshot">
 
-            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)">
+            <div *ngIf="(instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)">
                 <div *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last" class="portlet portlet light">
 
                     <bk-portlet-title

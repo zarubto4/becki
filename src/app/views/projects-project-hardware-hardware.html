@@ -82,202 +82,225 @@
             <div *ngIf="hardware && hardwareType">
 
                 <!-- Main Overview -->
-                <div *ngIf="hardware && hardwareType" class="row">
+                <div class="row">
 
                     <!-- Basic Overview -->
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 ">
+                        <div class="portlet portlet light">
 
-                        <H4>{{'label_overview'|bkTranslate:this}}</H4>
-                        <br>
-                        <div>
-                            {{'label_name'|bkTranslate:this}}:
-                            <span *ngIf="hardware.name" class="font-grey-mint bold">{{hardware.name}}</span>
-                            <span *ngIf="!hardware.name" class="font-grey-mint">{{'label_you_can_set'|bkTranslate:this}}</span>
-                        </div>
-                        <div>
-                            {{'label_description'|bkTranslate:this}}:
-                            <span *ngIf="hardware.description" class="font-grey-mint bold">{{hardware.description}}</span>
-                            <span *ngIf="!hardware.description" class="font-grey-mint">{{'label_you_can_set'|bkTranslate:this}}</span>
-                        </div>
-                        <br>
-                        <div>
-                            {{'label_type'|bkTranslate:this}}:
-                            <a [routerLink]="['/hardware', hardware.hardware_type.id]" class="bold">{{hardware.hardware_type.name}}</a>
-                        </div>
-                        <div>
-                            {{'label_producer'|bkTranslate:this}}:
-                            <a [routerLink]="['/producers', hardwareType.producer.id]" class="bold">{{hardwareType.producer.name}}</a>
-                        </div>
-                        <div>
-                            {{'label_revision'|bkTranslate:this}}:
-                            <span class="font-grey-mint bold">{{hardware.revision}}</span>
-                        </div>
+                            <bk-portlet-title
+                                [title_name]="'label_overview'|bkTranslate:this"
+                                [icon]="'fa-info'">
+                            </bk-portlet-title>
 
-                        <hr style="margin-right: 5%; margin-left: 5%">
+                            <div class="portlet-body">
+                                <br>
+                                <div>
+                                    {{'label_name'|bkTranslate:this}}:
+                                    <span *ngIf="hardware.name" class="font-grey-mint bold">{{hardware.name}}</span>
+                                    <span *ngIf="!hardware.name" class="font-grey-mint">{{'label_you_can_set'|bkTranslate:this}}</span>
+                                </div>
+                                <div>
+                                    {{'label_description'|bkTranslate:this}}:
+                                    <span *ngIf="hardware.description" class="font-grey-mint bold">{{hardware.description}}</span>
+                                    <span *ngIf="!hardware.description" class="font-grey-mint">{{'label_you_can_set'|bkTranslate:this}}</span>
+                                </div>
+                                <br>
+                                <div>
+                                    {{'label_type'|bkTranslate:this}}:
+                                    <a [routerLink]="['/hardware', hardware.hardware_type.id]" class="bold">{{hardware.hardware_type.name}}</a>
+                                </div>
+                                <div>
+                                    {{'label_producer'|bkTranslate:this}}:
+                                    <a [routerLink]="['/producers', hardwareType.producer.id]" class="bold">{{hardwareType.producer.name}}</a>
+                                </div>
+                                <div>
+                                    {{'label_revision'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{hardware.revision}}</span>
+                                </div>
 
-                        <div>
-                            {{'label_id'|bkTranslate:this}}:
-                            <span class="font-grey-mint bold">{{hardware.id}}</span>
-                        </div>
-                        <div>
-                            {{'label_full_id'|bkTranslate:this}}:
-                            <span class="font-grey-mint bold">{{hardware.full_id}}</span>
-                        </div>
-                        <br>
-                        <div>
-                            {{'label_ethernet_address'|bkTranslate:this}}:
-                            <span *ngIf="hardware.mac_address" class="font-grey-mint bold">{{hardware.mac_address}}</span>
-                            <span *ngIf="!hardware.mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
-                        </div>
-                        <div>
-                            {{'label_wifi_address'|bkTranslate:this}}:
-                            <span *ngIf="hardware.wifi_mac_address" class="font-grey-mint bold">{{hardware.wifi_mac_address}}</span>
-                            <span *ngIf="!hardware.wifi_mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
-                        </div>
+                                <hr style="margin-right: 5%; margin-left: 5%">
 
-                        <div *ngIf="!hardware.dominant_entity">
-                            <hr style="margin-right: 5%; margin-left: 5%">
-                            <span class="font-red-flamingo">
-                                <i class="fa fa-fw fa-exclamation-triangle"></i>
-                            </span>
-                            <span>{{'label_device_is_not_dominant'|bkTranslate:this}}</span>
-                            <div *ngIf="hardware.dominant_project_active">
-                                <span>{{'label_device_project_dominant'|bkTranslate:this}}</span><a (click)="onProjectClick(hardware.dominant_project_active.id)">{{hardware.dominant_project_active.name}}</a>
+                                <div>
+                                    {{'label_id'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{hardware.id}}</span>
+                                </div>
+                                <div>
+                                    {{'label_full_id'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{hardware.full_id}}</span>
+                                </div>
+                                <br>
+                                <div>
+                                    {{'label_ethernet_address'|bkTranslate:this}}:
+                                    <span *ngIf="hardware.mac_address" class="font-grey-mint bold">{{hardware.mac_address}}</span>
+                                    <span *ngIf="!hardware.mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
+                                </div>
+                                <div>
+                                    {{'label_wifi_address'|bkTranslate:this}}:
+                                    <span *ngIf="hardware.wifi_mac_address" class="font-grey-mint bold">{{hardware.wifi_mac_address}}</span>
+                                    <span *ngIf="!hardware.wifi_mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
+                                </div>
+
+                                <div *ngIf="!hardware.dominant_entity">
+                                    <hr class="margin-left-15 margin-right-15">
+                                    <span class="font-red-flamingo">
+                                    <i class="fa fa-fw fa-exclamation-triangle"></i>
+                                </span>
+                                    <span>{{'label_device_is_not_dominant'|bkTranslate:this}}</span>
+                                    <div *ngIf="hardware.dominant_project_active">
+                                        <span>{{'label_device_project_dominant'|bkTranslate:this}}</span><a (click)="onProjectClick(hardware.dominant_project_active.id)">{{hardware.dominant_project_active.name}}</a>
+                                    </div>
+                                    <br>
+                                </div>
+                                <hr class="margin-left-15 margin-right-15">
+                                <div>
+                                    {{'label_device_status'|bkTranslate:this}}:
+                                    <bk-online-state [online_state]="hardware.online_state"></bk-online-state>
+                                </div>
+                                <div>
+                                    <div *ngIf="hardware.online_state == 'OFFLINE' && !hardware.latest_online">
+                                        <span> {{'label_device_last_seen'|bkTranslate:this}}:</span>
+                                        <span *ngIf="hardware.latest_online" class="font-grey-mint bold">{{hardware.latest_online|bkUnixTimeToDate}}</span>
+                                        <span *ngIf="!hardware.latest_online" class="font-grey-mint bold">({{'label_last_seen_unknow'|bkTranslate:this}})</span>
+                                    </div>
+                                </div>
                             </div>
-                            <br>
-                        </div>
-                        <hr style="margin-right: 5%; margin-left: 5%">
-                        <div>
-                            {{'label_device_status'|bkTranslate:this}}:
-                            <bk-online-state [online_state]="hardware.online_state"></bk-online-state>
-                        </div>
-                        <div>
-                            <div *ngIf="hardware.online_state == 'OFFLINE' && !hardware.latest_online">
-                                <span> {{'label_device_last_seen'|bkTranslate:this}}:</span>
-                                <span *ngIf="hardware.latest_online" class="font-grey-mint bold">{{hardware.latest_online|bkUnixTimeToDate}}</span>
-                                <span *ngIf="!hardware.latest_online" class="font-grey-mint bold">({{'label_last_seen_unknow'|bkTranslate:this}})</span>
-                            </div>
-                        </div>
 
+                        </div>
                     </div>
 
                     <!-- Settings and Errors-->
-                    <div class="col-lg-5" style="padding-left: 5%;  padding-right:  5%">
-                        <H4>{{'label_info'|bkTranslate:this}}</H4>
-                        <div style="margin-left: 5%; margin-top: 10px">
+                    <div class="col-lg-5">
+                        <div class="portlet portlet light">
 
-                            <div class="font-blue-dark">
-                                <i class="fa fa-lg fa-microchip"></i>
-                                <span style="margin-left: 10px">{{'label_bootloader'|bkTranslate:this}}</span>
-                            </div>
-                            <br>
-                            <div *ngIf="!hardware.available_latest_bootloader" class="font-red bold">
-                                <span [innerHTML]="'label_bootloader_not_supported'|bkTranslate:this"></span>
-                            </div>
-                            <div *ngIf="!hardware.actual_bootloader" class="font-red bold">
-                                <span [innerHTML]="'label_bootloader_database_not_recognize'|bkTranslate:this"></span>
+                            <bk-portlet-title
+                                [title_name]="'label_info'|bkTranslate:this"
+                                [icon]="'fa-cog'">
+                            </bk-portlet-title>
+
+                            <div class="portlet-body">
+
+                                <div class="margin-left-15 margin-top-15">
+
+                                    <div class="font-blue-dark">
+                                        <i class="fa fa-lg fa-microchip"></i>
+                                        <span class="margin-left-10" [innerHTML]="'label_bootloader'|bkTranslate:this"></span>
+                                    </div>
+                                    <div class="margin-left-15 margin-top-10">
+                                        <div *ngIf="!hardware.available_latest_bootloader" class="font-red bold">
+                                            <span [innerHTML]="'label_bootloader_not_supported'|bkTranslate:this"></span>
+                                        </div>
+                                        <div *ngIf="!hardware.actual_bootloader" class="font-red bold">
+                                            <span [innerHTML]="'label_bootloader_database_not_recognize'|bkTranslate:this"></span>
+                                        </div>
+
+                                        <div *ngIf="hardware.actual_bootloader" class="font-grey-mint">
+                                            <span [innerHTML]="'label_bootloader_version'|bkTranslate:this"></span>: <span [innerHTML]="hardware.actual_bootloader.name"></span>
+                                        </div>
+
+                                        <div *ngIf="hardware.actual_bootloader && hardware.available_latest_bootloader && hardware.available_latest_bootloader.id == hardware.actual_bootloader.id">
+                                            <span class="font-grey-mint">({{'label_bootloader_up_to_date'|bkTranslate:this}})</span>
+                                            <i class="fa fa-check font-green-jungle " style="vertical-align: middle; font-size: 1.5em;"></i>
+                                        </div>
+
+
+                                        <!-- Update Bootlaoder on Hardware - There is condition - if user made update already - we must hide this button [TZ]-->
+                                        <div *ngIf="(!hardware.actual_bootloader || hardware.available_latest_bootloader.id != hardware.actual_bootloader.id) && !hardware.bootloader_update_in_progress" class="text-center">
+                                            <br>
+                                            <button class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
+                                                <i class="fa fa-rocket"></i> {{'label_update_to'|bkTranslate:this}}
+                                                <strong>{{hardware.available_latest_bootloader.name}}</strong>
+                                            </button>
+                                        </div>
+
+                                        <!-- Updae in Quue -->
+                                        <div *ngIf="hardware.bootloader_update_in_progress" class="text-center">
+                                            <br>
+                                            <button class="btn default btn-sm disabled">
+                                                <i class="fa fa-rocket"></i> {{'label_update_in_que'|bkTranslate:this}}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE'">
+                                    <hr style="margin-right: 5%; margin-left: 5%">
+
+                                    <div class="font-blue-dark">
+                                        <i class="fa fa-lg fa-link"></i>
+                                        <span class="margin-left-10" [innerHTML]="'label_web_link'|bkTranslate:this"></span>
+                                    </div>
+                                    <div class="font-blue-dark margin-left-15 margin-top-10">
+                                        <span class="font-grey-mint">Link: </span>
+                                        <span *ngIf="!hardware.ip_address" class="bold">
+                                                      <i class="fa fa-spinner fa-spin"></i>
+                                                </span>
+                                        <span *ngIf="hardware.ip_address">
+                                                      <a target="_blank" href="http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}" class="bold">http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}</a>
+                                                </span>
+                                        <br>
+                                        <span>(working only on same local network)</span>
+                                    </div>
+                                </div>
+
+                                <div class="margin-left-15 margin-top-15"  *ngIf="hardware.alert_list && hardware.alert_list.length">
+
+                                    <hr style="margin-right: 5%; margin-left: 5%">
+                                    <div class="font-blue-dark">
+                                        <i class="fa fa-lg fa-exclamation-triangle"></i>
+                                        <span class="margin-left-10" [innerHTML]="'label_alerts'|bkTranslate:this"></span>
+                                    </div>
+
+                                    <div class="margin-top-10" style="background-color: pink; margin-right: 5%; margin-left: 10%; padding: 1px 8px; margin-top: 20px;">
+                                        <h5 class="font-red-flamingo">
+                                            <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>{{'label_alerts'|bkTranslate:this}}
+                                        </h5>
+                                        <ul *ngIf="hardware.alert_list" style="padding-left: 25px;">
+                                            <li *ngFor="let alert of hardware.alert_list" class="bold no-wrap">
+                                                {{alert|bkTranslateTable:this:'device_alerts'}}
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            <div *ngIf="hardware.actual_bootloader" class="font-grey-mint">
-                                <span [innerHTML]="'label_bootloader_version'|bkTranslate:this"></span>: <span [innerHTML]="hardware.actual_bootloader.name"></span>
-                            </div>
-
-                            <div *ngIf="hardware.actual_bootloader && hardware.available_latest_bootloader && hardware.available_latest_bootloader.id == hardware.actual_bootloader.id">
-                                <span class="font-grey-mint">({{'label_bootloader_up_to_date'|bkTranslate:this}})</span>
-                                <i class="fa fa-check font-green-jungle " style="vertical-align: middle; font-size: 1.5em;"></i>
-                            </div>
-
-
-                            <!-- Update Bootlaoder on Hardware - There is condition - if user made update already - we must hide this button [TZ]-->
-                            <div *ngIf="(!hardware.actual_bootloader || hardware.available_latest_bootloader.id != hardware.actual_bootloader.id) && !hardware.bootloader_update_in_progress" class="text-center">
-                                <br>
-                                <button class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
-                                    <i class="fa fa-rocket"></i> {{'label_update_to'|bkTranslate:this}}
-                                    <strong>{{hardware.available_latest_bootloader.name}}</strong>
-                                </button>
-                            </div>
-
-                            <!-- Updae in Quue -->
-                            <div *ngIf="hardware.bootloader_update_in_progress" class="text-center">
-                                <br>
-                                <button class="btn default btn-sm disabled">
-                                    <i class="fa fa-rocket"></i> {{'label_update_in_que'|bkTranslate:this}}
-                                </button>
-                            </div>
-
-                        </div>
-
-                        <div *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE'" style="margin-left: 20px">
-                            <hr style="margin-right: 20px; margin-left: 20px">
-                            <div class="font-blue-dark">
-                                  <i class="fa fa-lg fa-link"></i>
-                                  <span style="margin-left: 10px">{{'label_web_link'|bkTranslate:this}}</span>
-                            </div>
-                            <br>
-                            <br>
-                            <div class="font-blue-dark">
-                                <span class="font-grey-mint">Link: </span>
-                                <span *ngIf="!hardware.ip_address" class="bold">
-                                              <i class="fa fa-spinner fa-spin"></i>
-                                        </span>
-                                <span *ngIf="hardware.ip_address">
-                                              <a target="_blank" href="http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}" class="bold">http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}</a>
-                                        </span>
-                                <br>
-                                <span>(working only on same local network)</span>
-                            </div>
-                        </div>
-
-                        <div *ngIf="hardware.alert_list && hardware.alert_list.length">
-                            <hr style="margin-right: 5%; margin-left: 5%">
-                            <H4>Alerts on this Hardware</H4>
-                            <div style="background-color: pink; margin-right: 5%; margin-left: 10%; padding: 1px 8px; margin-top: 20px;">
-                                <h5 class="font-red-flamingo">
-                                    <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>{{'label_alerts'|bkTranslate:this}}
-                                </h5>
-                                <ul *ngIf="hardware.alert_list" style="padding-left: 25px;">
-                                    <li *ngFor="let alert of hardware.alert_list" class="bold no-wrap">
-                                        {{alert|bkTranslateTable:this:'device_alerts'}}
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
 
                     <!-- Immage -->
-                    <div class="col-lg-3 hw-image-col">
-                        <H4>{{'label_image'|bkTranslate:this}}</H4>
-                        <br>
+                    <div class="col-lg-3">
+                        <div class="portlet portlet light">
+                            <bk-portlet-title
+                                [title_name]="'label_image'|bkTranslate:this"
+                                [icon]="'fa-image'">
+                            </bk-portlet-title>
+                            <div class="portlet-body hw-image-col">
+                                <img *ngIf="hardwareType.picture_link && !hardware.picture_link " [attr.src]="hardwareType.picture_link">
+                                <img *ngIf="hardware.picture_link " [attr.src]="hardware.picture_link">
+                                <i *ngIf="!hardwareType.picture_link && !hardware.picture_link " class="fa fa-fw fa-microchip text-center"></i>
 
-                        <img *ngIf="hardwareType.picture_link && !hardware.picture_link " [attr.src]="hardwareType.picture_link">
-                        <img *ngIf="hardware.picture_link " [attr.src]="hardware.picture_link">
-                        <i *ngIf="!hardwareType.picture_link && !hardware.picture_link " class="fa fa-fw fa-microchip text-center"></i>
-
-                        <p *ngIf="hardware.update_permission && projectId" class="text-center">
-                            <a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a>
-                        </p>
+                                <p *ngIf="hardware.update_permission && projectId" class="text-center">
+                                    <a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a>
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
 
-                <br>
-                <hr>
-                <br>
-
                 <!-- Firmware Overview -->
 
-                <div *ngIf="hardware && hardwareType" class="row">
+                <div *ngIf="hardware && hardwareType" class="row margin-top-40">
                     <div class="col-md-6">
                         <div class="portlet portlet light bordered">
-                            <div class="portlet-title">
-                                <div class="becki-caption">
-                                            <span class="font-blue-dark">
-                                                <i class="fa fa-fw fa-code"></i>
-                                                <span [innerHTML]="'label_byzance_code'|bkTranslate:this"></span>
-                                            </span>
-                                </div>
-                            </div>
-                            <div>
+                            <bk-portlet-title
+                                [title_name]="'label_byzance_code'|bkTranslate:this"
+                                [icon]="'fa-code'">
+                            </bk-portlet-title>
+                            <div class="portlet-body">
                                 <div>
                                     <div>
                                         <span [innerHTML]="'label_actual_program_name'|bkTranslate:this"></span>:
@@ -325,54 +348,50 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <div class="portlet portlet light bordered">
-                            <div class="portlet-title">
-                                <div class="becki-caption">
-                                            <span class="font-blue-dark">
-                                                <i class="fa fa-fw fa-cloud"></i>
-                                                <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
-                                            </span>
+
+                            <bk-portlet-title
+                                [title_name]="'label_byzance_cloud'|bkTranslate:this"
+                                [icon]="'fa-cloud'">
+                            </bk-portlet-title>
+
+                            <div class="portlet-body">
+
+                                <div *ngIf="hardware.server!=null">
+                                    <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server'|bkTranslate:this}}:
+                                    <span *ngIf="hardware.server.name" class="font-grey-mint bold">{{hardware.server.name}}</span>
+                                    <span *ngIf="!hardware.server.name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                    <bk-online-state [online_state]="hardware.server.online_state"></bk-online-state>
                                 </div>
+
+                                <span *ngIf="hardware.server==null">
+                                            <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server_not_found'|bkTranslate:this}}
+                                        </span>
+                                <br>
+                                <div *ngIf="hardware.actual_instance!=null">
+                                    <strong class="font-color-cloud">CLOUD</strong>{{'label_instance'|bkTranslate:this}}:
+                                    <a *ngIf="hardware.actual_instance.id" [routerLink]="['/projects', hardware.project.id, 'instances', hardware.actual_instance.id]"
+                                       class="font-grey-mint bold">{{hardware.actual_instance.name?hardware.actual_instance.name:hardware.actual_instance.id}}}</a>
+                                    <span *ngIf="!hardware.actual_instance.id" class="font-grey-mint bold">(Device is not connected to an instance)</span>
+                                    <bk-online-state [online_state]="hardware.actual_instance.instance_online_state"></bk-online-state>
+                                </div>
+                                <br>
+                                <div *ngIf="hardware.actual_instance!=null">
+                                    <strong class="font-color-blocko">BLOCKO</strong>{{'label_name'|bkTranslate:this}}:
+                                    <a *ngIf="hardware.actual_instance" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project.id, 'blocko', hardware.actual_instance.b_program_id]">{{hardware.actual_instance.b_program_name}}</a>
+                                    <span *ngIf="!hardware.actual_instance.name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                </div>
+
+                                <div *ngIf="hardware.actual_instance!=null">
+                                    <strong class="font-color-blocko">BLOCKO</strong>{{'label_version'|bkTranslate:this}}:
+                                    <a *ngIf="hardware.actual_instance.b_program_version_id" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project.id, 'blocko', hardware.actual_instance.b_program_id, { version: hardware.actual_instance.b_program_version_id }]">{{hardware.actual_instance.b_program_version_name}}</a>
+                                    <span *ngIf="!hardware.actual_instance.b_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                </div>
+
                             </div>
 
-
-                            <div *ngIf="hardware.server!=null">
-                                <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server'|bkTranslate:this}}:
-                                <span *ngIf="hardware.server.name" class="font-grey-mint bold">{{hardware.server.name}}</span>
-                                <span *ngIf="!hardware.server.name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                <bk-online-state [online_state]="hardware.server.online_state"></bk-online-state>
-                            </div>
-
-                            <span *ngIf="hardware.server==null">
-                                        <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server_not_found'|bkTranslate:this}}
-                                    </span>
-
-                            <br>
-
-                            <div *ngIf="hardware.actual_instance!=null">
-                                <strong class="font-color-cloud">CLOUD</strong>{{'label_instance'|bkTranslate:this}}:
-                                <a *ngIf="hardware.actual_instance.id" [routerLink]="['/projects', hardware.project.id, 'instances', hardware.actual_instance.id]"
-                                   class="font-grey-mint bold">{{hardware.actual_instance.name?hardware.actual_instance.name:hardware.actual_instance.id}}}</a>
-                                <span *ngIf="!hardware.actual_instance.id" class="font-grey-mint bold">(Device is not connected to an instance)</span>
-                                <bk-online-state [online_state]="hardware.actual_instance.instance_online_state"></bk-online-state>
-                            </div>
-
-                            <br>
-
-                            <div *ngIf="hardware.actual_instance!=null">
-                                <strong class="font-color-blocko">BLOCKO</strong>{{'label_name'|bkTranslate:this}}:
-                                <a *ngIf="hardware.actual_instance" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project.id, 'blocko', hardware.actual_instance.b_program_id]">{{hardware.actual_instance.b_program_name}}</a>
-                                <span *ngIf="!hardware.actual_instance.name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                            </div>
-
-                            <div *ngIf="hardware.actual_instance!=null">
-                                <strong class="font-color-blocko">BLOCKO</strong>{{'label_version'|bkTranslate:this}}:
-                                <a *ngIf="hardware.actual_instance.b_program_version_id" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project.id, 'blocko', hardware.actual_instance.b_program_id, { version: hardware.actual_instance.b_program_version_id }]">{{hardware.actual_instance.b_program_version_name}}</a>
-                                <span *ngIf="!hardware.actual_instance.b_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                            </div>
-
-                            <div class="clearfix"></div>
                         </div>
                     </div>
 
@@ -383,112 +402,118 @@
         <div *ngIf="tab == 'developer'">
 
             <div *ngIf="hardware && hardwareType" class="row">
-                <div class="col-md-12">
 
-                    <div class="col-md-6">
-                        <H4>{{'label_settings'|bkTranslate:this}}</H4>
-                        <br>
-                        <div>
-                                    <span class="font-blue-dark">
-                                        <i class="fa fa-lg fa-bell"></i>
-                                        <span>&nbsp;&nbsp;&nbsp;{{'label_developer_settings'|bkTranslate:this}}</span>
-                                    </span>
-                            <br>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <ul>
-                                        <table class="table table-hover table-light">
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <span class="font-grey-mint"> Analytics for Developer </span>
-                                                </td>
-                                                <td>
-                                                    <i *ngIf="hardware.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
-                                                       (click)="onEditParameterValue_Boolean_Click('developer_kit',!hardware.developer_kit)"></i>
-                                                    <i *ngIf="!hardware.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
-                                                       (click)="onEditParameterValue_Boolean_Click('developer_kit',!hardware.developer_kit)"></i>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="font-grey-mint"> Synchronize always with database </span>
-                                                </td>
-                                                <td>
-                                                    <i *ngIf="hardware.database_synchronize" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
-                                                       (click)="onEditParameterValue_Boolean_Click('database_synchronize',!hardware.database_synchronize)"></i>
-                                                    <i *ngIf="!hardware.database_synchronize" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
-                                                       (click)="onEditParameterValue_Boolean_Click('database_synchronize',!hardware.database_synchronize)"></i>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                <div class="col-md-6 portlet light">
+
+                    <bk-portlet-title
+                        [title_name]="'label_settings'|bkTranslate:this"
+                        [tabbable_under_line]="true"
+                        [icon]="'fa-cog'">
+                    </bk-portlet-title>
+
+                    <div class="portlet-body">
+                        <table class="table table-hover table-light margin-left-15 margin-top-30">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="font-grey-mint"> Analytics for Developer </span>
+                                    </td>
+                                    <td>
+                                        <i *ngIf="hardware.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
+                                           (click)="onEditParameterValue_Boolean_Click('developer_kit',!hardware.developer_kit)"></i>
+                                        <i *ngIf="!hardware.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
+                                           (click)="onEditParameterValue_Boolean_Click('developer_kit',!hardware.developer_kit)"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="font-grey-mint"> Synchronize always with database </span>
+                                    </td>
+                                    <td>
+                                        <i *ngIf="hardware.database_synchronize" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
+                                           (click)="onEditParameterValue_Boolean_Click('database_synchronize',!hardware.database_synchronize)"></i>
+                                        <i *ngIf="!hardware.database_synchronize" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
+                                           (click)="onEditParameterValue_Boolean_Click('database_synchronize',!hardware.database_synchronize)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-md-6">
-                        <H4>{{'label_core_configuration'|bkTranslate:this}}</H4>
-                        <span [innerHtml]="'label_core_configuration_comment'|bkTranslate:this"></span>
-                        <div>
-                            <button *ngIf="hardware.update_permission" [disabled]="hardware.online_state != 'ONLINE'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
-                                <i class="fa fa-heartbeat"></i> {{'label_restart_hardware'|bkTranslate:this}}
-                            </button>
-                            <button *ngIf="hardware.update_permission" [disabled]="hardware.online_state != 'ONLINE'" class="btn red btn-sm" (click)="onSwitchToBootloaderDeviceClick()">
-                                <i class="fa fa-briefcase"></i> {{'label_restart_to_bootloader'|bkTranslate:this}}
-                            </button>
-                            <button *ngIf="hardware.update_permission" class="btn red btn-sm" (click)="onGenerateNewPassword()">
-                                <i class="fa fa-lock"></i> {{'label_change_mqtt_pass'|bkTranslate:this}}
-                            </button>
-                            <button *ngIf="hardware.update_permission" class="btn red btn-sm" (click)="onChangeServer()">
-                                <i class="fa fa-lock"></i> {{'label_change_server'|bkTranslate:this}}
-                            </button>
-                        </div>
-                        <br>
-                        <div>
-                                    <span class="font-blue-dark">
-                                        <i class="fa fa-lg fa-wrench"></i>
-                                        <span>&nbsp;&nbsp;&nbsp;{{'label_core_registers'|bkTranslate:this}}</span>
-                                    </span>
-                            <br>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-11">
-                                    <ul>
-                                        <table class="table table-hover table-light">
-                                            <tbody *ngIf="configParameters">
-                                            <tr *ngFor="let conf of configParameters">
-                                                <td>
-                                                    <span class="font-grey-mint">{{conf.key}}</span>
-                                                </td>
-                                                <td>
-                                                    <div *ngIf="conf.type == 'string'">
-                                                        <span class="font-grey-mint bold">{{conf.value}}</span>
-                                                        <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
-                                                    </div>
-                                                    <div *ngIf="conf.type == 'number'">
-                                                        <span class="font-grey-mint bold">{{conf.value}}</span>
-                                                        <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Register:', conf.key ,conf.value)"></i>
-                                                    </div>
-                                                    <div *ngIf="conf.type == 'boolean'">
-                                                        <i *ngIf="conf.value" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
-                                                           (click)="onEditParameterValue_Boolean_Click(conf.key, !conf.value)"></i>
-                                                        <i *ngIf="!conf.value" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
-                                                           (click)="onEditParameterValue_Boolean_Click(conf.key, !conf.value)"></i>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+                <div class="col-md-6 portlet light">
+                    <bk-portlet-title
+                        [title_name]="'label_core_configuration'|bkTranslate:this"
+                        [icon]="'fa-cogs'"
+                        [tabbable_under_line]="true"
+                        (onClick)="onPortletClick($event)"
+                        [btns]="[
+                          {
+                              condition: (hardware.online_state == 'ONLINE'),
+                              btn_label_for_person: ('label_restart_hardware'|bkTranslate:this),
+                              icon: 'fa-heartbeat',
+                              colorType: 'REMOVE',
+                              btn_tag: 'hardware_restart',
+                              permission: (hardware.update_permission && hardware.online_state == 'ONLINE')
+
+                          },
+                          {
+                              condition: (hardware.online_state == 'ONLINE'),
+                              btn_label_for_person: ('label_restart_to_bootloader'|bkTranslate:this),
+                              icon: 'fa-briefcase',
+                              colorType: 'REMOVE',
+                              btn_tag: 'hardware_restart_bootloader',
+                              permission: (hardware.update_permission)
+                          },
+                          {
+                              condition: (true),
+                              btn_label_for_person: ('label_change_mqtt_pass'|bkTranslate:this),
+                              icon: 'fa-lock',
+                              colorType: 'UPDATE',
+                              btn_tag: 'hardware_restart_pass',
+                              permission: (hardware.update_permission)
+                          },
+                          {
+                              condition: (true),
+                              btn_label_for_person: ('label_change_server'|bkTranslate:this),
+                              icon: 'fa-server',
+                              colorType: 'UPDATE',
+                              btn_tag: 'hardware_change_server',
+                              permission: (hardware.update_permission )
+                          }
+                        ]">
+                    </bk-portlet-title>
+
+                    <div class="portlet-body">
+                        <span class="margin-top-30 margin-right-30" [innerHtml]="'label_core_configuration_comment'|bkTranslate:this"></span>
+                        <table class="table table-hover table-light margin-top-15 margin-left-15">
+                            <tbody *ngIf="configParameters">
+                                <tr *ngFor="let conf of configParameters">
+                                    <td>
+                                        <span class="font-grey-mint">{{conf.key}}</span>
+                                    </td>
+                                    <td>
+                                        <div *ngIf="conf.type == 'string'">
+                                            <span class="font-grey-mint bold">{{conf.value}}</span>
+                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
+                                        </div>
+                                        <div *ngIf="conf.type == 'number'">
+                                            <span class="font-grey-mint bold">{{conf.value}}</span>
+                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Register:', conf.key ,conf.value)"></i>
+                                        </div>
+                                        <div *ngIf="conf.type == 'boolean'">
+                                            <i *ngIf="conf.value" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
+                                               (click)="onEditParameterValue_Boolean_Click(conf.key, !conf.value)"></i>
+                                            <i *ngIf="!conf.value" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
+                                               (click)="onEditParameterValue_Boolean_Click(conf.key, !conf.value)"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div *ngIf="tab == 'updates'">
@@ -576,7 +601,8 @@
 
         </div>
 
-        <div *ngIf="tab == 'command_center'">
+        <!-- Dont kill terminal if div is not active!!!!!!! With Hiden!!!!  !-->
+        <div [hidden]="tab != 'command_center'">
             <div class="row margin-left-15 margin-top-10 margin-right-15 tabbable-line">
                 <bk-terminal-log-component [project_id]="this.projectId"
                                            [preselected_hardware]="[hardware]">

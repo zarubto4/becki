@@ -21,7 +21,7 @@ export class ModalsSelectVersionModel extends ModalModel {
 
         this.options = versions.map((v) => {
             return {
-                label: v.name,
+                label: v.name + ' - ' + v.description,
                 value: v.id
             };
         });

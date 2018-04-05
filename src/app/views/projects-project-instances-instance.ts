@@ -58,9 +58,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     bindings: BlockoCore.BoundInterface[] = [];
 
-    gridUrl: string = '';
-    instanceStatus: OnlineChangeStatus;
-
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     currentHistoricInstance: IInstanceSnapshot = null;
 
@@ -99,31 +96,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     constructor(injector: Injector) {
         super(injector);
 
-        this.tyrionBackendService.onlineStatus.subscribe((status) => {
-            if (status.model === 'Instance' && this.instanceId === status.model_id) {
-                this.instance.online_state = status.online_state;
-            }
-        });
+
 
     };
 
-    onInstanceEditClick() {
-        let model = new ModalsInstanceEditDescriptionModel(this.instance.id, this.instance.name, this.instance.description);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.instanceEdit(this.instance.id, { name: model.name, description: model.description })
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
-                        this.refresh();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
-                        this.refresh();
-                    });
-            }
-        });
-    }
 
     ngOnInit(): void {
 
@@ -143,9 +119,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             if (this.editorView) {
 
-                if (this.instance) {
+                if (this.instance && this.instance.current_snapshot) {
                     this.editorView.setDataJson(this.instance.current_snapshot.program.snapshot);
                 } else if (this.bProgramVersion) {
+                    console.info('ngAfterViewInit::this.bProgramVersion', this.bProgramVersion);
                     this.editorView.setDataJson(this.bProgramVersion.program);
                 }
 
@@ -211,6 +188,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.instance.server.online_state = status.online_state;
                     }
                 });
+
+                this.tyrionBackendService.onlineStatus.subscribe((status) => {
+                    if (status.model === 'Instance' && this.instance.id === status.model_id) {
+                        this.instance.online_state = status.online_state;
+                    }
+                });
             })
             .catch(reason => {
                 this.fmError(`Instances ${this.projectId} cannot be loaded.`, reason);
@@ -261,13 +244,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onDragStop(params: DraggableEventParams) {
-
+        console.info('onDragStop::homerMessageReceived params:', params);
         switch (params.type) {
             case 'hardware': {
 
                 let controller = this.editorView.getBlockoController();
 
                 let iface = controller.bindInterface(params.data.id, params.data.group);
+                console.info('onDragStop::homerMessageReceived iface:', iface);
 
                 let index = this.bindings.findIndex((i) => {
                     return i.targetId === iface.targetId;
@@ -370,6 +354,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.bProgramVersion = bpv;
                             this.tab = 'editor';
                             if (this.editorView) {
+                                console.info('ProjectsProjectInstancesInstanceComponent:: onChangeVersion:: Version::', this.bProgramVersion);
                                 this.editorView.setDataJson(this.bProgramVersion.program);
                                 this.bindings = this.editorView.getBindings();
                             }
@@ -466,7 +451,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.instanceSnapshotShutdown(this.instance.current_snapshot.id)
+                this.tyrionBackendService.instanceShutdown(this.instance.id)
                     .then(() => {
                         this.unblockUI();
                         this.refresh();
@@ -511,9 +496,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         let program: ISwaggerInstanceSnapShotConfigurationProgram = program_project.grid_programs.find((gpr) => {
             return gpr.grid_program_id === program_id;
         });
-
-        console.log("Instnace: getGridConfig: Program: ", program);
-        console.log("Instnace: getGridConfig: Program snapshot_settings: ", program.snapshot_settings);
 
         return program;
     }
@@ -663,22 +645,24 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     /* tslint:disable:max-line-length ter-indent*/
 
     loadBlockoLiveView() {
+        console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView start');
         this.zone.runOutsideAngular(() => {
             if (this.liveView && this.instance.current_snapshot) {
                 console.info(JSON.stringify(this.instance.current_snapshot.program));
                 this.liveView.setDataJson(this.instance.current_snapshot.program.snapshot);
 
                 if (this.instance.instance_remote_url) {
-
+                    console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView instance_remote_url', this.instance.instance_remote_url);
                     this.tyrionBackendService.getWebsocketService().connectBlockoInstanceWebSocket(this.instance.instance_remote_url, (socket: WebsocketClientBlockoView, error: any) => {
 
                         if (socket) {
                             this.homerDao = socket;
 
                             this.homerDao.onOpenCallback = (e) => {
-                                console.error('Instance WebSocket WebView is open ');
+                                console.error('ProjectsProjectInstancesInstanceComponent: Instance WebSocket WebView is open ');
 
                                 this.homerDao.requestGetValues(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
+                                    console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView requestGetValues: response', response_message);
                                     if (response_message) {
                                         this.homerMessageReceived(response_message);
                                     } else {
@@ -687,6 +671,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                 });
 
                                 this.homerDao.requestGetLogs(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
+                                    console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView requestGetLogs: response', response_message);
                                     if (response_message) {
                                         this.homerMessageReceived(response_message);
                                     } else {
@@ -694,10 +679,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                     }
                                 });
 
+                                this.homerDao.onMessageCallback = (m: WebsocketMessage) => this.homerMessageReceived(m);
                             };
 
+
+
                         } else {
-                            console.error('connectBlockoInstanceWebSocket:: ', error);
+                            console.error('ProjectsProjectInstancesInstanceComponent:connectBlockoInstanceWebSocket:: ', error);
                         }
 
                     });
@@ -707,7 +695,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     homerMessageReceived(m: any) {
+        console.info('ProjectsProjectInstancesInstanceComponent::homerMessageReceived m:', m);
         this.zone.runOutsideAngular(() => {
+
             const controller = this.liveView.getBlockoController();
 
             if (m.message_type === 'new_input_connector_value') {
@@ -721,12 +711,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
 
             if (m.message_type === 'new_external_input_connector_value') {
-                // controller.setInputConnectorValue(m.block_id, m.interface_name, m.value);
+                  controller.setInputConnectorValue(m.block_id, m.interface_name, m.value);
                 return;
             }
 
             if (m.message_type === 'new_external_output_connector_value') {
-                // controller.setOutputConnectorValue(m.block_id, m.interface_name, m.value);
+                 controller.setOutputConnectorValue(m.block_id, m.interface_name, m.value);
                 return;
             }
 

@@ -1407,8 +1407,6 @@ export class StaticTranslation {
                 'flash_instance_edit_success': 'Instance information has been updated.',
                 'flash_instance_edit_fail': 'Instance information could not be updated. ',
 
-                'label_shut_down_instance_modal': 'Shutdown instance',
-                'label_shut_down_instance_modal_comment': 'Are you sure to shutdown the running instance?',
                 'label_upload_instance_modal': 'Deploy to Cloud',
                 'label_upload_instance_modal_comment': 'The last used <strong class="font-color-blocko">BLOCKO</strong> configuration will be uploaded to the server.',
                 'label_upload_error': 'Unable to shutdown this instance, {0}.',
@@ -1421,6 +1419,9 @@ export class StaticTranslation {
                 'label_instance_properties': 'Instance properties',
                 'label_own_name_and_description': 'You can set your own name and description',
                 'btn_create_instance': 'Create Instance',
+                'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
+                'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
+
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
@@ -1469,6 +1470,8 @@ export class StaticTranslation {
                 'table_grid_link': 'Access Link',
                 'btn_turn_off_instance': 'Shut Down',
                 'btn_change_version': 'Change version',
+                'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
+                'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
                 'label_instance_properties': 'properties',
                 'label_instance_name': 'Name',
                 'label_instance_description': 'Description',
@@ -1483,6 +1486,8 @@ export class StaticTranslation {
                 'label_instance_version_description': 'Snapshot description',
                 'label_status': 'Status',
                 'label_info': 'Info',
+                'label_no_updates': 'No <strong class="font-color-code">FIRMWARE </strong> release updates',
+                'label_no_updates_comment': 'For Actual <strong class="font-color-hardware">INSTANCE</strong> Snapshot is not required any update',
                 'label_instance_info_is_offline': '<strong class="font-color-instance">INSTANCE</strong> is offline',
                 'label_instance_info_is_offline_comments': 'Deploy <strong class="font-color-blocko">INSTANCE</strong> on server or start required <strong class="font-color-cloud">CLOUD</strong>Server',
                 'label_grid_group_in_snapshot': 'Not any <strong class="font-color-grid">GRID</strong> Apps',
@@ -1813,13 +1818,14 @@ export class StaticTranslation {
                 'flash_blocko_cant_update': 'Unable to update program, ',
 
             }, 'ProjectsProjectBlocksBlockComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK',
                 'label_name': '<strong class="font-color-blocko">BLOCKO</strong> Block Name:',
                 'label_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Description:',
                 'label_group': '<strong class="font-color-blocko">BLOCKO</strong> Block Group Name',
                 'label_console_output': 'Output <strong>{0}</strong> = {1}',
 
-                'label_group_properties': 'BLOCKO block properties',
+                'label_properties': 'Settings',
+                'label_remove': 'Remove',
                 'label_group_remove': 'Remove BLOCKO block',
                 'label_code': 'IDE',
                 'label_version': 'Version',
