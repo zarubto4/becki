@@ -721,16 +721,29 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
 
             if (m.message_type === 'new_console_event') {
+                console.info('homerMessageReceived:: new_console_event:: ', m);
                 this.zone.run(() => {
-                    this.consoleLog.add(m.console_message_type, m.console_message, 'Block ' + m.block_id, new Date(m.console_message_time).toLocaleString());
+                    this.consoleLog.add(
+                        m.data['console_message_type'],
+                        JSON.stringify(m.data['console_message'], null, 4).toString(), // message
+                        m.data['block_id'], // source
+                        'Block ' + m.data['block_id'],
+                        new Date(m.data['console_message_time']).toLocaleString()) // TimaStamp
                 });
                 return;
             }
 
             if (m.message_type === 'new_error_event') {
+                console.info('homerMessageReceived:: new_error_event:: ', JSON.stringify(m.data['error_message'], null, 4));
                 controller.setError(m.block_id, true);
                 this.zone.run(() => {
-                    this.consoleLog.add('error', m.error_message, 'Block ' + m.block_id, new Date(m.error_time).toLocaleString());
+                    this.consoleLog.add(
+                        'error', // type
+                        JSON.stringify(m.data['error_message'], null, 4).toString(), // message
+                        m.data['block_id'], // source
+                        'Block ' + m.data['block_id'], // alias
+                        new Date(m.data['error_time']).toLocaleString() // TimaStamp
+                    );
                 });
                 return;
             }

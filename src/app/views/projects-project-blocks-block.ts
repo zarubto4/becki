@@ -398,7 +398,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
     onBlockoLog(bl: { block: Core.Block, type: string, message: string }): void {
         if (this.consoleLog) {
-            this.consoleLog.add(<ConsoleLogType>bl.type, bl.message);
+            this.consoleLog.add(<ConsoleLogType>bl.type, bl.message, bl.block.id, bl.block.id);
         }
     }
 
@@ -458,7 +458,12 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean | number | Core.MessageJson)) => {
                     this.zone.run(() => {
                         if (this.consoleLog) {
-                            this.consoleLog.add('output', this.translate('label_console_output', connector.name, this.toReadableValue(value)));
+                            this.consoleLog.add(
+                                'info', // type
+                                this.translate('label_console_output', connector.name, this.toReadableValue(value)), // message
+                                'Test Click',
+                                'Test Click',
+                            );
                         }
                     });
                 });

@@ -298,7 +298,19 @@
                         <div class="portlet portlet light bordered">
                             <bk-portlet-title
                                 [title_name]="'label_byzance_code'|bkTranslate:this"
-                                [icon]="'fa-code'">
+                                [icon]="'fa-code'"
+                                (onClick)="onPortletClick($event)"
+                                [btns]="[
+                                      {
+                                          condition: (hardware.online_state == 'ONLINE'),
+                                          btn_label_for_person: ('label_manual_individual_update'|bkTranslate:this),
+                                          icon: 'fa-code',
+                                          colorType: 'UPDATE',
+                                          btn_tag: 'hardware_manual_update',
+                                          permission: (hardware.update_permission && hardware.online_state == 'ONLINE')
+
+                                      }
+                                      ]">
                             </bk-portlet-title>
                             <div class="portlet-body">
                                 <div>
@@ -360,34 +372,34 @@
                             <div class="portlet-body">
 
                                 <div *ngIf="hardware.server!=null">
-                                    <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server'|bkTranslate:this}}:
-                                    <span *ngIf="hardware.server.name" class="font-grey-mint bold">{{hardware.server.name}}</span>
-                                    <span *ngIf="!hardware.server.name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                    <bk-online-state [online_state]="hardware.server.online_state"></bk-online-state>
+                                    <div>
+                                        <span [innerHTML]="'label_main_server'|bkTranslate:this"></span>: {{hardware.server.name}}
+                                    </div>
+                                    <div>
+                                        <span [innerHTML]="'label_server_online_state'|bkTranslate:this"></span>: <bk-online-state [online_state]="hardware.server.online_state"></bk-online-state>
+                                    </div>
+                                </div>
+                                <div *ngIf="hardware.server==null">
+                                    <span [innerHTML]="'label_main_server_not_found'|bkTranslate:this"></span>
+                                 </div>
+
+                                <hr>
+
+                                <div *ngIf="hardware.actual_instance">
+                                    <div>
+                                        <span [innerHTML]="'label_instance'|bkTranslate:this"></span>:
+                                        <a *ngIf="hardware.actual_instance.id" (click)="onInstanceClick(hardware.actual_instance.id)" class="bold">{{hardware.actual_instance.name}}</a>
+                                    </div>
+                                    <div>
+                                        <span [innerHTML]="'label_instance_description'|bkTranslate:this"></span>: {{hardware.actual_instance.description}}
+                                    </div>
+                                    <div>
+                                        <span [innerHTML]="'label_instance_online_state'|bkTranslate:this"></span>: <bk-online-state [online_state]="hardware.actual_instance.online_state"></bk-online-state>
+                                    </div>
                                 </div>
 
-                                <span *ngIf="hardware.server==null">
-                                            <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server_not_found'|bkTranslate:this}}
-                                        </span>
-                                <br>
-                                <div *ngIf="hardware.actual_instance!=null">
-                                    <strong class="font-color-cloud">CLOUD</strong>{{'label_instance'|bkTranslate:this}}:
-                                    <a *ngIf="hardware.actual_instance.id" [routerLink]="['/projects', hardware.project.id, 'instances', hardware.actual_instance.id]"
-                                       class="font-grey-mint bold">{{hardware.actual_instance.name?hardware.actual_instance.name:hardware.actual_instance.id}}}</a>
-                                    <span *ngIf="!hardware.actual_instance.id" class="font-grey-mint bold">(Device is not connected to an instance)</span>
-                                    <bk-online-state [online_state]="hardware.actual_instance.instance_online_state"></bk-online-state>
-                                </div>
-                                <br>
-                                <div *ngIf="hardware.actual_instance!=null">
-                                    <strong class="font-color-blocko">BLOCKO</strong>{{'label_name'|bkTranslate:this}}:
-                                    <a *ngIf="hardware.actual_instance" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project.id, 'blocko', hardware.actual_instance.b_program_id]">{{hardware.actual_instance.b_program_name}}</a>
-                                    <span *ngIf="!hardware.actual_instance.name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                </div>
-
-                                <div *ngIf="hardware.actual_instance!=null">
-                                    <strong class="font-color-blocko">BLOCKO</strong>{{'label_version'|bkTranslate:this}}:
-                                    <a *ngIf="hardware.actual_instance.b_program_version_id" class="font-grey-mint bold" [routerLink]="['/projects', hardware.project.id, 'blocko', hardware.actual_instance.b_program_id, { version: hardware.actual_instance.b_program_version_id }]">{{hardware.actual_instance.b_program_version_name}}</a>
-                                    <span *ngIf="!hardware.actual_instance.b_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                <div *ngIf="!hardware.actual_instance">
+                                    <span [innerHTML]="'label_not_in_instance'|bkTranslate:this"></span>
                                 </div>
 
                             </div>

@@ -213,7 +213,7 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
     private _show_libraries_portlet: boolean = false;
     private _show_integrated_hardware_portlet: boolean = false;
     private _show_blocko_interface_portlet: boolean = false;
-    private _show_code_settings_portlet: boolean = true;
+    private _show_code_settings_portlet: boolean = false;
     private _latest_blockoInterface = null;
     private _editorView: BlockoViewComponent = null;
 

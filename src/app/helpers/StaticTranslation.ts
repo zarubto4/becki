@@ -1,8 +1,3 @@
-/*
- * Created by DominikKrisztof 13.3.2017
- */
-
-import {ModalsGridProgramSettingsComponent} from "../modals/instance-grid-program-settings";
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
@@ -1175,6 +1170,10 @@ export class StaticTranslation {
                 'flash_cant_turn_instance_on': 'Could not turn on this instance, {0}.',
                 'flash_cant_turn_instance_off': 'Could not turn off this instance, {0}.',
 
+            }, 'ModalsCodeSelectComponent': {
+
+                'title': 'Select <strong class="font-color-code">CODE</strong>',
+
             }, 'ProjectsProjectHardwareComponent': {
 
                 'title': 'Project <strong class="font-color-hardware">HARDWARE</strong> Overview',
@@ -1303,17 +1302,19 @@ export class StaticTranslation {
                 'label_set_own_picture': 'Set your own photo',
                 'label_no_running_update_on_hardware': 'No <strong class="font-color-code">FIRMWARE </strong> release',
                 'label_no_running_update_on_hardware_comment': 'There is no update for this device yet. Create new <strong class="font-color-code">Code</strong> program or set new release',
-                'label_main_server': 'Main Server',
-                'label_instance': 'Instance ID',
+                'label_main_server': '<strong class="font-color-cloud">CLOUD</strong> Server',
+                'label_instance': '<strong class="font-color-instance">INSTANCE</strong> Name',
+                'label_instance_description': 'Description',
                 'label_main_server_not_found': 'Device is not connected to Server yet',
                 'label_not_in_instance': 'Device is not connected to an instance',
-                'label_online': 'ONLINE',
-                'label_offline': 'OFFLINE',
+                'label_server_online_state': 'State',
+                'label_instance_online_state': 'State',
                 'label_none': 'none',
                 'label_unknown_value': 'none',
                 'label_cant_load_device': 'Device cannot be loaded. {0}',
                 'label_no_hardware_to_show_comment': 'There are no devices to show, but you can add some',
                 'label_unsubscribe_device': 'Unsubscribe device',
+                'label_manual_individual_update': 'Manual Change',
 
 
                 'label_actual_program_name': 'Current <strong class="font-color-code">FIRMWARE </strong> name',

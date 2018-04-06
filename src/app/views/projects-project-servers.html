@@ -95,6 +95,7 @@
         </div>
 
         <div *ngIf="tab == 'create_server_selector'">
+
             <div class="row" style="padding-right: 25%; padding-left: 25%">
                 <div class="col-lg-6 text-center">
                     <img style="width: auto; height: 90%;" src="https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5aa164daae3ca60001aa4c50_server%20modry.svg">
@@ -121,56 +122,64 @@
 
         <div *ngIf="tab == 'create_server_automatically'">
 
+            <div class="margin-right-15 margin-left-15">
+                <div class="mt-element-card mt-element-overlay">
 
-            <div class="mt-element-card mt-element-overlay">
-
-                <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-                <bk-nothing-to-show [condition_loading]="(registration_information == null)"
-                                    [condition_empty]="(registration_information != null && registration_information.server_sizes == null)"
-                                    [main_message_link]="'label_no_server_size_found'|bkTranslate:this"
-                                    [main_message_comment_link]="'label_no_server_size_found_comment'|bkTranslate:this"
-                                    [show_button]="false">
-                </bk-nothing-to-show>
-                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+                    <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                    <bk-nothing-to-show [condition_loading]="(registration_information == null)"
+                                        [condition_empty]="(registration_information != null && registration_information.server_sizes == null)"
+                                        [main_message_link]="'label_no_server_size_found'|bkTranslate:this"
+                                        [main_message_comment_link]="'label_no_server_size_found_comment'|bkTranslate:this"
+                                        [show_button]="false">
+                    </bk-nothing-to-show>
+                    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
 
-                <!-- Select Server size -->
-                <div *ngIf="registration_information" class="row">
-                    <H2 [innerHTML]="'label_select_size'|bkTranslate:this"></H2>
-                    <div *ngFor="let server_size of registration_information.server_sizes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
-                        <bk-server-size-componet [server_size]="server_size" [selected_slug]="selected_server_slug" (onClick)="onServerSizeSlugClick($event)"></bk-server-size-componet>
-                    </div>
-                    <br>
-                </div>
-
-                <!-- Select Server Region -->
-                <div *ngIf="selected_server_slug" class="row">
-                    <H2 [innerHTML]="'label_select_destination'|bkTranslate:this"></H2>
-                    <div *ngFor="let region of selected_server_slug.regions" class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
-                        <bk-server-region-component [server_region]="region" [selected_slug]="selected_destination_slug" (onClick)="onServerRegionSlugClick($event)"></bk-server-region-component>
-                    </div>
-                </div>
-
-                <!-- Name It -->
-                <div *ngIf="registration_information" class="row">
-                    <div class="col-lg-5 col-md-4 col-sm-3 col-xs-12">
-                    </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
-                        <form [formGroup]="form">
-                            <span [innerHTML]="'label_personal_server_name'|bkTranslate:this" style="text-align: center"></span>
-                            <bk-form-input [control]="form.controls.name" [showLabel]="false"></bk-form-input>
-                            <br>
-                            <span [innerHTML]="'label_personal_server_description'|bkTranslate:this" style="text-align: center"></span>
-                            <bk-form-input [control]="form.controls.description" [showLabel]="false"></bk-form-input>
-                        </form>
-                        <div class="modal-footer" style="text-align: center">
-                            <button type="button" class="btn green" [disabled]="!form.valid" (click)="onCreateHomerServerAutomaticalyClick()">{{'btn_create'|bkTranslate:this}}</button>
+                    <!-- Select Server size -->
+                    <div *ngIf="registration_information" class="row text-center margin-bottom-30">
+                        <H2 [innerHTML]="'label_select_size'|bkTranslate:this" class="margin-bottom-40 margin-top-40"></H2>
+                        <div style="margin-right: 20%; margin-left: 20%">
+                            <div *ngFor="let server_size of registration_information.server_sizes" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <bk-server-size-componet [server_size]="server_size" [selected_slug]="selected_server_slug" (onClick)="onServerSizeSlugClick($event)"></bk-server-size-componet>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-4 col-sm-3 col-xs-12">
+
+                    <!-- Select Server Region -->
+                    <div *ngIf="selected_server_slug" class="row text-center ">
+                        <H2 [innerHTML]="'label_select_destination'|bkTranslate:this"  class="margin-bottom-40 margin-top-40"></H2>
+                        <div  style="margin-right: 20%; margin-left: 20%">
+                            <div *ngFor="let region of selected_server_slug.regions" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <bk-server-region-component [server_region]="region" [selected_slug]="selected_destination_slug" (onClick)="onServerRegionSlugClick($event)"></bk-server-region-component>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="margin-right-15 margin-left-15 margin-bottom-40 margin-top-40">
+
+                    <!-- Name It -->
+                    <div *ngIf="registration_information" class="row margin-top-15">
+                        <div class="col-lg-5 col-md-4 col-sm-3 col-xs-12">
+                    </div>
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                            <form [formGroup]="form">
+                                <span [innerHTML]="'label_personal_server_name'|bkTranslate:this" style="text-align: center"></span>
+                                <bk-form-input [control]="form.controls.name" [showLabel]="false"></bk-form-input>
+                                <br>
+                                <span [innerHTML]="'label_personal_server_description'|bkTranslate:this" style="text-align: center"></span>
+                                <bk-form-input [control]="form.controls.description" [showLabel]="false"></bk-form-input>
+                            </form>
+                            <div class="modal-footer" style="text-align: center">
+                                <button type="button" class="btn green" [disabled]="!form.valid" (click)="onCreateHomerServerAutomaticalyClick()">{{'btn_create'|bkTranslate:this}}</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-4 col-sm-3 col-xs-12">
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 

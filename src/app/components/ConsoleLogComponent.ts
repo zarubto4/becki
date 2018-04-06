@@ -109,17 +109,29 @@ export class ConsoleLogComponent {
         }
     }
 
+    /**
+     *
+     * @param {ConsoleLogType} type
+     * @param {string} message
+     * @param {string} source
+     * @param {string} alias
+     * @param {string} timestamp
+     */
     add(type: ConsoleLogType, message: string, source?: string, alias?: string, timestamp?: string) {
-        if (!timestamp) {
-            timestamp = moment().format('HH:mm:ss.SSS');
+        try {
+            if (!timestamp) {
+                timestamp = moment().format('HH:mm:ss.SSS');
+            }
+            this.items.unshift({
+                timestamp: timestamp,
+                type: type,
+                message: message.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
+                source: source,
+                alias: alias
+            });
+        } catch (exc) {
+            console.error('ConsoleLogComponent:: add', exc);
         }
-        this.items.unshift({
-            timestamp: timestamp,
-            type: type,
-            message: message.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
-            source: source,
-            alias: alias
-        });
     }
 
     addFromMessage(message: MachineMessage, source?: string, timestamp?: string) {

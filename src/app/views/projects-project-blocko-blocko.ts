@@ -268,7 +268,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     onBlockoLog(bl: { block: Core.Block, type: string, message: string }): void {
         if (this.consoleLog) {
-            this.consoleLog.add(<ConsoleLogType>bl.type, bl.message, 'Block ' + bl.block.id);
+            this.consoleLog.add(<ConsoleLogType>bl.type, bl.message,  bl.block.id, 'Block ' + bl.block.id);
         }
     }
 
