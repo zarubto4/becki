@@ -523,6 +523,8 @@ export class StaticTranslation {
                 'title': 'Create an account',
                 'info_text': 'Enter your E-mail address, nickname, full name and password.',
                 'label_nick_name': 'Nickname',
+                'label_first_name': 'First Name',
+                'label_last_name': 'Last Name',
                 'label_full_name': 'Full Name',
                 'label_password_again': 'Re-enter Password',
                 'flash_email_was_send': 'Confirmation E-mail with further instructions was sent to your address.',

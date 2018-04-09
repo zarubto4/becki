@@ -87,7 +87,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit {
             this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
         }
 
-        let model = new ModalsProjectPropertiesModel(this.products, project.name, project.description, project.product.id, true, project.name);
+        let model = new ModalsProjectPropertiesModel(this.products, project.name, project.description, project.product ? project.product.id : null, true, project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

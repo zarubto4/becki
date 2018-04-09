@@ -78,7 +78,7 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
 
     onEditClick(): void {
 
-        let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, this.project.product.id, true, this.project.name);
+        let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, this.project.product ? this.project.product.id : null, true, this.project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
