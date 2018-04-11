@@ -477,7 +477,10 @@ export class StaticTranslation {
 
             'DashboardComponent': {
                 'title_first_steps': 'FIRST STEPS',
-                'title_platform_news': 'Platform News',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'title_platform_news': 'News',
+                'title_your_project': 'Your Projects',
                 'tab_general': 'General',
                 'tab_hardware': '<strong class="font-color-hardware">Hardware</strong>',
                 'tab_blocko': '<strong class="font-color-blocko">Blocko</strong>',

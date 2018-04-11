@@ -5,6 +5,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
+import {IApplicableProduct, IProject} from "../backend/TyrionAPI";
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -13,6 +14,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 export class DashboardComponent extends _BaseMainComponent implements OnInit {
 
     tab: string = 'general';
+    projects: IProject[] = null;
 
     constructor(injector: Injector) {
         super(injector);
@@ -23,10 +25,19 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.refresh();
     }
 
     onToggleTab(tab: string) {
         this.tab = tab;
+    }
+
+
+    refresh(): void {
+        this.tyrionBackendService.projectGetByLoggedPerson()
+            .then((projects: IProject[]) => {
+                this.projects = projects;
+            });
     }
 
 

@@ -3,12 +3,12 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-exports.__esModule = true;
-var program = require("commander");
-var fs_1 = require("fs");
-var moment = require("moment");
-var chalk = require("chalk");
-var request = require('sync-request');
+Object.defineProperty(exports, "__esModule", { value: true });
+const program = require("commander");
+const fs_1 = require("fs");
+const moment = require("moment");
+const chalk = require("chalk");
+let request = require('sync-request');
 /* tslint:disable:no-console max-line-length */
 program
     .version('0.0.1')
@@ -30,12 +30,12 @@ if (!program['className']) {
     console.log(chalk.red('Missing className parameter'));
     process.exit();
 }
-var DEBUG = false;
+let DEBUG = false;
 if (program['debug'] === true) {
     DEBUG = true;
 }
 // CONFIG
-var CONFIG = {
+let CONFIG = {
     definitionsRefPrefix: '#/definitions/',
     ignoredDefinitions: ['EntityBean', 'EntityBeanIntercept', 'ValuePair'],
     methodsReplace: {
@@ -43,23 +43,23 @@ var CONFIG = {
         // like 'get:/websocket/becki/{secure_token}': '',
         // normal replaces
         'post:/login': '__login',
-        'post:/logout': '__logout'
+        'post:/logout': '__logout',
     },
-    methodsOkCodes: [200, 201, 202]
+    methodsOkCodes: [200, 201, 202],
 };
-var throwError = function (msg) {
+let throwError = (msg) => {
     console.log(chalk.red(msg + ''));
     process.exit();
 };
-var argInput = program['input'];
-var argOutput = program['output'];
-var className = program['className'];
-var prefixInterfaces = program['prefixInterfaces'] || '';
-var swaggerFile = null;
+let argInput = program['input'];
+let argOutput = program['output'];
+let className = program['className'];
+let prefixInterfaces = program['prefixInterfaces'] || '';
+let swaggerFile = null;
 if (argInput.toLocaleLowerCase().indexOf('http') === 0) {
     console.log(chalk.magenta('Going download file ' + argInput + ''));
     try {
-        var res = request('GET', argInput);
+        let res = request('GET', argInput);
         swaggerFile = res.getBody();
     }
     catch (e) {
@@ -75,16 +75,15 @@ else {
         throwError('Cannot open Swagger JSON file from ' + argInput + ' (error: ' + e.toString() + ')');
     }
 }
-var swaggerObject = JSON.parse(swaggerFile);
+let swaggerObject = JSON.parse(swaggerFile);
 // FILE methods:
-var outFileContent = '';
-var fileWriteLine = function (line) {
-    if (line === void 0) { line = ''; }
+let outFileContent = '';
+let fileWriteLine = (line = '') => {
     outFileContent += line + '\n';
 };
 // HEAD:
-var version = swaggerObject['info']['version'];
-var basePath = swaggerObject['basePath'] !== '' ? (' + `' + swaggerObject['basePath'] + '`') : null;
+let version = swaggerObject['info']['version'];
+let basePath = swaggerObject['basePath'] !== '' ? (' + `' + swaggerObject['basePath'] + '`') : null;
 fileWriteLine('/**************************************************************/');
 fileWriteLine('/*                                                            */');
 fileWriteLine('/*   Generated Homer API backend file                         */');
@@ -106,21 +105,21 @@ fileWriteLine('import { IHomerServer } from "./TyrionAPI";');
 fileWriteLine();
 fileWriteLine();
 // DEFINITIONS:
-var validateDefName = function (name) {
-    var defNameValidated = name.replace(/[ ]/g, '_'); // replaces spaces
+let validateDefName = (name) => {
+    let defNameValidated = name.replace(/[ ]/g, '_'); // replaces spaces
     defNameValidated = defNameValidated.replace(/'/g, ''); // replaces special char
     if (defNameValidated === 'boolean') {
         return defNameValidated;
     }
-    var out = '';
-    var parts = defNameValidated.split('_');
-    parts.forEach(function (part) {
+    let out = '';
+    let parts = defNameValidated.split('_');
+    parts.forEach((part) => {
         out += part.substr(0, 1).toLocaleUpperCase() + part.substr(1);
     });
     return prefixInterfaces + out;
 };
-var solveType = function (prop) {
-    var type = prop['type'];
+let solveType = (prop) => {
+    let type = prop['type'];
     // basic types:
     switch (type) {
         case 'string':
@@ -146,7 +145,7 @@ var solveType = function (prop) {
     // ref types:
     if (!type) {
         if (prop['$ref']) {
-            var ref = prop['$ref'];
+            let ref = prop['$ref'];
             if (ref.indexOf(CONFIG.definitionsRefPrefix) === 0) {
                 type = validateDefName(ref.substr(CONFIG.definitionsRefPrefix.length));
             }
@@ -162,14 +161,14 @@ var solveType = function (prop) {
     }
     return type;
 };
-var definitions = swaggerObject['definitions'];
-var definitionsKeys = [];
-var usedDefs = {};
-for (var defName in definitions) {
+let definitions = swaggerObject['definitions'];
+let definitionsKeys = [];
+let usedDefs = {};
+for (let defName in definitions) {
     if (!definitions.hasOwnProperty(defName)) {
         continue;
     }
-    var defNameValidated = validateDefName(defName);
+    let defNameValidated = validateDefName(defName);
     if (definitionsKeys.indexOf(defName) > -1) {
         throwError('Duplicate definition name (' + defName + ')');
     }
@@ -184,14 +183,14 @@ for (var defName in definitions) {
     usedDefs[defNameValidated] = {};
 }
 definitionsKeys.sort();
-definitionsKeys.forEach(function (defName) {
+definitionsKeys.forEach((defName) => {
     console.log(chalk.green('Generate interface for definition \"' + defName + '\".'));
-    var def = definitions[defName];
+    let def = definitions[defName];
     if (def['type'] !== 'object') {
         throwError('Unknown type of definition (' + def['type'] + ')');
     }
-    var defNameValidated = validateDefName(defName);
-    var desc = 'Interface ' + defNameValidated + ' definition';
+    let defNameValidated = validateDefName(defName);
+    let desc = 'Interface ' + defNameValidated + ' definition';
     if (def['description']) {
         desc = def['description'];
     }
@@ -202,19 +201,19 @@ definitionsKeys.forEach(function (defName) {
     }
     fileWriteLine(' */');
     fileWriteLine('export interface ' + defNameValidated + ' {');
-    var propsRequired = def['required'] || [];
-    var props = def['properties'];
+    let propsRequired = def['required'] || [];
+    let props = def['properties'];
     if (props) {
-        var propKeys = Object.keys(props);
+        let propKeys = Object.keys(props);
         propKeys.sort();
-        propKeys.forEach(function (propKey) {
-            var prop = props[propKey];
-            var required = (propsRequired.indexOf(propKey) > -1) ? '' : '?';
+        propKeys.forEach((propKey) => {
+            let prop = props[propKey];
+            let required = (propsRequired.indexOf(propKey) > -1) ? '' : '?';
             // TODO: check if this is okay!
             if (prop['readOnly'] === true) {
                 required = '';
             }
-            var type = solveType(prop);
+            let type = solveType(prop);
             if (!type) {
                 throwError('Missing type for key ' + propKey + ' in definition (' + defName + ')');
             }
@@ -256,7 +255,7 @@ definitionsKeys.forEach(function (defName) {
 fileWriteLine();
 fileWriteLine();
 // Methods:
-var makeReadableMethodName = function (method, url, pathObj) {
+let makeReadableMethodName = (method, url, pathObj) => {
     method = method.toLocaleLowerCase();
     if (CONFIG.methodsReplace[method + ':' + url]) {
         return CONFIG.methodsReplace[method + ':' + url];
@@ -264,18 +263,18 @@ var makeReadableMethodName = function (method, url, pathObj) {
     if (CONFIG.methodsReplace[method + ':' + url] === '') {
         return null;
     }
-    var prefix = '';
+    let prefix = '';
     console.log('method:: ', url);
     console.log('method:: ', pathObj);
     console.log('method:: ', method);
-    var partsAll = pathObj['summary'].replace(/{[a-zA-Z0-9_-]+}/g, '').split(/[ \/,]/);
-    var parts = partsAll.filter(function (value, index, self) { return self.indexOf(value) === index; }); // unique
+    let partsAll = pathObj['summary'].replace(/{[a-zA-Z0-9_-]+}/g, '').split(/[ \/,]/);
+    let parts = partsAll.filter((value, index, self) => self.indexOf(value) === index); // unique
     console.log('parts:', parts);
-    var out = prefix;
-    var first_prefix = null;
-    var second_prefix = null;
+    let out = prefix;
+    let first_prefix = null;
+    let second_prefix = null;
     // All Parters first letter to upperCase
-    parts.forEach(function (part) {
+    parts.forEach((part) => {
         if (part !== '') {
             /* tslint:disable:quotemark */
             part = part.replace(/'/g, '');
@@ -324,23 +323,23 @@ var makeReadableMethodName = function (method, url, pathObj) {
     }
     return out;
 };
-var paths = swaggerObject['paths'];
-var methodsParams = {};
-var methodsNames = [];
-for (var pathUrl in paths) {
+let paths = swaggerObject['paths'];
+let methodsParams = {};
+let methodsNames = [];
+for (let pathUrl in paths) {
     if (!paths.hasOwnProperty(pathUrl)) {
         continue;
     }
-    for (var pathMethod in paths[pathUrl]) {
+    for (let pathMethod in paths[pathUrl]) {
         if (!paths[pathUrl].hasOwnProperty(pathMethod)) {
             continue;
         }
-        var path = paths[pathUrl][pathMethod];
+        let path = paths[pathUrl][pathMethod];
         if (DEBUG) {
             console.log();
             console.log(path['description']);
         }
-        var m = makeReadableMethodName(pathMethod, pathUrl, path);
+        let m = makeReadableMethodName(pathMethod, pathUrl, path);
         if (!m) {
             console.log(chalk.yellow('Skip generation method for endpoint ' + pathMethod + ':' + pathUrl));
             continue;
@@ -352,7 +351,7 @@ for (var pathUrl in paths) {
             console.log(chalk.green('Adding method \"' + m + '\" to list.', ' path Method:: (' + pathMethod + ':' + pathUrl + ')'));
             methodsParams[m] = {
                 pathUrl: pathUrl,
-                pathMethod: pathMethod
+                pathMethod: pathMethod,
             };
             methodsNames.push(m);
         }
@@ -363,34 +362,34 @@ fileWriteLine('export abstract class ' + className + ' {');
 fileWriteLine();
 fileWriteLine('    protected abstract requestRestPath<T>(method:string, path:string, body:Object, success:number[]):Promise<T>;');
 fileWriteLine();
-methodsNames.forEach(function (methodName) {
-    var pathUrl = methodsParams[methodName]['pathUrl'];
-    var pathMethod = methodsParams[methodName]['pathMethod'];
-    var pathInfo = paths[pathUrl][pathMethod];
+methodsNames.forEach((methodName) => {
+    let pathUrl = methodsParams[methodName]['pathUrl'];
+    let pathMethod = methodsParams[methodName]['pathMethod'];
+    let pathInfo = paths[pathUrl][pathMethod];
     console.log(chalk.green('Generating method \"' + methodName + '\" (' + pathMethod + ':' + pathUrl + ')'));
-    var outParameters = [];
-    var outParametersComment = [];
-    var bodyParams = [];
-    var queryParameters = [];
-    var params = pathInfo['parameters'];
-    var encodeQueries = [];
+    let outParameters = [];
+    let outParametersComment = [];
+    let bodyParams = [];
+    let queryParameters = [];
+    let params = pathInfo['parameters'];
+    let encodeQueries = [];
     if (params) {
         outParameters.push('serverURL:IHomerServer');
         outParametersComment.push('@param serverURL');
-        params.forEach(function (param) {
+        params.forEach((param) => {
             if (param['in'] === 'path') {
-                var type = solveType(param);
+                let type = solveType(param);
                 if (!type) {
                     throwError('Missing type for key ' + param['name'] + ' in method (' + methodName + ')');
                 }
-                var req = (param['required'] === true) ? '' : '?';
+                let req = (param['required'] === true) ? '' : '?';
                 outParameters.push(param['name'] + req + ':' + type);
                 outParametersComment.push('@param {' + type + '} ' + param['name'] + (param['description'] ? ' - ' + param['description'] : ''));
             }
         });
-        params.forEach(function (param) {
+        params.forEach((param) => {
             if (param['in'] === 'query') {
-                var type = solveType(param);
+                let type = solveType(param);
                 if (!type) {
                     throwError('Missing type for key ' + param['name'] + ' in method (' + methodName + ')');
                 }
@@ -400,13 +399,13 @@ methodsNames.forEach(function (methodName) {
                 queryParameters.push(param['name'] + '=${' + param['name'] + '}');
             }
         });
-        params.forEach(function (param) {
+        params.forEach((param) => {
             if (param['in'] === 'body') {
-                var type = solveType(param);
+                let type = solveType(param);
                 if (!type) {
                     throwError('Missing type for key ' + param['name'] + ' in method (' + methodName + ')');
                 }
-                var req = (param['required'] === true) ? '' : '?';
+                let req = (param['required'] === true) ? '' : '?';
                 outParameters.push(param['name'] + req + ':' + type);
                 bodyParams.push(param['name']);
                 outParametersComment.push('@param {' + type + '} ' + param['name'] + (param['description'] ? ' - ' + param['description'] : ''));
@@ -416,27 +415,27 @@ methodsNames.forEach(function (methodName) {
     if (bodyParams.length > 1) {
         throwError('More than 1 body method (' + methodName + ')');
     }
-    var body = '{}';
+    let body = '{}';
     if (bodyParams.length === 1) {
         body = bodyParams[0];
     }
-    var pathUrlVariables = pathUrl.replace(/\{/g, '${');
-    var okResponses = [];
-    var errorResponses = [];
-    var responses = pathInfo['responses'];
+    let pathUrlVariables = pathUrl.replace(/\{/g, '${');
+    let okResponses = [];
+    let errorResponses = [];
+    let responses = pathInfo['responses'];
     if (responses) {
-        for (var code in responses) {
+        for (let code in responses) {
             if (!responses.hasOwnProperty(code)) {
                 continue;
             }
-            var codeInt = parseInt(code, 10);
-            var response = responses[code];
-            var type = solveType(response);
+            let codeInt = parseInt(code, 10);
+            let response = responses[code];
+            let type = solveType(response);
             if (!type && codeInt !== 500) {
                 console.log(chalk.yellow('Missing type for reponse code ' + code + ' in method (' + methodName + ')'));
             }
-            var description = response['description'];
-            var res = {
+            let description = response['description'];
+            let res = {
                 code: codeInt,
                 type: type,
                 description: description
@@ -452,13 +451,13 @@ methodsNames.forEach(function (methodName) {
             }
         }
     }
-    var returnTypes = ['any'];
-    var returnCodes = [200];
-    var returnDescriptions = [];
+    let returnTypes = ['any'];
+    let returnCodes = [200];
+    let returnDescriptions = [];
     if (okResponses.length > 0) {
         returnTypes = [];
         returnCodes = [];
-        okResponses.forEach(function (okRes) {
+        okResponses.forEach((okRes) => {
             if (okRes.type) {
                 returnTypes.push(okRes.type);
             }
@@ -496,7 +495,7 @@ methodsNames.forEach(function (methodName) {
     fileWriteLine('     *');
     fileWriteLine('     * @returns {' + returnTypes.join('|') + '} [code ' + returnCodes.join('|') + '] ' + returnDescriptions.join('|'));
     fileWriteLine('     *');
-    errorResponses.forEach(function (errorRes) {
+    errorResponses.forEach((errorRes) => {
         fileWriteLine('     * @throws ' + (errorRes.type ? '{' + errorRes.type + '} ' : '') + '[code ' + errorRes.code + ']' + (errorRes.description ? ' ' + errorRes.description : ''));
     });
     fileWriteLine('     */');

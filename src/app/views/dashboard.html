@@ -15,20 +15,44 @@
             <!--- Welcome Row Part -->
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="portlet">
-                    <div class="player player-8ae8476c-0177-4795-bfe0-71b5ac8187ca">
-                        <iframe src="https://player.vimeo.com/video/243828115?autoplay=1&loop=1&autopause=0"
-                                width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
-                        </iframe>
+                    <bk-portlet-title
+                        [title_name]="'title_your_project'|bkTranslate:this"
+                        [icon]="'fa-briefcase'">
+                    </bk-portlet-title>
+                    <div class="portlet-body">
+                        <div *ngIf="projects && projects.length" class="table-scrollable table-scrollable-borderless">
+                            <table class="table table-hover table-light byzance-table">
+                                <thead>
+                                <tr>
+                                    <th class="col">{{'table_name'|bkTranslate:this}}</th>
+                                    <th class="col">{{'table_description'|bkTranslate:this}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let project of projects">
+
+                                    <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a></td>
+
+                                    <td class="vert-align" *ngIf="!project.active">
+                                        <strong>{{project.name}}</strong>
+                                        <br>
+                                        <span *ngIf="project.product" class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
+                                    </td>
+
+                                    <td class="vert-align">{{project.description}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- News Row Part -->
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <div class="portlet light full-height-content full-height-content-scrollable bordered">
+                <div class="portlet light full-height-content full-height-content-scrollable">
                     <bk-portlet-title
                         [title_name]="'title_platform_news'|bkTranslate:this"
-                        [tabbable_under_line]="true"
                         [icon]="'fa-flag'"
                         (onTabClick)="onToggleTab($event)"
                         [tab_selected_name]="tab"
