@@ -252,7 +252,9 @@
                                 <button *ngIf="markupableAsMain(version)" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="hardwareType && !hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
                                     <i class="fa fa-flag"></i>
                                 </button>
-                                <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+
+                                <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                        [disabled]="!version.delete_permission"
                                         (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>

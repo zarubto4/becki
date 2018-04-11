@@ -5,13 +5,15 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
     selector: 'bk-nothing-to-show',
     /* tslint:disable */
     template: `
-        <div [class.row]="image_link != null" [class.vertical-align]="image_link!= null">
-            <div *ngIf="!condition_loading && condition_empty && image_link" [class.col-md-5]="image_link != null" [class.vcenter]="image_link!= null">
+        <div *ngIf="condition_loading" > 
+            <h3 class="text-center">{{'loading'|bkTranslate:this}}</h3>
+        </div>
+        <div *ngIf="!condition_loading" [class.row]="image_link != null" [class.vertical-align]="image_link!= null">
+            <div *ngIf="condition_empty && image_link" [class.col-md-5]="image_link != null" [class.vcenter]="image_link!= null">
                 <img class="text-center" style="width: auto; height: 70%;" src="{{image_link}}">
             </div>
             <div [class.col-md-7]="image_link != null" [class.vcenter]="image_link != null">
-                <h3 *ngIf="condition_loading" class="text-center">{{'loading' | bkTranslate:this}}</h3>
-                <div *ngIf="!condition_loading && condition_empty" class="list-no-items">
+                <div *ngIf="condition_empty" class="list-no-items">
                     <p class="list-no-items__main-label">
                         <span [innerHTML]="main_message_link"></span>
                     </p>
@@ -25,7 +27,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
                     </p>
                 </div>
            
-                    <div *ngIf="image_description && condition_empty && !condition_loading" class="portlet light bordered" style="margin-left: 10%; margin-right: 10%;">
+                    <div *ngIf="image_description && condition_empty" class="portlet light bordered" style="margin-left: 10%; margin-right: 10%;">
                         <div class="portlet-title">
                             <div class="caption font-grey-salsap">
                                 <i class="icon-speech font-grey-salsa"></i>
@@ -38,8 +40,6 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
                             </p>
                         </div>
                     </div>
-            
-            </div>
         </div>
     `
     /* tslint:enable */
