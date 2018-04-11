@@ -55,7 +55,13 @@ export class ModalsProjectPropertiesComponent implements OnInit {
         });
 
         if (!this.modalModel.edit) {
-            this.options = formSelectComponentOptionsMaker(this.modalModel.products, 'id', '%name% ', true);
+
+            this.options = this.modalModel.products.map((trf) => {
+                return {
+                    value: trf.id,
+                    label: trf.name
+                };
+            });
         }
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
