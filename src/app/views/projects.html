@@ -33,7 +33,7 @@
                     <th class="col">{{'table_name'|bkTranslate:this}}</th>
                     <th class="col">{{'table_description'|bkTranslate:this}}</th>
                     <th class="col">{{'table_product'|bkTranslate:this}}</th>
-                    <th class="coltext-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -51,7 +51,7 @@
 
                     <td class="vert-align">
                         <a *ngIf="project.product" (click)="onProductClick(project.product.id)">{{project.product.name}}</a>
-                        <span>No Access to Finance</span>
+                        <span *ngIf="!project.product">No Access to Finance</span>
                     </td>
 
                     <td class="no-wrap text-right vert-align">

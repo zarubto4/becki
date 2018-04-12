@@ -2460,7 +2460,9 @@ export class StaticTranslation {
                 'table_summary': 'Summary',
                 'table_date': 'Date',
                 'table_repetition': 'Occurrences',
-                'table_actions': 'Actions'
+                'table_actions': 'Actions',
+                'label_no_bugs': 'No Bugs',
+                'label_no_bugs_comment': 'Heureca! No Bugs!',
 
             }, 'BugsBugComponent': {
                 'main_title': 'Platform administration',
