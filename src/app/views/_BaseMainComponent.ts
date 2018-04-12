@@ -68,11 +68,11 @@ export abstract class _BaseMainComponent {
         this.router.navigate(link);
     }
 
-    protected blockUI(): void {
+    public blockUI(): void {
         this.blockUIService.blockUI();
     }
 
-    protected unblockUI(): void {
+    public unblockUI(): void {
         this.blockUIService.unblockUI();
     }
 
