@@ -30,11 +30,6 @@
                                 (click)="onTariffEditClick(tariff)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button *ngIf="tab == 'extensions_include' || tab == 'extensions_optional'" title="{{'label_add_extension'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onExtensionCreate()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
                     </div>
                 </div>
 
@@ -46,11 +41,8 @@
                           <a class="cursor-pointer" (click)="onToggleTab('tariffs')"><i class="fa fa-usd"></i> {{'tab_tariffs'|bkTranslate:this}}</a>
                         </li>
 
-                        <li [class.active]="tab == 'extensions_include'">
-                            <a class="cursor-pointer" (click)="onToggleTab('extensions_include')"><i class="fa fa-archive"></i> {{'tab_extensions_include'|bkTranslate:this}}</a>
-                        </li>
-                        <li [class.active]="tab == 'extensions_optional'">
-                            <a class="cursor-pointer" (click)="onToggleTab('extensions_optional')"><i class="fa fa-archive"></i> {{'tab_extensions_optional'|bkTranslate:this}}</a>
+                        <li [class.active]="tab == 'extensions'">
+                            <a class="cursor-pointer" (click)="onToggleTab('extensions')"><i class="fa fa-archive"></i> {{'tab_extensions'|bkTranslate:this}}</a>
                         </li>
                     </ul>
 
@@ -150,202 +142,41 @@
                     </div>
                 </div>
 
-                <div *ngIf="tab == 'extensions_include'">
-                    <div *ngIf="tariff.extensions_included ">
-                        <div *ngIf="tariff.extensions_included.length==0">
-                            <h3 class="text-center margin-bottom-15"> {{'label_no_expansions'|bkTranslate:this}}</h3>
-                        </div>
-                    </div>
-                    <div *ngFor="let extension of tariff.extensions_included" class="portlet-body">
-                        <div class="row">
-                            <div class="becki-actions">
-                                <button *ngIf="!(extension.order_position == 1 || extension.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onExtensionShiftUpClick(extension)">
-                                    <i class="fa fa-chevron-up"></i>
-                                </button>
-                                <button  *ngIf="!(tariff.extensions_included.length == extension.order_position)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onExtensionShiftDownClick(extension)">
-                                    <i class="fa fa-chevron-down"></i>
-                                </button>
-                                <button *ngIf="!extension.active" title="{{'label_active_extension'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onExtensionActivateClick(extension)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                                <button *ngIf="extension.active" title="{{'label_deactivated_extension'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onExtensionDeactivateClick(extension)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                                <button title="{{'label_add_extension'|bkTranslate:this}}" class="btn btn-icon-only blue margin-right-15"
-                                        [disabled]="false"
-                                        (click)="onExtensionEdit(extension)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="pricing-content-1">
-                                    <div class="row">
-                                        <div class="col-md-3" ></div>
-                                        <div class="col-md-6 margin-bottom-15">
-                                            <div class="price-column-container border-active package">
-                                                <div class="price-table-head bg-{{extension.color|lowercase}}">
-                                                    <h4 class="no-margin">{{extension.name}}</h4>
-                                                </div>
-                                                <div class="arrow-down border-top-{{extension.color|lowercase}}"></div>
-                                                <div class="price-table-pricing">
-                                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(extension.price).length>=7?'40px':'50px'">{{makePrice(extension.price)}}</h3>
-                                                    <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
-                                                    <div *ngIf="extension.include" class="price-ribbon">{{'label_included'|bkTranslate:this}}</div>
-                                                </div>
-                                                <div class="price-table-content">
-                                                    <p class="font-grey-salt">{{extension.description}}</p>
-                                                </div>
-                                                <div class="arrow-down arrow-grey"></div>
-                                                <div class="price-table-footer">
-                                                    <button *ngIf="extension.include" type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
-                                                        {{'btn_included'|bkTranslate:this}}
-                                                    </button>
-                                                    <button *ngIf="!extension.include" type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
-                                                        {{'btn_select'|bkTranslate:this}}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3" ></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <br>
-                                <br>
-                                <div>
-                                    {{'label_extension_name'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{extension.name}}</span>
-                                    <span *ngIf="extension.active" class="font-green-jungle bold">(Active (visible for customers))</span>
-                                    <span *ngIf="!extension.active" class="font-red-flamingo bold">(Deactivated (Invisible for customers)</span>
-                                    <span *ngIf="extension.include" class="font-green-jungle bold">(Include)</span>
-                                    <span *ngIf="!extension.include" class="font-red-flamingo bold">(Optional)</span>
-                                </div>
-                                <div>
-                                    {{'label_extension_description'|bkTranslate:this}}:
-                                    <span class="font-grey-mint ">{{extension.description}}</span>
-                                </div>
-                                <br>
-                                <div>
-                                    {{'label_extension_type'|bkTranslate:this}}:
-                                    <span class="font-grey-mint ">{{extension.type}}</span>
-                                </div>
-                                <div>
-                                    {{'label_extension_color'|bkTranslate:this}}:
-                                    <span class="font-grey-mint ">{{extension.color}}</span>
-                                </div>
-                                <div>
-                                    <h4> {{'label_extension_price'|bkTranslate:this}}:
-                                        <span class="font-grey-mint ">{{makePrice(extension.price)}}</span></h4>
-                                </div>
-                                <div>
-                                    <bk-form-nice-json [description]="'Config Json'" [cols]="50" [content]="extension.config" [readonly]="true"></bk-form-nice-json>
-                                </div>
-                                <hr>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
+                <div *ngIf="tab == 'extensions'">
+                    <table class="table table-hover table-light byzance-table">
+                        <thead>
+                        <tr>
+                            <th class="col col-lg-1">{{'table_color'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1">{{'table_price'|bkTranslate:this}}</th>
+                            <th class="col col-lg-4">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1 text-right no-wrap">{{'table_included'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            <th class="col col-lg-1 text-right no-wrap">{{'table_recommended'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let extension of extensions">
+
+                            <td class="vert-align no-wrap bold">
+                                <div style="width:20px; height: 20px;" class="bg-{{extension.color|lowercase}}"></div>
+                            </td>
+                            <td class="vert-align no-wrap bold"><a (click)="onExtensionEditClick(extension)">{{extension.name}}</a>
+                                <span *ngIf="extension.active" class="font-green-jungle bold">(Active)</span>
+                                <span *ngIf="!extension.active" class="font-red-flamingo bold">(Deactivated)</span>
+                            </td>
+                            <td class="vert-align">{{makePrice(extension.price)}}</td>
+                            <td class="vert-align">{{extension.description}}</td>
+                            <td class="vert-align no-wrap text-right">
+                                <input type="checkbox" [checked]="isIncluded(extension)" (change)="setIncluded(extension, included.checked)" #included>
+                            </td>
+                            <td class="vert-align no-wrap text-right">
+                                <input type="checkbox" [checked]="isRecommended(extension)" (change)="setRecommended(extension, recommended.checked)" #recommended>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div *ngIf="tab == 'extensions_optional'">
-                    <div *ngIf="tariff.extensions_optional">
-                        <div *ngIf=" tariff.extensions_optional.length==0">
-                            <h3 class="text-center margin-bottom-15"> {{'label_no_expansions'|bkTranslate:this}}</h3>
-                        </div>
-                    </div>
-                    <div *ngFor="let extension of tariff.extensions_optional" class="portlet-body">
-                        <div class="row">
-                            <div class="becki-actions">
-                                <button *ngIf="!(extension.order_position == 1 || extension.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onExtensionShiftUpClick(extension)">
-                                    <i class="fa fa-chevron-up"></i>
-                                </button>
-
-                                <button  *ngIf="!(tariff.extensions_optional.length == extension.order_position)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onExtensionShiftDownClick(extension)">
-                                    <i class="fa fa-chevron-down"></i>
-                                </button>
-                                <button *ngIf="!extension.active" title="{{'label_active_extension'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onExtensionActivateClick(extension)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                                <button *ngIf="extension.active" title="{{'label_deactivated_extension'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onExtensionDeactivateClick(extension)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                                <button title="{{'label_edit_extension'|bkTranslate:this}}" class="btn btn-icon-only blue margin-right-15"
-                                        [disabled]="false"
-                                        (click)="onExtensionEdit(extension)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="pricing-content-1">
-                                    <div class="row">
-                                        <div class="col-md-3" ></div>
-                                        <div class="col-md-6 margin-bottom-15">
-                                            <div class="price-column-container border-active package">
-                                                <div class="price-table-head bg-{{extension.color|lowercase}}">
-                                                    <h4 class="no-margin">{{extension.name}}</h4>
-                                                </div>
-                                                <div class="arrow-down border-top-{{extension.color|lowercase}}"></div>
-                                                <div class="price-table-pricing">
-                                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(extension.price).length>=7?'40px':'50px'">{{makePrice(extension.price)}}</h3>
-                                                    <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
-                                                    <div *ngIf="extension.include" class="price-ribbon">{{'label_included'|bkTranslate:this}}</div>
-                                                </div>
-                                                <div class="price-table-content">
-                                                    <p class="font-grey-salt">{{extension.description}}</p>
-                                                </div>
-                                                <div class="arrow-down arrow-grey"></div>
-                                                <div class="price-table-footer">
-                                                    <button *ngIf="extension.include" type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
-                                                        {{'btn_included'|bkTranslate:this}}
-                                                    </button>
-                                                    <button *ngIf="!extension.include" type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
-                                                        {{'btn_select'|bkTranslate:this}}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3" ></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <br>
-                                <br>
-                                <div>
-                                    {{'label_extension_name'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{extension.name}}</span>
-                                    <span *ngIf="extension.active" class="font-green-jungle bold">(Active (visible for customers))</span>
-                                    <span *ngIf="!extension.active" class="font-red-flamingo bold">(Deactivated (Invisible for customers)</span>
-                                    <span *ngIf="extension.include" class="font-green-jungle bold">(Include)</span>
-                                    <span *ngIf="!extension.include" class="font-red-flamingo bold">(Optional)</span>
-                                </div>
-                                <div>
-                                    {{'label_extension_description'|bkTranslate:this}}:
-                                    <span class="font-grey-mint ">{{extension.description}}</span>
-                                </div>
-                                <br>
-                                <div>
-                                    {{'label_extension_type'|bkTranslate:this}}:
-                                    <span class="font-grey-mint ">{{extension.type}}</span>
-                                </div>
-                                <div>
-                                    {{'label_extension_color'|bkTranslate:this}}:
-                                    <span class="font-grey-mint ">{{extension.color}}</span>
-                                </div>
-                                <div>
-                                    <h4> {{'label_extension_price'|bkTranslate:this}}:
-                                    <span class="font-grey-mint ">{{makePrice(extension.price)}}</span></h4>
-                                </div>
-                                <div>
-                                    <bk-form-nice-json [description]="'Config Json'" [cols]="50" [content]="extension.config" [readonly]="true"></bk-form-nice-json>
-                                </div>
-                                <hr>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
