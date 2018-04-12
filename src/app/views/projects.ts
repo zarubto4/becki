@@ -3,7 +3,7 @@
  * directory of this distribution.
  */
 
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import {
     FlashMessageError, FlashMessageSuccess,
@@ -18,7 +18,7 @@ import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
     selector: 'bk-view-projects',
     templateUrl: './projects.html',
 })
-export class ProjectsComponent extends _BaseMainComponent implements OnInit {
+export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     projects: IProject[] = null;
     products: IApplicableProduct[] = null;
@@ -29,17 +29,22 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit {
 
     ngOnInit(): void {
 
+        this.refresh();
+
         this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'ProjectsRefreshAfterInvite') {
                 this.refresh();
             }
         });
 
-        this.refresh();
+
+    }
+
+    ngOnDestroy(): void {
+        this.tyrionBackendService.objectUpdateTyrionEcho.unsubscribe();
     }
 
     refresh(): void {
-        console.log('Refresh: All Projects time:', new Date().getTime());
         this.blockUI();
 
         this.tyrionBackendService.projectGetByLoggedPerson()
@@ -52,7 +57,6 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit {
             .then((products: IApplicableProduct[]) => {
                 this.products = products;
             });
-
     }
 
     onAddClick(): void {
