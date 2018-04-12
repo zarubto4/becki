@@ -160,7 +160,7 @@
                             <td class="vert-align no-wrap bold">
                                 <div style="width:20px; height: 20px;" class="bg-{{extension.color|lowercase}}"></div>
                             </td>
-                            <td class="vert-align no-wrap bold"><a (click)="onExtensionEditClick(extension)">{{extension.name}}</a>
+                            <td class="vert-align no-wrap bold">{{extension.name}}
                                 <span *ngIf="extension.active" class="font-green-jungle bold">(Active)</span>
                                 <span *ngIf="!extension.active" class="font-red-flamingo bold">(Deactivated)</span>
                             </td>
