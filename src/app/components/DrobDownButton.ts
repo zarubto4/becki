@@ -32,7 +32,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
             <ul *ngIf="btns && btns.length > 0" class="dropdown-menu pull-right">
 
                 <li *ngFor="let btn of btns; let last = last" [class.devider]="btn.btn_space">
-                    <a *ngIf="!btn.btn_space" 
+                    <a *ngIf="!btn.btn_space"
                        (click)="onButtonClick(btn.btn_tag)"
                        [class.hidden]="btn.condition == false || btn.permission == false">
                         <i *ngIf="btn.icon" 

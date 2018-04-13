@@ -59,6 +59,13 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
             });
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'add_project') {
+            this.onAddClick();
+        }
+    }
+
+
     onAddClick(): void {
 
         if (!this.products) {
@@ -86,7 +93,17 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
         });
     }
 
-    onEditClick(project: IProject): void {
+    onDrobDownEmiter (action: string, project: IProject): void {
+        if (action === 'edit_project') {
+            this.onEditClick(project);
+        }
+
+        if (action === 'remove_project') {
+            this.onRemoveClick(project);
+        }
+    }
+
+    onEditClick (project: IProject): void {
         if (!this.products) {
             this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
         }

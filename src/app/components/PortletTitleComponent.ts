@@ -148,13 +148,15 @@ export class PortletTitleComponent {
 
     getConditionSize(): number {
 
-        console.info(this.btns.length);
+        console.info('PortletTitleComponent getConditionSize size:', this.btns.length);
         let count = 0;
         for (let i = 0; i < this.btns.length; i++) {
             if (this.btns[i].condition === true) {
                 count++;
             }
         }
+
+        console.info('PortletTitleComponent: getConditionSize Return', count);
         return count;
     }
 
