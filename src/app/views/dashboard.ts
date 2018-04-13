@@ -7,14 +7,19 @@ import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
 
+/* tslint:disable */
 @Component({
     selector: 'bk-view-dashboard',
     templateUrl: './dashboard.html'
 })
+/* tslint:enable */
 export class DashboardComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     tab: string = 'general';
     projects: IProject[] = null;
+
+
+
 
     constructor(injector: Injector) {
         super(injector);
@@ -23,6 +28,12 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
     onQrClick() {
         this.router.navigate(['/qr-reader-hardware']);
     }
+
+
+    onNaCoCliknil(value: string) {
+        console.log("Uživatel kliknul na", value);
+    }
+
 
     ngOnInit(): void {
         this.refresh();
@@ -34,10 +45,10 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
         });
 
 
+
     }
 
     ngOnDestroy(): void {
-        this.tyrionBackendService.objectUpdateTyrionEcho.unsubscribe();
     }
 
     onToggleTab(tab: string) {
@@ -52,8 +63,9 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
             });
     }
 
-
 }
+
+
 
 
 

@@ -41,7 +41,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
     }
 
     ngOnDestroy(): void {
-        this.tyrionBackendService.objectUpdateTyrionEcho.unsubscribe();
+
     }
 
     refresh(): void {
