@@ -12,6 +12,7 @@ import {
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
+import { Subscription } from 'rxjs/Rx';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
 
     projects: IProject[] = null;
     products: IApplicableProduct[] = null;
+    projectsUpdateSubscription: Subscription;
 
     constructor(injector: Injector) {
         super(injector);
@@ -31,7 +33,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
 
         this.refresh();
 
-        this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
+        this.projectsUpdateSubscription = this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'ProjectsRefreshAfterInvite') {
                 this.refresh();
             }
@@ -41,7 +43,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
     }
 
     ngOnDestroy(): void {
-        this.tyrionBackendService.objectUpdateTyrionEcho.unsubscribe();
+        this.projectsUpdateSubscription.unsubscribe();
     }
 
     refresh(): void {

@@ -8,7 +8,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
-import {IProject, IGridProject, IGridProjectList} from '../backend/TyrionAPI';
+import { IProject, IGridProject, IGridProjectList } from '../backend/TyrionAPI';
 import { ModalsGridProjectPropertiesModel } from '../modals/grid-project-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
@@ -36,6 +36,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
+            console.info("Project ID: " +      this.projectId);
             this.onFilter();
         });
     }
@@ -55,8 +56,9 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
 
     onFilter(pageNumber: number = 0): void {
         this.blockUI();
+        console.info("Project ID: onFilter: ", this.projectId);
         this.tyrionBackendService.gridProjectGetByFilter(pageNumber, {
-            project_ids : [this.projectId]
+            project_id : this.projectId,
         })
             .then((values) => {
                 this.gridProjects = values;

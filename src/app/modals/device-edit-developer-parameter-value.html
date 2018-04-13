@@ -12,7 +12,12 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.value" [label]='modalModel.valueDescription' aria-valuetext="Hardware description"></bk-form-input>
+            <bk-form-input *ngIf="!options" [control]="form.controls['value']" [label]='modalModel.valueDescription' aria-valuetext="Hardware description"></bk-form-input>
+
+            <div *ngIf="options">
+                <bk-form-select [control]="form.controls['value']" [label]="'label_select_value'|bkTranslate:this" [options]="options"></bk-form-select>
+            </div>
+
         </form>
     </div>
     <div class="modal-footer">

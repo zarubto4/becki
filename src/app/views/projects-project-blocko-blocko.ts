@@ -791,7 +791,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 project_id: this.projectId
             }),
             this.tyrionBackendService.gridProjectGetByFilter(0, {
-                project_ids: [this.projectId]
+                project_id: this.projectId
             })
         ]).then((values: [IBlockList, ICProgramList, IGridProjectList]) => {
             let blocks: IBlockList = values[0];

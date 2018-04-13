@@ -27,7 +27,7 @@
             <!-- BEGIN TOP NAVIGATION MENU -->
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
-                    <li *ngIf="backendService.tassks">
+                    <li *ngIf="backendService.tasks">
                         <a>
                             <i class="fa fa-spinner fa-spin"></i>
                         </a>
@@ -129,24 +129,6 @@
                                 <h3 class="uppercase">{{page.label}}</h3>
                             </template>
 
-                            <!-- BEGIN SIDEBAR MENU -->
-
-                            <!-- a *ngIf="page.options['adminNavigation'] && (page.options['items'])" (click)="openSubmanyItem(page.label)">
-                                <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
-                                <span class="title">{{page.label}}</span>
-                                <span class="selected"></span>
-                                <span [class]="(tabMenuDropped==page.label)?'arrow open':'arrow'"></span>
-                            </a>
-                            <ul [style.display]="(tabMenuDropped==page.label)?'block':'none'" class="sub-menu">
-                                <li routerLinkActive="active" *ngFor="let sublink of page.options['subLinks']">
-                                    <a [routerLink]="sublink.link">
-                                        <span class="fa fa-{{sublink.icon}}" data-bind-title="sublink.label"></span>
-                                        <span class="title">{{sublink.label}}</span>
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-                            </ul !-->
-
                             <template [ngIf]="page.link">
 
                                 <!-- For link in our platform -->
@@ -175,7 +157,7 @@
             <!-- BEGIN CONTENT BODY -->
             <div class="page-content">
 
-                <div class="page-bar">
+                <div class="page-bar" style="padding-left: 10px;border-left-width: 20px; margin-left: 0px;">
                     <ul class="page-breadcrumb">
                         <li *ngFor="let breadcrumb of breadcrumbsService.breadcrumbs; let last = last">
                             <a *ngIf="!last" [routerLink]="breadcrumb.link">{{breadcrumb.label}}</a>
@@ -197,7 +179,7 @@
 
                 <!----- Tab Menu BEGIN ---->
                 <div [class.tabbable-line]="tabMenuItems" class="p">
-                    <ul *ngIf="tabMenuItems" class="nav nav-tabs becki-tab-menu">
+                    <ul *ngIf="tabMenuItems" class="nav nav-tabs becki-tab-menu" style="">
                         <li *ngFor="let tabItem of tabMenuItems; let index = index" class="{{tabItem.options['styleClass']}}" [class.spacer]="!tabItem.options['items'] && !tabItem.link"
                             [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
                             <a *ngIf="!tabItem.options['items'] && tabItem.link" [routerLink]="tabItem.link" [class.disabled]="tabItem.options['disabled']">
@@ -225,7 +207,7 @@
                 <!----- Site Content START ---->
                 <div [class.tab-content]="tabMenuItems">
                     <div class="active" [class.tab-pane]="tabMenuItems">
-                        <div class="portlet light">
+                        <div class="portlet light" style="padding-left: 0px;padding-right: 0px;">
                             <ng-content></ng-content>
                         </div>
                     </div>

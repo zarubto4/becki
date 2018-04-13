@@ -50,7 +50,13 @@
                 condition: (true),
                 tab_color: 'CODE',
                 tab_label: ('tab_ide'|bkTranslate:this)
-            }
+            },
+            {
+                tab_name: 'versions',
+                condition: (true),
+                tab_color: 'CODE',
+                tab_label: ('tab_versions'|bkTranslate:this)
+             }
             ]">
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
@@ -59,40 +65,153 @@
     <!-- Page Content IDE -- START -->
     <div class="portlet-body">
 
-        <!--
-        <div class="portlet-title">
-            <div *ngIf="selectedProgramVersion" class="becki-caption version">
-                <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong>
-                    <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span>{{selectedProgramVersion.name}}</span>
-            </div>
-        </div>
-        -->
 
-        <!--- IDE START -->
-        <bk-code-ide [files]="selectedCodeFiles"
-                     [defaultOpenFilename]="'main.cpp'"
-                     (fileContentChange)="onFileContentChange($event)"
-                     [enableLibraryButtons]="true"
-                     [enableSaveButton]="codeProgram && codeProgram.update_permission"
-                     [enableBuildButton]="true"
-                     [buildInProgress]="buildInProgress"
-                     [selectedHardware]="selected_hardware"
-                     (onBuildClick)="onBuildClick()"
-                     (onSaveClick)="onSaveClick()"
-                     (onAddLibraryClick)="onAddLibraryClick()"
-                     (onAddHardwareClick)="onAddDeveloperHardwareClick()"
-                     (onRemoveHardwareClick)="onRemoveDeveloperHardwareClick($event)"
-                     (onChangeLibraryVersionClick)="onChangeLibraryVersionClick($event)"
-                     [libraryCompilationVersionOptions]="libraryCompilationVersionOptions"
-        #CodeIDEComponent>
-        </bk-code-ide>
-        <!--- IDE END -->
+        <div [hidden]="tab!='ide'">
+            <!--- IDE START -->
+            <bk-code-ide [files]="selectedCodeFiles"
+                         [defaultOpenFilename]="'main.cpp'"
+                         (fileContentChange)="onFileContentChange($event)"
+                         [enableLibraryButtons]="true"
+                         [enableSaveButton]="codeProgram && codeProgram.update_permission"
+                         [enableBuildButton]="true"
+                         [buildInProgress]="buildInProgress"
+                         [selectedHardware]="selected_hardware"
+                         (onBuildClick)="onBuildClick()"
+                         (onSaveClick)="onSaveClick()"
+                         (onAddLibraryClick)="onAddLibraryClick()"
+                         (onAddHardwareClick)="onAddDeveloperHardwareClick()"
+                         (onRemoveHardwareClick)="onRemoveDeveloperHardwareClick($event)"
+                         (onChangeLibraryVersionClick)="onChangeLibraryVersionClick($event)"
+                         [libraryCompilationVersionOptions]="libraryCompilationVersionOptions"
+            #CodeIDEComponent>
+            </bk-code-ide>
+            <!--- IDE END -->
+        </div>
+        <div [hidden]="tab!='versions'">
+            <div *ngIf="codeProgramVersions && codeProgramVersions.length > 0"  class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th *ngIf="!projectId"></th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="">{{'table_lib_version'|bkTranslate:this}}</th>
+                        <th class="">{{'table_author'|bkTranslate:this}}</th>
+                        <th class="">{{'table_status'|bkTranslate:this}}</th>
+                        <th class=""></th>
+                        <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let version of codeProgramVersions">
+
+                        <!-- NAME -->
+                        <td class="vert-align no-wrap" [class.bold]="isSelected(version)">
+                            <a (click)="onProgramVersionClick(version)">
+                                {{version.name}}
+                            </a>
+                        </td>
+
+                        <!-- Main Mark - Only for settings for Type of Board, If C program is not for user projects -->
+                        <td *ngIf="!projectId" class="vert-align no-wrap">
+                                 <span class="icon-hint-wraper green" *ngIf="version.main_mark">
+                                        <i class="fa fa-lg fa-flag font-green-jungle"></i>
+                                        <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                                </span>
+                        </td>
+
+                        <!-- Description -->
+                        <td class="vert-align">
+                            {{version.description}}
+                        </td>
+
+                        <!-- Description -->
+                        <td class="vert-align no-wrap">
+                            {{version.compilation_version}}
+                        </td>
+
+                        <!-- Author -->
+                        <td class="vert-align no-wrap">
+                            <span *ngIf="version.author">{{version.author.nick_name}}</span>
+                            <span *ngIf="!version.author">No One</span>
+                        </td>
+                        <!-- STATUS -->
+                        <td class="vert-align no-wrap">
+                            <bk-compilation-status-component [status]="version.status"></bk-compilation-status-component>
+                            <bk-compilation-status-component [status]="version.approval_state"></bk-compilation-status-component>
+                        </td>
+                        <!-- UPLOAD -->
+
+                        <td class="vert-align no-wrap">
+                            <button *ngIf="projectId && hardwareType && hardwareType.connectible_to_internet && version.status=='SUCCESS' && codeProgram && codeProgram.publish_type == 'PRIVATE'" class="btn blue">
+                                {{'btn_upload_to_hardware'|bkTranslate:this}}
+                            </button>
+                        </td>
+
+                        <!-- ACTIONS -->
+                        <td class="vert-align text-right no-wrap">
+
+                            <style type="text/css">
+                                table tr button {
+                                    opacity: 0.05;
+                                }
+
+                                table tr:hover button {
+                                    opacity: 1
+                                }
+                            </style>
+
+
+                            <a *ngIf="version.download_link_bin_file" href="{{version.download_link_bin_file}}">
+                                <button title="{{'label_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
+                                    <i class="fa fa-cloud-download"></i>
+                                </button>
+                            </a>
+
+                            <button *ngIf="version.update_permission"  title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                    (click)="onEditVersionClick(version)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+                            <button *ngIf="codeProgram.publish_type == 'PRIVATE' && !version.approval_state" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
+                                    (click)="onCommunityPublicVersionClick(version)">
+                                <i class="fa fa-heart"></i>
+                            </button>
+
+                            <!-- Buttons for Administrator for Community decisions  -->
+                            <button *ngIf="version.approval_state == 'PENDING' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onCProgramPublishResult(version)">
+                                <i class="fa fa-heart"></i>
+                            </button>
+
+                            <button *ngIf="markupableAsMain(version)" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="hardwareType && !hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                                <i class="fa fa-flag"></i>
+                            </button>
+
+                            <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                    [disabled]="!version.delete_permission"
+                                    (click)="onRemoveVersionClick(version)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(codeProgramVersions == null)"
+                                [condition_empty]="(codeProgramVersions != null && codeProgramVersions.length == 0)"
+                                [main_message_link]="'label_no_c_program_versions'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_program_versions_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
 
     </div>
     <!-- Page Content IDE -- END -->
 
     <!-- Page Content UNDER IDE -- START -->
-    <div class="portlet-body">
+    <div [hidden]="tab!='ide'" class="portlet-body">
 
         <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
         <bk-portlet-title [show_title]="false"
@@ -110,12 +229,6 @@
                                     condition: (true),
                                     tab_color: 'CODE',
                                     tab_label: ('tab_online_terminal'|bkTranslate:this)
-                                },
-                                {
-                                    tab_name: 'versions',
-                                    condition: (true),
-                                    tab_color: 'CODE',
-                                    tab_label: ('tab_versions'|bkTranslate:this)
                                 }
                           ]">
         </bk-portlet-title>
@@ -151,128 +264,6 @@
 
         <div *ngIf="tab_under_ide == 'console_log'">
             Zatím nic....
-        </div>
-
-
-        <div *ngIf="tab_under_ide == 'versions'">
-            <div *ngIf="codeProgramVersions.length > 0"  class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
-                    <thead>
-                        <tr>
-                            <th class="">{{'table_name'|bkTranslate:this}}</th>
-                            <th *ngIf="!projectId"></th>
-                            <th class="">{{'table_description'|bkTranslate:this}}</th>
-                            <th class="">{{'table_lib_version'|bkTranslate:this}}</th>
-                            <th class="">{{'table_author'|bkTranslate:this}}</th>
-                            <th class="">{{'table_status'|bkTranslate:this}}</th>
-                            <th class=""></th>
-                            <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let version of codeProgramVersions">
-
-                            <!-- NAME -->
-                            <td class="vert-align no-wrap" [class.bold]="isSelected(version)">
-                                <a (click)="onProgramVersionClick(version)">
-                                    {{version.name}}
-                                </a>
-                            </td>
-
-                                <!-- Main Mark - Only for settings for Type of Board, If C program is not for user projects -->
-                            <td *ngIf="!projectId" class="vert-align no-wrap">
-                                 <span class="icon-hint-wraper green" *ngIf="version.main_mark">
-                                        <i class="fa fa-lg fa-flag font-green-jungle"></i>
-                                        <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
-                                </span>
-                            </td>
-
-                            <!-- Description -->
-                            <td class="vert-align">
-                                {{version.description}}
-                            </td>
-
-                            <!-- Description -->
-                            <td class="vert-align no-wrap">
-                                {{version.compilation_version}}
-                            </td>
-
-                            <!-- Author -->
-                            <td class="vert-align no-wrap">
-                                <span *ngIf="version.author">{{version.author.nick_name}}</span>
-                                <span *ngIf="!version.author">No One</span>
-                            </td>
-                            <!-- STATUS -->
-                            <td class="vert-align no-wrap">
-                                <bk-compilation-status-component [status]="version.status"></bk-compilation-status-component>
-                                <bk-compilation-status-component [status]="version.approval_state"></bk-compilation-status-component>
-                            </td>
-                            <!-- UPLOAD -->
-
-                            <td class="vert-align no-wrap">
-                                <button *ngIf="projectId && hardwareType && hardwareType.connectible_to_internet && version.status=='SUCCESS' && codeProgram && codeProgram.publish_type == 'PRIVATE'" class="btn blue">
-                                    {{'btn_upload_to_hardware'|bkTranslate:this}}
-                                </button>
-                            </td>
-
-                            <!-- ACTIONS -->
-                            <td class="vert-align text-right no-wrap">
-
-                                <style type="text/css">
-                                    table tr button {
-                                        opacity: 0.05;
-                                    }
-
-                                    table tr:hover button {
-                                        opacity: 1
-                                    }
-                                </style>
-
-
-                                <a *ngIf="version.download_link_bin_file" href="{{version.download_link_bin_file}}">
-                                    <button title="{{'label_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
-                                        <i class="fa fa-cloud-download"></i>
-                                    </button>
-                                </a>
-
-                                <button *ngIf="version.update_permission"  title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                        (click)="onEditVersionClick(version)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button *ngIf="codeProgram.publish_type == 'PRIVATE' && !version.approval_state" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
-                                        (click)="onCommunityPublicVersionClick(version)">
-                                    <i class="fa fa-heart"></i>
-                                </button>
-
-                                <!-- Buttons for Administrator for Community decisions  -->
-                                <button *ngIf="version.approval_state == 'PENDING' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onCProgramPublishResult(version)">
-                                    <i class="fa fa-heart"></i>
-                                </button>
-
-                                <button *ngIf="markupableAsMain(version)" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="hardwareType && !hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
-                                    <i class="fa fa-flag"></i>
-                                </button>
-
-                                <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                        [disabled]="!version.delete_permission"
-                                        (click)="onRemoveVersionClick(version)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-            <bk-nothing-to-show [condition_loading]="(codeProgramVersions == null)"
-                                [condition_empty]="(codeProgramVersions != null && codeProgramVersions.length == 0)"
-                                [main_message_link]="'label_no_c_program_versions'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_c_program_versions_comment'|bkTranslate:this"
-                                [show_button]="false">
-            </bk-nothing-to-show>
-            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
-
         </div>
 
     </div>

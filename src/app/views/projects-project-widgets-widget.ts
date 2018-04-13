@@ -37,7 +37,6 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     projectId: string; // Project
     project: IProject = null;
     widgetId: string;  // Widget
-    typeOfWidgetId: string; // Type Of Widget
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
@@ -86,13 +85,13 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     ngOnInit(): void {
         this.unsavedChanges = false;
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+
             this.projectId = params['project'];
             this.widgetId = params['widget'];
-            this.typeOfWidgetId = params['widgets'];
 
-            if (this.projectId && this.typeOfWidgetId) {
+            if (this.projectId) {
                 if (params['version']) {
-                    this.router.navigate(['/projects', this.projectId, 'widgets', this.typeOfWidgetId, this.widgetId]);
+                    this.router.navigate(['/projects', this.projectId, 'widgets', this.widgetId]);
                     this.selectVersionByVersionId(params['version']);
                 }
             }

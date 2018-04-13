@@ -209,6 +209,13 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
     @ViewChildren(BlockoViewComponent)
     blockoViews: QueryList<BlockoViewComponent>;
 
+    draggableOptions: JQueryUI.DraggableOptions = {
+        helper: 'clone',
+        containment: 'document',
+        cursor: 'move',
+        cursorAt: { left: -5, top: -5 }
+    };
+
     private _show_files_portlet: boolean = true;
     private _show_libraries_portlet: boolean = false;
     private _show_integrated_hardware_portlet: boolean = false;

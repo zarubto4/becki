@@ -120,7 +120,6 @@
                 </div>
 
             </div>
-
             <div class="col-md-3">
                 <div class="portlet portlet light bordered">
 
@@ -143,8 +142,14 @@
                                 <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[staticBlocksGroup.id]">
                                     <div class="panel-body">
                                         <div *ngIf="staticBlocksGroup.blocks.length == 0" style="color: gray; text-align: center;">{{'label_no_blocks_in_group'|bkTranslate:this}}</div>
-                                        <div *ngFor="let block of staticBlocksGroup.blocks;" [bkDraggable]="draggableOptions" [bkDraggableData]="block" [bkDraggableDataType]="'block'" (bkDraggableOnStop)="onDragStop($event)"
-                                             (bkDraggableOnStart)="onDragStart($event)" class="blocko-block" [style.backgroundColor]="block.backgroundColor">
+                                        <div *ngFor="let block of staticBlocksGroup.blocks;"
+                                             [bkDraggable]="draggableOptions"
+                                             [bkDraggableData]="block"
+                                             [bkDraggableDataType]="'block'"
+                                             (bkDraggableOnStop)="onDragStop($event)"
+                                             (bkDraggableOnStart)="onDragStart($event)"
+                                             class="blocko-block"
+                                             [style.backgroundColor]="block.backgroundColor">
                                             <div class="blocko-block-mask"></div>
                                             <i class="fa fa-fw fa-cubes" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
                                             <span>{{block.name}}</span>

@@ -9,10 +9,11 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import {FormSelectComponentOption} from "../components/FormSelectComponent";
 
 
 export class ModalsDeviceEditDeveloperParameterValueModel extends ModalModel {
-    constructor(public id: string = '',  public valueDescription: string = '', public value: any = '') {
+    constructor(public id: string = '',  public valueDescription: string = '', public value: any = '', public values?: FormSelectComponentOption[]) {
         super();
     }
 }
@@ -30,6 +31,7 @@ export class ModalsDeviceEditDeveloperParameterValueComponent implements OnInit 
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
+    options: FormSelectComponentOption[] = null;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
@@ -40,6 +42,7 @@ export class ModalsDeviceEditDeveloperParameterValueComponent implements OnInit 
     }
 
     ngOnInit() {
+        this.options = this.modalModel.values; // If Null then null
         (<FormControl>(this.form.controls['valueDescription'])).setValue(this.modalModel.valueDescription);
         (<FormControl>(this.form.controls['value'])).setValue(this.modalModel.value);
     }

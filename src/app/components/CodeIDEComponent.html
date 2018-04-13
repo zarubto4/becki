@@ -14,83 +14,88 @@
     </div>
     -->
 
-    <div class="row">
-        <div class="col-lg-2 col-md-3 col-sm-4">
+    <div class="table-layout" style="max-width:100%;">
+        <div class="table-cell" style="min-width: 250px; width: 250px">
             <!--- files -->
-            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
-                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
-                    <div class="caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-file"></i>
-                              <span [innerHTML]="'label_panel_files'|bkTranslate:this"></span>
-                        </span>
+            <div class="portlet" style="padding: 0 15px 0 0;">
+
+                <div class="portlet-title">
+                    <div class="caption font-md">
+                        <i class="fa fa-file"></i>
+                        <span class="font-sm" [innerHTML]="'label_panel_files'|bkTranslate:this"></span>
                     </div>
-                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
-                        <a *ngIf="_show_files_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_files_portlet(false)">
-                            <i class="fa fa-angle-up"></i>
+                    <div class="actions">
+                        <a class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="toolbarAddDirectoryClick($event)">
+                            <i class="icon-folder"></i>
                         </a>
-                        <a *ngIf="!_show_files_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_files_portlet(true)">
-                            <i class="fa fa-angle-down"></i>
+                        <a *ngIf="_show_files_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_files_portlet(false)">
+                            <i class="icon-arrow-up"></i>
                         </a>
+                        <a  *ngIf="!_show_files_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_files_portlet(true)">
+                            <i class="icon-arrow-down"></i>
+                        </a>
+
                     </div>
                 </div>
-                <bk-file-tree *ngIf="_show_files_portlet"
-                    [fileTreeObject]="rootFileTreeObject"
-                    (newSelected)="selectFto($event)"
-                    (newFolderNewClick)="toolbarAddDirectoryClick($event)"
-                    (newFileNewClick)="toolbarAddFileClick($event)"
-                    (removeClick)="toolbarRemoveClick($event)"
-                    (editClick)="toolbarRenameClick($event)">
-                </bk-file-tree>
+
+                <div [hidden]="!_show_files_portlet">
+                    <bk-file-tree [fileTreeObject]="rootFileTreeObject"
+                                  (newSelected)="selectFto($event)"
+                                  (newFolderNewClick)="toolbarAddDirectoryClick($event)"
+                                  (newFileNewClick)="toolbarAddFileClick($event)"
+                                  (removeClick)="toolbarRemoveClick($event)"
+                                  (editClick)="toolbarRenameClick($event)">
+                    </bk-file-tree>
+                </div>
             </div>
 
             <!--- Libraries -->
-            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
-                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
-                    <div class="caption">
-                          <span class="font-blue-dark uppercase">
-                                <i class="fa fa-fw fa-files-o"></i>
-                                <span [innerHTML]="'label_panel_libraries'|bkTranslate:this"></span>
-                          </span>
+            <div class="portlet" style="padding: 0 15px 0 0;">
+                <div class="portlet-title">
+                    <div class="caption font-md">
+                        <i class="fa fa-file"></i>
+                        <span class="font-sm" [innerHTML]="'label_panel_libraries'|bkTranslate:this"></span>
                     </div>
-                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
-                        <a class="btn btn-circle btn-icon-only btn-default" (click)="toolbarAddLibraryClick($event)">
-                            <i class="fa fa-plus"></i>
+                    <div class="actions">
+                        <a *ngIf="_show_libraries_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_libraries_portlet(false)">
+                            <i class="icon-arrow-up"></i>
                         </a>
-                        <a *ngIf="_show_libraries_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_libraries_portlet(false)">
-                            <i class="fa fa-angle-up"></i>
-                        </a>
-                        <a *ngIf="!_show_libraries_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_libraries_portlet(true)">
-                            <i class="fa fa-angle-down"></i>
+                        <a  *ngIf="!_show_libraries_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_libraries_portlet(true)">
+                            <i class="icon-arrow-down"></i>
                         </a>
                     </div>
                 </div>
-
-
+                <div *ngIf="_show_libraries_portlet" class="portlet-body">
+                    <br>
+                    <div class="text-center">
+                        Not Yet Supported :(
+                    </div>
+                    <br>
+                </div>
             </div>
 
             <!--- Integrated Developer Hardware -->
-            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
-                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
-                    <div class="caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-microchip"></i>
-                              <span [innerHTML]="'label_panel_hardware'|bkTranslate:this"></span>
-                        </span>
+            <div class="portlet" style="padding: 0 15px 0 0;">
+                <div class="portlet-title">
+                    <div class="caption font-md">
+                        <i class="fa fa-microchip"></i>
+                        <span class="font-sm" [innerHTML]="'label_panel_hardware'|bkTranslate:this"></span>
                     </div>
-                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
-                        <a class="btn btn-circle btn-icon-only btn-default" (click)="toolbarAddHardwareClick($event)">
-                            <i class="fa fa-plus"></i>
+                    <div class="actions">
+                        <a class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="toolbarAddHardwareClick($event)">
+                            <i class="icon-plus"></i>
                         </a>
-                        <a *ngIf="_show_integrated_hardware_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_integrated_hardware_portlet(false)">
-                            <i class="fa fa-angle-up"></i>
+                        <a *ngIf="_show_integrated_hardware_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_integrated_hardware_portlet(false)">
+                            <i class="icon-arrow-up"></i>
                         </a>
-                        <a *ngIf="!_show_integrated_hardware_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_integrated_hardware_portlet(true)">
-                            <i class="fa fa-angle-down"></i>
+                        <a  *ngIf="!_show_integrated_hardware_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_integrated_hardware_portlet(true)">
+                            <i class="icon-arrow-down"></i>
                         </a>
                     </div>
                 </div>
-                <div *ngIf="_show_integrated_hardware_portlet">
+
+                <div *ngIf="_show_integrated_hardware_portlet" class="portlet-body">
+
                     <!-- Hardware máme - HW nemáme -->
                     <div *ngIf="selectedHardware.length > 0">
                         <table class="table table-hover table-light byzance-table">
@@ -123,57 +128,60 @@
             </div>
 
 
+
             <!--- Blocko View -->
-            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
-                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
-                    <div class="caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
-                              <span [innerHTML]="'label_panel_blocko_interface_preview'|bkTranslate:this"></span>
-                        </span>
+            <div class="portlet" style="padding: 0 15px 0 0;">
+                <div class="portlet-title">
+                    <div class="caption font-md">
+                        <i class="fa fa-file"></i>
+                        <span class="font-sm" [innerHTML]="'label_panel_blocko_interface_preview'|bkTranslate:this"></span>
                     </div>
-                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
-                        <a *ngIf="_show_blocko_interface_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_blocko_interface_portlet(false)">
-                            <i class="fa fa-angle-up"></i>
+                    <div class="actions">
+                        <a *ngIf="_show_blocko_interface_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_blocko_interface_portlet(false)">
+                            <i class="icon-arrow-up"></i>
                         </a>
-                        <a *ngIf="!_show_blocko_interface_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_blocko_interface_portlet(true)">
-                            <i class="fa fa-angle-down"></i>
+                        <a  *ngIf="!_show_blocko_interface_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_blocko_interface_portlet(true)">
+                            <i class="icon-arrow-down"></i>
                         </a>
                     </div>
                 </div>
-                <div *ngIf="_show_blocko_interface_portlet">
-                    <bk-blocko-view [id]="'block_view'"  [disableExecution]="true" [canConfig]="false" [readonly]="true" [simpleMode]="false" [autosize]="true" class="blocko-overflow-visible blocko-no-borders-and-bg blocko-code-view"></bk-blocko-view>
+
+                <div *ngIf="_show_blocko_interface_portlet" class="portlet-body">
+                    <div>
+                        <bk-blocko-view [id]="'block_view'"  [disableExecution]="true" [canConfig]="false" [readonly]="true" [simpleMode]="false" [autosize]="true" class="blocko-overflow-visible blocko-no-borders-and-bg blocko-code-view"></bk-blocko-view>
+                    </div>
                 </div>
             </div>
 
             <!--- Under IDE -->
-            <div class="portlet light bordered" style="padding: 10px 10px 10px 10px; margin-bottom: 10px">
-                <div class="portlet-title" style="min-height: 25px; margin-bottom: 2px">
-                    <div class="caption">
-                            <span class="font-blue-dark uppercase">
-                                <i class="fa fa-fw fa-cogs"></i>
-                                  <span [innerHTML]="'label_panel_code_settings'|bkTranslate:this"></span>
-                            </span>
+            <div class="portlet" style="padding: 0 15px 0 0;">
+
+                <div class="portlet-title">
+                    <div class="caption font-md">
+                        <i class="fa fa-cog"></i>
+                        <span class="font-sm" [innerHTML]="'label_panel_code_settings'|bkTranslate:this"></span>
                     </div>
-                    <div class="actions" style="padding-bottom: 0;padding-top: 5px;">
-                        <a *ngIf="_show_code_settings_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_code_settings_portlet(false)">
-                            <i class="fa fa-angle-up"></i>
+                    <div class="actions">
+                        <a *ngIf="_show_code_settings_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_code_settings_portlet(false)">
+                            <i class="icon-arrow-up"></i>
                         </a>
-                        <a *ngIf="!_show_code_settings_portlet" class="btn btn-circle btn-icon-only btn-default" (click)="show_code_settings_portlet(true)">
-                            <i class="fa fa-angle-down"></i>
+                        <a  *ngIf="!_show_code_settings_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_code_settings_portlet(true)">
+                            <i class="icon-arrow-down"></i>
                         </a>
                     </div>
                 </div>
-                <div [hidden]="!_show_code_settings_portlet">
+
+                <div [hidden]="!_show_code_settings_portlet" class="portlet-body">
                     <bk-form-select [control]="formLibrarySelector.controls['compilation_version_library_tag']"
                                     [label]="'label_library_version'|bkTranslate:this"
                                     [regexFirstOption]="'[v][0-9.]*(?![-])$'"
-                                    [options]="libraryCompilationVersionOptions"></bk-form-select>
+                                    [options]="libraryCompilationVersionOptions">
+                    </bk-form-select>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-10 col-md-9 col-sm-8 no-padding-left" style="height: 85%">
+        <div class="table-cell" style="position: relative; height: 85%">
 
             <div class="tabbable-custom">
 
@@ -194,7 +202,7 @@
                 </ul>
 
 
-                <div class="tab-content">
+                <div class="tab-content" style="padding: 0 !important; border: 0 !important;">
                     <li *ngFor="let file of openFiles; let i = index" class="tab-pane"
                         [class.active]="i == openFilesTabIndex">
                         <bk-monaco-editor [code]="file.content" (codeChange)="onCodeChange($event, file)"

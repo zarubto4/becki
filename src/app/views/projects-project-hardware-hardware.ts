@@ -17,6 +17,7 @@ import { ModalsHardwareRestartMQTTPassModel } from '../modals/hardware-restart-m
 import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-server';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { ModalsSelectCodeModel } from '../modals/code-select';
+import {FormSelectComponentOption} from "../components/FormSelectComponent";
 
 export interface ConfigParameters {
     key: string;
@@ -317,6 +318,47 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     onEditParameterValue_String_Click(parameter_user_description: string, parameter_type: string, value: string): void {
 
         let model = new ModalsDeviceEditDeveloperParameterValueModel(this.hardware.id, parameter_user_description, value);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.boardEditDevelopersParameters(this.hardware.id, {
+                    parameter_type: parameter_type,
+                    string_value: model.value
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+
+    onEditParameterValue_SelectString_Click(parameter_user_description: string, parameter_type: string, value: string): void {
+
+        let form: FormSelectComponentOption[] = [
+            {
+                value: 'ethernet',
+                label: 'ethernet'
+            },
+            {
+                value: '6lowPan',
+                label: '6lowPan'
+            },
+            {
+                value: 'gsm',
+                label: 'gsm'
+            },
+            {
+                value: 'wifi',
+                label: 'wifi'
+            }
+        ];
+
+        let model = new ModalsDeviceEditDeveloperParameterValueModel(this.hardware.id, parameter_user_description, null, form);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

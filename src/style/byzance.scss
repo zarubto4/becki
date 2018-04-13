@@ -28,6 +28,17 @@
     color: #FFF;
 }
 
+
+
+.table-layout {
+    display:table;
+    width:100%;
+}
+.table-layout .table-cell {
+    display:table-cell;
+    border: 0 !important;
+}
+
 .vcenter {
     display: inline-block;
     vertical-align: middle;
