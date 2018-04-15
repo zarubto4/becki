@@ -504,7 +504,11 @@
                                         <span class="font-grey-mint">{{conf.key}}</span>
                                     </td>
                                     <td>
-                                        <div *ngIf="conf.type == 'string'">
+                                        <div *ngIf="conf.type == 'string' && conf.key != 'netsource'">
+                                            <span class="font-grey-mint bold">{{conf.value}}</span>
+                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
+                                        </div>
+                                        <div *ngIf="conf.type == 'string' && conf.key == 'netsource'">
                                             <span class="font-grey-mint bold">{{conf.value}}</span>
                                             <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
                                         </div>

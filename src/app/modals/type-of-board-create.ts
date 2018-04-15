@@ -9,8 +9,6 @@ import { IProcessor, IProducer } from '../backend/TyrionAPI';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { TyrionBackendService } from '../services/BackendService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
-import { IApplicableProduct } from '../backend/TyrionAPI';
 import { ModalModel } from '../services/ModalService';
 
 export class ModalsCreateHardwareTypeModel extends ModalModel {

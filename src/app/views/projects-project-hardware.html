@@ -95,8 +95,10 @@
                                     </span>
                                 </div>
                             </div>
-                            <a (click)="onDeviceClick(device.id)"
-                               class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+                            <a (click)="onDeviceClick(device.id)" class="no-wrap">
+                                <strong *ngIf="device.name && device.name != 'null'">{{device.name}}</strong>
+                                <strong *ngIf="!device.name || device.name == 'null' ">{{device.full_id}}</strong>
+                            </a>
                         </td>
                         <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
                         <td class="vert-align no-wrap">{{device.full_id}}</td>

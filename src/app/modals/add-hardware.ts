@@ -14,6 +14,7 @@ import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessageError, FlashMessage } from '../services/NotificationService';
 import { TranslatePipe } from '../pipes/TranslationPipe';
 import { TranslationService } from '../services/TranslationService';
+import { _BaseMainComponent } from '../views/_BaseMainComponent';
 
 
 export class ModalsAddHardwareModel extends ModalModel {
@@ -35,7 +36,7 @@ export interface StatusMesseage {
     selector: 'bk-modals-add-hardware',
     templateUrl: './add-hardware.html'
 })
-export class ModalsAddHardwareComponent implements OnInit {
+export class ModalsAddHardwareComponent  implements OnInit {
 
     @Input()
     modalModel: ModalsAddHardwareModel;
@@ -128,7 +129,7 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     sequenceRegistration() {
 
-        console.log('Console Registration');
+        console.info('Console Registration');
         this.devicesForRegistration = null;
 
         this.registeredDevices = [];
@@ -147,15 +148,16 @@ export class ModalsAddHardwareComponent implements OnInit {
         data = data.replace(/(\r?\n|\r)*(\s)*/g, '');
 
 
-        console.log('Result P5ed splitem: ', data);
+        console.info('Result P5ed splitem: ', data);
         let devicesForRegistration: string[] = data.split(';');
 
-        console.log('Result list:', devicesForRegistration);
+        console.info('Result list:', devicesForRegistration);
         this.devicesForRegistration = devicesForRegistration.filter(device => device.length > 20);
-        console.log('Result list:',  this.devicesForRegistration);
+        console.info('Result list:',  this.devicesForRegistration);
 
 
         this.sequenceRegistrationPromise(0);
+
     }
 
 
@@ -166,7 +168,7 @@ export class ModalsAddHardwareComponent implements OnInit {
             return;
         }
 
-        console.log("Registurji number: ", pointer, "Pole: ", this.devicesForRegistration[pointer]);
+        // console.info("Registurji number: ", pointer, "Pole: ", this.devicesForRegistration[pointer]);
 
         this.backendService.projectAddHW({
             group_ids: this.multiSelectedHardwareGroups,

@@ -3,7 +3,7 @@
  * directory of this distribution.
  */
 
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import {
     FlashMessageError, FlashMessageSuccess,
@@ -12,16 +12,18 @@ import {
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
+import { Subscription } from 'rxjs/Rx';
 
 
 @Component({
     selector: 'bk-view-projects',
     templateUrl: './projects.html',
 })
-export class ProjectsComponent extends _BaseMainComponent implements OnInit {
+export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     projects: IProject[] = null;
     products: IApplicableProduct[] = null;
+    projectsUpdateSubscription: Subscription;
 
     constructor(injector: Injector) {
         super(injector);
@@ -29,17 +31,22 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
+        this.refresh();
+
+        this.projectsUpdateSubscription = this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'ProjectsRefreshAfterInvite') {
                 this.refresh();
             }
         });
 
-        this.refresh();
+
+    }
+
+    ngOnDestroy(): void {
+        this.projectsUpdateSubscription.unsubscribe();
     }
 
     refresh(): void {
-        console.log('Refresh: All Projects time:', new Date().getTime());
         this.blockUI();
 
         this.tyrionBackendService.projectGetByLoggedPerson()
@@ -52,7 +59,6 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit {
             .then((products: IApplicableProduct[]) => {
                 this.products = products;
             });
-
     }
 
     onAddClick(): void {

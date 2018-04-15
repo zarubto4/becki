@@ -609,7 +609,9 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let snapshot of instance.snapshots">
-                        <td class="vert-align">{{snapshot.name}}</td>
+                        <td class="vert-align">{{snapshot.name}}
+                            <i *ngIf="instance.current_snapshot && snapshot.id === instance.current_snapshot.id" class="fa fa-fw fa-cloud font-color-cloud margin-left-15"></i>
+                        </td>
                         <td class="vert-align">{{snapshot.description}}</td>
                         <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a></td>
                         <td class="vert-align">{{snapshot.b_program_version.description}}</td>

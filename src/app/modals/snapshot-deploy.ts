@@ -8,11 +8,11 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
-import {IInstanceSnapshot} from "../backend/TyrionAPI";
-import {IMyDpOptions} from "mydatepicker";
-import {BeckiValidators} from "../helpers/BeckiValidators";
-import * as moment from "moment";
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { IInstanceSnapshot } from '../backend/TyrionAPI';
+import { IMyDpOptions } from 'mydatepicker';
+import { BeckiValidators } from '../helpers/BeckiValidators';
+import * as moment from 'moment';
 
 export class ModalsSnapShotDeployModel extends ModalModel {
     constructor(

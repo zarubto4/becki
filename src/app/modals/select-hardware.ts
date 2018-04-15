@@ -10,6 +10,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IHardware, IHardwareList, IHardwareType } from '../backend/TyrionAPI';
+import {Subscription} from "rxjs/Rx";
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
@@ -32,6 +33,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     devicesFilter: IHardwareList = null;
     selectedList: { [id: string]: IHardware } = {};
+    projectsUpdateSubscription: Subscription;
 
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
 

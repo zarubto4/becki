@@ -311,7 +311,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 if (success) {
 
                     this.blockUI();
-
                     let version_id = this.bProgramVersion.id;
 
                     let interfaces: IInstanceSnapshotJsonFileInterface[] = [];
@@ -335,6 +334,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.refresh();
                     }).catch((reason) => {
                         this.fmError(this.translate('flash_snapshot_save_fail'), reason);
+                        this.unblockUI();
                     });
                 }
             });
