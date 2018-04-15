@@ -269,6 +269,28 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
         });
     }
 
+    onExtensionShiftUpClick(extension: ITariffExtension): void {
+        this.tyrionBackendService.tariffExtensionOrderUp(extension.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.refresh();
+            });
+    }
+
+    onExtensionShiftDownClick(extension: ITariffExtension): void {
+        this.tyrionBackendService.tariffExtensionOrderDown(extension.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.refresh();
+            });
+    }
+
     onExtensionActivateClick(extension: ITariffExtension): void {
         this.tyrionBackendService.tariffExtensionActivate(extension.id)
             .then(() => {

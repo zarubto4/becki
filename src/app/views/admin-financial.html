@@ -142,6 +142,14 @@
                                     <i class="fa fa-cog"></i>
                                 </button>
 
+                                <button *ngIf="!(extension.order_position == 1 || extension.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!extension.update_permission" (click)="onExtensionShiftUpClick(extension)">
+                                    <i class="fa fa-chevron-up"></i>
+                                </button>
+
+                                <button *ngIf="!(extensions.length == extension.order_position)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!extension.update_permission" (click)="onExtensionShiftDownClick(extension)">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+
                                 <button *ngIf="!extension.active" title="{{'label_active_extension'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!extension.update_permission" (click)="onExtensionActivateClick(extension)">
                                     <i class="fa fa-power-off"></i>
                                 </button>
