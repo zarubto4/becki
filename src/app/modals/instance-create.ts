@@ -9,6 +9,7 @@ import { ModalModel } from '../services/ModalService';
 import { IBProgramList, IHomerServerList } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
+import {AfterContentChecked, AfterViewInit} from "@angular/core/src/metadata/lifecycle_hooks";
 
 
 export class ModalsInstanceCreateModel extends ModalModel {
@@ -46,43 +47,48 @@ export class ModalsInstanceCreateComponent implements OnInit {
             'main_server_id': ['', [Validators.required]],
             'backup_server_id': [''],
         });
+
+
     }
 
     ngOnInit() {
+
         // Find Homer Server
-        this.tyrionBackendService.homerServersGetList(0, {
-            server_types : ['PRIVATE' , 'PUBLIC'],
-            project_id: this.modalModel.project_id
-        })
-            .then((value) => {
-                this.homerList = value;
-                this.servers_options = this.homerList.content.map((pv) => {
-
-                    let status = this.translationService.translateTable(pv.server_type, this, 'server_type');
-                    return {
-                        label: pv.name + ' (' + status + ')',
-                        value: pv.id,
-                    };
-                });
+        setTimeout(() => {
+            this.tyrionBackendService.homerServersGetList(0, {
+                server_types: ['PRIVATE', 'PUBLIC'],
+                project_id: this.modalModel.project_id
             })
-            .catch((reason) => {
-            });
+                .then((value) => {
+                    this.homerList = value;
+                    this.servers_options = this.homerList.content.map((pv) => {
 
-        // Find B_Programs
-        this.tyrionBackendService.bProgramGetByFilter(0, {
-            project_id: this.modalModel.project_id
-        })
-            .then((value) => {
-                this.bProgram = value;
-                this.bProgram_options = this.bProgram.content.map((pv) => {
-                    return {
-                        label: pv.name + '(' + pv.description + ')',
-                        value: pv.id,
-                    };
+                        let status = this.translationService.translateTable(pv.server_type, this, 'server_type');
+                        return {
+                            label: pv.name + ' (' + status + ')',
+                            value: pv.id,
+                        };
+                    });
+                })
+                .catch((reason) => {
                 });
+
+            // Find B_Programs
+            this.tyrionBackendService.bProgramGetByFilter(0, {
+                project_id: this.modalModel.project_id
             })
-            .catch((reason) => {
-            });
+                .then((value) => {
+                    this.bProgram = value;
+                    this.bProgram_options = this.bProgram.content.map((pv) => {
+                        return {
+                            label: pv.name + '(' + pv.description + ')',
+                            value: pv.id,
+                        };
+                    });
+                })
+                .catch((reason) => {
+                });
+        }, 100);
     }
 
 

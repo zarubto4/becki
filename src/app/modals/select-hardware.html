@@ -19,7 +19,11 @@
                 <ng-container *ngFor="let device of devicesFilter.content;">
                     <tr [class.success]="selectedList[device.id]">
                         <td class="vert-align">
-                            <strong>{{device.name?device.name:device.id}}</strong>
+
+                            <a (click)="!selectedList[device.id] ? onAddToList(device) : onRemoveFromList(device)" class="no-wrap">
+                                <strong *ngIf="device.name && device.name != 'null'">{{device.name}}</strong>
+                                <strong *ngIf="!device.name || device.name == 'null' ">{{device.full_id}}</strong>
+                            </a>
                         </td>
                         <td class="vert-align">{{device.id.substr(0,13)}}</td>
                         <td class="vert-align text-center">

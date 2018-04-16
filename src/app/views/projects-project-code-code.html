@@ -91,16 +91,16 @@
             <div *ngIf="codeProgramVersions && codeProgramVersions.length > 0"  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
-                    <tr>
-                        <th class="">{{'table_name'|bkTranslate:this}}</th>
-                        <th *ngIf="!projectId"></th>
-                        <th class="">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="">{{'table_lib_version'|bkTranslate:this}}</th>
-                        <th class="">{{'table_author'|bkTranslate:this}}</th>
-                        <th class="">{{'table_status'|bkTranslate:this}}</th>
-                        <th class=""></th>
-                        <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                    </tr>
+                        <tr>
+                            <th class="">{{'table_name'|bkTranslate:this}}</th>
+                            <th *ngIf="!projectId"></th>
+                            <th class="">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="">{{'table_lib_version'|bkTranslate:this}}</th>
+                            <th class="">{{'table_author'|bkTranslate:this}}</th>
+                            <th class="">{{'table_status'|bkTranslate:this}}</th>
+                            <th class=""></th>
+                            <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let version of codeProgramVersions">
@@ -113,11 +113,11 @@
                         </td>
 
                         <!-- Main Mark - Only for settings for Type of Board, If C program is not for user projects -->
-                        <td *ngIf="!projectId" class="vert-align no-wrap">
-                                 <span class="icon-hint-wraper green" *ngIf="version.main_mark">
-                                        <i class="fa fa-lg fa-flag font-green-jungle"></i>
-                                        <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
-                                </span>
+                        <td *ngIf="!projectId" class="vert-align">
+                             <span class="icon-hint-wraper green" *ngIf="version.main_mark">
+                                  <i class="fa fa-lg fa-flag font-green-jungle"></i>
+                                  <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                             </span>
                         </td>
 
                         <!-- Description -->
@@ -136,7 +136,7 @@
                             <span *ngIf="!version.author">No One</span>
                         </td>
                         <!-- STATUS -->
-                        <td class="vert-align no-wrap">
+                        <td class="vert-align">
                             <bk-compilation-status-component [status]="version.status"></bk-compilation-status-component>
                             <bk-compilation-status-component [status]="version.approval_state"></bk-compilation-status-component>
                         </td>
@@ -148,7 +148,7 @@
                             </button>
                         </td>
 
-                        <!-- ACTIONS -->
+                        <!-- ACTIONS -->48ia97h
                         <td class="vert-align text-right no-wrap">
 
                             <style type="text/css">
