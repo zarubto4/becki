@@ -49,28 +49,29 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
 
     ngOnInit() {
 
-        // console.log('URL: ', this.modalModel.homer_server.server_url);
-        // console.log('PORT: ', this.modalModel.homer_server.rest_api_port);
-        // console.log('http://' + this.modalModel.homer_server.server_url + (this.modalModel.homer_server.rest_api_port !== null  ? `:` + this.modalModel.homer_server.rest_api_port : ``) + `/v1` + `/versions/available_versions`);
-        this.tyrionBackendService.serverServerGetListAvailableVersions(this.modalModel.homer_server)
-            .then((versions: IAvailableVersion[]) => {
-                this.options_available_version = versions.map((version) => {
-                    return {
-                        label: version.tag,
-                        value: version.tag
-                    };
+        console.info('URL: ', this.modalModel.homer_server.server_url);
+        console.info('PORT: ', this.modalModel.homer_server.rest_api_port);
+        console.info('http://' + this.modalModel.homer_server.server_url + (this.modalModel.homer_server.rest_api_port !== null  ? `:` + this.modalModel.homer_server.rest_api_port : ``) + `/v1` + `/versions/available_versions`);
+        setTimeout(() => {
+            this.tyrionBackendService.serverServerGetListAvailableVersions(this.modalModel.homer_server)
+                .then((versions: IAvailableVersion[]) => {
+                    this.options_available_version = versions.map((version) => {
+                        return {
+                            label: version.tag,
+                            value: version.tag
+                        };
+                    });
+                })
+                .catch((reason) => {
+                    console.error(reason);
+                    this.onCancelClick();
                 });
-            })
-            .catch((reason) => {
-                console.error(reason);
-                this.onCancelClick();
-            });
+        }, 100);
     }
 
     onSubmitClick(): void {
 
         // TODO zpracování času [TZ]
-
         this.tyrionBackendService.homerServerUpdateToNewVersion(this.modalModel.homer_server, {
             tag: this.form.controls['selected_version'].value,
             time: 0
