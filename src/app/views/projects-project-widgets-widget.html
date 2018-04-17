@@ -221,7 +221,7 @@
                                 <th></th>
                                 <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </thead>
-                        <tbody>
+                        <tbody class="hide-bk-drob-down-button">
                             <tr *ngFor="let version of widget.versions">
                                 <td class="vert-align no-wrap" [class.bold]="selectedWidgetVersion && (selectedWidgetVersion.id == version.id)">
                                     <a (click)="onWidgetVersionClick(version)"> {{version.name}}
@@ -255,17 +255,6 @@
                                     </span>
                                 </td>
                                 <td class="vert-align no-wrap text-right">
-
-                                    <style type="text/css">
-                                        table tr button {
-                                            opacity: 0.05;
-                                        }
-
-                                        table tr:hover button {
-                                            opacity: 1
-                                        }
-                                    </style>
-
                                     <!-- Buttons for Users for Community publishing  -->
                                     <button *ngIf="project && !version.approval_state" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
                                             (click)="onCommunityPublicVersionClick(version)">

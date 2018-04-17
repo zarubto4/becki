@@ -54,18 +54,13 @@
                         <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let code of cPrograms.content">
 
                         <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
                         <td class="vert-align">{{code.description}}</td>
                         <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
 
                             <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.update_permission" (click)="onCProgramEditClick(code)">
                                 <i class="fa fa-cog"></i>
@@ -114,11 +109,6 @@
                         <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
                         <td class="vert-align no-wrap text-right">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-
                             <!-- No buttons ?-->
                         </td>
                     </tr>
@@ -150,7 +140,7 @@
                         <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let library of libraries.content">
 
                         <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{library.name}}</a></td>
@@ -159,11 +149,6 @@
                             <a *ngFor="let type of library.hardware_types" (click)="onHardwareTypeClick(type.id)">{{type.name}}, </a>
                         </td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
 
                             <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission" (click)="onLibraryEditClick(library)">
                                 <i class="fa fa-cog"></i>
@@ -214,12 +199,6 @@
                             <a *ngFor="let type of library.hardware_types" (click)="onHardwareTypeClick(type.id)">{{type.name}}, </a>
                         </td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-
                         </td>
                     </tr>
                     </tbody>

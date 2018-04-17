@@ -120,7 +120,7 @@
                             <th class="center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let login_token of login_tokens">
                             <td class="vert-align">
                                 <span *ngIf="login_token.where_logged == 'BECKI_WEBSITE'">Byzance Portal</span>
@@ -130,11 +130,6 @@
                             <td class="vert-align no-wrap">{{login_token.access_age|bkUnixTimeToDate}}</td>
 
                             <td class="vert-align text-right no-wrap">
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
-
                                 <button *ngIf="login_token.delete_permission" title="{{'label_token_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onLoginTokenDeleteClick(login_token)">
                                     <i class="fa fa-trash"></i>
                                 </button>

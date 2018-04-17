@@ -169,7 +169,7 @@
                             <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let version of codeProgramVersions">
 
                             <!-- NAME -->
@@ -217,18 +217,6 @@
 
                             <!-- ACTIONS -->
                             <td class="vert-align text-right no-wrap">
-
-                                <style type="text/css">
-                                    table tr button {
-                                        opacity: 0.05;
-                                    }
-
-                                    table tr:hover button {
-                                        opacity: 1
-                                    }
-                                </style>
-
-
                                 <a *ngIf="version.download_link_bin_file" href="{{version.download_link_bin_file}}">
                                     <button title="{{'label_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
                                         <i class="fa fa-cloud-download"></i>

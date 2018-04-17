@@ -32,7 +32,7 @@
                     <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let bug of bugs">
 
                     <td class="no-wrap bold vert-align">
@@ -45,17 +45,30 @@
 
                     <td class="no-wrap text-right vert-align">
 
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                            [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_report_bug'|bkTranslate:this),
+                                    btn_tag: 'report_bug',
+                                    icon: 'fa-share',
+                                    colorType: 'ADD',
+                                    permission: (bug.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_bug'|bkTranslate:this),
+                                    btn_tag: 'remove_bug',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (bug.delete_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, bug)"
+                        >
+                        </bk-drob-down-button>
 
-                        <button title="{{'label_report_bug'|bkTranslate}}" (click)="onReportBug(bug)" class="btn btn-icon-only blue">
-                            <i class="fa fa-share"></i>
-                        </button>
-                        <button title="{{'label_remove_bug'|bkTranslate}}" (click)="onDeleteBug(bug)" class="btn btn-icon-only red">
-                            <i class="fa fa-trash"></i>
-                        </button>
                     </td>
                 </tr>
                 </tbody>

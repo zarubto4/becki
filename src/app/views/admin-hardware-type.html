@@ -103,7 +103,7 @@
                     </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let device of boardsFiler.content">
                         <template [ngIf]="device">
                             <td class="vert-align no-wrap">
@@ -122,10 +122,6 @@
                             <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
                             <td class="vert-align no-wrap"><bk-online-state [online_state]="device.online_state"></bk-online-state></td>
                             <td class="vert-align no-wrap">
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
                                 <button title="{{'label_print_stickers'|bkTranslate:this}}" class="btn btn-icon-only yellow" (click)="onPrintLabelHardwareClick(device)">
                                     <i class="fa fa-print"></i>
                                 </button>
@@ -170,7 +166,7 @@
                         <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let hardwareType of hardwareTypes">
                         <td class="vert-align no-wrap">
                             <a (click)="onHardwareTypeClick(hardwareType.id)" class="no-wrap"><strong>{{hardwareType.name}}</strong></a>
@@ -196,10 +192,6 @@
                         </td>
 
                         <td class="vert-align text-right no-wrap">
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
                             <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!hardwareType.update_permission" (click)="onHardwareTypeEditClick(hardwareType)">
                                 <i class="fa fa-cog"></i>
                             </button>
@@ -236,7 +228,7 @@
                         <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let producer of producers">
                         <td class="vert-align no-wrap">
                             <a (click)="onProducerClick(producer.id)" class="no-wrap"><strong>{{producer.name}}</strong></a>
@@ -245,10 +237,6 @@
                             {{producer.description}}
                         </td>
                         <td class="vert-align text-right no-wrap">
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
                             <button title="{{'label_producer_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!producer.update_permission" (click)="onProducerEditClick(producer)">
                                 <i class="fa fa-cog"></i>
                             </button>
@@ -286,7 +274,7 @@
                             <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let processor of processors">
                             <td class="vert-align no-wrap">
                                 <strong>{{processor.name}}</strong>
@@ -298,10 +286,6 @@
                                 {{processor.speed}}
                             </td>
                             <td class="vert-align text-right no-wrap">
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
                                 <button title="{{'label_processor_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!processor.update_permission" (click)="onProcessorEditClick(processor)">
                                     <i class="fa fa-cog"></i>
                                 </button>

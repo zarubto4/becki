@@ -53,22 +53,11 @@
                             <th class=" text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let library of libraries">
                             <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
                             <td class="vert-align no-wrap">{{library.description}}</td>
                             <td class="vert-align no-wrap text-right">
-
-                                <style type="text/css">
-                                    table tr button {
-                                        opacity: 0.05;
-                                    }
-
-                                    table tr:hover button {
-                                        opacity: 1
-                                    }
-                                </style>
-
                                 <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission"
                                     (click)="onEditClick(library)">
                                 <i class="fa fa-cog"></i>
@@ -108,7 +97,7 @@
                         <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let library of publicLibraries.content">
                         <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
                         <td class="vert-align">{{library.description}}</td>
@@ -116,11 +105,6 @@
                             <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeClick(board.id)">{{board.name}}, </a>
                         </td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
                             <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(library)">
                                 <i class="fa fa-clone"></i>
                             </button>

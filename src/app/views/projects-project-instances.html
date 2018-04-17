@@ -41,7 +41,7 @@
                         <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let instance of instanceFilter.content">
 
                         <td class="vert-align no-wrap bold">
@@ -57,17 +57,6 @@
                             <bk-online-state [online_state]="instance.online_state"></bk-online-state>
                         </td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
-
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
                             <button title="{{'label_instance_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!instance.update_permission" (click)="onInstanceEditClick(instance)">
                                 <i class="fa fa-cog"></i>
                             </button>

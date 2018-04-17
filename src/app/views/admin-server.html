@@ -61,7 +61,7 @@
                         <th class="text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let homer_server of homer_servers.content">
                         <td class="vert-align no-wrap">
                             <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.name?homer_server.name:homer_server.id}}</strong></a>
@@ -84,10 +84,6 @@
                         </td>
 
                         <td class="text-right vert-align no-wrap">
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
                             <button title="{{'label_server_udpate'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!homer_server.update_permission" (click)="onHomerServerUpdateServer(homer_server)">
                                 <i class="fa fa-cog"></i>
                             </button>
@@ -127,7 +123,7 @@
                         <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let compilations_server of compilations_servers">
 
                         <td class="vert-align no-wrap">
@@ -143,10 +139,6 @@
                         </td>
 
                         <td class="vert-align text-right no-wrap">
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
                             <button title="{{'label_server_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!compilations_server.update_permission" (click)="onCompilationServerEditClick(compilations_server)">
                                 <i class="fa fa-cog"></i>
                             </button>

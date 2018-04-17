@@ -30,7 +30,7 @@
                     <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let role of securityRole">
 
                     <td class="vert-align no-wrap">
@@ -42,10 +42,6 @@
                     </td>
 
                     <td class="vert-align text-right no-wrap">
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
                         <button title="{{'label_role_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!role.update_permission" (click)="onRoleEditClick(role)">
                             <i class="fa fa-cog"></i>
                         </button>

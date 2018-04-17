@@ -90,16 +90,12 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
     }
 
     getConditionSize(): number {
-
-        console.info('BeckiDrobDownButtonComponent: Size of buttons', this.btns.length);
         let count = 0;
         for (let i = 0; i < this.btns.length; i++) {
             if (this.btns[i].condition === true) {
                 count++;
             }
         }
-
-        console.info('BeckiDrobDownButtonComponent: Return', count);
         return count;
     }
 

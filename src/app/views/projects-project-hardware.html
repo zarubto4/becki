@@ -83,7 +83,7 @@
                         <th class="text-right margin-right-15" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let device of devicesFilter.content">
 
                         <td class="vert-align">
@@ -135,16 +135,6 @@
                             <bk-online-state [online_state]="device.online_state"></bk-online-state>
                         </td>
                         <td class="vert-align text-right no-wrap">
-
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
                             <button title="{{'label_hardware_group'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
                                     [disabled]="!device.update_permission"
                                     (click)="onDeviceEditGroupClick(device)">
@@ -193,7 +183,7 @@
                         <th class="text-right" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let group of deviceGroup.content">
 
                         <td class="vert-align no-wrap">{{group.name}}</td>
@@ -214,17 +204,6 @@
                         </td>
 
                         <td class="vert-align text-right no-wrap">
-
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
-
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
                             <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
                                     [disabled]="!group.update_permission"
                                     (click)="onGroupEditClick(group)">
@@ -274,7 +253,7 @@
                             <th class="vert-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let procedure of actualizationFilter.content">
                             <td class="vert-align">
                                 <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', procedure.id]">{{procedure.id.substr(0, 12)}}</a>
@@ -316,15 +295,6 @@
                             </td>
 
                             <td class="vert-align text-right">
-                                <style type="text/css">
-                                    table tr button {
-                                        opacity: 0.05;
-                                    }
-
-                                    table tr:hover button {
-                                        opacity: 1
-                                    }
-                                </style>
                                 <button title="{{'label_change_update_parameters'|bkTranslate:this}}" class="btn btn-icon-only blue"
                                         [disabled]="!procedure.update_permission"
                                         (click)="onUpdateProcedureUpdateClick(procedure)">

@@ -82,18 +82,12 @@
                         <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody lass="hide-bk-drob-down-button">
                     <tr *ngFor="let ticket of tickets.content">
 
                         <td class="vert-align no-wrap bold"><a (click)="onTicketClick(ticket)">name</a></td>
                         <td class="vert-align">description</td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-
                         </td>
                     </tr>
                     </tbody>

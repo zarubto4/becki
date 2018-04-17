@@ -220,7 +220,7 @@
                         <th class="vert-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let procedure of instance.current_snapshot.updates">
                         <td class="vert-align">
                             <a class="bold" (click)="onActualizationProcedureClick(procedure.id)">{{procedure.id.substr(0, 12)}}</a>
@@ -242,15 +242,7 @@
                         </td>
 
                         <td class="vert-align text-right">
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
 
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
                             <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
                                     [disabled]="!procedure.update_permission"
                                     (click)="onUpdateProcedureCancelClick(procedure)">
@@ -533,7 +525,7 @@
                                 <th class="text-right margin-right-15" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="hide-bk-drob-down-button">
                             <tr *ngFor="let program of m_project.grid_programs">
 
                                 <td class="vert-align no-wrap"><a (click)="onGridProgramClick(m_project.grid_project.id, program.grid_program.id)">{{program.grid_program.name}}</a></td>
@@ -551,15 +543,6 @@
 
 
                                 <td class="vert-align text-right no-wrap">
-
-                                    <style type="text/css">
-                                        table tr button {
-                                            opacity: 0.05;
-                                        }
-                                        table tr:hover button {
-                                            opacity: 1
-                                        }
-                                    </style>
 
                                     <button title="{{'label_edit_grid_app'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
                                             [disabled]="!program.update_permission"
@@ -607,7 +590,7 @@
                         <th class="text-right">{{'table_actions'|bkTranslate:this}}   </th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let snapshot of instance.snapshots">
                         <td class="vert-align">{{snapshot.name}}
                             <i *ngIf="instance.current_snapshot && snapshot.id === instance.current_snapshot.id" class="fa fa-fw fa-cloud font-color-cloud margin-left-15"></i>
@@ -616,13 +599,6 @@
                         <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a></td>
                         <td class="vert-align">{{snapshot.b_program_version.description}}</td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-
-
                             <button title="{{'label_blocko_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!snapshot.update_permission" (click)="onEditSnapShotClick(snapshot)">
                                 <i class="fa fa-cog"></i>
                             </button>

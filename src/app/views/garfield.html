@@ -35,7 +35,7 @@
                     <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let garfield of garfield_s">
                     <td class="vert-align no-wrap">
                         <a (click)="onGarfieldClick(garfield.id)" class="no-wrap"><strong>{{garfield.name}}</strong></a>
@@ -50,10 +50,6 @@
                     <td class="vert-align no-wrap">{{garfield.hardware_tester_id}}</td>
 
                     <td class="vert-align text-right no-wrap">
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
                         <button title="{{'label_garfield_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!garfield.update_permission" (click)="onEditGarfield(garfield)">
                             <i class="fa fa-cog"></i>
                         </button>

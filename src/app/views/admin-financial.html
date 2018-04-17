@@ -57,7 +57,7 @@
                         <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let tariff of tariffs">
 
                         <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
@@ -68,10 +68,34 @@
                         <td class="vert-align">{{tariff.description}}</td>
                         <td class="vert-align no-wrap text-right">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
+
+                            <!--Dodelat dropdown menu-->
+
+
+                            <!--<bk-drob-down-button-->
+                                <!--[btns_group_name]="('label_Project_Properties'|bkTranslate:this)"-->
+                                <!--[btns] = "[-->
+                                <!--{-->
+                                    <!--condition: true,-->
+                                    <!--btn_label_for_person: ('label_tariff_edit_properties'|bkTranslate:this),-->
+                                    <!--btn_tag: 'edit_tariff',-->
+                                    <!--icon: 'fa-cog',-->
+                                    <!--colorType: 'EDIT',-->
+                                    <!--permission: (!tariff.update_permission)-->
+                                <!--},-->
+                                <!--{-->
+                                    <!--condition: true,-->
+                                    <!--btn_label_for_person: ('label_change_order'|bkTranslate:this),-->
+                                    <!--btn_tag: 'remove_project',-->
+                                    <!--icon: 'fa-trash',-->
+                                    <!--colorType: 'REMOVE',-->
+                                    <!--permission: (project.delete_permission && project.active)-->
+                                <!--}-->
+                            <!--]"-->
+                                <!--(onValueChanged)="onDrobDownEmiter($event, project)"-->
+                            <!--&gt;-->
+                            <!--</bk-drob-down-button>-->
+                            
 
                             <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
                                 <i class="fa fa-cog"></i>
@@ -124,7 +148,7 @@
                             <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let extension of extensions">
 
                             <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
@@ -134,11 +158,6 @@
                             </td>
                             <td class="vert-align">{{tariff.description}}</td>
                             <td class="vert-align no-wrap text-right">
-
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
 
                                 <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
                                     <i class="fa fa-cog"></i>

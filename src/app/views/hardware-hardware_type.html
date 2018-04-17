@@ -134,7 +134,7 @@
                             <th class="col col-lg-2 text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let bootloader of hardwareType.boot_loaders">
                             <td class="vert-align no-wrap"><strong>{{bootloader.id.substr(0,8)}}</strong> </td>
                             <!-- Main Mark - Only for settings for Type of Board -->
@@ -150,12 +150,6 @@
                             <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span *ngIf="bootloader.changing_note.length > 32">...</span></td>
 
                             <td class="vert-align text-right no-wrap">
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
-
-
                                 <a *ngIf="bootloader.file_path" href="{{bootloader.file_path}}">
                                     <button title="{{'label_bootloader_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
                                         <i class="fa fa-cloud-download"></i>
@@ -236,7 +230,7 @@
                                 <th class=" text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="hide-bk-drob-down-button">
                             <tr *ngFor="let version of hardwareType.main_c_program.program_versions">
                                 <!-- NAME -->
                                 <td class="no-wrap vert-align bold">
@@ -267,16 +261,6 @@
 
                                 <!-- ACTIONS -->
                                 <td class="vert-align text-right no-wrap">
-                                    <style type="text/css">
-                                        table tr button {
-                                            opacity: 0.05;
-                                        }
-
-                                        table tr:hover button {
-                                            opacity: 1
-                                        }
-                                    </style>
-
                                     <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                             (click)="onEditVersionClick(version)">
                                         <i class="fa fa-cog"></i>
@@ -354,7 +338,7 @@
                                 <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="hide-bk-drob-down-button">
                             <tr *ngFor="let version of hardwareType.main_test_c_program.program_versions">
                                 <!-- NAME -->
                                 <td class="vert-align bold no-wrap">
@@ -385,16 +369,6 @@
 
                                 <!-- ACTIONS -->
                                 <td class="vert-align text-right no-wrap">
-                                    <style type="text/css">
-                                        table tr button {
-                                            opacity: 0.05;
-                                        }
-
-                                        table tr:hover button {
-                                            opacity: 1
-                                        }
-                                    </style>
-
                                     <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                             (click)="onEditVersionClick(version)">
                                         <i class="fa fa-cog"></i>
@@ -446,7 +420,7 @@
                         <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let batch of hardwareType.batchs">
 
                         <!-- NAME -->
@@ -478,15 +452,6 @@
 
                         <!-- ACTIONS -->
                         <td class="vert-align text-right no-wrap">
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
-
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
 
                             <button *ngIf="hardwareType.update_permission" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
                                     (click)="onEditRevisionClick(batch)">

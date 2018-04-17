@@ -52,6 +52,7 @@
     padding: 0 5px;
 }
 
+
 .btn-facebook:hover,
 .btn-facebook:focus,
 .btn-facebook:active,
@@ -2710,4 +2711,20 @@ textarea.form-control {
 
 .bk-table-scrollable{
     overflow-y:scroll;
+}
+
+.hide-bk-drob-down-button tr bk-drob-down-button{
+    opacity:0.05;
+}
+
+.hide-bk-drob-down-button tr:hover bk-drob-down-button{
+    opacity:1;
+}
+
+.hide-bk-drob-down-button tr button{
+    opacity:0.05;
+}
+
+.hide-bk-drob-down-button tr button:hover{
+    opacity:1;
 }

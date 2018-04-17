@@ -57,17 +57,15 @@
                             <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let code of privatePrograms.content">
                             <td class="vert-align no-wrap"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
                             <td class="vert-align">{{code.description}}</td>
                             <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a></td>
                             <td class="vert-align no-wrap text-right">
 
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
+
+
 
                                 <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!code.update_permission" (click)="onEditClick(code)">
                                     <i class="fa fa-cog"></i>
@@ -75,6 +73,8 @@
                                 <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
                                     <i class="fa fa-trash"></i>
                                 </button>
+
+
                             </td>
                         </tr>
                     </tbody>
@@ -106,17 +106,12 @@
                         <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let code of publicPrograms.content">
                         <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
                         <td class="vert-align">{{code.description}}</td>
                         <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a></td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
                             <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(code)">
                                 <i class="fa fa-clone"></i>
                             </button>

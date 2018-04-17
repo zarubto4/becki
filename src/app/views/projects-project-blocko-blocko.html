@@ -245,7 +245,7 @@
                                 <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="hide-bk-drob-down-button">
                             <tr *ngFor="let version of blockoProgramVersions">
                                 <td class="vert-align no-wrap" [class.bold]="selectedProgramVersion && selectedProgramVersion.id == version.id">
                                     <a (click)="onProgramVersionClick(version)">
@@ -264,15 +264,6 @@
 
 
                                 <td class="vert-align no-wrap text-right">
-
-                                    <style type="text/css">
-                                        table tr button {
-                                            opacity: 0.05;
-                                        }
-                                        table tr:hover button {
-                                            opacity: 1
-                                        }
-                                    </style>
 
                                     <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                             (click)="onEditVersionClick(version)">
