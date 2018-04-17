@@ -10,7 +10,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
     /* tslint:disable */
     template: `
 
-        <div *ngIf="btns && getConditionSize() > 0" 
+        <div *ngIf="btns && getConditionSize() > 0"
              class="btn-group"
              [class.open]="drob_down_clicked"
              [class.color-hardware]="group_color === 'HARDWARE'"
