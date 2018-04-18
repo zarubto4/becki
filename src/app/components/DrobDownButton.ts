@@ -10,7 +10,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
     /* tslint:disable */
     template: `
 
-        <div *ngIf="btns && getConditionSize() > 0"
+        <div *ngIf="btns && getConditionSize() > 0" style="z-index: 5000;  overflow: visible"
              class="btn-group"
              [class.open]="drob_down_clicked"
              [class.color-hardware]="group_color === 'HARDWARE'"
@@ -29,10 +29,12 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
                 {{btns_group_name}}
                 <i class="fa fa-angle-down"></i>
             </a>
-            <ul *ngIf="btns && btns.length > 0" class="dropdown-menu pull-right">
+            <ul *ngIf="btns && btns.length > 0" class="dropdown-menu pull-right" style="z-index: 5000; overflow: visible">
 
                 <li *ngFor="let btn of btns; let last = last" [class.devider]="btn.btn_space">
-                    <a *ngIf="!btn.btn_space"
+
+                    <!-- Only if not a external link link !-->
+                    <a *ngIf="!btn.btn_space && !btn.btn_link"
                        (click)="onButtonClick(btn.btn_tag)"
                        [class.hidden]="btn.condition == false || btn.permission == false">
                         <i *ngIf="btn.icon" 
@@ -45,8 +47,26 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
                            [class.font-grey-cascade]="btn.colorType == '' || btn.colorType == null"
                         ></i> {{btn.btn_label_for_person}}
                     </a>
+
+
+                    <!-- Only if its a external link - Stupid but easy to write !-->
+                    <a *ngIf="!btn.btn_space && btn.btn_link"
+                        href="{{btn.btn_link}}" target="_blank"
+                        [class.hidden]="btn.condition == false || btn.permission == false">
+                        <i *ngIf="btn.icon"
+                           class="fa {{btn.icon}}"
+                           [class.font-red-sunglo]="btn.colorType=='REMOVE'"
+                           [class.font-yellow-crusta]="btn.colorType=='EDIT' || btn.colorType=='UPDATE'"
+                           [class.font-blue-madison]="btn.colorType=='ACTIVE'"
+                           [class.font-purple-plum]="btn.colorType=='DEACTIVE'"
+                           [class.font-blue]="btn.colorType=='ADD' || btn.colorType=='CREATE'"
+                           [class.font-grey-cascade]="btn.colorType == '' || btn.colorType == null"
+                        ></i> {{btn.btn_label_for_person}}
+                    </a>
+
+                    <!-- TODO SPACE !-->
+                    
                 </li>
-                
             </ul>
         </div>
 `
@@ -90,12 +110,16 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
     }
 
     getConditionSize(): number {
+
+        // console.info('BeckiDrobDownButtonComponent: Size of buttons', this.btns.length);
         let count = 0;
         for (let i = 0; i < this.btns.length; i++) {
             if (this.btns[i].condition === true) {
                 count++;
             }
         }
+
+        // console.info('BeckiDrobDownButtonComponent: Return', count);
         return count;
     }
 

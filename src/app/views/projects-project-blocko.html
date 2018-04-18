@@ -44,12 +44,31 @@
                     <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(blocko.id)">{{blocko.name}}</a></td>
                     <td class="vert-align">{{blocko.description}}</td>
                     <td class="vert-align no-wrap text-right">
-                        <button title="{{'label_blocko_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blocko.update_permission" (click)="onEditClick(blocko)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_blocko_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!blocko.delete_permission" (click)="onRemoveClick(blocko)">
-                            <i class="fa fa-trash"></i>
-                        </button>
+
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_blocko_program_properties'|bkTranslate:this)"
+                            [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_blocko_program_properties'|bkTranslate:this),
+                                    btn_tag: 'blocko_program_properties',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (blocko.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_blocko_remove'|bkTranslate:this),
+                                    btn_tag: 'blocko_remove',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (blocko.delete_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, blocko)"
+                        >
+                        </bk-drob-down-button>
+
                     </td>
                 </tr>
                 </tbody>

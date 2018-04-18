@@ -80,9 +80,22 @@
                         <td class="vert-align no-wrap">{{person.email}}</td>
                         <td class="vert-align text-right no-wrap">
 
-                            <button title="{{'label_person_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!securityRole.update_permission" (click)="onMemberDeleteClick(person)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_person_remove'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_person_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_person',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (securityRole.update_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, person)"
+                            >
+                            </bk-drob-down-button>
+
                         </td>
                     </tr>
                     </tbody>
@@ -117,13 +130,29 @@
                         <td class="vert-align no-wrap"> {{permission.description}}</td>
                         <td class="vert-align text-right no-wrap">
 
-                            <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!permission.update_permission" (click)="onPermissionEditClick(permission)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_person_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!permission.delete_permission" (click)="onPermissionDeleteClick(permission)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_type_of_board_properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_type_of_board_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_permission',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (permission.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_person_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_permission',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (permission.update_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, permission)"
+                            >
+                            </bk-drob-down-button>
                     </tr>
                     </tbody>
                 </table>

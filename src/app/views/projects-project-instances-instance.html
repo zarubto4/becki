@@ -243,11 +243,30 @@
 
                         <td class="vert-align text-right">
 
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_cancel_update'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_cancel_update'|bkTranslate:this),
+                                    btn_tag: 'cancel_update_procedure',
+                                    icon: 'fa-cog',
+                                    colorType: 'UPDATE',
+                                    permission: (procedure.update_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiterProcedure($event, procedure)"
+                            >
+                            </bk-drob-down-button>
+
+
                             <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
                                     [disabled]="!procedure.update_permission"
                                     (click)="onUpdateProcedureCancelClick(procedure)">
                                 <i class="fa fa-trash"></i>
                             </button>
+
+
                         </td>
                     </tr>
                     </tbody>
@@ -544,11 +563,22 @@
 
                                 <td class="vert-align text-right no-wrap">
 
-                                    <button title="{{'label_edit_grid_app'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
-                                            [disabled]="!program.update_permission"
-                                            (click)="onGridProgramPublishClick(m_project, program)">
-                                        <i class="fa fa-cogs"></i>
-                                    </button>
+                                    <bk-drob-down-button
+                                        [btns_group_name]="('label_edit_grid_app'|bkTranslate:this)"
+                                        [btns] = "[
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_edit_grid_app'|bkTranslate:this),
+                                                btn_tag: 'edit_grid_app',
+                                                icon: 'fa-cogs',
+                                                colorType: 'EDIT',
+                                                permission: (program.update_permission)
+                                            }
+                                        ]"
+                                                    (onValueChanged)="onDrobDownEmiter($event, program)"
+                                    >
+                                    </bk-drob-down-button>
+
                                 </td>
 
                             </tr>
@@ -599,13 +629,30 @@
                         <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a></td>
                         <td class="vert-align">{{snapshot.b_program_version.description}}</td>
                         <td class="vert-align no-wrap text-right">
-                            <button title="{{'label_blocko_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!snapshot.update_permission" (click)="onEditSnapShotClick(snapshot)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_blocko_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!snapshot.delete_permission" (click)="onRemoveSnapShotClick(snapshot)">
-                                <i class="fa fa-trash"></i>
-                            </button>
 
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_blocko_program_properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_blocko_program_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_blocko_program',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (snapshot.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_blocko_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_blocko',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (snapshot.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, snapshot)"
+                            >
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>

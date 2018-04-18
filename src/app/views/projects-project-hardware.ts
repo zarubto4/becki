@@ -413,5 +413,38 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     }
 
+    onDrobDownEmiter(action: string, object: any): void {
+
+
+        if (action === 'edit_hardware_group') {
+            this.onDeviceEditGroupClick(object);
+        }
+
+        if (action === 'edit_hardware') {
+            this.onHardwareEditClick(object);
+        }
+
+        if (action === 'remove_hardware') {
+            this.onHardwareRemoveClick(object);
+        }
+
+        if (action === 'edit_project') {
+            this.onGroupEditClick(object);
+        }
+
+        if (action === 'edit_project') {
+            this.onGroupDeleteClick(object);
+        }
+
+        if (action === 'edit_project') {
+            this.onUpdateProcedureUpdateClick(object);
+        }
+
+        if (action === 'edit_project') {
+            this.onUpdateProcedureCancelClick(object);
+        }
+
+    }
+
 
 }

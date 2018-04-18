@@ -32,7 +32,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                         </span>
 
                         <!-- Only if its a external link - Stupid but easy to write !-->
-                        <a  *ngIf="element.btn_link" href="element.btn_link" target="_blank">
+                        <a  *ngIf="element.btn_link" href="{{element.btn_link}}" target="_blank">
                             <button *ngIf="element.condition" class="btn btn-sm"
                                     [class.red-sunglo]="element.colorType=='REMOVE'"
                                     [class.yellow-crusta]="element.colorType=='EDIT' || element.colorType=='UPDATE'"

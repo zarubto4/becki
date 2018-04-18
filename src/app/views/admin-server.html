@@ -25,7 +25,7 @@
                       }
                     ]"
         (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
+        [tab_selected_name]="tab"
         [tabBtns]="[
                         {
                             tab_name: 'homer_server',
@@ -48,7 +48,8 @@
 
         <div *ngIf="tab == 'homer_server'">
 
-            <div *ngIf="(homer_servers && homer_servers.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(homer_servers && homer_servers.content.length > 0)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
@@ -68,31 +69,55 @@
                         </td>
                         <td class="vert-align no-wrap">{{homer_server.id}}</td>
                         <td class="vert-align no-wrap">
-                            <span *ngIf="homer_server.server_type == 'MAIN'"     class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
-                            <span *ngIf="homer_server.server_type == 'BACKUP'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
-                            <span *ngIf="homer_server.server_type == 'PUBLIC'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
-                            <span *ngIf="homer_server.server_type == 'PRIVATE'"   class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
+                            <span *ngIf="homer_server.server_type == 'MAIN'" class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
+                            <span *ngIf="homer_server.server_type == 'BACKUP'" class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
+                            <span *ngIf="homer_server.server_type == 'PUBLIC'" class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
+                            <span *ngIf="homer_server.server_type == 'PRIVATE'" class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
                         </td>
                         <td class="vert-align no-wrap">
                             <a href="http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}" class="no-wrap"><strong>http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}</strong></a>
-                       </td>
+                        </td>
                         <td class="vert-align no-wrap">
-                            <a href="https://github.com/ByzanceIoT/homer-core/releases/tag/{{homer_server.server_version}}" class="no-wrap"><strong>{{homer_server.server_version}}</strong></a>
+                            <a href="https://github.com/ByzanceIoT/homer-core/releases/tag/{{homer_server.server_version}}"
+                               class="no-wrap"><strong>{{homer_server.server_version}}</strong></a>
                         </td>
                         <td class="vert-align no-wrap">
                             <bk-online-state [online_state]="homer_server.online_state"></bk-online-state>
                         </td>
 
                         <td class="text-right vert-align no-wrap">
-                            <button title="{{'label_server_udpate'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!homer_server.update_permission" (click)="onHomerServerUpdateServer(homer_server)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_server_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!homer_server.update_permission" (click)="onHomerServerEditClick(homer_server)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_delete_server'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!homer_server.de" (click)="onHomerServerDeleteClick(homer_server)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_server_udpate'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_server_udpate'|bkTranslate:this),
+                                    btn_tag: 'update_homer_server',
+                                    icon: 'fa-wrench',
+                                    colorType: 'UPDATE',
+                                    permission: (homer_server.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_server_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_homer_server',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (homer_server.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_delete_server'|bkTranslate:this),
+                                    btn_tag: 'remove_homer_server',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (homer_server.update_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, homer_server)"
+                            >
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>
@@ -113,14 +138,16 @@
 
         <div *ngIf="tab == 'compilation_server'">
 
-            <div *ngIf="(compilations_servers && compilations_servers.length > 0)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(compilations_servers && compilations_servers.length > 0)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'label_server_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'label_id'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'label_status'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;
+                        </th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -139,12 +166,29 @@
                         </td>
 
                         <td class="vert-align text-right no-wrap">
-                            <button title="{{'label_server_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!compilations_server.update_permission" (click)="onCompilationServerEditClick(compilations_server)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_delete_server'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!compilations_server.delete_permission" (click)="onCompilationServerDeleteClick(compilations_server)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_server_properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_server_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_compilations_server',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (compilations_server.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_delete_server'|bkTranslate:this),
+                                    btn_tag: 'remove_compilations_server',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (compilations_server.update_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, compilations_server)"
+                            >
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>

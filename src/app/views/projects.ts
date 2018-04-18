@@ -3,15 +3,15 @@
  * directory of this distribution.
  */
 
-import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
-import { _BaseMainComponent } from './_BaseMainComponent';
+import {Component, OnInit, Injector, OnDestroy} from '@angular/core';
+import {_BaseMainComponent} from './_BaseMainComponent';
 import {
     FlashMessageError, FlashMessageSuccess,
     FlashMessageInfo, FlashMessageWarning, FlashMessage
 } from '../services/NotificationService';
-import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsProjectPropertiesModel } from '../modals/project-properties';
-import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
+import {ModalsRemovalModel} from '../modals/removal';
+import {ModalsProjectPropertiesModel} from '../modals/project-properties';
+import {IApplicableProduct, IProject} from '../backend/TyrionAPI';
 
 
 @Component({
@@ -93,7 +93,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
         });
     }
 
-    onDrobDownEmiter (action: string, project: IProject): void {
+    onDrobDownEmiter(action: string, project: IProject): void {
         if (action === 'edit_project') {
             this.onEditClick(project);
         }
@@ -103,7 +103,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
         }
     }
 
-    onEditClick (project: IProject): void {
+    onEditClick(project: IProject): void {
         if (!this.products) {
             this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
         }

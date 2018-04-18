@@ -135,21 +135,40 @@
                             <bk-online-state [online_state]="device.online_state"></bk-online-state>
                         </td>
                         <td class="vert-align text-right no-wrap">
-                            <button title="{{'label_hardware_group'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
-                                    [disabled]="!device.update_permission"
-                                    (click)="onDeviceEditGroupClick(device)">
-                                <i class="fa fa-object-group"></i>
-                            </button>
-                            <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                    [disabled]="!device.update_permission"
-                                    (click)="onHardwareEditClick(device)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                    [disabled]="!device.delete_permission"
-                                    (click)="onHardwareRemoveClick(device)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+
+
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_hardware_group'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_hardware_group'|bkTranslate:this),
+                                    btn_tag: 'edit_hardware_group',
+                                    icon: 'fa-object-group',
+                                    colorType: 'UPDATE',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_device_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_hardware',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_device'|bkTranslate:this),
+                                    btn_tag: 'remove_hardware',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (device.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, device)"
+                            >
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>
@@ -204,16 +223,30 @@
                         </td>
 
                         <td class="vert-align text-right no-wrap">
-                            <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                    [disabled]="!group.update_permission"
-                                    (click)="onGroupEditClick(group)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                    [disabled]="!group.delete_permission"
-                                    (click)="onGroupDeleteClick(group)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_device_properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_device_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_device',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (group.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_device'|bkTranslate:this),
+                                    btn_tag: 'remove_device',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (group.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, group)"
+                            >
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>
@@ -295,16 +328,31 @@
                             </td>
 
                             <td class="vert-align text-right">
-                                <button title="{{'label_change_update_parameters'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                        [disabled]="!procedure.update_permission"
-                                        (click)="onUpdateProcedureUpdateClick(procedure)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                        [disabled]="!procedure.update_permission"
-                                        (click)="onUpdateProcedureCancelClick(procedure)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+
+
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_change_update_parameters'|bkTranslate:this)"
+                                    [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_change_update_parameters'|bkTranslate:this),
+                                    btn_tag: 'edit_project',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (procedure.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_cancel_update'|bkTranslate:this),
+                                    btn_tag: 'remove_project',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (procedure.delete_permission)
+                                }
+                            ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, project)"
+                                >
+                                </bk-drob-down-button>
 
                             </td>
                         </tr>

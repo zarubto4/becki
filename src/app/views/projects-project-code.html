@@ -25,7 +25,7 @@
                       }
                     ]"
         (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
+        [tab_selected_name]="tab"
         [tabBtns]="[
                         {
                             tab_name: 'my_programs',
@@ -47,39 +47,57 @@
     <div class="portlet-body">
 
         <div *ngIf="tab == 'my_programs'">
-            <div *ngIf="(privatePrograms && privatePrograms.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(privatePrograms && privatePrograms.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
-                        <tr>
-                            <th class="">{{'table_name'|bkTranslate:this}}</th>
-                            <th class="">{{'table_description'|bkTranslate:this}}</th>
-                            <th class=""> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                            <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class=""><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                        <tr *ngFor="let code of privatePrograms.content">
-                            <td class="vert-align no-wrap"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
-                            <td class="vert-align">{{code.description}}</td>
-                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a></td>
-                            <td class="vert-align no-wrap text-right">
+                    <tr *ngFor="let code of privatePrograms.content">
+                        <td class="vert-align no-wrap"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
+                        <td class="vert-align">{{code.description}}</td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a>
+                        </td>
+                        <td class="vert-align no-wrap text-right">
 
 
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                [btns]="[
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                            btn_tag: 'code_program_properties',
+                                            icon: 'fa-cog',
+                                            colorType: 'EDIT',
+                                            permission: (code.update_permission)
+                                        },
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_remove_code_program'|bkTranslate:this),
+                                            btn_tag: 'remove_code_program',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (code.delete_permission)
+                                        }
+                                    ]"
+                                (onValueChanged)="onDrobDownEmiter($event, code)"
+                            >
+                            </bk-drob-down-button>
 
-
-                                <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!code.update_permission" (click)="onEditClick(code)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-
-
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to" [total]="privatePrograms.total"  [totalPages]="privatePrograms.pages" (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to"
+                                          [total]="privatePrograms.total" [totalPages]="privatePrograms.pages"
+                                          (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
@@ -96,30 +114,48 @@
 
         <div *ngIf="tab == 'public_c_programs'">
 
-            <div *ngIf="(publicPrograms && publicPrograms.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(publicPrograms && publicPrograms.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;
+                        </th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let code of publicPrograms.content">
                         <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
                         <td class="vert-align">{{code.description}}</td>
-                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a></td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a>
+                        </td>
                         <td class="vert-align no-wrap text-right">
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(code)">
-                                <i class="fa fa-clone"></i>
-                            </button>
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                [btns] = "[
+                                    {
+                                        condition: true,
+                                        btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                        btn_tag: 'code_program_clone',
+                                        icon: 'fa-clone',
+                                        colorType: 'EDIT',
+                                        permission: (code.update_permission)
+                                    }
+                                ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, code)"
+                            >
+                                </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="publicPrograms.from" [to]="publicPrograms.to" [total]="publicPrograms.total"  [totalPages]="publicPrograms.pages" (onSelect)="onFilterPublicPrograms($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="publicPrograms.from" [to]="publicPrograms.to"
+                                          [total]="publicPrograms.total" [totalPages]="publicPrograms.pages"
+                                          (onSelect)="onFilterPublicPrograms($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->

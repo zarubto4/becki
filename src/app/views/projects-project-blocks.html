@@ -70,14 +70,30 @@
                         </td>
                         <td class="vert-align">{{block.description}}</td>
                         <td class="vert-align no-wrap">
-                            <button title="{{'label_block_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!block.update_permission"
-                                    (click)="onBlockEditClick(block)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_block_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!block.delete_permission"
-                                    (click)="onBlockDeleteClick(block)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_block_properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_block_properties'|bkTranslate:this),
+                                    btn_tag: 'block_properties',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_block_remove'|bkTranslate:this),
+                                    btn_tag: 'block_remove',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (block.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, block)"
+                            >
+                            </bk-drob-down-button>
 
                         </td>
                     </tr>
@@ -117,24 +133,54 @@
                         </td>
                         <td class="vert-align">{{block.description}}</td>
                         <td class="vert-align no-wrap">
-                            <button *ngIf="projectId && group.publish_type == 'public_program'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(block)">
-                                <i class="fa fa-clone"></i>
-                            </button>
-                            <button *ngIf="!projectId && !block.active" title="{{'label_active_group'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!block.update_permission" (click)="onBlockActivateClick(block)">
-                                <i class="fa fa-power-off"></i>
-                            </button>
-                            <button  *ngIf="!projectId && block.active" title="{{'label_deactive_group'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!block.update_permission" (click)="onBlockDeactivateClick(block)">
-                                <i class="fa fa-power-off"></i>
-                            </button>
 
-                            <button title="{{'label_block_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!block.update_permission"
-                                    (click)="onBlockEditClick(block)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_block_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!block.delete_permission"
-                                    (click)="onBlockDeleteClick(block)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: projectId && group.publish_type == 'public_program',
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'block_make_clone',
+                                    icon: 'fa-clone',
+                                    colorType: 'EDIT',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: !projectId && !block.active,
+                                    btn_label_for_person: ('label_active_group'|bkTranslate:this),
+                                    btn_tag: 'active_group',
+                                    icon: 'fa-power-off',
+                                    colorType: 'DEACTIVE',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: projectId && block.active,
+                                    btn_label_for_person: ('label_deactive_group'|bkTranslate:this),
+                                    btn_tag: 'deactive_group',
+                                    icon: 'fa-power-off',
+                                    colorType: 'ACTIVE',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_block_properties'|bkTranslate:this),
+                                    btn_tag: 'block_properties',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_block_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_project',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (block.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, block)"
+                            >
+                            </bk-drob-down-button>
 
                         </td>
                     </tr>

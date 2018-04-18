@@ -8,6 +8,7 @@ import {
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
     ISwaggerInstanceSnapShotConfigurationProgram, ISwaggerInstanceSnapShotConfiguration,
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
+    IUpdateProcedure
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -845,5 +846,30 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
         });
     }
+
+    // TODO: onGridProgramPublishClick 2 args
+
+    onDrobDownEmiter(action: string, object: any): void {
+
+
+        // if (action === 'edit_grid_app') {
+        //     this.onGridProgramPublishClick(object);
+        // }
+        if (action === 'edit_blocko_program') {
+            this.onEditSnapShotClick(object);
+        }
+
+        if (action === 'remove_blocko') {
+            this.onRemoveSnapShotClick(object);
+        }
+    }
+
+    // TODO: finish onDrobDownEmiterProcedure!!!!!
+
+    // onDrobDownEmiterProcedure(action: string, procedure: IUpdateProcedure){
+    //     if (action === 'cancel_update_procedure') {
+    //         this.onUpdateProcedureCancelClick(procedure);
+    //     }
+    // }
 }
 

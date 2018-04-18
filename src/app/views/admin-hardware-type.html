@@ -14,6 +14,7 @@
                           btn_label_for_person: ('btn_label_create_manually_hardware'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'EDIT',
+                          permission: true,
                           btn_tag: 'add_hardware'
                       },
                        {
@@ -21,6 +22,7 @@
                           btn_label_for_person: ('btn_label_hardware_hash'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'DEACTIVE',
+                          permission: true,
                           btn_tag: 'find_hardware_hash'
                       },
                       {
@@ -28,27 +30,31 @@
                           btn_label_for_person: ('btn_label_add_new_with_full_flow'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'CREATE',
+                          permission: true,
                           btn_tag: 'register_new_hardware'
                       },
                       {
-                          condition: (tab == 'hardware_type' && hardwareTypes && hardwareTypes.length),
+                          condition: (tab == 'hardware_type' && hardwareTypes && hardwareTypes.length > 0 ),
                           btn_label_for_person: ('btn_label_create_type_of_board'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
+                          permission: true,
                           btn_tag: 'new_hardware_type'
                       },
                       {
-                          condition: (tab == 'producers' && producers && producers.length),
+                          condition: (tab == 'producers' && producers && producers.length > 0 ),
                           btn_label_for_person: ('btn_label_create_producer'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
+                          permission: true,
                           btn_tag: 'add_producer'
                       },
                       {
-                          condition: (tab == 'processor' && processors && processors.length),
+                          condition: (tab == 'processor' && processors && processors.length > 0),
                           btn_label_for_person: ('btn_label_create_processor'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
+                          permission: true,
                           btn_tag: 'add_processor'
                       }
                     ]"
@@ -104,36 +110,59 @@
                     </thead>
 
                     <tbody class="hide-bk-drob-down-button">
-                    <tr *ngFor="let device of boardsFiler.content">
-                        <template [ngIf]="device">
-                            <td class="vert-align no-wrap">
-                                    <span class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
-                                        <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
-                                        <div class="hint-fixed">
-                                            <span class="hint right">
-                                                <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
-                                            </span>
-                                        </div>
-                                    </span>
-                                <a (click)="onDeviceClick_Admin(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
-                            </td>
-                            <td class="vert-align no-wrap">{{device.id}}</td>
-                            <td class="vert-align no-wrap">{{device.description}}</td>
-                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
-                            <td class="vert-align no-wrap"><bk-online-state [online_state]="device.online_state"></bk-online-state></td>
-                            <td class="vert-align no-wrap">
-                                <button title="{{'label_print_stickers'|bkTranslate:this}}" class="btn btn-icon-only yellow" (click)="onPrintLabelHardwareClick(device)">
-                                    <i class="fa fa-print"></i>
-                                </button>
-                                <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!device.update_permission" (click)="onEditHardwareClick(device)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!device.delete_permission" (click)="onRemoveHardwareClick(device)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </template>
-                    </tr>
+                        <tr *ngFor="let device of boardsFiler.content">
+                            <template [ngIf]="device">
+                                <td class="vert-align no-wrap">
+                                        <span class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
+                                            <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
+                                            <div class="hint-fixed">
+                                                <span class="hint right">
+                                                    <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
+                                                </span>
+                                            </div>
+                                        </span>
+                                    <a (click)="onDeviceClick_Admin(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+                                </td>
+                                <td class="vert-align no-wrap">{{device.id}}</td>
+                                <td class="vert-align no-wrap">{{device.description}}</td>
+                                <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
+                                <td class="vert-align no-wrap"><bk-online-state [online_state]="device.online_state"></bk-online-state></td>
+                                <td class="vert-align no-wrap">
+
+                                    <bk-drob-down-button
+                                        [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                        [btns] = "[
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_print_stickers'|bkTranslate:this),
+                                                btn_tag: 'print_device',
+                                                icon: 'fa-print',
+                                                colorType: 'CREATE',
+                                                permission: (device.update_permission)
+                                            },
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_device_properties'|bkTranslate:this),
+                                                btn_tag: 'edit_device',
+                                                icon: 'fa-cog',
+                                                colorType: 'EDIT',
+                                                permission: (device.update_permission)
+                                            },
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_remove_device'|bkTranslate:this),
+                                                btn_tag: 'remove_device',
+                                                icon: 'fa-trash',
+                                                colorType: 'REMOVE',
+                                                permission: (device.delete_permission)
+                                            }
+                                        ]"
+                                        (onValueChanged)="onDrobDownEmiter($event, device)"
+                                    >
+                                    </bk-drob-down-button>
+                                </td>
+                            </template>
+                        </tr>
                     </tbody>
                 </table>
                 <bk-filter-page-component [from]="boardsFiler.from" [to]="boardsFiler.to" [total]="boardsFiler.total"  [totalPages]="boardsFiler.pages" (onSelect)="onFilterHardware($event)"></bk-filter-page-component>
@@ -185,19 +214,40 @@
                             <span *ngIf="!hardwareType.main_test_c_program.default_version" class="font-red-flamingo bold">Missing!</span>
                         </td>
                         <td class="vert-align no-wrap">
-                            <a (click)="onProducerClick(hardwareType.producer_id)" class="no-wrap"><strong>{{hardwareType.producer_name}}</strong></a>
+                            <a (click)="onProducerClick(hardwareType.producer.id)" class="no-wrap"><strong>{{hardwareType.producer.name}}</strong></a>
                         </td>
                         <td class="vert-align no-wrap">
-                            {{hardwareType.processor_name}}
+
+                            <span *ngIf="hardwareType.processor">{{hardwareType.processor.name}}</span>
+
                         </td>
 
                         <td class="vert-align text-right no-wrap">
-                            <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!hardwareType.update_permission" (click)="onHardwareTypeEditClick(hardwareType)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_type_of_board_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!hardwareType.delete_permission" (click)="onHardwareTypeDeleteClick(hardwareType)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_type_of_board_properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_type_of_board_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_hardwareType',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (hardwareType.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_type_of_board_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_hardwareType',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (hardwareType.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, hardwareType)"
+                            >
+                            </bk-drob-down-button>
+
                         </td>
                     </tr>
                     </tbody>
@@ -237,12 +287,41 @@
                             {{producer.description}}
                         </td>
                         <td class="vert-align text-right no-wrap">
-                            <button title="{{'label_producer_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!producer.update_permission" (click)="onProducerEditClick(producer)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_producer_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!producer.delete_permission" (click)="onProducerDeleteClick(producer)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+
+
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_producer_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_producer',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (producer.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_producer_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_producer',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (producer.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, producer)"
+                            >
+                            </bk-drob-down-button>
+
+
+
+                            <!--<button title="{{'label_producer_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!producer.update_permission" (click)="onProducerEditClick(producer)">-->
+                                <!--<i class="fa fa-cog"></i>-->
+                            <!--</button>-->
+                            <!--<button title="{{'label_producer_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!producer.delete_permission" (click)="onProducerDeleteClick(producer)">-->
+                                <!--<i class="fa fa-trash"></i>-->
+                            <!--</button>-->
                         </td>
                     </tr>
                     </tbody>
@@ -265,7 +344,7 @@
         <!-- Processor -->
         <div *ngIf="tab == 'processor'">
             <div *ngIf="(processors && processors.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+                <table class="table table-hover table-light byzance-table" style="overflow: visible">
                     <thead>
                         <tr>
                             <th class="col col-lg-3">{{'label_name'|bkTranslate:this}}</th>
@@ -274,7 +353,7 @@
                             <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody class="hide-bk-drob-down-button">
+                    <tbody class="hide-bk-drob-down-button" style="overflow: visible">
                         <tr *ngFor="let processor of processors">
                             <td class="vert-align no-wrap">
                                 <strong>{{processor.name}}</strong>
@@ -286,12 +365,30 @@
                                 {{processor.speed}}
                             </td>
                             <td class="vert-align text-right no-wrap">
-                                <button title="{{'label_processor_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!processor.update_permission" (click)="onProcessorEditClick(processor)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="{{'label_processor_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!processor.delete_permission" (click)="onProcessorDeleteClick(processor)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_processor_properties'|bkTranslate:this)"
+                                    [btns] = "[
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_processor_properties'|bkTranslate:this),
+                                            btn_tag: 'edit_processor',
+                                            icon: 'fa-cog',
+                                            colorType: 'EDIT',
+                                            permission: true
+                                        },
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_processor_remove'|bkTranslate:this),
+                                            btn_tag: 'remove_processor',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (processor.delete_permission)
+                                        }
+                                    ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, processor)"
+                                >
+                                </bk-drob-down-button>
                             </td>
                         </tr>
                     </tbody>

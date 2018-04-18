@@ -49,17 +49,25 @@
                         </span>
                     </div>
                     <div *ngIf="selectedBlockoBlockVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span>{{selectedBlockoBlockVersion.name}}</span>
+                        <span
+                            class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span
+                            *ngIf="unsavedChanges" class="changes"></span>{{selectedBlockoBlockVersion.name}}</span>
                     </div>
                 </div>
 
-                <bk-form-color-picker label="{{'label_block_color'|bkTranslate:this}}" [control]="blockForm.controls['color']" [waitForTouch]="false"></bk-form-color-picker>
-                <bk-form-fa-icon-select label="{{'label_block_icon'|bkTranslate:this}}" [control]="blockForm.controls['icon']" [waitForTouch]="false"></bk-form-fa-icon-select>
-                <bk-form-input [label]="'label_block_description'|bkTranslate:this" [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
+                <bk-form-color-picker label="{{'label_block_color'|bkTranslate:this}}"
+                                      [control]="blockForm.controls['color']"
+                                      [waitForTouch]="false"></bk-form-color-picker>
+                <bk-form-fa-icon-select label="{{'label_block_icon'|bkTranslate:this}}"
+                                        [control]="blockForm.controls['icon']"
+                                        [waitForTouch]="false"></bk-form-fa-icon-select>
+                <bk-form-input [label]="'label_block_description'|bkTranslate:this"
+                               [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
 
                 <div class="form-group">
                     <label>{{'label_block_code'|bkTranslate:this}}</label>
-                    <bk-monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'FetchLib', 'ServiceLib', 'BlockoServiceHandler', 'ES5' ]"></bk-monaco-editor>
+                    <bk-monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)"
+                                      [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'FetchLib', 'ServiceLib', 'BlockoServiceHandler', 'ES5' ]"></bk-monaco-editor>
                 </div>
 
                 <div *ngFor="let tsError of tsErrors;" class="mt-element-ribbon bg-grey-steel">
@@ -71,12 +79,15 @@
                 </div>
 
                 <div>
-                    <div class="font-red text-right" style="padding-bottom: 5px; transition: opacity 0.5s;" [style.opacity]="successfullyTested?'0':'1'">{{'label_block_code_change'|bkTranslate:this}}</div>
+                    <div class="font-red text-right" style="padding-bottom: 5px; transition: opacity 0.5s;"
+                         [style.opacity]="successfullyTested?'0':'1'">{{'label_block_code_change'|bkTranslate:this}}
+                    </div>
                     <div class="pull-right">
                         <button type="button" class="btn default yellow-gold" (click)="onTestClick()">
                             <i class="fa fa-play"></i> {{'btn_test'|bkTranslate:this}}
                         </button>
-                        <button type="button" class="btn default green-haze" [disabled]="!successfullyTested" (click)="onSaveClick()">
+                        <button type="button" class="btn default green-haze" [disabled]="!successfullyTested"
+                                (click)="onSaveClick()">
                             <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
                         </button>
                     </div>
@@ -89,7 +100,8 @@
         <div class="col-md-12">
             <div class="portlet light bordered padding-20">
                 <div class="portlet-title">
-                    <h3 *ngIf="!tsBlock" class="pull-right" style="margin: 0; margin-right: 95px;"> {{'label_press_test_button'|bkTranslate:this}} <i class="fa fa-chevron-up"></i></h3>
+                    <h3 *ngIf="!tsBlock" class="pull-right" style="margin: 0; margin-right: 95px;">
+                        {{'label_press_test_button'|bkTranslate:this}} <i class="fa fa-chevron-up"></i></h3>
 
                 </div>
                 <div class="portlet-content">
@@ -99,15 +111,18 @@
 
                         <div class="block-tester no-select">
 
-                            <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
-
+                            <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color"
+                                 [class.odd]="iCon%2">
 
 
                                 <template [ngIf]="connector.type == connectorTypes.DigitalInput">
                                     <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                     <div class="col-md-8">
-                                        <div class="block-tester-message-input-label"><strong>{{'label_value'|bkTranslate:this}}</strong>:</div>
-                                        <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value"
+                                        <div class="block-tester-message-input-label"><strong>{{'label_value'|bkTranslate:this}}</strong>:
+                                        </div>
+                                        <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;"
+                                           [class.fa-toggle-on]="connector.value"
+                                           [class.fa-toggle-off]="!connector.value"
                                            (click)="onDigitalInputClick(connector)"></i>
                                     </div>
                                 </template>
@@ -115,8 +130,10 @@
                                 <template [ngIf]="connector.type == connectorTypes.AnalogInput">
                                     <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                     <div class="col-md-8">
-                                        <div class="block-tester-message-input-label"><strong>{{'label_value'|bkTranslate:this}}</strong>:</div>
-                                        <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
+                                        <div class="block-tester-message-input-label"><strong>{{'label_value'|bkTranslate:this}}</strong>:
+                                        </div>
+                                        <input type="number" class="form-control" step="0.1" [value]="connector.value"
+                                               (input)="onAnalogInputChange($event, connector)">
                                     </div>
                                 </template>
 
@@ -128,28 +145,41 @@
 
                                         <template [ngIf]="argType == argTypes.Boolean">
                                             <div class="col-md-8">
-                                                <div class="block-tester-message-input-label"><span [innerHTML]="'label_datatype_boolean'|bkTranslate:this:index"></span>:</div>
-                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]"
+                                                <div class="block-tester-message-input-label"><span
+                                                    [innerHTML]="'label_datatype_boolean'|bkTranslate:this:index"></span>:
+                                                </div>
+                                                <i class="fa cursor-hand"
+                                                   style="vertical-align: middle; font-size: 1.5em;"
+                                                   [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]"
                                                    [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]"
                                                    (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
                                             </div>
                                         </template>
                                         <template [ngIf]="argType == argTypes.Float">
                                             <div class="col-md-8">
-                                                <div class="block-tester-message-input-label"><span [innerHTML]="'label_datatype_float'|bkTranslate:this:index"></span>:</div>
-                                                <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                <div class="block-tester-message-input-label"><span
+                                                    [innerHTML]="'label_datatype_float'|bkTranslate:this:index"></span>:
+                                                </div>
+                                                <input type="number" class="form-control" step="0.1" value="0"
+                                                       (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
                                         <template [ngIf]="argType == argTypes.Integer">
                                             <div class="col-md-8">
-                                                <div class="block-tester-message-input-label"><span [innerHTML]="'label_datatype_integer'|bkTranslate:this:index"></span>:</div>
-                                                <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                <div class="block-tester-message-input-label"><span
+                                                    [innerHTML]="'label_datatype_integer'|bkTranslate:this:index"></span>:
+                                                </div>
+                                                <input type="number" class="form-control" step="1" value="0"
+                                                       (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
                                         <template [ngIf]="argType == argTypes.String">
                                             <div class="col-md-8">
-                                                <div class="block-tester-message-input-label"><span [innerHTML]="'label_datatype_string'|bkTranslate:this:index"></span>:</div>
-                                                <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                <div class="block-tester-message-input-label"><span
+                                                    [innerHTML]="'label_datatype_string'|bkTranslate:this:index"></span>:
+                                                </div>
+                                                <input type="text" class="form-control"
+                                                       (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
 
@@ -157,7 +187,8 @@
 
                                     <div class="col-md-4"></div>
                                     <div class="col-md-8">
-                                        <button class="btn btn-sm default green block-tester-message-input-btn" type="button" (click)="onMessageInputSendClick(connector)">
+                                        <button class="btn btn-sm default green block-tester-message-input-btn"
+                                                type="button" (click)="onMessageInputSendClick(connector)">
                                             <i class="fa fa-paper-plane"></i> {{'btn_send'|bkTranslate:this}}
                                         </button>
                                     </div>
@@ -166,14 +197,17 @@
                         </div>
 
                     </div>
-                    <div class="col-md-4" style="width: 130px; overflow: hidden;" [style.display]="tsBlock?'inline-block':'none'">
+                    <div class="col-md-4" style="width: 130px; overflow: hidden;"
+                         [style.display]="tsBlock?'inline-block':'none'">
                         <h4 *ngIf="tsBlock" class="text-center">{{'label_block'|bkTranslate:this}}</h4>
                         <div style="background-color: #333; width: 105px;">
-                            <bk-blocko-view autosize="true" canConfig="true" readonly="true" safeRun="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"
+                            <bk-blocko-view autosize="true" canConfig="true" readonly="true" safeRun="true"
+                                            (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"
                                             class="blocko-overflow-visible blocko-no-borders-and-bg"></bk-blocko-view>
                         </div>
                     </div>
-                    <div class="col-md-4" style="width: calc(50% - 65px)" [style.display]="tsBlock?'inline-block':'none'">
+                    <div class="col-md-4" style="width: calc(50% - 65px)"
+                         [style.display]="tsBlock?'inline-block':'none'">
                         <h4 class="text-center">{{'label_console'|bkTranslate:this}}</h4>
                         <div class="row">
                             <bk-console-log maxHeight="400px"></bk-console-log>
@@ -207,9 +241,11 @@
                         </thead>
                         <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let version of blockoBlockVersions">
-                            <td class="vert-align no-wrap" [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
+                            <td class="vert-align no-wrap"
+                                [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
                                 <a (click)="onBlockoBlockVersionClick(version)"> {{version.name}}
-                                    <span *ngIf="version.publish_type === 'default_version'" class="font-green-jungle bold">(Default)</span>
+                                    <span *ngIf="version.publish_type === 'default_version'"
+                                          class="font-green-jungle bold">(Default)</span>
                                 </a>
                             </td>
                             <td class="vert-align">
@@ -222,48 +258,79 @@
                             </td>
                             <td class="vert-align no-wrap">
                                     <span class="icon-hint-wraper red" *ngIf="version.publish_status == 'pending'">
-                                        <i class="fa fa-heart font-red-flamingo" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                        <i class="fa fa-heart font-red-flamingo"
+                                           style="font-size: 1.6em; margin-left: 5px;"></i>
+                                        <span class="hint"
+                                              [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
                                 <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'approved'">
-                                        <i class="fa fa-heart font-green-jungle" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                        <i class="fa fa-heart font-green-jungle"
+                                           style="font-size: 1.6em; margin-left: 5px;"></i>
+                                        <span class="hint"
+                                              [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
                                 <span class="icon-hint-wraper gray" *ngIf="version.publish_status == 'disapproved'">
-                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;"></i>
+                                        <span class="hint"
+                                              [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
                                 <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'edited'">
-                                        <i class="fa fa-heart font-blue" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                        <i class="fa fa-heart font-blue"
+                                           style="font-size: 1.6em; margin-left: 5px;"></i>
+                                        <span class="hint"
+                                              [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
                             </td>
                             <td class="vert-align no-wrap text-right">
-                                <!-- Buttons for Users for Community publishing  -->
-                                <button *ngIf="project && !version.publish_status" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
-                                        (click)="onCommunityPublicVersionClick(version)">
-                                    <i class="fa fa-heart"></i>
-                                </button>
 
-                                <!-- Buttons for Administrator for Community decisions  -->
-                                <button *ngIf="version.publish_status == 'pending' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onProgramVersionPublishResult(version)">
-                                    <i class="fa fa-heart"></i>
-                                </button>
 
-                                <!-- Only For for Administrator for Make Default Block Version -->
-                                <button *ngIf="block && block.publish_type === 'default_main_program' && version.publish_type !== 'default_version'" title="{{'label_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!block.update_permission" (click)="onBlockSetMainClick(version)">
-                                    <i class="fa fa-flag"></i>
-                                </button>
-
-                                <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
-                                        (click)="onEditVersionClick(version)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-
-                                <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
-                                        (click)="onRemoveVersionClick(version)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_properties'|bkTranslate:this)"
+                                    [btns]="[
+                                        {
+                                            condition: project && !version.publish_status,
+                                            btn_label_for_person: ('label_publish'|bkTranslate:this),
+                                            btn_tag: 'version_publish_public',
+                                            icon: 'fa-heart',
+                                            colorType: 'ADD',
+                                            permission: (version.publish_status)
+                                        },
+                                        {
+                                            condition: version.publish_status == 'pending' && version.community_publishing_permission,
+                                            btn_label_for_person: ('label_publish'|bkTranslate:this),
+                                            btn_tag: 'version_publish_administrator',
+                                            icon: 'fa-heart',
+                                            colorType: 'ADD',
+                                            permission: (version.community_publishing_permission)
+                                        },
+                                        {
+                                            condition: block && block.publish_type === 'default_main_program' && version.publish_type !== 'default_version',
+                                            btn_label_for_person: ('label_version_set_as_main'|bkTranslate:this),
+                                            btn_tag: 'version_set_as_main',
+                                            icon: 'fa-cog',
+                                            colorType: 'UPDATE',
+                                            permission: (block.update_permission)
+                                        },
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_version_properties'|bkTranslate:this),
+                                            btn_tag: 'version_properties',
+                                            icon: 'fa-cog',
+                                            colorType: 'EDIT',
+                                            permission: (version.update_permission)
+                                        },
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_remove_version'|bkTranslate:this),
+                                            btn_tag: 'remove_version',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (version.delete_permission)
+                                        }
+                                    ]"
+                                            (onValueChanged)="onDrobDownEmiter($event, version)"
+                                >
+                                </bk-drob-down-button>
 
                             </td>
                         </tr>

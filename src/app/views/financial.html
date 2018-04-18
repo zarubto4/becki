@@ -63,9 +63,23 @@
                         </td>
                         <td class="vert-align">{{product.subscription_id}}</td>
                         <td class="vert-align text-right">
-                            <button (click)="onEditClick(product)" [disabled]="product.update_permission" title="Settings" class="btn green btn-icon-only white">
-                                <i class="fa fa-gear"></i>
-                            </button>
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_settings'|bkTranslate:this),
+                                    btn_tag: 'edit_product',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (product.update_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, product)"
+                            >
+                            </bk-drob-down-button>
+
                         </td>
                     </tr>
                 </tbody>

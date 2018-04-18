@@ -239,4 +239,27 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
             });
     }
 
+    onDrobDownEmiter(action: string, object: any): void {
+
+        if (action === 'block_properties') {
+            this.onBlockEditClick(object);
+        }
+
+        if (action === 'block_remove') {
+            this.onBlockDeleteClick(object);
+        }
+
+        if (action === 'block_make_clone') {
+            this.onMakeClone(object);
+        }
+
+        if (action === 'active_group') {
+            this.onBlockActivateClick(object);
+        }
+
+        if (action === 'deactive_group') {
+            this.onBlockDeactivateClick(object);
+        }
+    }
+
 }

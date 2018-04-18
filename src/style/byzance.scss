@@ -321,6 +321,11 @@ span.changes {
     user-select: none;          /* Likely future */
 }
 
+.table-scrollable {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+
 .blocko-view svg {
     font-size:14px;
 }
@@ -2713,7 +2718,7 @@ textarea.form-control {
     overflow-y:scroll;
 }
 
-.hide-bk-drob-down-button tr bk-drob-down-button{
+.hide-bk-drob-down-button tr bk-drob-down-button {
     opacity:0.05;
 }
 

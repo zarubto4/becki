@@ -42,12 +42,31 @@
                     </td>
 
                     <td class="vert-align text-right no-wrap">
-                        <button title="{{'label_role_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!role.update_permission" (click)="onRoleEditClick(role)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_role_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!role.delete_permission" (click)="onRoleRemoveClick(role)">
-                            <i class="fa fa-trash"></i>
-                        </button>
+
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_role_properties'|bkTranslate:this)"
+                            [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_role_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_role',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (role.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_role_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_role',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (role.update_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, role)"
+                        >
+                        </bk-drob-down-button>
+
                     </td>
                 </tr>
                 </tbody>

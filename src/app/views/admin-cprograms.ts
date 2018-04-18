@@ -194,6 +194,26 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
             }
         });
     }
+
+    onDrobDownEmiterCode(action: string, code: ICProgram): void {
+        if (action === 'edit_code') {
+            this.onCProgramEditClick(code);
+        }
+
+        if (action === 'remove_code') {
+            this.onCProgramRemoveClick(code);
+        }
+    }
+
+    onDrobDownEmiterLibrary(action: string, library: ILibrary): void {
+        if (action === 'edit_library') {
+            this.onLibraryEditClick(library);
+        }
+
+        if (action === 'remove_library') {
+            this.onLibraryRemoveClick(library);
+        }
+    }
 }
 
 

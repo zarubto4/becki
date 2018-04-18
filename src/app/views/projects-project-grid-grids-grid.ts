@@ -429,4 +429,14 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
         this.exitConfirmationService.setConfirmationEnabled(true);
     }
 
+    onDrobDownEmiter(action: string, version: IGridProgramVersion): void {
+        if (action === 'edit_device') {
+            this.onEditVersionClick(version);
+        }
+
+        if (action === 'remove_device') {
+            this.onRemoveVersionClick(version);
+        }
+    }
+
 }

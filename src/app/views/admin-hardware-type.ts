@@ -372,6 +372,40 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
             });
     }
 
+    onDrobDownEmiter(action: string, object: any): void {
+        if (action === 'print_device') {
+            this.onPrintLabelHardwareClick(object);
+        }
+
+        if (action === 'edit_device') {
+            this.onEditHardwareClick(object);
+        }
+        if (action === 'remove_device') {
+            this.onRemoveHardwareClick(object);
+        }
+
+        if (action === 'edit_hardwareType') {
+            this.onHardwareTypeEditClick(object);
+        }
+
+        if (action === 'remove_hardwareType') {
+            this.onHardwareTypeDeleteClick(object);
+        }
+
+        if (action === 'edit_producer') {
+            this.onProducerEditClick(object);
+        }
+        if (action === 'remove_producer') {
+            this.onProducerDeleteClick(object);
+        }
+
+        if (action === 'edit_pprocessor') {
+            this.onProducerEditClick(object);
+        }
+        if (action === 'remove_processor') {
+            this.onProducerDeleteClick(object);
+        }
+    }
 
 }
 

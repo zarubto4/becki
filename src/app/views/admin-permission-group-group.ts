@@ -224,6 +224,19 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
         });
     }
 
+    onDrobDownEmiter (action: string, object: any): void {
+
+        if (action === 'remove_person') {
+            this.onMemberDeleteClick(object);
+        }
+        if (action === 'edit_permission') {
+            this.onPermissionEditClick(object);
+        }
+        if (action === 'remove_permission') {
+            this.onPermissionDeleteClick(object);
+        }
+    }
+
 }
 
 

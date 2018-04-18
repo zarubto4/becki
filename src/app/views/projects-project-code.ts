@@ -208,4 +208,19 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
             });
     }
 
+    onDrobDownEmiter(action: string, object: any): void {
+
+        if (action === 'code_program_clone') {
+            this.onMakeClone(object);
+        }
+
+        if (action === 'code_program_properties') {
+            this.onEditClick(object);
+        }
+
+        if (action === 'remove_project') {
+            this.onRemoveClick(object);
+        }
+
+    }
 }

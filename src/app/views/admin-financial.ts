@@ -217,6 +217,32 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
         });
     }
 
+    onDrobDownEmiter (action: string, tariff: ITariff): void {
+
+        if (action === 'edit_tariff') {
+            this.onTariffEditClick(tariff);
+        }
+
+        if (action === 'shift_up_tariff') {
+            this.onTariffShiftUpClick(tariff);
+        }
+
+        if (action === 'shift_down_tariff') {
+            this.onTariffShiftDownClick(tariff);
+        }
+
+        if (action === 'active_tariff') {
+            this.onTariffActivate(tariff);
+        }
+
+        if (action === 'deactive_tariff') {
+            this.onTariffDeactivate(tariff);
+        }
+        if (action === 'remove_tariff') {
+            this.onTariffRemoveClick(tariff);
+        }
+    }
+
 
 }
 

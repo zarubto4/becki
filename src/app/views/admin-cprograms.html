@@ -62,13 +62,39 @@
                         <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                         <td class="vert-align no-wrap text-right">
 
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.update_permission" (click)="onCProgramEditClick(code)">
-                                <i class="fa fa-cog"></i>
-                            </button>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_code',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (code.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_code_program'|bkTranslate:this),
+                                    btn_tag: 'remove_code',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (code.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiterCode($event, code)"
+                            >
+                            </bk-drob-down-button>
 
-                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <!--Before dropdownmenu CODE-->
+
+                            <!--&lt;!&ndash;<button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.update_permission" (click)="onCProgramEditClick(code)">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<i class="fa fa-cog"></i>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</button>&ndash;&gt;-->
+
+                            <!--&lt;!&ndash;<button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<i class="fa fa-trash"></i>&ndash;&gt;-->
+                            <!--</button>-->
                         </td>
                     </tr>
                     </tbody>
@@ -150,13 +176,29 @@
                         </td>
                         <td class="vert-align no-wrap text-right">
 
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission" (click)="onLibraryEditClick(library)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-
-                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onLibraryRemoveClick(library)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_library',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (library.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_code_program'|bkTranslate:this),
+                                    btn_tag: 'remove_library',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (library.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiterLibrary($event, library)"
+                            >
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>
@@ -166,8 +208,8 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(libraries == null)"
                                 [condition_empty]="(libraries != null && libraries.content.length == 0)"
-                                [main_message_link]="'label_no_batch'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_c_library'|bkTranslate:this"
+                                [main_message_link]="'label_no_c_programs'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_programs_comment'|bkTranslate:this"
                                 [btn_label]="'label_no_c_library_comment'|bkTranslate:this"
                                 [show_button]="false">
             </bk-nothing-to-show>
@@ -208,8 +250,8 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(librariesNotApproved == null)"
                                 [condition_empty]="(librariesNotApproved != null && librariesNotApproved.content.length == 0)"
-                                [main_message_link]="'label_no_batch'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_c_library'|bkTranslate:this"
+                                [main_message_link]="'label_no_c_library'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_library_comment'|bkTranslate:this"
                                 [btn_label]="'label_no_c_library_comment'|bkTranslate:this"
                                 [show_button]="false">
             </bk-nothing-to-show>
