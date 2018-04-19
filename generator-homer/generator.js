@@ -374,8 +374,8 @@ methodsNames.forEach((methodName) => {
     let params = pathInfo['parameters'];
     let encodeQueries = [];
     if (params) {
-        outParameters.push('serverURL:IHomerServer');
-        outParametersComment.push('@param serverURL');
+        outParameters.push('server: IHomerServer');
+        outParametersComment.push('@param server');
         params.forEach((param) => {
             if (param['in'] === 'path') {
                 let type = solveType(param);
@@ -503,7 +503,7 @@ methodsNames.forEach((methodName) => {
     if (encodeQueries.length) {
         fileWriteLine(encodeQueries.join('\n'));
     }
-    fileWriteLine('        return this.requestRestPath(\"' + pathMethod.toLocaleUpperCase() + '\",' + ' `http://` +' + ' serverURL.server_url + (serverURL.rest_api_port !== null  ? \`:\` + serverURL.rest_api_port : \`\`) ' + basePath + ' + `' + pathUrlVariables + (queryParameters.length ? '?' + queryParameters.join('&') : '') + '`, ' + body + ', [' + returnCodes.join(',') + ']);');
+    fileWriteLine('        return this.requestRestPath(\"' + pathMethod.toLocaleUpperCase() + '\",' + ' `http://` +' + ' server.server_url + (server.rest_api_port !== null  ? \`:\` + server.rest_api_port : \`\`) ' + basePath + ' + `' + pathUrlVariables + (queryParameters.length ? '?' + queryParameters.join('&') : '') + '`, ' + body + ', [' + returnCodes.join(',') + ']);');
     fileWriteLine('    }');
     fileWriteLine();
 });

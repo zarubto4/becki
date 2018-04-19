@@ -11,42 +11,36 @@ import { Component, Input } from '@angular/core';
                                      </span>
         
         <span class="icon-hint-wraper green" *ngIf="status == 'SERVER_ERROR'">
-                                        <i class="fa fa-exclamation-triangle font-red-mint"
-                                           style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="status|bkTranslateTable:this:'version_status'"></span>
-                                    </span>
+                                        <i class="fa fa-exclamation-triangle font-red-mint" style="font-size: 1.6em; margin-left: 5px;"></i>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'version_status'"></span></span>
 
         <span class="icon-hint-wraper red" *ngIf="status=='BROKEN_JSON'">
                                         <i class="fa fa-exclamation-triangle font-red-mint"></i>
-                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
-                                     </span>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'version_status'"></span></span>
+                            
 
         <span class="icon-hint-wraper orange" *ngIf="status=='FAILED'">
                                         <i class="fa fa-bug font-yellow"></i>
-                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
+                                                <span class="hint" [innerHTML]="status|bkTranslateTable:this:'version_status'"></span></span>
 
         <span class="icon-hint-wraper red" *ngIf="status=='UNSTABLE'">
                                         <i class="fa fa-heartbeat font-red-mint"></i>
-                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
+                                         <span class="hint" [innerHTML]="status|bkTranslateTable:this:'version_status'"></span></span>
+                                  
 
         <span class="icon-hint-wraper orange"
               *ngIf="status=='server_was_offline' || status=='SUCCESS_DOWNLOAD_FAILED' || status=='undefined' || status=='file_with_code_not_found' || status=='compilation_server_error' || status=='json_code_is_broken'">
                                         <i class="fa fa-thumbs-down font-yellow"></i>
-                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
-
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'version_status'"></span></span>
+        
+        
         <span class="icon-hint-wraper gray" *ngIf="status=='IN_PROGRESS'">
                                         <i class="fa fa-spinner fa-spin"></i>
-                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'version_status'"></span></span>
 
         <span class="icon-hint-wraper green" *ngIf="status=='SUCCESS'">
                                         <i class="fa fa-check font-green-jungle"></i>
-                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
-                                    </span>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'version_status'"></span></span>
 
         <!-- Public Status -->
         <span class="icon-hint-wraper red" *ngIf="status == 'PENDING'">

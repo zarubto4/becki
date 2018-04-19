@@ -10,12 +10,13 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IHardware, IHardwareList, IHardwareType } from '../backend/TyrionAPI';
-import {Subscription} from "rxjs/Rx";
+import { Subscription } from 'rxjs/Rx';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
     constructor(public project_id: string, public hardware_type: IHardwareType = null, public selected_hardware: IHardware[] = []) {
         super();
+        this.modalLarge = true;
     }
 }
 
@@ -40,7 +41,9 @@ export class ModalsSelectHardwareComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.onFilterHardware();
+        setTimeout(() => {
+            this.onFilterHardware();
+        }, 100);
     }
 
     onFilterHardware(pageNumber: number = 0 ): void {

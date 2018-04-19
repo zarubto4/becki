@@ -1,12 +1,16 @@
-<div *ngFor="let modalWrapper of modalService.modalWrappers" class="modal fade" tabindex="-1" [class.in]="modalWrapper.modalIn" [style.display]="modalWrapper.modalDisplay ? 'block' : 'none'" style="background-color: rgba(0,0,0,0.5)">
-    <div class="modal-dialog" [class.modal-width-80]="modalWrapper.modalModel?modalWrapper.modalModel.modalWide:false">
-        <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
+<div *ngFor="let modalWrapper of modalService.modalWrappers"
+     class="modal fade" tabindex="-1"
+     [class.in]="modalWrapper.modalIn"
+     [style.display]="modalWrapper.modalDisplay ? 'block' : 'none'" style="background-color: rgba(0,0,0,0.5)">
 
+    <div class="modal-dialog"
+         [class.modal-lg]="modalWrapper.modalModel?modalWrapper.modalModel.modalLarge:false"
+         [class.modal-width-80]="modalWrapper.modalModel?modalWrapper.modalModel.modalWide:false">
+        <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
 
             <template [ngSwitchCase]="'ModalsInstanceCreateModel'">
                 <bk-modals-instance-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-create>
             </template>
-
             <template [ngSwitchCase]="'ModalsHardwareFindHash'">
                 <bk-modals-hardware-find-hash-component [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-find-hash-component>
             </template>

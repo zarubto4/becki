@@ -1423,6 +1423,8 @@ export class StaticTranslation {
                 'label_deactivate_server': 'Activate',
                 'label_activate_server': 'Deactivate',
                 'label_actions': 'Actions',
+                'label_rest_url': 'Rest URL',
+                'label_mqtt_url': 'MQTT URL',
                 'label_personal_server_name': 'Server name',
                 'label_personal_server_description': 'Description',
                 'label_no_server_size_found': 'No Server Components...',

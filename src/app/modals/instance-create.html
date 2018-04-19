@@ -10,19 +10,19 @@
     <div class="modal-body">
         <form [formGroup]="form">
 
-            <bk-form-input [control]="form.controls.name" [label]="'label_instance_name'|bkTranslate:this"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" [label]="'label_instance_description'|bkTranslate:this" aria-valuetext="Instance description"></bk-form-input>
+            <bk-form-input [control]="form.controls['name']" [label]="'label_instance_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['description']" [label]="'label_instance_description'|bkTranslate:this" aria-valuetext="Instance description"></bk-form-input>
 
             <hr>
             <div *ngIf="servers_options">
-                <bk-form-select [control]="form.controls.main_server_id" [label]="'label_select_server'|bkTranslate:this" [options]="servers_options"></bk-form-select>
+                <bk-form-select [control]="form.controls['main_server_id']" [label]="'label_select_server'|bkTranslate:this" [options]="servers_options"></bk-form-select>
             </div>
             <div *ngIf="!servers_options">
                 <span [innerHTML]="'loading'|bkTranslate:this"></span>
             </div>
 
             <div *ngIf="bProgram_options">
-                <bk-form-select [control]="form.controls.b_program_id" [label]="'label_select_b_program'|bkTranslate:this" [options]="bProgram_options"></bk-form-select>
+                <bk-form-select [control]="form.controls['b_program_id']" [label]="'label_select_b_program'|bkTranslate:this" [options]="bProgram_options"></bk-form-select>
             </div>
             <div *ngIf="!bProgram_options">
                 <span [innerHTML]="'loading'|bkTranslate:this"></span>

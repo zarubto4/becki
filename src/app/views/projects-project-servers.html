@@ -28,11 +28,13 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-3">{{'label_server_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-5">{{'label_id'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3">{{'label_server_version'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'label_status'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col">{{'label_server_name'|bkTranslate:this}}</th>
+                        <th class="col">{{'label_id'|bkTranslate:this}}</th>
+                        <th class="">{{'label_rest_url'|bkTranslate:this}}</th>
+                        <th class="">{{'label_mqtt_url'|bkTranslate:this}}</th>
+                        <th class="col">{{'label_server_version'|bkTranslate:this}}</th>
+                        <th class="col">{{'label_status'|bkTranslate:this}}</th>
+                        <th class="col text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -41,6 +43,15 @@
                             <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.name?homer_server.name:homer_server.id}}</strong></a>
                         </td>
                         <td class="vert-align no-wrap">{{homer_server.id}}</td>
+
+                        <td class="vert-align no-wrap">
+                            <a href="http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}" class="no-wrap"><strong>http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}</strong></a>
+                        </td>
+
+                        <td class="vert-align no-wrap">
+                            <a href="mqtt://{{homer_server.server_url}}:{{homer_server.mqtt_port}}" class="no-wrap"><strong>mqtt://{{homer_server.server_url}}:{{homer_server.mqtt_port}}</strong></a>
+                        </td>
+
                         <td class="vert-align no-wrap">
                             <a href="https://github.com/ByzanceIoT/homer-core/releases/tag/{{homer_server.server_version}}" class="no-wrap"><strong>{{homer_server.server_version}}</strong></a>
                         </td>

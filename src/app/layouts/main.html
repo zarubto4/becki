@@ -88,7 +88,7 @@
         <div class="page-sidebar-wrapper page-sidebar-fixed">
             <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
             <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-            <div class="page-sidebar" [class.navbar-collapse]="sidebarMobileClosed" [class.collapse]="sidebarMobileClosed">
+            <div class="page-sidebar" [class.navbar-collapse]="sidebarMobileClosed" [class.collapse]="sidebarMobileClosed" style="z-index: 100 !important;">
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul class="page-sidebar-menu page-header-fixed" [class.page-sidebar-menu-closed]="sidebarClosed">
 
@@ -152,6 +152,7 @@
                 </ul>
             </div>
         </div>
+
         <!-- END SIDEBAR -->
         <div class="page-content-wrapper">
             <!-- BEGIN CONTENT BODY -->
@@ -178,7 +179,7 @@
                 </h1>
 
                 <!----- Tab Menu BEGIN ---->
-                <div [class.tabbable-line]="tabMenuItems" class="p">
+                <div [class.tabbable-line]="tabMenuItems" style="z-index: 20 !important;">
                     <ul *ngIf="tabMenuItems" class="nav nav-tabs becki-tab-menu" style="">
                         <li *ngFor="let tabItem of tabMenuItems; let index = index" class="{{tabItem.options['styleClass']}}" [class.spacer]="!tabItem.options['items'] && !tabItem.link"
                             [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
@@ -207,7 +208,7 @@
                 <!----- Site Content START ---->
                 <div [class.tab-content]="tabMenuItems">
                     <div class="active" [class.tab-pane]="tabMenuItems">
-                        <div class="portlet light" style="padding-left: 0px;padding-right: 0px;">
+                        <div class="portlet light" style="padding-left: 0px;padding-right: 0px;" z>
                             <ng-content></ng-content>
                         </div>
                     </div>

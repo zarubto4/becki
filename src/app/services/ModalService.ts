@@ -8,6 +8,7 @@ import { TranslationService } from './TranslationService';
 
 export abstract class ModalModel {
     modalWide: boolean = false;
+    modalLarge: boolean = false;
 }
 
 export class ModalWrapper {

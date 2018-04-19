@@ -2086,6 +2086,7 @@ ul.hw-list li ul li, ul.grid-list li ul li {
 
 .icon-hint-wraper {
     position: relative;
+    z-index: 999 !important;
 
     i {
         cursor: help;
