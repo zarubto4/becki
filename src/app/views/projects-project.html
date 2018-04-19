@@ -126,7 +126,9 @@
                         </div>
                     </div>
                     <div>
-                        <span [innerHTML]="'label_servers_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.instances}}</strong>
+                        <span [innerHTML]="'label_servers_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.servers}}</strong>
+                        <br>
+                        <span [innerHTML]="'label_online_status'|bkTranslate:this"></span>: <strong class="font-green-jungle bold">{{project.project_stats.servers_online}}</strong>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -143,7 +145,7 @@
                     <div>
                         <span [innerHTML]="'label_instances_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.instances}}</strong>
                         <br>
-                        <span [innerHTML]="'label_online_status'|bkTranslate:this"></span>: <strong class="font-green-jungle bold">{{project.project_stats.hardware_online}}</strong>
+                        <span [innerHTML]="'label_online_status'|bkTranslate:this"></span>: <strong class="font-green-jungle bold">{{project.project_stats.instance_online}}</strong>
                     </div>
                     <div class="clearfix"></div>
                 </div>
