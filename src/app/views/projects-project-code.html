@@ -85,6 +85,7 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(privatePrograms == null)"
                                 [condition_empty]="(privatePrograms != null && privatePrograms.content.length == 0)"
+                                [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59d793dea7327a00016b151f_code%20web%20small.png'"
                                 [main_message_link]="'label_no_code'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_code_comment'|bkTranslate:this"
                                 [btn_label]="'btn_add_code_program'|bkTranslate:this"

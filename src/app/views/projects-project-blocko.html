@@ -50,7 +50,6 @@
                             table tr:hover button { opacity:1 }
                         </style>
 
-
                         <button title="{{'label_blocko_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blocko.update_permission" (click)="onEditClick(blocko)">
                             <i class="fa fa-cog"></i>
                         </button>
@@ -64,11 +63,14 @@
             <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to" [total]="privatePrograms.total"  [totalPages]="privatePrograms.pages" (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
         </div>
 
+
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(privatePrograms == null)"
                             [condition_empty]="(privatePrograms != null && privatePrograms.content.length == 0)"
                             [main_message_link]="'label_no_blocko_program'|bkTranslate:this"
                             [main_message_comment_link]="'label_create_blocko_text'|bkTranslate:this"
+                            [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59c93590bcfa480001e577bf_live%20traces.svg'"
+                            [image_description]="'label_blocko_documentation_description'|bkTranslate:this"
                             [btn_label]="'btn_add_blocko_program'|bkTranslate:this"
                             (onButtonClick)="onAddClick()">
         </bk-nothing-to-show>

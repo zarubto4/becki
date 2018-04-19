@@ -48,11 +48,13 @@
                         {
                             tab_name: 'permissions',
                             tab_color: 'HARDWARE',
+                            condition: (true),
                             tab_label: ('tab_permissions'|bkTranslate:this)
                         },
                         {
                             tab_name: 'persons',
                             tab_color: 'HARDWARE',
+                            condition: (true),
                             tab_label: ('tab_persons'|bkTranslate:this)
                         }
                     ]">
@@ -63,8 +65,8 @@
 
         <div *ngIf="tab == 'persons'">
 
-            <div *ngIf="(securityRole && securityRole.persons.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(securityRole && securityRole.persons.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th>{{'label_name'|bkTranslate:this}}</th>

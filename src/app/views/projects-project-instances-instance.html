@@ -211,13 +211,13 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
-                        <th class="vert-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col vert-align">{{'table_update_id'|bkTranslate:this}}</th>
+                        <th class="col vert-align text-center">{{'table_created'|bkTranslate:this}}</th>
+                        <th class="col vert-align text-center">{{'table_planed'|bkTranslate:this}}</th>
+                        <th class="col vert-align text-center">{{'table_finished'|bkTranslate:this}}</th>
+                        <th class="col vert-align  text-center">{{'table_update_progress'|bkTranslate:this}}</th>
+                        <th class="col vert-align">{{'table_update_state'|bkTranslate:this}}</th>
+                        <th class="col vert-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -225,13 +225,13 @@
                         <td class="vert-align">
                             <a class="bold" (click)="onActualizationProcedureClick(procedure.id)">{{procedure.id.substr(0, 12)}}</a>
                         </td>
-                        <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
-                        <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
-                        <td class="vert-align">
+                        <td class="vert-align  text-center ">{{procedure.created|bkUnixTimeToDate}}</td>
+                        <td class="vert-align  text-center">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                        <td class="vert-align  text-center">
                             <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
                             <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
                         </td>
-                        <td class="vert-align">
+                        <td class="vert-align  text-center">
                             <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
                             <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
                         </td>

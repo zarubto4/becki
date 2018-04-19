@@ -123,11 +123,10 @@
                         </td>
 
                         <td class="vert-align text-center no-wrap">
-                            <span *ngIf="device.dominant_entity">{{'label_project_active'|bkTranslate:this}}</span>
-                            <span *ngIf="!device.dominant_entity && device.dominant_project_active" class="font-red-flamingo">{{'label_project_not_active'|bkTranslate:this}}</span>
+
                             <div *ngIf="!device.dominant_entity && device.dominant_project_active">
-                                <span>Active In:</span><br>
-                                <small><a (click)="onProjectClick(device.dominant_project_active.id)">{{device.dominant_project_active.name}}</a></small>
+                                <span *ngIf="device.dominant_project_active.id">Active In: <a (click)="onProjectClick(device.dominant_project_active.id)">{{device.dominant_project_active.name}}</a></span>
+                                <span *ngIf="!device.dominant_project_active.id" [innerHTML]="'label_foreign_project'|bkTranslate:this"></span>
                             </div>
                             <div *ngIf="!device.dominant_entity && !device.dominant_project_active">
                                 <span class="font-green-jungle">Can Be Activated</span>
@@ -172,7 +171,7 @@
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(devicesFilter == null)"
-
+                                [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5a0c3d3adace480001d6c0e2_Kreslic%C3%AD%20pl%C3%A1tno%203%20kopie-fin1.svg'"
                                 [condition_empty]="(devicesFilter != null && devicesFilter.content.length == 0)"
                                 [main_message_link]="'label_no_hardware'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_hardware_comment'|bkTranslate:this"

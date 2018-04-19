@@ -1202,6 +1202,7 @@ export class StaticTranslation {
                 'label_remove_device': 'Remove device',
                 'label_time_missing_in_json': 'Not Yet',
                 'label_project_active': 'This one',
+                'label_foreign_project': 'Active in Foreign project <br> without Access',
                 'label_project_not_active': 'Freeze',
                 'label_release_documentation_description': '<p>Here you can create group orders. For example, update hardware in <strong>"North Korea"</strong> or execute <strong><a target="_blank" href="https://www.youtube.com/watch?v=xSN6BOgrSSU">order 66</a></strong>.<p/><p class="text-center"> Heavy times for the republic..</p>',
 
@@ -1420,7 +1421,7 @@ export class StaticTranslation {
                 'label_upload_error': 'Unable to shutdown this instance, {0}.',
                 'label_no_instances': 'No <strong class="font-color-cloud">Instances</strong> found in <strong class="font-color-cloud">CLOUD</strong>',
                 'label_no_instances_comment': 'If You already create <strong class="font-color-blocko">BLOCKO</strong>, you are ready to deploy it!',
-                'label_instance_documentation_description': '<p><strong class="font-color-cloud">INSTANCE</strong>  is a <strong>container</strong> for a running application created in the <strong class="font-color-blocko">BLOCKO</strong> editor.<br><strong class="font-color-cloud">CLOUD</strong> Server is a <strong>container manager</strong>.</p><p>The server handles Hardware via MQTT and applications connected via the websocket and passes data safely to the container and from the container to the end devices. Each container (<strong class="font-color-cloud">INSTANCE</strong>) is totally separate from others. The more the instance is computationally more demanding, the fewer the Server can handle.<br>You can have an <strong class="font-color-cloud">INSTANCE</strong> in restricted mode on a public server or <strong>on your own servers.</strong></p>',
+                'label_instance_documentation_description': '<p><strong class="font-color-cloud">INSTANCE</strong>  is a <strong>container</strong> for a running application created in the <strong class="font-color-blocko">BLOCKO</strong> editor.</p><p><strong class="font-color-cloud">CLOUD</strong> Server is a <strong>container manager</strong>.</p><p>The server handles Hardware via MQTT and applications connected via the websocket and passes data safely to the container and from the container to the end devices. Each container (<strong class="font-color-cloud">INSTANCE</strong>) is totally separate from others. The more the instance is computationally more demanding, the fewer the Server can handle.<br>You can have an <strong class="font-color-cloud">INSTANCE</strong> in restricted mode on a public server or <strong>on your own servers.</strong></p>',
                 'label_shutdown_instance': 'Shutdown instance',
                 'label_upload_latest_used_version': 'Upload Latest Configuration to Cloud',
                 'label_start': 'Start instance',
@@ -1817,6 +1818,7 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
                 'btn_add_blocko_program': 'New Program',
+                'label_blocko_documentation_description': '<p><strong class="font-color-blocko">BLOCKO</strong> is a web-based editor developed for creating CLOUD decision server apps. By combining individual <strong>BLOCKS</strong> together, you can create a very complex logic. Actions and reactions. Storage of data. Performing commands when combining conditions. Work with a small Set of Hardware or create logic behavior for thousands of Hardware Devices and links to third-party services.<br><br><strong class="font-color-blocko">BLOCKO</strong> is stored at the end and compiled into a self-running container. We call it an <strong class="font-color-instance">INSTANCE</strong>, which you can upload to the Server.</p><p>The <strong class="font-color-blocko">BLOCKO</strong> program is created without parameters. That means, that you making logic for anonymous hardware. As you create your own Instance, you assign anonymous Blocks representing <strong class="font-color-hardware">HARDWARE</strong> to the specific <strong class="font-color-hardware">HARDWARE</strong> you own. So, you can use the same Blocko program for dozens of different Hardware groups across the world.</p>',
 
                 'flash_blocko_remove': 'Program has been removed.',
                 'flash_blocko_cant_remove': 'Unable to remove program, ',
@@ -2160,6 +2162,9 @@ export class StaticTranslation {
 
                 'label_permission': 'Permission',
                 'label_person': 'Person',
+                'label_remove_role': 'Remove Role',
+                'label_person_add': 'Add Person',
+                'label_permission_add': 'Add Permission',
 
                 'label_no_person': 'No Users',
                 'label_no_person_comment': 'We didn\'t find any users, add new one (already remigrated)',

@@ -96,6 +96,7 @@
                     <tr>
                         <th class="no-wrap">{{'label_name'|bkTranslate:this}}</th>
                         <th class="no-wrap">{{'label_table_id'|bkTranslate:this}}</th>
+                        <th class="no-wrap">{{'label_table_full_id'|bkTranslate:this}}</th>
                         <th class="no-wrap">{{'label_description'|bkTranslate:this}}</th>
                         <th class="no-wrap"><strong class="font-color-hardware">Hardware</strong>{{'label_table_type'|bkTranslate:this}}</th>
                         <th class="no-wrap">{{'label_table_status'|bkTranslate:this}}</th>
@@ -118,6 +119,7 @@
                                 <a (click)="onDeviceClick_Admin(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                             </td>
                             <td class="vert-align no-wrap">{{device.id}}</td>
+                            <td class="vert-align no-wrap">{{device.full_id}}</td>
                             <td class="vert-align no-wrap">{{device.description}}</td>
                             <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a></td>
                             <td class="vert-align no-wrap"><bk-online-state [online_state]="device.online_state"></bk-online-state></td>

@@ -541,13 +541,13 @@ export class NotificationService {
             case 'Project':
                 this.router.navigate(['projects', e.id]);
                 break;
-            case 'Model_Person': console.error('not implemented yet');
+            case 'Person': console.error('not implemented yet');
                 this.router.navigate(['persons', e.id]);
                 break;
-            case 'B_Program_Version':
+            case 'BProgramVersion':
                 this.router.navigate(['projects', e.project_id, 'blocko', e.program_id, { version: e.id }]);
                 break;
-            case 'C_Program_Version':
+            case 'CProgramVersion':
                 this.router.navigate(['projects', e.project_id, 'code', e.program_id, { version: e.id }]);
                 break;
             case 'BProgram':
@@ -559,11 +559,14 @@ export class NotificationService {
             case 'CProgram':
                 this.router.navigate(['projects', e.project_id, 'code', e.id]);
                 break;
-            case 'Homer_Instance':
+            case 'Instance':
                 this.router.navigate(['projects', e.project_id, 'instances', e.id]);
                 break;
-            case 'ActualizationProcedure':
+            case 'UpdateProcedure':
                 this.router.navigate(['projects', e.project_id, 'actualization_procedure', e.id]);
+                break;
+            case 'HardwareUpdate':
+                this.router.navigate(['projects', e.project_id, 'hardware', e.id,  { tab: 'update'}]);
                 break;
         }
     }
