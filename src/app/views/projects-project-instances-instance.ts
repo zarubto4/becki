@@ -222,6 +222,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.onInstanceShutdownClick();
                 break;
             }
+            case 'save_snapshot': {
+                this.onSaveSnapshotClick();
+                break;
+            }
+            case 'change_version': {
+                this.onChangeVersion();
+                break;
+            }
             default: {
                 console.warn('TODO action for:', action);
             }
@@ -309,7 +317,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }
     }
 
-    onSaveSnapshotClick = () => {
+    onSaveSnapshotClick(): void {
         if (this.editorView.isDeployable()) {
             let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
             this.modalService.showModal(m).then((success) => {
@@ -349,7 +357,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }
     }
 
-    onChangeVersion = () => {
+    onChangeVersion(): void {
         let m: ModalsSelectVersionModel = new ModalsSelectVersionModel(this.bProgram.program_versions);
         this.modalService.showModal(m)
             .then((success) => {

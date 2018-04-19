@@ -314,22 +314,23 @@
                 <div class="col-md-9 portlet light bordered">
                     <bk-portlet-title
                         [title_name]="'label_snapshot_editor'|bkTranslate:this"
+                        (onClick)="onPortletClick($event)"
                         [btns]="[
                             {
                               condition: (true),
                               btn_label_for_person: ('btn_save'|bkTranslate:this),
                               icon: 'fa-share',
                               colorType: 'ADD',
-                              btn_tag: 'save_snapshot',
-                              onClick: this.onSaveSnapshotClick
+                              permission: true,
+                              btn_tag: 'save_snapshot'
                             },
                             {
                               condition: (true),
                               btn_label_for_person: ('btn_change_version'|bkTranslate:this),
                               icon: 'fa-cog',
                               colorType: 'EDIT',
-                              btn_tag: 'change_version',
-                              onClick: this.onChangeVersion
+                              permission: true,
+                              btn_tag: 'change_version'
                             }
                         ]"></bk-portlet-title>
                     <div class="portlet-body">
