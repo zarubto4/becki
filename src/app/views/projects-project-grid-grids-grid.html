@@ -10,7 +10,7 @@
     [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-    <bk-portlet-title
+    <bk-portlet-title *ngIf="gridProgram"
         [title_name]="'title'|bkTranslate:this"
         [title_object_name]="gridProgram != null ? gridProgram.name : ''"
         [title_object_description]="gridProgram != null ? gridProgram.description : ''"
@@ -42,12 +42,14 @@
                             tab_name: 'ide',
                             condition: (true),
                             tab_color: 'GRID',
+                             permission: true,
                             tab_label: ('tab_ide'|bkTranslate:this)
                         },
                         {
                             tab_name: 'versions',
                             condition: (true),
                             tab_color: 'GRID',
+                             permission: true,
                             tab_label: ('tab_versions'|bkTranslate:this)
                         }
                     ]"
@@ -207,20 +209,20 @@
                                 <td class="action-btn-col">
 
                                     <bk-drob-down-button
-                                        [btns_group_name]="('label_device_properties'|bkTranslate:this)"
+                                        [btns_group_name]="('label_settings'|bkTranslate:this)"
                                         [btns]="[
                                                 {
                                                     condition: true,
-                                                    btn_label_for_person: ('label_device_properties'|bkTranslate:this),
-                                                    btn_tag: 'edit_device_properties',
+                                                    btn_label_for_person: ('label_version_properties'|bkTranslate:this),
+                                                    btn_tag: 'edit_version',
                                                     icon: 'fa-cog',
                                                     colorType: 'EDIT',
-                                                    permission: (ersion.update_permission)
+                                                    permission: (version.update_permission)
                                                 },
                                                 {
                                                     condition: true,
-                                                    btn_label_for_person: ('label_device_remove'|bkTranslate:this),
-                                                    btn_tag: 'remove_device',
+                                                    btn_label_for_person: ('label_version_remove'|bkTranslate:this),
+                                                    btn_tag: 'remove_version',
                                                     icon: 'fa-trash',
                                                     colorType: 'REMOVE',
                                                     permission: (version.delete_permission)

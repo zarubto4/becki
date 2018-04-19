@@ -65,7 +65,11 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         }
 
         if (tab === 'public_blocks' && this.blockPublicList == null) {
-            this.onShowProgramPrivateBlocksFilter();
+            this.onShowProgramPublicBlocksFilter();
+        }
+
+        if (tab === 'admin_blocks' && this.blockListNotApproved == null) {
+            this.onShowProgramPendingBlocksFilter();
         }
     }
 

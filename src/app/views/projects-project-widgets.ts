@@ -24,8 +24,6 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    project: IProject = null;
-
     widgetList: IGridWidgetList = null;
     widgetPublicList: IGridWidgetList = null;
     widgetListNotApproved: IGridWidgetList = null;

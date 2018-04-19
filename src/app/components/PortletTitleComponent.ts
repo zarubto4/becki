@@ -14,7 +14,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                 </div>
 
 
-                <div *ngIf="btns && getConditionSize() > 0 && getConditionSize() < 2" class="becki-actions">
+                <div *ngIf="btns && getConditionSize() == 1" class="becki-actions">
                     <template ngFor let-element="$implicit" [ngForOf]="btns">
 
                         <!-- Only if not a external link link !-->
@@ -111,7 +111,7 @@ export class PortletTitleComponent {
         btn_label_for_person: string,
         btn_space?: boolean,
         icon: string,
-        permission?: boolean,                                                       // for example project.delete_permission
+        permission: boolean,                                                       // for example project.delete_permission
         colorType?: ('ADD'| 'EDIT' | 'UPDATE' | 'CREATE' | 'REMOVE' | 'ACTIVE' | 'DEACTIVE'),  // DEFAULT in HTML is EDIT
         btn_tag: string,    // Only if you have more that one Button!
         btn_link?: string,  // External link

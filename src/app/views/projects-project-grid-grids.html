@@ -65,20 +65,20 @@
                     <td class="action-btn-col">
 
                         <bk-drob-down-button
-                            [btns_group_name]="('label_version_properties'|bkTranslate:this)"
+                            [btns_group_name]="('label_settings'|bkTranslate:this)"
                             [btns]="[
                                 {
                                     condition: true,
-                                    btn_label_for_person: ('label_version_properties'|bkTranslate:this),
-                                    btn_tag: 'edit_version',
+                                    btn_label_for_person: ('label_grid_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_grid_app',
                                     icon: 'fa-cog',
                                     colorType: 'EDIT',
                                     permission: (program.update_permission)
                                 },
                                 {
                                     condition: true,
-                                    btn_label_for_person: ('label_remove'|bkTranslate:this),
-                                    btn_tag: 'remove_version',
+                                    btn_label_for_person: ('label_grid_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_grid_app',
                                     icon: 'fa-trash',
                                     colorType: 'REMOVE',
                                     permission: (program.delete_permission)

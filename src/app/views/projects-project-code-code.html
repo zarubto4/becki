@@ -17,47 +17,49 @@
                       [icon]="'fa-tachometer'"
                       (onClick)="onPortletClick($event)"
                       [btns]="[
-             {
-                  condition: (codeProgram && codeProgram.update_permission),
-                  btn_label_for_person: ('label_program_properties'|bkTranslate:this),
-                  icon: 'fa-cog',
-                  permission: (codeProgram && codeProgram.update_permission),
-                  colorType: 'EDIT',
-                  btn_tag: 'edit_program'
-             },
-             {
-                  condition: (codeProgram && codeProgram.delete_permission),
-                  btn_label_for_person: ('label_remove_program'|bkTranslate:this),
-                  icon: 'fa-trash',
-                  permission: (codeProgram && codeProgram.delete_permission),
-                  colorType: 'REMOVE',
-                  btn_tag: 'remove_program'
-             },
-             {
-                  condition: (codeProgram && codeProgram.publish_type == 'PUBLIC'),
-                  btn_label_for_person: ('label_make_copy'|bkTranslate:this),
-                  icon: 'fa-clone',
-                  permission: (true),
-                  colorType: 'CLONE',
-                  btn_tag: 'make_clone'
-             }
-            ]"
-                      (onTabClick)="onToggleTab($event)"
-                      [tab_selected_name]="tab"
-                      [tabBtns]="[
-            {
-                tab_name: 'ide',
-                condition: (true),
-                tab_color: 'CODE',
-                tab_label: ('tab_ide'|bkTranslate:this)
-            },
-            {
-                tab_name: 'versions',
-                condition: (true),
-                tab_color: 'CODE',
-                tab_label: ('tab_versions'|bkTranslate:this)
-             }
-            ]">
+                                 {
+                                      condition: (codeProgram && codeProgram.update_permission),
+                                      btn_label_for_person: ('label_program_properties'|bkTranslate:this),
+                                      icon: 'fa-cog',
+                                      permission: (codeProgram && codeProgram.update_permission),
+                                      colorType: 'EDIT',
+                                      btn_tag: 'edit_program'
+                                 },
+                                 {
+                                      condition: (codeProgram && codeProgram.delete_permission),
+                                      btn_label_for_person: ('label_remove_program'|bkTranslate:this),
+                                      icon: 'fa-trash',
+                                      permission: (codeProgram && codeProgram.delete_permission),
+                                      colorType: 'REMOVE',
+                                      btn_tag: 'remove_program'
+                                 },
+                                 {
+                                      condition: (codeProgram && codeProgram.publish_type == 'PUBLIC'),
+                                      btn_label_for_person: ('label_make_copy'|bkTranslate:this),
+                                      icon: 'fa-clone',
+                                      permission: (true),
+                                      colorType: 'CLONE',
+                                      btn_tag: 'make_clone'
+                                 }
+                    ]"
+                    (onTabClick)="onToggleTab($event)"
+                    [tab_selected_name]="tab"
+                    [tabBtns]="[
+                                {
+                                    tab_name: 'ide',
+                                    condition: (true),
+                                    tab_color: 'CODE',
+                                    permission: true,
+                                    tab_label: ('tab_ide'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'versions',
+                                    condition: (true),
+                                    tab_color: 'CODE',
+                                    permission: true,
+                                    tab_label: ('tab_versions'|bkTranslate:this)
+                                 }
+                    ]">
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 

@@ -21,27 +21,31 @@
                                     label: ('label_financial_product_properties'|bkTranslate:this),
                                     icon: 'fa-cog',
                                     colorType: 'EDIT',
-                                    btn_tag: 'edit_product'
+                                    btn_tag: 'edit_product',
+                                    permission: true
                                 },
                                 {
                                     condition: (product.active),
                                     label: ('label_deactivate_product'|bkTranslate:this),
                                     icon: 'fa-stop-circle',
                                     colorType: 'DEACTIVE',
-                                    btn_tag: 'deactivate_product'
+                                    btn_tag: 'deactivate_product',
+                                    permission: true
                                 },
                                 {
                                     condition: (!product.active),
                                     label: ('label_activate_product'|bkTranslate:this),
                                     icon: 'fa-cloud-upload',
                                     colorType: 'ACTIVE',
-                                    btn_tag: 'activate_product'
+                                    btn_tag: 'activate_product',
+                                    permission: true
                                 },
                                 {
                                     condition: (product.method == 'CREDIT'),
                                     label: ('btn_add_credit'|bkTranslate:this),
                                     icon: 'fa-plus-circle',
-                                    btn_tag: 'add_credit'
+                                    btn_tag: 'add_credit',
+                                    permission: true
                                 }
                         ]">
         </bk-portlet-title>

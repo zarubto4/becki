@@ -12,35 +12,35 @@
                       [icon]="'fa-microchip'"
                       (onClick)="onPortletClick($event)"
                       [btns]="[
-                      {
-                          condition: (tab == 'hardware_type_overview' && hardwareType.update_permission),
-                          btn_label_for_person: ('label_type_of_boards_properties'|bkTranslate:this),
-                          icon: 'fa-cog',
-                          colorType: 'EDIT',
-                          btn_tag: 'update'
-                      },
-                      {
-                          condition: (tab == 'hardware_type_overview' && hardwareType.delete_permission),
-                          btn_label_for_person: ('label_type_of_boards_remove'|bkTranslate:this),
-                          icon: 'fa-trash',
-                          colorType: 'REMOVE',
-                          btn_tag: 'remove'
-                      },
-                      {
-                          condition: (tab == 'bootloaders' && hardwareType.bootloader_edit_permission),
-                          btn_label_for_person: ('label_bootloader_create_description'|bkTranslate:this),
-                          icon: 'fa-plus',
-                          colorType: 'ADD',
-                          btn_tag: 'bootloader_add'
-                      },
-                       {
-                          condition: (tab == 'batches' && hardwareType.update_permission),
-                          btn_label_for_person: ('label_revision_create_description'|bkTranslate:this),
-                          icon: 'fa-plus',
-                          colorType: 'ADD',
-                          btn_tag: 'batches_add'
-                      }
-        ]"
+                          {
+                              condition: (tab == 'hardware_type_overview' && hardwareType.update_permission),
+                              btn_label_for_person: ('label_type_of_boards_properties'|bkTranslate:this),
+                              icon: 'fa-cog',
+                              colorType: 'EDIT',
+                              btn_tag: 'update'
+                          },
+                          {
+                              condition: (tab == 'hardware_type_overview' && hardwareType.delete_permission),
+                              btn_label_for_person: ('label_type_of_boards_remove'|bkTranslate:this),
+                              icon: 'fa-trash',
+                              colorType: 'REMOVE',
+                              btn_tag: 'remove'
+                          },
+                          {
+                              condition: (tab == 'bootloaders' && hardwareType.bootloader_edit_permission),
+                              btn_label_for_person: ('label_bootloader_create_description'|bkTranslate:this),
+                              icon: 'fa-plus',
+                              colorType: 'ADD',
+                              btn_tag: 'bootloader_add'
+                          },
+                           {
+                              condition: (tab == 'batches' && hardwareType.update_permission),
+                              btn_label_for_person: ('label_revision_create_description'|bkTranslate:this),
+                              icon: 'fa-plus',
+                              colorType: 'ADD',
+                              btn_tag: 'batches_add'
+                          }
+                      ]"
                       (onTabClick)="onToggleTab($event)"
                       [tab_selected_name]="tab"
                       [tabBtns]="[
@@ -64,7 +64,7 @@
                         },
                         {
                             tab_name: 'batches',
-                            condition: (hardwareType.update_permission && hardwareType.update_permission),
+                            condition: (hardwareType.update_permission),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_batches'|bkTranslate:this)
                         }
@@ -468,27 +468,6 @@
                                         (onValueChanged)="onDrobDownEmiter($event, version)"
                                     >
                                     </bk-drob-down-button>
-
-
-                                    <button title="{{'label_version_properties'|bkTranslate:this}}"
-                                            class="btn btn-icon-only green" [disabled]="!version.update_permission"
-                                            (click)="onEditVersionClick(version)">
-                                        <i class="fa fa-cog"></i>
-                                    </button>
-
-                                    <button *ngIf="version.status=='SUCCESS' && !version.main_mark"
-                                            title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}"
-                                            class="btn btn-icon-only yellow"
-                                            [disabled]="!hardwareType.update_permission"
-                                            (click)="onCProgramDefaultSetMainClick(version)">
-                                        <i class="fa fa-flag"></i>
-                                    </button>
-
-                                    <button title="{{'label_remove_version'|bkTranslate:this}}"
-                                            class="btn btn-icon-only red" [disabled]="!version.delete_permission"
-                                            (click)="onRemoveVersionClick(version)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
                                 </td>
                             </tr>
                             </tbody>
@@ -514,7 +493,7 @@
 
             <!-- Only with permission Revision For Burning procedure -->
 
-            <div *ngIf="(hardwareType && hardwareType.batchs && hardwareType.batchs.length > 0)"
+            <div *ngIf="hardwareType && hardwareType.batchs && hardwareType.batchs.length > 0"
                  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-light byzance-table">
                     <thead>
@@ -571,7 +550,7 @@
                                     btn_tag: 'edit_batch',
                                     icon: 'fa-cog',
                                     colorType: 'EDIT',
-                                    permission: (project.update_permission && project.active)
+                                    permission: hardwareType.update_permission
                                 },
                                 {
                                     condition: hardwareType.update_permission,
@@ -579,26 +558,12 @@
                                     btn_tag: 'remove_batch',
                                     icon: 'fa-trash',
                                     colorType: 'REMOVE',
-                                    permission: (project.delete_permission && project.active)
+                                    permission: hardwareType.update_permission
                                 }
                             ]"
                                 (onValueChanged)="onDrobDownEmiter($event, batch)"
                             >
                             </bk-drob-down-button>
-
-
-                            <button *ngIf="hardwareType.update_permission"
-                                    title="{{'label_version_properties'|bkTranslate:this}}"
-                                    class="btn btn-icon-only green"
-                                    (click)="onEditRevisionClick(batch)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-
-                            <button *ngIf="hardwareType.update_permission"
-                                    title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                    (click)="onDeleteRevisionClick(batch)">
-                                <i class="fa fa-trash"></i>
-                            </button>
                         </td>
                     </tr>
                     </tbody>

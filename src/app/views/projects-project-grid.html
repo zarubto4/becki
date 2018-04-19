@@ -16,11 +16,12 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                       {
-                          condition: (gridProjects && gridProjects.content.length),
+                          condition: (gridProjects && gridProjects.content.length > 0),
                           btn_label_for_person: ('btn_add_grid_project'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
-                          btn_tag: 'btn_add'
+                          btn_tag: 'btn_add',
+                          permission: true
                       }
                  ]"
     >
@@ -46,7 +47,7 @@
                     <td class="action-btn-col">
 
                         <bk-drob-down-button
-                            [btns_group_name]="('label_group_properties'|bkTranslate:this)"
+                            [btns_group_name]="('label_settings'|bkTranslate:this)"
                             [btns]="[
                                 {
                                     condition: true,
@@ -68,16 +69,6 @@
                             (onValueChanged)="onDrobDownEmiter($event, gridProject)"
                         >
                         </bk-drob-down-button>
-
-                        <button title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="!gridProject.update_permission" (click)="onProjectEditClick(gridProject)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_group_remove'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick(gridProject)">
-                            <i class="fa fa-trash"></i>
-                        </button>
-
                     </td>
                 </tr>
                 </tbody>

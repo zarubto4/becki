@@ -35,8 +35,8 @@ export interface ModelChangeStatus {
 
 export abstract class TyrionApiBackend extends TyrionAPI {
 
-    private host = 'tyrion.stage.byzance.cz';
-    private protocol = 'https';
+    private host = '127.0.0.1:9000';
+    private protocol = 'http';
 
     public requestProxyServerUrl = 'http://127.0.0.1:4000/fetch/';
 
@@ -64,6 +64,30 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     // CONSTRUCTOR
     public constructor() {
         super();
+
+
+        if (location && location.hostname) {
+            if (location.hostname.indexOf('portal.') === 0) {
+                this.host = location.hostname.replace('portal.', 'tyrion.');
+            } else {
+                this.host = location.hostname + ':9000';
+            }
+        }
+
+        if (location && location.protocol) {
+            if (location.protocol === 'https:') {
+                this.protocol = 'https';
+            }
+        }
+
+        if (location.hostname.indexOf('portal.stage.') === 0) {
+            this.requestProxyServerUrl = 'https://request.stage.byzance.cz/fetch/';
+        }
+
+        // Mac mini
+        if (location && location.hostname.indexOf('test.byzance.dev') > -1) {
+            this.requestProxyServerUrl = 'http://test.byzance.dev:4000/fetch/';
+        }
 
         // Create WebSocket Connection
         this.websocketService = new WebsocketService(this);
@@ -182,7 +206,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     private setToken(token: string, withRefreshPersonalInfo = true): void {
-        console.log('set_token');
+        console.info('set_token');
         window.localStorage.setItem('auth_token', token);
         if (withRefreshPersonalInfo) {
             this.refreshPersonInfo();
@@ -257,13 +281,13 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     // PERSON INFO
     public refreshPersonInfo(): void {
-        console.log('refreshPersonInfo');
+        console.info('refreshPersonInfo');
         this.personInfoSnapshotDirty = true;
         if (TyrionApiBackend.tokenExist()) {
             this.getTyrionWebsocketConnection().onReady();
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
-                    console.log(lr);
+                    console.info(lr);
                     this.personPermissions = lr.permissions;
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;

@@ -21,6 +21,7 @@
                           btn_label_for_person: ('label_instance_properties'|bkTranslate:this),
                           icon: 'fa-cog',
                           colorType: 'EDIT',
+                          permission: true,
                           btn_tag: 'edit_Instance'
                       },
                       {
@@ -28,6 +29,7 @@
                           btn_label_for_person: ('label_deactivate_instance'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'DEACTIVE',
+                          permission: instance.update_permission,
                           btn_tag: 'deactivate_instance'
                       },
                       {
@@ -35,6 +37,7 @@
                           btn_label_for_person: ('label_activate_instance'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ACTIVE',
+                          permission: instance.update_permission,
                           btn_tag: 'active_instance'
                       },
                       {
@@ -42,6 +45,7 @@
                           btn_label_for_person: ('btn_deploy_snapshot'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ACTIVE',
+                          permission: instance.update_permission,
                           btn_tag: 'deploy_snapshot'
                       },
                       {
@@ -49,6 +53,7 @@
                           btn_label_for_person: ('btn_select_cloud_version'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'UPDATE',
+                          permission: instance.update_permission,
                           btn_tag: 'change_version_instance'
                       }
                     ]"
@@ -59,18 +64,21 @@
                             tab_name: 'overview',
                             condition: (true),
                             tab_color: 'CLOUD',
+                            permission: true,
                             tab_label: ('tab_name_overview'|bkTranslate:this)
                         },
                         {
                             tab_name: 'editor',
                             condition: (true),
                             tab_color: 'CLOUD',
+                            permission: instance.update_permission,
                             tab_label: ('tab_name_editor'|bkTranslate:this)
                         },
                         {
                             tab_name: 'hardware',
                             condition: (instance && instance.current_snapshot),
                             tab_color: 'HARDWARE',
+                            permission: instance.update_permission,
                             tab_label: ('tab_name_hardware'|bkTranslate:this)
                         },
                         {
@@ -83,30 +91,35 @@
                             tab_name: 'history',
                             condition: (true),
                             tab_color: 'CLOUD',
+                            permission: instance.update_permission,
                             tab_label: ('tab_name_history'|bkTranslate:this)
                         },
                         {
                             tab_name: 'update',
                             condition: (instance && instance.current_snapshot),
                             tab_color: 'HARDWARE',
+                            permission: instance.update_permission,
                             tab_label: ('tab_name_update_progress'|bkTranslate:this)
                         },
                         {
                             tab_name: 'view',
                             condition: (instance && instance.current_snapshot),
                             tab_color: 'CLOUD',
+                            permission: true,
                             tab_label: ('tab_name_update_view'|bkTranslate:this)
                         },
                         {
                             tab_name: 'logs',
                             condition: (false),
                             tab_color: 'CLOUD',
+                            permission: instance.update_permission,
                             tab_label: ('tab_name_logs'|bkTranslate:this)
                         },
                         {
                             tab_name: 'debug',
                             condition: (false),
                             tab_color: 'CLOUD',
+                            permission: instance.update_permission,
                             tab_label: ('tab_name_debugs'|bkTranslate:this)
                         }
                     ]"
@@ -397,13 +410,12 @@
         </div>
 
         <div *ngIf="tab == 'hardware' && instance && instance.current_snapshot">
-            <div class="row">
+
 
                 <!-- List of Integrated HW groups START-->
                 <h4 [innerHTML]="'label_hardware_groups'|bkTranslate:this"></h4>
 
-                <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)"
-                     class="table-scrollable table-scrollable-borderless">
+                <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
                     <table class="table table-hover table-light byzance-table">
                         <thead>
                         <tr>
@@ -416,7 +428,7 @@
                         <tbody>
                         <tr *ngFor="let group of deviceGroupFilter.content">
 
-                            <td class="vert-align no-wrap">{{group.name}}</td>
+                            <td class="vert-align no-wrap bold">{{group.name}}</td>
                             <td class="vert-align no-wrap">{{group.description}}</td>
                             <td class="vert-align text-center no-wrap">{{group.size}}</td>
                             <td class="vert-align text-center no-wrap">
@@ -522,7 +534,7 @@
                                     [show_button]="false">
                 </bk-nothing-to-show>
                 <!-- Temporary page content if content is being loaded or if there is no content -- END -->¨
-            </div>
+
         </div>
 
         <div *ngIf="tab == 'view' && instance && instance.current_snapshot">
@@ -553,8 +565,8 @@
         <div *ngIf="tab == 'grid' && instance && instance.current_snapshot">
 
             <div *ngIf="(instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)">
-                <div *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last"
-                     class="portlet portlet light">
+
+                <div *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last" class="portlet portlet light">
 
                     <bk-portlet-title
                         [title_name]="'label_grid_project'|bkTranslate:this"
@@ -651,8 +663,7 @@
 
         <div *ngIf="tab == 'history' && instance">
 
-            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)"
-                 class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>

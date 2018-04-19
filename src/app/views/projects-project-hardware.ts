@@ -119,6 +119,32 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         });
     }
 
+    onHardwareDeactivate(hardware: IHardware): void {
+        this.blockUI();
+        this.tyrionBackendService.projectDeactiveHW(hardware.id)
+            .then((values) => {
+                this.unblockUI();
+                this.onFilterHardware();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.onFilterHardware();
+            });
+    }
+
+    onHardwareActivate(hardware: IHardware): void {
+        this.blockUI();
+        this.tyrionBackendService.projectActiveHW(hardware.id)
+            .then((values) => {
+                this.unblockUI();
+                this.onFilterHardware();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.onFilterHardware();
+            });
+    }
+
     onHardwareRemoveClick(hardware: IHardware): void {
         this.modalService.showModal(new ModalsRemovalModel('[' + hardware.id + '] ' + (hardware.name ? hardware.name : ''))).then((success) => {
             if (success) {
@@ -126,9 +152,13 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.tyrionBackendService.projectRemoveHW(hardware.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_remove_device_success')));
+                        this.unblockUI();
+                        this.onFilterHardware();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
+                        this.unblockUI();
+                        this.onFilterHardware();
                     });
             }
         });
@@ -428,20 +458,28 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             this.onHardwareRemoveClick(object);
         }
 
-        if (action === 'edit_project') {
+        if (action === 'edit_group') {
             this.onGroupEditClick(object);
         }
 
-        if (action === 'edit_project') {
+        if (action === 'remove_group') {
             this.onGroupDeleteClick(object);
         }
 
-        if (action === 'edit_project') {
+        if (action === 'edit_procedure') {
             this.onUpdateProcedureUpdateClick(object);
         }
 
-        if (action === 'edit_project') {
+        if (action === 'remove_procedure') {
             this.onUpdateProcedureCancelClick(object);
+        }
+
+        if (action === 'activate_hardware') {
+            this.onHardwareActivate(object);
+        }
+
+        if (action === 'deactivate_hardware') {
+            this.onHardwareDeactivate(object);
         }
 
     }

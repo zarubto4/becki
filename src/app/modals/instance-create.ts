@@ -9,7 +9,7 @@ import { ModalModel } from '../services/ModalService';
 import { IBProgramList, IHomerServerList } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
-import {AfterContentChecked, AfterViewInit} from "@angular/core/src/metadata/lifecycle_hooks";
+
 
 
 export class ModalsInstanceCreateModel extends ModalModel {
@@ -48,7 +48,6 @@ export class ModalsInstanceCreateComponent implements OnInit {
             'backup_server_id': [''],
         });
 
-
     }
 
     ngOnInit() {
@@ -81,7 +80,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
                     this.bProgram = value;
                     this.bProgram_options = this.bProgram.content.map((pv) => {
                         return {
-                            label: pv.name + '(' + pv.description + ')',
+                            label: pv.name + ' ' + pv.description,
                             value: pv.id,
                         };
                     });

@@ -183,11 +183,11 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
 
     onDrobDownEmiter(action: string, program: IGridProgram): void {
 
-        if (action === 'edit_version') {
+        if (action === 'edit_grid_app') {
             this.onProgramEditClick(program);
         }
 
-        if (action === 'remove_version') {
+        if (action === 'remove_grid_app') {
             this.onProgramDeleteClick(program);
         }
     }

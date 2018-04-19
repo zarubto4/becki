@@ -258,50 +258,42 @@
         </div>
 
         <div [hidden]="!(tab=='versions')">
-            <div class="portlet portlet light bordered">
 
-                <bk-portlet-title
-                    [title_name]="'label_saved_versions'|bkTranslate:this"
-                    [icon]="'fa-code-fork'">
-                </bk-portlet-title>
+            <div *ngIf="blockoProgramVersions && blockoProgramVersions.length > 0" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="">{{'table_author'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_in_cloud'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let version of blockoProgramVersions">
+                        <td class="vert-align no-wrap"
+                            [class.bold]="selectedProgramVersion && selectedProgramVersion.id == version.id">
+                            <a (click)="onProgramVersionClick(version)">
+                                {{version.name}}
+                            </a>
+                        </td>
 
-                <div class="portlet-body">
+                        <td class="vert-align">
+                            {{version.description}}
+                        </td>
+                        <td class="vert-align">
+                            {{version.author.nick_name}}
+                        </td>
 
-                    <div *ngIf="blockoProgramVersions" class="table-scrollable table-scrollable-borderless">
-                        <table class="table table-hover table-light byzance-table">
-                            <thead>
-                            <tr>
-                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                                <th class="col col-lg-6">{{'table_description'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2">{{'table_author'|bkTranslate:this}}</th>
-                                <th class="text-center col col-lg-1">{{'table_in_cloud'|bkTranslate:this}}</th>
-                                <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
-                            </tr>
-                            </thead>
-                            <tbody class="hide-bk-drob-down-button">
-                            <tr *ngFor="let version of blockoProgramVersions">
-                                <td class="vert-align no-wrap"
-                                    [class.bold]="selectedProgramVersion && selectedProgramVersion.id == version.id">
-                                    <a (click)="onProgramVersionClick(version)">
-                                        {{version.name}}
-                                    </a>
-                                </td>
-
-                                <td class="vert-align">
-                                    {{version.description}}
-                                </td>
-                                <td class="vert-align">
-                                    {{version.author.nick_name}}
-                                </td>
-
-                                <th class="vert-align text-center"></th>
+                        <th class="vert-align text-center"></th>
 
 
-                                <td class="action-btn-col">
+                        <td class="action-btn-col">
 
-                                    <bk-drob-down-button
-                                        [btns_group_name]="('label_version_properties'|bkTranslate:this)"
-                                        [btns]="[
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_version_properties'|bkTranslate:this)"
+                                [btns]="[
                                                 {
                                                     condition: true,
                                                     btn_label_for_person: ('label_version_properties'|bkTranslate:this),
@@ -319,28 +311,25 @@
                                                     permission: (version.delete_permission)
                                                 }
                                             ]"
-                                        (onValueChanged)="onDrobDownEmiter($event, version)"
-                                    >
-                                    </bk-drob-down-button>
+                                (onValueChanged)="onDrobDownEmiter($event, version)"
+                            >
+                            </bk-drob-down-button>
 
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-                    <bk-nothing-to-show [condition_loading]="(blockoProgramVersions == null)"
-                                        [condition_empty]="(blockoProgramVersions != null && blockoProgramVersions.length == 0)"
-                                        [main_message_link]="'label_program_versions'|bkTranslate:this"
-                                        [main_message_comment_link]="'label_program_versions_comment'|bkTranslate:this"
-                                        [show_button]="false">
-                    </bk-nothing-to-show>
-                    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
-
-                </div>
-
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(blockoProgramVersions == null)"
+                                [condition_empty]="(blockoProgramVersions != null && blockoProgramVersions.length == 0)"
+                                [main_message_link]="'label_program_versions'|bkTranslate:this"
+                                [main_message_comment_link]="'label_program_versions_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
         </div>
 
     </div>

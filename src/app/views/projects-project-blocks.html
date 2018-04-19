@@ -17,7 +17,7 @@
         [btns]="[
                       {
                           condition: (tab == 'my_blocks'),
-                          btn_label_for_person: ('btn_add'|bkTranslate:this),
+                          btn_label_for_person: ('btn_create'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
                           btn_tag: 'add_block'
@@ -72,7 +72,7 @@
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_block_properties'|bkTranslate:this)"
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: true,
@@ -116,7 +116,78 @@
 
 
         </div>
+
         <div *ngIf="tab == 'public_blocks'">
+            <div *ngIf="(blockPublicList && blockPublicList.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th>{{'table_name'|bkTranslate:this}}</th>
+                        <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let block of blockPublicList.content">
+                        <td class="vert-align no-wrap bold">
+                            <a (click)="onBlockClick(block.id)">{{block.name}}</a>
+                        </td>
+                        <td class="vert-align">{{block.description}}</td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
+                                    {
+                                        condition: (block.update_permission),
+                                        btn_label_for_person: ('label_block_properties'|bkTranslate:this),
+                                        btn_tag: 'block_properties',
+                                        icon: 'fa-cog',
+                                        colorType: 'EDIT',
+                                        permission: (block.update_permission)
+                                    },
+                                    {
+                                        condition: (block.delete_permission),
+                                        btn_label_for_person: ('label_block_remove'|bkTranslate:this),
+                                        btn_tag: 'block_remove',
+                                        icon: 'fa-trash',
+                                        colorType: 'REMOVE',
+                                        permission: (block.delete_permission)
+                                    },
+                                    {
+                                        condition: true,
+                                        btn_label_for_person: ('label_block_make_copy'|bkTranslate:this),
+                                        btn_tag: 'block_copy',
+                                        icon: 'fa-clone',
+                                        colorType: 'CREATE',
+                                        permission: (true)
+                                    }
+                                ]"
+                                (onValueChanged)="onDrobDownEmiter($event, block)"
+                            >
+                            </bk-drob-down-button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"
+                                          [totalPages]="blockList.pages"
+                                          (onSelect)="onShowProgramPrivateBlocksFilter($event)"></bk-filter-page-component>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(blockPublicList == null)"
+                                [condition_empty]="(blockPublicList != null && blockPublicList.content.length == 0)"
+                                [main_message_link]="'label_no_public_block_program'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_public_block_text'|bkTranslate:this"
+                                (onButtonClick)="onBlockAddClick()"
+                                [btn_label]="'btn_add_block'|bkTranslate:this">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
+
+        <div *ngIf="tab == 'admin_blocks'">
             <div *ngIf="(blockListNotApproved && blockListNotApproved.content.length)"
                  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
@@ -140,7 +211,7 @@
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: projectId && group.publish_type == 'public_program',
@@ -205,7 +276,7 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
         </div>
 
-        <div *ngIf="tab == 'admin_blocks'"></div>
+
 
     </div>
 

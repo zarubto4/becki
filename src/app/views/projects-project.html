@@ -50,7 +50,9 @@
                         </div>
                     </div>
                     <div>
-                        {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.project_stats.hardware}}</strong><br> {{'label_Status'|bkTranslate:this}}:
+                        <span [innerHTML]="'label_devices_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.hardware}}</strong>
+                        <br>
+                        <span [innerHTML]="'label_online_status'|bkTranslate:this"></span>: <strong class="font-green-jungle bold">{{project.project_stats.hardware_online}}</strong>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -68,9 +70,9 @@
                         </div>
                     </div>
                     <div>
-                        {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.c_programs}}</strong>
+                        <span [innerHTML]="'label_programs_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.c_programs}}</strong>
                         <br>
-                        {{'label_libraries_count'|bkTranslate:this}}:<strong>{{project.project_stats.libraries}}</strong>
+                        <span [innerHTML]="'label_libraries_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.libraries}}</strong>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -85,9 +87,9 @@
                         </div>
                     </div>
                     <div>
-                         {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.b_programs}}</strong>
+                        <span [innerHTML]="'label_programs_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.b_programs}}</strong>
                          <br>
-                         {{'label_blocks_count'|bkTranslate:this}}: <strong>{{project.project_stats.blocks}}</strong>
+                        <span [innerHTML]="'label_blocks_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.blocks}}</strong>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -102,26 +104,46 @@
                         </div>
                     </div>
                     <div>
-                        {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.project_stats.grid_projects}}</strong>
+                        <span [innerHTML]="'label_projects_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.grid_projects}}</strong>
                         <br>
-                        {{'label_widgets_count'|bkTranslate:this}}: <strong>{{project.project_stats.widgets}}</strong>
+                        <span [innerHTML]="'label_programs_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.grid_projects}}</strong>
+                        <br>
+                        <span [innerHTML]="'label_widgets_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.widgets}}</strong>
                     </div>
                     <div class="clearfix"></div>
                 </div>
             </div>
 
             <div class="col-md-4">
+
                 <div class="portlet portlet light bordered">
                     <div class="portlet-title">
                         <div class="becki-caption">
                             <span class="font-blue-dark">
-                                <i class="fa fa-fw fa-cloud"></i>
+                                <i class="fa fa-fw fa-server"></i>
                                 <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
                             </span>
                         </div>
                     </div>
                     <div>
-                        {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.project_stats.instances}}</strong>
+                        <span [innerHTML]="'label_servers_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.instances}}</strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="portlet portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="becki-caption">
+                            <span class="font-blue-dark">
+                                <i class="fa fa-fw fa-cloud"></i>
+                                <span [innerHTML]="'label_byzance_instance'|bkTranslate:this"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <span [innerHTML]="'label_instances_count'|bkTranslate:this"></span>: <strong>{{project.project_stats.instances}}</strong>
+                        <br>
+                        <span [innerHTML]="'label_online_status'|bkTranslate:this"></span>: <strong class="font-green-jungle bold">{{project.project_stats.hardware_online}}</strong>
                     </div>
                     <div class="clearfix"></div>
                 </div>

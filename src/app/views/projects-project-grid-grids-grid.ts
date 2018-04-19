@@ -430,11 +430,11 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onDrobDownEmiter(action: string, version: IGridProgramVersion): void {
-        if (action === 'edit_device') {
+        if (action === 'remove_version') {
             this.onEditVersionClick(version);
         }
 
-        if (action === 'remove_device') {
+        if (action === 'remove_version') {
             this.onRemoveVersionClick(version);
         }
     }

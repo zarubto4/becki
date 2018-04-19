@@ -15,27 +15,30 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                       {
-                          condition: (tab == 'hardware_list' && (devicesFilter && devicesFilter.content.length)),
+                          condition: (tab == 'hardware_list' && devicesFilter && devicesFilter.content.length > 0),
                           btn_label_for_person: ('btn_add_hardware'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
+                          permission: true,
                           btn_tag: 'add_hardware'
                       },
                       {
-                          condition: (tab == 'hardware_groups' && (deviceGroup && deviceGroup.content.length)),
+                          condition: (tab == 'hardware_groups' && deviceGroup && deviceGroup.content.length > 0),
                           btn_label_for_person: ('btn_add_hardware_group'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
+                          permission: true,
                           btn_tag: 'add_hardware_group'
                       },
                       {
-                          condition: (tab == 'updates' && (actualizationFilter && actualizationFilter.content.length)),
+                          condition: (tab == 'updates' && actualizationFilter && actualizationFilter.content.length > 0),
                           btn_label_for_person: ('btn_add_new_update'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
+                          permission: true,
                           btn_tag: 'new_release'
                       }
-                    ]"
+                  ]"
         (onTabClick)="onToggleTab($event)"
         [tab_selected_name]="tab"
         [tabBtns]="[
@@ -64,10 +67,7 @@
 
     <!-- Page Content -- START -->
     <div class="portlet-body">
-
-
         <div *ngIf="tab == 'hardware_list'">
-
             <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)"
                  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
@@ -81,7 +81,7 @@
                             <th class="text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_project_status'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_status'|bkTranslate:this"></th>
-                            <th class="text-right margin-right-15" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                         </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -107,7 +107,7 @@
                         <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
                         <td class="vert-align no-wrap">{{device.full_id}}</td>
                         <td class="vert-align no-wrap">{{device.description}}</td>
-                        <td class="vert-align text-center no-wrap"><a
+                        <td class="vert-align text-center"><a
                             (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a>
                         </td>
                         <td class="vert-align text-center no-wrap">
@@ -118,8 +118,8 @@
                             <div *ngIf="device.hardware_groups">
                                 [
                                 <span *ngFor="let group of device.hardware_groups; let last = last">
-                                                {{group.name}}<span *ngIf="!last">, </span>
-                                            </span>
+                                     {{group.name}}<span *ngIf="!last">, </span>
+                                </span>
                                 ]
                             </div>
 
@@ -141,13 +141,12 @@
                         </td>
                         <td class="action-btn-col">
 
-
                             <bk-drob-down-button
-                                [btns_group_name]="('label_hardware_group'|bkTranslate:this)"
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: true,
-                                    btn_label_for_person: ('label_hardware_group'|bkTranslate:this),
+                                    btn_label_for_person: ('label_set_hardware_group'|bkTranslate:this),
                                     btn_tag: 'edit_hardware_group',
                                     icon: 'fa-object-group',
                                     colorType: 'UPDATE',
@@ -159,6 +158,22 @@
                                     btn_tag: 'edit_hardware',
                                     icon: 'fa-cog',
                                     colorType: 'EDIT',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: (!device.dominant_entity && !device.dominant_project_active),
+                                    btn_label_for_person: ('label_activate_hardware'|bkTranslate:this),
+                                    btn_tag: 'activate_hardware',
+                                    icon: 'fa-flag',
+                                    colorType: 'ADD',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: (device.dominant_entity),
+                                    btn_label_for_person: ('label_deactivate_hardware'|bkTranslate:this),
+                                    btn_tag: 'deactivate_hardware',
+                                    icon: 'fa-ban',
+                                    colorType: 'ADD',
                                     permission: (device.update_permission)
                                 },
                                 {
@@ -212,7 +227,7 @@
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let group of deviceGroup.content">
 
-                        <td class="vert-align no-wrap">{{group.name}}</td>
+                        <td class="vert-align no-wrap bold">{{group.name}}</td>
                         <td class="vert-align no-wrap">{{group.description}}</td>
                         <td class="vert-align text-center no-wrap">{{group.size}}</td>
                         <td class="vert-align text-center no-wrap">
@@ -232,20 +247,20 @@
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_device_properties'|bkTranslate:this)"
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: true,
-                                    btn_label_for_person: ('label_device_properties'|bkTranslate:this),
-                                    btn_tag: 'edit_device',
+                                    btn_label_for_person: ('label_group_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_group',
                                     icon: 'fa-cog',
                                     colorType: 'EDIT',
                                     permission: (group.update_permission)
                                 },
                                 {
                                     condition: true,
-                                    btn_label_for_person: ('label_remove_device'|bkTranslate:this),
-                                    btn_tag: 'remove_device',
+                                    btn_label_for_person: ('label_remove_group'|bkTranslate:this),
+                                    btn_tag: 'remove_group',
                                     icon: 'fa-trash',
                                     colorType: 'REMOVE',
                                     permission: (group.delete_permission)
@@ -349,12 +364,12 @@
 
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_change_update_parameters'|bkTranslate:this)"
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_change_update_parameters'|bkTranslate:this),
-                                    btn_tag: 'edit_project',
+                                    btn_tag: 'edit_procedure',
                                     icon: 'fa-cog',
                                     colorType: 'EDIT',
                                     permission: (procedure.update_permission)
@@ -362,7 +377,7 @@
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_cancel_update'|bkTranslate:this),
-                                    btn_tag: 'remove_project',
+                                    btn_tag: 'remove_procedure',
                                     icon: 'fa-trash',
                                     colorType: 'REMOVE',
                                     permission: (procedure.delete_permission)

@@ -1,52 +1,115 @@
 <bk-layout-main
     [title]="'main_title'|bkTranslate:this">
 
-    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-    <bk-portlet-title
-        [title_name]="'title'|bkTranslate:this"
-        [icon]="'fa-flag'">
-    </bk-portlet-title>
-    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
-
     <div class="portlet-body">
 
+        <div class="row">
 
-        <bk-drob-down-button
-            [btns_group_name] = "'Můj button'"
-            [group_color] = "'CODE'"
-            [btns]="[
-                {
-                    condition: false,
-                    btn_label_for_person: 'Pepa',
-                    btn_tag: 'pepa_btn_1',
-                    icon: 'fa-fire-extinguisher',
-                    permission: true
-                },
-                {
-                    condition: false,
-                    btn_label_for_person: 'Pepa2',
-                    btn_tag: 'pepa_btn_2',
-                    icon: 'fa-fire-extinguisher',
-                    permission: true
-                },
-                {
-                    condition: false,
-                    label_for_user: '',
-                    btn_tag: '',
-                    btn_space: true,
-                    permission: true
-                },
-                {
-                    condition: false,
-                    btn_label_for_person: 'Pepa3',
-                    btn_tag: 'pepa_btn_3',
-                    icon: 'fa-fire-extinguisher',
-                    permission: true
-                }
-            ]"
-            (onValueChanged)="onNaCoCliknil($event)">
-        </bk-drob-down-button>
+            <!--- Welcome Row Part -->
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="portlet">
+                    <bk-portlet-title
+                        [title_name]="'title_your_project'|bkTranslate:this"
+                        [icon]="'fa-briefcase'">
+                    </bk-portlet-title>
+                    <div class="portlet-body">
+                        <div *ngIf="projects && projects.length" class="table-scrollable table-scrollable-borderless">
+                            <table class="table table-hover table-light byzance-table">
+                                <thead>
+                                <tr>
+                                    <th class="col">{{'table_name'|bkTranslate:this}}</th>
+                                    <th class="col">{{'table_description'|bkTranslate:this}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let project of projects">
 
+                                    <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a></td>
 
+                                    <td class="vert-align" *ngIf="!project.active">
+                                        <strong>{{project.name}}</strong>
+                                        <br>
+                                        <span *ngIf="project.product" class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
+                                    </td>
+
+                                    <td class="vert-align">{{project.description}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Row Part -->
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="portlet light full-height-content full-height-content-scrollable">
+                    <bk-portlet-title
+                        [title_name]="'title_platform_news'|bkTranslate:this"
+                        [icon]="'fa-flag'"
+                        (onTabClick)="onToggleTab($event)"
+                        [tab_selected_name]="tab"
+                        [tabBtns]="[
+                                {
+                                    tab_name: 'general',
+                                    condition: (true),
+                                    tab_color: 'BYZANCE',
+                                    tab_label: ('tab_general'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'hardware',
+                                    condition: (true),
+                                    tab_color: 'HARDWARE',
+                                    tab_label: ('tab_hardware'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'code',
+                                    condition: (true),
+                                    tab_color: 'CODE',
+                                    tab_label: ('tab_code'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'blocko',
+                                    condition: (true),
+                                    tab_color: 'BLOCKO',
+                                    tab_label: ('tab_blocko'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'grid',
+                                    condition: (true),
+                                    tab_color: 'GRID',
+                                    tab_label: ('tab_grid'|bkTranslate:this)
+                                }
+                            ]">
+                    </bk-portlet-title>
+                    <div class="portlet-body">
+                        <div class="slimScrollDiv"
+                             style="position: relative; overflow: hidden; width: auto; height: 310px;">
+                            <p> Bla bla bla bsafjsd lbjkadfklbsadf kn  ds dasd Hi! This is an amazing UI! Is there a way to turn sidebar completely off with a simple
+                                body class, like that which is used to minimize the sidebar? Also, I’m looking for a way
+                                to make portlets fill the vertical space
+                                between the fixed header and fixed footer. I know that full height divs are a chore, but
+                                I’m wondering if you have already written any code that checks the height of the window
+                                and adjusts the height of an element
+                                that I could re-purpose or extend for these full height content areas? If you have, I’d
+                                love a tip on where to find it in app.js or wherever else. Otherwise any other
+                                suggestions you may have. Thanks a ton!Hi! This
+                                is an amazing UI! Is there a way to turn sidebar completely off with a simple body
+                                class, like that which is used to minimize the sidebar? Also, I’m looking for a way to
+                                make portlets fill the vertical space between
+                                the fixed header and fixed footer. I know that full height divs are a chore, but I’m
+                                wondering if you have already written any code that checks the height of the window and
+                                adjusts the height of an element that
+                                I could re-purpose or extend for these full height content areas? If you have, I’d love
+                                a tip on where to find it in app.js or wherever else. Otherwise any other suggestions
+                                you may have. Thanks a ton!Hi!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+    </div>
+
+        </div>
     </div>
 </bk-layout-main>
