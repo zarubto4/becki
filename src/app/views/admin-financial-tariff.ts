@@ -82,11 +82,11 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
         this.blockUI();
         this.tyrionBackendService.tariffDeactivate(tariff.id)
             .then(() => {
-                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_deactive_success')));
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error'), reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_deactive_error'), reason));
                 this.refresh();
             });
     }
@@ -95,11 +95,11 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
         this.blockUI();
         this.tyrionBackendService.tariffActivate(tariff.id)
             .then(() => {
-                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_active_success')));
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error'), reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_active_error'), reason));
                 this.refresh();
             });
     }
@@ -195,28 +195,6 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.refresh();
             });
     }
-
-    // onExtensionShiftUpClick(extension: IProductExtension): void {
-    //     this.tyrionBackendService.tariffExtensionOrderUP(extension.id)
-    //         .then(() => {
-    //             this.refresh();
-    //         })
-    //         .catch(reason => {
-    //             this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label'), reason));
-    //             this.refresh();
-    //         });
-    // }
-    //
-    // onExtensionShiftDownClick(extension: IProductExtension): void {
-    //     this.tyrionBackendService.tariffExtensionOrderDown(extension.id)
-    //         .then(() => {
-    //             this.refresh();
-    //         })
-    //         .catch(reason => {
-    //             this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label'), reason));
-    //             this.refresh();
-    //         });
-    // }
 }
 
 

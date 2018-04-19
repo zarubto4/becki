@@ -210,11 +210,11 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                     config: model.config.toString(),
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_edit_success', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_create_success', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_edit_error', model.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_create_error', model.name, reason)));
                         this.refresh();
                     });
             }
