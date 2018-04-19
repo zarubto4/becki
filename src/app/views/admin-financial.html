@@ -31,12 +31,14 @@
                         {
                             tab_name: 'tariffs',
                             tab_color: 'HARDWARE',
-                            tab_label: ('tab_tariffs'|bkTranslate:this)
+                            tab_label: ('tab_tariffs'|bkTranslate:this),
+                            condition: true
                         },
                         {
                             tab_name: 'extensions',
                             tab_color: 'HARDWARE',
-                            tab_label: ('tab_extensions'|bkTranslate:this)
+                            tab_label: ('tab_extensions'|bkTranslate:this),
+                            condition: true
                         }
                     ]">
         </bk-portlet-title>
@@ -118,49 +120,52 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                         <tr>
-                            <th class="col col-lg-1">{{'table_icon'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1">{{'table_extension_color'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_extension_name'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1">{{'table_extension_price'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_extension_description'|bkTranslate:this}}</th>
                             <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let extension of extensions">
 
-                            <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
-                            <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
-                                <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
-                                <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
+                            <td class="vert-align no-wrap bold"><div style="width:20px; height: 20px;" class="bg-{{extension.color|lowercase}}"></div></td>
+                            <td class="vert-align no-wrap bold"><a (click)="onExtensionEditClick(extension)">{{extension.name}}</a>
+                                <span *ngIf="extension.active" class="font-green-jungle bold">(Active)</span>
+                                <span *ngIf="!extension.active" class="font-red-flamingo bold">(Deactivated)</span>
                             </td>
-                            <td class="vert-align">{{tariff.description}}</td>
+                            <td class="vert-align">{{makePrice(extension.price)}}</td>
+                            <td class="vert-align">{{extension.description}}</td>
                             <td class="vert-align no-wrap text-right">
+                                <button title="{{'label_extension_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!extension.update_permission" (click)="onExtensionEditClick(extension)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+
+                                <button *ngIf="!(extension.order_position == 1 || extension.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!extension.update_permission" (click)="onExtensionShiftUpClick(extension)">
+                                    <i class="fa fa-chevron-up"></i>
+                                </button>
+
+                                <button *ngIf="!(extensions.length == extension.order_position)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!extension.update_permission" (click)="onExtensionShiftDownClick(extension)">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+
+                                <button *ngIf="!extension.active" title="{{'label_active_extension'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!extension.update_permission" (click)="onExtensionActivateClick(extension)">
+                                    <i class="fa fa-power-off"></i>
+                                </button>
+
+                                <button  *ngIf="extension.active" title="{{'label_deactive_extension'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!extension.update_permission" (click)="onExtensionDeactivateClick(extension)">
+                                    <i class="fa fa-power-off"></i>
+                                </button>
+
+                                <button title="{{'label_delete_extension'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!extension.update_permission" (click)="onExtensionRemoveClick(extension)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
 
                                 <style type="text/css">
                                     table tr button { opacity:0.05;}
                                     table tr:hover button { opacity:1 }
                                 </style>
-
-                                <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.update_permission" (click)="onTariffEditClick(tariff)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-
-                                <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftUpClick(tariff)">
-                                    <i class="fa fa-chevron-up"></i>
-                                </button>
-
-                                <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.update_permission" (click)="onTariffShiftDownClick(tariff)">
-                                    <i class="fa fa-chevron-down"></i>
-                                </button>
-
-                                <button *ngIf="!tariff.active" title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivate(tariff)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                                <button  *ngIf="tariff.active" title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivate(tariff)">
-                                    <i class="fa fa-power-off"></i>
-                                </button>
-                                <button title="{{'label_delete_tariff'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!tariff.update_permission" (click)="onTariffRemoveClick(tariff)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
                             </td>
                         </tr>
                     </tbody>
