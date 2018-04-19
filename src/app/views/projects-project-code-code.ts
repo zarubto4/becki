@@ -771,4 +771,27 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
             }
         }
     }
+
+    onDrobDownEmiter(action: string, version: ICProgramVersion): void {
+
+        if (action === 'version_properties') {
+            this.onEditVersionClick(version);
+        }
+
+        if (action === 'version_properties_community') {
+            this.onCommunityPublicVersionClick(version);
+        }
+
+        if (action === 'version_publish') {
+            this.onCProgramPublishResult(version);
+        }
+
+        if (action === 'set_as_main') {
+            this.onCProgramDefaultSetMainClick(version);
+        }
+
+        if (action === 'remove_version') {
+            this.onRemoveVersionClick(version);
+        }
+    }
 }

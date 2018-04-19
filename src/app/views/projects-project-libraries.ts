@@ -191,5 +191,20 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 this.unblockUI();
             });
     }
+    onDrobDownEmiter(action: string, library: ILibrary): void {
+
+        if (action === 'edit_library') {
+            this.onEditClick(library);
+        }
+
+        if (action === 'remove_library') {
+            this.onRemoveClick(library);
+        }
+
+        if (action === 'make_clone_library') {
+            this.onMakeClone(library);
+        }
+    }
+
 
 }

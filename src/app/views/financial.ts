@@ -69,6 +69,13 @@ export class FinancialComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
             });
     }
+
+    onDrobDownEmiter (action: string, product: IProduct): void {
+
+        if (action === 'edit_product') {
+            this.onEditClick(product);
+        }
+    }
 }
 
 

@@ -507,6 +507,9 @@ export class StaticTranslation {
                 'label_deactivated_under': 'Deactivated under',
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
+                'label_Project_Properties': 'Settings',
+                'label_basic_settings': 'Basic Settings',
+                'label_remove': 'Remove',
                 'label_no_projects': '<strong class="font-color-byzance-blue">Nerds</strong> rule N.1',
                 'label_no_projects_comment': 'Create project first, connect hardware and <strong class="font-color-byzance-blue">start slowly control the world</strong>... Step by step...',
                 'label_no_product': '<strong class="font-color-hardware">Mr. Salieri</strong> likes things in order and leads an <strong class="font-color-hardware">accounting book...</strong>',
@@ -666,7 +669,7 @@ export class StaticTranslation {
 
                 'tab_tariffs': 'All Tariffs',
                 'tab_extensions': 'All Extensions',
-
+                'label_Project_Properties': 'Settings',
 
             }, 'AdminFinancialTariffComponent': {
                 'main_title': 'Platform administration',
@@ -898,7 +901,8 @@ export class StaticTranslation {
                 'flash_product_activated': 'The product has been activated.',
                 'flash_cant_activate_product': 'The product cannot be activated. ',
                 'flash_product_deactivated': 'The product has been deactivated.',
-                'flash_products_cant_load': 'Products cannot be loaded, {0}.'
+                'flash_products_cant_load': 'Products cannot be loaded, {0}.',
+                'label_settings': 'Settings'
 
             }, 'HardwareHardwareTypeComponent': {
                 'main_administration_title': 'Platform administration',
@@ -976,6 +980,9 @@ export class StaticTranslation {
                 'tab_bootloaders': 'Bootloaders',
                 'tab_admin_code': 'Code Settings',
                 'tab_batches': 'Manufacture Batches',
+
+                'label_version_properties': 'Properties',
+                'label_remove_version': 'Remove version',
 
             }, 'HardwareComponent': {
                 'main_title': 'Hardware Types',
@@ -1209,6 +1216,8 @@ export class StaticTranslation {
                 'flash_edit_cant_change_version': 'Version {0} could not be changed, {1}.',
                 'flash_cant_turn_instance_on': 'Could not turn on this instance, {0}.',
                 'flash_cant_turn_instance_off': 'Could not turn off this instance, {0}.',
+                'label_publish': 'Publish',
+                'label_user_blocks': 'User Blocks'
 
             }, 'ModalsCodeSelectComponent': {
 
@@ -1465,7 +1474,7 @@ export class StaticTranslation {
                 'btn_create_instance': 'Create Instance',
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
-
+                'label_instance_remove': 'Remove instance',
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
@@ -1765,6 +1774,8 @@ export class StaticTranslation {
                 'label_no_admin_widget': 'No <strong class="font-color-grid">GRID</strong> widgets',
                 'label_no_admin_widget_comment': 'There is not any widgets to check and valid',
 
+                'label_code_program_properties': 'Code Properties',
+
             }, 'ProjectsProjectWidgetsWidgetComponent': {
 
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET <strong>{0}</strong>',
@@ -1807,6 +1818,9 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
+
+                'label_publish': 'Publish',
+                'label_version_set_as_main': 'Set as main',
 
             }, 'ProjectsProjectActualizationProcedureComponent': {
                 'title': 'Actualization Procedure',
@@ -1919,6 +1933,7 @@ export class StaticTranslation {
                 'flash_version_change': 'Version {0} has been changed.',
                 'flash_cant_change_version': 'Unable to change version {0}, {1}',
                 'flash_cant_load_block_version': 'Unable to load block version, ',
+                'label_publish': 'Publish',
 
             }, 'ProjectsProjectBlocksComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> Blocks',
@@ -2013,6 +2028,8 @@ export class StaticTranslation {
                 'flash_cant_load_code_types': 'Unable to load code types, {0}.',
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>, {1}.',
 
+                'label_download_file': 'Download',
+
             }, 'ProjectsProjectCodeComponent': {
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL PROGRAMS',
                 'label_no_code': 'New <strong class="font-color-code">CODE</strong> Program',
@@ -2040,6 +2057,7 @@ export class StaticTranslation {
                 'flash_cant_add_code_to_project': 'Unable to add CODE program to your project.',
                 'flash_code_remove': 'Program has been removed.',
                 'flash_cant_remove_code': 'Unable to remove program, {0}.',
+                'label_code_program_properties': 'Code Properties'
 
             }, 'ProjectsProjectGridGridsGridComponent': {
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong>',
@@ -2320,6 +2338,11 @@ export class StaticTranslation {
                 'label_loading': 'Loading',
                 'btn_create_server': 'Create server',
 
+                'label_server_udpate': 'Update',
+                'label_server_properties': 'Properties',
+                'label_delete_server': 'Remove',
+
+
             }, 'AdminDashboardComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Admin Dashboard',
@@ -2377,7 +2400,23 @@ export class StaticTranslation {
                 'btn_label_synchronize_hardware' : 'Synchronize with CA',
                 'btn_label_create_type_of_board' : 'Create',
                 'btn_label_create_producer' : 'Create',
-                'btn_label_create_processor' : 'Create'
+                'btn_label_create_processor' : 'Create',
+
+
+                'label_Project_Properties': 'Settings',
+                'label_print_stickers': 'Print Stickers',
+                'label_device_properties': 'Hardware Properties',
+                'label_remove_device': 'Remove Hardware',
+
+                'label_type_of_board_properties': 'Hardware Type Properties',
+                'label_type_of_board_remove': 'Hardware Type Remove',
+
+                'label_producer_properties':'Producer Properties',
+                'label_producer_remove': 'Producer Remove',
+
+                'label_processor_properties': 'Processor Properties',
+                'label_processor_remove': 'Processor Remove',
+
 
             }, 'CommunityCProgramComponent': {
                 'main_title': 'Platform administration',
@@ -2401,6 +2440,9 @@ export class StaticTranslation {
 
                 'label_no_c_library': 'No <strong class="font-color-code">CODE</strong> libraries ',
                 'label_no_c_library_comment': 'Create new <strong>Library</strong>, or change Filter property',
+
+                'label_code_program_properties': 'Program properties',
+                'label_remove_code_program': 'Remove CODE program',
 
             }, 'GarfieldGarfieldComponent': {
                 'main_title': 'Platform administration',
@@ -2505,6 +2547,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'label_no_bugs': 'No Bugs',
                 'label_no_bugs_comment': 'Heureca! No Bugs!',
+                'label_Project_Properties':'Settings',
 
             }, 'BugsBugComponent': {
                 'main_title': 'Platform administration',

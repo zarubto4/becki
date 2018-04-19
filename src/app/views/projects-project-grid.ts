@@ -131,4 +131,14 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
 
     }
 
+    onDrobDownEmiter(action: string, gridProject: IGridProject): void {
+        if (action === 'edit_gridProject') {
+            this.onProjectEditClick(gridProject);
+        }
+
+        if (action === 'remove_gridProject') {
+            this.onProjectDeleteClick(gridProject);
+        }
+    }
+
 }

@@ -4,19 +4,19 @@
   -->
 
 <bk-layout-main
-     [tabMenu]="(project_Id == null ? 'byzance-admin' : 'projects-project')"
-     [show_title]="!project_Id"
-     [title]="project_Id == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
-     [subtitle]="project_Id == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
+    [tabMenu]="(project_Id == null ? 'byzance-admin' : 'projects-project')"
+    [show_title]="!project_Id"
+    [title]="project_Id == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="project_Id == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title *ngIf="codeProgram"
-        [title_name]="'title'|bkTranslate:this"
-        [title_object_name]="codeProgram.name"
-        [title_object_description]="codeProgram.description"
-        [icon]="'fa-tachometer'"
-        (onClick)="onPortletClick($event)"
-        [btns]="[
+                      [title_name]="'title'|bkTranslate:this"
+                      [title_object_name]="codeProgram.name"
+                      [title_object_description]="codeProgram.description"
+                      [icon]="'fa-tachometer'"
+                      (onClick)="onPortletClick($event)"
+                      [btns]="[
              {
                   condition: (codeProgram && codeProgram.update_permission),
                   btn_label_for_person: ('label_program_properties'|bkTranslate:this),
@@ -42,9 +42,9 @@
                   btn_tag: 'make_clone'
              }
             ]"
-        (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
-        [tabBtns]="[
+                      (onTabClick)="onToggleTab($event)"
+                      [tab_selected_name]="tab"
+                      [tabBtns]="[
             {
                 tab_name: 'ide',
                 condition: (true),
@@ -91,18 +91,18 @@
             <div *ngIf="codeProgramVersions && codeProgramVersions.length > 0"  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
-                        <tr>
-                            <th class="">{{'table_name'|bkTranslate:this}}</th>
-                            <th *ngIf="!projectId"></th>
-                            <th class="">{{'table_description'|bkTranslate:this}}</th>
-                            <th class="">{{'table_lib_version'|bkTranslate:this}}</th>
-                            <th class="">{{'table_author'|bkTranslate:this}}</th>
-                            <th class="">{{'table_status'|bkTranslate:this}}</th>
-                            <th class=""></th>
-                            <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th *ngIf="!projectId"></th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="">{{'table_lib_version'|bkTranslate:this}}</th>
+                        <th class="">{{'table_author'|bkTranslate:this}}</th>
+                        <th class="">{{'table_status'|bkTranslate:this}}</th>
+                        <th class=""></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let version of codeProgramVersions">
 
                         <!-- NAME -->
@@ -142,57 +142,74 @@
                         </td>
                         <!-- UPLOAD -->
 
-                        <td class="vert-align no-wrap">
-                            <button *ngIf="projectId && hardwareType && hardwareType.connectible_to_internet && version.status=='SUCCESS' && codeProgram && codeProgram.publish_type == 'PRIVATE'" class="btn blue">
-                                {{'btn_upload_to_hardware'|bkTranslate:this}}
-                            </button>
-                        </td>
+                            <td class="vert-align no-wrap">
+                                <button *ngIf="projectId && hardwareType && hardwareType.connectible_to_internet && version.status=='SUCCESS' && codeProgram && codeProgram.publish_type == 'PRIVATE'" class="btn blue">
+                                    {{'btn_upload_to_hardware'|bkTranslate:this}}
+                                </button>
+                            </td>
 
                         <!-- ACTIONS -->
-                        <td class="vert-align text-right no-wrap">
+                        <td class="action-btn-col">
 
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_version_properties'|bkTranslate:this)"
+                                    [btns]="[
+                                    {
+                                        condition: version.download_link_bin_file,
+                                        btn_label_for_person: ('label_download_file'|bkTranslate:this),
+                                        btn_tag: 'download_file',
+                                        icon: 'fa-cloud-download',
+                                        colorType: 'CREATE',
+                                        btn_link: version.download_link_bin_file,
+                                        permission: (version.update_permission)
+                                    },
+                                    {
+                                        condition: version.update_permission,
+                                        btn_label_for_person: ('label_version_properties'|bkTranslate:this),
+                                        btn_tag: 'version_properties',
+                                        icon: 'fa-cog',
+                                        colorType: 'EDIT',
+                                        permission: (version.update_permission)
+                                    },
+                                    {
+                                        condition: codeProgram.publish_type == 'PRIVATE' && !version.approval_state,
+                                        btn_label_for_person: ('label_version_properties'|bkTranslate:this),
+                                        btn_tag: 'version_properties_community',
+                                        icon: 'fa-heart',
+                                        colorType: 'UPDATE',
+                                        permission: (version.update_permission)
+                                    },
+                                    {
+                                        condition: version.approval_state == 'PENDING' && version.community_publishing_permission,
+                                        btn_label_for_person: ('label_publish'|bkTranslate:this),
+                                        btn_tag: 'version_publish',
+                                        icon: 'fa-heart',
+                                        colorType: 'UPDATE',
+                                        permission: (version.update_permission)
+                                    },
+                                    {
+                                        condition: markupableAsMain(version),
+                                        btn_label_for_person: ('label_main_c_program_version_set_as_main'|bkTranslate:this),
+                                        btn_tag: 'set_as_main',
+                                        icon: 'fa-flag',
+                                        colorType: 'ACTIVE',
+                                        permission: (hardwareType && !hardwareType.update_permission)
+                                    },
+                                    {
+                                        condition: true,
+                                        btn_label_for_person: ('label_remove_version'|bkTranslate:this),
+                                        btn_tag: 'remove_version',
+                                        icon: 'fa-trash',
+                                        colorType: 'REMOVE',
+                                        permission: (version.delete_permission)
+                                    }
+                                ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, version)"
+                                >
+                                </bk-drob-down-button>
 
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
-
-                            <a *ngIf="version.download_link_bin_file" href="{{version.download_link_bin_file}}">
-                                <button title="{{'label_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
-                                    <i class="fa fa-cloud-download"></i>
-                                </button>
-                            </a>
-
-                            <button *ngIf="version.update_permission"  title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                    (click)="onEditVersionClick(version)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button *ngIf="codeProgram.publish_type == 'PRIVATE' && !version.approval_state" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
-                                    (click)="onCommunityPublicVersionClick(version)">
-                                <i class="fa fa-heart"></i>
-                            </button>
-
-                            <!-- Buttons for Administrator for Community decisions  -->
-                            <button *ngIf="version.approval_state == 'PENDING' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onCProgramPublishResult(version)">
-                                <i class="fa fa-heart"></i>
-                            </button>
-
-                            <button *ngIf="markupableAsMain(version)" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="hardwareType && !hardwareType.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
-                                <i class="fa fa-flag"></i>
-                            </button>
-
-                            <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                    [disabled]="!version.delete_permission"
-                                    (click)="onRemoveVersionClick(version)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

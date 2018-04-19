@@ -3,8 +3,8 @@
  * directory of this distribution.
  */
 
-import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
-import { _BaseMainComponent } from './_BaseMainComponent';
+import {Component, OnInit, Injector, OnDestroy} from '@angular/core';
+import {_BaseMainComponent} from './_BaseMainComponent';
 import {
     FlashMessageError, FlashMessageSuccess,
     FlashMessageInfo, FlashMessageWarning, FlashMessage
@@ -61,6 +61,13 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
             });
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'add_project') {
+            this.onAddClick();
+        }
+    }
+
+
     onAddClick(): void {
 
         if (!this.products) {
@@ -86,6 +93,16 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
                     });
             }
         });
+    }
+
+    onDrobDownEmiter(action: string, project: IProject): void {
+        if (action === 'edit_project') {
+            this.onEditClick(project);
+        }
+
+        if (action === 'remove_project') {
+            this.onRemoveClick(project);
+        }
     }
 
     onEditClick(project: IProject): void {

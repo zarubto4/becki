@@ -602,4 +602,27 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
             });
     }
 
+    onDrobDownEmiter(action: string, version: IWidgetVersion): void {
+
+        if (action === 'version_publish_community') {
+            this.onCommunityPublicVersionClick(version);
+        }
+
+        if (action === 'version_publish_admin') {
+            this.onProgramVersionPublishResult(version);
+        }
+
+        if (action === 'edit_version') {
+            this.onWidgetSetMainClick(version);
+        }
+
+        if (action === 'version_set_as_main') {
+            this.onEditVersionClick(version);
+        }
+
+        if (action === 'remove_version') {
+            this.onRemoveVersionClick(version);
+        }
+    }
+
 }

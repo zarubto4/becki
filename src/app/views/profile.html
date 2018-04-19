@@ -1,7 +1,7 @@
-    <!--
-  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level
-  ~ directory of this distribution.
-  -->
+<!--
+~ © 2016 Becki Authors. See the AUTHORS file found in the top-level
+~ directory of this distribution.
+-->
 
 
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
@@ -11,7 +11,7 @@
         [title_name]="'title'|bkTranslate:this"
         [icon]="'fa-user'"
         (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
+        [tab_selected_name]="tab"
         [tabBtns]="[
                         {
                             condition: (person && person.update_permission),
@@ -55,11 +55,16 @@
             <!-- PERSONAL TAB -->
             <div class="tab-pane" [class.active]="tab == 'personal'">
                 <form>
-                    <bk-form-input [label]="'label_first_name'|bkTranslate:this" type="text" [control]="infoForm.controls['first_name']"></bk-form-input>
-                    <bk-form-input [label]="'label_last_name'|bkTranslate:this" type="text" [control]="infoForm.controls['last_name']"></bk-form-input>
-                    <bk-form-input [label]="'label_nick_name'|bkTranslate:this" type="text" [control]="infoForm.controls['nickName']"></bk-form-input>
-                    <bk-form-select [label]="'label_gender'|bkTranslate:this"   [options]="genderList" [control]="infoForm.controls['gender']"></bk-form-select>
-                    <bk-form-select [label]="'label_state'|bkTranslate:this"     [options]="countryList" [control]="infoForm.controls['state']"></bk-form-select>
+                    <bk-form-input [label]="'label_first_name'|bkTranslate:this" type="text"
+                                   [control]="infoForm.controls['first_name']"></bk-form-input>
+                    <bk-form-input [label]="'label_last_name'|bkTranslate:this" type="text"
+                                   [control]="infoForm.controls['last_name']"></bk-form-input>
+                    <bk-form-input [label]="'label_nick_name'|bkTranslate:this" type="text"
+                                   [control]="infoForm.controls['nickName']"></bk-form-input>
+                    <bk-form-select [label]="'label_gender'|bkTranslate:this" [options]="genderList"
+                                    [control]="infoForm.controls['gender']"></bk-form-select>
+                    <bk-form-select [label]="'label_state'|bkTranslate:this" [options]="countryList"
+                                    [control]="infoForm.controls['state']"></bk-form-select>
 
                     <div *ngIf="person.update_permission" class="margin-top-10">
                         <button (click)="changeInfo()" class="btn green">{{'btn_save'|bkTranslate:this}}</button>
@@ -71,10 +76,13 @@
 
             <!-- AVATAR TAB -->
             <div class="tab-pane center-align center text-center" [class.active]="tab == 'avatar'">
-                <img *ngIf="person.picture_link" class="preview img-circle center-align center" [src]="person.picture_link" width="128" height="128">
-                <img *ngIf="!person.picture_link" class="preview img-circle empty center-align center" width="128" height="128">
+                <img *ngIf="person.picture_link" class="preview img-circle center-align center"
+                     [src]="person.picture_link" width="128" height="128">
+                <img *ngIf="!person.picture_link" class="preview img-circle empty center-align center" width="128"
+                     height="128">
 
-                <p class="text-center"><a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+                <p class="text-center"><a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a>
+                </p>
             </div>
             <!-- END AVATAR TAB -->
 
@@ -82,12 +90,17 @@
             <!-- PASSWORD TAB -->
             <div class="tab-pane" [class.active]="tab === 'password'">
                 <form>
-                    <bk-form-input [label]="'label_current_password'|bkTranslate:this" type="password" [control]="passwordForm.controls['currentPassword']"></bk-form-input>
-                    <bk-form-input [label]="'label_new_password'|bkTranslate:this" type="password" [control]="passwordForm.controls['newPassword']"></bk-form-input>
-                    <bk-form-input [label]="'label_new_password_again'|bkTranslate:this" type="password" [control]="passwordForm.controls['newPasswordConfirm']"></bk-form-input>
+                    <bk-form-input [label]="'label_current_password'|bkTranslate:this" type="password"
+                                   [control]="passwordForm.controls['currentPassword']"></bk-form-input>
+                    <bk-form-input [label]="'label_new_password'|bkTranslate:this" type="password"
+                                   [control]="passwordForm.controls['newPassword']"></bk-form-input>
+                    <bk-form-input [label]="'label_new_password_again'|bkTranslate:this" type="password"
+                                   [control]="passwordForm.controls['newPasswordConfirm']"></bk-form-input>
 
                     <div *ngIf="person.update_permission" class="margin-top-10">
-                        <button type="submit" (click)="changePassword()" class="btn green" [disabled]="!passwordForm.valid">{{'btn_change_password'|bkTranslate:this}}</button>
+                        <button type="submit" (click)="changePassword()" class="btn green"
+                                [disabled]="!passwordForm.valid">{{'btn_change_password'|bkTranslate:this}}
+                        </button>
                     </div>
                 </form>
             </div>
@@ -97,12 +110,17 @@
             <!-- EMAIL TAB -->
             <div class="tab-pane" [class.active]="tab === 'email'">
                 <form>
-                    <bk-form-input [label]="'label_current_email'|bkTranslate:this" type="email" [control]="emailForm.controls['currentEmail']"></bk-form-input>
-                    <bk-form-input [label]="'label_new_email'|bkTranslate:this" type="email" [control]="emailForm.controls['newEmail']"></bk-form-input>
-                    <bk-form-input [label]="'label_new_email_again'|bkTranslate:this" type="email" [control]="emailForm.controls['newEmailConfirm']"></bk-form-input>
+                    <bk-form-input [label]="'label_current_email'|bkTranslate:this" type="email"
+                                   [control]="emailForm.controls['currentEmail']"></bk-form-input>
+                    <bk-form-input [label]="'label_new_email'|bkTranslate:this" type="email"
+                                   [control]="emailForm.controls['newEmail']"></bk-form-input>
+                    <bk-form-input [label]="'label_new_email_again'|bkTranslate:this" type="email"
+                                   [control]="emailForm.controls['newEmailConfirm']"></bk-form-input>
 
                     <div *ngIf="person.update_permission" class="margin-top-10">
-                        <button type="submit" (click)="changeEmail()" class="btn green" [disabled]="!emailForm.valid">{{'btn_change_email'|bkTranslate:this}}</button>
+                        <button type="submit" (click)="changeEmail()" class="btn green" [disabled]="!emailForm.valid">
+                            {{'btn_change_email'|bkTranslate:this}}
+                        </button>
                     </div>
                 </form>
             </div>
@@ -117,10 +135,10 @@
                             <th class="center-align">{{'table_user_agent'|bkTranslate:this}}</th>
                             <th class="center-align">{{'table_created'|bkTranslate:this}}</th>
                             <th class="center-align">{{'table_access_age'|bkTranslate:this}}</th>
-                            <th class="center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let login_token of login_tokens">
                             <td class="vert-align">
                                 <span *ngIf="login_token.where_logged == 'BECKI_WEBSITE'">Byzance Portal</span>
@@ -129,21 +147,30 @@
                             <td class="vert-align no-wrap">{{login_token.created|bkUnixTimeToDate}}</td>
                             <td class="vert-align no-wrap">{{login_token.access_age|bkUnixTimeToDate}}</td>
 
-                            <td class="vert-align text-right no-wrap">
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
+                            <td class="action-btn-col">
 
-                                <button *ngIf="login_token.delete_permission" title="{{'label_token_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onLoginTokenDeleteClick(login_token)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_token_remove'|bkTranslate:this)"
+                                    [btns]="[
+                                        {
+                                            condition: login_token.delete_permission,
+                                            btn_label_for_person: ('label_token_remove'|bkTranslate:this),
+                                            btn_tag: 'login_token_delete',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (login_token.delete_permission)
+                                        }
+                                        ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, login_token)"
+                                >
+                                </bk-drob-down-button>
+
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <h3  *ngIf="!login_tokens" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                <h3 *ngIf="!login_tokens" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
             </div>
 
         </div>

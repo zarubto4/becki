@@ -53,7 +53,7 @@
                       }
                     ]"
                       (onTabClick)="onToggleTab($event)"
-                      [tab_selected_name] = "tab"
+                      [tab_selected_name]="tab"
                       [tabBtns]="[
                         {
                             tab_name: 'overview',
@@ -130,10 +130,12 @@
                         <br>
                         <div>
                             <div>
-                                <span [innerHTML]="'label_b_program_name'|bkTranslate:this"></span>: <a (click)="onBProgramClick(instance.b_program.id)">{{instance.b_program.name}}</a>
+                                <span [innerHTML]="'label_b_program_name'|bkTranslate:this"></span>: <a
+                                (click)="onBProgramClick(instance.b_program.id)">{{instance.b_program.name}}</a>
                             </div>
                             <div>
-                                <span [innerHTML]="'label_b_program_description'|bkTranslate:this"></span>: {{instance.b_program.description}}
+                                <span [innerHTML]="'label_b_program_description'|bkTranslate:this"></span>:
+                                {{instance.b_program.description}}
                             </div>
                         </div>
 
@@ -151,15 +153,18 @@
                         <div class="portlet-body margin-left-15 margin-top-15">
                             <div>
                                 <div>
-                                    <span [innerHTML]="'label_server_name'|bkTranslate:this"></span>: {{instance.server.name}}
+                                    <span [innerHTML]="'label_server_name'|bkTranslate:this"></span>:
+                                    {{instance.server.name}}
                                 </div>
                                 <div>
-                                    <span [innerHTML]="'label_server_description'|bkTranslate:this"></span>: {{instance.server.description}}
+                                    <span [innerHTML]="'label_server_description'|bkTranslate:this"></span>:
+                                    {{instance.server.description}}
                                 </div>
 
                                 <br>
                                 <div>
-                                    <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>: <bk-online-state [online_state]="instance.server.online_state"></bk-online-state>
+                                    <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>:
+                                    <bk-online-state [online_state]="instance.server.online_state"></bk-online-state>
                                 </div>
                             </div>
                         </div>
@@ -173,28 +178,36 @@
                         <div class="portlet-body margin-left-15 margin-top-15">
                             <div *ngIf="instance.current_snapshot">
                                 <div>
-                                    <span [innerHTML]="'label_instance_version_name'|bkTranslate:this"></span>: {{instance.current_snapshot.b_program_version.name}}
+                                    <span [innerHTML]="'label_instance_version_name'|bkTranslate:this"></span>:
+                                    {{instance.current_snapshot.b_program_version.name}}
                                 </div>
                                 <div>
-                                    <span [innerHTML]="'label_instance_version_description'|bkTranslate:this"></span>: {{instance.current_snapshot.b_program_version.description}}
+                                    <span [innerHTML]="'label_instance_version_description'|bkTranslate:this"></span>:
+                                    {{instance.current_snapshot.b_program_version.description}}
                                 </div>
                                 <div class="margin-left-15 margin-top-15 margin-bottom-15">
                                     <div>
-                                        <span [innerHTML]="'label_b_program_version_name'|bkTranslate:this"></span>: <a (click)="onBProgramClick(instance.current_snapshot.b_program_version.id)">{{instance.current_snapshot.b_program_version.name}}</a>
+                                        <span [innerHTML]="'label_b_program_version_name'|bkTranslate:this"></span>: <a
+                                        (click)="onBProgramClick(instance.current_snapshot.b_program_version.id)">{{instance.current_snapshot.b_program_version.name}}</a>
                                     </div>
                                     <div>
-                                        <span [innerHTML]="'label_b_program_version_description'|bkTranslate:this"></span>: {{instance.current_snapshot.b_program_version.description}}
+                                        <span
+                                            [innerHTML]="'label_b_program_version_description'|bkTranslate:this"></span>:
+                                        {{instance.current_snapshot.b_program_version.description}}
                                     </div>
                                 </div>
                                 <div>
-                                    <span [innerHTML]="'label_created'|bkTranslate:this"></span>: {{instance.current_snapshot.created|bkUnixTimeToDate}}
+                                    <span [innerHTML]="'label_created'|bkTranslate:this"></span>:
+                                    {{instance.current_snapshot.created|bkUnixTimeToDate}}
                                 </div>
                                 <div>
-                                    <span [innerHTML]="'label_deployed'|bkTranslate:this"></span>: {{instance.current_snapshot.deployed|bkUnixTimeToDate}}
+                                    <span [innerHTML]="'label_deployed'|bkTranslate:this"></span>:
+                                    {{instance.current_snapshot.deployed|bkUnixTimeToDate}}
                                 </div>
                                 <br>
                                 <div>
-                                    <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>: <bk-online-state [online_state]="instance.online_state"></bk-online-state>
+                                    <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>:
+                                    <bk-online-state [online_state]="instance.online_state"></bk-online-state>
                                 </div>
                             </div>
 
@@ -207,33 +220,38 @@
 
         <div *ngIf="tab == 'update' && instance && instance.current_snapshot">
 
-            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)" class="table-scrollable table-scrollable-borderless">
+            <div
+                *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)"
+                class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col vert-align">{{'table_update_id'|bkTranslate:this}}</th>
-                        <th class="col vert-align text-center">{{'table_created'|bkTranslate:this}}</th>
-                        <th class="col vert-align text-center">{{'table_planed'|bkTranslate:this}}</th>
-                        <th class="col vert-align text-center">{{'table_finished'|bkTranslate:this}}</th>
-                        <th class="col vert-align  text-center">{{'table_update_progress'|bkTranslate:this}}</th>
-                        <th class="col vert-align">{{'table_update_state'|bkTranslate:this}}</th>
-                        <th class="col vert-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
+                        <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let procedure of instance.current_snapshot.updates">
                         <td class="vert-align">
-                            <a class="bold" (click)="onActualizationProcedureClick(procedure.id)">{{procedure.id.substr(0, 12)}}</a>
+                            <a class="bold" (click)="onActualizationProcedureClick(procedure.id)">{{procedure.id.substr(0,
+                                12)}}</a>
                         </td>
                         <td class="vert-align  text-center ">{{procedure.created|bkUnixTimeToDate}}</td>
                         <td class="vert-align  text-center">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
                         <td class="vert-align  text-center">
                             <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
-                            <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                            <span
+                                *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
                         </td>
                         <td class="vert-align  text-center">
                             <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
-                            <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
+                            <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 "
+                                  class="bold">-/-</span>
                         </td>
 
                         <!-- Update State -->
@@ -241,21 +259,24 @@
                             <bk-update-state [updateState]="procedure.state"></bk-update-state>
                         </td>
 
-                        <td class="vert-align text-right">
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
+                        <td class="action-btn-col">
 
-                                table tr:hover button {
-                                    opacity: 1
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_cancel_update'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_cancel_update'|bkTranslate:this),
+                                    btn_tag: 'cancel_update_procedure',
+                                    icon: 'fa-cog',
+                                    colorType: 'UPDATE',
+                                    permission: (procedure.update_permission)
                                 }
-                            </style>
-                            <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                    [disabled]="!procedure.update_permission"
-                                    (click)="onUpdateProcedureCancelClick(procedure)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, procedure)"
+                            >
+                            </bk-drob-down-button>
+
                         </td>
                     </tr>
                     </tbody>
@@ -299,8 +320,9 @@
                             }
                         ]"></bk-portlet-title>
                     <div class="portlet-body">
-                        <bk-blocko-view [id]="'snapshot_editor'" [disableExecution]="true" [canConfig]="false" [readonly]="false"
-                        [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
+                        <bk-blocko-view [id]="'snapshot_editor'" [disableExecution]="true" [canConfig]="false"
+                                        [readonly]="false"
+                                        [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -314,11 +336,16 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <div *ngIf="allHw && allHw.content.length > 0" class="panel-group accordion blocko-blocks-group-list">
+                            <div *ngIf="allHw && allHw.content.length > 0"
+                                 class="panel-group accordion blocko-blocks-group-list">
                                 <ng-container *ngFor="let hardware of allHw.content;">
-                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions" [bkDraggableData]="{ id: hardware.id, group: false }" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
+                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions"
+                                         [bkDraggableData]="{ id: hardware.id, group: false }"
+                                         [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)"
+                                         class="blocko-block">
                                         <div class="blocko-block-mask"></div>
-                                        <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
+                                        <i class="fa fa-fw fa-microchip"
+                                           style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
                                         <i class="fa fa-exclamation"></i>
                                         <span>{{hardware.name}}</span>
                                         <span style="font-size: 0.8em">{{hardware.id}}</span>
@@ -342,11 +369,16 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <div *ngIf="allHwGroups && allHwGroups.content.length > 0" class="panel-group accordion blocko-blocks-group-list">
+                            <div *ngIf="allHwGroups && allHwGroups.content.length > 0"
+                                 class="panel-group accordion blocko-blocks-group-list">
                                 <ng-container *ngFor="let hardware of allHwGroups.content;">
-                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions" [bkDraggableData]="{ id: hardware.id, group: true }" [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)" class="blocko-block">
+                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions"
+                                         [bkDraggableData]="{ id: hardware.id, group: true }"
+                                         [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)"
+                                         class="blocko-block">
                                         <div class="blocko-block-mask"></div>
-                                        <i class="fa fa-fw fa-microchip" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
+                                        <i class="fa fa-fw fa-microchip"
+                                           style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
                                         <i class="fa fa-exclamation"></i>
                                         <span>{{hardware.name}}</span>
                                         <span style="font-size: 0.8em">{{hardware.id}}</span>
@@ -370,7 +402,8 @@
                 <!-- List of Integrated HW groups START-->
                 <h4 [innerHTML]="'label_hardware_groups'|bkTranslate:this"></h4>
 
-                <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+                <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)"
+                     class="table-scrollable table-scrollable-borderless">
                     <table class="table table-hover table-light byzance-table">
                         <thead>
                         <tr>
@@ -417,7 +450,8 @@
                 <hr>
                 <!-- List of Integrated HW by filter START-->
                 <h4 [innerHTML]="'label_hardware_in_instance'|bkTranslate:this"></h4>
-                <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+                <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)"
+                     class="table-scrollable table-scrollable-borderless">
                     <table class="table table-hover table-light byzance-table">
                         <thead>
                         <tr>
@@ -437,7 +471,9 @@
                             </td>
                             <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
                             <td class="vert-align no-wrap">{{device.description}}</td>
-                            <td class="vert-align text-center no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a></td>
+                            <td class="vert-align text-center no-wrap"><a
+                                (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a>
+                            </td>
                             <td class="vert-align text-center no-wrap">
 
                                 <div *ngIf="!device.hardware_groups">
@@ -455,10 +491,12 @@
 
                             <td class="vert-align text-center no-wrap">
                                 <span *ngIf="device.dominant_entity">{{'label_project_active'|bkTranslate:this}}</span>
-                                <span *ngIf="!device.dominant_entity && device.dominant_project_active" class="font-red-flamingo">{{'label_project_not_active'|bkTranslate:this}}</span>
+                                <span *ngIf="!device.dominant_entity && device.dominant_project_active"
+                                      class="font-red-flamingo">{{'label_project_not_active'|bkTranslate:this}}</span>
                                 <div *ngIf="!device.dominant_entity && device.dominant_project_active">
                                     <span>Active In:</span><br>
-                                    <small><a (click)="onProjectClick(device.dominant_project_active.id)">{{device.dominant_project_active.name}}</a></small>
+                                    <small><a (click)="onProjectClick(device.dominant_project_active.id)">{{device.dominant_project_active.name}}</a>
+                                    </small>
                                 </div>
                                 <div *ngIf="!device.dominant_entity && !device.dominant_project_active">
                                     <span class="font-green-jungle">Can Be Activated</span>
@@ -471,7 +509,9 @@
                         </tr>
                         </tbody>
                     </table>
-                    <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"  [totalPages]="devicesFilter.pages" (onSelect)="onFilterHardware($event)"></bk-filter-page-component>
+                    <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to"
+                                              [total]="devicesFilter.total" [totalPages]="devicesFilter.pages"
+                                              (onSelect)="onFilterHardware($event)"></bk-filter-page-component>
                 </div>
 
                 <!-- Temporary page content if content is being loaded or if there is no content -- START -->
@@ -502,8 +542,10 @@
 
             </div>
             <div *ngIf="!instance || instance.online_state !== 'ONLINE'" class="list-no-items">
-                <p class="list-no-items__main-label" [innerHTML]="'label_instance_info_is_offline'|bkTranslate:this"></p>
-                <p class="list-no-items__sub-label" [innerHTML]="'label_instance_info_is_offline_comments'|bkTranslate:this"></p>
+                <p class="list-no-items__main-label"
+                   [innerHTML]="'label_instance_info_is_offline'|bkTranslate:this"></p>
+                <p class="list-no-items__sub-label"
+                   [innerHTML]="'label_instance_info_is_offline_comments'|bkTranslate:this"></p>
             </div>
 
         </div>
@@ -511,7 +553,8 @@
         <div *ngIf="tab == 'grid' && instance && instance.current_snapshot">
 
             <div *ngIf="(instance.current_snapshot.m_projects && instance.current_snapshot.m_projects.length > 0)">
-                <div *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last" class="portlet portlet light">
+                <div *ngFor="let m_project of instance.current_snapshot.m_projects; let last = last"
+                     class="portlet portlet light">
 
                     <bk-portlet-title
                         [title_name]="'label_grid_project'|bkTranslate:this"
@@ -527,45 +570,57 @@
                                 <th class="" [innerHTML]="'table_grid_program_name'|bkTranslate:this"></th>
                                 <th class="" [innerHTML]="'table_grid_program_description'|bkTranslate:this"></th>
                                 <th class="" [innerHTML]="'table_grid_program_version_name'|bkTranslate:this"></th>
-                                <th class="" [innerHTML]="'table_grid_program_version_description'|bkTranslate:this"></th>
-                                <th class="text-center" [innerHTML]="'table_grid_program_settings'|bkTranslate:this"></th>
+                                <th class=""
+                                    [innerHTML]="'table_grid_program_version_description'|bkTranslate:this"></th>
+                                <th class="text-center"
+                                    [innerHTML]="'table_grid_program_settings'|bkTranslate:this"></th>
                                 <th class="text-center" [innerHTML]="'table_grid_link'|bkTranslate:this"></th>
-                                <th class="text-right margin-right-15" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                                <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="hide-bk-drob-down-button">
                             <tr *ngFor="let program of m_project.grid_programs">
 
-                                <td class="vert-align no-wrap"><a (click)="onGridProgramClick(m_project.grid_project.id, program.grid_program.id)">{{program.grid_program.name}}</a></td>
+                                <td class="vert-align no-wrap"><a
+                                    (click)="onGridProgramClick(m_project.grid_project.id, program.grid_program.id)">{{program.grid_program.name}}</a>
+                                </td>
                                 <td class="vert-align">{{program.grid_program.description}}</td>
-                                <td class="vert-align no-wrap"><a (click)="onGridProgramVersionClick(m_project.grid_project.id, program.grid_program.id, program.grid_program_version.id)">{{program.grid_program_version.name}}</a></td>
+                                <td class="vert-align no-wrap"><a
+                                    (click)="onGridProgramVersionClick(m_project.grid_project.id, program.grid_program.id, program.grid_program_version.id)">{{program.grid_program_version.name}}</a>
+                                </td>
                                 <td class="vert-align">{{program.grid_program_version.description}}</td>
 
                                 <td class="vert-align text-center no-wrap">
-                                    {{getGridConfig(m_project.grid_project.id, program.grid_program.id).snapshot_settings}}
+                                    {{getGridConfig(m_project.grid_project.id,
+                                    program.grid_program.id).snapshot_settings}}
                                 </td>
                                 <td class="vert-align text-center no-wrap">
-                                    <a target="_blank" href="{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}">{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}</a>
-                                    <a class="bold margin-left-15" target="_blank" (click)="showGrid(m_project.grid_project.id, program.grid_program.id)">(Show QR)</a>
+                                    <a target="_blank"
+                                       href="{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}">{{getGridConfig(m_project.grid_project.id,
+                                        program.grid_program.id).connection_url}}</a>
+                                    <a class="bold margin-left-15" target="_blank"
+                                       (click)="showGrid(m_project.grid_project.id, program.grid_program.id)">(Show
+                                        QR)</a>
                                 </td>
 
+                                <td class="action-btn-col">
 
-                                <td class="vert-align text-right no-wrap">
+                                    <bk-drob-down-button
+                                        [btns_group_name]="('label_edit_grid_app'|bkTranslate:this)"
+                                        [btns]="[
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_edit_grid_app'|bkTranslate:this),
+                                                btn_tag: 'edit_grid_app',
+                                                icon: 'fa-cogs',
+                                                colorType: 'EDIT',
+                                                permission: (program.update_permission)
+                                            }
+                                        ]"
+                                        (onValueChanged)="onDrobDownEmiterProgram($event, m_project, program)"
+                                    >
+                                    </bk-drob-down-button>
 
-                                    <style type="text/css">
-                                        table tr button {
-                                            opacity: 0.05;
-                                        }
-                                        table tr:hover button {
-                                            opacity: 1
-                                        }
-                                    </style>
-
-                                    <button title="{{'label_edit_grid_app'|bkTranslate:this}}" class="btn btn-icon-only yellow-casablanca"
-                                            [disabled]="!program.update_permission"
-                                            (click)="onGridProgramPublishClick(m_project, program)">
-                                        <i class="fa fa-cogs"></i>
-                                    </button>
                                 </td>
 
                             </tr>
@@ -596,7 +651,8 @@
 
         <div *ngIf="tab == 'history' && instance">
 
-            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
@@ -604,32 +660,45 @@
                         <th [innerHTML]="'table_description'|bkTranslate:this"></th>
                         <th [innerHTML]="'table_b_program_version_name'|bkTranslate:this"></th>
                         <th [innerHTML]="'table_b_program_version_description'|bkTranslate:this"></th>
-                        <th class="text-right">{{'table_actions'|bkTranslate:this}}   </th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let snapshot of instance.snapshots">
                         <td class="vert-align">{{snapshot.name}}
-                            <i *ngIf="instance.current_snapshot && snapshot.id === instance.current_snapshot.id" class="fa fa-fw fa-cloud font-color-cloud margin-left-15"></i>
+                            <i *ngIf="instance.current_snapshot && snapshot.id === instance.current_snapshot.id"
+                               class="fa fa-fw fa-cloud font-color-cloud margin-left-15"></i>
                         </td>
                         <td class="vert-align">{{snapshot.description}}</td>
-                        <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a>
+                        </td>
                         <td class="vert-align">{{snapshot.b_program_version.description}}</td>
-                        <td class="vert-align no-wrap text-right">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
+                        <td class="action-btn-col">
 
-
-                            <button title="{{'label_blocko_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!snapshot.update_permission" (click)="onEditSnapShotClick(snapshot)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_blocko_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!snapshot.delete_permission" (click)="onRemoveSnapShotClick(snapshot)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_blocko_program_properties'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_blocko_program_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_blocko_program',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (snapshot.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_blocko_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_blocko',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (snapshot.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, snapshot)"
+                            >
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>

@@ -20,7 +20,7 @@
                     btn_label_for_person: ('btn_add_members'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-plus-circle',
-                          btn_tag: 'add'
+                    btn_tag: 'add'
                 }
             ]">
     </bk-portlet-title>
@@ -33,31 +33,46 @@
         <div *ngIf="(project && project.participants.length > 1)" class="table-scrollable table-scrollable-borderless">
             <table class="table table-hover table-light byzance-table">
                 <thead>
-                    <tr>
-                        <th class="col col-lg-3">{{'label_email'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3">{{'table_state'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3 text-right no-wrap">{{'table_actions'|bkTranslate:this}}</th>
-                    </tr>
+                <tr>
+                    <th class="col col-lg-3">{{'label_email'|bkTranslate:this}}</th>
+                    <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="col col-lg-3">{{'table_state'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                </tr>
                 </thead>
-                <tbody>
-                    <tr *ngFor="let member of project.participants">
-                        <td class="vert-align no-wrap">{{member.email}}</td>
-                        <td class="vert-align no-wrap">{{member.full_name}}</td>
-                        <td class="vert-align no-wrap">{{readableState(member.state)}}</td>
-                        <td class="vert-align no-wrap text-right">
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-                            <button title="{{'label_remove_member'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                            <button title="{{'label_send_invitation'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="member.id == selfId" (click)="onMemberSendAgainClick(member)">
-                                <i class="fa fa-envelope"></i>
-                            </button>
-                        </td>
-                    </tr>
+                <tbody class="hide-bk-drob-down-button">
+                <tr *ngFor="let member of project.participants">
+                    <td class="vert-align no-wrap">{{member.email}}</td>
+                    <td class="vert-align no-wrap">{{member.full_name}}</td>
+                    <td class="vert-align no-wrap">{{readableState(member.state)}}</td>
+                    <td class="action-btn-col">
+
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_remove_member'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_member'|bkTranslate:this),
+                                    btn_tag: 'remove_member',
+                                    icon: 'fa fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (member.id == selfId)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_send_invitation'|bkTranslate:this),
+                                    btn_tag: 'send_invitation',
+                                    icon: 'fa-envelope',
+                                    colorType: 'CREATE',
+                                    permission: (member.id == selfId)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, member)"
+                        >
+                        </bk-drob-down-button>
+
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

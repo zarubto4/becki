@@ -12,12 +12,14 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                           <span *ngIf="title_object_name" class="bold" [innerHTML]="' - ' + title_object_name"></span>
                     </span>
                 </div>
-                <div *ngIf="btns && btns.length > 0" class="becki-actions">
+
+
+                <div *ngIf="btns && getConditionSize() > 0 && getConditionSize() < 2" class="becki-actions">
                     <template ngFor let-element="$implicit" [ngForOf]="btns">
-                        
+
                         <!-- Only if not a external link link !-->
-                        <span *ngIf="!btn_link">
-                            <button *ngIf="element.condition" class="btn"
+                        <span *ngIf="!element.btn_link">
+                            <button *ngIf="element.condition" class="btn btn-sm"
                                     [class.red-sunglo]="element.colorType=='REMOVE'"
                                     [class.yellow-crusta]="element.colorType=='EDIT' || element.colorType=='UPDATE'"
                                     [class.blue-madison]="element.colorType=='ACTIVE'"
@@ -30,11 +32,11 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                         </span>
 
                         <!-- Only if its a external link - Stupid but easy to write !-->
-                        <a  *ngIf="btn_link" href="btn_link" target="_blank">
-                            <button *ngIf="element.condition" class="btn"  
+                        <a  *ngIf="element.btn_link" href="{{element.btn_link}}" target="_blank">
+                            <button *ngIf="element.condition" class="btn btn-sm"
                                     [class.red-sunglo]="element.colorType=='REMOVE'"
                                     [class.yellow-crusta]="element.colorType=='EDIT' || element.colorType=='UPDATE'"
-                                    [class.blue-madison]="element.colorType=='ACTIVE'" 
+                                    [class.blue-madison]="element.colorType=='ACTIVE'"
                                     [class.purple-plum]="element.colorType=='DEACTIVE'"
                                     [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
                                     [class.grey-cascade]="element.colorType == '' || element.colorType == null"
@@ -43,9 +45,18 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                             </button>
                         </a>
                         
-                        
                     </template>
                 </div>
+                
+                <div *ngIf="btns && getConditionSize() > 1" class="becki-actions">
+                    <!-- If we have more than two Buttons -->
+                    <bk-drob-down-button *ngIf="btns != null"
+                                         [btns_group_name] = "btns_group_name"
+                                         [btns]="btns"
+                                         (onValueChanged)="onClickButton($event)">
+                    </bk-drob-down-button>
+                </div>
+                
                 <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line">
                     <ul class="nav nav-tabs becki-tab-menu" style="padding-top: 0px;">
                         <template ngFor let-btn="$implicit" [ngForOf]="tabBtns">
@@ -92,9 +103,13 @@ export class PortletTitleComponent {
 // BUTTONS ------------------------------------------------------------------------------------------------------------------------------
 
     @Input()
+    btns_group_name: string = 'Settings';
+
+    @Input()
     btns: {
         condition: boolean,
         btn_label_for_person: string,
+        btn_space?: boolean,
         icon: string,
         permission?: boolean,                                                       // for example project.delete_permission
         colorType?: ('ADD'| 'EDIT' | 'UPDATE' | 'CREATE' | 'REMOVE' | 'ACTIVE' | 'DEACTIVE'),  // DEFAULT in HTML is EDIT
@@ -131,6 +146,16 @@ export class PortletTitleComponent {
     constructor() {
     }
 
+    getConditionSize(): number {
+        let count = 0;
+        for (let i = 0; i < this.btns.length; i++) {
+            if (this.btns[i].condition === true) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     onClickButton(onClick: string) {
         this.onClick.emit(onClick);
     }
@@ -138,7 +163,5 @@ export class PortletTitleComponent {
     onClickTabButton(onClick: string) {
         this.onTabClick.emit(onClick);
     }
-
-
 
 }

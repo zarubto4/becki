@@ -319,12 +319,37 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
             return this.translate('label_free');
         }
 
-        price = price / 1000;
 
         if (Math.floor(price) === price) {
             return price.toFixed(2) + '$';
         } else {
             return price.toFixed(2) + '$';
+        }
+    }
+
+    onDrobDownEmiter (action: string, tariff: ITariff): void {
+
+        if (action === 'edit_tariff') {
+            this.onTariffEditClick(tariff);
+        }
+
+        if (action === 'shift_up_tariff') {
+            this.onTariffShiftUpClick(tariff);
+        }
+
+        if (action === 'shift_down_tariff') {
+            this.onTariffShiftDownClick(tariff);
+        }
+
+        if (action === 'active_tariff') {
+            this.onTariffActivate(tariff);
+        }
+
+        if (action === 'deactive_tariff') {
+            this.onTariffDeactivate(tariff);
+        }
+        if (action === 'remove_tariff') {
+            this.onTariffRemoveClick(tariff);
         }
     }
 }

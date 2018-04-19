@@ -858,4 +858,14 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     blockoZoomOnChange(e: any) {
         this.blockoZoom = e.target.value * e.target.value;
     }
+
+    onDrobDownEmiter(action: string, version: IBProgramVersion): void {
+        if (action === 'edit_version_properties') {
+            this.onEditVersionClick(version);
+        }
+
+        if (action === 'remove_version') {
+            this.onRemoveVersionClick(version);
+        }
+    }
 }

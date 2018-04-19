@@ -1,15 +1,15 @@
 <bk-layout-main
-     [tabMenu]="'byzance-admin'"
-     [title]="'main_title'|bkTranslate:this"
-     [subtitle]="'main_subtitle'|bkTranslate:this">
+    [tabMenu]="'byzance-admin'"
+    [title]="'main_title'|bkTranslate:this"
+    [subtitle]="'main_subtitle'|bkTranslate:this">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title
-                      [title_name]="'title'|bkTranslate:this"
-                      [icon]="'fa-server'"
-                      (onTabClick)="onToggleTab($event)"
-                      [tab_selected_name] = "tab"
-                      [tabBtns]="[
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-server'"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name]="tab"
+        [tabBtns]="[
                             {
                                 tab_name: 'public_c_programs',
                                 tab_color: 'CODE',
@@ -48,32 +48,46 @@
                 <table class="table table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class=""><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let code of cPrograms.content">
 
-                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a>
+                        </td>
                         <td class="vert-align">{{code.description}}</td>
-                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
-                        <td class="vert-align no-wrap text-right">
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a>
+                        </td>
+                        <td class="action-btn-col">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_code',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (code.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_code_program'|bkTranslate:this),
+                                    btn_tag: 'remove_code',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (code.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiterCode($event, code)"
+                            >
+                            </bk-drob-down-button>
 
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.update_permission" (click)="onCProgramEditClick(code)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-
-                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">
-                                <i class="fa fa-trash"></i>
-                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -96,28 +110,27 @@
             <!-- Filter Parameters -->
             <div>
             </div>
-            <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let code of cProgramsNotApproved.content">
 
-                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a>
+                        </td>
                         <td class="vert-align">{{code.description}}</td>
-                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a>
+                        </td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
 
                             <!-- No buttons ?-->
                         </td>
@@ -146,11 +159,11 @@
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let library of libraries.content">
 
                         <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{library.name}}</a></td>
@@ -158,20 +171,31 @@
                         <td class="vert-align no-wrap">
                             <a *ngFor="let type of library.hardware_types" (click)="onHardwareTypeClick(type.id)">{{type.name}}, </a>
                         </td>
-                        <td class="vert-align no-wrap text-right">
+                        <td class="action-btn-col">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission" (click)="onLibraryEditClick(library)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-
-                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onLibraryRemoveClick(library)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_library',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (library.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_code_program'|bkTranslate:this),
+                                    btn_tag: 'remove_library',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (library.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiterLibrary($event, library)"
+                            >
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>
@@ -181,8 +205,8 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(libraries == null)"
                                 [condition_empty]="(libraries != null && libraries.content.length == 0)"
-                                [main_message_link]="'label_no_batch'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_c_library'|bkTranslate:this"
+                                [main_message_link]="'label_no_c_programs'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_programs_comment'|bkTranslate:this"
                                 [btn_label]="'label_no_c_library_comment'|bkTranslate:this"
                                 [show_button]="false">
             </bk-nothing-to-show>
@@ -195,31 +219,28 @@
             <!-- Filter Parameters -->
             <div>
             </div>
-            <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let library of librariesNotApproved.content">
 
-                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a>
+                        </td>
                         <td class="vert-align">{{library.description}}</td>
                         <td class="vert-align no-wrap">
                             <a *ngFor="let type of library.hardware_types" (click)="onHardwareTypeClick(type.id)">{{type.name}}, </a>
                         </td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-
                         </td>
                     </tr>
                     </tbody>
@@ -229,8 +250,8 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(librariesNotApproved == null)"
                                 [condition_empty]="(librariesNotApproved != null && librariesNotApproved.content.length == 0)"
-                                [main_message_link]="'label_no_batch'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_c_library'|bkTranslate:this"
+                                [main_message_link]="'label_no_c_library'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_c_library_comment'|bkTranslate:this"
                                 [btn_label]="'label_no_c_library_comment'|bkTranslate:this"
                                 [show_button]="false">
             </bk-nothing-to-show>

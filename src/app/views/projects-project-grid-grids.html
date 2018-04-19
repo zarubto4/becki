@@ -57,23 +57,37 @@
                     <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let program of gridProject.m_programs">
-                    <td class="vert-align no-wrap bold"><a (click)="onGridProgramClick(gridProject.id, program.id)">{{program.name}}</a></td>
+                    <td class="vert-align no-wrap bold"><a (click)="onGridProgramClick(gridProject.id, program.id)">{{program.name}}</a>
+                    </td>
                     <td class="vert-align">{{program.description}}</td>
-                    <td class="vert-align no-wrap">
+                    <td class="action-btn-col">
 
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_version_properties'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_version_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_version',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (program.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_version',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (program.delete_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, program)"
+                        >
+                        </bk-drob-down-button>
 
-                        <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!program.update_permission" (click)="onProgramEditClick(program)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_version_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
-                            <i class="fa fa-trash"></i>
-                        </button>
                     </td>
                 </tr>
                 </tbody>

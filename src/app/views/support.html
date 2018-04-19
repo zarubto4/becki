@@ -8,10 +8,12 @@
             <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
             <ul class="nav nav-tabs pull-left">
                 <li [class.active]="tab == 'knowledge_base'">
-                    <a class="cursor-pointer" (click)="onToggleTab('knowledge_base')"><i class="fa fa-question"></i> {{'knowledge_base'|bkTranslate:this}}</a>
+                    <a class="cursor-pointer" (click)="onToggleTab('knowledge_base')"><i class="fa fa-question"></i>
+                        {{'knowledge_base'|bkTranslate:this}}</a>
                 </li>
                 <li [class.active]="tab == 'tickets'">
-                    <a class="cursor-pointer" (click)="onToggleTab('tickets')"><i class="fa fa-ticket"></i> {{'tab_tickets'|bkTranslate:this}}</a>
+                    <a class="cursor-pointer" (click)="onToggleTab('tickets')"><i class="fa fa-ticket"></i>
+                        {{'tab_tickets'|bkTranslate:this}}</a>
                 </li>
             </ul>
 
@@ -24,21 +26,23 @@
                         <div class="portlet light bordered" style="margin-inside: 10px">
                             <div class="text-center" style="margin-top: 50px;">
                                 <span class="fa-lg font-color-hardware" style="font-size: 6em;">
-                                      <i class="fa fa-question" ></i>
+                                      <i class="fa fa-question"></i>
                                 </span>
                             </div>
-                            <H4 class="text-center" style="margin-top: 37px; margin-bottom: 40px;"> {{'label_faq'|bkTranslate:this}}</H4>
+                            <H4 class="text-center" style="margin-top: 37px; margin-bottom: 40px;">
+                                {{'label_faq'|bkTranslate:this}}</H4>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="portlet light bordered" style="margin-inside: 10px">
                             <div class="text-center" style="margin-top: 50px;  margin-bottom: -30px">
                                 <span class="fa-stack fa-lg font-color-cloud" style="font-size: 3.6em;">
-                                      <i class="fa fa-comment-o fa-stack-2x" ></i>
-                                      <i class="fa fa-question fa-stack-1x" ></i>
+                                      <i class="fa fa-comment-o fa-stack-2x"></i>
+                                      <i class="fa fa-question fa-stack-1x"></i>
                                 </span>
                             </div>
-                            <H4 class="text-center" style="margin-bottom: 40px;">{{'label_documentation'|bkTranslate:this}}</H4>
+                            <H4 class="text-center" style="margin-bottom: 40px;">
+                                {{'label_documentation'|bkTranslate:this}}</H4>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -48,7 +52,8 @@
                                       <i class="fa fa-ticket"></i>
                                 </span>
                             </div>
-                            <H4 class="text-center" style="margin-top: 44px; margin-bottom: 40px;">{{'label_open_ticket'|bkTranslate:this}}</H4>
+                            <H4 class="text-center" style="margin-top: 44px; margin-bottom: 40px;">
+                                {{'label_open_ticket'|bkTranslate:this}}</H4>
                         </div>
                     </div>
                 </div>
@@ -78,22 +83,17 @@
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;
+                        </th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody lass="hide-bk-drob-down-button">
                     <tr *ngFor="let ticket of tickets.content">
 
                         <td class="vert-align no-wrap bold"><a (click)="onTicketClick(ticket)">name</a></td>
                         <td class="vert-align">description</td>
                         <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-
                         </td>
                     </tr>
                     </tbody>
@@ -103,7 +103,10 @@
             <div *ngIf="tickets && tickets.total < 1" class="list-no-items">
                 <p class="list-no-items__main-label">{{'label_no_tickets'|bkTranslate:this}}</p>
                 <p class="list-no-items__sub-label">{{'label_no_tickets_comment'|bkTranslate:this}} </p>
-                <p><button class="btn blue" (click)="onCreateTicketClick()"><i class="fa fa-plus-circle"></i>{{'btn_create_ticket'|bkTranslate:this}}</button></p>
+                <p>
+                    <button class="btn blue" (click)="onCreateTicketClick()"><i class="fa fa-plus-circle"></i>{{'btn_create_ticket'|bkTranslate:this}}
+                    </button>
+                </p>
             </div>
         </div>
 

@@ -83,6 +83,16 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
     onBugClick(bug: IServerError) {
         this.navigate(['/admin/bugs', bug.id]);
     }
+
+    onDrobDownEmiter (action: string, bug: IServerError): void {
+        if (action === 'report_bug') {
+            this.onReportBug(bug);
+        }
+
+        if (action === 'remove_bug') {
+            this.onDeleteBug(bug);
+        }
+    }
 }
 
 

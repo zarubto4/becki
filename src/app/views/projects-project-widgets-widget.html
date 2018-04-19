@@ -219,9 +219,9 @@
                                 <th class="col col-lg-8">{{'table_description'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
                                 <th></th>
-                                <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                         </thead>
-                        <tbody>
+                        <tbody class="hide-bk-drob-down-button">
                             <tr *ngFor="let version of widget.versions">
                                 <td class="vert-align no-wrap" [class.bold]="selectedWidgetVersion && (selectedWidgetVersion.id == version.id)">
                                     <a (click)="onWidgetVersionClick(version)"> {{version.name}}
@@ -254,43 +254,55 @@
                                         <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
                                 </td>
-                                <td class="vert-align no-wrap text-right">
+                                <td class="action-btn-col">
 
-                                    <style type="text/css">
-                                        table tr button {
-                                            opacity: 0.05;
-                                        }
-
-                                        table tr:hover button {
-                                            opacity: 1
-                                        }
-                                    </style>
-
-                                    <!-- Buttons for Users for Community publishing  -->
-                                    <button *ngIf="project && !version.approval_state" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
-                                            (click)="onCommunityPublicVersionClick(version)">
-                                        <i class="fa fa-heart"></i>
-                                    </button>
-
-                                    <!-- Buttons for Administrator for Community decisions  -->
-                                    <button *ngIf="version.approval_state == 'PENDING' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onProgramVersionPublishResult(version)">
-                                        <i class="fa fa-heart"></i>
-                                    </button>
-
-                                    <!-- Only For for Administrator for Make Default Widget -->
-                                    <button *ngIf="widget && widget.publish_type == 'DEFAULT_MAIN' && version.publish_type != 'DEFAULT_VERSION'" title="{{'label_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!widget.update_permission" (click)="onWidgetSetMainClick(version)">
-                                        <i class="fa fa-flag"></i>
-                                    </button>
-
-                                    <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
-                                            (click)="onEditVersionClick(version)">
-                                             <i class="fa fa-cog"></i>
-                                    </button>
-
-                                    <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
-                                        (click)="onRemoveVersionClick(version)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
+                                    <bk-drob-down-button
+                                        [btns_group_name]="('label_properties'|bkTranslate:this)"
+                                        [btns] = "[
+                                            {
+                                                condition: project && !version.approval_state,
+                                                btn_label_for_person: ('label_publish'|bkTranslate:this),
+                                                btn_tag: 'version_publish_community',
+                                                icon: 'fa-heart',
+                                                colorType: 'CREATE',
+                                                permission: (version.update_permission)
+                                            },
+                                            {
+                                                condition: version.approval_state == 'PENDING' && version.community_publishing_permission,
+                                                btn_label_for_person: ('label_publish'|bkTranslate:this),
+                                                btn_tag: 'version_publish_admin',
+                                                icon: 'fa-heart',
+                                                colorType: 'CREATE',
+                                                permission: (version.update_permission)
+                                            },
+                                            {
+                                                condition: widget && widget.publish_type == 'DEFAULT_MAIN' && version.publish_type != 'DEFAULT_VERSION',
+                                                btn_label_for_person: ('label_basic_settings'|bkTranslate:this),
+                                                btn_tag: 'edit_version',
+                                                icon: 'fa-cog',
+                                                colorType: 'EDIT',
+                                                permission: (widget.update_permission)
+                                            },
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_version_set_as_main'|bkTranslate:this),
+                                                btn_tag: 'version_set_as_main',
+                                                icon: 'fa-flag',
+                                                colorType: 'UPDATE',
+                                                permission: (version.update_permission)
+                                            },
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_remove_version'|bkTranslate:this),
+                                                btn_tag: 'remove_version',
+                                                icon: 'fa-trash',
+                                                colorType: 'REMOVE',
+                                                permission: (version.delete_permission)
+                                            }
+                                        ]"
+                                                    (onValueChanged)="onDrobDownEmiter($event, version)"
+                                    >
+                                    </bk-drob-down-button>
 
                                 </td>
 

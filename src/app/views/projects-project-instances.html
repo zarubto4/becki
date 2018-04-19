@@ -29,66 +29,85 @@
 
     <div class="portlet-body">
 
-        <div *ngIf="(instanceFilter && instanceFilter.content.length)" class="table-scrollable table-scrollable-borderless">
+        <div *ngIf="(instanceFilter && instanceFilter.content.length)"
+             class="table-scrollable table-scrollable-borderless">
             <table class="table table-hover table-light byzance-table">
                 <thead>
-                    <tr>
-                        <th class="">{{'table_name'|bkTranslate:this}}</th>
-                        <!--th class="col col-lg-1">{{'table_id'|bkTranslate:this}}</th-->
-                        <th class="">{{'table_description'|bkTranslate:this}}</th>
-                        <th class=""><strong class="font-color-blocko">BLOCKO</strong>{{'table_blocko_program'|bkTranslate:this}}</th>
-                        <th class="">{{'table_status'|bkTranslate:this}}</th>
-                        <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                    </tr>
+                <tr>
+                    <th class="">{{'table_name'|bkTranslate:this}}</th>
+                    <!--th class="col col-lg-1">{{'table_id'|bkTranslate:this}}</th-->
+                    <th class="">{{'table_description'|bkTranslate:this}}</th>
+                    <th class=""><strong class="font-color-blocko">BLOCKO</strong>{{'table_blocko_program'|bkTranslate:this}}
+                    </th>
+                    <th class="">{{'table_status'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                </tr>
                 </thead>
-                <tbody>
-                    <tr *ngFor="let instance of instanceFilter.content">
+                <tbody class="hide-bk-drob-down-button">
+                <tr *ngFor="let instance of instanceFilter.content">
 
-                        <td class="vert-align no-wrap bold">
-                            <a (click)="onInstanceClick(instance.id)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
-                            <span *ngIf="!instance.name" class="icon-hint-wraper gray">
-                                <i  title="{{'label_own_name_and_description'|bkTranslate:this}}" class="fa fa-info-circle font-color-byzance-blue"></i>
+                    <td class="vert-align no-wrap bold">
+                        <a (click)="onInstanceClick(instance.id)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
+                        <span *ngIf="!instance.name" class="icon-hint-wraper gray">
+                                <i title="{{'label_own_name_and_description'|bkTranslate:this}}"
+                                   class="fa fa-info-circle font-color-byzance-blue"></i>
                             </span>
-                        </td>
-                        <!--td class="no-wrap">{{instance.id}}</td-->
-                        <td class="no-wrap">{{instance.description}}</td>
-                        <td class="no-wrap"><a (click)="onBProgramClick(instance.b_program.id)">{{instance.b_program.name}}</a></td>
-                        <td class="no-wrap">
-                            <bk-online-state [online_state]="instance.online_state"></bk-online-state>
-                        </td>
-                        <td class="vert-align no-wrap text-right">
-
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
+                    </td>
+                    <!--td class="no-wrap">{{instance.id}}</td-->
+                    <td class="no-wrap">{{instance.description}}</td>
+                    <td class="no-wrap"><a
+                        (click)="onBProgramClick(instance.b_program.id)">{{instance.b_program.name}}</a></td>
+                    <td class="no-wrap">
+                        <bk-online-state [online_state]="instance.online_state"></bk-online-state>
+                    </td>
+                    <td class="action-btn-col">
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_instance_properties'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_instance_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_instance',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (instance.update_permission)
+                                },
+                                {
+                                    condition: instance.online_state  == 'SHUT_DOWN',
+                                    btn_label_for_person: ('label_upload_latest_used_version'|bkTranslate:this),
+                                    btn_tag: 'start_instance',
+                                    icon: 'fa fa-power-off',
+                                    colorType: 'DEACTIVE',
+                                    permission: (instance.update_permission)
+                                },
+                                {
+                                    condition: instance.online_state  == 'ONLINE',
+                                    btn_label_for_person: ('label_shutdown_instance'|bkTranslate:this),
+                                    btn_tag: 'shutdown_instance',
+                                    icon: 'fa fa-power-off',
+                                    colorType: 'ACTIVE',
+                                    permission: (instance.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_instance_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_project',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (instance.update_permission)
                                 }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, instance)"
+                        >
+                        </bk-drob-down-button>
 
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
-                            <button title="{{'label_instance_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!instance.update_permission" (click)="onInstanceEditClick(instance)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-
-                            <button title="{{'label_instance_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission" (click)="onInstanceRemoveClick(instance)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-
-                            <button *ngIf="instance.online_state  == 'SHUT_DOWN'" title="{{'label_upload_latest_used_version'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission" (click)="onInstanceStartClick(instance, true)">
-                                <i class="fa fa-power-off"></i>
-                            </button>
-
-                            <button *ngIf="instance.online_state  == 'ONLINE'" title="{{'label_shutdown_instance'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission" (click)="onInstanceShutdownClick(instance)">
-                                <i class="fa fa-power-off"></i>
-                            </button>
-
-                        </td>
-                    </tr>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-            <bk-filter-page-component [from]="instanceFilter.from" [to]="instanceFilter.to" [total]="instanceFilter.total"  [totalPages]="instanceFilter.pages" (onSelect)="onFilterInstances($event)"></bk-filter-page-component>
+            <bk-filter-page-component [from]="instanceFilter.from" [to]="instanceFilter.to"
+                                      [total]="instanceFilter.total" [totalPages]="instanceFilter.pages"
+                                      (onSelect)="onFilterInstances($event)"></bk-filter-page-component>
         </div>
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->

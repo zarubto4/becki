@@ -134,4 +134,14 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                 this.unblockUI();
             });
     }
+
+    onDrobDownEmiter(action: string, blocko: IBProgram): void {
+        if (action === 'blocko_program_properties') {
+            this.onEditClick(blocko);
+        }
+
+        if (action === 'blocko_remove') {
+            this.onRemoveClick(blocko);
+        }
+    }
 }
