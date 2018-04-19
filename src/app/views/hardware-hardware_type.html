@@ -132,11 +132,11 @@
                     <tr>
                         <th class="col col-lg-1 center-align ">{{'table_id'|bkTranslate:this}}</th>
                         <th></th>
-                        <th class="col col-lg-2 center-align ">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2 center-align ">{{'table_identifier'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3 center-align ">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3 center-align ">{{'table_change_notes'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2 text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_identifier'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="">{{'table_change_notes'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -157,7 +157,7 @@
                         <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span
                             *ngIf="bootloader.changing_note.length > 32">...</span></td>
 
-                        <td class="vert-align text-right no-wrap">
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_type_of_board_properties'|bkTranslate:this)"
@@ -269,7 +269,7 @@
                                 <th class="">{{'table_description'|bkTranslate:this}}</th>
                                 <th class="">{{'table_author'|bkTranslate:this}}</th>
                                 <th class="">{{'table_status'|bkTranslate:this}}</th>
-                                <th class=" text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                             </tr>
                             </thead>
                             <tbody class="hide-bk-drob-down-button">
@@ -303,7 +303,7 @@
                                 </td>
 
                                 <!-- ACTIONS -->
-                                <td class="vert-align text-right no-wrap">
+                                <td class="action-btn-col">
 
                                     <bk-drob-down-button
                                         [btns_group_name]="('label_version_properties'|bkTranslate:this)"
@@ -400,7 +400,7 @@
                                 <th class="">{{'table_description'|bkTranslate:this}}</th>
                                 <th class="">{{'table_author'|bkTranslate:this}}</th>
                                 <th class="">{{'table_status'|bkTranslate:this}}</th>
-                                <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                             </tr>
                             </thead>
                             <tbody class="hide-bk-drob-down-button">
@@ -435,11 +435,11 @@
                                 </td>
 
                                 <!-- ACTIONS -->
-                                <td class="vert-align text-right no-wrap">
+                                <td class="action-btn-col">
 
                                     <bk-drob-down-button
                                         [btns_group_name]="('label_version_properties'|bkTranslate:this)"
-                                        [btns] = "[
+                                        [btns]="[
                                             {
                                                 condition: true,
                                                 btn_label_for_person: ('label_version_properties'|bkTranslate:this),
@@ -519,14 +519,13 @@
                 <table class="table table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-2">{{'table_revision'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_production_batch'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3">{{'table_mac_range'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_latest_used'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_ean'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_assembly_time'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;
-                        </th>
+                        <th class="">{{'table_revision'|bkTranslate:this}}</th>
+                        <th class="">{{'table_production_batch'|bkTranslate:this}}</th>
+                        <th class="">{{'table_mac_range'|bkTranslate:this}}</th>
+                        <th class="">{{'table_latest_used'|bkTranslate:this}}</th>
+                        <th class="">{{'table_ean'|bkTranslate:this}}</th>
+                        <th class="">{{'table_assembly_time'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -561,11 +560,11 @@
                         </td>
 
                         <!-- ACTIONS -->
-                        <td class="vert-align text-right no-wrap">
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_version_properties'|bkTranslate:this)"
-                                [btns] = "[
+                                [btns]="[
                                 {
                                     condition: hardwareType.update_permission,
                                     btn_label_for_person: ('label_version_properties'|bkTranslate:this),

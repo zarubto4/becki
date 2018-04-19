@@ -4,19 +4,19 @@
   -->
 
 <bk-layout-main
-     [tabMenu]="(project_Id == null ? 'byzance-admin' : 'projects-project')"
-     [show_title]="!project_Id"
-     [title]="project_Id == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
-     [subtitle]="project_Id == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
+    [tabMenu]="(project_Id == null ? 'byzance-admin' : 'projects-project')"
+    [show_title]="!project_Id"
+    [title]="project_Id == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="project_Id == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title *ngIf="codeProgram"
-        [title_name]="'title'|bkTranslate:this"
-        [title_object_name]="codeProgram.name"
-        [title_object_description]="codeProgram.description"
-        [icon]="'fa-tachometer'"
-        (onClick)="onPortletClick($event)"
-        [btns]="[
+                      [title_name]="'title'|bkTranslate:this"
+                      [title_object_name]="codeProgram.name"
+                      [title_object_description]="codeProgram.description"
+                      [icon]="'fa-tachometer'"
+                      (onClick)="onPortletClick($event)"
+                      [btns]="[
              {
                   condition: (codeProgram && codeProgram.update_permission),
                   btn_label_for_person: ('label_program_properties'|bkTranslate:this),
@@ -42,9 +42,9 @@
                   btn_tag: 'make_clone'
              }
             ]"
-        (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
-        [tabBtns]="[
+                      (onTabClick)="onToggleTab($event)"
+                      [tab_selected_name]="tab"
+                      [tabBtns]="[
             {
                 tab_name: 'ide',
                 condition: (true),
@@ -84,7 +84,7 @@
                      (onRemoveHardwareClick)="onRemoveDeveloperHardwareClick($event)"
                      (onChangeLibraryVersionClick)="onChangeLibraryVersionClick($event)"
                      [libraryCompilationVersionOptions]="libraryCompilationVersionOptions"
-        #CodeIDEComponent>
+                     #CodeIDEComponent>
         </bk-code-ide>
         <!--- IDE END -->
 
@@ -97,7 +97,7 @@
         <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
         <bk-portlet-title [show_title]="false"
                           (onTabClick)="onToggleIDETab($event)"
-                          [tab_selected_name] = "tab_under_ide"
+                          [tab_selected_name]="tab_under_ide"
                           [tabBtns]="[
                                 {
                                     tab_name: 'error_list',
@@ -126,9 +126,12 @@
 
             <div *ngIf="(buildErrors && buildErrors.length)">
                 <div *ngFor="let buildError of buildErrors" class="mt-element-ribbon bg-grey-steel">
-                    <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'" [class.ribbon-color-warning]="buildError.type=='warning'">{{buildError.type}}</div>
+                    <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'"
+                         [class.ribbon-color-warning]="buildError.type=='warning'">{{buildError.type}}
+                    </div>
                     <p class="ribbon-content">
-                        <span [innerHTML]="'label_file_and_line'|bkTranslate:this:buildError.filename:buildError.line"></span>
+                        <span
+                            [innerHTML]="'label_file_and_line'|bkTranslate:this:buildError.filename:buildError.line"></span>
                         <br>
                         <b>{{buildError.text}}</b>
                         <br>
@@ -155,73 +158,78 @@
 
 
         <div *ngIf="tab_under_ide == 'versions'">
-            <div *ngIf="codeProgramVersions.length > 0"  class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="codeProgramVersions.length > 0" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
-                        <tr>
-                            <th class="">{{'table_name'|bkTranslate:this}}</th>
-                            <th *ngIf="!projectId"></th>
-                            <th class="">{{'table_description'|bkTranslate:this}}</th>
-                            <th class="">{{'table_lib_version'|bkTranslate:this}}</th>
-                            <th class="">{{'table_author'|bkTranslate:this}}</th>
-                            <th class="">{{'table_status'|bkTranslate:this}}</th>
-                            <th class=""></th>
-                            <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th *ngIf="!projectId"></th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="">{{'table_lib_version'|bkTranslate:this}}</th>
+                        <th class="">{{'table_author'|bkTranslate:this}}</th>
+                        <th class="">{{'table_status'|bkTranslate:this}}</th>
+                        <th class=""></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                        <tr *ngFor="let version of codeProgramVersions">
+                    <tr *ngFor="let version of codeProgramVersions">
 
-                            <!-- NAME -->
-                            <td class="vert-align no-wrap" [class.bold]="isSelected(version)">
-                                <a (click)="onProgramVersionClick(version)">
-                                    {{version.name}}
-                                </a>
-                            </td>
+                        <!-- NAME -->
+                        <td class="vert-align no-wrap" [class.bold]="isSelected(version)">
+                            <a (click)="onProgramVersionClick(version)">
+                                {{version.name}}
+                            </a>
+                        </td>
 
-                                <!-- Main Mark - Only for settings for Type of Board, If C program is not for user projects -->
-                            <td *ngIf="!projectId" class="vert-align no-wrap">
+                        <!-- Main Mark - Only for settings for Type of Board, If C program is not for user projects -->
+                        <td *ngIf="!projectId" class="vert-align no-wrap">
                                  <span class="icon-hint-wraper green" *ngIf="version.main_mark">
                                         <i class="fa fa-lg fa-flag font-green-jungle"></i>
-                                        <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                                        <span
+                                            class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
                                 </span>
-                            </td>
+                        </td>
 
-                            <!-- Description -->
-                            <td class="vert-align">
-                                {{version.description}}
-                            </td>
+                        <!-- Description -->
+                        <td class="vert-align">
+                            {{version.description}}
+                        </td>
 
-                            <!-- Description -->
-                            <td class="vert-align no-wrap">
-                                {{version.compilation_version}}
-                            </td>
+                        <!-- Description -->
+                        <td class="vert-align no-wrap">
+                            {{version.compilation_version}}
+                        </td>
 
-                            <!-- Author -->
-                            <td class="vert-align no-wrap">
-                                <span *ngIf="version.author">{{version.author.nick_name}}</span>
-                                <span *ngIf="!version.author">No One</span>
-                            </td>
-                            <!-- STATUS -->
-                            <td class="vert-align no-wrap">
-                                <bk-compilation-status-component [status]="version.status"></bk-compilation-status-component>
-                                <bk-compilation-status-component [status]="version.approval_state"></bk-compilation-status-component>
-                            </td>
-                            <!-- UPLOAD -->
+                        <!-- Author -->
+                        <td class="vert-align no-wrap">
+                            <span *ngIf="version.author">{{version.author.nick_name}}</span>
+                            <span *ngIf="!version.author">No One</span>
+                        </td>
+                        <!-- STATUS -->
+                        <td class="vert-align no-wrap">
+                            <bk-compilation-status-component
+                                [status]="version.status"></bk-compilation-status-component>
+                            <bk-compilation-status-component
+                                [status]="version.approval_state"></bk-compilation-status-component>
+                        </td>
+                        <!-- UPLOAD -->
 
-                            <td class="vert-align no-wrap">
-                                <button *ngIf="projectId && hardwareType && hardwareType.connectible_to_internet && version.status=='SUCCESS' && codeProgram && codeProgram.publish_type == 'PRIVATE'" class="btn blue">
-                                    {{'btn_upload_to_hardware'|bkTranslate:this}}
-                                </button>
-                            </td>
+                        <td class="vert-align no-wrap">
+                            <button
+                                *ngIf="projectId && hardwareType && hardwareType.connectible_to_internet && version.status=='SUCCESS' && codeProgram && codeProgram.publish_type == 'PRIVATE'"
+                                class="btn blue">
+                                {{'btn_upload_to_hardware'|bkTranslate:this}}
+                            </button>
+                        </td>
 
-                            <!-- ACTIONS -->
-                            <td class="vert-align text-right no-wrap">
+                        <!-- ACTIONS -->
+                        <td class="action-btn-col">
 
 
-                                <bk-drob-down-button
-                                    [btns_group_name]="('label_version_properties'|bkTranslate:this)"
-                                    [btns] = "[
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_version_properties'|bkTranslate:this)"
+                                [btns]="[
                                 {
                                     condition: version.download_link_bin_file,
                                     btn_label_for_person: ('label_download_file'|bkTranslate:this),
@@ -272,12 +280,12 @@
                                     permission: (version.delete_permission)
                                 }
                             ]"
-                                    (onValueChanged)="onDrobDownEmiter($event, version)"
-                                >
-                                </bk-drob-down-button>
+                                (onValueChanged)="onDrobDownEmiter($event, version)"
+                            >
+                            </bk-drob-down-button>
 
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

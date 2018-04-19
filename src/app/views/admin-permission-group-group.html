@@ -69,7 +69,7 @@
                     <tr>
                         <th>{{'label_name'|bkTranslate:this}}</th>
                         <th>{{'label_email'|bkTranslate:this}}</th>
-                        <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -78,7 +78,7 @@
                             <a (click)="onPersonClick(person.id)" class="no-wrap"><strong>{{person.full_name}}</strong> ({{person.nick_name}})</a>
                         </td>
                         <td class="vert-align no-wrap">{{person.email}}</td>
-                        <td class="vert-align text-right no-wrap">
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_person_remove'|bkTranslate:this)"
@@ -121,14 +121,14 @@
                     <tr>
                         <th>{{'label_name'|bkTranslate:this}}</th>
                         <th>{{'label_description'|bkTranslate:this}}</th>
-                        <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let permission of securityRole.permissions">
                         <td class="vert-align no-wrap"> {{permission.name}}</td>
                         <td class="vert-align no-wrap"> {{permission.description}}</td>
-                        <td class="vert-align text-right no-wrap">
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_type_of_board_properties'|bkTranslate:this)"

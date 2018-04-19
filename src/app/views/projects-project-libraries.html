@@ -24,7 +24,7 @@
                     }
                  ]"
         (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
+        [tab_selected_name]="tab"
         [tabBtns]="[
                         {
                             tab_name: 'my_libraries',
@@ -47,30 +47,49 @@
             <div *ngIf="(libraries && libraries.length)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
-                        <tr>
-                            <th class="">{{'table_name'|bkTranslate:this}}</th>
-                            <th class="">{{'table_description'|bkTranslate:this}}</th>
-                            <th class=" text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                        <tr *ngFor="let library of libraries">
-                            <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
-                            <td class="vert-align no-wrap">{{library.description}}</td>
-                            <td class="vert-align no-wrap text-right">
-                                <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.update_permission"
-                                    (click)="onEditClick(library)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                                <button title="{{'label_remove_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission"
-                                    (click)="onRemoveClick(library)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                            </td>
-                        </tr>
+                    <tr *ngFor="let library of libraries">
+                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a>
+                        </td>
+                        <td class="vert-align no-wrap">{{library.description}}</td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_program_properties'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_program_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_library',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (library.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_program'|bkTranslate:this),
+                                    btn_tag: 'remove_library',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (library.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, library)"
+                            >
+                            </bk-drob-down-button>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="privateLibraries.from" [to]="privateLibraries.to" [total]="privateLibraries.total"  [totalPages]="privateLibraries.pages" (onSelect)="onFilterPrivateLibraries($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="privateLibraries.from" [to]="privateLibraries.to"
+                                          [total]="privateLibraries.total" [totalPages]="privateLibraries.pages"
+                                          (onSelect)="onFilterPrivateLibraries($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
@@ -87,32 +106,50 @@
 
         <div *ngIf="tab == 'public_libraries'">
 
-            <div *ngIf="(publicLibraries && publicLibraries.content.length)" class="table-scrollable table-scrollable table-scrollable-borderless">
+            <div *ngIf="(publicLibraries && publicLibraries.content.length)"
+                 class="table-scrollable table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class=""><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let library of publicLibraries.content">
-                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a>
+                        </td>
                         <td class="vert-align">{{library.description}}</td>
                         <td class="vert-align no-wrap">
                             <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeClick(board.id)">{{board.name}}, </a>
                         </td>
-                        <td class="vert-align no-wrap text-right">
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(library)">
-                                <i class="fa fa-clone"></i>
-                            </button>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'make_clone_library',
+                                    icon: 'fa-clone',
+                                    colorType: 'UPDATE',
+                                    permission: (library.update_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, library)"
+                            >
+                            </bk-drob-down-button>
+
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="publicLibraries.from" [to]="publicLibraries.to" [total]="publicLibraries.total"  [totalPages]="publicLibraries.pages" (onSelect)="onFilterPublicLibraries($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="publicLibraries.from" [to]="publicLibraries.to"
+                                          [total]="publicLibraries.total" [totalPages]="publicLibraries.pages"
+                                          (onSelect)="onFilterPublicLibraries($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->

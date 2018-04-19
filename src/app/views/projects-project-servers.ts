@@ -274,6 +274,32 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
             });
     }
 
+    onDrobDownEmiter(action: string, homer_server: IHomerServer): void {
+
+        if (action === 'update_server') {
+            this.onHomerServerUpdateServer(homer_server);
+        }
+
+        if (action === 'edit_server') {
+            this.onHomerServerEditClick(homer_server);
+        }
+        if (action === 'shutdown_server') {
+            this.onHomerServerShutDownClick(homer_server);
+        }
+
+        if (action === 'turn_on_server') {
+            this.onHomerServerStartClick(homer_server);
+        }
+
+        if (action === 'restart_server') {
+            this.onHomerServerRestartClick(homer_server);
+        }
+
+        if (action === 'remove_server') {
+            this.onHomerServerDeleteClick(homer_server);
+        }
+    }
+
 }
 
 

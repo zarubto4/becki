@@ -232,11 +232,11 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th class="col col-lg-2">{{'table_version_name'|bkTranslate:this}}</th>
-                            <th class="col col-lg-7">{{'table_description'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_author'|bkTranslate:this}}</th>
+                            <th class="">{{'table_version_name'|bkTranslate:this}}</th>
+                            <th class="">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="">{{'table_author'|bkTranslate:this}}</th>
                             <th></th>
-                            <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                         </tr>
                         </thead>
                         <tbody class="hide-bk-drob-down-button">
@@ -281,7 +281,7 @@
                                               [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
                             </td>
-                            <td class="vert-align no-wrap text-right">
+                            <td class="action-btn-col">
 
 
                                 <bk-drob-down-button
@@ -328,7 +328,7 @@
                                             permission: (version.delete_permission)
                                         }
                                     ]"
-                                            (onValueChanged)="onDrobDownEmiter($event, version)"
+                                    (onValueChanged)="onDrobDownEmiter($event, version)"
                                 >
                                 </bk-drob-down-button>
 

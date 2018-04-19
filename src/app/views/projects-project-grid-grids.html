@@ -59,13 +59,14 @@
                 </thead>
                 <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let program of gridProject.m_programs">
-                    <td class="vert-align no-wrap bold"><a (click)="onGridProgramClick(gridProject.id, program.id)">{{program.name}}</a></td>
+                    <td class="vert-align no-wrap bold"><a (click)="onGridProgramClick(gridProject.id, program.id)">{{program.name}}</a>
+                    </td>
                     <td class="vert-align">{{program.description}}</td>
-                    <td class="vert-align no-wrap">
+                    <td class="action-btn-col">
 
                         <bk-drob-down-button
                             [btns_group_name]="('label_version_properties'|bkTranslate:this)"
-                            [btns] = "[
+                            [btns]="[
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_version_properties'|bkTranslate:this),

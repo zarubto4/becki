@@ -55,7 +55,7 @@
                         <th class="">{{'table_name'|bkTranslate:this}}</th>
                         <th class="">{{'table_description'|bkTranslate:this}}</th>
                         <th class=""><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -64,8 +64,7 @@
                         <td class="vert-align">{{code.description}}</td>
                         <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a>
                         </td>
-                        <td class="vert-align no-wrap text-right">
-
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
@@ -119,11 +118,10 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;
-                        </th>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class=""><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -132,11 +130,11 @@
                         <td class="vert-align">{{code.description}}</td>
                         <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a>
                         </td>
-                        <td class="vert-align no-wrap text-right">
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
-                                [btns] = "[
+                                [btns]="[
                                     {
                                         condition: true,
                                         btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
@@ -146,9 +144,9 @@
                                         permission: (code.update_permission)
                                     }
                                 ]"
-                                    (onValueChanged)="onDrobDownEmiter($event, code)"
+                                (onValueChanged)="onDrobDownEmiter($event, code)"
                             >
-                                </bk-drob-down-button>
+                            </bk-drob-down-button>
                         </td>
                     </tr>
                     </tbody>

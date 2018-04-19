@@ -24,7 +24,7 @@
                       }
                  ]"
         (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
+        [tab_selected_name]="tab"
         [tabBtns]="[
                         {
                             tab_name: 'my_blocks',
@@ -69,11 +69,11 @@
                             <a (click)="onBlockClick(block.id)">{{block.name}}</a>
                         </td>
                         <td class="vert-align">{{block.description}}</td>
-                        <td class="vert-align no-wrap">
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_block_properties'|bkTranslate:this)"
-                                [btns] = "[
+                                [btns]="[
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_block_properties'|bkTranslate:this),
@@ -99,7 +99,9 @@
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"  [totalPages]="blockList.pages" (onSelect)="onShowProgramPrivateBlocksFilter($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"
+                                          [totalPages]="blockList.pages"
+                                          (onSelect)="onShowProgramPrivateBlocksFilter($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
@@ -115,7 +117,8 @@
 
         </div>
         <div *ngIf="tab == 'public_blocks'">
-            <div *ngIf="(blockListNotApproved && blockListNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(blockListNotApproved && blockListNotApproved.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
@@ -128,15 +131,17 @@
                     <tr *ngFor="let block of blockListNotApproved.content">
                         <td class="vert-align no-wrap bold">
                             <a (click)="onBlockClick(block.id)">{{block.name}}</a>
-                            <span *ngIf="!projectId && block.active" class="font-green-jungle bold">(Active)</span>         <!-- Only for Administrator -->
-                            <span *ngIf="!projectId && !block.active" class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
+                            <span *ngIf="!projectId && block.active" class="font-green-jungle bold">(Active)</span>
+                            <!-- Only for Administrator -->
+                            <span *ngIf="!projectId && !block.active"
+                                  class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
                         </td>
                         <td class="vert-align">{{block.description}}</td>
-                        <td class="vert-align no-wrap">
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
-                                [btns] = "[
+                                [btns]="[
                                 {
                                     condition: projectId && group.publish_type == 'public_program',
                                     btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
@@ -186,7 +191,9 @@
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"  [totalPages]="blockList.pages" (onSelect)="onShowProgramPublicBlocksFilter($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"
+                                          [totalPages]="blockList.pages"
+                                          (onSelect)="onShowProgramPublicBlocksFilter($event)"></bk-filter-page-component>
             </div>
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(blockListNotApproved == null)"

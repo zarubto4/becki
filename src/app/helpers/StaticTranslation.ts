@@ -1437,7 +1437,7 @@ export class StaticTranslation {
                 'btn_create_instance': 'Create Instance',
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
-
+                'label_instance_remove': 'Remove instance',
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
@@ -1737,6 +1737,8 @@ export class StaticTranslation {
                 'label_no_admin_widget': 'No <strong class="font-color-grid">GRID</strong> widgets',
                 'label_no_admin_widget_comment': 'There is not any widgets to check and valid',
 
+                'label_code_program_properties': 'Code Properties',
+
             }, 'ProjectsProjectWidgetsWidgetComponent': {
 
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET <strong>{0}</strong>',
@@ -1779,6 +1781,9 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
+
+                'label_publish': 'Publish',
+                'label_version_set_as_main': 'Set as main',
 
             }, 'ProjectsProjectActualizationProcedureComponent': {
                 'title': 'Actualization Procedure',

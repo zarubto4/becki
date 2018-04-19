@@ -10,32 +10,35 @@ import {
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
     IUpdateProcedure
 } from '../backend/TyrionAPI';
-import { BlockoCore } from 'blocko';
+import {BlockoCore} from 'blocko';
 import {
     Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef, ViewChildren, QueryList,
     AfterViewInit
 } from '@angular/core';
-import { _BaseMainComponent } from './_BaseMainComponent';
-import { Subscription } from 'rxjs/Rx';
-import { CurrentParamsService } from '../services/CurrentParamsService';
-import { BlockoViewComponent } from '../components/BlockoViewComponent';
-import { ModalsConfirmModel } from '../modals/confirm';
-import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
-import { OnlineChangeStatus, TyrionApiBackend } from '../backend/BeckiBackend';
-import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
-import { ModalsSelectVersionModel } from '../modals/version-select';
-import { DraggableEventParams } from '../components/DraggableDirective';
-import { WebsocketClientBlockoView } from '../services/websocket/Websocket_Client_BlockoView';
-import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
-import { ModalsVersionDialogModel } from '../modals/version-dialog';
+import {_BaseMainComponent} from './_BaseMainComponent';
+import {Subscription} from 'rxjs/Rx';
+import {CurrentParamsService} from '../services/CurrentParamsService';
+import {BlockoViewComponent} from '../components/BlockoViewComponent';
+import {ModalsConfirmModel} from '../modals/confirm';
+import {ConsoleLogComponent} from '../components/ConsoleLogComponent';
+import {FlashMessageError, FlashMessageSuccess} from '../services/NotificationService';
+import {ModalsInstanceEditDescriptionModel} from '../modals/instance-edit-description';
+import {OnlineChangeStatus, TyrionApiBackend} from '../backend/BeckiBackend';
+import {InstanceHistoryTimeLineComponent} from '../components/InstanceHistoryTimeLineComponent';
+import {ModalsSelectVersionModel} from '../modals/version-select';
+import {DraggableEventParams} from '../components/DraggableDirective';
+import {WebsocketClientBlockoView} from '../services/websocket/Websocket_Client_BlockoView';
+import {WebsocketMessage} from '../services/websocket/WebsocketMessage';
+import {ModalsVersionDialogModel} from '../modals/version-dialog';
 import moment = require('moment/moment');
-import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
-import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
-import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsShowQRModel } from '../modals/show_QR';
-import { ModalsGridProgramSettingsModel } from '../modals/instance-grid-program-settings';
+import {ModalsSnapShotInstanceModel} from '../modals/snapshot-properties';
+import {ModalsSnapShotDeployModel} from '../modals/snapshot-deploy';
+import {ModalsRemovalModel} from '../modals/removal';
+import {ModalsShowQRModel} from '../modals/show_QR';
+import {ModalsGridProgramSettingsModel} from '../modals/instance-grid-program-settings';
+
+// Trying smth
+import {ProjectsProjectHardwareComponent} from '../views/projects-project-hardware';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -89,14 +92,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         helper: 'clone',
         containment: 'document',
         cursor: 'move',
-        cursorAt: { left: -5, top: -5 }
+        cursorAt: {left: -5, top: -5}
     };
 
     private liveViewLoaded: boolean = false;
 
     constructor(injector: Injector) {
         super(injector);
-
 
 
     };
@@ -267,7 +269,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 break;
             }
 
-            default: this.fmError(this.translate('flash_cant_add_blocko_block'));
+            default:
+                this.fmError(this.translate('flash_cant_add_blocko_block'));
         }
     }
 
@@ -301,7 +304,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.onChangeVersion();
                 break;
             }
-            default: console.warn('undefined for:', action);
+            default:
+                console.warn('undefined for:', action);
         }
     }
 
@@ -324,7 +328,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         });
                     });
 
-                    this.tyrionBackendService.instanceSnapshotCreate( this.instanceId, {
+                    this.tyrionBackendService.instanceSnapshotCreate(this.instanceId, {
                         name: m.name,
                         description: m.description,
                         version_id: version_id,
@@ -399,7 +403,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.instanceEdit(this.instance.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.instanceEdit(this.instance.id, {
+                    name: model.name,
+                    description: model.description
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.refresh();
@@ -440,9 +447,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.unblockUI();
                         this.refresh();
                     }).catch((err) => {
-                        this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', err));
-                    });
+                    this.unblockUI();
+                    this.fmError(this.translate('label_upload_error', err));
+                });
             }
         });
     }
@@ -513,14 +520,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     onFilterHardwareGroup(pageNumber: number = 0): void {
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
-            project_id : this.projectId,
+            project_id: this.projectId,
             instance_snapshots: [this.instance.current_snapshot.id],
 
         })
             .then((values) => {
                 this.deviceGroupFilter = values;
 
-                if (this.deviceGroupFilter.content.length > 0 ) {
+                if (this.deviceGroupFilter.content.length > 0) {
                     this.onFilterHardware(0, this.deviceGroupFilter.content);
                 } else {
                     this.onFilterHardware(0, []);
@@ -587,7 +594,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
-            project_id : this.projectId
+            project_id: this.projectId
         })
             .then((values) => {
                 this.allHwGroups = values;
@@ -603,8 +610,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedureTask(pageNumber: number = 0,
-                                       status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE' , 'COMPLETE_WITH_ERROR' , 'CANCELED' , 'IN_PROGRESS' , 'NOT_START_YET'],
-                                      ): void {
+                                       status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET'],): void {
         this.blockUI();
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
@@ -643,6 +649,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
+
     /* tslint:disable:max-line-length ter-indent*/
 
     loadBlockoLiveView() {
@@ -684,7 +691,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             };
 
 
-
                         } else {
                             console.error('ProjectsProjectInstancesInstanceComponent:connectBlockoInstanceWebSocket:: ', error);
                         }
@@ -712,12 +718,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
 
             if (m.message_type === 'new_external_input_connector_value') {
-                  controller.setInputConnectorValue(m.block_id, m.interface_name, m.value);
+                controller.setInputConnectorValue(m.block_id, m.interface_name, m.value);
                 return;
             }
 
             if (m.message_type === 'new_external_output_connector_value') {
-                 controller.setOutputConnectorValue(m.block_id, m.interface_name, m.value);
+                controller.setOutputConnectorValue(m.block_id, m.interface_name, m.value);
                 return;
             }
 
@@ -847,14 +853,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    // TODO: onGridProgramPublishClick 2 args
-
     onDrobDownEmiter(action: string, object: any): void {
 
-
-        // if (action === 'edit_grid_app') {
-        //     this.onGridProgramPublishClick(object);
-        // }
         if (action === 'edit_blocko_program') {
             this.onEditSnapShotClick(object);
         }
@@ -862,14 +862,32 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         if (action === 'remove_blocko') {
             this.onRemoveSnapShotClick(object);
         }
+
+        if (action === 'cancel_update_procedure') {
+            this.onUpdateProcedureCancelClick(object);
+        }
     }
 
-    // TODO: finish onDrobDownEmiterProcedure!!!!!
+    onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
+        this.blockUI();
+        this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
+            .then(() => {
+                this.unblockUI();
+                this.refresh();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
 
-    // onDrobDownEmiterProcedure(action: string, procedure: IUpdateProcedure){
-    //     if (action === 'cancel_update_procedure') {
-    //         this.onUpdateProcedureCancelClick(procedure);
-    //     }
-    // }
+
+
+    onDrobDownEmiterProgram(action: string, m_project: IBProgramVersionSnapGridProject, program: IBProgramVersionSnapGridProjectProgram) {
+
+        if (action === 'edit_grid_app') {
+            this.onGridProgramPublishClick(m_project, program);
+        }
+    }
 }
 

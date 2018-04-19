@@ -1,15 +1,15 @@
 <bk-layout-main
-     [tabMenu]="'byzance-admin'"
-     [title]="'main_title'|bkTranslate:this"
-     [subtitle]="'main_subtitle'|bkTranslate:this">
+    [tabMenu]="'byzance-admin'"
+    [title]="'main_title'|bkTranslate:this"
+    [subtitle]="'main_subtitle'|bkTranslate:this">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title
-                      [title_name]="'title'|bkTranslate:this"
-                      [icon]="'fa-server'"
-                      (onTabClick)="onToggleTab($event)"
-                      [tab_selected_name] = "tab"
-                      [tabBtns]="[
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-server'"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name]="tab"
+        [tabBtns]="[
                             {
                                 tab_name: 'public_c_programs',
                                 tab_color: 'CODE',
@@ -48,23 +48,25 @@
                 <table class="table table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class=""><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let code of cPrograms.content">
 
-                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a>
+                        </td>
                         <td class="vert-align">{{code.description}}</td>
-                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
-                        <td class="vert-align no-wrap text-right">
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a>
+                        </td>
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
-                                [btns] = "[
+                                [btns]="[
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
@@ -86,15 +88,6 @@
                             >
                             </bk-drob-down-button>
 
-                            <!--Before dropdownmenu CODE-->
-
-                            <!--&lt;!&ndash;<button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.update_permission" (click)="onCProgramEditClick(code)">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<i class="fa fa-cog"></i>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</button>&ndash;&gt;-->
-
-                            <!--&lt;!&ndash;<button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<i class="fa fa-trash"></i>&ndash;&gt;-->
-                            <!--</button>-->
                         </td>
                     </tr>
                     </tbody>
@@ -117,22 +110,26 @@
             <!-- Filter Parameters -->
             <div>
             </div>
-            <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let code of cProgramsNotApproved.content">
 
-                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onCProgramAdminClick(code.id)">{{code.name}}</a>
+                        </td>
                         <td class="vert-align">{{code.description}}</td>
-                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a></td>
+                        <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type_id)">{{code.hardware_type_name}}</a>
+                        </td>
                         <td class="vert-align no-wrap text-right">
 
                             <!-- No buttons ?-->
@@ -162,8 +159,8 @@
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -174,11 +171,11 @@
                         <td class="vert-align no-wrap">
                             <a *ngFor="let type of library.hardware_types" (click)="onHardwareTypeClick(type.id)">{{type.name}}, </a>
                         </td>
-                        <td class="vert-align no-wrap text-right">
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
-                                [btns] = "[
+                                [btns]="[
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
@@ -222,20 +219,23 @@
             <!-- Filter Parameters -->
             <div>
             </div>
-            <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="col col-lg-2"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let library of librariesNotApproved.content">
 
-                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a>
+                        </td>
                         <td class="vert-align">{{library.description}}</td>
                         <td class="vert-align no-wrap">
                             <a *ngFor="let type of library.hardware_types" (click)="onHardwareTypeClick(type.id)">{{type.name}}, </a>

@@ -135,7 +135,7 @@
                             <th class="center-align">{{'table_user_agent'|bkTranslate:this}}</th>
                             <th class="center-align">{{'table_created'|bkTranslate:this}}</th>
                             <th class="center-align">{{'table_access_age'|bkTranslate:this}}</th>
-                            <th class="center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                         </tr>
                         </thead>
                         <tbody class="hide-bk-drob-down-button">
@@ -147,7 +147,7 @@
                             <td class="vert-align no-wrap">{{login_token.created|bkUnixTimeToDate}}</td>
                             <td class="vert-align no-wrap">{{login_token.access_age|bkUnixTimeToDate}}</td>
 
-                            <td class="vert-align text-right no-wrap">
+                            <td class="action-btn-col">
 
                                 <bk-drob-down-button
                                     [btns_group_name]="('label_token_remove'|bkTranslate:this)"

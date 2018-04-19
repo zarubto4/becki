@@ -34,6 +34,12 @@
     float: none;
 }
 
+.action-btn-col {
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 1px
+}
+
 .vertical-align {
     display: flex;
     align-items: center;

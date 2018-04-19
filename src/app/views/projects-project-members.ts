@@ -115,4 +115,15 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
         return 'Unknown';
     }
 
+    onDrobDownEmiter(action: string, member: IProjectParticipant): void {
+
+        if (action === 'send_invitation') {
+            this.onMemberSendAgainClick(member);
+        }
+
+        if (action === 'remove_member') {
+            this.onMemberDeleteClick(member);
+        }
+    }
+
 }

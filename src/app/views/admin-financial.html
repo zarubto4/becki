@@ -1,7 +1,7 @@
 <bk-layout-main
-     [tabMenu]="'byzance-admin'"
-     [title]="'main_title'|bkTranslate:this"
-     [subtitle]="'main_subtitle'|bkTranslate:this">
+    [tabMenu]="'byzance-admin'"
+    [title]="'main_title'|bkTranslate:this"
+    [subtitle]="'main_subtitle'|bkTranslate:this">
 
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
@@ -26,7 +26,7 @@
                 }
             ]"
         (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
+        [tab_selected_name]="tab"
         [tabBtns]="[
                         {
                             tab_name: 'tariffs',
@@ -39,7 +39,7 @@
                             tab_label: ('tab_extensions'|bkTranslate:this)
                         }
                     ]">
-        </bk-portlet-title>
+    </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
     <div class="portlet-body">
@@ -51,28 +51,27 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="col col-lg-1">{{'table_icon'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        <th class="">{{'table_icon'|bkTranslate:this}}</th>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let tariff of tariffs">
 
-                        <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
+                        <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;"
+                                                               class="fa {{tariff.awesome_icon}}"></i></td>
                         <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
                             <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
                             <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
                         </td>
                         <td class="vert-align">{{tariff.description}}</td>
-                        <td class="vert-align no-wrap text-right">
+                        <td class="action-btn-col">
 
-
-                            <!--TODO: Conditions for buttons-->
                             <bk-drob-down-button
                                 [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
-                                [btns] = "[
+                                [btns]="[
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_tariff_edit_properties'|bkTranslate:this),
@@ -148,82 +147,83 @@
             <div *ngIf="(extensions && extensions.length)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
-                        <tr>
-                            <th class="col col-lg-1">{{'table_icon'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
-                            <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th class="">{{'table_icon'|bkTranslate:this}}</th>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                        <tr *ngFor="let extension of extensions">
+                    <tr *ngFor="let extension of extensions">
 
-                            <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
-                            <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
-                                <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
-                                <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
-                            </td>
-                            <td class="vert-align">{{tariff.description}}</td>
-                            <td class="vert-align no-wrap text-right">
+                        <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;"
+                                                               class="fa {{tariff.awesome_icon}}"></i></td>
+                        <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
+                            <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
+                            <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
+                        </td>
+                        <td class="vert-align">{{tariff.description}}</td>
+                        <td class="action-btn-col">
 
-                                <bk-drob-down-button
+                            <bk-drob-down-button
                                 [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
-                                [btns] = "[
-                                {
-                                condition: true,
-                                btn_label_for_person: ('label_tariff_edit_properties'|bkTranslate:this),
-                                btn_tag: 'edit_tariff',
-                                icon: 'fa-cog',
-                                colorType: 'EDIT',
-                                permission: (tariff.update_permission)
-                                },
-                                {
-                                condition: !(tariff.order_position == 1 || tariff.order_position == 0),
-                                btn_label_for_person: ('label_change_order'|bkTranslate:this),
-                                btn_tag: 'shift_up_tariff',
-                                icon: 'fa-chevron-up',
-                                colorType: 'UPDATE',
-                                permission: (tariff.update_permission)
-                                },
-                                {
-                                condition: !(tariffs.length == tariff.order_position),
-                                btn_label_for_person: ('label_change_order'|bkTranslate:this),
-                                btn_tag: 'shift_down_tariff',
-                                icon: 'fa-chevron-down',
-                                colorType: 'UPDATE',
-                                permission: (tariff.update_permission)
-                                },
-                                {
-                                condition: !tariff.active,
-                                btn_label_for_person: ('label_deactive_tariff'|bkTranslate:this),
-                                btn_tag: 'deactive_tariff',
-                                icon: 'fa-power-off',
-                                colorType: 'DEACTIVE',
-                                permission: (tariff.update_permission)
-                                },
-                                {
-                                condition: tariff.active,
-                                btn_label_for_person: ('label_active_tariff'|bkTranslate:this),
-                                btn_tag: 'active_tariff',
-                                icon: 'fa-power-off',
-                                colorType: 'ACTIVE',
-                                permission: (tariff.update_permission)
-                                },
-                                {
-                                condition: true,
-                                btn_label_for_person: ('label_delete_tariff'|bkTranslate:this),
-                                btn_tag: 'remove_tariff',
-                                icon: 'fa-trash',
-                                colorType: 'REMOVE',
-                                permission: (tariff.update_permission)
-                                }
-                                ]"
-                                (onValueChanged)="onDrobDownEmiter($event, tariff)"
-                                >
-                                </bk-drob-down-button>
+                                [btns]="[
+                                    {
+                                        condition: true,
+                                        btn_label_for_person: ('label_tariff_edit_properties'|bkTranslate:this),
+                                        btn_tag: 'edit_tariff',
+                                        icon: 'fa-cog',
+                                        colorType: 'EDIT',
+                                        permission: (tariff.update_permission)
+                                    },
+                                    {
+                                        condition: !(tariff.order_position == 1 || tariff.order_position == 0),
+                                        btn_label_for_person: ('label_change_order'|bkTranslate:this),
+                                        btn_tag: 'shift_up_tariff',
+                                        icon: 'fa-chevron-up',
+                                        colorType: 'UPDATE',
+                                        permission: (tariff.update_permission)
+                                    },
+                                    {
+                                        condition: !(tariffs.length == tariff.order_position),
+                                        btn_label_for_person: ('label_change_order'|bkTranslate:this),
+                                        btn_tag: 'shift_down_tariff',
+                                        icon: 'fa-chevron-down',
+                                        colorType: 'UPDATE',
+                                        permission: (tariff.update_permission)
+                                    },
+                                    {
+                                        condition: !tariff.active,
+                                        btn_label_for_person: ('label_deactive_tariff'|bkTranslate:this),
+                                        btn_tag: 'deactive_tariff',
+                                        icon: 'fa-power-off',
+                                        colorType: 'DEACTIVE',
+                                        permission: (tariff.update_permission)
+                                    },
+                                    {
+                                        condition: tariff.active,
+                                        btn_label_for_person: ('label_active_tariff'|bkTranslate:this),
+                                        btn_tag: 'active_tariff',
+                                        icon: 'fa-power-off',
+                                        colorType: 'ACTIVE',
+                                        permission: (tariff.update_permission)
+                                    },
+                                    {
+                                        condition: true,
+                                        btn_label_for_person: ('label_delete_tariff'|bkTranslate:this),
+                                        btn_tag: 'remove_tariff',
+                                        icon: 'fa-trash',
+                                        colorType: 'REMOVE',
+                                        permission: (tariff.update_permission)
+                                    }
+                                        ]"
+                                        (onValueChanged)="onDrobDownEmiter($event, tariff)"
+                            >
+                            </bk-drob-down-button>
 
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
