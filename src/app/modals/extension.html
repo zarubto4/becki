@@ -18,12 +18,6 @@
             <div>
                 <bk-form-nice-json [description]="'Config Json'" [control]="form.controls['config']" [cols]="75" [content]="modalModel.config" [readonly]="false"></bk-form-nice-json>
             </div>
-            <br>
-            <div>
-                <label>{{'label_optional_included'|bkTranslate:this}}</label>
-                <i *ngIf="!modalModel.included" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Included(!modalModel.included)"></i>
-                <i *ngIf="modalModel.included"  style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBoolean_Included(!modalModel.included)"></i>
-            </div>
         </form>
     </div>
     <div class="modal-footer">

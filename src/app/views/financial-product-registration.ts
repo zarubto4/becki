@@ -57,7 +57,7 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
     goPayLoaderServiceSubscription: Subscription;
 
     // integrator or do_it_yourself - Flag Register
-    extensionTab: string = 'optional_extensions';
+    extensionTab: string = 'recommended_extensions';
 
     constructor(injector: Injector) {
         super(injector);
@@ -357,7 +357,7 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
 
 
         // Only if user change tariff after choice -- just set for default
-        this.extensionTab = 'optional_extensions';
+        this.extensionTab = 'recommended_extensions';
 
 
         if (this.selectedTariff.company_details_required) {
