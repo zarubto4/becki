@@ -125,6 +125,12 @@
                         <td class="vert-align no-wrap">
                             <a *ngFor="let board of library.type_of_boards" (click)="onHardwareTypeClick(board.id)">{{board.name}}, </a>
                         </td>
+
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="library.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button

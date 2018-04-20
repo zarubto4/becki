@@ -68,6 +68,11 @@
                                   class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
                         </td>
                         <td class="vert-align">{{widget.description}}</td>
+
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="widget.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
@@ -154,6 +159,11 @@
                             <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
                         </td>
                         <td class="vert-align">{{widget.description}}</td>
+
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="widget.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
@@ -219,6 +229,11 @@
                                   class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
                         </td>
                         <td class="vert-align">{{widget.description}}</td>
+
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="widget.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button

@@ -48,6 +48,10 @@
                             <bk-online-state [online_state]="homer_server.online_state"></bk-online-state>
                         </td>
 
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="homer_server.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button

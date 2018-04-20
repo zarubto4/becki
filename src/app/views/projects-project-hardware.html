@@ -229,6 +229,10 @@
                             </div>
                         </td>
 
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="group.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
@@ -345,6 +349,10 @@
                             <bk-update-state [updateState]="procedure.state"></bk-update-state>
                         </td>
 
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="procedure.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
 
@@ -368,7 +376,7 @@
                                     permission: (procedure.delete_permission)
                                 }
                             ]"
-                                (onValueChanged)="onDrobDownEmiter($event, project)"
+                                (onValueChanged)="onDrobDownEmiter($event, procedure)"
                             >
                             </bk-drob-down-button>
 

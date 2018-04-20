@@ -12,8 +12,14 @@ import { TranslationService } from '../services/TranslationService';
     selector: 'bk-tag-component',
 /* tslint:disable:max-line-length */
     template: `        
-        <span class="tag label label-info" (mouseover)="hoover(true)" (mouseleave)="hoover(false)">
-             {{tag}} <span data-role="remove"><i *ngIf="hover && !readonly" class="fa fa-trash" style="width: 0.6em; text-align: center;" (click)="onRemoveClickEvent()"></i> </span>
+        <span class="tag label" 
+              (mouseover)="hoover(true)" 
+              (mouseleave)="hoover(false)"
+              [class.label-info]="tag_color == 'label-info' && !tag_popup_color"
+              [class.label-danger]="tag_color == 'label-danger' || tag_popup_color"
+              [class.label-warning]="tag_color == 'label-warning' && !tag_popup_color"
+        >
+             {{tag}} <span data-role="remove"><i *ngIf="!readonly" class="fa fa-times" style="width: 0.6em; text-align: center;" (click)="onRemoveClickEvent()"></i> </span>
         </span>
     `
 /* tslint:enable */
@@ -23,6 +29,12 @@ export class TagComponent implements OnInit {
     // List of Tags Values
     @Input()
     tag: string = null;
+
+    @Input()
+    tag_color: ('label-info' | 'label-warning' ) = 'label-info';
+
+    @Input()
+    tag_popup_color: boolean;
 
     @Input()
     readonly: boolean = false;
@@ -45,5 +57,7 @@ export class TagComponent implements OnInit {
     onRemoveClickEvent() {
         this.onRemoveClick.emit(this.tag);
     }
+
+
 
 }

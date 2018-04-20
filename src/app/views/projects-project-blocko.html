@@ -44,6 +44,10 @@
                 <tr *ngFor="let blocko of privatePrograms.content">
                     <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(blocko.id)">{{blocko.name}}</a></td>
                     <td class="vert-align">{{blocko.description}}</td>
+                    <td class="vert-align">
+                        <bk-form-tag-input [tags_without_form]="blocko.tags" [readonly]="true"></bk-form-tag-input>
+                    </td>
+
                     <td class="action-btn-col">
 
                         <bk-drob-down-button

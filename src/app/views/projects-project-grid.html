@@ -43,6 +43,11 @@
                     <td class="vert-align no-wrap bold"><a (click)="onGridProjectClick(gridProject.id)">{{gridProject.name}}</a>
                     </td>
                     <td class="vert-align">{{gridProject.description}}</td>
+
+                    <td class="vert-align">
+                        <bk-form-tag-input [tags_without_form]="gridProject.tags" [readonly]="true"></bk-form-tag-input>
+                    </td>
+
                     <td class="action-btn-col">
 
                         <bk-drob-down-button
@@ -68,15 +73,6 @@
                             (onValueChanged)="onDrobDownEmiter($event, gridProject)"
                         >
                         </bk-drob-down-button>
-
-                        <button title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="!gridProject.update_permission" (click)="onProjectEditClick(gridProject)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_group_remove'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick(gridProject)">
-                            <i class="fa fa-trash"></i>
-                        </button>
 
                     </td>
                 </tr>
