@@ -92,6 +92,9 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
         if (action === 'remove_project') {
             this.onProjectDeleteClick();
         }
+        if (action === 'add_program') {
+            this.onProgramAddClick();
+        }
     }
 
     onProjectEditClick(): void {

@@ -1434,7 +1434,7 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> SERVERS',
                 'label_no_servers': 'Not any <strong class="font-color-cloud">CLOUD</strong> Servers',
                 'label_no_servers_comment': 'Your own Server will allow you to run your <strong class="font-color-blocko">BLOCKO</strong> instances.<br>You can install the Server on your own Servers or leave everything to us',
-                'label_id': 'Server ID',
+                'table_id': 'Server ID',
                 'table_server_name': 'Name',
                 'table_server_version': 'Version',
                 'table_status': 'Online Status',
@@ -1442,7 +1442,9 @@ export class StaticTranslation {
                 'label_server_properties': 'Server settings',
                 'label_delete_server': 'Remove server',
                 'label_deactivate_server': 'Activate',
+                'label_shut_down': 'Shut Down',
                 'label_activate_server': 'Deactivate',
+                'label_restart': 'Restart',
                 'table_actions': 'Actions',
                 'table_rest_url': 'Rest URL',
                 'table_mqtt_url': 'MQTT URL',
@@ -1550,6 +1552,7 @@ export class StaticTranslation {
                 'label_instance_version_description': 'Snapshot description',
                 'label_status': 'Status',
                 'label_info': 'Info',
+                'label_cancel_update': 'Stop Updates',
                 'label_no_updates': 'No <strong class="font-color-code">FIRMWARE </strong> release updates',
                 'label_no_updates_comment': 'For Actual <strong class="font-color-hardware">INSTANCE</strong> Snapshot is not required any update',
                 'label_instance_info_is_offline': '<strong class="font-color-instance">INSTANCE</strong> is offline',
@@ -1557,6 +1560,7 @@ export class StaticTranslation {
                 'label_grid_group_in_snapshot': 'Not any <strong class="font-color-grid">GRID</strong> Apps',
                 'label_no_grid_group_in_snapshot_comment': 'In Actual <strong class="font-color-instance">INSTANCE</strong> Snap Shots you are not using any <strong class="font-color-grid">GRID</strong> Apps',
                 'label_instance_type': 'Instance Type',
+                'label_edit_grid_app': 'Change Parameters',
                 'label_created': 'Created',
                 'label_running_from': 'Running from',
                 'label_deployed': 'Deployed',
@@ -2762,6 +2766,7 @@ export class StaticTranslation {
                 'HOMER_SERVER_NEVER_CONNECTED': 'Never connected',
                 'COMPLETE_WITH_ERROR': 'Complete with error',
                 'SUCCESSFULLY_COMPLETE': 'Successfully completed',
+                'PROHIBITED_BY_CONFIG': 'Prohibited by config',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu

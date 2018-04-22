@@ -15,6 +15,7 @@
 <span *ngIf="updateState == 'INSTANCE_INACCESSIBLE'" class="bold font-red-flamingo" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
 <span *ngIf="updateState == 'HOMER_SERVER_NEVER_CONNECTED'" class="bold font-red-flamingo" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
 <span *ngIf="updateState == 'COMPLETE_WITH_ERROR'" class="bold font-yellow-casablanca" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
+<span *ngIf="updateState == 'PROHIBITED_BY_CONFIG'" class="bold font-yellow-casablanca" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
 
 <span *ngIf="updateState == 'CRITICAL_ERROR' && error_code" class="icon-hint-wraper red">
     <i class="fa fa-exclamation-triangle font-red-mint"></i>
