@@ -18,8 +18,12 @@ import { TranslationService } from '../services/TranslationService';
               [class.label-info]="tag_color == 'label-info' && !tag_popup_color"
               [class.label-danger]="tag_color == 'label-danger' || tag_popup_color"
               [class.label-warning]="tag_color == 'label-warning' && !tag_popup_color"
+              [class.label-primary]="tag_color == 'label-primary' && !tag_popup_color"
+              [class.label-success]="tag_color == 'label-success' && !tag_popup_color"
+              [class.label-default]="tag_color == 'label-default' && !tag_popup_color"
+              [class.fade_animation]="tag_faded == 'label-danger' || tag_popup_color"
         >
-             {{tag}} <span data-role="remove"><i *ngIf="!readonly" class="fa fa-times" style="width: 0.6em; text-align: center;" (click)="onRemoveClickEvent()"></i> </span>
+            {{tag}} <span data-role="remove"><i *ngIf="!readonly" class="fa fa-times" style="width: 0.6em; text-align: center;" (click)="onRemoveClickEvent()"></i> </span>
         </span>
     `
 /* tslint:enable */
@@ -31,13 +35,16 @@ export class TagComponent implements OnInit {
     tag: string = null;
 
     @Input()
-    tag_color: ('label-info' | 'label-warning' ) = 'label-info';
+    tag_color: ('label-info' | 'label-warning' | 'label-primary' ) = 'label-info';
 
     @Input()
     tag_popup_color: boolean;
 
     @Input()
     readonly: boolean = false;
+
+    @Input()
+    tag_faded: boolean = false;
 
     private hover: boolean = false;
 
@@ -57,7 +64,6 @@ export class TagComponent implements OnInit {
     onRemoveClickEvent() {
         this.onRemoveClick.emit(this.tag);
     }
-
 
 
 }

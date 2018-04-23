@@ -1737,7 +1737,7 @@ export class StaticTranslation {
                 'label_no_admin_widget': 'No <strong class="font-color-grid">GRID</strong> widgets',
                 'label_no_admin_widget_comment': 'There is not any widgets to check and valid',
 
-                'label_code_program_properties': 'Code Properties',
+                'label_grid_widget_properties': 'Widget Properties',
 
             }, 'ProjectsProjectWidgetsWidgetComponent': {
 
@@ -2375,6 +2375,7 @@ export class StaticTranslation {
 
                 'label_processor_properties': 'Processor Properties',
                 'label_processor_remove': 'Processor Remove',
+                'table_actions': 'Actions',
 
 
             }, 'CommunityCProgramComponent': {

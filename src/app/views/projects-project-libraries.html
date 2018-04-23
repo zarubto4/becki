@@ -50,6 +50,7 @@
                     <tr>
                         <th class="">{{'table_name'|bkTranslate:this}}</th>
                         <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -58,6 +59,11 @@
                         <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a>
                         </td>
                         <td class="vert-align no-wrap">{{library.description}}</td>
+
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="library.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
@@ -114,6 +120,7 @@
                         <th class="">{{'table_name'|bkTranslate:this}}</th>
                         <th class="">{{'table_description'|bkTranslate:this}}</th>
                         <th class=""><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -129,7 +136,6 @@
                         <td class="vert-align">
                             <bk-form-tag-input [tags_without_form]="library.tags" [readonly]="true"></bk-form-tag-input>
                         </td>
-
 
                         <td class="action-btn-col">
 

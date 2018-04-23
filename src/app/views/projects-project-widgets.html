@@ -55,6 +55,7 @@
                     <tr>
                         <th>{{'table_name'|bkTranslate:this}}</th>
                         <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -76,11 +77,11 @@
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                [btns_group_name]="('label_grid_widget_properties'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: projectId && widget.publish_type == 'PUBLIC',
-                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_label_for_person: ('label_grid_widget_properties'|bkTranslate:this),
                                     btn_tag: 'make_clone_widget',
                                     icon: 'fa-clone',
                                     colorType: 'CREATE',
@@ -150,6 +151,7 @@
                     <tr>
                         <th>{{'table_name'|bkTranslate:this}}</th>
                         <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -216,6 +218,7 @@
                     <tr>
                         <th>{{'table_name'|bkTranslate:this}}</th>
                         <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
