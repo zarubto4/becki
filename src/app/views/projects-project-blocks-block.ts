@@ -603,4 +603,24 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.refresh();
             });
     }
+
+    onDrobDownEmiter(action: string, version: IBlockVersion): void {
+
+        if (action === 'version_publish_public') {
+            this.onCommunityPublicVersionClick(version);
+        }
+
+        if (action === 'version_publish_administrator') {
+            this.onProgramVersionPublishResult(version);
+        }
+        if (action === 'version_set_as_main') {
+            this.onBlockSetMainClick(version);
+        }
+        if (action === 'version_properties') {
+            this.onEditVersionClick(version);
+        }
+        if (action === 'remove_version') {
+            this.onRemoveVersionClick(version);
+        }
+    }
 }

@@ -34,16 +34,6 @@
 
                         <td class="vert-align no-wrap text-right">
 
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
-
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
                             <button title="Edit" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                 (click)="onEditClick(version)">
                                     <i class="fa fa-cog"></i>
@@ -53,7 +43,6 @@
                                 (click)="onRemoveClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
-
                         </td>
                     </tr>
                 </tbody>

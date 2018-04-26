@@ -92,6 +92,9 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
         if (action === 'remove_project') {
             this.onProjectDeleteClick();
         }
+        if (action === 'add_program') {
+            this.onProgramAddClick();
+        }
     }
 
     onProjectEditClick(): void {
@@ -179,6 +182,17 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
             }
         });
 
+    }
+
+    onDrobDownEmiter(action: string, program: IGridProgram): void {
+
+        if (action === 'edit_grid_app') {
+            this.onProgramEditClick(program);
+        }
+
+        if (action === 'remove_grid_app') {
+            this.onProgramDeleteClick(program);
+        }
     }
 
 

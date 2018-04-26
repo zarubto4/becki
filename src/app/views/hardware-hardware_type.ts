@@ -456,6 +456,41 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
         return num;
     }
 
+    onDrobDownEmiter (action: string, object: any): void {
+
+        if (action === 'edit_bootloader') {
+            this.onBootloaderEditClick(object);
+        }
+
+        if (action === 'set_as_main_bootloader') {
+            this.onBootloaderSetMainClick(object);
+        }
+
+        if (action === 'upload_file_bootloader') {
+            this.onBootloaderUpdateFile(object);
+        }
+        if (action === 'remove_bootloader') {
+            this.onBootloaderDeleteClick(object);
+        }
+        if (action === 'edit_version') {
+            this.onEditVersionClick(object);
+        }
+        if (action === 'set_as_main_version') {
+            this.onCProgramDefaultSetMainClick(object);
+        }
+        if (action === 'remove_version') {
+            this.onRemoveVersionClick(object);
+        }
+
+        if (action === 'edit_batch') {
+            this.onEditRevisionClick(object);
+        }
+        if (action === 'remove_batch') {
+            this.onDeleteRevisionClick(object);
+        }
+
+    }
+
 }
 
 

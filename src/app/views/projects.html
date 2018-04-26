@@ -11,14 +11,15 @@
     <bk-portlet-title
         [title_name]="'title'|bkTranslate:this"
         [icon]="'fa-briefcase'"
-        (onClick)="onAddClick($event)"
+        (onClick)="onPortletClick($event)"
         [btns]="[
                 {
                     condition: (products != null && products.length > 0 && projects != null &&  projects.length > 0),
                     btn_label_for_person: ('btn_add_project'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-plus-circle',
-                    btn_tag: 'add'
+                    btn_tag: 'add_project',
+                    permission: true
                 }
             ]">
     </bk-portlet-title>
@@ -26,53 +27,71 @@
 
     <!-- Page Content -- START -->
     <div class="portlet-body">
+
+
         <div *ngIf="projects && projects.length" class="table-scrollable table-scrollable-borderless">
             <table class="table table-hover table-light byzance-table">
                 <thead>
                 <tr>
-                    <th class="col">{{'table_name'|bkTranslate:this}}</th>
-                    <th class="col">{{'table_description'|bkTranslate:this}}</th>
-                    <th class="col">{{'table_product'|bkTranslate:this}}</th>
-                    <th class="text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    <th class="">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="">{{'table_product'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let project of projects">
 
-                    <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a></td>
+                    <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a>
+                    </td>
 
                     <td class="vert-align" *ngIf="!project.active">
                         <strong>{{project.name}}</strong>
                         <br>
-                        <span *ngIf="project.product" class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
+                        <span *ngIf="project.product" class="font-red-flamingo">(Deactivated under <a
+                            (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
                     </td>
 
                     <td class="vert-align">{{project.description}}</td>
 
                     <td class="vert-align">
-                        <a *ngIf="project.product" (click)="onProductClick(project.product.id)">{{project.product.name}}</a>
+                        <a *ngIf="project.product"
+                           (click)="onProductClick(project.product.id)">{{project.product.name}}</a>
                         <span *ngIf="!project.product">No Access to Finance</span>
                     </td>
 
-                    <td class="no-wrap text-right vert-align">
+                    <td class="action-btn-col">
 
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_basic_settings'|bkTranslate:this),
+                                    btn_tag: 'edit_project',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (project.update_permission && project.active)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_project',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (project.delete_permission && project.active)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, project)"
+                        >
+                        </bk-drob-down-button>
 
-                        <button title="{{'label_Project_Properties'|bkTranslate}}" class="btn btn-icon-only blue" [disabled]="!project.update_permission || !project.active" (click)="onEditClick(project)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_Remove_project'|bkTranslate}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active" (click)="onRemoveClick(project)">
-                            <i class="fa fa-trash"></i>
-                        </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <!-- Page Content -- END -->
+
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <!-- If User has already products, he can crate project. If Products is Empty - First Create product -->
@@ -92,8 +111,9 @@
                                 [btn_label]="'btn_add_project'|bkTranslate:this"
                                 (onButtonClick)="onAddClick()"></bk-nothing-to-show>
         </template>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
     </div>
-    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
+    <!-- Page Content -- END -->
 </bk-layout-main>

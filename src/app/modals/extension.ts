@@ -8,7 +8,6 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IProductExtensionType } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
@@ -16,7 +15,6 @@ export class ModalsExtensionModel extends ModalModel {
     constructor(
         public extensionTypes: IProductExtensionType[] = [],
         public edit: boolean = false,
-        public included: boolean = false,
         public color: string = '',
         public name: string = '',
         public description: string = '',
@@ -53,11 +51,6 @@ export class ModalsExtensionComponent implements OnInit {
             'config': ['', [Validators.required]],
         });
     }
-
-    onBoolean_Included(value: boolean): void {
-        this.modalModel.included = value;
-    }
-
 
     ngOnInit() {
 

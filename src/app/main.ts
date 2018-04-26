@@ -215,6 +215,7 @@ import { ProjectsProjectGridGridsComponent } from './views/projects-project-grid
 import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-grid-grids-grid';
 import { ModalsShowQRComponent } from './modals/show_QR';
 import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-program-settings';
+import { BeckiDrobDownButtonComponent } from './components/DrobDownButton';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -534,6 +535,7 @@ class BeckiErrorHandler implements ErrorHandler {
         TerminalLogSubscriberComponent,
         LogLevelComponent,
         GridViewComponent,
+        BeckiDrobDownButtonComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,

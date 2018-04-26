@@ -243,6 +243,26 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
         });
     }
 
+    onDrobDownEmiter (action: string, object: any): void {
+
+        if (action === 'update_homer_server') {
+            this.onHomerServerUpdateServer(object);
+        }
+
+        if (action === 'edit_homer_server') {
+            this.onHomerServerEditClick(object);
+        }
+        if (action === 'remove_homer_server') {
+            this.onHomerServerDeleteClick(object);
+        }
+        if (action === 'edit_compilations_server') {
+            this.onCompilationServerEditClick(object);
+        }
+        if (action === 'remove_compilations_server') {
+            this.onCompilationServerDeleteClick(object);
+        }
+    }
+
 }
 
 

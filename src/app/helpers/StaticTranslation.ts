@@ -507,6 +507,9 @@ export class StaticTranslation {
                 'label_deactivated_under': 'Deactivated under',
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
+                'label_Project_Properties': 'Settings',
+                'label_basic_settings': 'Basic Settings',
+                'label_remove': 'Remove',
                 'label_no_projects': '<strong class="font-color-byzance-blue">Nerds</strong> rule N.1',
                 'label_no_projects_comment': 'Create project first, connect hardware and <strong class="font-color-byzance-blue">start slowly control the world</strong>... Step by step...',
                 'label_no_product': '<strong class="font-color-hardware">Mr. Salieri</strong> likes things in order and leads an <strong class="font-color-hardware">accounting book...</strong>',
@@ -622,8 +625,8 @@ export class StaticTranslation {
 
             }, 'AdminFinancialComponent': {
                 'main_title': 'Platform administration',
-                'main_subtitle': 'Financial Management - Tariffs',
-                'title': 'List of All Tariffs',
+                'main_subtitle': 'Financial Management - Tariffs and Extensions',
+                'title': 'Financial Management',
                 'label_tariff_create': 'Create new Tariff',
                 'table_icon': 'Icon',
                 'table_name': 'Name',
@@ -637,18 +640,43 @@ export class StaticTranslation {
                 'label_no_tariffs': 'No Tariffs',
                 'label_no_tariffs_comment': 'We didn\'t find any tariffs. Create new one',
 
-                'tab_tariffs': 'All Tariffs',
-                'tab_extensions': 'All Independent Extensions',
-                'flash_tariff_edit_success': 'Successfully updated',
+                'flash_tariff_create_success': 'Tariff successfully created',
+                'flash_tariff_create_error': 'Tariff was not be created',
+                'flash_tariff_edit_success': 'Tariff successfully updated',
+                'flash_tariff_edit_error': 'Tariff was not be updated',
+                'flash_tariff_delete_success': 'Tariff successfully deleted',
+                'flash_tariff_delete_error': 'Tariff was not deleted',
 
+                'label_no_extensions': 'No Extensions',
+                'label_no_extensions_comment': 'We didn\'t find any extensions. Create new one',
+                'label_extension_create': 'Create new extension',
+                'table_extension_icon': 'Icon',
+                'table_extension_name': 'Name',
+                'table_extension_description': 'Description',
+                'table_extension_color': 'Color',
+                'table_extension_price': 'Price (Average per month)',
+                'label_extension_edit_properties': 'Edit extension properties',
+                'label_active_extension': 'Active extension for platform',
+                'label_deactive_extension': 'Deactivate extension for platform',
+                'label_delete_extension': 'Permanently remove extension',
+
+                'flash_extension_create_success': 'Extension successfully created',
+                'flash_extension_create_error': 'Extension was not created',
+                'flash_extension_edit_success': 'Extension successfully updated',
+                'flash_extension_edit_error': 'Extension was not updated',
+                'flash_extension_delete_success': 'Extension successfully deleted',
+                'flash_extension_delete_error': 'Extension was not deleted',
+
+                'tab_tariffs': 'All Tariffs',
+                'tab_extensions': 'All Extensions',
+                'label_Project_Properties': 'Settings',
 
             }, 'AdminFinancialTariffComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Tariff Management',
                 'title': 'Tariff Settings',
                 'tab_tariffs': 'Settings',
-                'tab_extensions_optional': 'Optional Extensions',
-                'tab_extensions_include': 'Included Extensions',
+                'tab_extensions': 'Extensions',
                 'label_no_expansions': 'No Extensions in Tariff',
                 'label_average_monthly_cost': 'Average monthly cost',
                 'label_tariff_name': 'Tariff Name',
@@ -656,24 +684,34 @@ export class StaticTranslation {
                 'label_tariff_identifier': 'Api identifier',
                 'label_credit_for_beginning': 'Free Credit for beginning',
                 'label_tariff_color': 'Background Color',
+                'label_edit_tariff': 'Edit Tariff Properties',
+                'label_active_tariff': 'Active tariff for platform',
+                'label_deactive_tariff': 'Deactivate tariff for platform',
                 'label_tariff_no_company_details_required': 'Company Details are NOT required',
                 'label_tariff_company_details_required': 'Company Details are required',
                 'label_tariff_no_payment_details_required': 'Payment Details are NOT required',
                 'label_tariff_payment_details_required': 'Payment Details are required',
                 'label_tariff_no_payment_method_required': 'Payment Method are NOT required',
                 'label_tariff_payment_method_required': 'Payment Method are required',
-                'flash_tariff_edit_success': 'Tariff Edit was successful',
                 'ribbon_selected': 'Selected',
-                'label_included': 'Included',
-                'label_extension_price': 'Price (Average per month)',
-                'label_extension_color': 'Color',
-                'label_extension_type': 'Tyrion Extension Type',
-                'label_extension_description': 'Description',
-                'label_extension_name': 'Name',
+
+                'flash_tariff_active_success': 'Tariff successfully activated',
+                'flash_tariff_active_error': 'Tariff was not activated',
+                'flash_tariff_deactive_success': 'Tariff successfully deactivated',
+                'flash_tariff_deactive_error': 'Tariff was not deactivated',
+                'flash_tariff_edit_success': 'Tariff successfully updated',
+                'flash_tariff_edit_error': 'Tariff was not be updated',
+
+                'table_extension_included': 'Included',
+                'table_extension_recommended': 'Recommended',
+                'table_extension_price': 'Price (Average per month)',
+                'table_extension_color': 'Color',
+                'table_extension_type': 'Tyrion Extension Type',
+                'table_extension_description': 'Description',
+                'table_extension_name': 'Name',
                 'label_free': 'Free',
                 'label_change_order': 'Change order',
                 'btn_select': 'Select',
-                'btn_included': 'Include',
 
             }, 'ProjectsProjectComponent': {
                 'title': 'Project dashboard',
@@ -687,13 +725,16 @@ export class StaticTranslation {
                 'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
                 'label_byzance_hardware_update': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> Updates',
                 'label_devices_count': 'Devices count',
-                'label_Status': 'Status',
+                'label_online_status': 'Online',
                 'label_byzance_cloud': 'Byzance<strong class="font-color-cloud">CLOUD</strong>',
+                'label_byzance_instance': 'Byzance<strong class="font-color-instance">INSTANCE</strong>',
                 'label_instances_count': 'Instances count',
+                'label_servers_count': 'Private Server count',
                 'label_byzance_code': 'Byzance<strong class="font-color-code">CODE</strong>',
                 'label_programs_count': 'Programs count',
                 'label_libraries_count': 'Libraries count',
                 'label_blocks_count': 'Blocks count',
+                'label_projects_count': 'Projects',
                 'label_byzance_grid': 'Byzance<strong class="font-color-grid">GRID</strong>',
                 'label_widgets_count': 'Widgets count',
                 'label_in_group': 'in <strong> {0} </strong>group(s)',
@@ -863,7 +904,8 @@ export class StaticTranslation {
                 'flash_product_activated': 'The product has been activated.',
                 'flash_cant_activate_product': 'The product cannot be activated. ',
                 'flash_product_deactivated': 'The product has been deactivated.',
-                'flash_products_cant_load': 'Products cannot be loaded, {0}.'
+                'flash_products_cant_load': 'Products cannot be loaded, {0}.',
+                'label_settings': 'Settings'
 
             }, 'HardwareHardwareTypeComponent': {
                 'main_administration_title': 'Platform administration',
@@ -941,6 +983,9 @@ export class StaticTranslation {
                 'tab_bootloaders': 'Bootloaders',
                 'tab_admin_code': 'Code Settings',
                 'tab_batches': 'Manufacture Batches',
+
+                'label_version_properties': 'Properties',
+                'label_remove_version': 'Remove version',
 
             }, 'HardwareComponent': {
                 'main_title': 'Hardware Types',
@@ -1174,6 +1219,8 @@ export class StaticTranslation {
                 'flash_edit_cant_change_version': 'Version {0} could not be changed, {1}.',
                 'flash_cant_turn_instance_on': 'Could not turn on this instance, {0}.',
                 'flash_cant_turn_instance_off': 'Could not turn off this instance, {0}.',
+                'label_publish': 'Publish',
+                'label_user_blocks': 'User Blocks'
 
             }, 'ModalsCodeSelectComponent': {
 
@@ -1192,6 +1239,10 @@ export class StaticTranslation {
                 'btn_add_hardware': 'Add a Device',
                 'btn_add_hardware_group': 'Create a Group',
                 'btn_add_new_update': 'Release Firmware',
+                'label_group_properties': 'Edit Group',
+                'label_remove_group': 'Permanently Remove',
+                'label_cancel_update': 'Stop Procedure',
+                'label_change_update_parameters': 'Change Configuration (TODO)',
                 'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
                 'label_no_hardware_comment': 'Click on the button bellow to add a new device.',
                 'label_no_hardware_group': 'No <strong class="font-color-hardware">HARDWARE GROUP</strong> in this project.',
@@ -1199,9 +1250,14 @@ export class StaticTranslation {
                 'label_no_updates': 'No <strong class="font-color-code">FIRMWARE </strong> release',
                 'label_no_updates_comment': 'Click on the button bellow to update <strong class="font-color-hardware">HARDWARE</strong>, or <strong class="font-color-hardware">Hardware Groups</strong>.',
                 'label_device_properties': 'Device properties',
-                'label_remove_device': 'Remove device',
+                'label_settings': 'Settings',
+                'label_set_hardware_group': 'Set Hardware Groups',
+                'label_remove_device': 'Remove permanently',
                 'label_time_missing_in_json': 'Not Yet',
                 'label_project_active': 'This one',
+                'label_deactivate_hardware': 'Deactivate for project',
+                'label_activate_hardware': 'Activate for project',
+                'label_foreign_project': 'Active in Foreign project <br> without Access',
                 'label_project_not_active': 'Freeze',
                 'label_release_documentation_description': '<p>Here you can create group orders. For example, update hardware in <strong>"North Korea"</strong> or execute <strong><a target="_blank" href="https://www.youtube.com/watch?v=xSN6BOgrSSU">order 66</a></strong>.<p/><p class="text-center"> Heavy times for the republic..</p>',
 
@@ -1378,18 +1434,20 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> SERVERS',
                 'label_no_servers': 'Not any <strong class="font-color-cloud">CLOUD</strong> Servers',
                 'label_no_servers_comment': 'Your own Server will allow you to run your <strong class="font-color-blocko">BLOCKO</strong> instances.<br>You can install the Server on your own Servers or leave everything to us',
-                'label_id': 'Server ID',
-                'label_server_name': 'Name',
-                'label_server_version': 'Version',
-                'label_status': 'Online Status',
+                'table_id': 'Server ID',
+                'table_server_name': 'Name',
+                'table_server_version': 'Version',
+                'table_status': 'Online Status',
                 'label_server_update': 'Update',
                 'label_server_properties': 'Server settings',
                 'label_delete_server': 'Remove server',
                 'label_deactivate_server': 'Activate',
+                'label_shut_down': 'Shut Down',
                 'label_activate_server': 'Deactivate',
-                'label_actions': 'Actions',
-                'label_rest_url': 'Rest URL',
-                'label_mqtt_url': 'MQTT URL',
+                'label_restart': 'Restart',
+                'table_actions': 'Actions',
+                'table_rest_url': 'Rest URL',
+                'table_mqtt_url': 'MQTT URL',
                 'label_personal_server_name': 'Server name',
                 'label_personal_server_description': 'Description',
                 'label_no_server_size_found': 'No Server Components...',
@@ -1420,7 +1478,7 @@ export class StaticTranslation {
                 'label_upload_error': 'Unable to shutdown this instance, {0}.',
                 'label_no_instances': 'No <strong class="font-color-cloud">Instances</strong> found in <strong class="font-color-cloud">CLOUD</strong>',
                 'label_no_instances_comment': 'If You already create <strong class="font-color-blocko">BLOCKO</strong>, you are ready to deploy it!',
-                'label_instance_documentation_description': '<p><strong class="font-color-cloud">INSTANCE</strong>  is a <strong>container</strong> for a running application created in the <strong class="font-color-blocko">BLOCKO</strong> editor.<br><strong class="font-color-cloud">CLOUD</strong> Server is a <strong>container manager</strong>.</p><p>The server handles Hardware via MQTT and applications connected via the websocket and passes data safely to the container and from the container to the end devices. Each container (<strong class="font-color-cloud">INSTANCE</strong>) is totally separate from others. The more the instance is computationally more demanding, the fewer the Server can handle.<br>You can have an <strong class="font-color-cloud">INSTANCE</strong> in restricted mode on a public server or <strong>on your own servers.</strong></p>',
+                'label_instance_documentation_description': '<p><strong class="font-color-cloud">INSTANCE</strong>  is a <strong>container</strong> for a running application created in the <strong class="font-color-blocko">BLOCKO</strong> editor.</p><p><strong class="font-color-cloud">CLOUD</strong> Server is a <strong>container manager</strong>.</p><p>The server handles Hardware via MQTT and applications connected via the websocket and passes data safely to the container and from the container to the end devices. Each container (<strong class="font-color-cloud">INSTANCE</strong>) is totally separate from others. The more the instance is computationally more demanding, the fewer the Server can handle.<br>You can have an <strong class="font-color-cloud">INSTANCE</strong> in restricted mode on a public server or <strong>on your own servers.</strong></p>',
                 'label_shutdown_instance': 'Shutdown instance',
                 'label_upload_latest_used_version': 'Upload Latest Configuration to Cloud',
                 'label_start': 'Start instance',
@@ -1429,7 +1487,7 @@ export class StaticTranslation {
                 'btn_create_instance': 'Create Instance',
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
-
+                'label_instance_remove': 'Remove instance',
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
@@ -1494,6 +1552,7 @@ export class StaticTranslation {
                 'label_instance_version_description': 'Snapshot description',
                 'label_status': 'Status',
                 'label_info': 'Info',
+                'label_cancel_update': 'Stop Updates',
                 'label_no_updates': 'No <strong class="font-color-code">FIRMWARE </strong> release updates',
                 'label_no_updates_comment': 'For Actual <strong class="font-color-hardware">INSTANCE</strong> Snapshot is not required any update',
                 'label_instance_info_is_offline': '<strong class="font-color-instance">INSTANCE</strong> is offline',
@@ -1501,6 +1560,7 @@ export class StaticTranslation {
                 'label_grid_group_in_snapshot': 'Not any <strong class="font-color-grid">GRID</strong> Apps',
                 'label_no_grid_group_in_snapshot_comment': 'In Actual <strong class="font-color-instance">INSTANCE</strong> Snap Shots you are not using any <strong class="font-color-grid">GRID</strong> Apps',
                 'label_instance_type': 'Instance Type',
+                'label_edit_grid_app': 'Change Parameters',
                 'label_created': 'Created',
                 'label_running_from': 'Running from',
                 'label_deployed': 'Deployed',
@@ -1706,7 +1766,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
 
                 'label_group_properities': 'Group properties',
-                'label_remove_group': 'Remove group',
+                'label_remove_group': 'Remove Group',
                 'label_widget_properties': 'GRID widget properties',
                 'label_remove_widget': 'Remove GRID widget',
 
@@ -1728,6 +1788,8 @@ export class StaticTranslation {
                 'label_no_public_widget_comment': 'Change filter Parameters, or create and share own miracle',
                 'label_no_admin_widget': 'No <strong class="font-color-grid">GRID</strong> widgets',
                 'label_no_admin_widget_comment': 'There is not any widgets to check and valid',
+
+                'label_code_program_properties': 'Code Properties',
 
             }, 'ProjectsProjectWidgetsWidgetComponent': {
 
@@ -1771,6 +1833,9 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
+
+                'label_publish': 'Publish',
+                'label_version_set_as_main': 'Set as main',
 
             }, 'ProjectsProjectActualizationProcedureComponent': {
                 'title': 'Actualization Procedure',
@@ -1817,6 +1882,7 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
                 'btn_add_blocko_program': 'New Program',
+                'label_blocko_documentation_description': '<p><strong class="font-color-blocko">BLOCKO</strong> is a web-based editor developed for creating CLOUD decision server apps. By combining individual <strong>BLOCKS</strong> together, you can create a very complex logic. Actions and reactions. Storage of data. Performing commands when combining conditions. Work with a small Set of Hardware or create logic behavior for thousands of Hardware Devices and links to third-party services.<br><br><strong class="font-color-blocko">BLOCKO</strong> is stored at the end and compiled into a self-running container. We call it an <strong class="font-color-instance">INSTANCE</strong>, which you can upload to the Server.</p><p>The <strong class="font-color-blocko">BLOCKO</strong> program is created without parameters. That means, that you making logic for anonymous hardware. As you create your own Instance, you assign anonymous Blocks representing <strong class="font-color-hardware">HARDWARE</strong> to the specific <strong class="font-color-hardware">HARDWARE</strong> you own. So, you can use the same Blocko program for dozens of different Hardware groups across the world.</p>',
 
                 'flash_blocko_remove': 'Program has been removed.',
                 'flash_blocko_cant_remove': 'Unable to remove program, ',
@@ -1882,11 +1948,13 @@ export class StaticTranslation {
                 'flash_version_change': 'Version {0} has been changed.',
                 'flash_cant_change_version': 'Unable to change version {0}, {1}',
                 'flash_cant_load_block_version': 'Unable to load block version, ',
+                'label_publish': 'Publish',
 
             }, 'ProjectsProjectBlocksComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> Blocks',
-                'label_block_properties': 'BLOCKO block properties',
-                'label_block_remove': 'Remove BLOCKO block',
+                'label_block_remove': 'Remove Block',
+                'label_block_make_copy': 'Make Copy',
+                'label_block_properties': 'Update Block',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
@@ -1976,6 +2044,8 @@ export class StaticTranslation {
                 'flash_cant_load_code_types': 'Unable to load code types, {0}.',
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>, {1}.',
 
+                'label_download_file': 'Download',
+
             }, 'ProjectsProjectCodeComponent': {
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL PROGRAMS',
                 'label_no_code': 'New <strong class="font-color-code">CODE</strong> Program',
@@ -1995,6 +2065,7 @@ export class StaticTranslation {
 
                 'tab_my_programs': 'My Program',
                 'tab_public_c_programs': 'Public Programs',
+                'label_code_copy': 'Make Copy',
 
                 'flash_cant_update_code': 'Unable to update program, {0}.',
                 'flash_code_update': 'Program has been updated.',
@@ -2003,6 +2074,7 @@ export class StaticTranslation {
                 'flash_cant_add_code_to_project': 'Unable to add CODE program to your project.',
                 'flash_code_remove': 'Program has been removed.',
                 'flash_cant_remove_code': 'Unable to remove program, {0}.',
+                'label_code_program_properties': 'Code Properties'
 
             }, 'ProjectsProjectGridGridsGridComponent': {
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong>',
@@ -2023,6 +2095,7 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_device_remove': 'Remove Device',
                 'label_version_name': 'Name',
+                'table_actions': 'Actions',
                 'label_description': 'Description',
                 'label_author': 'Author',
                 'label_actions': 'Actions',
@@ -2038,8 +2111,8 @@ export class StaticTranslation {
 
                 'btn_add_page': 'New Page',
                 'btn_clear_console': 'Clear Console',
-                'btn_program_properties': 'Update',
-                'btn_program_delete': 'Delete',
+                'btn_program_properties': 'Update App',
+                'btn_program_delete': 'Delete App',
                 'modal_label_grid_size_change': 'Change <strong class="font-color-grid">GRID</strong> size class',
                 'modal_text_grid_size_change': 'Changing <strong class="font-color-grid">GRID</strong> size class <strong>will delete all your pages</strong>, are you sure?',
 
@@ -2061,12 +2134,14 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong>',
 
                 'btn_edit_project': 'Edit Apps Project',
-                'btn_remove_project': 'Remove',
+                'btn_remove_project': 'Remove Group',
                 'btn_add_grid_program': 'Create GRID Program',
 
                 'label_no_grid_programs': 'No <strong class="font-color-grid">GRID</strong> programs available',
                 'label_no_grid_programs_comment': 'Click on the button bellow to create a new one',
 
+                'label_grid_remove': 'Remove App',
+                'label_grid_properties': 'Properties',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
@@ -2091,7 +2166,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
 
                 'label_group_properties': 'Group properties',
-                'label_group_remove': 'Remove group',
+                'label_group_remove': 'Remove Grid Group',
                 'label_no_grid_projects': 'No <strong class="font-color-grid">GRID</strong> projects available',
                 'label_no_grid_projects_comment': 'Click on the button bellow to create a project.',
 
@@ -2160,6 +2235,9 @@ export class StaticTranslation {
 
                 'label_permission': 'Permission',
                 'label_person': 'Person',
+                'label_remove_role': 'Remove Role',
+                'label_person_add': 'Add Person',
+                'label_permission_add': 'Add Permission',
 
                 'label_no_person': 'No Users',
                 'label_no_person_comment': 'We didn\'t find any users, add new one (already remigrated)',
@@ -2280,6 +2358,11 @@ export class StaticTranslation {
                 'label_loading': 'Loading',
                 'btn_create_server': 'Create server',
 
+                'label_server_udpate': 'Update',
+                'label_server_properties': 'Properties',
+                'label_delete_server': 'Remove',
+
+
             }, 'AdminDashboardComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Admin Dashboard',
@@ -2337,7 +2420,23 @@ export class StaticTranslation {
                 'btn_label_synchronize_hardware' : 'Synchronize with CA',
                 'btn_label_create_type_of_board' : 'Create',
                 'btn_label_create_producer' : 'Create',
-                'btn_label_create_processor' : 'Create'
+                'btn_label_create_processor' : 'Create',
+
+
+                'label_Project_Properties': 'Settings',
+                'label_print_stickers': 'Print Stickers',
+                'label_device_properties': 'Hardware Properties',
+                'label_remove_device': 'Remove Hardware',
+
+                'label_type_of_board_properties': 'Hardware Type Properties',
+                'label_type_of_board_remove': 'Hardware Type Remove',
+
+                'label_producer_properties': 'Producer Properties',
+                'label_producer_remove': 'Producer Remove',
+
+                'label_processor_properties': 'Processor Properties',
+                'label_processor_remove': 'Processor Remove',
+
 
             }, 'CommunityCProgramComponent': {
                 'main_title': 'Platform administration',
@@ -2361,6 +2460,9 @@ export class StaticTranslation {
 
                 'label_no_c_library': 'No <strong class="font-color-code">CODE</strong> libraries ',
                 'label_no_c_library_comment': 'Create new <strong>Library</strong>, or change Filter property',
+
+                'label_code_program_properties': 'Program properties',
+                'label_remove_code_program': 'Remove CODE program',
 
             }, 'GarfieldGarfieldComponent': {
                 'main_title': 'Platform administration',
@@ -2465,6 +2567,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'label_no_bugs': 'No Bugs',
                 'label_no_bugs_comment': 'Heureca! No Bugs!',
+                'label_Project_Properties': 'Settings',
 
             }, 'BugsBugComponent': {
                 'main_title': 'Platform administration',
@@ -2537,6 +2640,7 @@ export class StaticTranslation {
             'loading': 'Loading...',
             'btn_done': 'Done',
             'btn_rename': 'Rename',
+            'label_settings': 'Settings',
             'btn_yes': 'Yes',
             'btn_no': 'No',
             'btn_update': 'Update',
@@ -2662,6 +2766,7 @@ export class StaticTranslation {
                 'HOMER_SERVER_NEVER_CONNECTED': 'Never connected',
                 'COMPLETE_WITH_ERROR': 'Complete with error',
                 'SUCCESSFULLY_COMPLETE': 'Successfully completed',
+                'PROHIBITED_BY_CONFIG': 'Prohibited by config',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu
@@ -2702,5 +2807,4 @@ export class StaticTranslation {
             // TODO
         }
     };
-}
-;
+};

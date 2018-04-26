@@ -136,7 +136,14 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
         });
     }
 
-
+    onDrobDownEmiter (action: string, garfield: IGarfield): void {
+        if (action === 'edit_garfield') {
+            this.onEditGarfield(garfield);
+        }
+        if (action === 'remove_garfield') {
+            this.onDeleteGarfield(garfield);
+        }
+    }
 }
 
 

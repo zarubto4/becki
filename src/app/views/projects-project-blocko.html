@@ -16,59 +16,78 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                       {
-                          condition: (privatePrograms && privatePrograms.content.length),
+                          condition: (privatePrograms && privatePrograms.content.length > 0),
                           btn_label_for_person: ('btn_add_blocko_program'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
-                          btn_tag: 'add_blocko'
+                          btn_tag: 'add_blocko',
+                          permission: true
                       }
                  ]"
-         >
+    >
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
     <!-- Page Content -- START -->
     <div class="portlet-body">
 
-        <div *ngIf="(privatePrograms && privatePrograms.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+        <div *ngIf="(privatePrograms && privatePrograms.content.length > 0)"
+             class="table-scrollable table-scrollable-borderless">
             <table class="table table-hover table-light byzance-table">
                 <thead>
                 <tr>
                     <th class="">{{'table_name'|bkTranslate:this}}</th>
                     <th class="">{{'table_description'|bkTranslate:this}}</th>
-                    <th class="text-right">{{'table_actions'|bkTranslate:this}}   </th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let blocko of privatePrograms.content">
                     <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(blocko.id)">{{blocko.name}}</a></td>
                     <td class="vert-align">{{blocko.description}}</td>
-                    <td class="vert-align no-wrap text-right">
+                    <td class="action-btn-col">
 
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_settings'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_blocko_program_properties'|bkTranslate:this),
+                                    btn_tag: 'blocko_program_properties',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (blocko.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_blocko_remove'|bkTranslate:this),
+                                    btn_tag: 'blocko_remove',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (blocko.delete_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, blocko)"
+                        >
+                        </bk-drob-down-button>
 
-
-                        <button title="{{'label_blocko_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blocko.update_permission" (click)="onEditClick(blocko)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_blocko_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!blocko.delete_permission" (click)="onRemoveClick(blocko)">
-                            <i class="fa fa-trash"></i>
-                        </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to" [total]="privatePrograms.total"  [totalPages]="privatePrograms.pages" (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
+            <bk-filter-page-component [from]="privatePrograms.from" [to]="privatePrograms.to"
+                                      [total]="privatePrograms.total" [totalPages]="privatePrograms.pages"
+                                      (onSelect)="onFilterPrivatePrograms($event)"></bk-filter-page-component>
         </div>
+
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(privatePrograms == null)"
                             [condition_empty]="(privatePrograms != null && privatePrograms.content.length == 0)"
                             [main_message_link]="'label_no_blocko_program'|bkTranslate:this"
                             [main_message_comment_link]="'label_create_blocko_text'|bkTranslate:this"
+                            [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59c93590bcfa480001e577bf_live%20traces.svg'"
+                            [image_description]="'label_blocko_documentation_description'|bkTranslate:this"
                             [btn_label]="'btn_add_blocko_program'|bkTranslate:this"
                             (onButtonClick)="onAddClick()">
         </bk-nothing-to-show>

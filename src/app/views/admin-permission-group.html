@@ -27,10 +27,10 @@
                 <tr>
                     <th>{{'label_name'|bkTranslate:this}}</th>
                     <th>{{'label_description'|bkTranslate:this}}</th>
-                    <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let role of securityRole">
 
                     <td class="vert-align no-wrap">
@@ -41,17 +41,32 @@
                         {{role.description}}
                     </td>
 
-                    <td class="vert-align text-right no-wrap">
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
-                        <button title="{{'label_role_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!role.update_permission" (click)="onRoleEditClick(role)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_role_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!role.delete_permission" (click)="onRoleRemoveClick(role)">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                    <td class="action-btn-col">
+
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_role_properties'|bkTranslate:this)"
+                            [btns] = "[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_role_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_role',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (role.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_role_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_role',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (role.update_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, role)"
+                        >
+                        </bk-drob-down-button>
+
                     </td>
                 </tr>
                 </tbody>

@@ -17,14 +17,14 @@
         [btns]="[
                       {
                           condition: (tab == 'my_blocks'),
-                          btn_label_for_person: ('btn_add'|bkTranslate:this),
+                          btn_label_for_person: ('btn_create'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
                           btn_tag: 'add_block'
                       }
                  ]"
         (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
+        [tab_selected_name]="tab"
         [tabBtns]="[
                         {
                             tab_name: 'my_blocks',
@@ -63,38 +63,45 @@
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let block of blockList.content">
                         <td class="vert-align no-wrap bold">
                             <a (click)="onBlockClick(block.id)">{{block.name}}</a>
                         </td>
                         <td class="vert-align">{{block.description}}</td>
-                        <td class="vert-align no-wrap">
+                        <td class="action-btn-col">
 
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_block_properties'|bkTranslate:this),
+                                    btn_tag: 'block_properties',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_block_remove'|bkTranslate:this),
+                                    btn_tag: 'block_remove',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (block.delete_permission)
                                 }
-
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
-                            <button title="{{'label_block_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!block.update_permission"
-                                    (click)="onBlockEditClick(block)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_block_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!block.delete_permission"
-                                    (click)="onBlockDeleteClick(block)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, block)"
+                            >
+                            </bk-drob-down-button>
 
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"  [totalPages]="blockList.pages" (onSelect)="onShowProgramPrivateBlocksFilter($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"
+                                          [totalPages]="blockList.pages"
+                                          (onSelect)="onShowProgramPrivateBlocksFilter($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
@@ -109,8 +116,9 @@
 
 
         </div>
+
         <div *ngIf="tab == 'public_blocks'">
-            <div *ngIf="(blockListNotApproved && blockListNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(blockPublicList && blockPublicList.content.length)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
@@ -119,50 +127,144 @@
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr *ngFor="let block of blockListNotApproved.content">
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let block of blockPublicList.content">
                         <td class="vert-align no-wrap bold">
                             <a (click)="onBlockClick(block.id)">{{block.name}}</a>
-                            <span *ngIf="!projectId && block.active" class="font-green-jungle bold">(Active)</span>         <!-- Only for Administrator -->
-                            <span *ngIf="!projectId && !block.active" class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
                         </td>
                         <td class="vert-align">{{block.description}}</td>
-                        <td class="vert-align no-wrap">
+                        <td class="action-btn-col">
 
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
-
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-
-                            <button *ngIf="projectId && group.publish_type == 'public_program'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(block)">
-                                <i class="fa fa-clone"></i>
-                            </button>
-                            <button *ngIf="!projectId && !block.active" title="{{'label_active_group'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!block.update_permission" (click)="onBlockActivateClick(block)">
-                                <i class="fa fa-power-off"></i>
-                            </button>
-                            <button  *ngIf="!projectId && block.active" title="{{'label_deactive_group'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!block.update_permission" (click)="onBlockDeactivateClick(block)">
-                                <i class="fa fa-power-off"></i>
-                            </button>
-
-                            <button title="{{'label_block_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!block.update_permission"
-                                    (click)="onBlockEditClick(block)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button title="{{'label_block_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!block.delete_permission"
-                                    (click)="onBlockDeleteClick(block)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
+                                    {
+                                        condition: (block.update_permission),
+                                        btn_label_for_person: ('label_block_properties'|bkTranslate:this),
+                                        btn_tag: 'block_properties',
+                                        icon: 'fa-cog',
+                                        colorType: 'EDIT',
+                                        permission: (block.update_permission)
+                                    },
+                                    {
+                                        condition: (block.delete_permission),
+                                        btn_label_for_person: ('label_block_remove'|bkTranslate:this),
+                                        btn_tag: 'block_remove',
+                                        icon: 'fa-trash',
+                                        colorType: 'REMOVE',
+                                        permission: (block.delete_permission)
+                                    },
+                                    {
+                                        condition: true,
+                                        btn_label_for_person: ('label_block_make_copy'|bkTranslate:this),
+                                        btn_tag: 'block_copy',
+                                        icon: 'fa-clone',
+                                        colorType: 'CREATE',
+                                        permission: (true)
+                                    }
+                                ]"
+                                (onValueChanged)="onDrobDownEmiter($event, block)"
+                            >
+                            </bk-drob-down-button>
 
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"  [totalPages]="blockList.pages" (onSelect)="onShowProgramPublicBlocksFilter($event)"></bk-filter-page-component>
+                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"
+                                          [totalPages]="blockList.pages"
+                                          (onSelect)="onShowProgramPrivateBlocksFilter($event)"></bk-filter-page-component>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(blockPublicList == null)"
+                                [condition_empty]="(blockPublicList != null && blockPublicList.content.length == 0)"
+                                [main_message_link]="'label_no_public_block_program'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_public_block_text'|bkTranslate:this"
+                                (onButtonClick)="onBlockAddClick()"
+                                [btn_label]="'btn_add_block'|bkTranslate:this">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
+
+        <div *ngIf="tab == 'admin_blocks'">
+            <div *ngIf="(blockListNotApproved && blockListNotApproved.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th>{{'table_name'|bkTranslate:this}}</th>
+                        <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let block of blockListNotApproved.content">
+                        <td class="vert-align no-wrap bold">
+                            <a (click)="onBlockClick(block.id)">{{block.name}}</a>
+                            <span *ngIf="!projectId && block.active" class="font-green-jungle bold">(Active)</span>
+                            <!-- Only for Administrator -->
+                            <span *ngIf="!projectId && !block.active"
+                                  class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
+                        </td>
+                        <td class="vert-align">{{block.description}}</td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: projectId && group.publish_type == 'public_program',
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'block_make_clone',
+                                    icon: 'fa-clone',
+                                    colorType: 'EDIT',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: !projectId && !block.active,
+                                    btn_label_for_person: ('label_active_group'|bkTranslate:this),
+                                    btn_tag: 'active_group',
+                                    icon: 'fa-power-off',
+                                    colorType: 'DEACTIVE',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: projectId && block.active,
+                                    btn_label_for_person: ('label_deactive_group'|bkTranslate:this),
+                                    btn_tag: 'deactive_group',
+                                    icon: 'fa-power-off',
+                                    colorType: 'ACTIVE',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_block_properties'|bkTranslate:this),
+                                    btn_tag: 'block_properties',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (block.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_block_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_project',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (block.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, block)"
+                            >
+                            </bk-drob-down-button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <bk-filter-page-component [from]="blockList.from" [to]="blockList.to" [total]="blockList.total"
+                                          [totalPages]="blockList.pages"
+                                          (onSelect)="onShowProgramPublicBlocksFilter($event)"></bk-filter-page-component>
             </div>
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(blockListNotApproved == null)"
@@ -174,7 +276,7 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
         </div>
 
-        <div *ngIf="tab == 'admin_blocks'"></div>
+
 
     </div>
 

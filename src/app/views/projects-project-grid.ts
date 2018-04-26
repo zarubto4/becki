@@ -56,7 +56,6 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
 
     onFilter(pageNumber: number = 0): void {
         this.blockUI();
-        console.info("Project ID: onFilter: ", this.projectId);
         this.tyrionBackendService.gridProjectGetByFilter(pageNumber, {
             project_id : this.projectId,
         })
@@ -129,6 +128,16 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
             }
         });
 
+    }
+
+    onDrobDownEmiter(action: string, gridProject: IGridProject): void {
+        if (action === 'edit_gridProject') {
+            this.onProjectEditClick(gridProject);
+        }
+
+        if (action === 'remove_gridProject') {
+            this.onProjectDeleteClick(gridProject);
+        }
     }
 
 }

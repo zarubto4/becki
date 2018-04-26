@@ -24,7 +24,8 @@
     <!-- Page Content -- START -->
     <div class="portlet-body">
 
-        <div *ngIf="(garfield_s && garfield_s.length)" class="table-scrollable table-scrollable table-scrollable-borderless">
+        <div *ngIf="(garfield_s && garfield_s.length)"
+             class="table-scrollable table-scrollable table-scrollable-borderless">
             <table class="table table-hover table-light byzance-table">
                 <thead>
                 <tr>
@@ -32,10 +33,10 @@
                     <th>{{'label_type_of_board'|bkTranslate:this}}</th>
                     <th>{{'label_producer'|bkTranslate:this}}</th>
                     <th>{{'label_test_kit_id'|bkTranslate:this}}</th>
-                    <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let garfield of garfield_s">
                     <td class="vert-align no-wrap">
                         <a (click)="onGarfieldClick(garfield.id)" class="no-wrap"><strong>{{garfield.name}}</strong></a>
@@ -49,17 +50,32 @@
 
                     <td class="vert-align no-wrap">{{garfield.hardware_tester_id}}</td>
 
-                    <td class="vert-align text-right no-wrap">
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
-                        <button title="{{'label_garfield_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!garfield.update_permission" (click)="onEditGarfield(garfield)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button title="{{'label_garfield_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!garfield.delete_permission" (click)="onDeleteGarfield(garfield)">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                    <td class="action-btn-col">
+
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_garfield_properties'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_garfield_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_garfield',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (garfield.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_garfield_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_garfield',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (garfield.update_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, garfield)"
+                        >
+                        </bk-drob-down-button>
+
                     </td>
                 </tr>
                 </tbody>

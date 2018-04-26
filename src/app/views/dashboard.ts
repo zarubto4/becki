@@ -6,7 +6,7 @@
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
-import {Subscription} from "rxjs/Rx";
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -30,7 +30,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
     ngOnInit(): void {
         this.refresh();
 
-        this.projectsUpdateSubscription = this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
+        this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'ProjectsRefreshAfterInvite') {
                 this.refresh();
             }
@@ -40,7 +40,9 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
     }
 
     ngOnDestroy(): void {
-        this.projectsUpdateSubscription.unsubscribe();
+        if (this.projectsUpdateSubscription) {
+            this.projectsUpdateSubscription.unsubscribe();
+        }
     }
 
     onToggleTab(tab: string) {

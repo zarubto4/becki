@@ -17,29 +17,36 @@
         [btns]="[
                       {
                           condition: (tab == 'my_widgets'),
-                          btn_label_for_person: ('btn_add'|bkTranslate:this),
+                          btn_label_for_person: ('btn_create'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
-                          btn_tag: 'add_widget'
+                          btn_tag: 'add_widget',
+                          permission: true
                       }
                  ]"
         (onTabClick)="onToggleTab($event)"
-        [tab_selected_name] = "tab"
+        [tab_selected_name]="tab"
         [tabBtns]="[
                         {
                             tab_name: 'my_widgets',
+                            condition: true,
                             tab_color: 'CODE',
-                            tab_label: ('tab_my_widgets'|bkTranslate:this)
+                            tab_label: ('tab_my_widgets'|bkTranslate:this),
+                            permission: true
                         },
                         {
                             tab_name: 'public_widgets',
+                            condition: true,
                             tab_color: 'CODE',
-                            tab_label: ('tab_public_widgets'|bkTranslate:this)
+                            tab_label: ('tab_public_widgets'|bkTranslate:this),
+                            permission: true
                         },
                         {
                             tab_name: 'admin_widget',
+                            condition: (projectId == null),
                             tab_color: 'CODE',
-                            tab_label: ('tab_admin_widgets'|bkTranslate:this)
+                            tab_label: ('tab_admin_widgets'|bkTranslate:this),
+                            permission: true
                         }
                     ]"
     >
@@ -50,49 +57,80 @@
         <div *ngIf="tab == 'my_widgets'">
 
             <div *ngIf="(widgetList && widgetList.content.length)" class="table-scrollable table-scrollable-borderless">
-            <table class="table table-hover table-light byzance-table">
-                <thead>
-                <tr>
-                    <th>{{'table_name'|bkTranslate:this}}</th>
-                    <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let widget of widgetList.content">
-                    <td class="vert-align no-wrap bold">
-                        <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
-                        <span *ngIf="!projectId && widget.active" class="font-green-jungle bold">(Active)</span>         <!-- Only for Administrator -->
-                        <span *ngIf="!projectId && !widget.active" class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
-                    </td>
-                    <td class="vert-align">{{widget.description}}</td>
-                    <td class="vert-align no-wrap">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th>{{'table_name'|bkTranslate:this}}</th>
+                        <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let widget of widgetList.content">
+                        <td class="vert-align no-wrap bold">
+                            <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
+                            <span *ngIf="!projectId && widget.active" class="font-green-jungle bold">(Active)</span>
+                            <!-- Only for Administrator -->
+                            <span *ngIf="!projectId && !widget.active"
+                                  class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
+                        </td>
+                        <td class="vert-align">{{widget.description}}</td>
+                        <td class="action-btn-col">
 
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: projectId && widget.publish_type == 'PUBLIC',
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'make_clone_widget',
+                                    icon: 'fa-clone',
+                                    colorType: 'CREATE',
+                                    permission: (widget.update_permission)
+                                },
 
-                        <button *ngIf="projectId && widget.publish_type == 'PUBLIC'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(widget)">
-                            <i class="fa fa-clone"></i>
-                        </button>
-                        <button *ngIf="!projectId && !widget.active" title="{{'label_active_group'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.update_permission" (click)="onWidgetActivateClick(widget)">
-                            <i class="fa fa-power-off"></i>
-                        </button>
-                        <button  *ngIf="!projectId && widget.active" title="{{'label_deactive_group'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!widget.update_permission" (click)="onWidgetDeactivateClick(widget)">
-                            <i class="fa fa-power-off"></i>
-                        </button>
-                        <button *ngIf="widget.update_permission" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onWidgetEditClick(widget)">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button *ngIf="widget.delete_permission" title="{{'label_remove_widget'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onWidgetDeleteClick(widget)">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                                {
+                                    condition: !projectId && !widget.active,
+                                    btn_label_for_person: ('label_active_group'|bkTranslate:this),
+                                    btn_tag: 'active_group_widget',
+                                    icon: 'fa-power-off',
+                                    colorType: 'DEACTIVE',
+                                    permission: (widget.update_permission)
+                                },
+                               {
+                                    condition: !projectId && widget.active,
+                                    btn_label_for_person: ('label_deactive_group'|bkTranslate:this),
+                                    btn_tag: 'deactive_group_widget',
+                                    icon: 'fa-power-off',
+                                    colorType: 'ACTIVE',
+                                    permission: (widget.update_permission)
+                                },
+                                {
+                                    condition: widget.update_permission,
+                                    btn_label_for_person: ('label_widget_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_widget',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (widget.update_permission)
+                                },
+                                {
+                                    condition: widget.delete_permission,
+                                    btn_label_for_person: ('label_remove_widget'|bkTranslate:this),
+                                    btn_tag: 'remove_widget',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (widget.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, widget)"
+                            >
+                            </bk-drob-down-button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(widgetList == null)"
@@ -107,7 +145,8 @@
 
         <div *ngIf="tab == 'public_widgets'">
 
-            <div *ngIf="(widgetPublicList && widgetPublicList.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(widgetPublicList && widgetPublicList.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
@@ -116,24 +155,39 @@
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let widget of widgetPublicList.content">
                         <td class="vert-align no-wrap bold">
                             <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
                         </td>
                         <td class="vert-align">{{widget.description}}</td>
-                        <td class="vert-align no-wrap">
+                        <td class="action-btn-col">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-                            <button *ngIf="widget.update_permission" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onWidgetEditClick(widget)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button *ngIf="widget.delete_permission" title="{{'label_remove_widget'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onWidgetDeleteClick(widget)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_widget_properties'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: widget.update_permission,
+                                    btn_label_for_person: ('label_widget_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_widget',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (widget.update_permission)
+                                },
+                                {
+                                    condition: widget.delete_permission,
+                                    btn_label_for_person: ('label_remove_widget'|bkTranslate:this),
+                                    btn_tag: 'remove_widget',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (widget.update_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, widget)"
+                            >
+                            </bk-drob-down-button>
+
+
                         </td>
                     </tr>
                     </tbody>
@@ -152,7 +206,8 @@
 
         <div *ngIf="tab == 'admin_widget'">
 
-            <div *ngIf="(widgetListNotApproved && widgetListNotApproved.content.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(widgetListNotApproved && widgetListNotApproved.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
@@ -161,36 +216,67 @@
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let widget of widgetListNotApproved.content">
                         <td class="vert-align no-wrap bold">
                             <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
-                            <span *ngIf="!projectId && widget.active" class="font-green-jungle bold">(Active)</span>         <!-- Only for Administrator -->
-                            <span *ngIf="!projectId && !widget.active" class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
+                            <span *ngIf="!projectId && widget.active" class="font-green-jungle bold">(Active)</span>
+                            <!-- Only for Administrator -->
+                            <span *ngIf="!projectId && !widget.active"
+                                  class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
                         </td>
                         <td class="vert-align">{{widget.description}}</td>
-                        <td class="vert-align no-wrap">
+                        <td class="action-btn-col">
 
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                [btns]="[
+                                {
+                                    condition: projectId && widget.publish_type == 'PUBLIC',
+                                    btn_label_for_person: ('label_code_program_properties'|bkTranslate:this),
+                                    btn_tag: 'make_clone_widget',
+                                    icon: 'fa-clone',
+                                    colorType: 'CREATE',
+                                    permission: (widget.update_permission)
+                                },
 
-                            <button *ngIf="projectId && widget.publish_type == 'PUBLIC'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(widget)">
-                                <i class="fa fa-clone"></i>
-                            </button>
-                            <button *ngIf="!projectId && !widget.active" title="{{'label_active_group'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.update_permission" (click)="onWidgetActivateClick(widget)">
-                                <i class="fa fa-power-off"></i>
-                            </button>
-                            <button  *ngIf="!projectId && widget.active" title="{{'label_deactive_group'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!widget.update_permission" (click)="onWidgetDeactivateClick(widget)">
-                                <i class="fa fa-power-off"></i>
-                            </button>
-                            <button *ngIf="widget.update_permission" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onWidgetEditClick(widget)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button *ngIf="widget.delete_permission" title="{{'label_remove_widget'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onWidgetDeleteClick(widget)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                                {
+                                    condition: !projectId && !widget.active,
+                                    btn_label_for_person: ('label_active_group'|bkTranslate:this),
+                                    btn_tag: 'active_group_widget',
+                                    icon: 'fa-power-off',
+                                    colorType: 'DEACTIVE',
+                                    permission: (widget.update_permission)
+                                },
+                               {
+                                    condition: !projectId && widget.active,
+                                    btn_label_for_person: ('label_deactive_group'|bkTranslate:this),
+                                    btn_tag: 'deactive_group_widget',
+                                    icon: 'fa-power-off',
+                                    colorType: 'ACTIVE',
+                                    permission: (widget.update_permission)
+                                },
+                                {
+                                    condition: widget.update_permission,
+                                    btn_label_for_person: ('label_widget_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_widget',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (widget.update_permission)
+                                },
+                                {
+                                    condition: widget.delete_permission,
+                                    btn_label_for_person: ('label_remove_widget'|bkTranslate:this),
+                                    btn_tag: 'remove_widget',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (widget.delete_permission)
+                                }
+                            ]"
+                                (onValueChanged)="onDrobDownEmiter($event, widget)"
+                            >
+                            </bk-drob-down-button>
+
                         </td>
                     </tr>
                     </tbody>

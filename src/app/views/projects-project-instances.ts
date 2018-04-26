@@ -161,6 +161,23 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
         });
     }
 
+    onDrobDownEmiter(action: string, instance: IInstance): void {
+        if (action === 'edit_instance') {
+            this.onInstanceEditClick(instance);
+        }
+
+        if (action === 'start_instance') {
+            this.onInstanceRemoveClick(instance);
+        }
+        if (action === 'shutdown_instance') {
+            this.onInstanceStartClick(instance);
+        }
+
+        if (action === 'remove_project') {
+            this.onInstanceShutdownClick(instance);
+        }
+    }
+
 
 
 }

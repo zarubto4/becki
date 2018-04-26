@@ -107,16 +107,16 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     protected abstract requestRestGeneral(request: RestRequest): Promise<RestResponse>;
 
     public requestRestPath<T>(method: string, path: string, body: Object, success: number[]): Promise<T> {
-
+        console.info('requestRestPath:: method', method, 'path: ', path);
 
         // If path contains http on beginning! or first char is "/" its on 100% api path from TyrionAPI
         // For example /login or /get_projects:{all}
         // But if contains https - for example https://homer.server.cz/get_something - it didnt used ${this.protocol}://${this.host}${path}
         if (path.charAt(0) === '/') {
-            // console.log('Its a Tyrion API');
+            console.info('Its a Tyrion API');
             return this.requestRest(method, `${this.protocol}://${this.host}${path}`, body, success);
         } else {
-            // console.log('Its a External outside API');
+            console.info('Its a External outside API');
             return this.requestRest(method, path, body, success);
         }
     }
@@ -206,7 +206,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     private setToken(token: string, withRefreshPersonalInfo = true): void {
-        console.log('set_token');
+        console.info('set_token');
         window.localStorage.setItem('auth_token', token);
         if (withRefreshPersonalInfo) {
             this.refreshPersonInfo();
@@ -281,13 +281,13 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     // PERSON INFO
     public refreshPersonInfo(): void {
-        console.log('refreshPersonInfo');
+        console.info('refreshPersonInfo');
         this.personInfoSnapshotDirty = true;
         if (TyrionApiBackend.tokenExist()) {
             this.getTyrionWebsocketConnection().onReady();
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
-                    console.log(lr);
+                    console.info(lr);
                     this.personPermissions = lr.permissions;
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;

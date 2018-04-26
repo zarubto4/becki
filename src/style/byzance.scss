@@ -45,6 +45,12 @@
     float: none;
 }
 
+.action-btn-col {
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 1px
+}
+
 .vertical-align {
     display: flex;
     align-items: center;
@@ -62,6 +68,7 @@
     font-size: 0.7em;
     padding: 0 5px;
 }
+
 
 .btn-facebook:hover,
 .btn-facebook:focus,
@@ -329,6 +336,11 @@ span.changes {
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */
+}
+
+.table-scrollable {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
 }
 
 .blocko-view svg {
@@ -2722,4 +2734,20 @@ textarea.form-control {
 
 .bk-table-scrollable{
     overflow-y:scroll;
+}
+
+.hide-bk-drob-down-button tr bk-drob-down-button {
+    opacity:0.05;
+}
+
+.hide-bk-drob-down-button tr:hover bk-drob-down-button{
+    opacity:1;
+}
+
+.hide-bk-drob-down-button tr button{
+    opacity:0.05;
+}
+
+.hide-bk-drob-down-button tr button:hover{
+    opacity:1;
 }

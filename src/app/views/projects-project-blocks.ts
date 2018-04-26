@@ -65,7 +65,11 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         }
 
         if (tab === 'public_blocks' && this.blockPublicList == null) {
-            this.onShowProgramPrivateBlocksFilter();
+            this.onShowProgramPublicBlocksFilter();
+        }
+
+        if (tab === 'admin_blocks' && this.blockListNotApproved == null) {
+            this.onShowProgramPendingBlocksFilter();
         }
     }
 
@@ -237,6 +241,29 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.addFlashMessage(new FlashMessageError('Blocko cannot be loaded.', reason));
                 this.unblockUI();
             });
+    }
+
+    onDrobDownEmiter(action: string, object: any): void {
+
+        if (action === 'block_properties') {
+            this.onBlockEditClick(object);
+        }
+
+        if (action === 'block_remove') {
+            this.onBlockDeleteClick(object);
+        }
+
+        if (action === 'block_make_clone') {
+            this.onMakeClone(object);
+        }
+
+        if (action === 'active_group') {
+            this.onBlockActivateClick(object);
+        }
+
+        if (action === 'deactive_group') {
+            this.onBlockDeactivateClick(object);
+        }
     }
 
 }

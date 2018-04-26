@@ -66,7 +66,7 @@ import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
             <bk-console-log maxHeight="800px" #console></bk-console-log>
             <br>
             <button class="btn blue" (click)="consoleLog.clear()">
-                <i class="fa fa-times-circle"></i> {{'btn_clear_console' | bkTranslate:this}}
+                <i class="fa fa-times-circle"></i> {{'btn_clear_console'|bkTranslate:this}}
             </button>
         </div>
         <!-- Terminal END -->
@@ -427,6 +427,11 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
         console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe size: ', this.selected_hw_for_subscribe.length);
         console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe: ', this.selected_hw_for_subscribe);
 
+        if(hardware.server == null) {
+            this.consoleLog.set_color(hardware.id, color);
+            this.consoleLog.add('error', 'Try to Initialize Device ID: '+ hardware.id + ' Device Full ID: ' + hardware.full_id +' but it looks like the device never joined the server. We have no required details where device is!', hardware.id, hardware.name);
+            return
+        }
 
         this.tyrionBackendService.getWebsocketService()
             .connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString(),(socket: WebsocketClientHardwareLogger, error: any) => {

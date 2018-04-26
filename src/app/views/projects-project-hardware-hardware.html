@@ -25,6 +25,7 @@
                           btn_label_for_person: ('label_device_properties'|bkTranslate:this),
                           icon: 'fa-cog',
                           colorType: 'EDIT',
+                          permission: hardware.update_permission,
                           btn_tag: 'update_hardware'
                       },
                       {
@@ -32,6 +33,7 @@
                           btn_label_for_person: ('label_deactivate_device'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'DEACTIVE',
+                          permission: hardware.update_permission,
                           btn_tag: 'deactivate_hardware'
                       },
                       {
@@ -39,9 +41,9 @@
                           btn_label_for_person: ('label_active_device'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ACTIVE',
+                          permission: hardware.update_permission,
                           btn_tag: 'active_hardware'
                       }
-
                     ]"
         (onTabClick)="onToggleTab($event)"
         [tab_selected_name] = "tab"
@@ -49,24 +51,28 @@
                         {
                             tab_name: 'overview',
                             condition: (true),
+                            permission: (true),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_overview'|bkTranslate:this)
                         },
                         {
                             tab_name: 'updates',
                             condition: (true),
+                            permission: (true),
                             tab_color: 'CODE',
                             tab_label: ('tab_update'|bkTranslate:this)
                         },
                         {
                             tab_name: 'developer',
-                            condition: (true),
+                            condition: (hardware.update_permission),
+                            permission: (true),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_developer'|bkTranslate:this)
                         },
                         {
                             tab_name: 'command_center',
-                            condition: (true),
+                            condition: (hardware.update_permission),
+                            permission: (true),
                             tab_color: 'CODE',
                             tab_label: ('tab_advance_command_center'|bkTranslate:this)
                         }

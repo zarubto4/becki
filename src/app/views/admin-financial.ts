@@ -1,8 +1,8 @@
 
 
 import { Component, Injector, OnInit } from '@angular/core';
-import { _BaseMainComponent } from './_BaseMainComponent';
-import { IApplicableProduct, IProductExtensionType, ITariff } from '../backend/TyrionAPI';
+import {  _BaseMainComponent } from './_BaseMainComponent';
+import { IProductExtensionType, ITariff, ITariffExtension } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsTariffModel } from '../modals/tariff';
@@ -15,7 +15,7 @@ import { ModalsExtensionModel } from '../modals/extension';
 export class AdminFinancialComponent extends _BaseMainComponent implements OnInit {
 
     tariffs: ITariff[] = null;
-    extensions: ITariff[] = null;
+    extensions: ITariffExtension[] = null;
     extensionTypes: IProductExtensionType[] = null;
 
     tab: string = 'tariffs';
@@ -41,9 +41,14 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.tyrionBackendService.tariffsGetAll(), this.tyrionBackendService])
-            .then((values: [ITariff[]]) => {
+        Promise.all<any>([this.tyrionBackendService.tariffsGetAll(),
+            this.tyrionBackendService.tariffGetExtensionsAll(),
+            this.tyrionBackendService.tariffGetAllTypes(),
+            this.tyrionBackendService])
+            .then((values: [ITariff[], ITariffExtension[], IProductExtensionType[]]) => {
                 this.tariffs = values[0];
+                this.extensions = values[1];
+                this.extensionTypes = values[2];
                 this.unblockUI();
             })
             .catch((reason) => {
@@ -197,27 +202,156 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.tariffExtensionCreate('TODO', {
+                this.tyrionBackendService.tariffExtensionCreate({
                     name: model.name,
                     description: model.description,
                     color: model.color,
                     extension_type: model.extension_type,
-                    included: model.included,
                     config: model.config.toString(),
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_create_success', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_create_error', model.name, reason)));
                         this.refresh();
                     });
             }
         });
     }
 
+    onExtensionEditClick(extension: ITariffExtension) {
+        let model = new ModalsExtensionModel(
+            this.extensionTypes,
+            true,
+            extension.color,
+            extension.name,
+            extension.description,
+            extension.type,
+            extension.config
+        );
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.tariffExtensionEdit(extension.id, {
+                    name: model.name,
+                    description: model.description,
+                    color: model.color,
+                    config: model.config.toString(),
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_edit_success', model.name)));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_edit_error', model.name, reason)));
+                        this.refresh();
+                    });
+            }
+        });
+    }
 
+    onExtensionRemoveClick(extension: ITariffExtension) {
+        this.modalService.showModal(new ModalsRemovalModel(extension.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.tariffExtensionDelete(extension.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_delete_success')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_delete_error'), reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onExtensionShiftUpClick(extension: ITariffExtension): void {
+        this.tyrionBackendService.tariffExtensionOrderUp(extension.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.refresh();
+            });
+    }
+
+    onExtensionShiftDownClick(extension: ITariffExtension): void {
+        this.tyrionBackendService.tariffExtensionOrderDown(extension.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.refresh();
+            });
+    }
+
+    onExtensionActivateClick(extension: ITariffExtension): void {
+        this.tyrionBackendService.tariffExtensionActivate(extension.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.refresh();
+            });
+    }
+
+    onExtensionDeactivateClick(extension: ITariffExtension): void {
+        this.tyrionBackendService.tariffExtensionDeactivate(extension.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.refresh();
+            });
+    }
+
+    // TODO to pipe?
+    makePrice(price: number): string {
+        if (price === 0) {
+            return this.translate('label_free');
+        }
+
+
+        if (Math.floor(price) === price) {
+            return price.toFixed(2) + '$';
+        } else {
+            return price.toFixed(2) + '$';
+        }
+    }
+
+    onDrobDownEmiter (action: string, tariff: ITariff): void {
+
+        if (action === 'edit_tariff') {
+            this.onTariffEditClick(tariff);
+        }
+
+        if (action === 'shift_up_tariff') {
+            this.onTariffShiftUpClick(tariff);
+        }
+
+        if (action === 'shift_down_tariff') {
+            this.onTariffShiftDownClick(tariff);
+        }
+
+        if (action === 'active_tariff') {
+            this.onTariffActivate(tariff);
+        }
+
+        if (action === 'deactive_tariff') {
+            this.onTariffDeactivate(tariff);
+        }
+        if (action === 'remove_tariff') {
+            this.onTariffRemoveClick(tariff);
+        }
+    }
 }
 
 

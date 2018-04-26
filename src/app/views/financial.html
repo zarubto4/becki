@@ -6,72 +6,84 @@
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
 
 
-        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-        <bk-portlet-title
-            [title_name]="'label_product_list'|bkTranslate:this"
-            [icon]="'fa-dollar'"
-            (onClick)="onAddProductClick()"
-            [btns]="[
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'label_product_list'|bkTranslate:this"
+        [icon]="'fa-dollar'"
+        (onClick)="onAddProductClick()"
+        [btns]="[
                 {
                     condition: (products && products.length > 0),
                     btn_label_for_person: ('btn_new_subscription'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-plus-circle',
-                     btn_tag: 'add'
+                    btn_tag: 'add',
+                    permission: true
                 }
             ]"></bk-portlet-title>
-        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-   <!-- Page Content -- START -->
+    <!-- Page Content -- START -->
     <div class="portlet-body">
         <div *ngIf="(products && products.length)" class="table-scrollable table-scrollable-borderless">
             <table class="table table-hover table-light byzance-table">
                 <thead>
-                    <tr>
-                        <th>{{'table_name'|bkTranslate:this}}</th>
-                        <th>{{'table_type'|bkTranslate:this}}</th>
-                        <th></th>
-                        <th>{{'table_payment_type'|bkTranslate:this}}</th>
-                        <th>{{'label_subscription_id'|bkTranslate:this}}</th>
-                        <th class="text-right">{{'label_actions'|bkTranslate:this}}</th>
-                    </tr>
+                <tr>
+                    <th>{{'table_name'|bkTranslate:this}}</th>
+                    <th>{{'table_type'|bkTranslate:this}}</th>
+                    <th></th>
+                    <th>{{'table_payment_type'|bkTranslate:this}}</th>
+                    <th>{{'label_subscription_id'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                </tr>
                 </thead>
-                <tbody>
-                    <tr *ngFor="let product of products">
-                        <td class="vert-align no-wrap">
-                            <a (click)="onProductClick(product.id)"><b>{{product.name}}</b></a>
-                            <span *ngIf="product.active" class="font-green-jungle">({{'label_active'|bkTranslate:this}})</span>
-                            <span *ngIf="!product.active" class="font-red">({{'label_hibernation'|bkTranslate:this}})</span>
+                <tbody class="hide-bk-drob-down-button">
+                <tr *ngFor="let product of products">
+                    <td class="vert-align no-wrap">
+                        <a (click)="onProductClick(product.id)"><b>{{product.name}}</b></a>
+                        <span *ngIf="product.active"
+                              class="font-green-jungle">({{'label_active'|bkTranslate:this}})</span>
+                        <span *ngIf="!product.active" class="font-red">({{'label_hibernation'|bkTranslate:this}})</span>
 
-                            <!-- Add independent Icon with status -->
-                            <span *ngIf="!product.active" class="icon-hint-wraper red">
+                        <!-- Add independent Icon with status -->
+                        <span *ngIf="!product.active" class="icon-hint-wraper red">
                               <i class="fa fa-exclamation-triangle font-red-mint"></i>
                               <span class="hint">{{[product.active.toString()]|bkTranslateTable:this:'productStatusTranslate'}}</span>
                             </span>
 
-                        </td>
-                        <td class="vert-align no-wrap">
-                            <span *ngIf="product.client_billing" class="font-blue-chambray">({{'label_client_billing'|bkTranslate:this}})</span>
-                            <span *ngIf="!product.client_billing" class="font-blue-chambray">({{'label_client_private'|bkTranslate:this}})</span>
-                        </td>
-                        <td class="vert-align">
-                            <span *ngIf="product.client_billing" class="font-blue-chambray bold">{{product.payment_details.company_name}}</span>
-                        </td>
+                    </td>
+                    <td class="vert-align no-wrap">
+                        <span *ngIf="product.client_billing" class="font-blue-chambray">({{'label_client_billing'|bkTranslate:this}})</span>
+                        <span *ngIf="!product.client_billing" class="font-blue-chambray">({{'label_client_private'|bkTranslate:this}})</span>
+                    </td>
+                    <td class="vert-align">
+                        <span *ngIf="product.client_billing" class="font-blue-chambray bold">{{product.payment_details.company_name}}</span>
+                    </td>
 
-                        <td class="vert-align no-wrap ">
-                            <bk-payment-method-component [method]="product.method"></bk-payment-method-component>
-                        </td>
-                        <td class="vert-align">{{product.subscription_id}}</td>
-                        <td class="vert-align text-right">
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
-                            <button (click)="onEditClick(product)" [disabled]="product.update_permission" title="Settings" class="btn green btn-icon-only white">
-                                <i class="fa fa-gear"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    <td class="vert-align no-wrap ">
+                        <bk-payment-method-component [method]="product.method"></bk-payment-method-component>
+                    </td>
+                    <td class="vert-align">{{product.subscription_id}}</td>
+                    <td class="action-btn-col">
+
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_settings'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_settings'|bkTranslate:this),
+                                    btn_tag: 'edit_product',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (product.update_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, product)"
+                        >
+                        </bk-drob-down-button>
+
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

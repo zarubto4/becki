@@ -2,17 +2,17 @@
  * Created by dominikkrisztof on 24/08/16.
  */
 
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
-import { _BaseMainComponent } from './_BaseMainComponent';
-import { NotificationService, Notification, FlashMessage } from '../services/NotificationService';
-import { TyrionBackendService } from '../services/BackendService';
-import { FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
-import { FormGroup, Validators } from '@angular/forms';
-import { BeckiValidators } from '../helpers/BeckiValidators';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { StaticOptionLists } from '../helpers/StaticOptionLists';
-import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import { IAuthorizationToken, IPerson, IRole } from '../backend/TyrionAPI';
+import {Component, Injector, OnInit, ViewChild} from '@angular/core';
+import {_BaseMainComponent} from './_BaseMainComponent';
+import {NotificationService, Notification, FlashMessage} from '../services/NotificationService';
+import {TyrionBackendService} from '../services/BackendService';
+import {FlashMessageSuccess, FlashMessageError} from '../services/NotificationService';
+import {FormGroup, Validators} from '@angular/forms';
+import {BeckiValidators} from '../helpers/BeckiValidators';
+import {FormSelectComponentOption} from '../components/FormSelectComponent';
+import {StaticOptionLists} from '../helpers/StaticOptionLists';
+import {ModalsPictureUploadModel} from '../modals/picture-upload';
+import {IAuthorizationToken, IPerson, IRole} from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-profile',
@@ -185,7 +185,10 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
 
     changeEmail(): void {
         this.blockUI();
-        this.backendService.entityValidation({ key: 'email', value: this.emailForm.controls['newEmail'].value }).then(response => {
+        this.backendService.entityValidation({
+            key: 'email',
+            value: this.emailForm.controls['newEmail'].value
+        }).then(response => {
             if (response.valid) {
                 this.backendService.personEditProperty({
                     property: 'email',
@@ -232,5 +235,12 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_information', error)));
             });
+    }
+
+    onDrobDownEmiter(action: string, login_token: IAuthorizationToken): void {
+
+        if (action === 'login_token_delete') {
+            this.onLoginTokenDeleteClick(login_token);
+        }
     }
 }

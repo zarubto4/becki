@@ -101,6 +101,16 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
         });
     }
 
+    onDrobDownEmiter (action: string, role: IRole): void {
+        if (action === 'edit_role') {
+            this.onRoleEditClick(role);
+        }
+
+        if (action === 'remove_prole') {
+            this.onRoleRemoveClick(role);
+        }
+    }
+
 }
 
 

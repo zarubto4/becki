@@ -24,8 +24,6 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    project: IProject = null;
-
     widgetList: IGridWidgetList = null;
     widgetPublicList: IGridWidgetList = null;
     widgetListNotApproved: IGridWidgetList = null;
@@ -253,6 +251,28 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 this.addFlashMessage(new FlashMessageError('Widget cannot be loaded.', reason));
                 this.unblockUI();
             });
+    }
+
+    onDrobDownEmiter(action: string, object: any): void {
+
+        if (action === 'make_clone_widget') {
+            this.onMakeClone(object);
+        }
+
+        if (action === 'active_group_widget') {
+            this.onWidgetActivateClick(object);
+        }
+        if (action === 'deactive_group_widget') {
+            this.onWidgetDeactivateClick(object);
+        }
+
+        if (action === 'edit_widget') {
+            this.onWidgetEditClick(object);
+        }
+
+        if (action === 'remove_widget') {
+            this.onWidgetDeleteClick(object);
+        }
     }
 
 }

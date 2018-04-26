@@ -5,12 +5,12 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
     selector: 'bk-nothing-to-show',
     /* tslint:disable */
     template: `
-        <div *ngIf="condition_loading" > 
+        <div *ngIf="condition_loading" >
             <h3 class="text-center">{{'loading'|bkTranslate:this}}</h3>
         </div>
-        <div *ngIf="!condition_loading" [class.row]="image_link != null" [class.vertical-align]="image_link!= null">
+        <div *ngIf="!condition_loading" [class.row]="image_link != null" [class.vertical-align]="image_link!= null" class="margin-top-30" style="margin-left: 5%; margin-right: 5%">
             <div *ngIf="condition_empty && image_link" [class.col-md-5]="image_link != null" [class.vcenter]="image_link!= null">
-                <img class="text-center" style="width: auto; height: 70%;" src="{{image_link}}">
+                <img class="text-center" style="width: 100%; height: auto;" src="{{image_link}}">
             </div>
             <div [class.col-md-7]="image_link != null" [class.vcenter]="image_link != null">
                 <div *ngIf="condition_empty" class="list-no-items">
@@ -26,20 +26,21 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
                         </button>
                     </p>
                 </div>
-           
-                    <div *ngIf="image_description && condition_empty" class="portlet light bordered" style="margin-left: 10%; margin-right: 10%;">
-                        <div class="portlet-title">
-                            <div class="caption font-grey-salsap">
-                                <i class="icon-speech font-grey-salsa"></i>
-                                <span class="caption-subject font-grey-salsa" style="font-size: 20px;">Info</span>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <p style="font-size: 18px; margin-left: 2%; margin-right: 2%; padding-top: 25px">
-                                <span [innerHTML]="image_description"></span>
-                            </p>
+
+                <div *ngIf="image_description && condition_empty" class="portlet light bordered" style="margin-left: 10%; margin-right: 10%;">
+                    <div class="portlet-title">
+                        <div class="caption font-grey-salsap">
+                            <i class="icon-speech font-grey-salsa"></i>
+                            <span class="caption-subject font-grey-salsa" style="font-size: 20px;">Info</span>
                         </div>
                     </div>
+                    <div class="portlet-body">
+                        <p style="font-size: 18px; margin-left: 2%; margin-right: 2%; padding-top: 25px">
+                            <span [innerHTML]="image_description"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     `
     /* tslint:enable */
