@@ -157,7 +157,7 @@ with open(os.path.dirname(sys.argv[0]) + '/dist.zip', 'w') as fd:
 print 'File was downloaded'
 
 with zipfile.ZipFile(os.path.dirname(sys.argv[0]) + '/dist.zip') as zip:
-    zip.extractall()
+    zip.extractall(os.path.dirname(sys.argv[0]))
     zip.close()
 
 print 'File was extracted'

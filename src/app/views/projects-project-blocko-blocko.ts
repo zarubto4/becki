@@ -238,7 +238,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             }
         });
         this.refresh();
-        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
+        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
     }
 
     selectVersionByVersionId(versionId: string) {

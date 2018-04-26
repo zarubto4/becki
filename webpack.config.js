@@ -283,6 +283,10 @@ module.exports = function makeWebpackConfig() {
         ])
     )
 
+    config.plugins.push(
+        new webpack.IgnorePlugin(/mongodb/)
+    )
+
     /**
      * Dev server configuration
      * Reference: http://webpack.github.io/docs/configuration.html#devserver

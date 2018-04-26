@@ -98,7 +98,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             this.blockoRenderer.showBlockNames = this.showBlockNames;
             this.blockoRenderer.simpleMode = this.simpleMode;
             this.blockoRenderer.canConfigInReadonly = this.canConfig;
-            this.blockoRenderer.autosize = this.autosize;
 
             this.blockoController = new BlockoCore.Controller();
 
@@ -126,6 +125,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             this.blockoController.registerService(new Blocks.XmlApiService());
             this.blockoController.registerService(new Blocks.RestApiService());
             this.blockoController.registerService(new Blocks.CronService());
+            this.blockoController.registerService(new Blocks.DatabaseService());
 
             /*
              *
@@ -219,12 +219,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             if (safeRun) {
                 this.blockoController.safeRun = safeRun.currentValue;
             }
-
-            let scale = changes['scale'];
-            if (scale) {
-                this.blockoRenderer.scale = scale.currentValue;
-            }
-
         });
     }
 
