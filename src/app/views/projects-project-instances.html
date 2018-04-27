@@ -41,6 +41,7 @@
                     <th class=""><strong class="font-color-blocko">BLOCKO</strong>{{'table_blocko_program'|bkTranslate:this}}
                     </th>
                     <th class="">{{'table_status'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                     <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
@@ -61,6 +62,11 @@
                     <td class="no-wrap">
                         <bk-online-state [online_state]="instance.online_state"></bk-online-state>
                     </td>
+
+                    <td class="vert-align">
+                        <bk-form-tag-input [tags_without_form]="instance.tags" [readonly]="true"></bk-form-tag-input>
+                    </td>
+
                     <td class="action-btn-col">
                         <bk-drob-down-button
                             [btns_group_name]="('label_settings'|bkTranslate:this)"

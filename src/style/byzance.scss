@@ -2751,3 +2751,16 @@ textarea.form-control {
 .hide-bk-drob-down-button tr button:hover{
     opacity:1;
 }
+
+.bootstrap-tagsinput .tag [data-role="remove"] {
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.fade_animation {
+    opacity: 0;
+    transition: opacity 0.05s ease;
+}
+
+
+

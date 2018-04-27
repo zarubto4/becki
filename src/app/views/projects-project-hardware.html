@@ -81,6 +81,7 @@
                             <th class="text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_project_status'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_status'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                         </tr>
                     </thead>
@@ -136,9 +137,13 @@
                             </div>
                         </td>
                         <td class="vert-align text-center no-wrap">
-
                             <bk-online-state [online_state]="device.online_state"></bk-online-state>
                         </td>
+
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="device.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
@@ -221,6 +226,7 @@
                         <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]=" 'table_size'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -242,6 +248,10 @@
                                  </span>
                                 ]
                             </div>
+                        </td>
+
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="group.tags" [readonly]="true"></bk-form-tag-input>
                         </td>
 
                         <td class="action-btn-col">
@@ -308,6 +318,7 @@
                         <th class="vert-align">{{'table_update_type'|bkTranslate:this}}</th>
                         <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
                         <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -360,8 +371,11 @@
                             <bk-update-state [updateState]="procedure.state"></bk-update-state>
                         </td>
 
-                        <td class="action-btn-col">
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="procedure.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
 
+                        <td class="action-btn-col">
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_settings'|bkTranslate:this)"
@@ -383,7 +397,7 @@
                                     permission: (procedure.delete_permission)
                                 }
                             ]"
-                                (onValueChanged)="onDrobDownEmiter($event, project)"
+                                (onValueChanged)="onDrobDownEmiter($event, procedure)"
                             >
                             </bk-drob-down-button>
 

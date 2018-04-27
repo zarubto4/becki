@@ -33,6 +33,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
 
     tab: string = 'my_programs';
 
+    tags_liza: string[] = ['pepa', 'franta', 'liza','pepa', 'franta', 'liza','pepa', 'franta', 'liza','pepa', 'franta', 'liza','pepa', 'franta', 'liza','pepa', 'franta', 'liza'];
+
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     constructor(injector: Injector) {
@@ -101,7 +103,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                             project_id: this.project_id,
                             name: model.name,
                             description: model.description,
-                            hardware_type_id: model.hardware_type_id
+                            hardware_type_id: model.hardware_type_id,
+                            tags: model.tags
                         })
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
@@ -223,4 +226,5 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
         }
 
     }
+
 }
