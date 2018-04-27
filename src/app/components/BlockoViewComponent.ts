@@ -66,7 +66,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     protected blockoController: BlockoCore.Controller;
 
-    protected blockoRenderer: BlockoPaperRenderer.RendererController;
+    protected blockoRenderer: BlockoPaperRenderer.Controller;
 
     @ViewChild('field')
     field: ElementRef;
@@ -76,7 +76,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, private translationService: TranslationService) {
         this.zone.runOutsideAngular(() => {
 
-            this.blockoRenderer = new BlockoPaperRenderer.RendererController();
+            this.blockoRenderer = new BlockoPaperRenderer.Controller();
             this.blockoRenderer.registerOpenConfigCallback((block) => {
                 let versions: IBlockVersion[] =  null;
 
