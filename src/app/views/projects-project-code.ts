@@ -141,7 +141,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                         this.blockUI();
                         this.tyrionBackendService.cProgramEdit(code.id, {
                             name: model.name,
-                            description: model.description
+                            description: model.description,
+                            tags: model.tags
                         })
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));

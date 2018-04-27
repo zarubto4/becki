@@ -251,7 +251,7 @@
                         </td>
 
                         <td class="vert-align">
-                            <bk-form-tag-input [tags_without_form]="group.tags" [readonly]="true"></bk-form-tag-input>
+                            <!-- bk-form-tag-input [tags_without_form]="group.tags" [readonly]="true"></bk-form-tag-input !-->
                         </td>
 
                         <td class="action-btn-col">
@@ -318,7 +318,6 @@
                         <th class="vert-align">{{'table_update_type'|bkTranslate:this}}</th>
                         <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
                         <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
-                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -369,10 +368,6 @@
                         <!-- Update State -->
                         <td class="vert-align">
                             <bk-update-state [updateState]="procedure.state"></bk-update-state>
-                        </td>
-
-                        <td class="vert-align">
-                            <bk-form-tag-input [tags_without_form]="procedure.tags" [readonly]="true"></bk-form-tag-input>
                         </td>
 
                         <td class="action-btn-col">

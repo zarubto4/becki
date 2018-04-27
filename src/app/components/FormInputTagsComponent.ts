@@ -12,11 +12,10 @@ import {red} from "chalk";
 
 @Component({
     selector: 'bk-form-tag-input',
-    /* tslint:disable:max-line-length */
+    /* tslint:disable */
     template: `
         <div>
-            <div class="form-group"
-                 [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"
+            <div [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"
                  [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"
                  [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
                 <label *ngIf="showLabel">{{label}}</label>
@@ -156,17 +155,15 @@ export class FormInputTagsComponent implements OnInit {
         if (this.tags.indexOf(tag) > -1) {
 
             this.tag_faded = true;
-
             this.tag_popup_selected_tag = tag;
 
             let that = this;
-            setTimeout(function(){
-                    that.tag_popup_selected_tag = '';
-                    that.tag_faded = false;
+            setTimeout(function() {
+                that.tag_popup_selected_tag = '';
+                that.tag_faded = false;
             }, 500);
 
             return;
-
         }
 
         // Set Tags

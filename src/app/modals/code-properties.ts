@@ -72,6 +72,8 @@ export class ModalsCodePropertiesComponent implements OnInit {
         if (this.modalModel.edit === false) {
             this.modalModel.hardware_type_id = this.form.controls['hardware_type_id'].value;
         }
+
+        this.modalModel.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 
