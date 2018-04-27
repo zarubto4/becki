@@ -269,7 +269,9 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
             });
 
             if (this._editorView) {
-                this._editorView.addInterface(this._latest_blockoInterface);
+                if (this._latest_blockoInterface != null && this._latest_blockoInterface !== null && this._latest_blockoInterface !== '') {
+                    this._editorView.addInterface(this._latest_blockoInterface);
+                }
             }
 
         });
@@ -339,9 +341,13 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
 
     refreshInterface(ios: any = this._latest_blockoInterface) {
 
+        console.error('refreshInterface');
+
         if (ios == null) {
             return;
         }
+
+        console.error('refreshInterface:: ', ios);
 
         this._latest_blockoInterface = {
             interfaceId : 'dummy_id',
@@ -351,6 +357,9 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
             pos_x : 50,
             pos_y : 20
         };
+
+
+        console.error('refreshInterface:: _latest_blockoInterface ',  this._latest_blockoInterface);
 
         if (this._editorView) {
             this._editorView.addInterface(this._latest_blockoInterface);

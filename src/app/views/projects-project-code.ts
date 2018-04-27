@@ -80,11 +80,20 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.tyrionBackendService.cProgramDelete(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.unblockUI();
+                        if (code.publish_type === 'PRIVATE') {
+                            this.onFilterPrivatePrograms();
+                        } else {
+                            this.onFilterPublicPrograms();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        if (code.publish_type === 'PRIVATE') {
+                            this.onFilterPrivatePrograms();
+                        } else {
+                            this.onFilterPublicPrograms();
+                        }
                     });
             }
         });
@@ -108,11 +117,13 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                         })
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
-                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                                this.unblockUI();
+                                this.onFilterPrivatePrograms();
                             })
                             .catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.name, reason)));
-                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                                this.unblockUI();
+                                this.onFilterPrivatePrograms();
                             });
                     }
                 });
@@ -134,11 +145,19 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                         })
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                                if (code.publish_type === 'PRIVATE') {
+                                    this.onFilterPrivatePrograms();
+                                } else {
+                                    this.onFilterPublicPrograms();
+                                }
                             })
                             .catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
-                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                                if (code.publish_type === 'PRIVATE') {
+                                    this.onFilterPrivatePrograms();
+                                } else {
+                                    this.onFilterPublicPrograms();
+                                }
                             });
                     }
                 });
@@ -158,11 +177,12 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
+                        this.onFilterPublicPrograms();
                     });
             }
         });
@@ -221,7 +241,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
             this.onEditClick(object);
         }
 
-        if (action === 'remove_project') {
+        if (action === 'remove_code_program') {
             this.onRemoveClick(object);
         }
 

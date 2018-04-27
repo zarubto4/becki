@@ -2022,8 +2022,8 @@ export class StaticTranslation {
                 'modal_text_no_yoda': 'No available devices.',
 
                 'label_main_c_program_version_set_as_main': 'Set this version as Main',
-                'label_publish': 'Accept publication',
-                'label_unpublish': 'Refused to Publish',
+                'version_publish_make': 'Make it Public',
+                'label_publish': 'Publication Decision',
 
                 'flash_update_success': 'Deployed successfully',
                 'flash_cant_upload_code': 'Deployment failed.',
@@ -2624,6 +2624,7 @@ export class StaticTranslation {
             'label_description': 'Description',
             'label_user': 'User',
             'btn_save': 'Save',
+            'table_tags': 'Tags',
             'btn_test': 'Test',
             'btn_close': 'Close',
             'btn_back': 'Back',

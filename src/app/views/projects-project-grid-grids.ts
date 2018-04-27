@@ -128,7 +128,6 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_remove')));
 
                         if (this.projectId) {
-                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                             this.router.navigate(['/projects/' + this.projectId + '/grid']);
                         } else {
                             this.router.navigate(['/admin/widgets']);
