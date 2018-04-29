@@ -36,7 +36,6 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
-            console.info("Project ID: " +      this.projectId);
             this.onFilter();
         });
     }
