@@ -2747,8 +2747,5 @@ textarea.form-control {
 
 .fade_animation {
     opacity: 0;
-    transition: opacity 0.05s ease;
+    transition: opacity 0.05s ease-out;
 }
-
-
-

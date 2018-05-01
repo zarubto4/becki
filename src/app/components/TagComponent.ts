@@ -21,7 +21,7 @@ import { TranslationService } from '../services/TranslationService';
               [class.label-primary]="tag_color == 'label-primary' && !tag_popup_color"
               [class.label-success]="tag_color == 'label-success' && !tag_popup_color"
               [class.label-default]="tag_color == 'label-default' && !tag_popup_color"
-              [class.fade_animation]="tag_faded == 'label-danger' || tag_popup_color"
+              [class.fade_animation]="tag_faded"
         >
             {{tag}} <span data-role="remove"><i *ngIf="!readonly" class="fa fa-times" style="width: 0.6em; text-align: center;" (click)="onRemoveClickEvent()"></i> </span>
         </span>
@@ -44,7 +44,7 @@ export class TagComponent implements OnInit {
     readonly: boolean = false;
 
     @Input()
-    tag_faded: boolean = false;
+    tag_faded: boolean;
 
     private hover: boolean = false;
 
@@ -64,6 +64,5 @@ export class TagComponent implements OnInit {
     onRemoveClickEvent() {
         this.onRemoveClick.emit(this.tag);
     }
-
 
 }

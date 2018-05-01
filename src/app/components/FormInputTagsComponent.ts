@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ValidatorErrorsService} from '../services/ValidatorErrorsService';
 import {TranslationService} from '../services/TranslationService';
@@ -87,6 +87,9 @@ export class FormInputTagsComponent implements OnInit {
     // Private Form for Label Reader & Enter Action
     private_form: FormGroup;
 
+    @ViewChildren(TagComponent)
+    tagComponents: QueryList<TagComponent>
+
     // List of tags
     private tags: string[] = [];
     private tag_length_for_read_only_max_size_already_counted: number = 0;
@@ -155,16 +158,20 @@ export class FormInputTagsComponent implements OnInit {
 
         if (this.tags.indexOf(tag) > -1) {
 
-            this.tag_faded = true;
+            let temp = this.tagComponents.find((com) => {
+                return com.tag === tag
+            })
+
+            if (temp) {
+                temp.tag_faded = true;
+
+                setTimeout(() => {
+                    this.tag_popup_selected_tag = '';
+                    temp.tag_faded = false;
+                }, 500);
+            }
 
             this.tag_popup_selected_tag = tag;
-
-            let that = this;
-            setTimeout(function(){
-                    that.tag_popup_selected_tag = '';
-                    that.tag_faded = false;
-            }, 500);
-
             return;
 
         }
@@ -188,10 +195,6 @@ export class FormInputTagsComponent implements OnInit {
     onChange() {
         this.control.setValue(this.tags);
         this.valueChange.emit(this.tags);
-    }
-
-    changeColor(tag: TagComponent, color: string) : void {
-
     }
 
 }

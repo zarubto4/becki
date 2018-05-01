@@ -1251,6 +1251,8 @@ export class StaticTranslation {
                 'flash_remove_device_success': 'Device has been removed.',
                 'flash_remove_device_fail': 'Device could not be removed, ',
 
+                'table_tags': 'Tags',
+
             }, 'TerminalLogSubscriberComponent': {
                 'title': '<strong class="font-color-hardware">HARDWARE</strong> Terminal',
                 'label_terminal': 'Terminal',
@@ -1409,6 +1411,8 @@ export class StaticTranslation {
                 'btn_create_server': 'Create Server',
                 'btn_create_automatically_server': ' Create SaaS Server',
 
+                'table_tags': 'Tags',
+
             }, 'ProjectsProjectInstancesComponent': {
 
                 'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> - ALL INSTANCES',
@@ -1438,6 +1442,8 @@ export class StaticTranslation {
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
                 'label_instance_remove': 'Remove instance',
+
+                'table_tags': 'Tags',
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
@@ -1628,6 +1634,8 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_hardware_type': 'Only compatible with',
                 'table_actions': 'Actions',
+
+                'table_tags': 'Tags',
 
             }, 'ProjectsProjectLibrariesLibraryComponent': {
 
@@ -1838,6 +1846,8 @@ export class StaticTranslation {
                 'flash_blocko_update': 'Program has been updated.',
                 'flash_blocko_cant_update': 'Unable to update program, ',
 
+                'table_tags': 'Tags',
+
             }, 'ProjectsProjectBlocksBlockComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK',
                 'label_name': '<strong class="font-color-blocko">BLOCKO</strong> Block Name:',
@@ -2019,7 +2029,9 @@ export class StaticTranslation {
                 'flash_cant_add_code_to_project': 'Unable to add CODE program to your project.',
                 'flash_code_remove': 'Program has been removed.',
                 'flash_cant_remove_code': 'Unable to remove program, {0}.',
-                'label_code_program_properties': 'Code Properties'
+                'label_code_program_properties': 'Code Properties',
+
+                'table_tags': 'Tags',
 
             }, 'ProjectsProjectGridGridsGridComponent': {
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong>',
@@ -2118,6 +2130,8 @@ export class StaticTranslation {
                 'flash_cant_edit_grid_project': 'Unable to edit project, .',
                 'flash_grid_project_remove': 'Project has been removed.',
                 'flash_cant_remove_grid_project': 'Unable to remove project.',
+
+                'table_tags': 'Tags',
 
             }, 'SupportComponent': {
 

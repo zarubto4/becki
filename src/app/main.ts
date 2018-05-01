@@ -216,6 +216,10 @@ import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-
 import { ModalsShowQRComponent } from './modals/show_QR';
 import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-program-settings';
 import { BeckiDrobDownButtonComponent } from './components/DrobDownButton';
+import { PopoverComponent } from "./components/PopoverComponent";
+import { PopoverModule } from "ngx-popover";
+
+
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -446,6 +450,7 @@ class BeckiErrorHandler implements ErrorHandler {
         HttpModule,
         JsonpModule,
         MyDatePickerModule,
+        PopoverModule
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
@@ -670,6 +675,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsProgramVersionSelectComponent,
         ModalsSnapShotInstanceComponent,
         ModalsSnapShotDeployComponent,
+
+        PopoverComponent,
+
 
     ],
     exports: [AppComponent],
