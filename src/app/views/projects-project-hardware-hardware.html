@@ -37,11 +37,20 @@
                           btn_tag: 'deactivate_hardware'
                       },
                       {
+                          condition: (hardware.online_state === 'ONLINE'),
+                          btn_label_for_person: ('label_blink_hardware'|bkTranslate:this),
+                          btn_tag: 'blink_hardware',
+                          icon: 'fa-lightbulb-o',
+                          colorType: 'ADD',
+                          permission: (hardware.update_permission)
+                      },
+                      {
                           condition: (tab == 'overview' && !hardware.dominant_entity && !hardware.dominant_project_active),
                           btn_label_for_person: ('label_active_device'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ACTIVE',
-                          permission: hardware.update_permission,
+                          permission:
+                          hardware.update_permission,
                           btn_tag: 'active_hardware'
                       }
                     ]"

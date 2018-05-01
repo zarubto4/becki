@@ -70,6 +70,20 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         });
     }
 
+    onBlinkDeviceClick(): void {
+        this.tyrionBackendService.boardCommandExecution({
+            hardware_id: this.hardwareId,
+            command: 'BLINK'
+        })
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_restart_success')));
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.unblockUI();
+            });
+    }
+
     onPortletClick(action: string): void {
         if (action === 'update_hardware') {
             this.onEditClick(this.hardware);
@@ -101,6 +115,10 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
 
         if (action === 'hardware_manual_update') {
             this.onManualIndividualUpdate();
+        }
+
+        if (action === 'blink_hardware') {
+            this.onBlinkDeviceClick();
         }
     }
 

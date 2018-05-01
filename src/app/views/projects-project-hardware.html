@@ -145,7 +145,6 @@
                         </td>
 
                         <td class="action-btn-col">
-
                             <bk-drob-down-button
                                 [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
@@ -155,6 +154,14 @@
                                     btn_tag: 'edit_hardware_group',
                                     icon: 'fa-object-group',
                                     colorType: 'UPDATE',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: (device.online_state === 'ONLINE'),
+                                    btn_label_for_person: ('label_blink_hardware'|bkTranslate:this),
+                                    btn_tag: 'blink_hardware',
+                                    icon: 'fa-lightbulb-o',
+                                    colorType: 'ADD',
                                     permission: (device.update_permission)
                                 },
                                 {

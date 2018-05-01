@@ -1252,6 +1252,7 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_settings': 'Settings',
                 'label_set_hardware_group': 'Set Hardware Groups',
+                'label_blink_hardware': 'Blink',
                 'label_remove_device': 'Remove permanently',
                 'label_time_missing_in_json': 'Not Yet',
                 'label_project_active': 'This one',
@@ -1403,6 +1404,7 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_deactivate_device': 'Deactive for this project',
                 'label_active_device': 'Active for this project',
+                'label_blink_hardware': 'Blink',
 
 
                 'table_id': 'Update ID',
