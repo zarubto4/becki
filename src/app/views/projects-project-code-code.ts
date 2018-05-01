@@ -606,6 +606,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     saveCode() {
+        console.log('saveCode modal');
         let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
         this.modalService.showModal(m).then((success) => {
             if (success) {
@@ -653,6 +654,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     onSaveClick() {
+        console.info('onSaveClick');
         if (this.changesInSelectedVersion().length === 0) {
             let con = new ModalsConfirmModel(this.translate('modal_label_save_same_code'), this.translate('modal_text_no_change'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
             this.modalService.showModal(con).then((success) => {

@@ -146,11 +146,19 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_edit')));
-                        this.onShowProgramPrivateBlocksFilter();
+                        if (block.publish_type === 'PRIVATE') {
+                            this.onShowProgramPrivateBlocksFilter();
+                        } else {
+                            this.onShowProgramPublicBlocksFilter();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block'), reason));
-                        this.onShowProgramPrivateBlocksFilter();
+                        if (block.publish_type === 'PRIVATE') {
+                            this.onShowProgramPrivateBlocksFilter();
+                        } else {
+                            this.onShowProgramPublicBlocksFilter();
+                        }
                     });
             }
         });
@@ -165,11 +173,19 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.tyrionBackendService.blockDelete(block.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
-                        this.onShowProgramPrivateBlocksFilter();
+                        if (block.publish_type === 'PRIVATE') {
+                            this.onShowProgramPrivateBlocksFilter();
+                        } else {
+                            this.onShowProgramPublicBlocksFilter();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block'), reason));
-                        this.onShowProgramPrivateBlocksFilter();
+                        if (block.publish_type === 'PRIVATE') {
+                            this.onShowProgramPrivateBlocksFilter();
+                        } else {
+                            this.onShowProgramPublicBlocksFilter();
+                        }
                     });
             }
         });
@@ -179,11 +195,19 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         this.blockUI();
         this.tyrionBackendService.blockActivate(block.id)
             .then(() => {
-                this.onShowProgramPrivateBlocksFilter();
+                if (block.publish_type === 'PRIVATE') {
+                    this.onShowProgramPrivateBlocksFilter();
+                } else {
+                    this.onShowProgramPublicBlocksFilter();
+                }
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
-                this.onShowProgramPendingBlocksFilter();
+                if (block.publish_type === 'PRIVATE') {
+                    this.onShowProgramPrivateBlocksFilter();
+                } else {
+                    this.onShowProgramPublicBlocksFilter();
+                }
             });
     }
 
@@ -191,11 +215,19 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         this.blockUI();
         this.tyrionBackendService.blockDeactivate(block.id)
             .then(() => {
-                this.onShowProgramPrivateBlocksFilter();
+                if (block.publish_type === 'PRIVATE') {
+                    this.onShowProgramPrivateBlocksFilter();
+                } else {
+                    this.onShowProgramPublicBlocksFilter();
+                }
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
-                this.onShowProgramPendingBlocksFilter();
+                if (block.publish_type === 'PRIVATE') {
+                    this.onShowProgramPrivateBlocksFilter();
+                } else {
+                    this.onShowProgramPublicBlocksFilter();
+                }
             });
     }
 

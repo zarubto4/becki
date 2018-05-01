@@ -848,10 +848,12 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
 
 
     onToolBarSaveClick() {
+        console.info('onToolBarSaveClick');
         this.onSaveClick.emit(true);
     }
 
     onToolBarBuildClick() {
+        console.info('onToolBarBuildClick');
         this.onBuildClick.emit(true);
     }
 
