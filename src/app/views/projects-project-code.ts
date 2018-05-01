@@ -33,8 +33,6 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
 
     tab: string = 'my_programs';
 
-    tags_liza: string[] = ['pepa', 'franta', 'liza','pepa', 'franta', 'liza','pepa', 'franta', 'liza','pepa', 'franta', 'liza','pepa', 'franta', 'liza','pepa', 'franta', 'liza'];
-
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     constructor(injector: Injector) {
