@@ -167,14 +167,14 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
         }
 
         if (action === 'start_instance') {
-            this.onInstanceRemoveClick(instance);
-        }
-        if (action === 'shutdown_instance') {
             this.onInstanceStartClick(instance);
         }
-
-        if (action === 'remove_project') {
+        if (action === 'shutdown_instance') {
             this.onInstanceShutdownClick(instance);
+        }
+
+        if (action === 'remove_instance') {
+            this.onInstanceRemoveClick(instance);
         }
     }
 
