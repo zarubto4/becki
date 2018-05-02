@@ -28,6 +28,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
 
     privatePrograms: ICProgramList = null;
     publicPrograms: ICProgramList = null;
+    adminForDecisionsPrograms: ICProgramList = null;
 
     hardwareTypes: IHardwareType[] = null;
 
@@ -59,6 +60,9 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
         this.tab = tab;
         if (this.publicPrograms == null && tab === 'public_c_programs') {
             this.onFilterPublicPrograms(null);
+        }
+        if (this.adminForDecisionsPrograms == null && tab === 'admin_c_programs') {
+            this.onShowProgramPendingCodeFilter(null);
         }
     }
 
@@ -219,6 +223,28 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
 
         this.tyrionBackendService.cProgramGetListByFilter(page, {
             public_programs: true,
+        })
+            .then((iCProgramList) => {
+                this.publicPrograms = iCProgramList;
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.unblockUI();
+            });
+    }
+
+    onShowProgramPendingCodeFilter(page: number = 0): void {
+
+        // Only for first page load - its not neccesery block page - user saw private programs first - soo api have time to load
+        if (page != null) {
+            this.blockUI();
+        } else {
+            page = 1;
+        }
+
+        this.tyrionBackendService.cProgramGetListByFilter(page, {
+            pending_programs: true,
         })
             .then((iCProgramList) => {
                 this.publicPrograms = iCProgramList;

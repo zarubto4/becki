@@ -5,11 +5,11 @@
 
 
 <bk-layout-main
-    [tabMenu]="init == true ? (projectId == null ? 'byzance-admin' : 'projects-project') : ''"
-    [title]="init == true ? (projectId == null ? ('main_administration_title'|bkTranslate:this): currentParamsService.currentProjectNameSnapshot) : '' "
-    [subtitle]="init == true ? (projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot) : '' "
+    [tabMenu]="projectId == null ? 'byzance-admin' : 'projects-project'"
+    [title]="projectId == null ? ('main_administration_title'|bkTranslate:this): '' "
+    [subtitle]="projectId == null ? ('main_subtitle_hardware'|bkTranslate:this) : '' "
     [lastBreadName]="hardware?hardware.name:''"
-    [show_title]="false">
+    [show_title]="projectId == null">
 
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
@@ -28,14 +28,7 @@
                           permission: hardware.update_permission,
                           btn_tag: 'update_hardware'
                       },
-                      {
-                          condition: (tab == 'overview' && hardware.dominant_entity),
-                          btn_label_for_person: ('label_deactivate_device'|bkTranslate:this),
-                          icon: 'fa-plus-circle',
-                          colorType: 'DEACTIVE',
-                          permission: hardware.update_permission,
-                          btn_tag: 'deactivate_hardware'
-                      },
+
                       {
                           condition: (hardware.online_state === 'ONLINE'),
                           btn_label_for_person: ('label_blink_hardware'|bkTranslate:this),
@@ -43,6 +36,22 @@
                           icon: 'fa-lightbulb-o',
                           colorType: 'ADD',
                           permission: (hardware.update_permission)
+                      },
+                        {
+                          condition: (tab == 'overview'),
+                          btn_label_for_person: ('label_remove_device'|bkTranslate:this),
+                          icon: 'fa-trash',
+                          colorType: 'REMOVE',
+                          permission: hardware.update_permission,
+                          btn_tag: 'remove_hardware'
+                      },
+                      {
+                          condition: (tab == 'overview' && hardware.dominant_entity),
+                          btn_label_for_person: ('label_deactivate_device'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'DEACTIVE',
+                          permission: hardware.update_permission,
+                          btn_tag: 'deactivate_hardware'
                       },
                       {
                           condition: (tab == 'overview' && !hardware.dominant_entity && !hardware.dominant_project_active),

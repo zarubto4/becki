@@ -100,77 +100,75 @@
                  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
-                    <tr>
-                        <th class="no-wrap">{{'label_name'|bkTranslate:this}}</th>
-                        <th class="no-wrap">{{'label_table_id'|bkTranslate:this}}</th>
-                        <th class="no-wrap">{{'label_table_full_id'|bkTranslate:this}}</th>
-                        <th class="no-wrap">{{'label_description'|bkTranslate:this}}</th>
-                        <th class="no-wrap"><strong class="font-color-hardware">Hardware</strong>{{'label_table_type'|bkTranslate:this}}
-                        </th>
-                        <th class="no-wrap">{{'label_table_status'|bkTranslate:this}}</th>
-                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
-                    </tr>
+                        <tr>
+                            <th class="" [innerHTML]="'label_name'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'label_table_id'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'label_table_full_id'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'label_description'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'label_table_type'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'label_table_status'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                        </tr>
                     </thead>
-
                     <tbody class="hide-bk-drob-down-button">
-                    <tr *ngFor="let device of boardsFiler.content">
-                        <template [ngIf]="device">
-                            <td class="vert-align no-wrap">
-                                        <span class="icon-hint-wraper red"
-                                              *ngIf="device.alert_list && device.alert_list.length > 0">
-                                            <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
-                                            <div class="hint-fixed">
-                                                <span class="hint right">
-                                                    <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
-                                                </span>
-                                            </div>
-                                        </span>
-                                <a (click)="onDeviceClick_Admin(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
-                            </td>
-                            <td class="vert-align no-wrap">{{device.id}}</td>
-                            <td class="vert-align no-wrap">{{device.full_id}}</td>
-                            <td class="vert-align no-wrap">{{device.description}}</td>
-                            <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a>
-                            </td>
-                            <td class="vert-align no-wrap">
-                                <bk-online-state [online_state]="device.online_state"></bk-online-state>
-                            </td>
-                            <td class="action-btn-col">
+                        <tr *ngFor="let device of boardsFiler.content">
+                            <template [ngIf]="device">
+                                <td class="vert-align no-wrap">
+                                            <span class="icon-hint-wraper red"
+                                                  *ngIf="device.alert_list && device.alert_list.length > 0">
+                                                <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
+                                                <div class="hint-fixed">
+                                                    <span class="hint right">
+                                                        <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
+                                                    </span>
+                                                </div>
+                                            </span>
+                                    <a (click)="onDeviceClick_Admin(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+                                </td>
+                                <td class="vert-align no-wrap">{{device.id}}</td>
+                                <td class="vert-align no-wrap">{{device.full_id}}</td>
+                                <td class="vert-align no-wrap">{{device.description}}</td>
+                                <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a>
+                                </td>
+                                <td class="vert-align no-wrap">
+                                    <bk-online-state [online_state]="device.online_state"></bk-online-state>
+                                </td>
+                                <td class="action-btn-col">
 
-                                <bk-drob-down-button
-                                    [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
-                                    [btns]="[
-                                            {
-                                                condition: true,
-                                                btn_label_for_person: ('label_print_stickers'|bkTranslate:this),
-                                                btn_tag: 'print_device',
-                                                icon: 'fa-print',
-                                                colorType: 'CREATE',
-                                                permission: (device.update_permission)
-                                            },
-                                            {
-                                                condition: true,
-                                                btn_label_for_person: ('label_device_properties'|bkTranslate:this),
-                                                btn_tag: 'edit_device',
-                                                icon: 'fa-cog',
-                                                colorType: 'EDIT',
-                                                permission: (device.update_permission)
-                                            },
-                                            {
-                                                condition: true,
-                                                btn_label_for_person: ('label_remove_device'|bkTranslate:this),
-                                                btn_tag: 'remove_device',
-                                                icon: 'fa-trash',
-                                                colorType: 'REMOVE',
-                                                permission: (device.delete_permission)
-                                            }
-                                        ]"
-                                    (onValueChanged)="onDrobDownEmiter($event, device)"
-                                >
-                                </bk-drob-down-button>
-                            </td>
-                        </template>
-                    </tr>
+                                    <bk-drob-down-button
+                                        [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                        [btns]="[
+                                                {
+                                                    condition: true,
+                                                    btn_label_for_person: ('label_print_stickers'|bkTranslate:this),
+                                                    btn_tag: 'print_device',
+                                                    icon: 'fa-print',
+                                                    colorType: 'CREATE',
+                                                    permission: (device.update_permission)
+                                                },
+                                                {
+                                                    condition: true,
+                                                    btn_label_for_person: ('label_device_properties'|bkTranslate:this),
+                                                    btn_tag: 'edit_device',
+                                                    icon: 'fa-cog',
+                                                    colorType: 'EDIT',
+                                                    permission: (device.update_permission)
+                                                },
+                                                {
+                                                    condition: true,
+                                                    btn_label_for_person: ('label_remove_device'|bkTranslate:this),
+                                                    btn_tag: 'remove_device',
+                                                    icon: 'fa-trash',
+                                                    colorType: 'REMOVE',
+                                                    permission: (device.delete_permission)
+                                                }
+                                            ]"
+                                        (onValueChanged)="onDrobDownEmiter($event, device)"
+                                    >
+                                    </bk-drob-down-button>
+                                </td>
+                            </template>
+                        </tr>
                     </tbody>
                 </table>
                 <bk-filter-page-component [from]="boardsFiler.from" [to]="boardsFiler.to" [total]="boardsFiler.total"

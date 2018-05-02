@@ -120,6 +120,10 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         if (action === 'blink_hardware') {
             this.onBlinkDeviceClick();
         }
+
+        if (action === 'remove_hardware') {
+            this.onRemoveClick(this.hardware);
+        }
     }
 
     ngOnDestroy(): void {
@@ -226,19 +230,16 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     }
 
     onFreezeDeviceClick(device: IHardware): void {
-        this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.projectDeactiveHW(device.id)
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
-                        this.router.navigate(['/projects/' + this.projectId + '/hardware']);
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
-                    });
-            }
-        });
+        this.blockUI();
+        this.tyrionBackendService.projectDeactiveHW(device.id)
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
+                this.refresh();
+            });
     }
 
     onActiveDeviceClick(device: IHardware): void {

@@ -1,16 +1,16 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{(modalModel.edit?"title_edit":"title_add")|bkTranslate:this}}</h4>
+        <h4 class="modal-title" [innerHTML]="('title_copy')|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
 
-            <bk-form-input [control]="form.controls.name" [label]="'label_widget_name'|bkTranslate:this"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" [label]="'label_widget_description'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['name']" [label]="'label_widget_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['description']" [label]="'label_widget_description'|bkTranslate:this"></bk-form-input>
 
-            <bk-form-select [control]="form.controls.type_of_widget" [label]="'label_type_of_widget'|bkTranslate:this"
-                            [options]="options"></bk-form-select>
+            <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
+
         </form>
     </div>
     <div class="modal-footer">

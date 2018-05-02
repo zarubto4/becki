@@ -45,7 +45,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
             if (this.projectId) {
                 this.onShowProgramPrivateBlocksFilter();
             }else {
-                this.onShowProgramPendingBlocksFilter();
+                this.tab = 'public_blocks';
+                this.onShowProgramPublicBlocksFilter();
             }
         });
     }
@@ -79,11 +80,12 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         }
     }
 
-    onBlockClick(blockId: string): void {
+
+    onBlockClick(block: IBlock): void {
         if (this.projectId) {
-            this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', blockId]);
+            this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', block.id]);
         } else {
-            this.navigate(['/admin/blocks/', blockId]);
+            this.navigate(['/admin/blocks/', block.id]);
         }
     }
 
@@ -249,6 +251,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
     onShowProgramPublicBlocksFilter(page: number = 0): void {
         this.blockUI();
         this.tyrionBackendService.blockGetByFilter(page, {
+            public_programs: true
         })
             .then((list) => {
                 this.blockPublicList = list;
@@ -277,6 +280,10 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onDrobDownEmiter(action: string, object: any): void {
 
+        if (action === 'block_make_clone') {
+            this.onMakeClone(object);
+        }
+
         if (action === 'block_properties') {
             this.onBlockEditClick(object);
         }
@@ -285,15 +292,15 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
             this.onBlockDeleteClick(object);
         }
 
-        if (action === 'block_make_clone') {
-            this.onMakeClone(object);
+        if (action === 'make_decision') {
+            this.onBlockClick(object);
         }
 
-        if (action === 'active_group') {
+        if (action === 'activate_block') {
             this.onBlockActivateClick(object);
         }
 
-        if (action === 'deactive_group') {
+        if (action === 'deactivate_block') {
             this.onBlockDeactivateClick(object);
         }
     }
