@@ -1,7 +1,6 @@
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
 import { FlashMessage } from '../services/NotificationService';
-import { ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalModel } from '../services/ModalService';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
