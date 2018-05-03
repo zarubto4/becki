@@ -9,9 +9,9 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
     protected pingTimeout;
     protected _onMessageGarfieldCallback: ((m: WebsocketMessage) => void);
 
-    public constructor(protected backend: TyrionApiBackend, public websocketUrl: string, public wss: boolean = false) {
+    public constructor(protected backend: TyrionApiBackend, public websocketUrl: string) {
 
-        super(websocketUrl, wss);
+        super(websocketUrl);
 
         super.onMessageCallback = (m: WebsocketMessage) => this.onMessageReceive(m);
         super.onOpenCallback = (e) => {

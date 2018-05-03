@@ -109,6 +109,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             this.instanceId = params['instance'];
             this.refresh();
         });
+
+        this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
+            if (status.model === 'Instance' && this.instanceId === status.model_id) {
+                this.refresh();
+            }
+        });
     }
 
     ngAfterViewInit() {

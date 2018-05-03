@@ -27,7 +27,7 @@ export interface OnlineChangeStatus {
 }
 
 export interface ModelChangeStatus {
-    model: ('ProjectsRefreshAfterInvite' | 'Project' | 'HomerServer' | 'Hardware' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure' | 'CProgramUpdatePlan');
+    model: ('ProjectsRefreshAfterInvite' | 'Instance' | 'Project' | 'HomerServer' | 'Hardware' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure' | 'CProgramUpdatePlan');
     model_id: 'uuid';
 }
 
@@ -35,8 +35,8 @@ export interface ModelChangeStatus {
 
 export abstract class TyrionApiBackend extends TyrionAPI {
 
-    private host = '127.0.0.1:9000';
-    private protocol = 'http';
+    public static host = '127.0.0.1:9000';
+    public static protocol = 'http';
 
     public requestProxyServerUrl = 'http://127.0.0.1:4000/fetch/';
 
@@ -68,15 +68,15 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
         if (location && location.hostname) {
             if (location.hostname.indexOf('portal.') === 0) {
-                this.host = location.hostname.replace('portal.', 'tyrion.');
+                TyrionApiBackend.host = location.hostname.replace('portal.', 'tyrion.');
             } else {
-                this.host = location.hostname + ':9000';
+                TyrionApiBackend.host = location.hostname + ':9000';
             }
         }
 
         if (location && location.protocol) {
             if (location.protocol === 'https:') {
-                this.protocol = 'https';
+                TyrionApiBackend.protocol = 'https';
             }
         }
 
@@ -93,8 +93,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         this.websocketService = new WebsocketService(this);
 
         // Open Websocket to Tyrion
-        this.websocketService.openTyrionWebsocketConnection(this.host + '/websocket/portal/', this.protocol === 'https');
-
+        this.websocketService.openTyrionWebsocketConnection(TyrionApiBackend.host + '/websocket/portal/');
     }
 
 
@@ -114,7 +113,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         // But if contains https - for example https://homer.server.cz/get_something - it didnt used ${this.protocol}://${this.host}${path}
         if (path.charAt(0) === '/') {
             console.info('Its a Tyrion API');
-            return this.requestRest(method, `${this.protocol}://${this.host}${path}`, body, success);
+            return this.requestRest(method, `${TyrionApiBackend.protocol}://${TyrionApiBackend.host}${path}`, body, success);
         } else {
             console.info('Its a External outside API');
             return this.requestRest(method, path, body, success);
