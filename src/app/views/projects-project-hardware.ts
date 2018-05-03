@@ -457,7 +457,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.unblockUI();
             });
     }
-    
+
     onDrobDownEmiter(action: string, object: any): void {
 
 
