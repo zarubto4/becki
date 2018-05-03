@@ -1,4 +1,4 @@
-// Angular 2
+// Angular 5
 import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';
 import '@angular/core';
