@@ -138,7 +138,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-
     ngAfterContentChecked() {
         if (this.tab === 'view') {
             if (!this.liveViewLoaded && this.liveView) {
