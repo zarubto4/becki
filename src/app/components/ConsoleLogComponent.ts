@@ -179,7 +179,7 @@ export class ConsoleLogComponent {
         }
         if (error instanceof SafeMachineError) {
             let msg = '<strong>' + error.message + '</strong>';
-            if (typeof error.original === 'object' && error.original instanceof Error) {
+            if (typeof error.original === 'object') {
                 msg = '<strong>' + (<Error>error.original).name + '</strong>: ' + (<Error>error.original).message;
             }
 

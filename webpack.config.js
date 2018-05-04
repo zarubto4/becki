@@ -45,9 +45,10 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html#entry
      */
     config.entry = isTest ? {} : {
+        'app': './src/main.ts',
         'polyfills': './src/polyfills.ts',
-        'vendor': './src/vendor.ts',
-        'app': './src/main.ts' // our angular app
+        'vendor': './src/vendor.ts'
+         // our angular app
     };
 
     /**
@@ -83,7 +84,7 @@ module.exports = function makeWebpackConfig() {
      * This handles most of the magic responsible for converting modules
      */
     config.module = {
-        loaders: [
+        rules: [
 
             // Support for .ts files.
             {
@@ -102,10 +103,10 @@ module.exports = function makeWebpackConfig() {
 
 
             // Support for *.json files.
-            {
-                test: /\.json$/,
-                loader: 'json-loader'
-            },
+            // {
+            //     test: /\.json$/,
+            //     loader: 'json-loader'
+            // },
 
             // Support for CSS as raw text
             // use 'null' loader in test mode (https://github.com/webpack/null-loader)
@@ -154,12 +155,12 @@ module.exports = function makeWebpackConfig() {
 
     if (!isTest || !isTestWatch) {
         // tslint support
-        config.module.loaders.push({
+        config.module.rules.push({
             test: /\.ts$/,
             exclude: /node_modules/,
             enforce: 'pre',
             loader: 'tslint-loader'
-        });
+        })
     }
 
     /**
