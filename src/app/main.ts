@@ -216,6 +216,7 @@ import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-
 import { ModalsShowQRComponent } from './modals/show_QR';
 import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-program-settings';
 import { BeckiDrobDownButtonComponent } from './components/DrobDownButton';
+import {FinancialProductEmployeesComponent} from "./views/financial-product-employees";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -247,7 +248,7 @@ let routes: Routes = [
 
     { path: 'financial/:product', data: { breadName: ':product' }, component: FinancialProductComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/extensions', data: { breadName: 'extensions' }, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard] },
-    { path: 'financial/:product/employees', data: { breadName: 'employees' }, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard] },
+    { path: 'financial/:product/employees', data: { breadName: 'employees' }, component: FinancialProductEmployeesComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/invoices', data: { breadName: 'invoices' }, component: FinancialProductInvoicesComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/invoices/:invoice', data: { breadName: ':invoice' }, component: FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/billing', data: { breadName: 'billing' }, component: FinancialProductBillingComponent, canActivate: [AuthGuard] },
@@ -554,6 +555,7 @@ class BeckiErrorHandler implements ErrorHandler {
         FinancialProductInvoicesComponent,
         FinancialProductInvoicesInvoiceComponent,
         FinancialProductBillingComponent,
+        FinancialProductEmployeesComponent,
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,
@@ -673,6 +675,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsProgramVersionSelectComponent,
         ModalsSnapShotInstanceComponent,
         ModalsSnapShotDeployComponent,
+
 
     ],
     exports: [AppComponent],
