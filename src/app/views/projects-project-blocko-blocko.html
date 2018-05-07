@@ -67,6 +67,7 @@
                 </div>
             </div>
 
+
             <div class="portlet light">
                 <bk-portlet-title
                     [title_name]="'label_console'|bkTranslate:this"
@@ -74,19 +75,32 @@
                     (onClick)="onPortletClick($event)"
                     [btns]="[
                       {
-                          condition: (privatePrograms && privatePrograms.content.length > 0),
+                          condition: (tab_under_ide == 'tab_terminal'),
                           btn_label_for_person: ('btn_clear_console'|bkTranslate:this),
                           icon: 'fa-trash-o',
                           colorType: 'REMOVE',
                           btn_tag: 'clean_console',
                           permission: true
                       }
-                 ]"
+                    ]"
+                    (onTabClick)="onToggleIDETab($event)"
+                    [tab_selected_name] = "tab_under_ide"
+                    [tabBtns]="[
+                        {
+                        tab_name: 'tab_terminal',
+                        condition: (true),
+                        tab_color: 'BLOCKO',
+                        tab_label: ('tab_terminal'|bkTranslate:this)
+                        }
+                    ]"
                 >
                 </bk-portlet-title>
 
-                <div class="portlet-body" [hidden]="!show_console">
-                    <bk-console-log maxHeight="400px"></bk-console-log>
+                <div class="portlet-body">
+                   <div [hidden]="tab_under_ide != 'tab_terminal'">
+                       <bk-console-log maxHeight="400px"></bk-console-log>
+                   </div>
+
                 </div>
             </div>
 

@@ -1171,6 +1171,7 @@ export class StaticTranslation {
                 'btn_add_grid': 'Add GRID project',
                 'btn_clear_program': 'Clear Program',
                 'btn_clear_console': 'Clear Console',
+                'tab_terminal': 'Log Terminal',
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
                 'btn_turn_off_instance': 'Shutdown instance',
                 'btn_change_cloud_version': 'Change Version',

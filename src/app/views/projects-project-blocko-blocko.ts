@@ -70,7 +70,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     protected exitConfirmationService: ExitConfirmationService;
 
-    show_console: boolean = false
+    show_console: boolean = false;
 
 
     /* tslint:disable:max-line-length */
@@ -154,6 +154,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     /* tslint:enable */
 
     tab: string = 'ide';
+    tab_under_ide: string = 'console';
 
     private monacoEditorLoaderService: MonacoEditorLoaderService = null;
     protected afterLoadSelectedVersionId: string = null;
@@ -180,6 +181,15 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             }
         });
         this.refresh();
+    }
+
+
+    onToggleIDETab(tab: string): void {
+        if (this.tab_under_ide === tab) {
+            this.tab_under_ide = ''; // Hide tab
+        }else {
+            this.tab_under_ide = tab;
+        }
     }
 
     ngAfterViewInit(): void {
