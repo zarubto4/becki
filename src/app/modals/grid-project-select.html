@@ -6,7 +6,7 @@
     <div class="modal-body">
         <div class="portlet-body">
 
-            <div *ngIf="selected_grid_project == null">
+            <div *ngIf="modalModel && modalModel.selected_grid_project == null">
                 <div *ngIf="(projects && projects.content.length)" class="table-scrollable table-scrollable-borderless">
                     <table class="table table-hover table-light byzance-table">
                         <thead>
@@ -62,7 +62,7 @@
                 <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
             </div>
-            <div *ngIf="selected_grid_project">
+            <div *ngIf="modalModel && modalModel.selected_grid_project">
 
                 <div>
                     <button type="button" class="btn default red" (click)="onBack()">
@@ -81,7 +81,7 @@
                         </tr>
                         </thead>
                         <tbody class="hide-bk-drob-down-button">
-                        <tr *ngFor="let m_program of selected_grid_project.m_programs">
+                        <tr *ngFor="let m_program of modalModel.selected_grid_project.m_programs">
                             <td class="vert-align">{{m_program.name}}</td>
 
                             <td class="vert-align">
@@ -90,7 +90,7 @@
                                                              [show_labels_selector]="false"
                                                              [type]="'IGridProgram'"
                                                              [already_selected_program_id]="m_program.id"
-                                                             (valueChanged)="onValueChanged($event, m_program.id)">
+                                                             (valueChanged)="onValueChanged($event, m_program)">
                                 </bk-program-version-selector>
                             </td>
                         </tr>
@@ -102,6 +102,9 @@
             </div>
 
         </div>
+    </div>
+    <div *ngIf="errorMessage">
+        <span class="font-red bold">{{errorMessage}}</span>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>

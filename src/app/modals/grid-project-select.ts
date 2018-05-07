@@ -12,14 +12,18 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
 import {
-    IBProgramVersion, ICProgram, ICProgramList, ICProgramVersion, IGridProject,
+    IBProgramVersion, ICProgram, ICProgramList, ICProgramVersion, IGridProgram, IGridProgramVersion, IGridProject,
     IGridProjectList
 } from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
 import {FlashMessageError} from "../services/NotificationService";
 
 export class ModalsSelectGridProjectModel extends ModalModel {
-    public selected_grid_project: string = null;
+    public selected_grid_project: IGridProject = null;
+    public selectedGridProgramVersions: { [program_id: string]: {
+        m_program: IGridProgram
+        version: IGridProgramVersion
+    } } = {};
 
     constructor(public project_id: string = null) {
         super();
@@ -41,7 +45,6 @@ export class ModalsGridProjectSelectComponent implements OnInit {
 
     errorMessage: string = null;
 
-    selected_grid_project: IGridProject = null;
     projects: IGridProjectList = null;
 
     // Filter parameters
@@ -66,11 +69,11 @@ export class ModalsGridProjectSelectComponent implements OnInit {
     }
 
     onSelectProjectClick(project: IGridProject): void {
-        this.selected_grid_project = project;
+        this.modalModel.selected_grid_project = project;
     }
 
     onBack(): void {
-        this.selected_grid_project = null;
+        this.modalModel.selected_grid_project = null;
     }
 
     onDrobDownEmiter(action: string, object: any): void {
@@ -93,8 +96,11 @@ export class ModalsGridProjectSelectComponent implements OnInit {
             });
     }
 
-    onValueChanged(versionId: string) {
-
+    onValueChanged(m_program_version: IGridProgramVersion, m_program: IGridProgram) {
+        this.modalModel.selectedGridProgramVersions[m_program.id] = {
+            version: m_program_version,
+            m_program: m_program
+        };
     }
 
     onCloseClick(): void {

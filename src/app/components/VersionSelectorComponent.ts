@@ -68,7 +68,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
     align_horizontal: boolean = true;
 
     @Output()
-    valueChanged: EventEmitter<string> = new EventEmitter<string>();
+    valueChanged: EventEmitter<any> = new EventEmitter<any>();
 
     selectedProgram: ICProgram|IGridProgram|IBlock|IWidget = null;
     selectedVersion: ICProgramVersion|IGridProgramVersion|IBlockVersion|IWidgetVersion = null;
@@ -269,7 +269,9 @@ export class ProgramVersionSelectorComponent implements OnInit {
         }
         this.selectedProgramVersionId = newValue;
         this.already_selected_program_version_id = this.selectedProgramVersionId;
-        this.valueChanged.emit(this.already_selected_program_version_id);
+
+
+        this.valueChanged.emit(this.selectedVersions.find((cp) => (cp.id === this.already_selected_program_version_id)));
     }
 
 }

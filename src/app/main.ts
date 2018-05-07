@@ -219,6 +219,7 @@ import { BeckiDrobDownButtonComponent } from './components/DrobDownButton';
 import { FinancialProductEmployeesComponent } from './views/financial-product-employees';
 import { FilterTableComponent } from './components/FilterTableComponent';
 import {ModalsGridProjectSelectComponent} from "./modals/grid-project-select";
+import {ModalsBlockSelectComponent} from "./modals/block-select";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -596,7 +597,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProducersComponent,
         ProducersProducerComponent,
         ProjectsProjectLibrariesComponent,
-        ModalsGridProjectSelectComponent,
+
         // ProjectsProjectLibrariesLibraryComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
@@ -679,7 +680,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsProgramVersionSelectComponent,
         ModalsSnapShotInstanceComponent,
         ModalsSnapShotDeployComponent,
-
+        ModalsGridProjectSelectComponent,
+        ModalsBlockSelectComponent,
 
     ],
     exports: [AppComponent],

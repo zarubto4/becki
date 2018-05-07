@@ -1,5 +1,6 @@
 import {ModalsWidgetsWidgetCopyComponent} from "../modals/widgets-widget-copy";
 import {ModalsGridProjectSelectComponent} from "../modals/grid-project-select";
+import {ModalsBlockSelectComponent} from "../modals/block-select";
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
@@ -1231,6 +1232,14 @@ export class StaticTranslation {
             }, 'ModalsCodeSelectComponent': {
 
                 'title': 'Select <strong class="font-color-code">CODE</strong>',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Action',
+                'label_select_code': 'Select',
+
+            }, 'ModalsBlockSelectComponent': {
+
+                'title': 'Select <strong class="font-color-blocko">BLOCK</strong>',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Action',

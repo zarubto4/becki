@@ -6,8 +6,9 @@
     <div class="modal-body">
         <div class="portlet light">
             <div class="portlet-body">
-                <div *ngIf="modalModel.selected_c_program == null">
-                    <div *ngIf="(programs && programs.content.length)" class="table-scrollable table-scrollable-borderless">
+
+                <div *ngIf="modalModel.selectedBlock == null">
+                    <div *ngIf="(blocks && blocks.content.length)" class="table-scrollable table-scrollable-borderless">
                         <table class="table table-hover table-light byzance-table">
                             <thead>
                             <tr>
@@ -18,52 +19,52 @@
                             </tr>
                             </thead>
                             <tbody class="hide-bk-drob-down-button">
-                                <tr *ngFor="let program of programs.content">
-                                    <td class="vert-align no-wrap"><a (click)="onSelectProgramClick(program)">{{program.name}}</a></td>
-                                    <td class="vert-align">{{program.description}}</td>
-                                    <td class="vert-align">
-                                        <bk-form-tag-input [tags_without_form]="program.tags" [readonly]="true"></bk-form-tag-input>
-                                    </td>
+                            <tr *ngFor="let block of blocks.content">
+                                <td class="vert-align no-wrap"><a (click)="onSelectBlockClick(block)">{{block.name}}</a></td>
+                                <td class="vert-align">{{block.description}}</td>
+                                <td class="vert-align">
+                                    <bk-form-tag-input [tags_without_form]="block.tags" [readonly]="true"></bk-form-tag-input>
+                                </td>
 
-                                    <td class="action-btn-col">
+                                <td class="action-btn-col">
 
-                                        <bk-drob-down-button
-                                            [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
-                                            [btns]="[
+                                    <bk-drob-down-button
+                                        [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                        [btns]="[
                                             {
                                                 condition: true,
                                                 btn_label_for_person: ('label_select_code'|bkTranslate:this),
-                                                btn_tag: 'label_select_code',
+                                                btn_tag: 'label_select_block',
                                                 icon: 'fa-check',
                                                 colorType: 'CREATE',
                                                 permission: true
                                             }
                                         ]"
-                                            (onValueChanged)="onDrobDownEmiter($event, program)"
-                                        >
-                                        </bk-drob-down-button>
+                                        (onValueChanged)="onDrobDownEmiter($event, block)"
+                                    >
+                                    </bk-drob-down-button>
 
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
-                        <bk-filter-page-component [from]="programs.from" [to]="programs.to"
-                                                  [total]="programs.total" [totalPages]="programs.pages"
+                        <bk-filter-page-component [from]="blocks.from" [to]="blocks.to"
+                                                  [total]="blocks.total" [totalPages]="blocks.pages"
                                                   (onSelect)="onFilterPrograms($event)"></bk-filter-page-component>
                     </div>
 
                     <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-                    <bk-nothing-to-show [condition_loading]="(programs == null)"
-                                        [condition_empty]="(programs != null && programs.content.length == 0)"
-                                        [main_message_link]="'label_no_code'|bkTranslate:this"
-                                        [main_message_comment_link]="'label_no_code_comment'|bkTranslate:this"
+                    <bk-nothing-to-show [condition_loading]="(blocks == null)"
+                                        [condition_empty]="(blocks != null && blocks.content.length == 0)"
+                                        [main_message_link]="'label_no_blocks'|bkTranslate:this"
+                                        [main_message_comment_link]="'label_no_blocks_comment'|bkTranslate:this"
                                         [show_button]="false">
                     </bk-nothing-to-show>
                     <!-- Temporary page content if content is being loaded or if there is no content -- END -->
                 </div>
 
                 <!-- Select Version -->
-                <div *ngIf="modalModel.selected_c_program">
+                <div *ngIf="modalModel.selectedBlock">
 
                     <div>
                         <button type="button" class="btn default red" (click)="onBack()">
@@ -73,19 +74,21 @@
                     <br>
 
                     <div>
-                        <bk-program-version-selector [programs]="[modalModel.selected_c_program]"
-                                                     [type]="'ICProgram'"
-                                                     [already_selected_program_id]="modalModel.selected_c_program.id"
+                        <bk-program-version-selector [programs]="[modalModel.selectedBlock]"
+                                                     [type]="'IBlock'"
+                                                     [already_selected_program_id]="modalModel.selectedBlock.id"
                                                      (valueChanged)="onValueChanged($event)">
                         </bk-program-version-selector>
                     </div>
                 </div>
+
             </div>
         </div>
         <div *ngIf="errorMessage">
             <span class="font-red bold">{{errorMessage}}</span>
         </div>
     </div>
+
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
         <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>

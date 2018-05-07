@@ -27,6 +27,7 @@ import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
 import { ModalsBlockoAddGridEmptyModel } from '../modals/blocko-add-grid-emtpy';
 import { ModalsSelectVersionModel } from '../modals/version-select';
 import {ModalsSelectGridProjectModel} from "../modals/grid-project-select";
+import {ModalsSelectBlockModel} from "../modals/block-select";
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -233,8 +234,30 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         return (Object.keys(obj).length === 0);
     }
 
+    // BLOCK -----------------------------------------------------------------------------------------------------------
+
+    onAddBlockInterfaceClick() {
+        let model = new ModalsSelectBlockModel(this.projectId);
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+
+            })
+            .catch((err) => {
+
+            });
+    }
+
+    blockRemove() {
+
+    }
+
+    blockChangeVersion() {
+
+    }
+
     // GRID ------------------------------------------------------------------------------------------------------------
-    // Call Modal - Select Grid Project and ADD to Blocko Program
+
     onAddGridInterfaceClick() {
         let model = new ModalsSelectGridProjectModel(this.projectId);
         this.modalService.showModal(model)
@@ -251,7 +274,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         delete this.selectedGridProgramVersions[gridProject.id];
     }
 
-    gridSelectedProgramVersionIdChange(projectId: string, programId: string) {
+    gridProjectChangeVersion(projectId: string, programId: string) {
        // this.selectedGridProgramVersions[projectId][programId] = programVersionId;
     }
 
@@ -263,7 +286,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         this.modalService.showModal(model)
             .then((success) => {
                 // TODO Doplnit do BLOCKA
-                let c_program_version_id: string = model.selectedCProgramVersionId;
+                let c_program_version_id: string = model.selectedCProgramVersion.id;
             })
             .catch((err) => {
 
