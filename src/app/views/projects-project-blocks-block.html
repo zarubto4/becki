@@ -281,7 +281,7 @@
                                     [btns_group_name]="('label_settings'|bkTranslate:this)"
                                     [btns]="[
                                         {
-                                            condition: (project != null && version.approval_state == null),
+                                            condition: (projectId != null && version.approval_state == null),
                                             btn_label_for_person: ('label_publish'|bkTranslate:this),
                                             btn_tag: 'version_publish_community',
                                             icon: 'fa-heart',

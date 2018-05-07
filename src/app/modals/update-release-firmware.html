@@ -44,8 +44,10 @@
                                     <span class="bold">{{type_of_board.name}}</span>
                                     <div *ngIf="cPrograms[type_of_board.id] != null && cPrograms[type_of_board.id].content.length > 0">
 
-                                    <bk-c-program-version-selector (valueChanged)="hwCProgramVersionChanged(type_of_board.id, $event)" [align_horizontal]="false"
-                                                                   [cPrograms]="cPrograms[type_of_board.id].content"></bk-c-program-version-selector>
+                                    <bk-program-version-selector (valueChanged)="hwCProgramVersionChanged(type_of_board.id, $event)"
+                                                                 [type]="'ICProgram'"
+                                                                 [align_horizontal]="false"
+                                                                 [programs]="cPrograms[type_of_board.id].content"></bk-program-version-selector>
                                     </div>
                                     <div *ngIf="cPrograms[type_of_board.id] == null">
                                         <!-- Not yet load -->

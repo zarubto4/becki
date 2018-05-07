@@ -1,4 +1,5 @@
 import {ModalsWidgetsWidgetCopyComponent} from "../modals/widgets-widget-copy";
+import {ModalsGridProjectSelectComponent} from "../modals/grid-project-select";
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
@@ -1230,6 +1231,20 @@ export class StaticTranslation {
             }, 'ModalsCodeSelectComponent': {
 
                 'title': 'Select <strong class="font-color-code">CODE</strong>',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Action',
+                'label_select_code': 'Select',
+
+            }, 'ModalsGridProjectSelectComponent': {
+
+                'title': 'Select <strong class="font-color-grid">GRID</strong> Project',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_program': 'Program',
+                'table_version': 'Version',
+                'table_actions': 'Action',
+                'label_select_project': 'Select',
 
             }, 'ProjectsProjectHardwareComponent': {
 
@@ -2043,8 +2058,8 @@ export class StaticTranslation {
                 'modal_text_no_yoda': 'No available devices.',
 
                 'label_main_c_program_version_set_as_main': 'Set this version as Main',
-                'version_publish_make': 'Make it Public',
-                'label_publish': 'Publication Decision',
+                'label_publish': 'Make it Public',
+                'label_publish_decision': 'Publication Decision',
 
                 'flash_update_success': 'Deployed successfully',
                 'flash_cant_upload_code': 'Deployment failed.',

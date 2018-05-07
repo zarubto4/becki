@@ -468,34 +468,24 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     }
 
     onManualIndividualUpdate(): void {
-        this.blockUI();
-        this.tyrionBackendService.cProgramGetListByFilter(0, {
-            project_id: this.projectId,
-            hardware_type_ids: [this.hardwareType.id]
-        }).then( (list: ICProgramList) => {
-            this.unblockUI();
-            let mConfirm = new ModalsSelectCodeModel(list.content);
-            this.modalService.showModal(mConfirm)
-                .then((success) => {
-                    if (success) {
-                        this.blockUI();
-                        this.tyrionBackendService.cProgramUploadIntoHardware({
-                            hardware_ids: [this.hardware.id],
-                            c_program_version_id: mConfirm.selectedVersionId
+        let model = new ModalsSelectCodeModel(this.projectId, this.hardwareType.id);
+        this.modalService.showModal(model)
+            .then((success) => {
+                if (success) {
+
+                    this.tyrionBackendService.cProgramUploadIntoHardware({
+                        hardware_ids: [this.hardware.id],
+                        c_program_version_id: model.selectedCProgramVersionId
+                    })
+                        .then(() => {
+                            this.refresh();
                         })
-                            .then(() => {
-                                this.refresh();
-                            })
-                            .catch((reason) => {
-                                this.fmError(this.translate('flash_cant_update_bootloader', reason));
-                                this.unblockUI();
-                            });
-                    }
-                });
-
-        });
-
-
+                        .catch((reason) => {
+                            this.fmError(this.translate('flash_cant_update_bootloader', reason));
+                            this.unblockUI();
+                        });
+                }
+            });
     }
 
     /* tslint:disable:max-line-length ter-indent */

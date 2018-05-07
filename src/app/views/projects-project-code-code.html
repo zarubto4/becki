@@ -173,8 +173,8 @@
                                         permission: (version.update_permission)
                                     },
                                     {
-                                        condition: codeProgram.publish_type == 'PRIVATE' && !version.approval_state,
-                                        btn_label_for_person: ('version_publish_make'|bkTranslate:this),
+                                        condition: (projectId != null && version.approval_state == null),
+                                        btn_label_for_person: ('label_publish'|bkTranslate:this),
                                         btn_tag: 'version_properties_community',
                                         icon: 'fa-heart',
                                         colorType: 'UPDATE',
@@ -182,7 +182,7 @@
                                     },
                                     {
                                         condition: version.approval_state == 'PENDING' && version.community_publishing_permission,
-                                        btn_label_for_person: ('version_publish'|bkTranslate:this),
+                                        btn_label_for_person: ('label_publish_decision'|bkTranslate:this),
                                         btn_tag: 'version_publish',
                                         icon: 'fa-heart',
                                         colorType: 'UPDATE',

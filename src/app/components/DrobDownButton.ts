@@ -10,7 +10,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
     /* tslint:disable */
     template: `
 
-        <div *ngIf="btns && getConditionSize() > 0" style="z-index: 5000;  overflow: visible"
+        <div *ngIf="btns && getConditionSize() > 1" style="z-index: 5000;  overflow: visible"
              class="btn-group"
              [class.open]="drob_down_clicked"
              [class.color-hardware]="group_color === 'HARDWARE'"
@@ -69,6 +69,38 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
                 </li>
             </ul>
         </div>
+
+        <div *ngIf="btns && getConditionSize() == 1" style="z-index: 5000;  overflow: visible">
+            
+            <!-- Only if not a external link link !-->
+            <button *ngIf="!btns[0].btn_space && !btns[0].btn_link" class="btn btn-sm"
+                    [class.red-sunglo]="btns[0].colorType =='REMOVE'"
+                    [class.yellow-crusta]="btns[0].colorType=='EDIT' || btns[0].colorType =='UPDATE'"
+                    [class.blue-madison]="btns[0].colorType =='ACTIVE'"
+                    [class.purple-plum]="btns[0].colorType =='DEACTIVE'"
+                    [class.blue]="btns[0].colorType =='ADD' || btns[0].colorType =='CREATE'"
+                    [class.grey-cascade]="btns[0].colorType == '' || btns[0].colorType == null"
+                    (click)="onButtonClick(btns[0].btn_tag)">
+                <i class="fa {{btns[0].icon}}"></i> {{btns[0].btn_label_for_person}}
+            </button>
+
+            <!-- Only if its a external link - Stupid but easy to write !-->
+            <a *ngIf="!btns[0].btn_space && btns[0].btn_link" 
+               href="{{btns[0].btn_link}}" target="_blank"
+               [class.hidden]="btns[0].condition == false || btns[0].permission == false">
+                <button *ngIf="btns[0].icon"
+                   class="fa {{btns[0].icon}}"
+                   [class.font-red-sunglo]="btns[0].colorType=='REMOVE'"
+                   [class.font-yellow-crusta]="btns[0].colorType=='EDIT' || btns[0].colorType=='UPDATE'"
+                   [class.font-blue-madison]="btns[0].colorType=='ACTIVE'"
+                   [class.font-purple-plum]="btns[0].colorType=='DEACTIVE'"
+                   [class.font-blue]="btns[0].colorType=='ADD' || btns[0].colorType=='CREATE'"
+                   [class.font-grey-cascade]="btns[0].colorType == '' || btns[0].colorType == null"
+                ></button> {{btns[0].btn_label_for_person}}
+            </a>
+            <!-- Only if its a external link - Stupid but easy to write !-->
+        </div>
+
 `
 /* tslint:enable */
 })

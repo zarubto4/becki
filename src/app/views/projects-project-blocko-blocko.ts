@@ -26,6 +26,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
 import { ModalsBlockoAddGridEmptyModel } from '../modals/blocko-add-grid-emtpy';
 import { ModalsSelectVersionModel } from '../modals/version-select';
+import {ModalsSelectGridProjectModel} from "../modals/grid-project-select";
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -35,7 +36,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     unsavedChanges: boolean = false;
 
-    projectId: string;
+    projectId: string; // genral project, not Grid
     blockoId: string;
 
     routeParamsSubscription: Subscription;
@@ -44,11 +45,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     blockoProgram: IBProgram = null;
 
     advancedMode: boolean = false;
-
-    // blocko blocks:
-    blocks: IBlock[] = null;
-    blockGroupsOpenToggle: { [id: string]: boolean } = {};
-    codePrograms: ICProgram[] = [];
 
     blocksLastVersions: { [id: string]: IBlockVersion } = {};
     blocksColors: { [id: string]: string } = {};
@@ -177,56 +173,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         this.exitConfirmationService.setConfirmationEnabled(false);
     };
 
-    onToggleTab(tab: string) {
-        this.tab = tab;
-    }
-
-    onPortletClick(action: string): void {
-        if (action === 'edit_program') {
-            this.onEditClick();
-        }
-
-        if (action === 'remove_program') {
-            this.onRemoveClick();
-        }
-    }
-
-
-    onRemoveClick(): void {
-        this.modalService.showModal(new ModalsRemovalModel(this.blockoProgram.name)).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.bProgramDelete(this.blockoProgram.id)
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
-                        this.router.navigate(['/projects/' + this.projectId + '/blocko']);
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_blocko'), reason));
-                        this.refresh();
-                    });
-            }
-        });
-    }
-
-    onEditClick(): void {
-        let model = new ModalsBlockoPropertiesModel(this.projectId, this.blockoProgram.name, this.blockoProgram.description, true, this.blockoProgram.name);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.bProgramEdit(this.blockoProgram.id, { name: model.name, description: model.description })
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_updated')));
-                        this.refresh();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_blocko'), reason));
-                        this.refresh();
-                    });
-            }
-        });
-    }
-
+    // ng***
     ngOnInit(): void {
         this.unsavedChanges = false;
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -234,32 +181,34 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             this.blockoId = params['blocko'];
             if (params['version']) {
                 this.router.navigate(['/projects', this.projectId, 'blocko', this.blockoId]);
-                this.selectVersionByVersionId(params['version']);
+                this.selectBProgramVersionByVersionId(params['version']);
             }
         });
         this.refresh();
         this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
     }
-
-    selectVersionByVersionId(versionId: string) {
-        if (this.blockoProgramVersions) {
-            let version = null;
-            if (versionId) {
-                version = this.blockoProgramVersions.find((bpv) => bpv.id === versionId);
-            }
-
-            if (version) {
-                this.selectProgramVersion(version);
-            }
-        } else {
-            this.afterLoadSelectedVersionId = versionId;
-        }
-    }
-
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
+    // TOGGLE TAB & PORTLET BUTTONS
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
+
+    onPortletClick(action: string): void {
+        if (action === 'edit_program') {
+            this.onBlockoProgramEditClick();
+        }
+
+        if (action === 'remove_program') {
+            this.onBlockoProgramRemoveClick();
+        }
+    }
+
+    // Basic OPERATION ON BLOCKO PROGRAM
+
+    // Clean Console
     onClearConsoleClick() {
         if (this.consoleLog) {
             this.consoleLog.clear();
@@ -280,296 +229,21 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         }
     }
 
-    onToggleGroup(groupId: string) {
-        this.blockGroupsOpenToggle[groupId] = !this.blockGroupsOpenToggle[groupId];
-    }
-
-    onDragStop(params: DraggableEventParams) {
-
-        console.info('onDragStop: ', params);
-
-        let dragOffset = params.ui.offset;
-        let blockoOffset = $(this.blockoView.field.nativeElement).offset();
-        let blockoWidth = $(this.blockoView.field.nativeElement).width();
-        let blockoHeight = $(this.blockoView.field.nativeElement).height();
-
-        // let blockoOffset = $(this.blocko.field.nativeElement).width();
-        if (dragOffset.top >= blockoOffset.top && dragOffset.left >= blockoOffset.left && dragOffset.top <= (blockoOffset.top + blockoHeight) && dragOffset.left <= (blockoOffset.left + blockoWidth)) {
-
-            let x = dragOffset.left - blockoOffset.left;
-            let y = dragOffset.top - blockoOffset.top;
-
-            switch (params.type) {
-                case 'block': {
-                    if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
-
-                        let wantedVersion = this.blocksLastVersions[params.data.id];
-                        let wantedVersionName = params.data.id + '_' + wantedVersion.id;
-
-                        if (this.blocksCache[wantedVersionName]) {
-                            this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
-                        } else {
-
-                            // TODO: make only one request
-                            this.tyrionBackendService.blockVersionGet(wantedVersion.id)
-                                .then((bbv) => {
-                                    this.blocksCache[wantedVersionName] = bbv;
-                                    this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
-                                })
-                                .catch(reason => {
-                                    this.fmError(this.translate('flash_cant_load_blocko_version'), reason);
-                                });
-                        }
-
-                    } else if (params.data && params.data.blockoName) {
-
-                        this.blockoView.addStaticBlock(params.data.blockoName, x, y);
-
-                    } else if (params.data && params.data.blockoTsCode) {
-
-                        this.blockoView.addTsBlock(params.data.blockoTsCode, params.data.blockoDesignJson, x, y);
-
-                    } else {
-                        this.fmError(this.translate('flash_cant_add_blocko_block'));
-                    }
-                    break;
-                }
-                case 'code': {
-
-                    let code = this.codePrograms.find((cp) => {
-                        return cp.id === params.data.id;
-                    });
-
-                    if (code) {
-                        let m = new ModalsSelectVersionModel(code.program_versions);
-                        this.modalService.showModal(m)
-                            .then((success: boolean) => {
-                                if (success && m.selectedId) {
-                                    let cpv = this.getCProgramVersionById(m.selectedId);
-                                    if (cpv && cpv.virtual_input_output) {
-                                        let interfaceData = JSON.parse(cpv.virtual_input_output);
-                                        if (interfaceData) {
-                                            this.blockoView.addInterface({
-                                                'color': '#30f485',
-                                                'interfaceId': cpv.id,
-                                                'displayName': cpv.id,
-                                                'pos_x': Math.round(x / 22) * 22,
-                                                'pos_y': Math.round(y / 22) * 22,
-                                                'interface': interfaceData
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                    }
-
-                    break;
-                }
-
-                case 'grid': {
-
-                    let project = this.allGridProjects.find( function(gp) {
-                        console.info('ID: ', gp.id);
-                        return gp.id === params.data.id;
-                    });
-
-                    let out: any = {
-                        analogInputs: {},
-                        digitalInputs: {},
-                        messageInputs: {},
-                        analogOutputs: {},
-                        digitalOutputs: {},
-                        messageOutputs: {},
-                    };
-
-                    if (project.m_programs) {
-                        project.m_programs.forEach((p) => {
-
-                            console.info('onDragStop   project.m_programs.forEach: ');
-                            console.info('onDragStop   p.program_versions:: ', (p.program_versions.length > 0));
-                            console.info('onDragStop   Project ID:: ', project.id);
-                            console.info('onDragStop   Program ID:: ', this.selectedGridProgramVersions[project.id]);
-                            console.info('onDragStop   Program ID:: ', p.id);
-                            console.info('onDragStop   version ID:: ', this.selectedGridProgramVersions[project.id][p.id]);
-
-                            if (p.program_versions && this.selectedGridProgramVersions[project.id] && (this.selectedGridProgramVersions[project.id][p.id])) {
-                                console.info('   if: 3');
-                                let programVersion = p.program_versions.find((pv) => (pv.id === this.selectedGridProgramVersions[project.id][p.id]));
-                                console.info('   Selected Program Version:', programVersion);
-                                if (programVersion) {
-
-                                    let iface: any = {};
-                                    try {
-                                        iface = JSON.parse(programVersion.m_program_virtual_input_output);
-                                    } catch (e) {
-                                        console.error(e);
-                                    }
-
-                                    if (iface.analogInputs) {
-                                        for (let k in iface.analogInputs) {
-                                            if (!iface.analogInputs.hasOwnProperty(k)) { continue; }
-                                            if (!out.analogInputs[k]) {
-                                                out.analogInputs[k] = iface.analogInputs[k];
-                                            }
-                                        }
-                                    }
-
-                                    if (iface.digitalInputs) {
-                                        for (let k in iface.digitalInputs) {
-                                            if (!iface.digitalInputs.hasOwnProperty(k)) { continue; }
-                                            if (!out.digitalInputs[k]) {
-                                                out.digitalInputs[k] = iface.digitalInputs[k];
-                                            }
-                                        }
-                                    }
-
-                                    if (iface.messageInputs) {
-                                        for (let k in iface.messageInputs) {
-                                            if (!iface.messageInputs.hasOwnProperty(k)) { continue; }
-                                            if (!out.messageInputs[k]) {
-                                                out.messageInputs[k] = iface.messageInputs[k];
-                                            }
-                                        }
-                                    }
-
-                                    if (iface.analogOutputs) {
-                                        for (let k in iface.analogOutputs) {
-                                            if (!iface.analogOutputs.hasOwnProperty(k)) { continue; }
-                                            if (!out.analogOutputs[k]) {
-                                                out.analogOutputs[k] = iface.analogOutputs[k];
-                                            }
-                                        }
-                                    }
-
-                                    if (iface.digitalOutputs) {
-                                        for (let k in iface.digitalOutputs) {
-                                            if (!iface.digitalOutputs.hasOwnProperty(k)) { continue; }
-                                            if (!out.digitalOutputs[k]) {
-                                                out.digitalOutputs[k] = iface.digitalOutputs[k];
-                                            }
-                                        }
-                                    }
-
-                                    if (iface.messageOutputs) {
-                                        for (let k in iface.messageOutputs) {
-                                            if (!iface.messageOutputs.hasOwnProperty(k)) { continue; }
-                                            if (!out.messageOutputs[k]) {
-                                                out.messageOutputs[k] = iface.messageOutputs[k];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    if (
-                        Object.keys(out.analogInputs).length ||
-                        Object.keys(out.digitalInputs).length ||
-                        Object.keys(out.messageInputs).length ||
-                        Object.keys(out.analogOutputs).length ||
-                        Object.keys(out.digitalOutputs).length ||
-                        Object.keys(out.messageOutputs).length
-                    ) {
-                        this.blockoView.addInterface({
-                            // 'targetType': 'grid_project',
-                            'color': '#9966ff',  // change color [TZ]
-                            'interfaceId': project.id,
-                            'grid': true,
-                            'displayName': project.name,
-                            'pos_x': Math.round(x / 22) * 22,
-                            'pos_y': Math.round(y / 22) * 22,
-                            'interface': out
-                        });
-                    }
-
-                    break;
-                }
-
-                default: this.fmError(this.translate('flash_cant_add_blocko_block'));
-            }
-        }
-    }
-
-    onDragStart(params: DraggableEventParams) {
-
-        console.info('onDragStart:', params);
-
-        if (params.type === 'code') {
-            // prefetch
-            if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
-                let wantedVersion = this.blocksLastVersions[params.data.id];
-                let wantedVersionName = params.data.id + '_' + wantedVersion.id;
-                if (!this.blocksCache[wantedVersionName]) {
-                    this.tyrionBackendService.blockVersionGet(wantedVersion.id)
-                        .then((bbv) => {
-                            this.blocksCache[wantedVersionName] = bbv;
-                        })
-                        .catch(reason => {
-                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_block'), reason));
-                        });
-                }
-            }
-        }
-
-        if (params.type === 'grid') {
-
-            console.info('onDragStart: Grid ID', params.data.id );
-
-            let project = this.allGridProjects.find( function(gp) {
-                console.info('onDragStart:ID: ', gp.id);
-                return gp.id === params.data.id;
-            });
-
-            console.info('onDragStart:Project: ', project);
-
-            project.m_programs.forEach((mp) => {
-                console.info('onDragStart:Program: ', mp);
-                this.selectedGridProgramVersions[project.id] = {};
-                this.selectedGridProgramVersions[project.id][mp.id] = mp.program_versions[0].id;
-                console.info('onDragStart:Version: ',  this.selectedGridProgramVersions[project.id][mp.id]);
-            });
-
-        }
-
-        console.info('this.selectedGridProgramVersions:', this.selectedGridProgramVersions);
-
-    }
-
     isEmptyObject(obj: any): boolean {
         return (Object.keys(obj).length === 0);
     }
 
-    gridAdd() {
-        if (!this.allGridProjects) {
-            return;
-        }
-
-        let projects = this.allGridProjects.filter((gp) => !this.selectedGridProgramVersions[gp.id]);
-
-        if (!projects.length) {
-            let m = new ModalsBlockoAddGridEmptyModel();
-            this.modalService.showModal(m)
-                .then((success) => {
-                    if (success) {
-                        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid']);
-                        return;
-                    }
-                });
-            return;
-        }
-
-        let m = new ModalsBlockoAddGridModel(projects);
-        this.modalService.showModal(m)
+    // GRID ------------------------------------------------------------------------------------------------------------
+    // Call Modal - Select Grid Project and ADD to Blocko Program
+    onAddGridInterfaceClick() {
+        let model = new ModalsSelectGridProjectModel(this.projectId);
+        this.modalService.showModal(model)
             .then((success) => {
-                if (success && m.selectedGridProject) {
-                    this.selectedGridProgramVersions[m.selectedGridProject.id] = {};
-                    /*if (m.selectedGridProject.m_programs) {
-                     m.selectedGridProject.m_programs.forEach((mp)=>{
-                     this.selectedGridProgramVersions[m.selectedGridProject.id][mp.id] = null;
-                     });
-                     }*/
-                }
+                // TODO Doplnit do BLOCKA
+
+            })
+            .catch((err) => {
+
             });
     }
 
@@ -577,37 +251,131 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         delete this.selectedGridProgramVersions[gridProject.id];
     }
 
-    gridSelectedProgramVersionIdChange(projectId: string, programId: string, programVersionId: string) {
-        this.selectedGridProgramVersions[projectId][programId] = programVersionId;
+    gridSelectedProgramVersionIdChange(projectId: string, programId: string) {
+       // this.selectedGridProgramVersions[projectId][programId] = programVersionId;
     }
 
-    getCProgramVersionById(programVersionId: string): ICProgramVersion {
-        let ret: ICProgramVersion = null;
 
-        this.codePrograms.find((cp: ICProgram) => {
-            ret = cp.program_versions.find((cpv: ICProgramVersion) => {
-                return cpv.id === programVersionId;
+    // CODE ------------------------------------------------------------------------------------------------------------
+
+    onAddCodeInterfaceClick() {
+        let model = new ModalsSelectCodeModel(this.projectId);
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+                let c_program_version_id: string = model.selectedCProgramVersionId;
+            })
+            .catch((err) => {
+
             });
-            return !!ret;
-        });
+    }
 
+    // Change Selected CProgram Version to another version and change that in Blocko Program
+    onChangeCProgramVersion(c_program_id: string) {
+
+        let ret: ICProgramVersion = null;
         return ret;
+
     }
 
-    onProgramVersionClick(programVersion: IBProgramVersion): void {
-        this.selectProgramVersion(programVersion);
+
+    // BLOCKO ----------------------------------------------------------------------------------------------------------
+
+
+    onBlockoProgramRemoveClick(): void {
+        this.modalService.showModal(new ModalsRemovalModel(this.blockoProgram.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.bProgramDelete(this.blockoProgram.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
+                        this.router.navigate(['/projects/' + this.projectId + '/blocko']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_blocko'), reason));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
-    onProgramVersionIdClick(programVersionId: string): void {
-        let programVersion = this.blockoProgramVersions.find((pv) => pv.id === programVersionId);
-        if (programVersion) {
-            this.selectProgramVersion(programVersion);
+    onBlockoProgramEditClick(): void {
+        let model = new ModalsBlockoPropertiesModel(this.projectId, this.blockoProgram.name, this.blockoProgram.description, true, this.blockoProgram.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.bProgramEdit(this.blockoProgram.id, { name: model.name, description: model.description })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_updated')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_blocko'), reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    // BLOCKO - VERSION OPERATIONS -------------------------------------------------------------------------------------
+
+    selectBProgramVersionByVersionId(versionId: string) {
+        // Select B_Program Version by ID if it is in URL parameter (or select last one)
+        if (this.blockoProgramVersions) {
+            let version = null;
+            if (versionId) {
+                version = this.blockoProgramVersions.find((bpv) => bpv.id === versionId);
+            }
+
+            if (version) {
+                this.selectBProgramVersion(version);
+            }
         } else {
-            this.fmError(this.translate('flash_cant_find_program_version'));
+            this.afterLoadSelectedVersionId = versionId;
         }
     }
 
-    onRemoveVersionClick(version: IBProgramVersion): void {
+    selectBProgramVersion(programVersion: IBProgramVersion): void {
+
+        if (!this.blockoProgramVersions) {
+            return;
+        }
+        if (this.blockoProgramVersions.indexOf(programVersion) === -1) {
+            return;
+        }
+
+        this.blockUI();
+        this.tyrionBackendService.bProgramVersionGet(programVersion.id)
+            .then((programVersionFull) => {
+
+                this.unsavedChanges = false;
+                this.exitConfirmationService.setConfirmationEnabled(false);
+
+                this.selectedProgramVersion = programVersionFull;
+                this.selectedGridProgramVersions = {};
+
+                programVersionFull.grid_project_snapshots.forEach((pps) => {
+                    this.selectedGridProgramVersions[pps.grid_project.id] = {};
+                    if (pps.grid_programs) {
+                        pps.grid_programs.forEach((ps) => {
+                            this.selectedGridProgramVersions[pps.grid_project.id][ps.id] = ps.grid_program_version.id;
+                        });
+                    }
+                });
+
+                this.blockoView.setDataJson(this.selectedProgramVersion.program);
+                if (this.consoleLog) {
+                    this.consoleLog.clear();
+                }
+                this.unblockUI();
+            })
+            .catch((err) => {
+                this.unblockUI();
+                this.fmError(this.translate('flash_cant_load_version', programVersion.name, err));
+            });
+    }
+
+    onRemoveBProgramVersionClick(version: IBProgramVersion): void {
         this.modalService.showModal(new ModalsRemovalModel(version.id)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -624,12 +392,12 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         });
     }
 
-    onEditVersionClick(version: IBProgramVersion): void {
+    onEditBProgramVersionClick(version: IBProgramVersion): void {
         let model = new ModalsVersionDialogModel(version.name, version.description, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.bProgramVersionEdit(version.id, { // TODO [permission]: version.update_permission (Project.update_permission)
+                this.tyrionBackendService.bProgramVersionEdit(version.id, {
                     name: model.name,
                     description: model.description
                 }).then(() => {
@@ -643,7 +411,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         });
     }
 
-    onClearClick(): void {
+
+    // EDITOR OPERATIONS -----------------------------------------------------------------------------------------------
+
+    onClearIDEClick(): void {
         let m = new ModalsConfirmModel(this.translate('label_modal_clear_program'), this.translate('label_modal_confirm_clear_blocko_program'));
         this.modalService.showModal(m)
             .then((success) => {
@@ -738,97 +509,11 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     }
 
-    selectProgramVersion(programVersion: IBProgramVersion): void {
-
-        if (!this.blockoProgramVersions) {
-            return;
-        }
-        if (this.blockoProgramVersions.indexOf(programVersion) === -1) {
-            return;
-        }
-
-        this.blockUI();
-        this.tyrionBackendService.bProgramVersionGet(programVersion.id)
-            .then((programVersionFull) => {
-
-                this.unsavedChanges = false;
-                this.exitConfirmationService.setConfirmationEnabled(false);
-
-                this.selectedProgramVersion = programVersionFull;
-                this.selectedGridProgramVersions = {};
-
-                programVersionFull.grid_project_snapshots.forEach((pps) => {
-                    this.selectedGridProgramVersions[pps.grid_project.id] = {};
-                    if (pps.grid_programs) {
-                        pps.grid_programs.forEach((ps) => {
-                            this.selectedGridProgramVersions[pps.grid_project.id][ps.id] = ps.grid_program_version.id;
-                        });
-                    }
-                });
-
-                this.blockoView.setDataJson(this.selectedProgramVersion.program);
-                if (this.consoleLog) {
-                    this.consoleLog.clear();
-                }
-                this.unblockUI();
-            })
-            .catch((err) => {
-                this.unblockUI();
-                this.fmError(this.translate('flash_cant_load_version', programVersion.name, err));
-            });
-
-    }
-
     refresh(): void {
-
         this.blockUI();
 
-        Promise.all<any>([
-            this.tyrionBackendService.blockGetByFilter(0, {
-                project_id: this.projectId
-            }),
-            this.tyrionBackendService.cProgramGetListByFilter(0, {
-                project_id: this.projectId
-            }),
-            this.tyrionBackendService.gridProjectGetByFilter(0, {
-                project_id: this.projectId
-            })
-        ]).then((values: [IBlockList, ICProgramList, IGridProjectList]) => {
-            let blocks: IBlockList = values[0];
-            let cPrograms: ICProgramList = values[1];
-            let gridProjects: IGridProjectList = values[2];
-
-            this.blocksLastVersions = {};
-            this.blocksColors = {};
-            this.blocksIcons = {};
-
-            blocks.content.forEach((b: IBlock) => {
-                if (b.versions.length) {
-                    this.blocksLastVersions[b.id] = b.versions[0];
-                    if (this.blocksLastVersions[b.id]) {
-                        let version = this.blocksLastVersions[b.id];
-                        try {
-                            let dj = JSON.parse(version.design_json);
-                            if (dj['backgroundColor']) {
-                                this.blocksColors[b.id] = dj['backgroundColor'];
-                            }
-                            if (dj['displayName'] && dj['displayName'].indexOf('fa-') === 0) {
-                                this.blocksIcons[b.id] = dj['displayName'];
-                            }
-                        } catch (e) {
-                            console.error('DesignJson parse error:' + e);
-                        }
-                    }
-                }
-            });
-
-            this.blocks = blocks.content;
-
-            this.allGridProjects = gridProjects.content;
-            this.codePrograms = cPrograms.content;
-
-            return this.tyrionBackendService.bProgramGet(this.blockoId); // TODO [permission]: Project.read_permission
-        }).then((blockoProgram) => {
+        this.tyrionBackendService.bProgramGet(this.blockoId)
+        .then((blockoProgram) => {
             this.blockoProgram = blockoProgram;
 
             this.blockoProgramVersions = this.blockoProgram.program_versions || [];
@@ -839,9 +524,9 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             }
 
             if (version) {
-                this.selectProgramVersion(version);
+                this.selectBProgramVersion(version);
             } else if (this.blockoProgramVersions.length) {
-                this.selectProgramVersion(this.blockoProgramVersions[0]);
+                this.selectBProgramVersion(this.blockoProgramVersions[0]);
             }
             this.unblockUI();
         }).catch(reason => {
@@ -861,11 +546,11 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     onDrobDownEmiter(action: string, version: IBProgramVersion): void {
         if (action === 'edit_version_properties') {
-            this.onEditVersionClick(version);
+            this.onEditBProgramVersionClick(version);
         }
 
         if (action === 'remove_version') {
-            this.onRemoveVersionClick(version);
+            this.onRemoveBProgramVersionClick(version);
         }
     }
 }
