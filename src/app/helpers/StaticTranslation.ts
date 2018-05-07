@@ -1920,8 +1920,8 @@ export class StaticTranslation {
             }, 'ProjectsProjectBlockoComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - ALL PROGRAMS',
 
-                'label_blocko_remove': 'Remove BLOCKO program',
-                'label_blocko_program_properties': 'BLOCKO program properties',
+                'label_blocko_remove': 'Remove Program',
+                'label_blocko_program_properties': 'Program properties',
                 'label_no_blocko_program': 'No <strong class="font-color-blocko">BLOCKO</strong> programs available.',
                 'label_create_blocko_text': 'Click on the button bellow to create your first a program or use public one.',
                 'table_name': 'Name',

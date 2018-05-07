@@ -19,7 +19,7 @@
                       [btns]="[
                           {
                               condition: !!blockoProgram,
-                              btn_label_for_person: ('label_blocko_program_properities'|bkTranslate:this),
+                              btn_label_for_person: ('label_blocko_program_properties'|bkTranslate:this),
                               icon: 'fa-cog',
                               colorType: 'EDIT',
                               btn_tag: 'edit_program',
@@ -56,99 +56,40 @@
 
     <div class="portlet-body">
 
-        <!-- Testování START !-->
-        <div>
-            <h1>Testovací tlačítka a vyvolávače Modalů</h1>
+        <div [hidden]="!(tab=='ide')">
 
-            <button type="button" class="btn default red" (click)="onClearIDEClick()">
-                <i class="fa fa-trash-o"></i> {{'btn_clear_program'|bkTranslate:this}}
-            </button>
-            <br>
-            <br>
-
-            <button type="button" class="btn default red" (click)="onSetHardwareByInterfaceClick()">
-                <i class="fa fa-trash-o"></i> {{'btn_add_hardware_interface'|bkTranslate:this}}
-            </button>
-            <br>
-
-        </div>
-        <br>
-        <br>
-        <!-- Testování STOP !-->
-
-        <div [hidden]="!(tab=='ide')" class="row">
-                <div class="portlet light bordered">
-                    <div class="portlet-title">
-                        <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-sitemap fa-rotate-270"></i>
-                            {{'tab_blocko'|bkTranslate:this}}
-                        </span>
-                        </div>
-                        <div *ngIf="selectedProgramVersion" class="becki-caption version">
-                            <span
-                                class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}</strong> <span
-                                *ngIf="unsavedChanges" class="changes"></span>                        {{selectedProgramVersion.name}}</span>
-                        </div>
-                    </div>
-
-                    <div>
-
-                        <label class="mt-checkbox mt-checkbox-outline" style="margin-top: 6px; margin-bottom: 6px; float: left;">
-                            <input type="checkbox" [(ngModel)]="advancedMode">
-                            {{'checkbox_advanced_mode'|bkTranslate:this}}
-                            <span></span>
-                        </label>
-
-                        <input class="form-control" type="range" style="float: left; width: 100px; margin: 0 20px;"
-                               [value]="1" (input)="blockoZoomOnChange($event)"
-                               (change)="blockoZoomOnChange($event)" [attr.step]="0.1" [attr.min]="0.3"
-                               [attr.max]="1.2"/>
-
-                        <div class="pull-right">
-                            <button type="button" class="btn default red" (click)="onClearIDEClick()">
-                                <i class="fa fa-trash-o"></i> {{'btn_clear_program'|bkTranslate:this}}
-                            </button>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div style="margin: 10px 0; overflow: hidden;">
-                        <bk-blocko-view [showBlockNames]="advancedMode" [safeRun]="true"
-                                        (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"
-                                        (onChange)="onSomethingChanged()" class="blocko-editor">
-                        </bk-blocko-view>
-                    </div>
-
-                    <div>
-                        <div class="pull-right">
-                            <button type="button" class="btn default green-haze" (click)="onSaveClick()">
-                                <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
-                            </button>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
+            <div class="portlet light">
+                <div class="portlet-body" style="overflow: hidden;">
+                    <bk-blocko-view [showBlockNames]="true" [safeRun]="true"
+                                    (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"
+                                    (onChange)="onSomethingChanged()" class="blocko-editor">
+                    </bk-blocko-view>
                 </div>
-                <div class="clearfix"></div>
+            </div>
 
-                <div class="portlet light bordered">
-                    <div class="portlet-title">
-                        <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-terminal"></i>
-                            {{'label_console'|bkTranslate:this}}
-                        </span>
-                        </div>
-                        <div class="pull-right">
-                            <button type="button" class="btn default red" (click)="onClearConsoleClick()">
-                                <i class="fa fa-trash-o"></i> {{'btn_clear_console'|bkTranslate:this}}
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <bk-console-log maxHeight="400px"></bk-console-log>
-                    </div>
+            <div class="portlet light">
+                <bk-portlet-title
+                    [title_name]="'label_console'|bkTranslate:this"
+                    [icon]="'fa-terminal'"
+                    (onClick)="onPortletClick($event)"
+                    [btns]="[
+                      {
+                          condition: (privatePrograms && privatePrograms.content.length > 0),
+                          btn_label_for_person: ('btn_clear_console'|bkTranslate:this),
+                          icon: 'fa-trash-o',
+                          colorType: 'REMOVE',
+                          btn_tag: 'clean_console',
+                          permission: true
+                      }
+                 ]"
+                >
+                </bk-portlet-title>
+
+                <div class="portlet-body" [hidden]="!show_console">
+                    <bk-console-log maxHeight="400px"></bk-console-log>
                 </div>
+            </div>
+
         </div>
 
         <div [hidden]="!(tab=='versions')">
@@ -160,7 +101,6 @@
                         <th class="">{{'table_name'|bkTranslate:this}}</th>
                         <th class="">{{'table_description'|bkTranslate:this}}</th>
                         <th class="">{{'table_author'|bkTranslate:this}}</th>
-                        <th class="text-center">{{'table_in_cloud'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -179,9 +119,6 @@
                         <td class="vert-align">
                             {{version.author.nick_name}}
                         </td>
-
-                        <th class="vert-align text-center"></th>
-
 
                         <td class="action-btn-col">
 

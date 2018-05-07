@@ -41,8 +41,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     project: IProject = null;
     blockoProgram: IBProgram = null;
 
-    advancedMode: boolean = false;
-
     blocksLastVersions: { [id: string]: IBlockVersion } = {};
     blocksColors: { [id: string]: string } = {};
     blocksIcons: { [id: string]: string } = {};
@@ -72,7 +70,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     protected exitConfirmationService: ExitConfirmationService;
 
-    blockoZoom: number = 1;
+    show_console: boolean = false
+
 
     /* tslint:disable:max-line-length */
     staticBlocks = [
@@ -206,6 +205,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
         if (action === 'remove_program') {
             this.onBlockoProgramRemoveClick();
+        }
+
+        if (action === 'console_clean') {
+            this.onClearConsoleClick();
         }
     }
 
@@ -610,10 +613,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     onSomethingChanged() {
         this.unsavedChanges = true;
         this.exitConfirmationService.setConfirmationEnabled(true);
-    }
-
-    blockoZoomOnChange(e: any) {
-        this.blockoZoom = e.target.value * e.target.value;
     }
 
     onDrobDownEmiter(action: string, version: IBProgramVersion): void {
