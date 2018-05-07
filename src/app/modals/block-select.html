@@ -66,12 +66,13 @@
                 <!-- Select Version -->
                 <div *ngIf="modalModel.selectedBlock">
 
-                    <div>
-                        <button type="button" class="btn default red" (click)="onBack()">
+                    <div *ngIf="modalModel.already_selected_code_for_version_change == null">
+                        <button  type="button" class="btn default red" (click)="onBack()">
                             <i class="fa fa-arrow-left"></i>
                         </button>
+                        <br>
+                        <br>
                     </div>
-                    <br>
 
                     <div>
                         <bk-program-version-selector [programs]="[modalModel.selectedBlock]"

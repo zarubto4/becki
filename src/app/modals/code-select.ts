@@ -19,7 +19,13 @@ export class ModalsSelectCodeModel extends ModalModel {
     public selectedCProgramVersion: ICProgramVersion = null;
     public selected_c_program: ICProgram = null;
 
-    constructor(public project_id: string = null, public hardware_type_id: string = null) {
+    constructor(public project_id: string = null,           // Filter - Parameter
+                public hardware_type_id: string = null,     // Filter - Parameter
+                public already_selected_code_for_version_change: {
+                    c_program_id: string,
+                    c_program_version_id: string
+                } = null
+    ) {
         super();
         this.modalLarge = true;
     }
@@ -59,9 +65,18 @@ export class ModalsCodeSelectComponent implements OnInit {
         }
 
         // Expression has changed after it was checked -  setTimeout is protection
-        setTimeout(() => {
-            this.onFilterPrograms(0);
-        });
+        if(!this.modalModel.already_selected_code_for_version_change) {
+            setTimeout(() => {
+                this.onFilterPrograms(0);
+            });
+        } else {
+            this.tyrionBackendService.cProgramGet(this.modalModel.already_selected_code_for_version_change.c_program_id)
+                .then((program) => {
+                    this.onSelectProgramClick(program);
+                }).catch((err) => {
+                    this.errorMessage = err.message;
+                })
+        }
     }
 
 

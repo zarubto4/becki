@@ -25,7 +25,11 @@ export class ModalsSelectGridProjectModel extends ModalModel {
         version: IGridProgramVersion
     } } = {};
 
-    constructor(public project_id: string = null) {
+    constructor(public project_id: string = null,
+                public already_selected_project_for_version_change: {
+                    grid_project_id: string,
+
+                } = null) {
         super();
         this.modalLarge = true;
     }
@@ -57,6 +61,20 @@ export class ModalsGridProjectSelectComponent implements OnInit {
         setTimeout(() => {
             this.onFilterProjects(0);
         });
+
+        // Expression has changed after it was checked -  setTimeout is protection
+        if(!this.modalModel.already_selected_project_for_version_change) {
+            setTimeout(() => {
+                this.onFilterProjects(0);
+            });
+        } else {
+            this.tyrionBackendService.gridProjectGet(this.modalModel.already_selected_project_for_version_change.grid_project_id)
+                .then((project) => {
+                    this.onSelectProjectClick(project);
+                }).catch((err) => {
+                this.errorMessage = err.message;
+            })
+        }
     }
 
 

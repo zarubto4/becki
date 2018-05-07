@@ -22,7 +22,10 @@ export class ModalsSelectBlockModel extends ModalModel {
     public selectedBlockVersion: IBlockVersion = null;
     public selectedBlock: IBlock = null;
 
-    constructor(public project_id: string = null) {
+    constructor(public project_id: string = null, public already_selected_code_for_version_change: {
+        block_id: string,
+        block_version_id: string
+    } = null) {
         super();
         this.modalLarge = true;
     }
@@ -55,9 +58,18 @@ export class ModalsBlockSelectComponent implements OnInit {
 
     ngOnInit(): void {
         // Expression has changed after it was checked -  setTimeout is protection
-        setTimeout(() => {
-            this.onFilterBlocks(0);
-        });
+        if(!this.modalModel.already_selected_code_for_version_change) {
+            setTimeout(() => {
+                this.onFilterBlocks(0);
+            });
+        } else {
+            this.tyrionBackendService.blockGet(this.modalModel.already_selected_code_for_version_change.block_id)
+                .then((block) => {
+                    this.onSelectBlockClick(block);
+                }).catch((err) => {
+                    this.errorMessage = err.message;
+                })
+        }
     }
 
 

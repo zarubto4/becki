@@ -28,6 +28,7 @@ import { ModalsBlockoAddGridEmptyModel } from '../modals/blocko-add-grid-emtpy';
 import { ModalsSelectVersionModel } from '../modals/version-select';
 import {ModalsSelectGridProjectModel} from "../modals/grid-project-select";
 import {ModalsSelectBlockModel} from "../modals/block-select";
+import {ModalsSelectHardwareModel} from "../modals/select-hardware";
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -55,7 +56,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     // grid:
     allGridProjects: IGridProject[] = [];
-
     selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string } } = {};
 
     // versions:
@@ -248,11 +248,38 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             });
     }
 
+
+    blockChangeVersion(block_id: string, block_version_id: string) {
+        let model = new ModalsSelectBlockModel(this.projectId, {
+            block_id: block_id,
+            block_version_id: block_version_id
+        });
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+
+            })
+            .catch((err) => {
+
+            });
+    }
+
+
     blockRemove() {
 
     }
 
-    blockChangeVersion() {
+    // Hardware ---
+    onSetHardwareByInterfaceClick() {
+        let model = new ModalsSelectHardwareModel(this.projectId, null, false);
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+
+            })
+            .catch((err) => {
+
+            });
 
     }
 
@@ -270,23 +297,35 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             });
     }
 
-    gridRemove(gridProject: IGridProject) {
-        delete this.selectedGridProgramVersions[gridProject.id];
+    gridProjectChangeVersion(grid_project_id: string, program_id: string, program_version_id: string) {
+        let model = new ModalsSelectGridProjectModel(this.projectId, {
+            grid_project_id: grid_project_id
+        });
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+                model.selectedGridProgramVersions;
+            })
+            .catch((err) => {
+
+            });
     }
 
-    gridProjectChangeVersion(projectId: string, programId: string) {
-       // this.selectedGridProgramVersions[projectId][programId] = programVersionId;
+    gridRemove(gridProject: IGridProject) {
+        // TODO
     }
+
+
 
 
     // CODE ------------------------------------------------------------------------------------------------------------
 
     onAddCodeInterfaceClick() {
-        let model = new ModalsSelectCodeModel(this.projectId);
+        let model = new ModalsSelectCodeModel(this.projectId, null, );
         this.modalService.showModal(model)
             .then((success) => {
                 // TODO Doplnit do BLOCKA
-                let c_program_version_id: string = model.selectedCProgramVersion.id;
+                model.selectedCProgramVersion;
             })
             .catch((err) => {
 
@@ -294,11 +333,19 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     // Change Selected CProgram Version to another version and change that in Blocko Program
-    onChangeCProgramVersion(c_program_id: string) {
+    onChangeCProgramVersion(c_program_id: string, c_program_version_id: string) {
+        let model = new ModalsSelectCodeModel(this.projectId, null, {
+            c_program_id: c_program_id,
+            c_program_version_id: c_program_version_id
+        });
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+                model.selectedCProgramVersion;
+            })
+            .catch((err) => {
 
-        let ret: ICProgramVersion = null;
-        return ret;
-
+            });
     }
 
 
