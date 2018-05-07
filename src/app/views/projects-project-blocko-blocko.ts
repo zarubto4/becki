@@ -271,7 +271,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     // Hardware ---
     onSetHardwareByInterfaceClick() {
-        let model = new ModalsSelectHardwareModel(this.projectId, null, false);
+        let model = new ModalsSelectHardwareModel(this.projectId, null, false, true);
         this.modalService.showModal(model)
             .then((success) => {
                 // TODO Doplnit do BLOCKA

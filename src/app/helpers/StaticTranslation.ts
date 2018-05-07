@@ -425,6 +425,15 @@ export class StaticTranslation {
                 'table_hardware_name': 'Alias',
                 'table_actions': 'Actions',
                 'table_status': 'Status',
+                'tab_hardware': 'Hardware',
+                'tab_hardware_group': 'Hardware Groups',
+                'label_add_multiple_hardware_supported': 'Multiple Select Hardware Supported',
+                'label_select_hardware': 'Select',
+                'label_remove_hardware': 'Remove',
+                'table_hardware_group_name': '<strong class="font-color-hardware">HARDWARE</strong> Group',
+                'table_hardware_group_description': 'Description',
+                'label_select_group': 'Select',
+                'label_remove_group': 'Remove',
 
             }, 'ModalsVersionDialogComponent': {
                 'title_edit': 'Edit Version',

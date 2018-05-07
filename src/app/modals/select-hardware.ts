@@ -9,13 +9,15 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { IHardware, IHardwareList, IHardwareType } from '../backend/TyrionAPI';
+import {IHardware, IHardwareGroup, IHardwareGroupList, IHardwareList, IHardwareType} from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs/Rx';
+import {FlashMessageError} from "../services/NotificationService";
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
-    public selected_hardware: IHardware[] = [];
-    constructor(public project_id: string, public hardware_type: IHardwareType = null, multiple_select_support: boolean = true) {
+    public selected_hardware: IHardware[] = null;
+    public selected_hardware_groups: IHardwareGroup[] = null;
+    constructor(public project_id: string, public hardware_type: IHardwareType = null, public multiple_select_support: boolean = true, public support_select_hw_groups = false) {
         super();
         this.modalLarge = true;
     }
@@ -33,8 +35,14 @@ export class ModalsSelectHardwareComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
+    errorMessage: string = null;
+
+    tab: string = 'hardware';
+
     devicesFilter: IHardwareList = null;
-    selectedList: { [id: string]: IHardware } = {};
+    groupFilter: IHardwareGroupList = null;
+    selectedHardwareList: { [id: string]: IHardware } = {};
+    selectedGroupList: { [id: string]: IHardwareGroup } = {};
 
 
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
@@ -47,10 +55,20 @@ export class ModalsSelectHardwareComponent implements OnInit {
         }, 100);
     }
 
+    // TOGGLE TAB & PORTLET BUTTONS
+    onToggleTab(tab: string) {
+        this.tab = tab;
+
+        if(this.tab == 'group' && this.groupFilter == null ) {
+            this.onFilterHardwareGroup();
+        }
+    }
+
     onFilterHardware(pageNumber: number = 0 ): void {
         this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
             projects: [this.modalModel.project_id],
-            hardware_type_ids: [ (this.modalModel.hardware_type != null) ? this.modalModel.hardware_type.id : null]
+            hardware_type_ids: [ (this.modalModel.hardware_type != null) ? this.modalModel.hardware_type.id : null],
+            count_on_page: 10
         })
             .then((values) => {
                 this.devicesFilter = values;
@@ -63,25 +81,76 @@ export class ModalsSelectHardwareComponent implements OnInit {
                 });
             })
             .catch((reason) => {
-
+                this.errorMessage = reason.message;
             });
     }
 
-    onAddToList(hardware: IHardware): void {
-        this.selectedList[hardware.id] = hardware;
+    onFilterHardwareGroup(pageNumber: number = 0): void {
+        this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
+            project_id : this.modalModel.project_id,
+            count_on_page: 10
+        })
+            .then((values) => {
+                this.groupFilter = values;
+            })
+            .catch((reason) => {
+                this.errorMessage = reason.message;
+            });
     }
 
-    onRemoveFromList(hardware: IHardware): void {
-        delete this.selectedList[hardware.id];
+    onHardwareAddToList(hardware: IHardware): void {
+        this.selectedHardwareList[hardware.id] = hardware;
+        if(!this.modalModel.multiple_select_support) {
+            this.onSubmitClick();
+        }
     }
 
+    onGroupAddToList(group: IHardwareGroup): void {
+        this.selectedGroupList[group.id] = group;
+        if(!this.modalModel.multiple_select_support) {
+            this.onSubmitClick();
+        }
+    }
+
+    onHardwareRemoveFromList(hardware: IHardwareGroup): void {
+        console.info('onHardwareRemoveFromList');
+        delete this.selectedHardwareList[hardware.id];
+    }
+
+    onGroupRemoveFromList(group: IHardwareGroup): void {
+        delete this.selectedGroupList[group.id];
+    }
+
+    onDrobDownEmiter(action: string, object: any): void {
+        if (action === 'label_select_hardware') {
+            this.onHardwareAddToList(object);
+        }
+        if (action === 'label_remove_hardware') {
+            this.onHardwareRemoveFromList(object);
+        }
+        if (action === 'label_select_group') {
+            this.onGroupAddToList(object);
+        }
+        if (action === 'label_remove_group') {
+            this.onGroupRemoveFromList(object);
+        }
+    }
 
     onSubmitClick(): void {
-        for (let i in this.selectedList) {
-            if (this.selectedList.hasOwnProperty(i)) {
-                this.modalModel.selected_hardware.push(this.selectedList[i]);
+        for (let i in this.selectedHardwareList) {
+            this.modalModel.selected_hardware = [];
+            if (this.selectedHardwareList.hasOwnProperty(i)) {
+                this.modalModel.selected_hardware.push(this.selectedHardwareList[i]);
             }
         }
+
+        for (let i in this.selectedGroupList) {
+            this.modalModel.selected_hardware_groups = [];
+            if (this.selectedGroupList.hasOwnProperty(i)) {
+                this.modalModel.selected_hardware_groups.push(this.selectedGroupList[i]);
+            }
+        }
+
         this.modalClose.emit(true);
     }
 

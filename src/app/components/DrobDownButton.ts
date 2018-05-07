@@ -70,33 +70,33 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
             </ul>
         </div>
 
-        <div *ngIf="btns && getConditionSize() == 1" style="z-index: 5000;  overflow: visible">
-            
+        <div *ngIf="btns && getConditionSize() == 1"  style="z-index: 5000;  overflow: visible">
+
             <!-- Only if not a external link link !-->
-            <button *ngIf="!btns[0].btn_space && !btns[0].btn_link" class="btn btn-sm"
-                    [class.red-sunglo]="btns[0].colorType =='REMOVE'"
-                    [class.yellow-crusta]="btns[0].colorType=='EDIT' || btns[0].colorType =='UPDATE'"
-                    [class.blue-madison]="btns[0].colorType =='ACTIVE'"
-                    [class.purple-plum]="btns[0].colorType =='DEACTIVE'"
-                    [class.blue]="btns[0].colorType =='ADD' || btns[0].colorType =='CREATE'"
-                    [class.grey-cascade]="btns[0].colorType == '' || btns[0].colorType == null"
-                    (click)="onButtonClick(btns[0].btn_tag)">
-                <i class="fa {{btns[0].icon}}"></i> {{btns[0].btn_label_for_person}}
+            <button *ngIf="!getSingleConditionButton().btn_space && !getSingleConditionButton().btn_link" class="btn btn-sm"
+                    [class.red-sunglo]="getSingleConditionButton().colorType =='REMOVE'"
+                    [class.yellow-crusta]="getSingleConditionButton().colorType=='EDIT' || getSingleConditionButton().colorType =='UPDATE'"
+                    [class.blue-madison]="getSingleConditionButton().colorType =='ACTIVE'"
+                    [class.purple-plum]="getSingleConditionButton().colorType =='DEACTIVE'"
+                    [class.blue]="getSingleConditionButton().colorType =='ADD' || getSingleConditionButton().colorType =='CREATE'"
+                    [class.grey-cascade]="getSingleConditionButton().colorType == '' || getSingleConditionButton().colorType == null"
+                    (click)="onButtonClick(getSingleConditionButton().btn_tag)">
+                <i class="fa {{getSingleConditionButton().icon}}"></i> {{getSingleConditionButton().btn_label_for_person}}
             </button>
 
             <!-- Only if its a external link - Stupid but easy to write !-->
-            <a *ngIf="!btns[0].btn_space && btns[0].btn_link" 
-               href="{{btns[0].btn_link}}" target="_blank"
-               [class.hidden]="btns[0].condition == false || btns[0].permission == false">
-                <button *ngIf="btns[0].icon"
-                   class="fa {{btns[0].icon}}"
-                   [class.font-red-sunglo]="btns[0].colorType=='REMOVE'"
-                   [class.font-yellow-crusta]="btns[0].colorType=='EDIT' || btns[0].colorType=='UPDATE'"
-                   [class.font-blue-madison]="btns[0].colorType=='ACTIVE'"
-                   [class.font-purple-plum]="btns[0].colorType=='DEACTIVE'"
-                   [class.font-blue]="btns[0].colorType=='ADD' || btns[0].colorType=='CREATE'"
-                   [class.font-grey-cascade]="btns[0].colorType == '' || btns[0].colorType == null"
-                ></button> {{btns[0].btn_label_for_person}}
+            <a *ngIf="!getSingleConditionButton().btn_space && getSingleConditionButton().btn_link" 
+               href="{{getSingleConditionButton().btn_link}}" target="_blank"
+               [class.hidden]="getSingleConditionButton().condition == false || getSingleConditionButton().permission == false">
+                <button *ngIf="getSingleConditionButton().icon"
+                   class="fa {{getSingleConditionButton().icon}}"
+                   [class.font-red-sunglo]="getSingleConditionButton().colorType=='REMOVE'"
+                   [class.font-yellow-crusta]="getSingleConditionButton().colorType=='EDIT' || getSingleConditionButton().colorType=='UPDATE'"
+                   [class.font-blue-madison]="getSingleConditionButton().colorType=='ACTIVE'"
+                   [class.font-purple-plum]="getSingleConditionButton().colorType=='DEACTIVE'"
+                   [class.font-blue]="getSingleConditionButton().colorType=='ADD' || getSingleConditionButton().colorType=='CREATE'"
+                   [class.font-grey-cascade]="getSingleConditionButton().colorType == '' || getSingleConditionButton().colorType == null"
+                ></button> {{getSingleConditionButton().btn_label_for_person}}
             </a>
             <!-- Only if its a external link - Stupid but easy to write !-->
         </div>
@@ -146,13 +146,30 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
         // console.info('BeckiDrobDownButtonComponent: Size of buttons', this.btns.length);
         let count = 0;
         for (let i = 0; i < this.btns.length; i++) {
-            if (this.btns[i].condition === true) {
+            if (this.btns[i].condition === true && this.btns[i].permission === true ) {
                 count++;
             }
         }
 
-        // console.info('BeckiDrobDownButtonComponent: Return', count);
         return count;
+    }
+
+    getSingleConditionButton(): {
+        condition: boolean,
+        btn_label_for_person: string,
+        icon: string,
+        btn_space?: boolean,
+        permission?: boolean,                                                                    // for example project.delete_permission
+        colorType?: ('ADD'| 'EDIT' | 'UPDATE' | 'CREATE' | 'REMOVE' | 'ACTIVE' | 'DEACTIVE'),   // DEFAULT in HTML is EDIT
+        btn_tag: string,    // Only if you have more that one Button!
+        btn_link?: string,  // External link
+        onClick?: () => void
+    } {
+        for (let i = 0; i < this.btns.length; i++) {
+            if (this.btns[i].condition === true && this.btns[i].permission === true ) {
+                return this.btns[i];
+            }
+        }
     }
 
     onButtonClick(identificator: string) {
