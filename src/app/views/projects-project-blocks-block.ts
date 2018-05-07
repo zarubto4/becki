@@ -4,7 +4,7 @@
  */
 
 import moment = require('moment/moment');
-import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import {
@@ -31,7 +31,7 @@ import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
     selector: 'bk-view-projects-project-blocks-block',
     templateUrl: './projects-project-blocks-block.html',
 })
-export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
     blockId: string;
 
@@ -110,8 +110,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
             this.refresh();
         });
-        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
+    }
 
+    ngAfterViewInit(): void {
+        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
     }
 
     ngOnDestroy(): void {

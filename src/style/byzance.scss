@@ -328,9 +328,25 @@ span.changes {
     height: 2000%;
 }
 
+.blocko-editor {
+    width: 100%;
+    min-height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.blocko-single-view {
+    width: 100%;
+    min-height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .blocko-view {
+    background-color: #333;
     padding: 0;
-    height: 500px;
+    width: 100%;
+    min-height: inherit;
     font-size: 0;
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
@@ -484,7 +500,6 @@ span.changes {
 
 .blocko-no-borders-and-bg .blocko-view {
     border: none !important;
-    height: inherit !important;
     background-color: transparent !important;
 }
 
@@ -2626,20 +2641,6 @@ textarea.form-control {
     height: 0;
     border-bottom: 2px solid #e7505a;
     margin-top: -1px;
-}
-
-.blocko-code-view .blocko-view {
-    background-color: #333 !important;
-    width: 229px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.blocko-block-view .blocko-view {
-    background-color: #333 !important;
-    width: 229px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .monaco-editor {

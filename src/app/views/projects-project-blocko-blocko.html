@@ -92,10 +92,9 @@
                     </div>
 
                     <div style="margin: 10px 0; overflow: hidden;">
-                        <bk-blocko-view [scale]="blockoZoom" [simpleMode]="!advancedMode"
-                                        [showBlockNames]="advancedMode" [safeRun]="true"
+                        <bk-blocko-view [showBlockNames]="advancedMode" [safeRun]="true"
                                         (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"
-                                        (onChange)="onSomethingChanged()">
+                                        (onChange)="onSomethingChanged()" class="blocko-editor">
                         </bk-blocko-view>
                     </div>
 

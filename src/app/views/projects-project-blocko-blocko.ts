@@ -3,7 +3,7 @@ import { ModalsSelectCodeModel } from '../modals/code-select';
 
 declare let $: JQueryStatic;
 import moment = require('moment/moment');
-import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
@@ -31,7 +31,7 @@ import { ModalsSelectVersionModel } from '../modals/version-select';
     selector: 'bk-view-projects-project-blocko-blocko',
     templateUrl: './projects-project-blocko-blocko.html',
 })
-export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
     unsavedChanges: boolean = false;
 
@@ -238,6 +238,9 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             }
         });
         this.refresh();
+    }
+
+    ngAfterViewInit(): void {
         this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
     }
 

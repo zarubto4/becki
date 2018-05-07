@@ -200,12 +200,8 @@
                     <div class="col-md-4" style="width: 130px; overflow: hidden;"
                          [style.display]="tsBlock?'inline-block':'none'">
                         <h4 *ngIf="tsBlock" class="text-center">{{'label_block'|bkTranslate:this}}</h4>
-                        <div style="background-color: #333; width: 105px;">
-                            <bk-blocko-view [canConfig]="true" readonly="true" [safeRun]="true"
-                                            (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)">
-
-                            </bk-blocko-view>
-                        </div>
+                        <bk-blocko-view [singleBlockView]="true" [canConfig]="true" readonly="true" [safeRun]="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" class="blocko-single-view">
+                        </bk-blocko-view>
                     </div>
                     <div class="col-md-4" style="width: calc(50% - 65px)"
                          [style.display]="tsBlock?'inline-block':'none'">

@@ -18,12 +18,17 @@ import { TyrionApiBackend } from '../backend/BeckiBackend';
 
 @Component({
     selector: 'bk-blocko-view',
-    templateUrl: './BlockoViewComponent.html'
+    template: `
+        <div #field class="blocko-view"></div>
+    `
 })
 export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     @Input()
     id: string = '';
+
+    @Input()
+    singleBlockView: boolean = false;
 
     @Input()
     disableExecution: boolean = false;
@@ -74,9 +79,48 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     groupRemovedCallback: (boundInterface: BlockoCore.BoundInterface) => void;
 
     constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, private translationService: TranslationService) {
+    }
+
+    public get serviceHandler(): Blocks.ServicesHandler {
+        return this.zone.runOutsideAngular(() => {
+            return this.blockoController.servicesHandler;
+        });
+    }
+
+    translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        /*this.zone.runOutsideAngular(() => {
+
+            let canConfig = changes['canConfig'];
+            if (canConfig) {
+                if (!canConfig.isFirstChange()) {
+                    throw new Error(this.translate('error_configuration_cant_change'));
+                }
+                this.blockoRenderer.canConfigInReadonly = canConfig.currentValue;
+            }
+
+            let showBlockNames = changes['showBlockNames'];
+            if (showBlockNames) {
+                this.blockoRenderer.showBlockNames = showBlockNames.currentValue;
+            }
+
+            let safeRun = changes['safeRun'];
+            if (safeRun) {
+                this.blockoController.safeRun = safeRun.currentValue;
+            }
+        });*/
+    }
+
+    ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
 
-            this.blockoRenderer = new BlockoPaperRenderer.Controller();
+            this.blockoRenderer = new BlockoPaperRenderer.Controller({
+                editorElement: this.field.nativeElement,
+                singleBlockView: this.singleBlockView
+            });
             this.blockoRenderer.registerOpenConfigCallback((block) => {
                 let versions: IBlockVersion[] =  null;
 
@@ -163,81 +207,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
     }
 
-    public get serviceHandler(): Blocks.ServicesHandler {
-        return this.zone.runOutsideAngular(() => {
-            return this.blockoController.servicesHandler;
-        });
-    }
-
-    translate(key: string, ...args: any[]): string {
-        return this.translationService.translate(key, this, null, args);
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        this.zone.runOutsideAngular(() => {
-
-            let disableExecution = changes['disableExecution'];
-            if (disableExecution) {
-                if (!disableExecution.isFirstChange()) {
-                    throw new Error(this.translate('error_execution_cant_change'));
-                }
-
-                if (disableExecution.currentValue) {
-                    this.blockoController.configuration.asyncEventsEnabled = false;
-                    this.blockoController.configuration.inputEnabled = false;
-                    this.blockoController.configuration.outputEnabled = true;
-                }
-            }
-
-            let readonly = changes['readonly'];
-            if (readonly) {
-                if (!readonly.isFirstChange()) {
-                    throw new Error(this.translate('error_cant_change_readability'));
-                }
-                this.blockoRenderer.readonly = readonly.currentValue;
-            }
-
-            let simpleMode = changes['simpleMode'];
-            if (simpleMode) {
-                this.blockoRenderer.simpleMode = simpleMode.currentValue;
-            }
-
-            let canConfig = changes['canConfig'];
-            if (canConfig) {
-                if (!canConfig.isFirstChange()) {
-                    throw new Error(this.translate('error_configuration_cant_change'));
-                }
-                this.blockoRenderer.canConfigInReadonly = canConfig.currentValue;
-            }
-
-            let showBlockNames = changes['showBlockNames'];
-            if (showBlockNames) {
-                this.blockoRenderer.showBlockNames = showBlockNames.currentValue;
-            }
-
-            let safeRun = changes['safeRun'];
-            if (safeRun) {
-                this.blockoController.safeRun = safeRun.currentValue;
-            }
-        });
-    }
-
-    ngAfterViewInit(): void {
-        this.zone.runOutsideAngular(() => {
-            // TODO:
-            if (this.canConfig) {
-                new BlockoBasicBlocks.ExecutionController(this.blockoController);
-            }
-            // TODO:
-            /*
-            if (this.spy) {
-                this.subscribeSpy(this.spy);
-            }
-            */
-            this.blockoRenderer.setEditorElement(this.field.nativeElement);
-        });
-    }
-
     ngOnDestroy(): void {
         // TODO:
         /*
@@ -248,6 +217,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.zone.runOutsideAngular(() => {
             this.blockoController.removeAllBlocks();
         });
+    }
+
+    setSingleBlock() {
+        // this.blockoRenderer.setBlockView()
     }
 
     addStaticBlock(blockName: string, x: number = 0, y: number = 0): BlockoCore.Block {
@@ -284,7 +257,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
             if (typeOfBlock) {
                 const json = JSON.parse(designJson);
-                json['type_of_block'] = typeOfBlock;
 
                 if (version) {
                     json['block_version'] = version;
