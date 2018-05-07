@@ -10,35 +10,33 @@ import {
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
     IUpdateProcedure
 } from '../backend/TyrionAPI';
-import {BlockoCore} from 'blocko';
+import { BlockoCore } from 'blocko';
 import {
     Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef, ViewChildren, QueryList,
     AfterViewInit
 } from '@angular/core';
-import {_BaseMainComponent} from './_BaseMainComponent';
-import {Subscription} from 'rxjs/Rx';
-import {CurrentParamsService} from '../services/CurrentParamsService';
-import {BlockoViewComponent} from '../components/BlockoViewComponent';
-import {ModalsConfirmModel} from '../modals/confirm';
-import {ConsoleLogComponent} from '../components/ConsoleLogComponent';
-import {FlashMessageError, FlashMessageSuccess} from '../services/NotificationService';
-import {ModalsInstanceEditDescriptionModel} from '../modals/instance-edit-description';
-import {OnlineChangeStatus, TyrionApiBackend} from '../backend/BeckiBackend';
-import {InstanceHistoryTimeLineComponent} from '../components/InstanceHistoryTimeLineComponent';
-import {ModalsSelectVersionModel} from '../modals/version-select';
-import {DraggableEventParams} from '../components/DraggableDirective';
-import {WebsocketClientBlockoView} from '../services/websocket/Websocket_Client_BlockoView';
-import {WebsocketMessage} from '../services/websocket/WebsocketMessage';
-import {ModalsVersionDialogModel} from '../modals/version-dialog';
+import { _BaseMainComponent } from './_BaseMainComponent';
+import { Subscription } from 'rxjs/Rx';
+import { CurrentParamsService } from '../services/CurrentParamsService';
+import { BlockoViewComponent } from '../components/BlockoViewComponent';
+import { ModalsConfirmModel } from '../modals/confirm';
+import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
+import { OnlineChangeStatus, TyrionApiBackend } from '../backend/BeckiBackend';
+import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
+import { ModalsSelectVersionModel } from '../modals/version-select';
+import { DraggableEventParams } from '../components/DraggableDirective';
+import { WebsocketClientBlockoView } from '../services/websocket/Websocket_Client_BlockoView';
+import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
+import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import moment = require('moment/moment');
-import {ModalsSnapShotInstanceModel} from '../modals/snapshot-properties';
-import {ModalsSnapShotDeployModel} from '../modals/snapshot-deploy';
-import {ModalsRemovalModel} from '../modals/removal';
-import {ModalsShowQRModel} from '../modals/show_QR';
-import {ModalsGridProgramSettingsModel} from '../modals/instance-grid-program-settings';
+import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
+import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
+import { ModalsRemovalModel } from '../modals/removal';
+import { ModalsShowQRModel } from '../modals/show_QR';
+import { ModalsGridProgramSettingsModel } from '../modals/instance-grid-program-settings';
 
-// Trying smth
-import {ProjectsProjectHardwareComponent} from '../views/projects-project-hardware';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -111,6 +109,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             this.instanceId = params['instance'];
             this.refresh();
         });
+
+        this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
+            if (status.model === 'Instance' && this.instanceId === status.model_id) {
+                this.refresh();
+            }
+        });
     }
 
     ngAfterViewInit() {
@@ -139,7 +143,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
         });
     }
-
 
     ngAfterContentChecked() {
         if (this.tab === 'view') {
@@ -220,6 +223,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
             case 'deactivate_instance': {
                 this.onInstanceShutdownClick();
+                break;
+            }
+            case 'active_instance': {
+                this.onInstanceDeployClick();
                 break;
             }
             case 'save_snapshot': {
@@ -455,9 +462,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.unblockUI();
                         this.refresh();
                     }).catch((err) => {
-                    this.unblockUI();
-                    this.fmError(this.translate('label_upload_error', err));
-                });
+                        this.unblockUI();
+                        this.fmError(this.translate('label_upload_error', err));
+                    });
             }
         });
     }
@@ -618,7 +625,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedureTask(pageNumber: number = 0,
-                                       status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET'],): void {
+                                       status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET']): void {
         this.blockUI();
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
@@ -743,7 +750,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         JSON.stringify(m.data['console_message'], null, 4).toString(), // message
                         m.data['block_id'], // source
                         'Block ' + m.data['block_id'],
-                        new Date(m.data['console_message_time']).toLocaleString()) // TimaStamp
+                        new Date(m.data['console_message_time']).toLocaleString()
+                    ); // TimaStamp
                 });
                 return;
             }
@@ -863,11 +871,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onDrobDownEmiter(action: string, object: any): void {
 
-        if (action === 'edit_blocko_program') {
+        if (action === 'edit_snapshot') {
             this.onEditSnapShotClick(object);
         }
 
-        if (action === 'remove_blocko') {
+        if (action === 'remove_snapshot') {
             this.onRemoveSnapShotClick(object);
         }
 

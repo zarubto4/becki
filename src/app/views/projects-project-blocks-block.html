@@ -254,28 +254,21 @@
                                     </span>
                             </td>
                             <td class="vert-align no-wrap">
-                                    <span class="icon-hint-wraper red" *ngIf="version.publish_status == 'pending'">
-                                        <i class="fa fa-heart font-red-flamingo"
-                                           style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                     <span class="icon-hint-wraper red" *ngIf="version.approval_state == 'PENDING'">
+                                        <i class="fa fa-heart font-red-flamingo" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
-                                <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'approved'">
-                                        <i class="fa fa-heart font-green-jungle"
-                                           style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                <span class="icon-hint-wraper green" *ngIf="version.approval_state == 'APPROVED'">
+                                        <i class="fa fa-heart font-green-jungle" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
-                                <span class="icon-hint-wraper gray" *ngIf="version.publish_status == 'disapproved'">
-                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                <span class="icon-hint-wraper gray" *ngIf="version.approval_state == 'DISAPPROVED'">
+                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
-                                <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'edited'">
-                                        <i class="fa fa-heart font-blue"
-                                           style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                <span class="icon-hint-wraper green" *ngIf="version.approval_state == 'EDITED'">
+                                        <i class="fa fa-heart font-blue" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
                             </td>
                             <td class="action-btn-col">
@@ -285,28 +278,20 @@
                                     [btns_group_name]="('label_settings'|bkTranslate:this)"
                                     [btns]="[
                                         {
-                                            condition: project && !version.publish_status,
+                                            condition: (projectId != null && version.approval_state == null),
                                             btn_label_for_person: ('label_publish'|bkTranslate:this),
-                                            btn_tag: 'version_publish_public',
+                                            btn_tag: 'version_publish_community',
                                             icon: 'fa-heart',
-                                            colorType: 'ADD',
-                                            permission: (version.publish_status)
+                                            colorType: 'CREATE',
+                                            permission: (version.update_permission)
                                         },
                                         {
-                                            condition: version.publish_status == 'pending' && version.community_publishing_permission,
-                                            btn_label_for_person: ('label_publish'|bkTranslate:this),
-                                            btn_tag: 'version_publish_administrator',
+                                            condition: (version.approval_state == 'PENDING'),
+                                            btn_label_for_person: ('label_publish_decision'|bkTranslate:this),
+                                            btn_tag: 'version_publish_admin',
                                             icon: 'fa-heart',
-                                            colorType: 'ADD',
+                                            colorType: 'CREATE',
                                             permission: (version.community_publishing_permission)
-                                        },
-                                        {
-                                            condition: block && block.publish_type === 'default_main_program' && version.publish_type !== 'default_version',
-                                            btn_label_for_person: ('label_version_set_as_main'|bkTranslate:this),
-                                            btn_tag: 'version_set_as_main',
-                                            icon: 'fa-cog',
-                                            colorType: 'UPDATE',
-                                            permission: (block.update_permission)
                                         },
                                         {
                                             condition: true,
@@ -314,6 +299,14 @@
                                             btn_tag: 'version_properties',
                                             icon: 'fa-cog',
                                             colorType: 'EDIT',
+                                            permission: (version.update_permission)
+                                        },
+                                        {
+                                            condition: (projectId == null && block.publish_type == 'DEFAULT_MAIN'),
+                                            btn_label_for_person: ('label_version_set_as_main'|bkTranslate:this),
+                                            btn_tag: 'version_set_as_main',
+                                            icon: 'fa-flag',
+                                            colorType: 'UPDATE',
                                             permission: (version.update_permission)
                                         },
                                         {

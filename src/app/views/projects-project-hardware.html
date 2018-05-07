@@ -81,6 +81,7 @@
                             <th class="text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_project_status'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_status'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                         </tr>
                     </thead>
@@ -136,11 +137,14 @@
                             </div>
                         </td>
                         <td class="vert-align text-center no-wrap">
-
                             <bk-online-state [online_state]="device.online_state"></bk-online-state>
                         </td>
-                        <td class="action-btn-col">
 
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="device.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
+                        <td class="action-btn-col">
                             <bk-drob-down-button
                                 [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
@@ -150,6 +154,14 @@
                                     btn_tag: 'edit_hardware_group',
                                     icon: 'fa-object-group',
                                     colorType: 'UPDATE',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: (device.online_state === 'ONLINE'),
+                                    btn_label_for_person: ('label_blink_hardware'|bkTranslate:this),
+                                    btn_tag: 'blink_hardware',
+                                    icon: 'fa-lightbulb-o',
+                                    colorType: 'ADD',
                                     permission: (device.update_permission)
                                 },
                                 {
@@ -221,6 +233,7 @@
                         <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]=" 'table_size'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -242,6 +255,10 @@
                                  </span>
                                 ]
                             </div>
+                        </td>
+
+                        <td class="vert-align">
+                            <!-- bk-form-tag-input [tags_without_form]="group.tags" [readonly]="true"></bk-form-tag-input !-->
                         </td>
 
                         <td class="action-btn-col">
@@ -303,10 +320,10 @@
                         <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
                         <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
                         <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_firmware_type'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_details'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_update_type'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
+                        <th class="vert-align text-center">{{'table_firmware_type'|bkTranslate:this}}</th>
+                        <th class="vert-align text-center">{{'table_details'|bkTranslate:this}}</th>
+                        <th class="vert-align text-center">{{'table_update_type'|bkTranslate:this}}</th>
+                        <th class="vert-align text-center">{{'table_update_progress'|bkTranslate:this}}</th>
                         <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
@@ -326,42 +343,35 @@
                                 *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
                         </td>
 
-                        <td class="vert-align">
+                        <td class="vert-align text-center">
                             <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
                         </td>
-                        <td class="vert-align">
-                            <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
-                                <template
-                                    [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'">
-                                    <a *ngIf="procedure.program" class="bold"
-                                       [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
-                                    -
-                                    <a *ngIf="procedure.program" class="bold"
-                                       [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
-                                </template>
-                                <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
-                                    <a *ngIf="procedure.bootloader" class="bold"
-                                       [routerLink]="['/hardware', procedure.bootloader.bootloader_id]">{{procedure.bootloader.bootloader_name}}</a>
-                                </template>
+                        <td class="vert-align text-center">
+                            <template [ngIf]="procedure.program">
+                                <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
+                                -
+                                <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
+                            </template>
+                            <template [ngIf]="procedure.bootloader">
+                                <a class="bold" [routerLink]="['/hardware', procedure.bootloader.bootloader_id]">{{procedure.bootloader.bootloader_name}}</a>
                             </template>
                         </td>
 
-                        <td class="vert-align">
+                        <td class="vert-align text-center">
                             <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
                         </td>
-                        <td class="vert-align">
+                        <td class="vert-align text-center">
                             <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
                             <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 "
                                   class="bold">-/-</span>
                         </td>
 
                         <!-- Update State -->
-                        <td class="vert-align">
+                        <td class="vert-align text-center">
                             <bk-update-state [updateState]="procedure.state"></bk-update-state>
                         </td>
 
                         <td class="action-btn-col">
-
 
                             <bk-drob-down-button
                                 [btns_group_name]="('label_settings'|bkTranslate:this)"
@@ -383,7 +393,7 @@
                                     permission: (procedure.delete_permission)
                                 }
                             ]"
-                                (onValueChanged)="onDrobDownEmiter($event, project)"
+                            (onValueChanged)="onDrobDownEmiter($event, procedure)"
                             >
                             </bk-drob-down-button>
 

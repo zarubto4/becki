@@ -30,7 +30,7 @@ import { FormInputComponent } from './components/FormInputComponent';
 import { FormInputTagsComponent } from './components/FormInputTagsComponent';
 import { FormSelectComponent } from './components/FormSelectComponent';
 import { CodeIDEComponent } from './components/CodeIDEComponent';
-import { CProgramVersionSelectorComponent } from './components/CProgramVersionSelectorComponent';
+import { ProgramVersionSelectorComponent } from './components/VersionSelectorComponent';
 import { DraggableDirective } from './components/DraggableDirective';
 import { FileTreeComponent } from './components/FileTreeComponent';
 import { Error404Component } from './views/error404';
@@ -216,6 +216,10 @@ import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-
 import { ModalsShowQRComponent } from './modals/show_QR';
 import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-program-settings';
 import { BeckiDrobDownButtonComponent } from './components/DrobDownButton';
+import { FinancialProductEmployeesComponent } from './views/financial-product-employees';
+import { FilterTableComponent } from './components/FilterTableComponent';
+import {ModalsGridProjectSelectComponent} from "./modals/grid-project-select";
+import {ModalsBlockSelectComponent} from "./modals/block-select";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -247,7 +251,7 @@ let routes: Routes = [
 
     { path: 'financial/:product', data: { breadName: ':product' }, component: FinancialProductComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/extensions', data: { breadName: 'extensions' }, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard] },
-    { path: 'financial/:product/employees', data: { breadName: 'employees' }, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard] },
+    { path: 'financial/:product/employees', data: { breadName: 'employees' }, component: FinancialProductEmployeesComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/invoices', data: { breadName: 'invoices' }, component: FinancialProductInvoicesComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/invoices/:invoice', data: { breadName: ':invoice' }, component: FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/billing', data: { breadName: 'billing' }, component: FinancialProductBillingComponent, canActivate: [AuthGuard] },
@@ -508,7 +512,7 @@ class BeckiErrorHandler implements ErrorHandler {
         FilterPagerComponent,
         CodeIDEComponent,
         TableListComponent,
-        CProgramVersionSelectorComponent,
+        ProgramVersionSelectorComponent,
         DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
@@ -536,6 +540,7 @@ class BeckiErrorHandler implements ErrorHandler {
         LogLevelComponent,
         GridViewComponent,
         BeckiDrobDownButtonComponent,
+        FilterTableComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -554,6 +559,7 @@ class BeckiErrorHandler implements ErrorHandler {
         FinancialProductInvoicesComponent,
         FinancialProductInvoicesInvoiceComponent,
         FinancialProductBillingComponent,
+        FinancialProductEmployeesComponent,
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,
@@ -591,6 +597,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProducersComponent,
         ProducersProducerComponent,
         ProjectsProjectLibrariesComponent,
+
         // ProjectsProjectLibrariesLibraryComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
@@ -673,6 +680,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsProgramVersionSelectComponent,
         ModalsSnapShotInstanceComponent,
         ModalsSnapShotDeployComponent,
+        ModalsGridProjectSelectComponent,
+        ModalsBlockSelectComponent,
 
     ],
     exports: [AppComponent],

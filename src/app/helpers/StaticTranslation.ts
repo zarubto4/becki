@@ -1,3 +1,6 @@
+import {ModalsWidgetsWidgetCopyComponent} from "../modals/widgets-widget-copy";
+import {ModalsGridProjectSelectComponent} from "../modals/grid-project-select";
+import {ModalsBlockSelectComponent} from "../modals/block-select";
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
@@ -56,6 +59,10 @@ export class StaticTranslation {
             }, 'ModalsFinancialProductComponent': {
                 'title': 'Change Basic Product information',
                 'label_name': 'Product name',
+            }, 'ModalsWidgetsWidgetCopyComponent': {
+                'title': 'Make a Private Copy',
+                'label_widget_name': 'Widget name',
+                'label_widget_description': 'Widget description',
             }, 'ModalsPublicShareResponseComponent': {
                 'title': 'Publishing decisions',
                 'label_program_additional_comment': 'If the user shares a new version of the same program as before, the program (not version) will be named the same as the one which has already been used since the previous approval.',
@@ -1225,6 +1232,28 @@ export class StaticTranslation {
             }, 'ModalsCodeSelectComponent': {
 
                 'title': 'Select <strong class="font-color-code">CODE</strong>',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Action',
+                'label_select_code': 'Select',
+
+            }, 'ModalsBlockSelectComponent': {
+
+                'title': 'Select <strong class="font-color-blocko">BLOCK</strong>',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Action',
+                'label_select_code': 'Select',
+
+            }, 'ModalsGridProjectSelectComponent': {
+
+                'title': 'Select <strong class="font-color-grid">GRID</strong> Project',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_program': 'Program',
+                'table_version': 'Version',
+                'table_actions': 'Action',
+                'label_select_project': 'Select',
 
             }, 'ProjectsProjectHardwareComponent': {
 
@@ -1252,6 +1281,7 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_settings': 'Settings',
                 'label_set_hardware_group': 'Set Hardware Groups',
+                'label_blink_hardware': 'Blink',
                 'label_remove_device': 'Remove permanently',
                 'label_time_missing_in_json': 'Not Yet',
                 'label_project_active': 'This one',
@@ -1277,11 +1307,11 @@ export class StaticTranslation {
                 'table_program': 'Program',
                 'table_version': 'Version',
                 'table_status': 'Status',
-                'table_details': 'Details',
-                'table_update_type': 'Update Type',
-                'table_firmware_type': 'Type',
+                'table_details': 'Additional Details',
+                'table_update_state': 'Update State',
+                'table_firmware_type': 'Firmware Type',
                 'table_update_progress': 'Progress',
-                'table_update_state': 'State',
+                'table_update_type': 'Who initiated the update',
                 'table_hardware_id': 'ID',
                 'table_hardware_full_id': 'Full ID',
                 'table_hardware_name': 'Alias Name',
@@ -1319,6 +1349,7 @@ export class StaticTranslation {
             }, 'ProjectsProjectHardwareHardwareComponent': {
 
                 'title': '<strong class="font-color-hardware">HARDWARE</strong> DashBoard',
+                'main_subtitle_hardware': '<strong class="font-red-flamingo">Please keep in mind as administrator that you are editing HW of our customers and some functionality can not work! Access Hardware throw the Projects!</strong>',
                 'main_administration_title': 'Platform administration',
                 'main_subtitle': 'Embedded Hardware Settings',
                 'tab_overview': 'Overview',
@@ -1399,10 +1430,11 @@ export class StaticTranslation {
                 'label_code': 'CODE',
                 'label_blocko': 'BLOCKO',
                 'label_cloud': 'CLOUD',
-                'label_remove_device': 'Remove device',
+                'label_remove_device': 'Irreversibly Remove device',
                 'label_device_properties': 'Device properties',
                 'label_deactivate_device': 'Deactive for this project',
                 'label_active_device': 'Active for this project',
+                'label_blink_hardware': 'Blink',
 
 
                 'table_id': 'Update ID',
@@ -1759,16 +1791,20 @@ export class StaticTranslation {
 
                 'tab_my_widgets': 'My Widgets',
                 'tab_public_widgets': 'Public Widgets',
-                'tab_admin_widgets': 'Admin Widgets',
+                'tab_admin_widgets': 'Widgets for Publish Decisions',
+                'table_active': 'Active for Users',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
 
-                'label_group_properities': 'Group properties',
                 'label_remove_group': 'Remove Group',
-                'label_widget_properties': 'GRID widget properties',
-                'label_remove_widget': 'Remove GRID widget',
+                'label_widget_properties': 'Widget properties',
+                'label_widget_make_decision': 'Make Decision',
+                'label_widget_clone': 'Clone',
+                'label_remove_widget': 'Remove Widget',
+                'label_activate': 'Active for user',
+                'label_deactivate': 'Deactivate it for users',
 
                 'flash_grid_group_add_fail': 'Version cannot be created. ',
                 'flash_grid_group_edit_success': 'Version has been changed.',
@@ -1789,7 +1825,7 @@ export class StaticTranslation {
                 'label_no_admin_widget': 'No <strong class="font-color-grid">GRID</strong> widgets',
                 'label_no_admin_widget_comment': 'There is not any widgets to check and valid',
 
-                'label_code_program_properties': 'Code Properties',
+                'label_grid_widget_properties': 'Widget Properties',
 
             }, 'ProjectsProjectWidgetsWidgetComponent': {
 
@@ -1835,6 +1871,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
 
                 'label_publish': 'Publish',
+                'label_publish_decision': 'Decide of Publish',
                 'label_version_set_as_main': 'Set as main',
 
             }, 'ProjectsProjectActualizationProcedureComponent': {
@@ -1949,22 +1986,30 @@ export class StaticTranslation {
                 'flash_cant_change_version': 'Unable to change version {0}, {1}',
                 'flash_cant_load_block_version': 'Unable to load block version, ',
                 'label_publish': 'Publish',
+                'label_publish_decision': 'Decide of Publish',
 
             }, 'ProjectsProjectBlocksComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> Blocks',
                 'label_block_remove': 'Remove Block',
                 'label_block_make_copy': 'Make Copy',
+                'label_activate': 'Active for user',
+                'label_deactivate': 'Deactivate it for users',
                 'label_block_properties': 'Update Block',
+                'label_block_make_decision': 'Make Decision',
                 'table_name': 'Name',
+                'table_active': 'Active for Users',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
-                'label_no_block_program': 'No <strong class="font-color-blocko">BLOCKO</strong> Block in this group',
-                'label_create_block_text': 'Click on the button bellow to create a Blocko Block.',
-
+                'label_no_blocks': 'No <strong class="font-color-blocko">BLOCKS</strong>',
+                'label_no_blocks_comment': 'You havn\'t yet created your own <strong class="font-color-blocko">BLOCK</strong>. It\'s time to grow up... It\'s time to start connecting the world.',
+                'label_no_public_blocks': 'No <strong class="font-color-blocko">BLOCKS</strong>',
+                'label_no_public_blocks_text': 'Based on specified criteria, there is no public or available <strong class="font-color-blocko">BLOCKS</strong>',
+                'label_no_admin_blocks': 'No <strong class="font-color-blocko">BLOCKO</strong> blocks',
+                'label_no_admin_blocks_comment': 'There is not any blocks to check and valid',
                 'btn_add_block': 'Create Block',
                 'tab_my_blocks': 'My Blocks',
                 'tab_public_blocks': 'Public Blocks',
-                'tab_admin_blocks': 'Admin Blocks',
+                'tab_admin_blocks': 'Blocks for Publish Decisions',
 
                 'flash_block_add': 'Block has been created.',
                 'flash_cant_add_block': 'Unable to create block, ',
@@ -2022,8 +2067,8 @@ export class StaticTranslation {
                 'modal_text_no_yoda': 'No available devices.',
 
                 'label_main_c_program_version_set_as_main': 'Set this version as Main',
-                'label_publish': 'Accept publication',
-                'label_unpublish': 'Refused to Publish',
+                'label_publish': 'Make it Public',
+                'label_publish_decision': 'Publication Decision',
 
                 'flash_update_success': 'Deployed successfully',
                 'flash_cant_upload_code': 'Deployment failed.',
@@ -2399,8 +2444,9 @@ export class StaticTranslation {
                 'label_processor': 'Processor',
                 'label_actions': 'Actions',
 
-                'label_table_id': 'Processor ID',
-                'label_table_type': 'Type',
+                'label_table_id': 'UUID ID',
+                'label_table_full_id': 'Processor ID <strong class="font-red-flamingo"> It can be repeated!</strong>',
+                'label_table_type': '<strong class="font-color-hardware">Hardware</strong> Type',
                 'label_hash': 'Hash Token',
                 'label_table_status': 'Online status',
 
@@ -2436,6 +2482,7 @@ export class StaticTranslation {
 
                 'label_processor_properties': 'Processor Properties',
                 'label_processor_remove': 'Processor Remove',
+                'table_actions': 'Actions',
 
 
             }, 'CommunityCProgramComponent': {
@@ -2444,6 +2491,7 @@ export class StaticTranslation {
                 'title': 'Community Content',
 
                 'tab_public_c_programs': 'Public Code Program',
+                'tab_admin_c_programs': 'Code Program for Publish decision',
                 'tab_public_c_libraries': 'Public Code Libraries',
                 'tab_c_programs_for_decisions': 'Community Code Requests',
                 'tab_c_libraries_for_decisions': 'Community Libraries Requests',
@@ -2623,6 +2671,7 @@ export class StaticTranslation {
             'label_description': 'Description',
             'label_user': 'User',
             'btn_save': 'Save',
+            'table_tags': 'Tags',
             'btn_test': 'Test',
             'btn_close': 'Close',
             'btn_back': 'Back',

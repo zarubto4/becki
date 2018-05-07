@@ -68,11 +68,11 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                 this.tyrionBackendService.bProgramDelete(blocko.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_remove'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
                     });
             }
         });
@@ -86,11 +86,11 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                 this.tyrionBackendService.bProgramCreate(this.project_id, { name: model.name, description: model.description }) // TODO [permission]: "Project.update_permission"
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_add_to_project', model.name)));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_add_to_project', model.name, reason)));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
                     });
             }
         });
@@ -104,11 +104,11 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                 this.tyrionBackendService.bProgramEdit(blocko.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_update')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_update'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
                     });
             }
         });

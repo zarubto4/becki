@@ -11,24 +11,32 @@
         [tab_selected_name]="tab"
         [tabBtns]="[
                             {
+                                condition: true,
                                 tab_name: 'public_c_programs',
                                 tab_color: 'CODE',
-                                tab_label: ('tab_public_c_programs'|bkTranslate:this)
+                                tab_label: ('tab_public_c_programs'|bkTranslate:this),
+                                permission: true
                             },
                             {
+                                condition: true,
                                 tab_name: 'public_c_libraries',
                                 tab_color: 'CODE',
-                                tab_label: ('tab_public_c_libraries'|bkTranslate:this)
+                                tab_label: ('tab_public_c_libraries'|bkTranslate:this),
+                                permission: true
                             },
                             {
+                                condition: true,
                                 tab_name: 'c_programs_for_decisions',
                                 tab_color: 'CODE',
-                                tab_label: ('tab_c_programs_for_decisions'|bkTranslate:this)
+                                tab_label: ('tab_c_programs_for_decisions'|bkTranslate:this),
+                                permission: true
                             },
                             {
+                                condition: true,
                                 tab_name: 'c_libraries_for_decisions',
                                 tab_color: 'CODE',
-                                tab_label: ('tab_c_libraries_for_decisions'|bkTranslate:this)
+                                tab_label: ('tab_c_libraries_for_decisions'|bkTranslate:this),
+                                permission: true
                             }
                         ]">
     </bk-portlet-title>
@@ -65,7 +73,7 @@
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns_group_name]="('label_properties'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: true,
@@ -174,7 +182,7 @@
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns_group_name]="('label_properties'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: true,

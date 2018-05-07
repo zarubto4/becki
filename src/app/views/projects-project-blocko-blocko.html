@@ -3,8 +3,11 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot"
-                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main tabMenu="projects-project"
+                [title]="currentParamsService.currentProjectNameSnapshot"
+                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot"
+                [show_title]="false"
+>
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title *ngIf="blockoProgram"
@@ -53,8 +56,44 @@
 
     <div class="portlet-body">
 
+        <!-- Testování START !-->
+        <div>
+            <h1>Testovací tlačítka a vyvolávače Modalů</h1>
+
+            <button type="button" class="btn default red" (click)="onClearIDEClick()">
+                <i class="fa fa-trash-o"></i> {{'btn_clear_program'|bkTranslate:this}}
+            </button>
+            <br>
+            <br>
+
+            <button type="button" class="btn default red" (click)="onAddCodeInterfaceClick()">
+                <i class="fa fa-trash-o"></i> {{'btn_add_code_interface'|bkTranslate:this}}
+            </button>
+            <br>
+            <br>
+
+            <button type="button" class="btn default red" (click)="onAddGridInterfaceClick()">
+                <i class="fa fa-trash-o"></i> {{'btn_add_grid_interface'|bkTranslate:this}}
+            </button>
+            <br>
+            <br>
+            <button type="button" class="btn default red" (click)="onAddBlockInterfaceClick()">
+                <i class="fa fa-trash-o"></i> {{'btn_add_block_interface'|bkTranslate:this}}
+            </button>
+            <br>
+            <br>
+
+            <button type="button" class="btn default red" (click)="onSetHardwareByInterfaceClick()">
+                <i class="fa fa-trash-o"></i> {{'btn_add_hardware_interface'|bkTranslate:this}}
+            </button>
+            <br>
+
+        </div>
+        <br>
+        <br>
+        <!-- Testování STOP !-->
+
         <div [hidden]="!(tab=='ide')" class="row">
-            <div class="col-md-9">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="becki-caption">
@@ -71,8 +110,8 @@
                     </div>
 
                     <div>
-                        <label class="mt-checkbox mt-checkbox-outline"
-                               style="margin-top: 6px; margin-bottom: 6px; float: left;">
+
+                        <label class="mt-checkbox mt-checkbox-outline" style="margin-top: 6px; margin-bottom: 6px; float: left;">
                             <input type="checkbox" [(ngModel)]="advancedMode">
                             {{'checkbox_advanced_mode'|bkTranslate:this}}
                             <span></span>
@@ -84,7 +123,7 @@
                                [attr.max]="1.2"/>
 
                         <div class="pull-right">
-                            <button type="button" class="btn default red" (click)="onClearClick()">
+                            <button type="button" class="btn default red" (click)="onClearIDEClick()">
                                 <i class="fa fa-trash-o"></i> {{'btn_clear_program'|bkTranslate:this}}
                             </button>
                         </div>
@@ -127,133 +166,6 @@
                         <bk-console-log maxHeight="400px"></bk-console-log>
                     </div>
                 </div>
-
-            </div>
-            <div class="col-md-3">
-                <div class="portlet portlet light bordered">
-
-                    <bk-portlet-title
-                        [title_name]="'tab_blocks'|bkTranslate:this"
-                        [icon]="'fa-cubes'">
-                    </bk-portlet-title>
-                    <div class="portlet-body">
-                        <div class="panel-group accordion blocko-blocks-group-list">
-
-                            <div *ngFor="let staticBlocksGroup of staticBlocks;" class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a class="accordion-toggle collapsed"
-                                           (click)="onToggleGroup(staticBlocksGroup.id)">
-                                            <i class="fa fa-pull-right fa-minus-square-o"
-                                               [class.fa-minus-square-o]="blockGroupsOpenToggle[staticBlocksGroup.id]"
-                                               [class.fa-plus-square-o]="!blockGroupsOpenToggle[staticBlocksGroup.id]"></i>
-                                            {{staticBlocksGroup.name}} ({{staticBlocksGroup.blocks.length}})
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div class="panel-collapse collapse"
-                                     [class.in]="blockGroupsOpenToggle[staticBlocksGroup.id]">
-                                    <div class="panel-body">
-                                        <div *ngIf="staticBlocksGroup.blocks.length == 0" style="color: gray; text-align: center;">{{'label_no_blocks_in_group'|bkTranslate:this}}</div>
-                                        <div *ngFor="let block of staticBlocksGroup.blocks;"
-                                             [bkDraggable]="draggableOptions"
-                                             [bkDraggableData]="block"
-                                             [bkDraggableDataType]="'block'"
-                                             (bkDraggableOnStop)="onDragStop($event)"
-                                             (bkDraggableOnStart)="onDragStart($event)"
-                                             class="blocko-block"
-                                             [style.backgroundColor]="block.backgroundColor">
-                                            <div class="blocko-block-mask"></div>
-                                            <i class="fa fa-fw fa-cubes"
-                                               style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
-                                            <span>{{block.name}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a class="accordion-toggle collapsed" (click)="onToggleGroup('user')">
-                                            <i class="fa fa-pull-right fa-minus-square-o"
-                                               [class.fa-minus-square-o]="blockGroupsOpenToggle['user']"
-                                               [class.fa-plus-square-o]="!blockGroupsOpenToggle['user']"></i>
-                                            {{'label_user_blocks'|bkTranslate:this}}
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle['user']">
-                                    <div class="panel-body">
-                                        <div *ngFor="let block of blocks;" [bkDraggable]="draggableOptions"
-                                             [bkDraggableData]="block" [bkDraggableDataType]="'block'"
-                                             (bkDraggableOnStop)="onDragStop($event)"
-                                             (bkDraggableOnStart)="onDragStart($event)" class="blocko-block"
-                                             [class.with-icon]="blocksIcons[block.id]"
-                                             [style.background-color]="blocksColors[block.id]">
-                                            <div class="blocko-block-mask"></div>
-                                            <i class="fa fa-fw fa-cubes"
-                                               style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
-                                            <i *ngIf="blocksIcons[block.id]" class="fa {{blocksIcons[block.id]}}"></i>
-                                            <span>{{block.name}}</span>
-                                            <span style="font-size: 0.8em">{{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="portlet portlet light bordered">
-
-                    <bk-portlet-title
-                        [title_name]="'tab_interfaces'|bkTranslate:this"
-                        [icon]="'fa-cubes'">
-                    </bk-portlet-title>
-
-                    <div class="portlet-body">
-                        <div class="panel-group accordion blocko-blocks-group-list">
-                            <div *ngFor="let iface of codePrograms;" [bkDraggable]="draggableOptions"
-                                 [bkDraggableData]="iface" [bkDraggableDataType]="'code'"
-                                 (bkDraggableOnStop)="onDragStop($event)"
-                                 (bkDraggableOnStart)="onDragStart($event)" class="blocko-block">
-                                <div class="blocko-block-mask"></div>
-                                <i class="fa fa-fw fa-cubes"
-                                   style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
-                                <i class="fa fa-exclamation"></i>
-                                <span>{{iface.name}}</span>
-                                <span style="font-size: 0.8em"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portlet portlet light bordered">
-
-                    <bk-portlet-title
-                        [title_name]="'tab_interfaces'|bkTranslate:this"
-                        [icon]="'fa-cube'">
-                    </bk-portlet-title>
-
-                    <div class="portlet-body">
-                        <div class="panel-group accordion blocko-blocks-group-list">
-                            <div *ngFor="let iface of allGridProjects;" [bkDraggable]="draggableOptions"
-                                 [bkDraggableData]="iface" [bkDraggableDataType]="'grid'"
-                                 (bkDraggableOnStop)="onDragStop($event)"
-                                 (bkDraggableOnStart)="onDragStart($event)" class="blocko-block">
-                                <div class="blocko-block-mask"></div>
-                                <i class="fa fa-fw fa-cubes"
-                                   style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
-                                <i class="fa fa-exclamation"></i>
-                                <span>{{iface.name}}</span>
-                                <span style="font-size: 0.8em"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div [hidden]="!(tab=='versions')">
@@ -273,7 +185,7 @@
                     <tr *ngFor="let version of blockoProgramVersions">
                         <td class="vert-align no-wrap"
                             [class.bold]="selectedProgramVersion && selectedProgramVersion.id == version.id">
-                            <a (click)="onProgramVersionClick(version)">
+                            <a (click)="selectBProgramVersion(version)">
                                 {{version.name}}
                             </a>
                         </td>

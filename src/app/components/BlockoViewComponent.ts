@@ -129,6 +129,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 this.zone.run(() => {
                     this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block, versions, this.blockChangeVersion));
                 });
+
             });
             this.blockoRenderer.registerOpenCodeEditCallback((block) => {
                 this.zone.run(() => {

@@ -43,7 +43,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
             if (this.projectId) {
                 this.onShowProgramPrivateWidgetFilter();
             } else {
-                this.onShowProgramPendingWidgetFilter();
+                this.tab = 'public_widgets';
+                this.onShowProgramPublicWidgetFilter();
             }
         });
     }
@@ -77,15 +78,6 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
         }
     }
 
-    refresh(): void {
-        if (this.tab === 'my_widgets') {
-            this.onShowProgramPrivateWidgetFilter();
-        } else if (this.tab === 'public_widgets') {
-            this.onShowProgramPublicWidgetFilter();
-        } else {
-            this.onShowProgramPendingWidgetFilter();
-        }
-    }
     onWidgetClick(widget: IWidget): void {
         if (this.projectId) {
             this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', widget.id]);
@@ -93,6 +85,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
             this.navigate(['/admin/widget/', widget.id]);
         }
     }
+
 
     onMakeClone(widget: IWidget): void {
         let model = new ModalsWidgetsWidgetCopyModel(widget.name, widget.description, widget.tags);
@@ -107,11 +100,15 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));
+                        this.onShowProgramPrivateWidgetFilter();
+                        this.tab = 'my_widgets';
                         this.unblockUI();
 
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail'), reason));
+                        this.onShowProgramPrivateWidgetFilter();
+                        this.onShowProgramPublicWidgetFilter();
                         this.unblockUI();
                     });
             }
@@ -131,11 +128,11 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_add_success')));
-                        this.refresh();
+                        this.onShowProgramPrivateWidgetFilter();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_add_fail'), reason));
-                        this.refresh();
+                        this.onShowProgramPrivateWidgetFilter();
                     });
             }
         });
@@ -154,11 +151,19 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
-                        this.refresh();
+                        if (widget.publish_type === 'PRIVATE') {
+                            this.onShowProgramPrivateWidgetFilter();
+                        } else {
+                            this.onShowProgramPublicWidgetFilter();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail'), reason));
-                        this.refresh();
+                        if (widget.publish_type === 'PRIVATE') {
+                            this.onShowProgramPrivateWidgetFilter();
+                        } else {
+                            this.onShowProgramPublicWidgetFilter();
+                        }
                     });
             }
         });
@@ -172,12 +177,20 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 this.blockUI();
                 this.tyrionBackendService.widgetDelete(widget.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
-                        this.refresh();
+
+                        if (widget.publish_type === 'PRIVATE') {
+                            this.onShowProgramPrivateWidgetFilter();
+                        } else {
+                            this.onShowProgramPublicWidgetFilter();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail'), reason));
-                        this.refresh();
+                        if (widget.publish_type === 'PRIVATE') {
+                            this.onShowProgramPrivateWidgetFilter();
+                        } else {
+                            this.onShowProgramPublicWidgetFilter();
+                        }
                     });
             }
         });
@@ -188,11 +201,19 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
         this.blockUI();
         this.tyrionBackendService.widgetActivate(widget.id)
             .then(() => {
-                this.refresh();
+                if (widget.publish_type === 'PRIVATE') {
+                    this.onShowProgramPrivateWidgetFilter();
+                } else {
+                    this.onShowProgramPublicWidgetFilter();
+                }
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
-                this.refresh();
+                if (widget.publish_type === 'PRIVATE') {
+                    this.onShowProgramPrivateWidgetFilter();
+                } else {
+                    this.onShowProgramPublicWidgetFilter();
+                }
             });
     }
 
@@ -200,11 +221,19 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
         this.blockUI();
         this.tyrionBackendService.widgetDeactivate(widget.id)
             .then(() => {
-                this.refresh();
+                if (widget.publish_type === 'PRIVATE') {
+                    this.onShowProgramPrivateWidgetFilter();
+                } else {
+                    this.onShowProgramPublicWidgetFilter();
+                }
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
-                this.refresh();
+                if (widget.publish_type === 'PRIVATE') {
+                    this.onShowProgramPrivateWidgetFilter();
+                } else {
+                    this.onShowProgramPublicWidgetFilter();
+                }
             });
     }
 
@@ -241,7 +270,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
     onShowProgramPendingWidgetFilter(page: number = 0): void {
         this.blockUI();
         this.tyrionBackendService.widgetGetByFilter(page, {
-            // pending_widgets: true,       // For public its required
+            pending_widgets: true,       // For public its required
         })
             .then((list) => {
                 this.widgetListNotApproved = list;
@@ -255,14 +284,14 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onDrobDownEmiter(action: string, object: any): void {
 
-        if (action === 'make_clone_widget') {
+        if (action === 'clone_widget') {
             this.onMakeClone(object);
         }
 
-        if (action === 'active_group_widget') {
+        if (action === 'activate_widget') {
             this.onWidgetActivateClick(object);
         }
-        if (action === 'deactive_group_widget') {
+        if (action === 'deactivate_widget') {
             this.onWidgetDeactivateClick(object);
         }
 
@@ -272,6 +301,10 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
         if (action === 'remove_widget') {
             this.onWidgetDeleteClick(object);
+        }
+
+        if (action === 'make_decision') {
+            this.onWidgetClick(object);
         }
     }
 

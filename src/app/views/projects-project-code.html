@@ -41,6 +41,13 @@
                             permission: true,
                             tab_color: 'CODE',
                             tab_label: ('tab_public_c_programs'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'admin_c_programs',
+                            condition: (project_id == null),
+                            permission: true,
+                            tab_color: 'CODE',
+                            tab_label: ('tab_admin_c_programs'|bkTranslate:this)
                         }
                     ]"
     >
@@ -55,10 +62,11 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="text-center"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                        <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_hardware_type'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -67,6 +75,11 @@
                         <td class="vert-align">{{code.description}}</td>
                         <td class="vert-align text-center no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a>
                         </td>
+
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="code.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
@@ -122,10 +135,11 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="text-center"><span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
-                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                        <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_hardware_type'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
@@ -133,6 +147,9 @@
                         <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code.id)">{{code.name}}</a></td>
                         <td class="vert-align">{{code.description}}</td>
                         <td class="vert-align text-center no-wrap"><a (click)="onHardwareTypeClick(code.hardware_type.id)">{{code.hardware_type.name}}</a>
+                        </td>
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="code.tags" [readonly]="true"></bk-form-tag-input>
                         </td>
                         <td class="action-btn-col">
 

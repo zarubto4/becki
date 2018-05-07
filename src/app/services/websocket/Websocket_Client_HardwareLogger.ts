@@ -55,7 +55,7 @@ export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
 
     /***** Requests *******/
 
-    public requestDeviceTerminalSubcribe(deviceId: string, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace'), callback: (response_message: WebsocketMessage, error: any) => void) {
+    public requestDeviceTerminalSubscribe(deviceId: string, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace'), callback: (response_message: WebsocketMessage, error: any) => void) {
 
         let message = new IWebSocketSubscribeHardware();
         message.hardware_ids = [deviceId];
@@ -64,7 +64,7 @@ export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
         super.send_with_callback(WebsocketMessage.fromOutComingMessage(message), 2000, 0, 3, callback);
     }
 
-    public requestDeviceTerminalUnSubcribe(deviceId: string, callback: (response_message: WebsocketMessage, error: any) => void) {
+    public requestDeviceTerminalUnSubscribe(deviceId: string, callback: (response_message: WebsocketMessage, error: any) => void) {
 
         let message = new IWebSocketUnSubscribeHardware();
         message.hardware_ids = [deviceId];

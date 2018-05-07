@@ -230,6 +230,12 @@
             <template [ngSwitchCase]="'ModalsGridProgramSettingsModel'">
                 <bk-modals-instance-grid-program-settings [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-grid-program-settings>
             </template>
+            <template [ngSwitchCase]="'ModalsSelectGridProjectModel'">
+                <bk-modals-grid-project-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-grid-project-select>
+            </template>
+            <template [ngSwitchCase]="'ModalsSelectBlockModel'">
+                <bk-modals-block-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-block-select>
+            </template>
         </div>
     </div>
 </div>

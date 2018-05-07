@@ -564,7 +564,6 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                     });
             }
         });
-
     }
 
     onMakeClone(): void {
@@ -613,11 +612,11 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
         }
 
         if (action === 'edit_version') {
-            this.onWidgetSetMainClick(version);
+            this.onEditVersionClick(version);
         }
 
         if (action === 'version_set_as_main') {
-            this.onEditVersionClick(version);
+            this.onWidgetSetMainClick(version);
         }
 
         if (action === 'remove_version') {

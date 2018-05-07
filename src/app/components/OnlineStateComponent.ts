@@ -39,6 +39,12 @@ export class OnlineStateComponent {
         <span *ngIf="log_level == 'warn'">
             <i class="fa fa-exclamation-triangle font-yellow-saffron"></i> Warn
         </span>
+        <span *ngIf="log_level == 'trace'">
+            <i class="fa fa-info-circle font-grey-salsa"></i> Trace
+        </span>
+        <span *ngIf="log_level == 'debug'">
+            <i class="fa fa-info-circle font-grey-mint"></i> Debug
+        </span>
         <span *ngIf="log_level == 'log'">
             <i class="fa fa-angle-double-right"></i> Log
         </span>

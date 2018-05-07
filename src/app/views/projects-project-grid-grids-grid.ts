@@ -162,12 +162,10 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.tyrionBackendService.gridProgramVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version'), reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
             }
@@ -317,7 +315,6 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.tyrionBackendService.gridProgramDelete(this.gridProgram.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_remove')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridProgramId]);
                     })
                     .catch(reason => {

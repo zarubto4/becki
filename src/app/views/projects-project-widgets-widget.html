@@ -254,13 +254,14 @@
                                         <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
                                 </td>
+
                                 <td class="action-btn-col">
 
                                     <bk-drob-down-button
                                         [btns_group_name]="('label_properties'|bkTranslate:this)"
                                         [btns] = "[
                                             {
-                                                condition: project && !version.approval_state,
+                                                condition: (projectId != null && version.approval_state == null),
                                                 btn_label_for_person: ('label_publish'|bkTranslate:this),
                                                 btn_tag: 'version_publish_community',
                                                 icon: 'fa-heart',
@@ -268,23 +269,23 @@
                                                 permission: (version.update_permission)
                                             },
                                             {
-                                                condition: version.approval_state == 'PENDING' && version.community_publishing_permission,
-                                                btn_label_for_person: ('label_publish'|bkTranslate:this),
+                                                condition: (version.approval_state == 'PENDING'),
+                                                btn_label_for_person: ('label_publish_decision'|bkTranslate:this),
                                                 btn_tag: 'version_publish_admin',
                                                 icon: 'fa-heart',
                                                 colorType: 'CREATE',
-                                                permission: (version.update_permission)
+                                                permission: (version.community_publishing_permission)
                                             },
                                             {
-                                                condition: widget && widget.publish_type == 'DEFAULT_MAIN' && version.publish_type != 'DEFAULT_VERSION',
-                                                btn_label_for_person: ('label_basic_settings'|bkTranslate:this),
+                                                condition: (true),
+                                                btn_label_for_person: ('label_version_properties'|bkTranslate:this),
                                                 btn_tag: 'edit_version',
                                                 icon: 'fa-cog',
                                                 colorType: 'EDIT',
                                                 permission: (widget.update_permission)
                                             },
                                             {
-                                                condition: true,
+                                                condition: (projectId == null && widget.publish_type == 'DEFAULT_MAIN'),
                                                 btn_label_for_person: ('label_version_set_as_main'|bkTranslate:this),
                                                 btn_tag: 'version_set_as_main',
                                                 icon: 'fa-flag',
@@ -292,7 +293,7 @@
                                                 permission: (version.update_permission)
                                             },
                                             {
-                                                condition: true,
+                                                condition: (true),
                                                 btn_label_for_person: ('label_remove_version'|bkTranslate:this),
                                                 btn_tag: 'remove_version',
                                                 icon: 'fa-trash',
@@ -300,7 +301,7 @@
                                                 permission: (version.delete_permission)
                                             }
                                         ]"
-                                                    (onValueChanged)="onDrobDownEmiter($event, version)"
+                                        (onValueChanged)="onDrobDownEmiter($event, version)"
                                     >
                                     </bk-drob-down-button>
 

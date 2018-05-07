@@ -44,11 +44,13 @@ export class ModalsWidgetsWidgetCopyComponent implements OnInit {
     ngOnInit() {
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
+        (<FormControl>(this.form.controls['tags'])).setValue(this.modalModel.tags);
     }
 
     onSubmitClick(): void {
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
+        this.modalModel.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

@@ -201,13 +201,13 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         if (this.project_Id != null) {
-                            this.storageService.projectRefresh(this.project_Id).then(() => this.unblockUI());
+                            this.refresh();
                         }
                         this.router.navigate(['/projects/' + this.project_Id + '/code']);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
-                        this.storageService.projectRefresh(this.project_Id).then(() => this.unblockUI());
+                        this.refresh();
                     });
             }
         });
@@ -242,14 +242,14 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
                         if (this.project_Id != null) {
-                            this.storageService.projectRefresh(this.project_Id).then(() => this.unblockUI());
+                            this.refresh();
                         }
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version'), reason));
                         if (this.project_Id != null) {
-                            this.storageService.projectRefresh(this.project_Id).then(() => this.unblockUI());
+                            this.refresh();
                         }
                         this.refresh();
                     });
@@ -489,7 +489,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
-                        this.storageService.projectRefresh(this.project_Id).then(() => this.unblockUI());
+                        this.refresh();
                     });
             }
         });
@@ -606,6 +606,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     saveCode() {
+        console.log('saveCode modal');
         let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
         this.modalService.showModal(m).then((success) => {
             if (success) {
@@ -653,6 +654,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     onSaveClick() {
+        console.info('onSaveClick');
         if (this.changesInSelectedVersion().length === 0) {
             let con = new ModalsConfirmModel(this.translate('modal_label_save_same_code'), this.translate('modal_text_no_change'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
             this.modalService.showModal(con).then((success) => {

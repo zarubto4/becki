@@ -1,0 +1,114 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
+    </div>
+    <div class="modal-body">
+        <div class="portlet-body">
+
+            <div *ngIf="modalModel && modalModel.selected_grid_project == null">
+                <div *ngIf="(projects && projects.content.length)" class="table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light byzance-table">
+                        <thead>
+                        <tr>
+                            <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="hide-bk-drob-down-button">
+                        <tr *ngFor="let project of projects.content">
+                            <td class="vert-align no-wrap"><a (click)="onSelectProjectClick(project)">{{project.name}}</a></td>
+                            <td class="vert-align">{{project.description}}</td>
+                            <td class="vert-align">
+                                <bk-form-tag-input [tags_without_form]="project.tags" [readonly]="true"></bk-form-tag-input>
+                            </td>
+
+                            <td class="action-btn-col">
+
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                    [btns]="[
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_select_project'|bkTranslate:this),
+                                                btn_tag: 'label_select_project',
+                                                icon: 'fa-check',
+                                                colorType: 'CREATE',
+                                                permission: true
+                                            }
+                                        ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, project)"
+                                >
+                                </bk-drob-down-button>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <bk-filter-page-component [from]="projects.from" [to]="projects.to"
+                                              [total]="projects.total" [totalPages]="projects.pages"
+                                              (onSelect)="onFilterProjects($event)"></bk-filter-page-component>
+                </div>
+
+                <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                <bk-nothing-to-show [condition_loading]="(projects == null)"
+                                    [condition_empty]="(projects != null && projects.content.length == 0)"
+                                    [main_message_link]="'label_no_grid_project'|bkTranslate:this"
+                                    [main_message_comment_link]="'label_no_grid_project_comment'|bkTranslate:this"
+                                    [show_button]="false">
+                </bk-nothing-to-show>
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+            </div>
+            <div *ngIf="modalModel && modalModel.selected_grid_project">
+
+                <div *ngIf="modalModel.already_selected_project_for_version_change == null">
+                    <button  type="button" class="btn default red" (click)="onBack()">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <br>
+                    <br>
+                </div>
+
+                <div class="clearfix">
+
+                    <table class="table table-hover table-light byzance-table">
+                        <thead>
+                        <tr>
+                            <th class="" [innerHTML]="'table_program'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'table_version'|bkTranslate:this"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="hide-bk-drob-down-button">
+                        <tr *ngFor="let m_program of modalModel.selected_grid_project.m_programs">
+                            <td class="vert-align">{{m_program.name}}</td>
+
+                            <td class="vert-align">
+                                <bk-program-version-selector [programs]="[m_program]"
+                                                             [show_program_selector]="false"
+                                                             [show_labels_selector]="false"
+                                                             [type]="'IGridProgram'"
+                                                             [already_selected_program_id]="m_program.id"
+                                                             (valueChanged)="onValueChanged($event, m_program)">
+                                </bk-program-version-selector>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div *ngIf="errorMessage">
+        <span class="font-red bold">{{errorMessage}}</span>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>
+    </div>
+</div>

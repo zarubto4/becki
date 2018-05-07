@@ -3,9 +3,10 @@ import { WebsocketMessage } from './WebsocketMessage';
 import { IWebSocketGetBProgramValues, IWebSocketSubscribeInstance } from './Websocket_Client_BlockoView';
 import { IHardwareNewSettingsResultConfiguration } from '../../backend/TyrionAPI';
 import { WebsocketClientTyrion } from './Websocket_Client_Tyrion';
+import {_BaseMainComponent} from "../../views/_BaseMainComponent";
 
 
-export class WebsocketClientGardfield extends WebsocketClientAbstract {
+export class WebsocketClientGardfield  extends WebsocketClientAbstract {
 
     public tyrion: WebsocketClientTyrion;
 

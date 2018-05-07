@@ -608,11 +608,11 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
     onDrobDownEmiter(action: string, version: IBlockVersion): void {
 
-        if (action === 'version_publish_public') {
+        if (action === 'version_publish_community') {
             this.onCommunityPublicVersionClick(version);
         }
 
-        if (action === 'version_publish_administrator') {
+        if (action === 'version_publish_admin') {
             this.onProgramVersionPublishResult(version);
         }
         if (action === 'version_set_as_main') {

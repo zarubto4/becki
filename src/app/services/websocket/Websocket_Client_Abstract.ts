@@ -1,5 +1,7 @@
 import { WebsocketMessage } from './WebsocketMessage';
 import { WebsocketMessageBuffer } from './WebsocketMessageBuffer';
+import {TyrionBackendService} from "../BackendService";
+import {TyrionApiBackend} from "../../backend/BeckiBackend";
 
 
 export abstract class IndividualWebSocketOutComingMessage {
@@ -35,11 +37,11 @@ export abstract class WebsocketClientAbstract {
 
     /**
      * @param url: Adresa  -  bez wss Portu pokud je vyžadován (Nepřekryt C_Name doménou)
-     * @param wss: true pokud je wss požadováno
+     * @param backendService: TyrionApiBackend
      */
-    constructor(public url: string, public wss: boolean = false) {
+    constructor(public url: string) {
         if (!(url.includes('ws://') || this.url.includes('wss://'))) {
-            if (!wss) {
+            if (TyrionApiBackend.protocol == 'http') {
                 this.url = 'ws://' + url;
             } else {
                 this.url = 'wss://' + url;
@@ -137,9 +139,9 @@ export abstract class WebsocketClientAbstract {
      */
     public connectWs() {
         if (!(this.url.includes('ws://') || this.url.includes('wss://'))) {
-            if (!this.wss) {
+            if (TyrionApiBackend.protocol == 'http') {
                 this.url = 'ws://' + this.url;
-            }else {
+            } else {
                 this.url = 'wss://' + this.url;
             }
         }

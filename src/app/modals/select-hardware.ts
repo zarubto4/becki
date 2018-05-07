@@ -14,7 +14,8 @@ import { Subscription } from 'rxjs/Rx';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
-    constructor(public project_id: string, public hardware_type: IHardwareType = null, public selected_hardware: IHardware[] = []) {
+    public selected_hardware: IHardware[] = [];
+    constructor(public project_id: string, public hardware_type: IHardwareType = null, multiple_select_support: boolean = true) {
         super();
         this.modalLarge = true;
     }
@@ -34,7 +35,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     devicesFilter: IHardwareList = null;
     selectedList: { [id: string]: IHardware } = {};
-    projectsUpdateSubscription: Subscription;
+
 
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
 

@@ -28,8 +28,8 @@ export class WebsocketService {
     /**
      * Return Tyrion Connection
      */
-    public openTyrionWebsocketConnection(url: string, wss: boolean = false): void {
-        this.tyrionWebSocketConnection = new WebsocketClientTyrion(this.backend, url, wss);
+    public openTyrionWebsocketConnection(url: string): void {
+        this.tyrionWebSocketConnection = new WebsocketClientTyrion(this.backend, url);
     }
 
     // WebSocket Messages From Homer For HArdware Logger:

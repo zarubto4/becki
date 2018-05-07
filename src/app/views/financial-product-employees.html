@@ -1,0 +1,96 @@
+<!-- /*
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
+ */
+ -->
+<bk-layout-main
+    [tabMenu]="'tariffs-tariff'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-users'"
+        (onClick)="onMembersAddClick()"
+        [btns]="[
+                {
+                    condition: (product && product.customer.employees.length > 1),
+                    btn_label_for_person: ('btn_add_members'|bkTranslate:this),
+                    colorType: 'ADD',
+                    icon: 'fa-plus-circle',
+                    btn_tag: 'add'
+                }
+            ]">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
+
+        <!-- Page Content -- START -->
+        <div *ngIf="(product && product.customer && product.customer.employees.length > 1)" class="table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light byzance-table">
+                <thead>
+                <tr>
+                    <th class="">{{'label_email'|bkTranslate:this}}</th>
+                    <th class="">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="">{{'table_state'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                </tr>
+                </thead>
+                <tbody class="hide-bk-drob-down-button">
+                <tr *ngFor="let employee of product.customer.employees">
+                    <td class="vert-align no-wrap">{{employee.person.email}}</td>
+                    <td class="vert-align no-wrap">{{employee.person.first_name + ' ' + employee.person.last_name}}</td>
+                    <td class="vert-align no-wrap">{{readableState(employee.state)}}</td>
+                    <td class="action-btn-col">
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_settings'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: (employee.person.id != selfId),
+                                    btn_label_for_person: ('label_remove_member'|bkTranslate:this),
+                                    btn_tag: 'remove_member',
+                                    icon: 'fa fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: product.update_permission
+                                },
+                                {
+                                    condition: (employee.person.id != selfId),
+                                    btn_label_for_person: ('label_send_invitation'|bkTranslate:this),
+                                    btn_tag: 'send_invitation',
+                                    icon: 'fa-envelope',
+                                    colorType: 'CREATE',
+                                    permission: product.update_permission
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, employee)"
+                        >
+                        </bk-drob-down-button>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Page Content -- END -->
+
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <!-- Admin is always in Project -->
+        <bk-nothing-to-show [condition_loading]="(product == null)"
+                            [condition_empty]="(product != null && product.customer != null && product.customer.employees.length < 2)"
+                            [main_message_link]="'no_persons_in_this_product'|bkTranslate:this"
+                            [main_message_comment_link]="'no_persons_in_this_product_comment'|bkTranslate:this"
+                            [btn_label]="'btn_add_members'|bkTranslate:this"
+                            [icon]="'fa-users'"
+                            (onButtonClick)="onMembersAddClick()">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+    </div>
+    <!-- Page Content -- END -->
+
+</bk-layout-main>

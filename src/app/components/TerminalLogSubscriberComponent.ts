@@ -285,7 +285,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     onHardwareUnSubscribeClick(hardware: IHardware): void {
         console.log('onHardwareUnSubscribeClick: Hardware::', hardware.id);
 
-        this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubcribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
+        this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
 
             if(response_message && response_message.status == 'success') {
                 this.logLevel[hardware.id].subscribed = false;
@@ -306,7 +306,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
         console.log('onHardwareSubscribeClick: Hardware::', hardware.id);
 
-        this.logLevel[hardware.id].socket.requestDeviceTerminalSubcribe(hardware.id, logLevel , (response_message: WebsocketMessage, error: any) => {
+        this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel , (response_message: WebsocketMessage, error: any) => {
 
             console.log('onHardwareSubscribeClick: response_message::', response_message);
 
@@ -338,11 +338,11 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
         }
 
         // Set New Default Values
-        this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubcribe(hardware.id, (response_message_unsubscribe: WebsocketMessage, error_unsubsribe: any) => {
+        this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message_unsubscribe: WebsocketMessage, error_unsubsribe: any) => {
 
             if (response_message_unsubscribe && response_message_unsubscribe.status === 'success') {
 
-                this.logLevel[hardware.id].socket.requestDeviceTerminalSubcribe(hardware.id, logLevel , (response_message_subscribe: WebsocketMessage, error_subsrribe: any) => {
+                this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel , (response_message_subscribe: WebsocketMessage, error_subsrribe: any) => {
 
                     if (response_message_unsubscribe && response_message_unsubscribe.status === 'success') {
 

@@ -192,7 +192,7 @@
                             <div *ngIf="instance.current_snapshot">
                                 <div>
                                     <span [innerHTML]="'label_instance_version_name'|bkTranslate:this"></span>:
-                                    {{instance.current_snapshot.b_program_version.name}}
+                                    {{instance.current_snapshot.name}}
                                 </div>
                                 <div>
                                     <span [innerHTML]="'label_instance_version_description'|bkTranslate:this"></span>:
@@ -693,16 +693,16 @@
                                 [btns]="[
                                 {
                                     condition: true,
-                                    btn_label_for_person: ('label_blocko_program_properties'|bkTranslate:this),
-                                    btn_tag: 'edit_blocko_program',
+                                    btn_label_for_person: ('label_snapshot_settings'|bkTranslate:this),
+                                    btn_tag: 'edit_snapshot_instance',
                                     icon: 'fa-cog',
                                     colorType: 'EDIT',
                                     permission: (snapshot.update_permission)
                                 },
                                 {
                                     condition: true,
-                                    btn_label_for_person: ('label_blocko_remove'|bkTranslate:this),
-                                    btn_tag: 'remove_blocko',
+                                    btn_label_for_person: ('label_snapshot_remove'|bkTranslate:this),
+                                    btn_tag: 'remove_instance',
                                     icon: 'fa-trash',
                                     colorType: 'REMOVE',
                                     permission: (snapshot.delete_permission)

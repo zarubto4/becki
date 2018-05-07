@@ -2,11 +2,6 @@
   ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level
   ~ directory of this distribution.
 */
-
-/**
- * Created by dominik krisztof on 22/09/16.
- */
-
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { ITariff, IProductExtension, IProductNew, IInvoice, IProduct, ICustomer } from '../backend/TyrionAPI';

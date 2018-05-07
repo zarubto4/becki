@@ -326,7 +326,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedure(pageNumber: number = 0,
         states: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE' , 'COMPLETE_WITH_ERROR' , 'CANCELED' , 'IN_PROGRESS' , 'NOT_START_YET'],
-        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL' , 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' , 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
+        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL' , 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE']): void {
         this.blockUI();
         this.tyrionBackendService.actualizationProcedureGetByFilter(pageNumber, {
             project_id: this.projectId,
@@ -398,6 +398,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         // TODO
     }
 
+
     onProcedureCreateClick() {
 
         // Get all deviceGroup - Recursion
@@ -443,6 +444,20 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     }
 
+    onBlinkDeviceClick(device: IHardware): void {
+        this.tyrionBackendService.boardCommandExecution({
+            hardware_id: device.id,
+            command: 'BLINK'
+        })
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_restart_success')));
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.unblockUI();
+            });
+    }
+
     onDrobDownEmiter(action: string, object: any): void {
 
 
@@ -481,7 +496,9 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         if (action === 'deactivate_hardware') {
             this.onHardwareDeactivate(object);
         }
-
+        if (action === 'blink_hardware') {
+            this.onBlinkDeviceClick(object);
+        }
     }
 
 

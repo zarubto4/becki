@@ -71,11 +71,19 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 this.tyrionBackendService.libraryDelete(library.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_removed_success')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        if (library.publish_type === 'PRIVATE') {
+                            this.onFilterPrivateLibraries();
+                        } else {
+                            this.onFilterPublicLibraries();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        if (library.publish_type === 'PRIVATE') {
+                            this.onFilterPrivateLibraries();
+                        } else {
+                            this.onFilterPublicLibraries();
+                        }
                     });
             }
         });
@@ -93,11 +101,11 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_add_success')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivateLibraries();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_add_fail', model.name, reason)));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivateLibraries();
                     });
             }
         });
@@ -116,10 +124,13 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivateLibraries();
+                        this.onFilterPublicLibraries();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                        this.onFilterPrivateLibraries();
+                        this.onFilterPublicLibraries();
                     });
             }
         });
@@ -137,11 +148,19 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        if (library.publish_type === 'PRIVATE') {
+                            this.onFilterPrivateLibraries();
+                        } else {
+                            this.onFilterPublicLibraries();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        if (library.publish_type === 'PRIVATE') {
+                            this.onFilterPrivateLibraries();
+                        } else {
+                            this.onFilterPublicLibraries();
+                        }
                     });
             }
         });

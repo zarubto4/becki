@@ -70,6 +70,20 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         });
     }
 
+    onBlinkDeviceClick(): void {
+        this.tyrionBackendService.boardCommandExecution({
+            hardware_id: this.hardwareId,
+            command: 'BLINK'
+        })
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_restart_success')));
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.unblockUI();
+            });
+    }
+
     onPortletClick(action: string): void {
         if (action === 'update_hardware') {
             this.onEditClick(this.hardware);
@@ -101,6 +115,14 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
 
         if (action === 'hardware_manual_update') {
             this.onManualIndividualUpdate();
+        }
+
+        if (action === 'blink_hardware') {
+            this.onBlinkDeviceClick();
+        }
+
+        if (action === 'remove_hardware') {
+            this.onRemoveClick(this.hardware);
         }
     }
 
@@ -208,19 +230,16 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     }
 
     onFreezeDeviceClick(device: IHardware): void {
-        this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.projectDeactiveHW(device.id)
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
-                        this.router.navigate(['/projects/' + this.projectId + '/hardware']);
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
-                    });
-            }
-        });
+        this.blockUI();
+        this.tyrionBackendService.projectDeactiveHW(device.id)
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
+                this.refresh();
+            });
     }
 
     onActiveDeviceClick(device: IHardware): void {
@@ -449,34 +468,24 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     }
 
     onManualIndividualUpdate(): void {
-        this.blockUI();
-        this.tyrionBackendService.cProgramGetListByFilter(0, {
-            project_id: this.projectId,
-            hardware_type_ids: [this.hardwareType.id]
-        }).then( (list: ICProgramList) => {
-            this.unblockUI();
-            let mConfirm = new ModalsSelectCodeModel(list.content);
-            this.modalService.showModal(mConfirm)
-                .then((success) => {
-                    if (success) {
-                        this.blockUI();
-                        this.tyrionBackendService.cProgramUploadIntoHardware({
-                            hardware_ids: [this.hardware.id],
-                            c_program_version_id: mConfirm.selectedVersionId
+        let model = new ModalsSelectCodeModel(this.projectId, this.hardwareType.id);
+        this.modalService.showModal(model)
+            .then((success) => {
+                if (success) {
+
+                    this.tyrionBackendService.cProgramUploadIntoHardware({
+                        hardware_ids: [this.hardware.id],
+                        c_program_version_id: model.selectedCProgramVersion.id
+                    })
+                        .then(() => {
+                            this.refresh();
                         })
-                            .then(() => {
-                                this.refresh();
-                            })
-                            .catch((reason) => {
-                                this.fmError(this.translate('flash_cant_update_bootloader', reason));
-                                this.unblockUI();
-                            });
-                    }
-                });
-
-        });
-
-
+                        .catch((reason) => {
+                            this.fmError(this.translate('flash_cant_update_bootloader', reason));
+                            this.unblockUI();
+                        });
+                }
+            });
     }
 
     /* tslint:disable:max-line-length ter-indent */

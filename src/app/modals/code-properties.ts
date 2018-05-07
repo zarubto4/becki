@@ -46,7 +46,6 @@ export class ModalsCodePropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('HArdware Types:: ', this.modalModel.hardwareTypes);
 
         if (!this.modalModel.edit) {
             this.options = formSelectComponentOptionsMaker(this.modalModel.hardwareTypes, 'id', 'name');
@@ -72,6 +71,8 @@ export class ModalsCodePropertiesComponent implements OnInit {
         if (this.modalModel.edit === false) {
             this.modalModel.hardware_type_id = this.form.controls['hardware_type_id'].value;
         }
+
+        this.modalModel.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

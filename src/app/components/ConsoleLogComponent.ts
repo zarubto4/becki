@@ -58,7 +58,8 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn' | 'deb
                             [class.font-grey-salsa]="log.type == 'trace'"
                             [class.font-grey-salsa]="log.type == 'info'"
                             [class.font-grey-salsa]="log.type == 'log'"
-                            [innerHTML]="log.message"></span>
+                            [innerHTML]="log.message">
+                        </span>
                     </div>
                 </td>
             </tr>

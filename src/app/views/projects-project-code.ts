@@ -28,6 +28,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
 
     privatePrograms: ICProgramList = null;
     publicPrograms: ICProgramList = null;
+    adminForDecisionsPrograms: ICProgramList = null;
 
     hardwareTypes: IHardwareType[] = null;
 
@@ -60,6 +61,9 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
         if (this.publicPrograms == null && tab === 'public_c_programs') {
             this.onFilterPublicPrograms(null);
         }
+        if (this.adminForDecisionsPrograms == null && tab === 'admin_c_programs') {
+            this.onShowProgramPendingCodeFilter(null);
+        }
     }
 
 
@@ -78,11 +82,20 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.tyrionBackendService.cProgramDelete(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.unblockUI();
+                        if (code.publish_type === 'PRIVATE') {
+                            this.onFilterPrivatePrograms();
+                        } else {
+                            this.onFilterPublicPrograms();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        if (code.publish_type === 'PRIVATE') {
+                            this.onFilterPrivatePrograms();
+                        } else {
+                            this.onFilterPublicPrograms();
+                        }
                     });
             }
         });
@@ -101,15 +114,18 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                             project_id: this.project_id,
                             name: model.name,
                             description: model.description,
-                            hardware_type_id: model.hardware_type_id
+                            hardware_type_id: model.hardware_type_id,
+                            tags: model.tags
                         })
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
-                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                                this.unblockUI();
+                                this.onFilterPrivatePrograms();
                             })
                             .catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.name, reason)));
-                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                                this.unblockUI();
+                                this.onFilterPrivatePrograms();
                             });
                     }
                 });
@@ -127,15 +143,24 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                         this.blockUI();
                         this.tyrionBackendService.cProgramEdit(code.id, {
                             name: model.name,
-                            description: model.description
+                            description: model.description,
+                            tags: model.tags
                         })
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                                if (code.publish_type === 'PRIVATE') {
+                                    this.onFilterPrivatePrograms();
+                                } else {
+                                    this.onFilterPublicPrograms();
+                                }
                             })
                             .catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
-                                this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                                if (code.publish_type === 'PRIVATE') {
+                                    this.onFilterPrivatePrograms();
+                                } else {
+                                    this.onFilterPublicPrograms();
+                                }
                             });
                     }
                 });
@@ -155,11 +180,12 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onFilterPrivatePrograms();
+                        this.onFilterPublicPrograms();
                     });
             }
         });
@@ -208,6 +234,28 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
             });
     }
 
+    onShowProgramPendingCodeFilter(page: number = 0): void {
+
+        // Only for first page load - its not neccesery block page - user saw private programs first - soo api have time to load
+        if (page != null) {
+            this.blockUI();
+        } else {
+            page = 1;
+        }
+
+        this.tyrionBackendService.cProgramGetListByFilter(page, {
+            pending_programs: true,
+        })
+            .then((iCProgramList) => {
+                this.publicPrograms = iCProgramList;
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.unblockUI();
+            });
+    }
+
     onDrobDownEmiter(action: string, object: any): void {
 
         if (action === 'code_program_clone') {
@@ -218,9 +266,10 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
             this.onEditClick(object);
         }
 
-        if (action === 'remove_project') {
+        if (action === 'remove_code_program') {
             this.onRemoveClick(object);
         }
 
     }
+
 }
