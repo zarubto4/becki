@@ -5,69 +5,204 @@
     </div>
     <div class="modal-body">
 
-        <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
-            <table class="table table-hover table-light byzance-table">
-                <thead>
-                <tr>
-                    <th class="col">{{'table_hardware_name'|bkTranslate:this}}</th>
-                    <th class="col">{{'table_hardware_id'|bkTranslate:this}}</th>
-                    <th class="col text-center">{{'table_status'|bkTranslate:this}}</th>
-                    <th class="col text-center">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                </tr>
-                </thead>
-                <tbody>
-                <ng-container *ngFor="let device of devicesFilter.content;">
-                    <tr [class.success]="selectedList[device.id]">
-                        <td class="vert-align">
+        <div class="portlet light">
 
-                            <a (click)="!selectedList[device.id] ? onAddToList(device) : onRemoveFromList(device)" class="no-wrap">
-                                <strong *ngIf="device.name && device.name != 'null'">{{device.name}}</strong>
-                                <strong *ngIf="!device.name || device.name == 'null' ">{{device.full_id}}</strong>
-                            </a>
-                        </td>
-                        <td class="vert-align">{{device.id.substr(0,13)}}</td>
-                        <td class="vert-align text-center">
-                            <bk-online-state [online_state]="device.online_state"></bk-online-state>
-                        </td>
+            <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+            <bk-portlet-title *ngIf="modalModel.support_select_hw_groups"
+                              [show_title]="false"
+                              (onTabClick)="onToggleTab($event)"
+                              [tab_selected_name]="tab"
+                              [tabBtns]="[
+                            {
+                                tab_name: 'hardware',
+                                condition: (true),
+                                tab_color: 'HARDWARE',
+                                tab_label: ('tab_hardware'|bkTranslate:this)
+                            },
+                            {
+                                tab_name: 'group',
+                                condition: (modalModel.support_select_hw_groups),
+                                tab_color: 'HARDWARE',
+                                tab_label: ('tab_hardware_group'|bkTranslate:this)
+                            }
+                    ]"
+            ></bk-portlet-title>
 
-                        <td class="vert-align text-right no-wrap">
 
-                            <style type="text/css">
-                                table tr button {
-                                    opacity: 0.05;
-                                }
-                                table tr:hover button {
-                                    opacity: 1
-                                }
-                            </style>
-                            <button *ngIf="!selectedList[device.id]" title="{{'label_add_hardware'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                    (click)="onAddToList(device)">
-                                    <i class="fa fa-plus-circle"></i>
-                            </button>
-                            <button *ngIf="selectedList[device.id]" title="{{'label_remove_hardware'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                    (click)="onRemoveFromList(device)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </ng-container>
-                </tbody>
-            </table>
-            <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"  [totalPages]="devicesFilter.pages" (onSelect)="onFilterHardware($event)"></bk-filter-page-component>
+            <div class="portlet-body">
+
+                <div *ngIf="tab == 'hardware'">
+                    <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+                        <table class="table table-hover table-light byzance-table">
+                            <thead>
+                            <tr>
+                                <th class="">{{'table_hardware_name'|bkTranslate:this}}</th>
+                                <th class="">{{'table_hardware_id'|bkTranslate:this}}</th>
+                                <th class="text-center">{{'table_status'|bkTranslate:this}}</th>
+                                <th [class.text-right]="modalModel.multiple_select_support" [class.text-center]="!modalModel.multiple_select_support" style="width: 1px">{{'table_actions'|bkTranslate:this}}</th>
+                            </tr>
+                            </thead>
+                            <tbody class="hide-bk-drob-down-button">
+                                <tr *ngFor="let device of devicesFilter.content">
+                                    <td class="vert-align">
+
+                                        <a (click)="!selectedHardwareList[device.id] ? onHardwareAddToList(device) : onHardwareRemoveFromList(device)" class="no-wrap">
+                                            <strong *ngIf="device.name && device.name != 'null'">{{device.name}}</strong>
+                                            <strong *ngIf="!device.name || device.name == 'null' ">{{device.full_id}}</strong>
+                                        </a>
+                                    </td>
+                                    <td class="vert-align">{{device.id.substr(0,13)}}</td>
+                                    <td class="vert-align text-center">
+                                        <bk-online-state [online_state]="device.online_state"></bk-online-state>
+                                    </td>
+
+                                    <!-- Multiple Select -->
+                                    <td class="vert-align text-center no-wrap" *ngIf="modalModel.multiple_select_support">
+                                        <div class="md-checkbox" (click)="selectedHardwareList[device.id] == null ? onHardwareAddToList(device) : onHardwareRemoveFromList(device)">
+                                            <input type="checkbox" class="md-check" [checked]="selectedHardwareList[device.id] != null">
+                                            <label>
+                                                <span class="inc"></span>
+                                                <span [class.check]="selectedHardwareList[device.id] != null"></span>
+                                                <span class="box"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+
+                                    <!-- Single Select -->
+                                    <td class="action-btn-col" *ngIf="!modalModel.multiple_select_support">
+                                        <bk-drob-down-button
+                                            [btns_group_name]="('label_hardware_properties'|bkTranslate:this)"
+                                            [btns]="[
+                                                    {
+                                                        condition: (selectedHardwareList[device.id] != null),
+                                                        btn_label_for_person: ('label_remove_hardware'|bkTranslate:this),
+                                                        btn_tag: 'label_remove_hardware',
+                                                        icon: 'fa-trash',
+                                                        colorType: 'REMOVE',
+                                                        permission: true
+                                                    },
+                                                    {
+                                                        condition: (selectedHardwareList[device.id] == null),
+                                                        btn_label_for_person: ('label_select_hardware'|bkTranslate:this),
+                                                        btn_tag: 'label_select_hardware',
+                                                        icon: 'fa-check',
+                                                        colorType: 'CREATE',
+                                                        permission: true
+                                                    }
+                                                ]"
+                                            (onValueChanged)="onDrobDownEmiter($event, device)"
+                                        >
+                                        </bk-drob-down-button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"  [totalPages]="devicesFilter.pages" (onSelect)="onFilterHardware($event)"></bk-filter-page-component>
+                    </div>
+
+                    <div *ngIf="modalModel.multiple_select_support" class="text-center">
+                        <span [innerHTML]="'label_add_multiple_hardware_supported'|bkTranslate:this"></span>
+                    </div>
+
+                    <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                    <bk-nothing-to-show [condition_loading]="(devicesFilter == null)"
+                                        [condition_empty]="(devicesFilter != null && devicesFilter.content.length == 0)"
+                                        [main_message_link]="'label_no_hardware'|bkTranslate:this"
+                                        [main_message_comment_link]="'label_no_hardware_comment'|bkTranslate:this"
+                                        [show_button]="false">
+                    </bk-nothing-to-show>
+                    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+                </div>
+
+                <div *ngIf="tab == 'group'">
+                    <div *ngIf="(groupFilter && groupFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+                        <table class="table table-hover table-light byzance-table">
+                            <thead>
+                            <tr>
+                                <th class="" [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></th>
+                                <th class="" [innerHTML]="'table_hardware_group_description'|bkTranslate:this"></th>
+                                <th [class.text-right]="modalModel.multiple_select_support" [class.text-center]="!modalModel.multiple_select_support" style="width: 1px">{{'table_actions'|bkTranslate:this}}</th>
+                            </tr>
+                            </thead>
+                            <tbody class="hide-bk-drob-down-button">
+                            <tr *ngFor="let group of groupFilter.content">
+                                <td class="vert-align">
+                                    <a (click)="!selectedGroupList[group.id] ? onGroupAddToList(group) : onGroupRemoveFromList(group)" class="no-wrap">
+                                        <strong *ngIf="group.name && group.name != 'null'">{{group.name}}</strong>
+                                        <strong *ngIf="!group.name || group.name == 'null' ">{{group.full_id}}</strong>
+                                    </a>
+                                </td>
+                                <td class="vert-align">
+                                    {{group.description}}
+                                </td>
+
+                                <!-- Multiple Select -->
+                                <td class="vert-align text-center no-wrap" *ngIf="modalModel.multiple_select_support">
+                                    <div class="md-checkbox" (click)="selectedHardwareList[group.id] == null ? onGroupAddToList(group) : onGroupRemoveFromList(group)">
+                                        <input type="checkbox" class="md-check" [checked]="selectedHardwareList[group.id] != null">
+                                        <label>
+                                            <span class="inc"></span>
+                                            <span [class.check]="selectedGroupList[group.id] != null"></span>
+                                            <span class="box"></span>
+                                        </label>
+                                    </div>
+                                </td>
+
+                                <!-- Single Select -->
+                                <td class="action-btn-col" *ngIf="!modalModel.multiple_select_support">
+                                    <bk-drob-down-button
+                                        [btns_group_name]="('label_group_properties'|bkTranslate:this)"
+                                        [btns]="[
+                                                    {
+                                                        condition: (selectedGroupList[group.id] != null),
+                                                        btn_label_for_person: ('label_remove_group'|bkTranslate:this),
+                                                        btn_tag: 'label_remove_group',
+                                                        icon: 'fa-trash',
+                                                        colorType: 'REMOVE',
+                                                        permission: true
+                                                    },
+                                                    {
+                                                        condition: (selectedGroupList[group.id] == null),
+                                                        btn_label_for_person: ('label_select_group'|bkTranslate:this),
+                                                        btn_tag: 'label_select_group',
+                                                        icon: 'fa-check',
+                                                        colorType: 'CREATE',
+                                                        permission: true
+                                                    }
+                                                ]"
+                                        (onValueChanged)="onDrobDownEmiter($event, group)"
+                                    >
+                                    </bk-drob-down-button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <bk-filter-page-component [from]="groupFilter.from" [to]="groupFilter.to" [total]="groupFilter.total"  [totalPages]="groupFilter.pages" (onSelect)="onFilterHardwareGroup($event)"></bk-filter-page-component>
+                    </div>
+
+                    <div *ngIf="modalModel.multiple_select_support" class="text-center">
+                        <span [innerHTML]="'label_add_multiple_hardware_supported'|bkTranslate:this"></span>
+                    </div>
+
+                    <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                    <bk-nothing-to-show [condition_loading]="(groupFilter == null)"
+                                        [condition_empty]="(groupFilter != null && groupFilter.content.length == 0)"
+                                        [main_message_link]="'label_no_hardware_group'|bkTranslate:this"
+                                        [main_message_comment_link]="'label_no_hardware_group_comment'|bkTranslate:this"
+                                        [show_button]="false">
+                    </bk-nothing-to-show>
+                    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+                </div>
+            </div>
         </div>
-
-        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-        <bk-nothing-to-show [condition_loading]="(devicesFilter == null)"
-                            [condition_empty]="(devicesFilter != null && devicesFilter.content.length == 0)"
-                            [main_message_link]="'label_no_hardware'|bkTranslate:this"
-                            [main_message_comment_link]="'label_no_hardware_comment'|bkTranslate:this"
-                            [show_button]="false">
-        </bk-nothing-to-show>
-        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
-
+        <div *ngIf="errorMessage">
+            <span class="font-red bold">{{errorMessage}}</span>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
+        <button *ngIf="modalModel.multiple_select_support" type="button" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
     </div>
 </div>

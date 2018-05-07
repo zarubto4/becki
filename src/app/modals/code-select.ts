@@ -46,11 +46,11 @@ export class ModalsCodeSelectComponent implements OnInit {
     @ViewChild(ProgramVersionSelectorComponent)
     versionSelector: ProgramVersionSelectorComponent;
 
-    errorMessage: string = null;
+
 
 
     programs: ICProgramList = null;
-
+    errorMessage: string = null;
     // Filter parameters
     hardware_type_ids: string [] = null;
     public_programs: boolean = false;
