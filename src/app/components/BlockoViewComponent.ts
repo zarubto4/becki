@@ -351,4 +351,16 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     registerInterfaceBoundCallback(callback: (boundInterface: BlockoCore.BoundInterface) => void) {
         this.groupRemovedCallback = callback;
     }
+
+    registerAddBlockCallback(callback: (callback: (block: BlockoCore.Block) => void) => void): void {
+        this.blockoRenderer.registerAddBlockCallback(callback);
+    }
+
+    registerAddGridCallback(callback: (callback: (iface: Blocks.BlockoTargetInterface) => void) => void): void {
+        this.blockoRenderer.registerAddGridCallback(callback);
+    }
+
+    registerAddHardwareCallback(callback: (callback: (iface: Blocks.BlockoTargetInterface) => void) => void): void {
+        this.blockoRenderer.registerAddHardwareCallback(callback);
+    }
 }

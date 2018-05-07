@@ -8,27 +8,22 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import {
-    IProject, IBProgram, IBlockVersion, IBProgramVersion, IGridProject, IMProgramSnapShot,
-    IMProjectSnapShot, ICProgram, IBlock, ICProgramList, ICProgramVersion, IBlockList, IGridProjectList, IGridProgram
+    IProject, IBProgram, IBlockVersion, IBProgramVersion, IGridProject, IMProgramSnapShot, IMProjectSnapShot
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
-import { DraggableEventParams } from '../components/DraggableDirective';
 import { ModalsConfirmModel } from '../modals/confirm';
-import { Blocks, Core } from 'blocko';
+import { BlockoCore, Blocks, Core } from 'blocko';
 import { Libs } from 'common-lib';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import { ModalsBlockoAddGridModel } from '../modals/blocko-add-grid';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
-import { ModalsBlockoAddGridEmptyModel } from '../modals/blocko-add-grid-emtpy';
-import { ModalsSelectVersionModel } from '../modals/version-select';
-import {ModalsSelectGridProjectModel} from "../modals/grid-project-select";
-import {ModalsSelectBlockModel} from "../modals/block-select";
-import {ModalsSelectHardwareModel} from "../modals/select-hardware";
+import { ModalsSelectGridProjectModel } from '../modals/grid-project-select';
+import { ModalsSelectBlockModel } from '../modals/block-select';
+import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -144,13 +139,13 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             blocks: [
                 {
                     name: 'All in one example',
-                    blockoDesignJson: '{\"displayName\":\"fa-font\",\"backgroundColor\":\"#32C5D2\",\"description\":\"All in one\"}',
+                    blockoDesignJson: '{\'displayName\':\'fa-font\',\'backgroundColor\':\'#32C5D2\',\'description\':\'All in one\'}',
                     blockoTsCode: '// add inputs\nlet din = context.inputs.add(\'din\', \'digital\', \'Digital input\');\nlet ain = context.inputs.add(\'ain\', \'analog\', \'Analog input\');\nlet min = context.inputs.add(\'min\', \'message\', \'Message input\', [\'boolean\', \'integer\', \'float\', \'string\']);\n\n// add outputs\nlet mout = context.outputs.add(\'mout\', \'message\', \'Message output\', [\'string\']);\nlet aout = context.outputs.add(\'aout\', \'analog\', \'Analog output\');\nlet dout = context.outputs.add(\'dout\', \'digital\', \'Digital output\');\n\n// add config properties\nlet offset = context.configProperties.add(\'offset\', \'float\', \'Analog offset\', 12.3, {\n    min: 0,\n    max: 50,\n    step: 0.1,\n    range: true\n});\n\nlet refreshAnalogValue = () => {\n    aout.value = ain.value + offset.value;\n};\n\n// set outputs on block ready\ncontext.listenEvent(\'ready\', () => {\n    dout.value = !din.value;\n    refreshAnalogValue();\n});\n\n// refresh analog value when ain or offset config property changed\nain.listenEvent(\'valueChanged\', refreshAnalogValue);\noffset.listenEvent(\'valueChanged\', refreshAnalogValue);\n\ndin.listenEvent(\'valueChanged\', () => {\n    dout.value = !din.value;\n});\n\nmin.listenEvent(\'messageReceived\', (event) => {\n    let val3 = event.message.values[3];\n    mout.send([\'Received \' + val3]);\n});\n',
                     backgroundColor: '#32C5D2'
                 },
                 {
                     name: 'Analog to digital example',
-                    blockoDesignJson: '{\"displayName\":\"fa-line-chart\",\"backgroundColor\":\"#1BA39C\",\"description\":\"Analog to digital\"}',
+                    blockoDesignJson: '{\'displayName\':\'fa-line-chart\',\'backgroundColor\':\'#1BA39C\',\'description\':\'Analog to digital\'}',
                     blockoTsCode: '// add input and output\nlet ain = context.inputs.add(\'ain\', \'analog\', \'Analog input\');\nlet dout = context.outputs.add(\'dout\', \'digital\', \'Digital output\');\n\n// add config properties for min a max value\nlet min = context.configProperties.add(\'min\', \'float\', \'Min\', 5, {\n    min: 0,\n    max: 100,\n    step: 0.1,\n    range: true\n});\nlet max = context.configProperties.add(\'max\', \'float\', \'Min\', 25, {\n    min: 0,\n    max: 100,\n    step: 0.1,\n    range: true\n});\n\n// function for refresh digital output value\nlet refreshOutput = () => {\n    dout.value = ((ain.value >= min.value) && (ain.value <= max.value));\n};\n\n// trigger refreshOutput function when block ready, ain and config value changed\ncontext.listenEvent(\'ready\', refreshOutput);\nain.listenEvent(\'valueChanged\', refreshOutput);\ncontext.configProperties.listenEvent(\'valueChanged\', refreshOutput);\n',
                     backgroundColor: '#1BA39C'
                 }
@@ -190,6 +185,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     ngAfterViewInit(): void {
         this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
+
+        this.blockoView.registerAddBlockCallback(this.onAddBlock.bind(this));
+        this.blockoView.registerAddGridCallback(this.onAddGrid.bind(this));
+        this.blockoView.registerAddHardwareCallback(this.onAddCode.bind(this));
     }
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
@@ -239,7 +238,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     // BLOCK -----------------------------------------------------------------------------------------------------------
 
-    onAddBlockInterfaceClick() {
+    onAddBlock(callback: (block: BlockoCore.Block) => void) {
         let model = new ModalsSelectBlockModel(this.projectId);
         this.modalService.showModal(model)
             .then((success) => {
@@ -288,7 +287,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     // GRID ------------------------------------------------------------------------------------------------------------
 
-    onAddGridInterfaceClick() {
+    onAddGrid(callback: (iface: Blocks.BlockoTargetInterface) => void) {
         let model = new ModalsSelectGridProjectModel(this.projectId);
         this.modalService.showModal(model)
             .then((success) => {
@@ -323,7 +322,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     // CODE ------------------------------------------------------------------------------------------------------------
 
-    onAddCodeInterfaceClick() {
+    onAddCode(callback: (iface: Blocks.BlockoTargetInterface) => void) {
         let model = new ModalsSelectCodeModel(this.projectId, null, );
         this.modalService.showModal(model)
             .then((success) => {
@@ -586,26 +585,26 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         this.blockUI();
 
         this.tyrionBackendService.bProgramGet(this.blockoId)
-        .then((blockoProgram) => {
-            this.blockoProgram = blockoProgram;
+            .then((blockoProgram) => {
+                this.blockoProgram = blockoProgram;
 
-            this.blockoProgramVersions = this.blockoProgram.program_versions || [];
+                this.blockoProgramVersions = this.blockoProgram.program_versions || [];
 
-            let version = null;
-            if (this.afterLoadSelectedVersionId) {
-                version = this.blockoProgramVersions.find((bpv) => bpv.id === this.afterLoadSelectedVersionId);
-            }
+                let version = null;
+                if (this.afterLoadSelectedVersionId) {
+                    version = this.blockoProgramVersions.find((bpv) => bpv.id === this.afterLoadSelectedVersionId);
+                }
 
-            if (version) {
-                this.selectBProgramVersion(version);
-            } else if (this.blockoProgramVersions.length) {
-                this.selectBProgramVersion(this.blockoProgramVersions[0]);
-            }
-            this.unblockUI();
-        }).catch(reason => {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko'), reason));
-            this.unblockUI();
-        });
+                if (version) {
+                    this.selectBProgramVersion(version);
+                } else if (this.blockoProgramVersions.length) {
+                    this.selectBProgramVersion(this.blockoProgramVersions[0]);
+                }
+                this.unblockUI();
+            }).catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko'), reason));
+                this.unblockUI();
+            });
     }
 
     onSomethingChanged() {
