@@ -19,13 +19,22 @@ import { TyrionApiBackend } from '../backend/BeckiBackend';
 @Component({
     selector: 'bk-blocko-view',
     template: `
-        <div #field class="blocko-view"></div>
+        <div [class.blocko-editor]="full_page" [class.blocko-editor-square]="!full_page">
+            <div #field [style.max-width]="full_page ? '' : square_size + 'px'" [style.max-height]="full_page ? '' : square_size + 'px'" class="blocko-container">
+            </div>
+        </div>
     `
 })
 export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     @Input()
     id: string = '';
+
+    @Input()
+    full_page: boolean = false;
+
+    @Input()
+    square_size: number = 200;
 
     @Input()
     singleBlockView: boolean = false;
@@ -52,13 +61,12 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     spy: string;
 
     @Input()
-    autosize: boolean = false;
-
-    @Input()
     tags: string[] = null;
 
     @Input()
     scale: number = 1;
+
+    fullScreen: boolean = false;
 
     @Output()
     onError: EventEmitter<{ block: BlockoCore.Block, error: any }> = new EventEmitter<{ block: BlockoCore.Block, error: any }>();
@@ -110,6 +118,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 this.blockoController.safeRun = safeRun.currentValue;
             }
         });*/
+    }
+
+    onFullscreenClick(): void {
+        this.fullScreen = !this.fullScreen;
     }
 
     ngAfterViewInit(): void {

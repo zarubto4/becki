@@ -12,12 +12,22 @@ import { Component, Input } from '@angular/core';
     <span *ngIf="online_state == 'NOT_YET_FIRST_CONNECTED'" class="font-grey-mint bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>
     <span *ngIf="online_state == 'UNKNOWN_LOST_CONNECTION_WITH_SERVER'" class="font-grey-mint bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>
     <span *ngIf="online_state == 'SHUT_DOWN'" class="font-grey-mint bold" [innerHTML]="online_state|bkTranslateTable:this:'online_state'"></span>
+    
+    
+    <span *ngIf="(online_state == 'OFFLINE' || online_state == 'FREEZED' || online_state == 'UNKNOWN_LOST_CONNECTION_WITH_SERVER') && latest_online" >
+        <br>
+        <small><span class="font-grey-silver">({{latest_online|bkUnixTimeToDate}})</span></small>
+    </span>
+        
     `
     /* tslint:enable */
 })
 export class OnlineStateComponent {
     @Input()
     online_state: string = 'SYNCHRONIZATION_IN_PROGRESS';
+
+    @Input()
+    latest_online: number = null;
 
 }
 
@@ -55,5 +65,4 @@ export class OnlineStateComponent {
 export class LogLevelComponent {
     @Input()
     log_level: string = 'info';
-
 }

@@ -55,6 +55,22 @@
                           colorType: 'UPDATE',
                           permission: instance.update_permission,
                           btn_tag: 'change_version_instance'
+                      },
+                      {
+                          condition: (tab == 'editor'),
+                          btn_label_for_person: ('btn_save'|bkTranslate:this),
+                          icon: 'fa-share',
+                          colorType: 'ADD',
+                          permission: true,
+                          btn_tag: 'save_snapshot'
+                      },
+                      {
+                          condition: (tab == 'editor'),
+                          btn_label_for_person: ('btn_change_version'|bkTranslate:this),
+                          icon: 'fa-cog',
+                          colorType: 'EDIT',
+                          permission: true,
+                          btn_tag: 'change_version'
                       }
                     ]"
                       (onTabClick)="onToggleTab($event)"
@@ -232,9 +248,7 @@
         </div>
 
         <div *ngIf="tab == 'update' && instance && instance.current_snapshot">
-
-            <div
-                *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)"
+            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)"
                 class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
@@ -310,102 +324,16 @@
         </div>
 
         <div *ngIf="tab == 'editor'">
-            <div class="row">
-                <div class="col-md-9 portlet light bordered">
-                    <bk-portlet-title
-                        [title_name]="'label_snapshot_editor'|bkTranslate:this"
-                        (onClick)="onPortletClick($event)"
-                        [btns]="[
-                            {
-                              condition: (true),
-                              btn_label_for_person: ('btn_save'|bkTranslate:this),
-                              icon: 'fa-share',
-                              colorType: 'ADD',
-                              permission: true,
-                              btn_tag: 'save_snapshot'
-                            },
-                            {
-                              condition: (true),
-                              btn_label_for_person: ('btn_change_version'|bkTranslate:this),
-                              icon: 'fa-cog',
-                              colorType: 'EDIT',
-                              permission: true,
-                              btn_tag: 'change_version'
-                            }
-                        ]"></bk-portlet-title>
-                    <div class="portlet-body">
-                        <bk-blocko-view [id]="'snapshot_editor'" [disableExecution]="true" [canConfig]="false"
-                                        [readonly]="false"
-                                        [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="portlet light bordered">
-                        <div class="portlet-title">
-                            <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-cubes"></i>
-                            {{'tab_hardware'|bkTranslate:this}}
-                        </span>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div *ngIf="allHw && allHw.content.length > 0"
-                                 class="panel-group accordion blocko-blocks-group-list">
-                                <ng-container *ngFor="let hardware of allHw.content;">
-                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions"
-                                         [bkDraggableData]="{ id: hardware.id, group: false }"
-                                         [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)"
-                                         class="blocko-block">
-                                        <div class="blocko-block-mask"></div>
-                                        <i class="fa fa-fw fa-microchip"
-                                           style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
-                                        <i class="fa fa-exclamation"></i>
-                                        <span>{{hardware.name}}</span>
-                                        <span style="font-size: 0.8em">{{hardware.id}}</span>
-                                    </div>
-                                </ng-container>
-                            </div>
-                            <bk-nothing-to-show [condition_loading]="(allHw == null)"
-                                                [condition_empty]="(allHw != null && allHw.content.length == 0)"
-                                                [main_message_link]="'label_no_hardware'|bkTranslate:this"
-                                                [show_button]="false">
-                            </bk-nothing-to-show>
-                        </div>
-                    </div>
-                    <div class="portlet light bordered">
-                        <div class="portlet-title">
-                            <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-cubes"></i>
-                            {{'tab_hardware_group'|bkTranslate:this}}
-                        </span>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div *ngIf="allHwGroups && allHwGroups.content.length > 0"
-                                 class="panel-group accordion blocko-blocks-group-list">
-                                <ng-container *ngFor="let hardware of allHwGroups.content;">
-                                    <div *ngIf="!isBound(hardware.id)" [bkDraggable]="draggableOptions"
-                                         [bkDraggableData]="{ id: hardware.id, group: true }"
-                                         [bkDraggableDataType]="'hardware'" (bkDraggableOnStop)="onDragStop($event)"
-                                         class="blocko-block">
-                                        <div class="blocko-block-mask"></div>
-                                        <i class="fa fa-fw fa-microchip"
-                                           style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
-                                        <i class="fa fa-exclamation"></i>
-                                        <span>{{hardware.name}}</span>
-                                        <span style="font-size: 0.8em">{{hardware.id}}</span>
-                                    </div>
-                                </ng-container>
-                            </div>
-                            <bk-nothing-to-show [condition_loading]="(allHwGroups == null)"
-                                                [condition_empty]="(allHwGroups != null && allHwGroups.content.length == 0)"
-                                                [main_message_link]="'label_no_hardware'|bkTranslate:this"
-                                                [show_button]="false">
-                            </bk-nothing-to-show>
-                        </div>
-                    </div>
+            <div class="portlet light" style="padding: 0 0 0 0;">
+                <div class="portlet-body">
+                    <bk-blocko-view [id]="'snapshot_editor'"
+                                    [full_page]="true"
+                                    [disableExecution]="true"
+                                    [canConfig]="false"
+                                    [readonly]="false"
+                                    [simpleMode]="false"
+                                    [showBlockNames]="true">
+                    </bk-blocko-view>
                 </div>
             </div>
         </div>

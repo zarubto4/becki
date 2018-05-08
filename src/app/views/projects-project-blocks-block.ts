@@ -56,6 +56,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     blockCode: string = '';
 
     tsErrors: { name: string, message: string, line?: number }[] = [];
+    tab: string = 'ide';
 
     // Properties for test view:
     @ViewChild(BlockoViewComponent)
@@ -121,6 +122,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
+    }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
     }
 
     onBlocksGroupClick(groupId: string) {
@@ -453,8 +458,8 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                         displayName: this.blockForm.controls['icon'].value,
                         description: this.blockForm.controls['description'].value
                     });
-                    this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck('', designJson, 22, 15);
-                } catch (e) { // TODO: promyslet jestli othle je ok [DH]
+                    this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck('', designJson, 25      , 50);
+                } catch (e) {
                 }
 
                 this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean | number | Core.MessageJson)) => {

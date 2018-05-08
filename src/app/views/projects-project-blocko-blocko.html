@@ -7,7 +7,8 @@
                 [title]="currentParamsService.currentProjectNameSnapshot"
                 [subtitle]="currentParamsService.currentProjectDescriptionSnapshot"
                 [show_title]="false"
->
+                class="portlet-fit full-height-content"
+                style="padding: 0 0 0 0 !important;">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title *ngIf="blockoProgram"
@@ -54,60 +55,63 @@
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-    <div class="portlet-body">
-
+    <div class="portlet-body" style="padding: 0 0 0 0;">
         <div [hidden]="!(tab=='ide')">
-
-            <div class="portlet light">
-                <div class="portlet-body" style="overflow: hidden;">
-                    <bk-blocko-view [showBlockNames]="true" [safeRun]="true"
-                                    (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"
-                                    (onChange)="onSomethingChanged()" class="blocko-editor">
-                    </bk-blocko-view>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light" style="padding: 0 0 0 0;">
+                        <div class="portlet-body">
+                            <bk-blocko-view [showBlockNames]="true"
+                                            [full_page]="true"
+                                            [safeRun]="true"
+                                            (onError)="onBlockoError($event)"
+                                            (onLog)="onBlockoLog($event)"
+                                            (onChange)="onSomethingChanged()"
+                                            #BlockoIDEComponent>
+                            </bk-blocko-view>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-
-            <div class="portlet light">
+                <div class="col-md-12">
+                    <div class="portlet light" >
                 <bk-portlet-title
                     [title_name]="'label_console'|bkTranslate:this"
                     [icon]="'fa-terminal'"
                     (onClick)="onPortletClick($event)"
                     [btns]="[
-                      {
-                          condition: (tab_under_ide == 'tab_terminal'),
-                          btn_label_for_person: ('btn_clear_console'|bkTranslate:this),
-                          icon: 'fa-trash-o',
-                          colorType: 'REMOVE',
-                          btn_tag: 'clean_console',
-                          permission: true
-                      }
-                    ]"
+                              {
+                                  condition: (tab_under_ide == 'tab_terminal'),
+                                  btn_label_for_person: ('btn_clear_console'|bkTranslate:this),
+                                  icon: 'fa-trash-o',
+                                  colorType: 'REMOVE',
+                                  btn_tag: 'clean_console',
+                                  permission: true
+                              }
+                            ]"
                     (onTabClick)="onToggleIDETab($event)"
                     [tab_selected_name] = "tab_under_ide"
                     [tabBtns]="[
-                        {
-                        tab_name: 'tab_terminal',
-                        condition: (true),
-                        tab_color: 'BLOCKO',
-                        tab_label: ('tab_terminal'|bkTranslate:this)
-                        }
-                    ]"
-                >
+                                {
+                                tab_name: 'tab_terminal',
+                                condition: (true),
+                                tab_color: 'BLOCKO',
+                                tab_label: ('tab_terminal'|bkTranslate:this)
+                                }
+                            ]">
                 </bk-portlet-title>
 
                 <div class="portlet-body">
-                   <div [hidden]="tab_under_ide != 'tab_terminal'">
-                       <bk-console-log maxHeight="400px"></bk-console-log>
-                   </div>
+                    <div [hidden]="tab_under_ide != 'tab_terminal'">
+                        <bk-console-log maxHeight="400px"></bk-console-log>
+                    </div>
 
                 </div>
             </div>
-
+                </div>
+            </div>
         </div>
 
         <div [hidden]="!(tab=='versions')">
-
             <div *ngIf="blockoProgramVersions && blockoProgramVersions.length > 0" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
@@ -176,7 +180,7 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
         </div>
-
     </div>
+
 
 </bk-layout-main>

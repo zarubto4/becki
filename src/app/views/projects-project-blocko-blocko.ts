@@ -198,6 +198,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         this.blockoView.registerAddBlockCallback(this.onAddBlock.bind(this));
         this.blockoView.registerAddGridCallback(this.onAddGrid.bind(this));
         this.blockoView.registerAddHardwareCallback(this.onAddCode.bind(this));
+        // Set Hardware on interface is not allowed here
     }
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
@@ -285,8 +286,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     }
 
-    // Hardware ---
-    onSetHardwareByInterfaceClick() {
+    // Hardware --------------------------------------------------------------------------------------------------------
+    onSetHardwareByInterfaceClick(callback: (block: BlockoCore.Block) => void) {
         let model = new ModalsSelectHardwareModel(this.projectId, null, false, true);
         this.modalService.showModal(model)
             .then((success) => {

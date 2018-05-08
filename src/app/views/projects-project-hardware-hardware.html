@@ -182,7 +182,7 @@
                                     <bk-online-state [online_state]="hardware.online_state"></bk-online-state>
                                 </div>
                                 <div>
-                                    <div *ngIf="hardware.online_state == 'OFFLINE' && !hardware.latest_online">
+                                    <div *ngIf="hardware.online_state == 'OFFLINE' || hardware.online_state == 'FREEZED' || hardware.online_state == 'UNKNOWN_LOST_CONNECTION_WITH_SERVER'">
                                         <span> {{'label_device_last_seen'|bkTranslate:this}}:</span>
                                         <span *ngIf="hardware.latest_online" class="font-grey-mint bold">{{hardware.latest_online|bkUnixTimeToDate}}</span>
                                         <span *ngIf="!hardware.latest_online" class="font-grey-mint bold">({{'label_last_seen_unknow'|bkTranslate:this}})</span>

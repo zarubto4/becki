@@ -10,7 +10,7 @@ import {
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
     IUpdateProcedure
 } from '../backend/TyrionAPI';
-import { BlockoCore } from 'blocko';
+import { BlockoCore, Blocks} from 'blocko';
 import {
     Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef, ViewChildren, QueryList,
     AfterViewInit
@@ -36,6 +36,9 @@ import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsShowQRModel } from '../modals/show_QR';
 import { ModalsGridProgramSettingsModel } from '../modals/instance-grid-program-settings';
+import { ModalsSelectGridProjectModel } from '../modals/grid-project-select';
+import { ModalsSelectBlockModel } from '../modals/block-select';
+import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 
 
 @Component({
@@ -118,6 +121,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     ngAfterViewInit() {
+
+
         this.blockoViews.changes.subscribe((views: QueryList<BlockoViewComponent>) => {
 
             this.editorView = views.find((view) => {
@@ -125,6 +130,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
 
             if (this.editorView) {
+
+                this.editorView.registerAddBlockCallback(this.onAddBlock.bind(this));
+                this.editorView.registerAddGridCallback(this.onAddGrid.bind(this));
+                this.editorView.registerAddHardwareCallback(this.onSetHardwareByInterfaceClick.bind(this));
 
                 if (this.instance && this.instance.current_snapshot) {
                     this.editorView.setDataJson(this.instance.current_snapshot.program.snapshot);
@@ -794,7 +803,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                     /* tslint:disable */
 
-                    console.log("homerMessageReceived:: .message_type === 'getValues', for:   ", m);
+                    console.log('homerMessageReceived:: .message_type === getValues, for:   ', m);
 
                     /* tslint:enable */
 
@@ -806,7 +815,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                         /* tslint:disable */
 
-                        console.log("homerMessageReceived:: .message_type === 'getValues', for:   ", targetType);
+                        console.log('homerMessageReceived:: .message_type ===  getValues, for:   ', targetType);
 
                         /* tslint:enable */
 
@@ -818,7 +827,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                             /* tslint:disable */
 
-                            console.log("homerMessageReceived:: m.message_type =  ", m.message_type);
+                            console.log('homerMessageReceived:: m.message_type =  ', m.message_type);
 
                             /* tslint:enable */
 
@@ -830,7 +839,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                 // controller.setInputExternalConnectorValue(targetType, targetId, input, m.externalConnector[targetType][targetId].inputs[input]);
 
                                 /* tslint:disable */
-                                console.log("homerMessageReceived:: setInputExternalConnectorValue, for: ", targetType, targetId, input, m.externalConnector[targetType][targetId].inputs[input]);
+                                console.log('homerMessageReceived:: setInputExternalConnectorValue, for: ', targetType, targetId, input, m.externalConnector[targetType][targetId].inputs[input]);
                                 /* tslint:enable */
                             }
 
@@ -839,7 +848,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                     continue;
                                 }
                                 /* tslint:disable */
-                                console.log("homerMessageReceived:: setOutputExternalConnectorValue, for: ", targetType, targetId, output, m.externalConnector[targetType][targetId].outputs[output]);
+                                console.log('homerMessageReceived:: setOutputExternalConnectorValue, for: ', targetType, targetId, output, m.externalConnector[targetType][targetId].outputs[output]);
                                 /* tslint:enable */
                                 // controller.setOutputExternalConnectorValue(targetType, targetId, output, m.externalConnector[targetType][targetId].outputs[output]);
                             }
@@ -867,6 +876,42 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 });
             }
         });
+    }
+
+    onAddGrid(callback: (iface: Blocks.BlockoTargetInterface) => void) {
+        let model = new ModalsSelectGridProjectModel(this.projectId);
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+
+            })
+            .catch((err) => {
+
+            });
+    }
+
+    onAddBlock(callback: (block: BlockoCore.Block) => void) {
+        let model = new ModalsSelectBlockModel(this.projectId);
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+
+            })
+            .catch((err) => {
+
+            });
+    }
+
+    onSetHardwareByInterfaceClick(callback: (block: BlockoCore.Block) => void) {
+        let model = new ModalsSelectHardwareModel(this.projectId, null, false, true);
+        this.modalService.showModal(model)
+            .then((success) => {
+                // TODO Doplnit do BLOCKA
+
+            })
+            .catch((err) => {
+
+            });
     }
 
     onDrobDownEmiter(action: string, object: any): void {

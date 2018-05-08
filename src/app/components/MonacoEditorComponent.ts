@@ -24,10 +24,12 @@ import { TranslationService } from '../services/TranslationService';
 
 @Component({
     selector: 'bk-monaco-editor',
-    template: `<div class="monaco-editor form-control" [class.monaco-full-screen]="fullScreen">
-        <div class="monaco-container" data-ref-field></div>
-        <a class="monaco-toggle-fullscreen" (click)="onFullscreenClick()"></a>
-    </div>`
+    template: `
+        <div class="monaco-editor form-control" [class.monaco-full-screen]="fullScreen">
+            <div class="monaco-container" data-ref-field></div>
+                <a class="monaco-toggle-fullscreen" (click)="onFullscreenClick()"></a>
+        </div>
+    `
 })
 export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestroy {
 
