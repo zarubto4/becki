@@ -11,7 +11,7 @@ import { ModalService } from '../services/ModalService';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
-import { IBlock, IBlockVersion } from '../backend/TyrionAPI';
+import { IBlockVersion } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
 
@@ -69,9 +69,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @Output()
     onLog: EventEmitter<{ block: BlockoCore.Block, type: string, message: string }> = new EventEmitter<{ block: BlockoCore.Block, type: string, message: string }>();
 
-    protected blockoController: BlockoCore.Controller;
-
-    protected blockoRenderer: BlockoPaperRenderer.Controller;
+    protected blocko: BlockoPaperRenderer.Controller;
 
     @ViewChild('field')
     field: ElementRef;
@@ -83,7 +81,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     public get serviceHandler(): Blocks.ServicesHandler {
         return this.zone.runOutsideAngular(() => {
-            return this.blockoController.servicesHandler;
+            return this.blocko.core.servicesHandler;
         });
     }
 
@@ -99,12 +97,12 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 if (!canConfig.isFirstChange()) {
                     throw new Error(this.translate('error_configuration_cant_change'));
                 }
-                this.blockoRenderer.canConfigInReadonly = canConfig.currentValue;
+                this.blocko.canConfigInReadonly = canConfig.currentValue;
             }
 
             let showBlockNames = changes['showBlockNames'];
             if (showBlockNames) {
-                this.blockoRenderer.showBlockNames = showBlockNames.currentValue;
+                this.blocko.showBlockNames = showBlockNames.currentValue;
             }
 
             let safeRun = changes['safeRun'];
@@ -117,11 +115,11 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
 
-            this.blockoRenderer = new BlockoPaperRenderer.Controller({
+            this.blocko = new BlockoPaperRenderer.Controller({
                 editorElement: this.field.nativeElement,
                 singleBlockView: this.singleBlockView
             });
-            this.blockoRenderer.registerOpenConfigCallback((block) => {
+            this.blocko.registerOpenConfigCallback((block) => {
                 let versions: IBlockVersion[] =  null;
 
                 // TODO Tady evidentně něco chybí! ?? Odstranil jsem jen Groupy ale nezdá se mi to
@@ -131,25 +129,23 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 });
 
             });
-            this.blockoRenderer.registerOpenCodeEditCallback((block) => {
+            this.blocko.registerOpenCodeEditCallback((block) => {
                 this.zone.run(() => {
                     this.modalService.showModal(new ModalsBlockoBlockCodeEditorModel(block));
                 });
             });
-            this.blockoRenderer.anyChangeCallback = () => {
+            this.blocko.anyChangeCallback = () => {
                 this.onChange.emit({});
             };
 
-            this.blockoRenderer.showBlockNames = this.showBlockNames;
-            this.blockoRenderer.simpleMode = this.simpleMode;
-            this.blockoRenderer.canConfigInReadonly = this.canConfig;
-
-            this.blockoController = new BlockoCore.Controller();
+            this.blocko.showBlockNames = this.showBlockNames;
+            this.blocko.simpleMode = this.simpleMode;
+            this.blocko.canConfigInReadonly = this.canConfig;
 
             if (this.disableExecution) {
-                this.blockoController.configuration.asyncEventsEnabled = false;
-                this.blockoController.configuration.inputEnabled = false;
-                this.blockoController.configuration.outputEnabled = true;
+                this.blocko.core.configuration.asyncEventsEnabled = false;
+                this.blocko.core.configuration.inputEnabled = false;
+                this.blocko.core.configuration.outputEnabled = true;
             }
 
             /*
@@ -166,44 +162,41 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 proxyServerUrl: this.backendService.requestProxyServerUrl
             };
 
-            this.blockoController.registerService(new Blocks.FetchService());
-            this.blockoController.registerService(new Blocks.XmlApiService());
-            this.blockoController.registerService(new Blocks.RestApiService());
-            this.blockoController.registerService(new Blocks.CronService());
-            this.blockoController.registerService(new Blocks.DatabaseService());
+            this.blocko.core.registerService(new Blocks.FetchService());
+            this.blocko.core.registerService(new Blocks.XmlApiService());
+            this.blocko.core.registerService(new Blocks.RestApiService());
+            this.blocko.core.registerService(new Blocks.CronService());
+            this.blocko.core.registerService(new Blocks.DatabaseService());
 
             /*
              *
              *  Sets new configuration for all services
              *
              */
-            this.blockoController.servicesHandler.configuration = serviceConfiguration;
-
-
-            this.blockoController.safeRun = this.safeRun;
-            this.blockoController.rendererFactory = this.blockoRenderer;
+            this.blocko.core.servicesHandler.configuration = serviceConfiguration;
+            this.blocko.core.safeRun = this.safeRun;
             /*this.blockoController.registerDataChangedCallback(() => {
              // TODO: why? [DH]
              // modalComponent.closeModal(false);
              // console.log("CHANGED!!!!!!");
              // this.dataChange.emit(this.blockoController.getDataJson());
              });*/
-            this.blockoController.registerErrorCallback((block: BlockoCore.Block, error: any) => {
+            this.blocko.core.registerErrorCallback((block: BlockoCore.Block, error: any) => {
                 this.zone.run(() => {
                     this.onError.emit({ block: block, error: error });
                 });
             });
-            this.blockoController.registerLogCallback((block: BlockoCore.Block, type: string, message: string) => {
+            this.blocko.core.registerLogCallback((block: BlockoCore.Block, type: string, message: string) => {
                 this.zone.run(() => {
                     this.onLog.emit({ block: block, type: type, message: message });
                 });
             });
-            this.blockoController.registerInterfaceBoundCallback((boundInterface: BlockoCore.BoundInterface) => {
+            this.blocko.core.registerInterfaceBoundCallback((boundInterface: BlockoCore.BoundInterface) => {
                 if (this.groupRemovedCallback) {
                     this.groupRemovedCallback(boundInterface);
                 }
             });
-            this.blockoController.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
+            this.blocko.core.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
 
         });
     }
@@ -216,15 +209,23 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         }
         */
         this.zone.runOutsideAngular(() => {
-            this.blockoController.removeAllBlocks();
+            this.blocko.core.removeAllBlocks();
         });
     }
 
     setSingleBlock() {
-        // this.blockoRenderer.setBlockView()
+        // this.blocko.setBlockView()
     }
 
-    addStaticBlock(blockName: string, x: number = 0, y: number = 0): BlockoCore.Block {
+    getCoreBlock(block: IBlockVersion|string): BlockoCore.Block {
+        if (typeof block === 'string') {
+            return this.getStaticBlock(block);
+        } else {
+            return this.getTSBlock(block);
+        }
+    }
+
+    getStaticBlock(blockName: string): BlockoCore.Block {
         let b: BlockoCore.Block = null;
         this.zone.runOutsideAngular(() => {
 
@@ -232,16 +233,26 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 throw new Error(this.translate('error_read_only'));
             }
 
-            let bc: BlockoCore.BlockClass = this.blockoController.getBlockClassByVisualType(blockName);
+            let bc: BlockoCore.BlockClass = this.blocko.core.getBlockClassByVisualType(blockName);
             if (!bc) {
                 throw new Error(this.translate('error_block_not_found', blockName));
             }
 
-            b = new bc(this.blockoController.getFreeBlockId());
-            b.x = Math.round(x / 15) * 15; // TODO: move this to blocko
-            b.y = Math.round(y / 15) * 15;
-            this.blockoController.addBlock(b);
+            b = new bc(null);
         });
+        return b;
+    }
+
+    getTSBlock(block: IBlockVersion) {
+        let b: BlockoBasicBlocks.TSBlock = null;
+        this.zone.runOutsideAngular(() => {
+            const json = JSON.parse(block.design_json);
+
+            json['block_version'] = block.id;
+
+            b = new BlockoBasicBlocks.TSBlock(null, block.logic_json, JSON.stringify(json));
+        });
+        this.onChange.emit({});
         return b;
     }
 
@@ -266,10 +277,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 designJson = JSON.stringify(json);
             }
 
-            b = new BlockoBasicBlocks.TSBlock(this.blockoController.getFreeBlockId(), '', designJson);
+            b = new BlockoBasicBlocks.TSBlock(this.blocko.core.getFreeBlockId(), '', designJson);
             b.x = Math.round(x / 22) * 22; // TODO: move this to blocko
             b.y = Math.round(y / 22) * 22;
-            this.blockoController.addBlock(b);
+            this.blocko.core.addBlock(b);
             b.setCode(tsCode);
         });
         this.onChange.emit({});
@@ -282,8 +293,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             if (this.readonly) {
                 throw new Error(this.translate('error_read_only'));
             }
-            b = new cls(this.blockoController.getFreeBlockId());
-            this.blockoController.addBlock(b);
+            b = new cls(this.blocko.core.getFreeBlockId());
+            this.blocko.core.addBlock(b);
         });
         return b;
     }
@@ -299,14 +310,14 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     removeAllBlocksWithoutReadonlyCheck(): void {
         this.zone.runOutsideAngular(() => {
-            this.blockoController.removeAllBlocks();
+            this.blocko.core.removeAllBlocks();
         });
     }
 
     setDataJson(json: string): string {
         let s: string = null;
         this.zone.runOutsideAngular(() => {
-            s = this.blockoController.setDataJson(json);
+            s = this.blocko.core.setDataJson(json);
         });
         return s;
     }
@@ -314,27 +325,27 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     getDataJson(): string {
         let s: string = null;
         this.zone.runOutsideAngular(() => {
-            s = this.blockoController.getDataJson();
+            s = this.blocko.core.getDataJson();
         });
         return s;
     }
 
     addInterface(iface: BlockoTargetInterface): void {
         this.zone.runOutsideAngular(() => {
-            this.blockoController.addInterface(iface);
+            this.blocko.core.addInterface(iface);
         });
     }
 
     getBindings(): Array<BlockoCore.BoundInterface> {
-        return this.blockoController.getBindings();
+        return this.blocko.core.getBindings();
     }
 
     isDeployable() {
-        return this.blockoController.isDeployable();
+        return this.blocko.core.isDeployable();
     }
 
     getBlockoController(): BlockoCore.Controller {
-        return this.blockoController;
+        return this.blocko.core;
     }
 
     blockChangeVersion = (block: Blocks.TSBlock, version_id: string) => {
@@ -348,19 +359,15 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });*/
     }
 
-    registerInterfaceBoundCallback(callback: (boundInterface: BlockoCore.BoundInterface) => void) {
-        this.groupRemovedCallback = callback;
-    }
-
     registerAddBlockCallback(callback: (callback: (block: BlockoCore.Block) => void) => void): void {
-        this.blockoRenderer.registerAddBlockCallback(callback);
+        this.blocko.registerAddBlockCallback(callback);
     }
 
     registerAddGridCallback(callback: (callback: (iface: Blocks.BlockoTargetInterface) => void) => void): void {
-        this.blockoRenderer.registerAddGridCallback(callback);
+        this.blocko.registerAddGridCallback(callback);
     }
 
     registerAddHardwareCallback(callback: (callback: (iface: Blocks.BlockoTargetInterface) => void) => void): void {
-        this.blockoRenderer.registerAddHardwareCallback(callback);
+        this.blocko.registerAddHardwareCallback(callback);
     }
 }

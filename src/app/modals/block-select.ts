@@ -6,17 +6,13 @@
  * directory of this distribution.
  */
 
-import {Input, Output, EventEmitter, Component, ViewChild, OnInit} from '@angular/core';
+import { Input, Output, EventEmitter, Component, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
-import {
-    IBlock, IBlockList, IBlockVersion, IBProgramVersion, ICProgram, ICProgramList,
-    ICProgramVersion
-} from '../backend/TyrionAPI';
+import { IBlock, IBlockList, IBlockVersion } from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
-import { FlashMessageError } from '../services/NotificationService';
 
 export class ModalsSelectBlockModel extends ModalModel {
     public selectedBlockVersion: IBlockVersion = null;
@@ -57,8 +53,8 @@ export class ModalsBlockSelectComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // Expression has changed after it was checked -  setTimeout is protection
-        if(!this.modalModel.already_selected_code_for_version_change) {
+        // Expression has changed after it was checked -  setTimeout is protection TODO it is not protection, it is temporary hack, use ChangeDetectorRef instead
+        if (!this.modalModel.already_selected_code_for_version_change) {
             setTimeout(() => {
                 this.onFilterBlocks(0);
             });
@@ -68,14 +64,14 @@ export class ModalsBlockSelectComponent implements OnInit {
                     this.onSelectBlockClick(block);
                 }).catch((err) => {
                     this.errorMessage = err.message;
-                })
+                });
         }
     }
 
 
     onSubmitClick(): void {
         if (!this.modalModel.selectedBlockVersion) {
-            this.errorMessage = this.translationService.translate('label_no_version_selected', this) ; //There is no version selected. ;
+            this.errorMessage = this.translationService.translate('label_no_version_selected', this) ; // There is no version selected. ;
         } else {
             this.modalClose.emit(true);
         }

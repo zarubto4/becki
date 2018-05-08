@@ -255,8 +255,9 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         let model = new ModalsSelectBlockModel(this.projectId);
         this.modalService.showModal(model)
             .then((success) => {
-                // TODO Doplnit do BLOCKA
-
+                this.zone.runOutsideAngular(() => {
+                    callback(this.blockoView.getCoreBlock(model.selectedBlockVersion));
+                });
             })
             .catch((err) => {
 
@@ -304,8 +305,120 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         let model = new ModalsSelectGridProjectModel(this.projectId);
         this.modalService.showModal(model)
             .then((success) => {
-                // TODO Doplnit do BLOCKA
+                this.zone.runOutsideAngular(() => {
+                    let out: any = {
+                        analogInputs: {},
+                        digitalInputs: {},
+                        messageInputs: {},
+                        analogOutputs: {},
+                        digitalOutputs: {},
+                        messageOutputs: {},
+                    };
 
+                    let project: IGridProject = model.selected_grid_project;
+
+                    if (model.selectedGridProgramVersions) {
+
+                        for (let key in model.selectedGridProgramVersions) {
+                            if (model.selectedGridProgramVersions.hasOwnProperty(key)) {
+
+                                const pair = model.selectedGridProgramVersions[key];
+                                const program = pair.m_program;
+                                const version = pair.version;
+
+                                let iface: any = {};
+                                try {
+                                    iface = JSON.parse(version.m_program_virtual_input_output);
+                                } catch (e) {
+                                    console.error(e);
+                                }
+
+                                if (iface.analogInputs) {
+                                    for (let k in iface.analogInputs) {
+                                        if (!iface.analogInputs.hasOwnProperty(k)) {
+                                            continue;
+                                        }
+                                        if (!out.analogInputs[k]) {
+                                            out.analogInputs[k] = iface.analogInputs[k];
+                                        }
+                                    }
+                                }
+
+                                if (iface.digitalInputs) {
+                                    for (let k in iface.digitalInputs) {
+                                        if (!iface.digitalInputs.hasOwnProperty(k)) {
+                                            continue;
+                                        }
+                                        if (!out.digitalInputs[k]) {
+                                            out.digitalInputs[k] = iface.digitalInputs[k];
+                                        }
+                                    }
+                                }
+
+                                if (iface.messageInputs) {
+                                    for (let k in iface.messageInputs) {
+                                        if (!iface.messageInputs.hasOwnProperty(k)) {
+                                            continue;
+                                        }
+                                        if (!out.messageInputs[k]) {
+                                            out.messageInputs[k] = iface.messageInputs[k];
+                                        }
+                                    }
+                                }
+
+                                if (iface.analogOutputs) {
+                                    for (let k in iface.analogOutputs) {
+                                        if (!iface.analogOutputs.hasOwnProperty(k)) {
+                                            continue;
+                                        }
+                                        if (!out.analogOutputs[k]) {
+                                            out.analogOutputs[k] = iface.analogOutputs[k];
+                                        }
+                                    }
+                                }
+
+                                if (iface.digitalOutputs) {
+                                    for (let k in iface.digitalOutputs) {
+                                        if (!iface.digitalOutputs.hasOwnProperty(k)) {
+                                            continue;
+                                        }
+                                        if (!out.digitalOutputs[k]) {
+                                            out.digitalOutputs[k] = iface.digitalOutputs[k];
+                                        }
+                                    }
+                                }
+
+                                if (iface.messageOutputs) {
+                                    for (let k in iface.messageOutputs) {
+                                        if (!iface.messageOutputs.hasOwnProperty(k)) {
+                                            continue;
+                                        }
+                                        if (!out.messageOutputs[k]) {
+                                            out.messageOutputs[k] = iface.messageOutputs[k];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (
+                        Object.keys(out.analogInputs).length ||
+                        Object.keys(out.digitalInputs).length ||
+                        Object.keys(out.messageInputs).length ||
+                        Object.keys(out.analogOutputs).length ||
+                        Object.keys(out.digitalOutputs).length ||
+                        Object.keys(out.messageOutputs).length
+                    ) {
+                        callback({
+                            'color': '#9966ff',  // change color [TZ]
+                            'interfaceId': project.id,
+                            'grid': true,
+                            'displayName': project.name,
+                            'interface': out
+                        });
+                    }
+                });
             })
             .catch((err) => {
 
@@ -339,8 +452,17 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         let model = new ModalsSelectCodeModel(this.projectId, null, );
         this.modalService.showModal(model)
             .then((success) => {
-                // TODO Doplnit do BLOCKA
-                model.selectedCProgramVersion;
+                this.zone.runOutsideAngular(() => {
+                    let interfaceData = JSON.parse(model.selectedCProgramVersion.virtual_input_output);
+                    if (interfaceData) {
+                        callback({
+                            'color': '#30f485',
+                            'interfaceId': model.selectedCProgramVersion.id,
+                            'displayName': model.selectedCProgramVersion.id,
+                            'interface': interfaceData
+                        });
+                    }
+                });
             })
             .catch((err) => {
 
