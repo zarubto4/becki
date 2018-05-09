@@ -11,18 +11,34 @@ import { TranslationService } from '../services/TranslationService';
 /* tslint:disable:max-line-length */
     template: `
 <div class="form-group icon-select-group" [class.has-success]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid))" [class.has-error]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))" [class.has-warning]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending))">
-    <label>{{label}}</label>
-    <div class="form-control cursor-hand select-input" (click)="onIconSelectClick()">
-        <span *ngIf="value" class="fa icon-select-icon {{value}}"></span>
-        {{value?value:(placeholder?placeholder:label)}}
-        <span class="fa icon-select-down-icon fa-angle-down fa-pull-right"></span>
-        <div class="clearfix"></div>
-    </div>
+    
+
+    <!-- Write manually -->
+    <bk-form-input [control]="control"
+                   [icon]="value"
+                   [label]="label"
+                   [showButton]="{
+                        btn_label_for_person: 'Select',
+                        colorType: 'ADD',
+                        btn_icon: 'fa-arrow-left'
+                   }"
+                   (onBtnClickEvent)="onIconSelectClick()"
+                   [placeholder]="'Write Manually or Select'"
+                   [waitForTouch]="false">
+    </bk-form-input>
+    
+    <!-- Select it -->
     <div class="form-control icon-select-table" [class.open]="iconSelectOpen">
-        <div *ngFor="let icon of iconSelectOptions;" class="fa icon-select-block" [class.selected]="icon.name == value" (click)="onIconSelectBlockClick(icon.name)">{{icon.icon}}</div>
+        <div *ngFor="let icon of iconSelectOptions;" class="fa icon-select-block" 
+             [class.selected]="icon.name == value" 
+             (click)="onIconSelectBlockClick(icon.name)">{{icon.icon}}</div>
         <div class="clearfix"></div>
     </div>
-    <span class="help-block" *ngIf="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
+
+    
+    <span class="help-block" *ngIf="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))">
+        {{validatorErrorsService.getMessageForErrors(control.errors)}}
+    </span>
 </div>
 `
 /* tslint:enable */

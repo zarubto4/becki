@@ -43,7 +43,7 @@
                       {
                           condition: ((tab === 'overview' || tab === 'editor') && instance.snapshots != null && instance.snapshots.length > 0),
                           btn_label_for_person: ('btn_deploy_snapshot'|bkTranslate:this),
-                          icon: 'fa-plus-circle',
+                          icon: 'fa-upload',
                           colorType: 'ACTIVE',
                           permission: instance.update_permission,
                           btn_tag: 'deploy_snapshot'
@@ -598,8 +598,12 @@
                     <tr>
                         <th [innerHTML]="'table_name'|bkTranslate:this"></th>
                         <th [innerHTML]="'table_description'|bkTranslate:this"></th>
+
+                        <!-- Chybí API
                         <th [innerHTML]="'table_b_program_version_name'|bkTranslate:this"></th>
                         <th [innerHTML]="'table_b_program_version_description'|bkTranslate:this"></th>
+
+                        -->
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                     </thead>
@@ -610,42 +614,53 @@
                                class="fa fa-fw fa-cloud font-color-cloud margin-left-15"></i>
                         </td>
                         <td class="vert-align">{{snapshot.description}}</td>
-                        <td class="vert-align no-wrap bold"><a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a>
-                        </td>
-                        <td class="vert-align">{{snapshot.b_program_version.description}}</td>
 
-                        <td class="action-btn-col">
+                        <!-- Chybí API
+                           <td class="vert-align no-wrap bold">
+                               <a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a>
+                           </td>
+                           <td class="vert-align">{{snapshot.b_program_version.description}}</td>
+                        -->
+                       <td class="action-btn-col">
 
-                            <bk-drob-down-button
-                                [btns_group_name]="('label_settings'|bkTranslate:this)"
-                                [btns]="[
-                                {
-                                    condition: true,
-                                    btn_label_for_person: ('label_snapshot_settings'|bkTranslate:this),
-                                    btn_tag: 'edit_snapshot_instance',
-                                    icon: 'fa-cog',
-                                    colorType: 'EDIT',
-                                    permission: (snapshot.update_permission)
-                                },
-                                {
-                                    condition: true,
-                                    btn_label_for_person: ('label_snapshot_remove'|bkTranslate:this),
-                                    btn_tag: 'remove_instance',
-                                    icon: 'fa-trash',
-                                    colorType: 'REMOVE',
-                                    permission: (snapshot.delete_permission)
-                                }
-                            ]"
-                                (onValueChanged)="onDrobDownEmiter($event, snapshot)"
-                            >
-                            </bk-drob-down-button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                           <bk-drob-down-button
+                               [btns_group_name]="('label_settings'|bkTranslate:this)"
+                               [btns]="[
+                               {
+                                   condition: true,
+                                   btn_label_for_person: ('label_deploy_snapshot'|bkTranslate:this),
+                                   btn_tag: 'edit_snapshot_instance',
+                                   icon: 'fa-upload',
+                                   colorType: 'CREATE',
+                                   permission: (instance.update_permission)
+                               },
+                               {
+                                   condition: true,
+                                   btn_label_for_person: ('label_snapshot_settings'|bkTranslate:this),
+                                   btn_tag: 'deploy_selected_snapshot',
+                                   icon: 'fa-cog',
+                                   colorType: 'EDIT',
+                                   permission: (instance.update_permission)
+                               },
+                               {
+                                   condition: true,
+                                   btn_label_for_person: ('label_snapshot_remove'|bkTranslate:this),
+                                   btn_tag: 'remove_instance',
+                                   icon: 'fa-trash',
+                                   colorType: 'REMOVE',
+                                   permission: (instance.delete_permission)
+                               }
+                           ]"
+                               (onValueChanged)="onDrobDownEmiter($event, snapshot)"
+                           >
+                           </bk-drob-down-button>
+                       </td>
+                   </tr>
+                   </tbody>
+               </table>
+           </div>
 
-            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+           <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(instance.snapshots == null)"
                                 [condition_empty]="(instance.snapshots != null && instance.snapshots.length == 0)"
                                 [main_message_link]="'label_no_instance_history'|bkTranslate:this"

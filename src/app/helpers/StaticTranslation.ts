@@ -1675,6 +1675,9 @@ export class StaticTranslation {
                 'table_status': '<strong class="font-color-hardware">HARDWARE</strong> Online status',
 
                 'label_modal_shutdown_instance': 'Shutdown instance',
+                'label_deploy_snapshot': 'Deploy',
+                'label_snapshot_settings': 'Edit',
+                'label_snapshot_remove': 'Remove',
                 'label_modal_confirm_shutdown_instance': 'Are you sure to shutdown the running instance?',
                 'label_modal_run_latest_version': 'Deploy to CLOUD in the latest version',
                 'label_modal_confirm_run_latest_version': 'Are you sure to deploy <strong class="font-color-blocko">BLOCKO</strong> and instance to CLOUD?',
