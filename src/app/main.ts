@@ -168,7 +168,7 @@ import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoList
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
 import { TyrionComponent } from './views/admin-tyrion';
-import { LogLevelComponent, OnlineStateComponent } from './components/OnlineStateComponent';
+import {LogLevelComponent, OnlineStateComponent, PublicStateComponent} from './components/OnlineStateComponent';
 import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
 import { CompilationStatusComponent } from './components/CompilationStatusComponent';
 import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
@@ -541,6 +541,7 @@ class BeckiErrorHandler implements ErrorHandler {
         GridViewComponent,
         BeckiDrobDownButtonComponent,
         FilterTableComponent,
+        PublicStateComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,

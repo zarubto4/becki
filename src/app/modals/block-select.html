@@ -8,6 +8,31 @@
             <div class="portlet-body">
 
                 <div *ngIf="modalModel.selectedBlock == null">
+
+                    <bk-filter-component
+                        [filter_parameters]="[
+                            {
+                                type: 'CHECKBOX_LIST',
+                                content: {
+                                    options:[
+                                        {
+                                            key: 'public_block',
+                                            label: 'filter_public_block'|bkTranslate:this,
+                                            selected: public_block
+                                        },
+                                        {
+                                            key: 'private_block',
+                                            label: 'filter_private_block'|bkTranslate:this,
+                                            selected: private_block
+                                        }
+                                        ],
+                                    horizontal: true
+                                }
+                            }
+                        ]"
+                        (onChange)="onFilterChange($event)">
+                    </bk-filter-component>
+
                     <div *ngIf="(blocks && blocks.content.length)" class="table-scrollable table-scrollable-borderless">
                         <table class="table table-hover table-light byzance-table">
                             <thead>
@@ -15,6 +40,7 @@
                                 <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
                                 <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
                                 <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
+                                <th class="text-center" [innerHTML]="'table_public_type'|bkTranslate:this"></th>
                                 <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                             </tr>
                             </thead>
@@ -25,11 +51,13 @@
                                 <td class="vert-align">
                                     <bk-form-tag-input [tags_without_form]="block.tags" [readonly]="true"></bk-form-tag-input>
                                 </td>
-
+                                <td class="vert-align text-center">
+                                    <bk-public-state [state]="block.publish_type"></bk-public-state>
+                                </td>
                                 <td class="action-btn-col">
 
                                     <bk-drob-down-button
-                                        [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
+                                        [btns_group_name]="('label_properties'|bkTranslate:this)"
                                         [btns]="[
                                             {
                                                 condition: true,

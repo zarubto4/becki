@@ -19,6 +19,9 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     projectsUpdateSubscription: Subscription;
 
+
+    realna_hodnota_jana: boolean = true;
+
     constructor(injector: Injector) {
         super(injector);
     };
@@ -26,6 +29,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
     onQrClick() {
         this.router.navigate(['/qr-reader-hardware']);
     }
+
 
     ngOnInit(): void {
         this.refresh();
@@ -56,6 +60,17 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                 this.projects = projects;
             });
     }
+
+
+    onFilterChange(filter: {key: string, value: any}) {
+        console.info('onFilterChange: Key', filter.key, 'value', filter.value);
+
+        if (filter.key == 'realna_hodnota_jana') {
+            this.realna_hodnota_jana = filter.value;
+        }
+
+    }
+
 
 
 }

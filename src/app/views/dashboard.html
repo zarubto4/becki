@@ -4,6 +4,113 @@
     <div class="portlet-body">
 
         <div class="row">
+            <h1>Testy</h1>
+
+            <bk-filter-component
+                [filter_parameters]="[
+                    {
+                        type: 'CHECKBOX_LIST',
+                        content: {
+                            options:[
+                                {
+                                    key: 'pepa',
+                                    label: 'pepa',
+                                    selected: false
+                                },
+                                {
+                                    key: 'franta',
+                                    label: 'franta',
+                                    selected: false
+                                },
+                                {
+                                    key: 'ondra',
+                                    label: 'ondra',
+                                    selected: true
+                                }
+                                ]
+                        }
+                    },
+                    {
+                        type: 'CHECKBOX_LIST',
+                        content: {
+                            options:[
+                                {
+                                    key: 'realna_hodnota_jana',
+                                    label: 'jana',
+                                    selected: realna_hodnota_jana
+                                },
+                                {
+                                    key: 'monika',
+                                    label: 'monika',
+                                    selected: true
+                                },
+                                {
+                                    key: 'petra',
+                                    label: 'petra',
+                                    selected: false
+                                }
+                                ],
+                            horizontal: true
+                        }
+                    },
+                    {
+                        type: 'LIST_SELECT',
+                        content: {
+                            label: 'Seznam',
+                            key: 'Seznam',
+                            options:[
+                                {
+                                    name: 'pepa',
+                                    id: 'pepa'
+                                },
+                                {
+                                    name: 'ondra',
+                                    id: 'ondra'
+                                },
+                                {
+                                    name: 'jana',
+                                    id: 'pedro'
+                                }
+                            ]
+                        }
+
+                    },
+                    {
+                        type: 'FIND_BY_TEXT',
+                        content: {
+                            key: 'text',
+                            label: 'aasfdssdf'
+                        }
+                    },
+                    {
+                        type: 'FIND_BY_TAG',
+                        content: {
+                            key: 'text',
+                            label: 'aasfdssdf',
+                            tags: []
+                        }
+                    },
+                    {
+                        type: 'FIND_BY_TAG',
+                        content: {
+                            key: 'text',
+                            label: 'aasfdssdf',
+                            tags: []
+                        }
+                    }
+                ]"
+                (onChange)="onFilterChange($event)">
+            </bk-filter-component>
+
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <div class="row">
 
             <!--- Welcome Row Part -->
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">

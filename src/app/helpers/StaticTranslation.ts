@@ -1253,6 +1253,9 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Action',
                 'label_select_code': 'Select',
+                'filter_public_block': 'Public',
+                'filter_private_block': 'Own Blocks',
+                'table_public_type': 'Type',
 
             }, 'ModalsGridProjectSelectComponent': {
 
@@ -2747,6 +2750,11 @@ export class StaticTranslation {
                 'NOT_YET_FIRST_CONNECTED': 'We have no idea <br><small>(never logged before)</small>',
                 'UNKNOWN_LOST_CONNECTION_WITH_SERVER': 'Lost connection with external server',
                 'SHUT_DOWN': 'Shut Downed',
+            },
+            'public_state': {
+                'PRIVATE' : 'Private' ,
+                'PUBLIC' : 'Public' ,
+                'COMMERCIAL' : 'Commercial' ,
             },
             'server_type': {
                 'PUBLIC': 'Public Byzance Server',

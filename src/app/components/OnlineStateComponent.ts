@@ -33,6 +33,24 @@ export class OnlineStateComponent {
 
 
 @Component({
+    selector: 'bk-public-state',
+    /* tslint:disable */
+    template: `
+        <span *ngIf="state == 'PRIVATE'"     class="font-grey-mint"   [innerHTML]="state|bkTranslateTable:this:'public_state'"></span>
+        <span *ngIf="state == 'PUBLIC'"      class="font-grey-silver" [innerHTML]="state|bkTranslateTable:this:'public_state'"></span>
+        <span *ngIf="state == 'COMMERCIAL'"  class="font-grey-mint"   [innerHTML]="state|bkTranslateTable:this:'public_state'"></span>
+    `
+    /* tslint:enable */
+})
+export class PublicStateComponent {
+    @Input()
+    state: string = 'PRIVATE';
+
+}
+
+
+
+@Component({
     selector: 'bk-log-level',
     /* tslint:disable */
     template: `        

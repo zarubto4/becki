@@ -47,7 +47,8 @@ export class ModalsBlockSelectComponent implements OnInit {
     blocks: IBlockList = null;
 
     // Filter parameters
-    public_programs: boolean = false;
+    public_block: boolean = false;
+    private_block: boolean = true;
 
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
     }
@@ -89,11 +90,20 @@ export class ModalsBlockSelectComponent implements OnInit {
         }
     }
 
+    onFilterChange(filter: {key: string, value: any}) {
+        console.info('onFilterChange: Key', filter.key, 'value', filter.value);
+
+        if (filter.key == 'public_block') {
+            this.public_block = filter.value;
+        }
+
+    }
+
     onFilterBlocks(page: number = 0): void {
 
         this.tyrionBackendService.blockGetByFilter(page, {
             project_id: this.modalModel.project_id,
-            public_programs: this.public_programs,
+            public_programs: this.public_block,
             count_on_page: 10
         })
             .then((list) => {
