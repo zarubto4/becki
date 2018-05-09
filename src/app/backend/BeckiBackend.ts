@@ -4,9 +4,8 @@
  */
 
 
-import { TyrionAPI, INotification, IPerson, ILoginResult, ISocialNetworkLogin, IWebSocketToken } from './TyrionAPI';
+import { TyrionAPI, IPerson, ILoginResult, ISocialNetworkLogin } from './TyrionAPI';
 import * as Rx from 'rxjs';
-import { ConsoleLogType } from '../components/ConsoleLogComponent';
 import {
     BadRequest, BugFoundError, CodeCompileError,
     CodeError, InternalServerError, InvalidBody, LostConnectionError, ObjectNotFound, PermissionMissingError,
@@ -182,7 +181,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     private setToken(token: string, withRefreshPersonalInfo = true): void {
-        console.log('set_token');
+        console.info('set_token');
         window.localStorage.setItem('auth_token', token);
         if (withRefreshPersonalInfo) {
             this.refreshPersonInfo();
@@ -257,13 +256,13 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     // PERSON INFO
     public refreshPersonInfo(): void {
-        console.log('refreshPersonInfo');
+        console.info('refreshPersonInfo');
         this.personInfoSnapshotDirty = true;
         if (TyrionApiBackend.tokenExist()) {
             this.getTyrionWebsocketConnection().onReady();
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
-                    console.log(lr);
+                    console.info(lr);
                     this.personPermissions = lr.permissions;
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;

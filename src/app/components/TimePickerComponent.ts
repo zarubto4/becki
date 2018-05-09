@@ -1,10 +1,6 @@
-
-import { IMyDpOptions, IMyDate, IMyDateModel } from 'mydatepicker';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Validators, FormGroup, FormBuilder, AbstractControl, FormControl } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
-import { BeckiValidators } from '../helpers/BeckiValidators';
-import { ConsoleSourceColor } from './ConsoleLogComponent';
 
 @Component({
     selector: 'bk-time-picker',
@@ -70,6 +66,7 @@ export class TimePickerComponent {
         this.hour = this.addZero(h);
         this.updateControl();
     }
+
     incrementMinute() {
         let m = Number(this.minute);
         m++;
@@ -83,6 +80,7 @@ export class TimePickerComponent {
 
 
     }
+
     decrementHour() {
         let h = Number(this.hour);
         h--;
@@ -95,6 +93,7 @@ export class TimePickerComponent {
 
 
     }
+
     decrementMinute() {
         let m = Number(this.minute);
         m--;
@@ -110,7 +109,6 @@ export class TimePickerComponent {
     }
 
     constructor(public validatorErrorsService: ValidatorErrorsService) {
-
     }
 
 }

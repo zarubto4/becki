@@ -11,7 +11,7 @@ import { ModalService } from '../services/ModalService';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
-import { IBlock, IBlockVersion } from '../backend/TyrionAPI';
+import { IBlockVersion } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
 

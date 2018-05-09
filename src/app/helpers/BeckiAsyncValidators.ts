@@ -4,10 +4,9 @@
  */
 
 
-import {FormControl, AsyncValidatorFn, AbstractControl, ValidationErrors} from '@angular/forms';
+import { FormControl, AsyncValidatorFn, AbstractControl } from '@angular/forms';
 import { Observable, Observer } from 'rxjs/Rx';
 import { TyrionBackendService } from '../services/BackendService';
-import { IBProgram } from '../backend/TyrionAPI';
 
 export class AsyncValidatorDebounce {
     _validate: (x: any) => any;
@@ -53,7 +52,7 @@ export class AsyncValidatorDebounce {
 
 export class BeckiAsyncValidators {
 
-    public static validateEntity(backEnd: TyrionBackendService, inputKey: ('email'|'nick_name'|'vat_number')): AsyncValidatorFn {
+    public static validateEntity(backEnd: TyrionBackendService, inputKey: ('email' | 'nick_name' | 'vat_number')): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
                 backEnd.entityValidation({
@@ -140,16 +139,22 @@ export class BeckiAsyncValidators {
         return (control: AbstractControl) => {
             return new Promise<any>((resolve, reject) => {
                 if (conditionCallback(control.value)) {
-                    validator(control) // do validation
-                        .then((out: any) => {
-                            resolve(out);
-                        })
-                        .catch((out: any) => {
-                            reject(out);
-                        });
+
+                    let validation = validator(control);
+
+                    if (validation instanceof Promise) {
+                        validation
+                            .then((out: any) => {
+                                resolve(out);
+                            })
+                            .catch((out: any) => {
+                                reject(out);
+                            });
+                    }
                 } else {
                     resolve(null); // valid
                 }
+
             });
         };
     }

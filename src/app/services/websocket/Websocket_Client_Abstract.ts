@@ -46,7 +46,7 @@ export abstract class WebsocketClientAbstract {
             }
         }
 
-        console.info('Konečná podoba URL: ',  this.url);
+        console.info('Konečná podoba URL: ', this.url);
     }
 
     public disconnectWebSocket(): void {
@@ -94,7 +94,7 @@ export abstract class WebsocketClientAbstract {
             if (this._websocket.readyState === WebSocket.OPEN) {
                 this._websocket.send(message.toJsonString());
                 return true;
-            }else {
+            } else {
                 console.error('WebsocketClientAbstract:: send_without_callback this._websocket.readyState !== WebSocket.OPEN');
                 return false;
             }
@@ -131,6 +131,7 @@ export abstract class WebsocketClientAbstract {
     public set onErrorCallback(callback: ((e: any) => void)) {
         this._onErrorCallback = callback;
     }
+
     /**
      * Obsluha Knihovny Websocketu.
      * Obnova / Odesílání dat / Příjem Zpráv (Přesměrovány do this.processData(..))
@@ -139,12 +140,12 @@ export abstract class WebsocketClientAbstract {
         if (!(this.url.includes('ws://') || this.url.includes('wss://'))) {
             if (!this.wss) {
                 this.url = 'ws://' + this.url;
-            }else {
+            } else {
                 this.url = 'wss://' + this.url;
             }
         }
 
-        console.info('Adresa Pro připojení: ',  this.url);
+        console.info('Adresa Pro připojení: ', this.url);
         // Logger.info('TyrionWebsocketClient:: MainServer Connection:: reconnect to Main server url:: ',this.websocketUrl);
         this._websocket = new WebSocket(this.url);
         this._websocket.addEventListener('close', (e) => this.onError(e));
@@ -193,7 +194,7 @@ export abstract class WebsocketClientAbstract {
 
                 // pokud se vrátí true - Parser si zprávu odchytil a odesílá na registrovaný callback!
                 if (this._messageBuffer.parseAnswer(message)) {
-                   //  console.log('WebsocketClientAbstract:: processData:: MessageBuffer Contain this Message');
+                    //  console.log('WebsocketClientAbstract:: processData:: MessageBuffer Contain this Message');
                     return;
                 }
 

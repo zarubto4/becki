@@ -3,12 +3,11 @@
  * of this distribution.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {ValidatorErrorsService} from '../services/ValidatorErrorsService';
-import {TranslationService} from '../services/TranslationService';
-import {TagComponent} from "./TagComponent";
-import {red} from "chalk";
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
+import { TranslationService } from '../services/TranslationService';
+import { TagComponent } from './TagComponent';
 
 @Component({
     selector: 'bk-form-tag-input',
@@ -23,19 +22,21 @@ import {red} from "chalk";
                 <div>
                     <div class="bootstrap-tagsinput">
                        <span *ngFor="let tag of tags; let i = index" [attr.data-index]="i">
-                           <span *ngIf="i <= index_stop || index_stop == null" style="margin-right: 3px; padding-right: 3px !important;">
-                                
-                               <bk-tag-component [tag]="tag" 
+                           <span *ngIf="i <= index_stop || index_stop == null"
+                                 style="margin-right: 3px; padding-right: 3px !important;">
+
+                               <bk-tag-component [tag]="tag"
                                                  [tag_color]="'label-info'"
                                                  [tag_popup_color]="tag_popup_selected_tag == tag"
                                                  [tag_faded]="tag_faded"
                                                  [readonly]="readonly"
                                                  (onRemoveClick)="onRemoveClick($event)">
                                 </bk-tag-component>
-                               
+
                            </span>
                        </span>
-                        <span *ngIf="tag_length_for_read_only_max_size_already_counted > tag_length_for_read_only_max_size && readonly">
+                        <span
+                            *ngIf="tag_length_for_read_only_max_size_already_counted > tag_length_for_read_only_max_size && readonly">
                            ...
                        </span>
                     </div>
@@ -109,7 +110,7 @@ export class FormInputTagsComponent implements OnInit {
         if (this.control != null) {
             this.control.setValue([]);
 
-        } else if(this.tags != null){
+        } else if (this.tags != null) {
 
             this.tags = this.tags_without_form;
 

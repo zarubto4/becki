@@ -332,7 +332,7 @@ export class IconFileComponent {
     file_name: string = '';
 
     get_name_icon_type(): string {
-        console.log('FileType: ', name);
+        console.info('FileType: ', name);
         return null;
     }
 

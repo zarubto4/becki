@@ -7,8 +7,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
-import { BeckiValidators } from '../helpers/BeckiValidators';
 import { BlockUIService } from '../services/BlockUIService';
+import { BeckiValidators } from '../helpers/BeckiValidators';
 import { Subscription } from 'rxjs';
 import { TranslationService } from '../services/TranslationService';
 
@@ -28,14 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     resendVertification: boolean = false;
     routeParamsSubscription: Subscription;
 
-    constructor(
-        private backendService: TyrionBackendService,
-        private formBuilder: FormBuilder,
-        private router: Router,
-        private blockUIService: BlockUIService,
-        private translationService: TranslationService,
-        protected activatedRoute: ActivatedRoute
-    ) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private router: Router, private blockUIService: BlockUIService, private translationService: TranslationService, protected activatedRoute: ActivatedRoute) {
         this.loginForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email]],
             'password': ['', [Validators.required, Validators.minLength(8)]]

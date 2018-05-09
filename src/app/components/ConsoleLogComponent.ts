@@ -30,47 +30,49 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn' | 'deb
     selector: 'bk-console-log',
     /* tslint:disable:max-line-length */
     template: `
-<div class="console-log-table-wrapper" [style.min-height]="(startOnMaxHeight?maxHeight:'20px')" [style.max-height]="maxHeight">
-    <table class="table table-fixed table-hover table-light">
-        <tbody>
-            <tr *ngFor="let log of items;" class="console-log-tr">
-                <td>
-                    <div class="console-log-head">
-                        <span class="console-log-timestamp">{{log.timestamp}}&nbsp;</span>
-                        <span *ngIf="log.type == 'error'" class="font-red">[Error]</span>
-                        <span *ngIf="log.type == 'warn'"  class="font-yellow">[Warn]</span>
-                        <span *ngIf="log.type == 'debug'" class="font-purple">[Debug]</span>
-                        <span *ngIf="log.type == 'trace'" class="font-grey-salsa">[Trace]</span>
-                        <span *ngIf="log.type == 'info'"  class="font-color-byzance-blue">[Info]&nbsp;&nbsp;</span>
-                        <span *ngIf="log.type == 'log'"   class="font-grey-salsae">[Info]</span>
-                    </div>
-                    <div class="console-log-message">
-                        
-                        <template [ngIf]="log.source || log.alias">
-                            <span [style.color]="sourceColor[log.source] ? sourceColor[log.source].color : ''" class="bold">{{log.alias?log.alias:log.source}}</span>
-                            <i class="fa fa-fw fa-angle-right"></i>
-                        </template>
-                        
-                        <span 
-                            [class.font-red]="log.type == 'error'"
-                            [class.font-yellow]="log.type == 'warn'"
-                            [class.font-grey-salsa]="log.type == 'debug'"
-                            [class.font-grey-salsa]="log.type == 'trace'"
-                            [class.font-grey-salsa]="log.type == 'info'"
-                            [class.font-grey-salsa]="log.type == 'log'"
-                            [innerHTML]="log.message"></span>
-                    </div>
-                </td>
-            </tr>
-            <tr *ngIf="items.length == 0">
-                <td class="text-center">
-                    <i>{{'label_console_is_empty'|bkTranslate:this}}</i>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-`
+        <div class="console-log-table-wrapper" [style.min-height]="(startOnMaxHeight?maxHeight:'20px')"
+             [style.max-height]="maxHeight">
+            <table class="table table-fixed table-hover table-light">
+                <tbody>
+                <tr *ngFor="let log of items;" class="console-log-tr">
+                    <td>
+                        <div class="console-log-head">
+                            <span class="console-log-timestamp">{{log.timestamp}}&nbsp;</span>
+                            <span *ngIf="log.type == 'error'" class="font-red">[Error]</span>
+                            <span *ngIf="log.type == 'warn'" class="font-yellow">[Warn]</span>
+                            <span *ngIf="log.type == 'debug'" class="font-purple">[Debug]</span>
+                            <span *ngIf="log.type == 'trace'" class="font-grey-salsa">[Trace]</span>
+                            <span *ngIf="log.type == 'info'" class="font-color-byzance-blue">[Info]&nbsp;&nbsp;</span>
+                            <span *ngIf="log.type == 'log'" class="font-grey-salsae">[Info]</span>
+                        </div>
+                        <div class="console-log-message">
+
+                            <template [ngIf]="log.source || log.alias">
+                                <span [style.color]="sourceColor[log.source] ? sourceColor[log.source].color : ''"
+                                      class="bold">{{log.alias ? log.alias : log.source}}</span>
+                                <i class="fa fa-fw fa-angle-right"></i>
+                            </template>
+
+                            <span
+                                [class.font-red]="log.type == 'error'"
+                                [class.font-yellow]="log.type == 'warn'"
+                                [class.font-grey-salsa]="log.type == 'debug'"
+                                [class.font-grey-salsa]="log.type == 'trace'"
+                                [class.font-grey-salsa]="log.type == 'info'"
+                                [class.font-grey-salsa]="log.type == 'log'"
+                                [innerHTML]="log.message"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="items.length == 0">
+                    <td class="text-center">
+                        <i>{{'label_console_is_empty' | bkTranslate:this}}</i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    `
     /* tslint:enable */
 })
 export class ConsoleLogComponent {
@@ -83,9 +85,11 @@ export class ConsoleLogComponent {
 
     items: ConsoleLogItem[] = [];
 
-    sourceColor: {[source_id: string]: {
-        color: string
-    }} = {};
+    sourceColor: {
+        [source_id: string]: {
+            color: string
+        }
+    } = {};
 
     constructor(private translationService: TranslationService) {
     }

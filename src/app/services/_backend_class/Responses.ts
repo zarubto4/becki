@@ -1,5 +1,3 @@
-
-
 // INTERFACES - Compiler
 import { IWebSocketErrorMessage } from '../websocket/Websocket_Client_Tyrion';
 
@@ -119,7 +117,7 @@ export class LostConnectionError extends IError {
         super();
         this.code = 0;
         this.name = 'Response_BadRequest';
-        this. message = 'Request failed, please check your internet connection.';
+        this.message = 'Request failed, please check your internet connection.';
     }
 }
 
@@ -229,9 +227,9 @@ export class InternalServerError extends IError {
         super('Critical Server Side Error!');
         this.code = 500;
         this.name = 'Response_CriticalError';
-        if ( response.body['message']) {
+        if (response.body['message']) {
             this.message = response.body['message'];
-        }else {
+        } else {
             this.message = 'Critical Server Side Error!';
         }
     }
@@ -284,6 +282,7 @@ export class CodeError extends IError {
     }
 
 }
+
 // 478
 export class CodeCompileError extends IError {
 

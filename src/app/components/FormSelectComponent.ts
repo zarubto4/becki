@@ -4,12 +4,11 @@
  */
 
 
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
 export let formSelectComponentOptionsMaker = (objects: any[], valueFieldName: string, labelFieldName: string, interactive: boolean = false): FormSelectComponentOption[] => {
-    // console.log('beckiFormSelectOptionsMaker called');
     if (!Array.isArray(objects)) {
         throw new Error('formSelectComponentOptionsMaker first param must be array');
     }
@@ -107,8 +106,8 @@ export class FormSelectComponent {
 
             if (this.regexFirstOption) {
 
-                console.log("FormSelectComponent: Regex: ", this.regexFirstOption);
-                console.log("FormSelectComponent: Option: ", option);
+                console.info('FormSelectComponent: Regex: ', this.regexFirstOption);
+                console.info('FormSelectComponent: Option: ', option);
 
                 let toPick: number = 0;
 
@@ -118,7 +117,7 @@ export class FormSelectComponent {
                     }
                 });
 
-                console.log("FormSelectComponent: TO Pick: ", toPick);
+                console.info('FormSelectComponent: TO Pick: ', toPick);
 
                 if (toPick === -1) {
                     this.selectedValue = option[0].value;
@@ -128,7 +127,7 @@ export class FormSelectComponent {
                     this.selectedValue = option[toPick].value;
                     this.control.setValue(option[toPick].value);
 
-                    console.log("FormSelectComponent: This Selected Value" , this.selectedValue );
+                    console.info('FormSelectComponent: This Selected Value' , this.selectedValue );
                 }
             } else if (this.positionFirstOption && this.positionFirstOption > -1 && this.positionFirstOption < option.length) {
 
@@ -154,7 +153,7 @@ export class FormSelectComponent {
 
         this.control.updateValueAndValidity();
 
-        console.log("onSelectedChange:", newValue);
+        console.info('onSelectedChange:', newValue);
 
         // Select first
         if (newValue == null) {
@@ -162,19 +161,19 @@ export class FormSelectComponent {
         }
 
         if (this.firstSelect && newValue != null) {
-            console.log("this.firstSelect && newValue != null");
+            console.info('this.firstSelect && newValue != null');
             this.firstSelect = false;
             this.valueChanged.emit(newValue);
             return;
         }
 
         if (this.selectedValue === newValue) {
-            console.log("onSelectedChange:: this.selectedValue === newValue ");
+            console.info('onSelectedChange:: this.selectedValue === newValue ');
             return;
         }
 
         this.selectedValue = newValue;
-        console.log("callEmit with:", this.selectedValue );
+        console.info('callEmit with:', this.selectedValue );
 
         this.valueChanged.emit(newValue);
     }

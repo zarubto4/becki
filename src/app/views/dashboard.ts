@@ -5,7 +5,7 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
+import { IProject } from '../backend/TyrionAPI';
 
 /* tslint:disable */
 @Component({
@@ -31,7 +31,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
 
     onNaCoCliknil(value: string) {
-        console.log("Uživatel kliknul na", value);
+        console.info('Uživatel kliknul na ', value);
     }
 
 

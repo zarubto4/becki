@@ -44,7 +44,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
             this.projectId = params['project'];
             if (this.projectId) {
                 this.onShowProgramPrivateBlocksFilter();
-            }else {
+            } else {
                 this.onShowProgramPendingBlocksFilter();
             }
         });
@@ -90,7 +90,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.blockUI();
                 this.tyrionBackendService.blockClone({
                     block_id: block.id,
-                   // tags: model.tags,
+                    // tags: model.tags,
                     project_id: this.projectId,
                     name: model.name,
                     description: model.description
@@ -212,8 +212,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onShowProgramPublicBlocksFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.blockGetByFilter(page, {
-        })
+        this.tyrionBackendService.blockGetByFilter(page, {})
             .then((list) => {
                 this.blockPublicList = list;
                 this.unblockUI();

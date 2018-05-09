@@ -10,10 +10,10 @@ import { TranslationService } from '../services/TranslationService';
 
 @Component({
     selector: 'bk-tag-component',
-/* tslint:disable:max-line-length */
-    template: `        
-        <span class="tag label" 
-              (mouseover)="hoover(true)" 
+    /* tslint:disable:max-line-length */
+    template: `
+        <span class="tag label"
+              (mouseover)="hoover(true)"
               (mouseleave)="hoover(false)"
               [class.label-info]="tag_color == 'label-info' && !tag_popup_color"
               [class.label-danger]="tag_color == 'label-danger' || tag_popup_color"
@@ -23,10 +23,12 @@ import { TranslationService } from '../services/TranslationService';
               [class.label-default]="tag_color == 'label-default' && !tag_popup_color"
               [class.fade_animation]="tag_faded"
         >
-            {{tag}} <span data-role="remove"><i *ngIf="!readonly" class="fa fa-times" style="width: 0.6em; text-align: center;" (click)="onRemoveClickEvent()"></i> </span>
+            {{tag}} <span data-role="remove"><i *ngIf="!readonly" class="fa fa-times"
+                                                style="width: 0.6em; text-align: center;"
+                                                (click)="onRemoveClickEvent()"></i> </span>
         </span>
     `
-/* tslint:enable */
+    /* tslint:enable */
 })
 export class TagComponent implements OnInit {
 

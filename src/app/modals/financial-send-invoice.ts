@@ -34,13 +34,13 @@ export class ModalsSendInvoiceComponent implements OnInit {
 
     form: FormGroup;
 
-    differentEmail: boolean= false;
+    differentEmail: boolean = false;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             'email': [this.modalModel.email,
-            [BeckiValidators.condition(() => this.differentEmail, Validators.required), BeckiValidators.condition(() => this.differentEmail, BeckiValidators.email)]]
+                [BeckiValidators.condition(() => this.differentEmail, Validators.required), BeckiValidators.condition(() => this.differentEmail, BeckiValidators.email)]]
         });
     }
 

@@ -67,7 +67,7 @@ export class FormJsonNiceTextAreaComponent implements OnInit {
         try {
             let obj = JSON.parse(this.content);
             this.content = JSON.stringify(obj, null, 2);
-        }catch (e) {
+        } catch (e) {
             this.content = JSON.stringify('[]', null, 2);
         }
     }

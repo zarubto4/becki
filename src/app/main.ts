@@ -216,8 +216,8 @@ import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-
 import { ModalsShowQRComponent } from './modals/show_QR';
 import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-program-settings';
 import { BeckiDrobDownButtonComponent } from './components/DrobDownButton';
-import { PopoverComponent } from "./components/PopoverComponent";
-import { PopoverModule } from "ng4-popover";
+import { PopoverComponent } from './components/PopoverComponent';
+import { PopoverModule } from 'ng4-popover';
 
 
 

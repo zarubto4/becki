@@ -76,7 +76,7 @@ export class WebsocketMessage {
             try {
                 json = JSON.parse(<string>json);
             } catch (e) {
-                console.log('WebsocketMessage :: error parsing JSON : error: ' + e);
+                console.info('WebsocketMessage :: error parsing JSON : error: ' + e);
                 return null;
             }
         }
@@ -105,7 +105,7 @@ export class WebsocketMessage {
                 }
             }
         } catch (e) {
-            console.log('WebsocketMessage :: error reading JSON : error: ' + e);
+            console.info('WebsocketMessage :: error reading JSON : error: ' + e);
             return null;
         }
         return m;
@@ -118,7 +118,7 @@ export class WebsocketMessage {
     public toJson(): { [key: string]: any } {
 
         if (this.message_id === null) {
-            console.log('WebSocketMessage Id zprávy bylo null - generuji nové!!');
+            console.info('WebSocketMessage Id zprávy bylo null - generuji nové!!');
             this.message_id = WebsocketMessage.getUUID();
         }
 

@@ -9,46 +9,50 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
 @Component({
     selector: 'bk-form-input',
-/* tslint:disable:max-line-length */
+    /* tslint:disable:max-line-length */
     template: `
-<div class="form-group" 
-     [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" 
-     [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" 
-     [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
-    <label *ngIf="showLabel">{{label}}</label>
-    <div class="input-icon right">
-        
-        <i class="fa fa-check" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
-        <i class="fa fa-warning" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
-        <i class="fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
-       
-        <input  *ngIf="control"  class="form-control" 
-               (keydown)="onEnter($event)"
-               (ngModelChange)="onSelectedChange($event)" 
-               [class.input-small]="widthSize == 'small'" 
-               [class.input-medium]="widthSize == 'medium'"
-               [class.input-xlarge]="widthSize == 'large'" 
-               [attr.type]="type" 
-               [attr.placeholder]="(placeholder?placeholder:label)"
-               [readonly]="readonly"
-               [formControl]="control" 
-               >
+        <div class="form-group"
+             [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"
+             [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"
+             [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
+            <label *ngIf="showLabel">{{label}}</label>
+            <div class="input-icon right">
 
-        <input *ngIf="!control" class="form-control"
-               (keydown)="onEnter($event)"
-               (ngModelChange)="onSelectedChange($event)"
-               [class.input-small]="widthSize == 'small'"
-               [class.input-medium]="widthSize == 'medium'"
-               [class.input-xlarge]="widthSize == 'large'"
-               [attr.type]="type"
-               [attr.placeholder]="(placeholder?placeholder:label)"
-               [readonly]="readonly">
+                <i class="fa fa-check"
+                   *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
+                <i class="fa fa-warning"
+                   *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
+                <i class="fa fa-spinner fa-spin"
+                   *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
 
-    </div>
-    <span class="help-block" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" >{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
-</div>
-`
-/* tslint:enable */
+                <input *ngIf="control" class="form-control"
+                       (keydown)="onEnter($event)"
+                       (ngModelChange)="onSelectedChange($event)"
+                       [class.input-small]="widthSize == 'small'"
+                       [class.input-medium]="widthSize == 'medium'"
+                       [class.input-xlarge]="widthSize == 'large'"
+                       [attr.type]="type"
+                       [attr.placeholder]="(placeholder?placeholder:label)"
+                       [readonly]="readonly"
+                       [formControl]="control"
+                >
+
+                <input *ngIf="!control" class="form-control"
+                       (keydown)="onEnter($event)"
+                       (ngModelChange)="onSelectedChange($event)"
+                       [class.input-small]="widthSize == 'small'"
+                       [class.input-medium]="widthSize == 'medium'"
+                       [class.input-xlarge]="widthSize == 'large'"
+                       [attr.type]="type"
+                       [attr.placeholder]="(placeholder?placeholder:label)"
+                       [readonly]="readonly">
+
+            </div>
+            <span class="help-block"
+                  *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
+        </div>
+    `
+    /* tslint:enable */
 })
 export class FormInputComponent implements OnInit {
 

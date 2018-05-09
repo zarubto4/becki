@@ -18,7 +18,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { NullSafe } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
-import { Core, EditorRenderer, Widgets } from 'the-grid';
+import { Core, EditorRenderer } from 'the-grid';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsGridProgramPropertiesModel } from '../modals/grid-program-properties';
@@ -259,7 +259,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.selectedProgramVersion = programVersionFull;
 
                 // TODO run update fo grid widgets version, then setDataJson ...
-                console.log('selectProgramVersion: ', this.selectedProgramVersion.program_version);
+                console.info('selectProgramVersion: ', this.selectedProgramVersion.program_version);
                 this.gridView.setDataJson(this.selectedProgramVersion.program_version);
 
                 this.gridDeviceProfile = this.gridView.getDeviceProfile();
@@ -376,7 +376,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onWidgetRequestingSource(event: any) {
-        console.log('onWidgetRequestingSource', event.type);
+        console.info('onWidgetRequestingSource', event.type);
         this.tyrionBackendService.widgetVersionGet(event.type.version_id)
             .then((widgetVersion) => {
                 // this.widgetSourceCache[event.type.id] = widgetVersion.id;

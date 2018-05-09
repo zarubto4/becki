@@ -1,14 +1,14 @@
 // Helper: root() is defined at the bottom
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
 // Webpack Plugins
-var autoprefixer = require('autoprefixer');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var browserConfig = require('web-app-browserconfig-loader');
-var xmlConfig = require('xml-loader');
+const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const browserConfig = require('web-app-browserconfig-loader');
+const xmlConfig = require('xml-loader');
 
 
 /**
@@ -19,6 +19,7 @@ var ENV = process.env.npm_lifecycle_event;
 var isTestWatch = ENV === 'test-watch';
 var isTest = ENV === 'test' || isTestWatch;
 var isProd = ENV === 'build';
+const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = function makeWebpackConfig() {
     /**
@@ -101,40 +102,20 @@ module.exports = function makeWebpackConfig() {
 
             { test: /\.xml$/, loader: 'xml-loader' }, // support for .xml files
 
-
-            // Support for *.json files.
-            // {
-            //     test: /\.json$/,
-            //     loader: 'json-loader'
-            // },
-
-            // Support for CSS as raw text
-            // use 'null' loader in test mode (https://github.com/webpack/null-loader)
-            // all css in src/style will be bundled in an external css file
-            {
-                test: /\.css$/,
-                exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' : ExtractTextPlugin.extract(
-                    {
-                        fallback: 'style-loader',
-                        use: ['css-loader', 'postcss-loader']
-                    }
-                )
-            },
-            // all css required in src/app files will be merged in js files
             {
                 test: /\.css$/,
                 include: root('src', 'app'),
                 loader: 'raw-loader!postcss-loader'
             },
 
-            // support for .scss files
-            // use 'null' loader in test mode (https://github.com/webpack/null-loader)
-            // all css in src/style will be bundled in an external css file
             {
-                test: /\.(scss|sass)$/,
-                exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' : ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'postcss-loader', 'sass-loader'] })
+                test: /\.s?[ac]ss$/,
+                use: [
+                    devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'postcss-loader',
+                    'sass-loader',
+                ],
             },
             // all css required in src/app files will be merged in js files
             {
@@ -178,11 +159,11 @@ module.exports = function makeWebpackConfig() {
             }
         }),
 
-        // Workaround needed for angular 2 angular/angular#11580
+        // Workaround needed for angular 5 angular/angular/issues/20357
         new webpack.ContextReplacementPlugin(
             // The (\\|\/) piece accounts for path separators in *nix and Windows
-            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            root('./src') // location of your src
+            /\@angular(\\|\/)core(\\|\/)esm5/,
+            path.join(__dirname, './src') // location of your src
         ),
 
         // Tslint configuration for webpack 2
@@ -229,9 +210,9 @@ module.exports = function makeWebpackConfig() {
             }),
 
             // Extract css files
-            // Reference: https://github.com/webpack/extract-text-webpack-plugin
+            // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
             // Disabled when in test mode or not in build mode
-            new ExtractTextPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
+            new MiniCssExtractPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
         );
     }
 

@@ -34,7 +34,7 @@ export class WebsocketSendingMessage {
 
     public send_message_again() {
 
-        console.log('send_message_again: ');
+        console.info('send_message_again: ');
 
         if (this.numberOfRetries < 1) { // Počítám do 1 - protože jeden pokus už je vyplítván v konstrukoru.
             this.destroy();
@@ -46,7 +46,7 @@ export class WebsocketSendingMessage {
 
         if (!this.websocket.send_without_callback(this.message)) {
 
-            console.log('send_message_again: send_without_callback - return false ');
+            console.info('send_message_again: send_without_callback - return false ');
 
             this.destroy();
             this.callCallback(null, 'Web Socket is offline');

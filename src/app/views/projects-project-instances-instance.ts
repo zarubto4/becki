@@ -4,41 +4,37 @@
  */
 import {
     IInstanceSnapshot, IInstance, IBProgram,
-    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary, IBProgramVersion,
+    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, IBProgramVersion,
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
-    ISwaggerInstanceSnapShotConfigurationProgram, ISwaggerInstanceSnapShotConfiguration,
+    ISwaggerInstanceSnapShotConfigurationProgram,
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
     IUpdateProcedure
 } from '../backend/TyrionAPI';
-import {BlockoCore} from 'blocko';
+import { BlockoCore } from 'blocko';
 import {
     Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef, ViewChildren, QueryList,
     AfterViewInit
 } from '@angular/core';
-import {_BaseMainComponent} from './_BaseMainComponent';
-import {Subscription} from 'rxjs/Rx';
-import {CurrentParamsService} from '../services/CurrentParamsService';
-import {BlockoViewComponent} from '../components/BlockoViewComponent';
-import {ModalsConfirmModel} from '../modals/confirm';
-import {ConsoleLogComponent} from '../components/ConsoleLogComponent';
-import {FlashMessageError, FlashMessageSuccess} from '../services/NotificationService';
-import {ModalsInstanceEditDescriptionModel} from '../modals/instance-edit-description';
-import {OnlineChangeStatus, TyrionApiBackend} from '../backend/BeckiBackend';
-import {InstanceHistoryTimeLineComponent} from '../components/InstanceHistoryTimeLineComponent';
-import {ModalsSelectVersionModel} from '../modals/version-select';
-import {DraggableEventParams} from '../components/DraggableDirective';
-import {WebsocketClientBlockoView} from '../services/websocket/Websocket_Client_BlockoView';
-import {WebsocketMessage} from '../services/websocket/WebsocketMessage';
-import {ModalsVersionDialogModel} from '../modals/version-dialog';
+import { _BaseMainComponent } from './_BaseMainComponent';
+import { Subscription } from 'rxjs/Rx';
+import { CurrentParamsService } from '../services/CurrentParamsService';
+import { BlockoViewComponent } from '../components/BlockoViewComponent';
+import { ModalsConfirmModel } from '../modals/confirm';
+import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
+import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
+import { ModalsSelectVersionModel } from '../modals/version-select';
+import { DraggableEventParams } from '../components/DraggableDirective';
+import { WebsocketClientBlockoView } from '../services/websocket/Websocket_Client_BlockoView';
+import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
+import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import moment = require('moment/moment');
-import {ModalsSnapShotInstanceModel} from '../modals/snapshot-properties';
-import {ModalsSnapShotDeployModel} from '../modals/snapshot-deploy';
-import {ModalsRemovalModel} from '../modals/removal';
-import {ModalsShowQRModel} from '../modals/show_QR';
-import {ModalsGridProgramSettingsModel} from '../modals/instance-grid-program-settings';
-
-// Trying smth
-import {ProjectsProjectHardwareComponent} from '../views/projects-project-hardware';
+import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
+import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
+import { ModalsRemovalModel } from '../modals/removal';
+import { ModalsShowQRModel } from '../modals/show_QR';
+import { ModalsGridProgramSettingsModel } from '../modals/instance-grid-program-settings';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -447,9 +443,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.unblockUI();
                         this.refresh();
                     }).catch((err) => {
-                    this.unblockUI();
-                    this.fmError(this.translate('label_upload_error', err));
-                });
+                        this.unblockUI();
+                        this.fmError(this.translate('label_upload_error', err));
+                    });
             }
         });
     }
@@ -610,7 +606,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedureTask(pageNumber: number = 0,
-                                       status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET'],): void {
+                                       status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET']): void {
         this.blockUI();
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
@@ -880,7 +876,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
-
 
 
     onDrobDownEmiterProgram(action: string, m_project: IBProgramVersionSnapGridProject, program: IBProgramVersionSnapGridProjectProgram) {

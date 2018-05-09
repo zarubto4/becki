@@ -2384,7 +2384,7 @@ export class StaticTranslation {
                 'label_type_of_board_properties': 'Hardware Type Properties',
                 'label_type_of_board_remove': 'Hardware Type Remove',
 
-                'label_producer_properties':'Producer Properties',
+                'label_producer_properties': 'Producer Properties',
                 'label_producer_remove': 'Producer Remove',
 
                 'label_processor_properties': 'Processor Properties',
@@ -2521,7 +2521,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'label_no_bugs': 'No Bugs',
                 'label_no_bugs_comment': 'Heureca! No Bugs!',
-                'label_Project_Properties':'Settings',
+                'label_Project_Properties': 'Settings',
 
             }, 'BugsBugComponent': {
                 'main_title': 'Platform administration',

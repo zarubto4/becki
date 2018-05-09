@@ -8,7 +8,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
-import { IBProgram, IBProgramList, IProject} from '../backend/TyrionAPI';
+import { IBProgram, IBProgramList, IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({

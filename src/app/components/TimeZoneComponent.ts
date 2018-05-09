@@ -193,7 +193,7 @@ export class TimeZoneSelectorComponent implements OnInit {
 
         if (offset < 0) {
             time_prefix = '+' + time_prefix;
-        }else {
+        } else {
             time_prefix = '-' + time_prefix;
         }
 
