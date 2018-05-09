@@ -280,7 +280,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onDrobDownEmiter(action: string, object: any): void {
 
-        if (action === 'block_make_clone') {
+        if (action === 'block_copy') {
             this.onMakeClone(object);
         }
 
