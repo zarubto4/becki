@@ -4,7 +4,7 @@
  */
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { Injectable } from '@angular/core';
+import { ApplicationRef, EventEmitter, Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
@@ -13,6 +13,8 @@ import { RestRequest, RestResponse } from './_backend_class/Responses';
 
 @Injectable()
 export class TyrionBackendService extends TyrionApiBackend {
+
+    public changeDetectionEmitter: EventEmitter<{}> = new EventEmitter<{}>();
 
     constructor(protected http: Http, protected router: Router, private translationService: TranslationService) {
         super();
@@ -89,5 +91,15 @@ export class TyrionBackendService extends TyrionApiBackend {
         }
 
         return this.http.request(request.url, optionsArgs).toPromise();
+    }
+
+    public increaseTasks() {
+        this.tasks++;
+        this.changeDetectionEmitter.emit({});
+    }
+
+    public decreaseTasks() {
+        this.tasks--;
+        this.changeDetectionEmitter.emit({});
     }
 }

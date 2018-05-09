@@ -5,7 +5,7 @@
 
 import {
     Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges, NgZone,
-    ViewEncapsulation
+    ViewEncapsulation, ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TyrionBackendService } from '../services/BackendService';
@@ -13,6 +13,7 @@ import { BreadcrumbsService } from '../services/BreadcrumbsService';
 import { TabMenuService } from '../services/TabMenuService';
 import { LabeledLink } from '../helpers/LabeledLink';
 import { NotificationService } from '../services/NotificationService';
+import { Subscription } from 'rxjs/Rx';
 
 declare const BECKI_VERSION: string;
 declare const BECKI_VERSION_ID: number;
@@ -60,6 +61,8 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
 
     breadcrumbsService: BreadcrumbsService = null;
 
+    changeDetectionSubcsription: Subscription;
+
     constructor(
         public notificationService: NotificationService,
         public backendService: TyrionBackendService,
@@ -69,6 +72,7 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private zone: NgZone,
+        private cdRef: ChangeDetectorRef
     ) {
         this.breadcrumbsService = breadcrumbsService;
         this.beckiBeta = backendService.getBeckiBeta();
@@ -174,6 +178,10 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
             document.body.addEventListener('mouseup', this.mouseUpEvent);
             document.body.addEventListener('mousemove', this.mouseMoveEvent);
         });
+
+        this.changeDetectionSubcsription = this.backendService.changeDetectionEmitter.subscribe(() => {
+            this.cdRef.detectChanges();
+        });
     }
 
     ngOnDestroy(): void {
@@ -182,6 +190,8 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
             document.body.removeEventListener('mouseup', this.mouseUpEvent);
             document.body.removeEventListener('mousemove', this.mouseMoveEvent);
         });
+
+        this.changeDetectionSubcsription.unsubscribe();
     }
 
     openSubmanyItem(label: string) {

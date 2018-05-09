@@ -11,9 +11,10 @@ import { ModalService } from '../services/ModalService';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
-import { IBlockVersion } from '../backend/TyrionAPI';
+import { IBlock, IBlockVersion } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 
 @Component({
@@ -84,7 +85,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     groupRemovedCallback: (boundInterface: BlockoCore.BoundInterface) => void;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, private translationService: TranslationService) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, protected translationService: TranslationService, protected notificationService: NotificationService,  ) {
     }
 
     public get serviceHandler(): Blocks.ServicesHandler {
@@ -132,12 +133,18 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 singleBlockView: this.singleBlockView
             });
             this.blocko.registerOpenConfigCallback((block) => {
-                let versions: IBlockVersion[] =  null;
-
-                // TODO Tady evidentně něco chybí! ?? Odstranil jsem jen Groupy ale nezdá se mi to
-
                 this.zone.run(() => {
-                    this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block, versions, this.blockChangeVersion));
+                    if (block.blockId) {
+                        this.backendService.blockGet(block.blockId)
+                            .then((b: IBlock) => {
+                                this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block, b.versions, this.blockChangeVersion));
+                            })
+                            .catch((error) => {
+                                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this)));
+                            });
+                    } else {
+                        this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block));
+                    }
                 });
 
             });
@@ -229,11 +236,11 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         // this.blocko.setBlockView()
     }
 
-    getCoreBlock(block: IBlockVersion|string): BlockoCore.Block {
-        if (typeof block === 'string') {
-            return this.getStaticBlock(block);
+    getCoreBlock(version: IBlockVersion|string, block?: IBlock): BlockoCore.Block {
+        if (typeof version === 'string') {
+            return this.getStaticBlock(version);
         } else {
-            return this.getTSBlock(block);
+            return this.getTSBlock(version, block);
         }
     }
 
@@ -255,14 +262,15 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return b;
     }
 
-    getTSBlock(block: IBlockVersion) {
+    getTSBlock(version: IBlockVersion, block?: IBlock) {
         let b: BlockoBasicBlocks.TSBlock = null;
         this.zone.runOutsideAngular(() => {
-            const json = JSON.parse(block.design_json);
+            const json = JSON.parse(version.design_json);
 
-            json['block_version'] = block.id;
+            json['version_id'] = version.id;
+            json['block_id'] = block.id;
 
-            b = new BlockoBasicBlocks.TSBlock(null, block.logic_json, JSON.stringify(json));
+            b = new BlockoBasicBlocks.TSBlock(null, version.logic_json, JSON.stringify(json));
         });
         this.onChange.emit({});
         return b;
@@ -363,7 +371,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     blockChangeVersion = (block: Blocks.TSBlock, version_id: string) => {
         this.backendService.blockVersionGet(version_id)
             .then((versionObject) => {
-                block.blockVersion = version_id;
+                block.versionId = version_id;
                 block.setCode(versionObject.logic_json);
             });
         /*.catch((reason) => {
@@ -381,5 +389,13 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     registerAddHardwareCallback(callback: (callback: (iface: Blocks.BlockoTargetInterface) => void) => void): void {
         this.blocko.registerAddHardwareCallback(callback);
+    }
+
+    registerChangeGridCallback(callback: (iface: Blocks.BlockoTargetInterface, callback: (iface: Blocks.BlockoTargetInterface) => void) => void): void {
+        this.blocko.registerChangeGridCallback(callback);
+    }
+
+    registerChangeHardwareCallback(callback: (iface: Blocks.BlockoTargetInterface, callback: (iface: Blocks.BlockoTargetInterface) => void) => void): void {
+        this.blocko.registerChangeHardwareCallback(callback);
     }
 }

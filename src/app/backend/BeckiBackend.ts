@@ -4,9 +4,8 @@
  */
 
 
-import { TyrionAPI, INotification, IPerson, ILoginResult, ISocialNetworkLogin, IWebSocketToken } from './TyrionAPI';
+import { TyrionAPI, IPerson, ILoginResult, ISocialNetworkLogin } from './TyrionAPI';
 import * as Rx from 'rxjs';
-import { ConsoleLogType } from '../components/ConsoleLogComponent';
 import {
     BadRequest, BugFoundError, CodeCompileError,
     CodeError, InternalServerError, InvalidBody, LostConnectionError, ObjectNotFound, PermissionMissingError,
@@ -60,6 +59,9 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     protected websocketService: WebsocketService = null;
 
     protected websocketErrorShown: boolean = false;
+
+    protected abstract increaseTasks();
+    protected abstract decreaseTasks();
 
     // CONSTRUCTOR
     public constructor() {
@@ -132,11 +134,11 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         request.headers['Becki-Version'] = BECKI_VERSION;
 
         // Set Task - New Try
-        this.tasks += 1;
+        this.increaseTasks();
         return this.requestRestGeneral(request)
             .then((response: RestResponse) => {
                 if (success.indexOf(response.status) > -1) {
-                    this.tasks -= 1;
+                    this.decreaseTasks();
                     let res = response.body;
                     Object.defineProperty(res, '_code_', {
                         value: response.status,
@@ -184,7 +186,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
             })
             .catch((e: any) => {
                 console.error('Error from Response', e);
-                this.tasks -= 1;
+                this.decreaseTasks();
                 throw e;
             });
     }

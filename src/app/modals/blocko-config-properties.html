@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body block-config">
         <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
-        <template [ngIf]="blockVersions && blockVersions.length > 0">
+        <div *ngIf="blockVersions">
             <h4>{{'label_block_code_version'|bkTranslate:this}}</h4>
             <div>
                 <select name="blockVersions" class="form-control" [(ngModel)]="formModelVersion">
@@ -14,7 +14,7 @@
                 </select>
             </div>
             <hr />
-        </template>
+        </div>
         <template [ngIf]="configProperties.length">
             <h4>{{'label_configuration'|bkTranslate:this}}</h4>
             <div *ngFor="let configProperty of configProperties;">

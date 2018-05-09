@@ -55,9 +55,7 @@ export class ModalsBlockSelectComponent implements OnInit {
     ngOnInit(): void {
         // Expression has changed after it was checked -  setTimeout is protection TODO it is not protection, it is temporary hack, use ChangeDetectorRef instead
         if (!this.modalModel.already_selected_code_for_version_change) {
-            setTimeout(() => {
-                this.onFilterBlocks(0);
-            });
+            this.onFilterBlocks(0);
         } else {
             this.tyrionBackendService.blockGet(this.modalModel.already_selected_code_for_version_change.block_id)
                 .then((block) => {
