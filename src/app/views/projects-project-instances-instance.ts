@@ -496,25 +496,41 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    onInstanceDeployClick() {
-        let model = new ModalsSnapShotDeployModel(this.instance.snapshots);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.instanceSnapshotDeploy({
-                    snapshot_id: model.selected_snapshot_id,
-                    upload_time: model.time
-                })
-                    .then(() => {
-                        this.unblockUI();
-                        this.refresh();
+    onInstanceDeployClick(snapshot?: IInstanceSnapshot) {
+
+        if(snapshot == null) {
+            let model = new ModalsSnapShotDeployModel(this.instance.snapshots);
+            this.modalService.showModal(model).then((success) => {
+                if (success) {
+                    this.blockUI();
+                    this.tyrionBackendService.instanceSnapshotDeploy({
+                        snapshot_id: model.selected_snapshot_id,
+                        upload_time: model.time
                     })
-                    .catch((err) => {
-                        this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', err));
-                    });
-            }
-        });
+                        .then(() => {
+                            this.unblockUI();
+                            this.refresh();
+                        })
+                        .catch((err) => {
+                            this.unblockUI();
+                            this.fmError(this.translate('label_upload_error', err));
+                        });
+                }
+            });
+        } else {
+            this.tyrionBackendService.instanceSnapshotDeploy({
+                snapshot_id: snapshot.id,
+                upload_time: 0
+            })
+                .then(() => {
+                    this.unblockUI();
+                    this.refresh();
+                })
+                .catch((err) => {
+                    this.unblockUI();
+                    this.fmError(this.translate('label_upload_error', err));
+                });
+        }
     }
 
     getGridConfig(project_id: string, program_id: string): ISwaggerInstanceSnapShotConfigurationProgram {
@@ -927,6 +943,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         if (action === 'cancel_update_procedure') {
             this.onUpdateProcedureCancelClick(object);
         }
+
+        if (action === 'deploy_selected_snapshot') {
+            this.onInstanceDeployClick(object);
+        }
+
+
+
     }
 
     onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
