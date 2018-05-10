@@ -83,8 +83,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @ViewChild('field')
     field: ElementRef;
 
-    groupRemovedCallback: (boundInterface: BlockoCore.BoundInterface) => void;
-
     constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, protected translationService: TranslationService, protected notificationService: NotificationService,  ) {
     }
 
@@ -209,11 +207,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 this.zone.run(() => {
                     this.onLog.emit({ block: block, type: type, message: message });
                 });
-            });
-            this.blocko.core.registerInterfaceBoundCallback((boundInterface: BlockoCore.BoundInterface) => {
-                if (this.groupRemovedCallback) {
-                    this.groupRemovedCallback(boundInterface);
-                }
             });
             this.blocko.core.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
 
@@ -397,5 +390,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     registerChangeHardwareCallback(callback: (iface: Blocks.BlockoTargetInterface, callback: (iface: Blocks.BlockoTargetInterface) => void) => void): void {
         this.blocko.registerChangeHardwareCallback(callback);
+    }
+
+    registerBindInterfaceCallback(callback: (callback: (targetId: string, group?: boolean) => BlockoCore.BoundInterface) => void): void {
+        this.blocko.registerBindInterfaceCallback(callback);
     }
 }

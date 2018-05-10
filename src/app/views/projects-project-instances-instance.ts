@@ -89,13 +89,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     tab: string = 'overview';
 
-    draggableOptions: JQueryUI.DraggableOptions = {
-        helper: 'clone',
-        containment: 'document',
-        cursor: 'move',
-        cursorAt: {left: -5, top: -5}
-    };
-
     private liveViewLoaded: boolean = false;
 
     constructor(injector: Injector) {
@@ -131,9 +124,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             if (this.editorView) {
 
-                this.editorView.registerAddBlockCallback(this.onAddBlock.bind(this));
-                this.editorView.registerAddGridCallback(this.onAddGrid.bind(this));
-                this.editorView.registerAddHardwareCallback(this.onSetHardwareByInterfaceClick.bind(this));
+                // this.editorView.registerAddBlockCallback(this.onAddBlock.bind(this));
+                // this.editorView.registerAddGridCallback(this.onAddGrid.bind(this));
+                // this.editorView.registerAddHardwareCallback(this.onSetHardwareByInterfaceClick.bind(this));
+                this.editorView.registerBindInterfaceCallback(this.onSetHardwareByInterfaceClick.bind(this));
 
                 if (this.instance && this.instance.current_snapshot) {
                     this.editorView.setDataJson(this.instance.current_snapshot.program.snapshot);
@@ -268,34 +262,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             this.onFilterHardwareGroup();
         }
 
-    }
-
-    onDragStop(params: DraggableEventParams) {
-        console.info('onDragStop::homerMessageReceived params:', params);
-        switch (params.type) {
-            case 'hardware': {
-
-                let controller = this.editorView.getBlockoController();
-
-                let iface = controller.bindInterface(params.data.id, params.data.group);
-                console.info('onDragStop::homerMessageReceived iface:', iface);
-
-                let index = this.bindings.findIndex((i) => {
-                    return i.targetId === iface.targetId;
-                });
-
-                if (index === -1) {
-                    this.bindings.push(iface);
-                } else {
-                    this.bindings[index] = iface;
-                }
-
-                break;
-            }
-
-            default:
-                this.fmError(this.translate('flash_cant_add_blocko_block'));
-        }
     }
 
     onCreateNewSnapshotSelectBProgramVersion() {
@@ -498,7 +464,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onInstanceDeployClick(snapshot?: IInstanceSnapshot) {
 
-        if(snapshot == null) {
+        if (snapshot == null) {
             let model = new ModalsSnapShotDeployModel(this.instance.snapshots);
             this.modalService.showModal(model).then((success) => {
                 if (success) {
@@ -918,12 +884,30 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
     }
 
-    onSetHardwareByInterfaceClick(callback: (block: BlockoCore.Block) => void) {
+    onSetHardwareByInterfaceClick(callback: (targetId: string, group?: boolean) => BlockoCore.BoundInterface): void {
         let model = new ModalsSelectHardwareModel(this.projectId, null, false, true);
         this.modalService.showModal(model)
             .then((success) => {
-                // TODO Doplnit do BLOCKA
+                let binding: BlockoCore.BoundInterface;
+                this.zone.runOutsideAngular(() => {
+                    if (model.selected_hardware.length > 0) {
+                        binding = callback(model.selected_hardware[0].id);
+                    } else if (model.selected_hardware_groups.length > 0) {
+                        binding = callback(model.selected_hardware_groups[0].id, true);
+                    }
+                });
 
+                if (binding) {
+                    let index = this.bindings.findIndex((i) => {
+                        return i.targetId === binding.targetId;
+                    });
+
+                    if (index === -1) {
+                        this.bindings.push(binding);
+                    } else {
+                        this.bindings[index] = binding;
+                    }
+                }
             })
             .catch((err) => {
 

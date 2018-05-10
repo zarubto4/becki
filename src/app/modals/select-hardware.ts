@@ -15,8 +15,8 @@ import {FlashMessageError} from "../services/NotificationService";
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
-    public selected_hardware: IHardware[] = null;
-    public selected_hardware_groups: IHardwareGroup[] = null;
+    public selected_hardware: IHardware[] = [];
+    public selected_hardware_groups: IHardwareGroup[] = [];
     constructor(public project_id: string, public hardware_type: IHardwareType = null, public multiple_select_support: boolean = true, public support_select_hw_groups = false) {
         super();
         this.modalLarge = true;
@@ -59,7 +59,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
     onToggleTab(tab: string) {
         this.tab = tab;
 
-        if(this.tab == 'group' && this.groupFilter == null ) {
+        if (this.tab === 'group' && this.groupFilter === null ) {
             this.onFilterHardwareGroup();
         }
     }
@@ -100,14 +100,14 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     onHardwareAddToList(hardware: IHardware): void {
         this.selectedHardwareList[hardware.id] = hardware;
-        if(!this.modalModel.multiple_select_support) {
+        if (!this.modalModel.multiple_select_support) {
             this.onSubmitClick();
         }
     }
 
     onGroupAddToList(group: IHardwareGroup): void {
         this.selectedGroupList[group.id] = group;
-        if(!this.modalModel.multiple_select_support) {
+        if (!this.modalModel.multiple_select_support) {
             this.onSubmitClick();
         }
     }
@@ -137,15 +137,15 @@ export class ModalsSelectHardwareComponent implements OnInit {
     }
 
     onSubmitClick(): void {
+        // this.modalModel.selected_hardware = []; TODO maybe clean the array?
         for (let i in this.selectedHardwareList) {
-            this.modalModel.selected_hardware = [];
             if (this.selectedHardwareList.hasOwnProperty(i)) {
                 this.modalModel.selected_hardware.push(this.selectedHardwareList[i]);
             }
         }
 
+        // this.modalModel.selected_hardware_groups = []; TODO maybe clean the array?
         for (let i in this.selectedGroupList) {
-            this.modalModel.selected_hardware_groups = [];
             if (this.selectedGroupList.hasOwnProperty(i)) {
                 this.modalModel.selected_hardware_groups.push(this.selectedGroupList[i]);
             }
