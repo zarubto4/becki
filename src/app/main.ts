@@ -6,7 +6,10 @@
 // Imports
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgModule, ErrorHandler } from '@angular/core';
-import { HttpModule, JsonpModule } from '@angular/http';
+// Deprecated version
+import { HttpModule,JsonpModule } from '@angular/http';
+// Angular5 version
+// import { HttpClientModule, HttpClientJsonpModule } from ' @angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app';
@@ -447,8 +450,11 @@ class BeckiErrorHandler implements ErrorHandler {
         ReactiveFormsModule,
         FormsModule,
         RouterModule.forRoot(routes),
+        // JsonpModule, HttpModule are deprecated, but i didn't delete this because idk its usage
         HttpModule,
         JsonpModule,
+        // HttpClientJsonpModule,
+        // HttpClientModule,
         MyDatePickerModule,
         PopoverModule
     ],

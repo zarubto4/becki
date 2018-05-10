@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
@@ -28,14 +28,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     resendVertification: boolean = false;
     routeParamsSubscription: Subscription;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private router: Router, private blockUIService: BlockUIService, private translationService: TranslationService, protected activatedRoute: ActivatedRoute) {
+    constructor(private backendService: TyrionBackendService,
+                private formBuilder: FormBuilder,
+                private router: Router,
+                private blockUIService: BlockUIService,
+                private translationService: TranslationService,
+                protected activatedRoute: ActivatedRoute) {
+    }
+
+    ngOnInit(): void {
+
         this.loginForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email]],
             'password': ['', [Validators.required, Validators.minLength(8)]]
         });
-    }
 
-    ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             if (typeof params['state'] !== 'undefined' && params['state'] !== 'success') {
                 this.loginError = this.translationService.translate('msg_login_error', this);

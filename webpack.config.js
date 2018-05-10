@@ -46,9 +46,9 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html#entry
      */
     config.entry = isTest ? {} : {
-        'app': './src/main.ts',
-        'polyfills': './src/polyfills.ts',
-        'vendor': './src/vendor.ts'
+        app: './src/main.ts',
+        polyfills: './src/polyfills.ts',
+        vendor: './src/vendor.ts'
          // our angular app
     };
 
