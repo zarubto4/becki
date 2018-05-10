@@ -176,7 +176,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
             page = 1;
         }
 
-        this.tyrionBackendService.libraryGetShortListByFilter(page, {
+        this.tyrionBackendService.libraryGetListByFilter(page, {
             project_id: this.project_id,
         })
             .then((iLibraryList) => {
@@ -198,7 +198,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
             page = 1;
         }
 
-        this.tyrionBackendService.libraryGetShortListByFilter(page, {
+        this.tyrionBackendService.libraryGetListByFilter(page, {
             public_library: true,
         })
             .then((iLibraryList) => {

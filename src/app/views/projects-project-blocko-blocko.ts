@@ -224,6 +224,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         if (action === 'console_clean') {
             this.onClearConsoleClick();
         }
+
+        if (action === 'save_program') {
+            this.onSaveClick();
+        }
     }
 
     // Basic OPERATION ON BLOCKO PROGRAM
@@ -290,6 +294,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     // Hardware --------------------------------------------------------------------------------------------------------
+
     onSetHardwareByInterfaceClick(callback: (block: BlockoCore.Block) => void) {
         let model = new ModalsSelectHardwareModel(this.projectId, null, false, true);
         this.modalService.showModal(model)
@@ -475,15 +480,15 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         this.modalService.showModal(model)
             .then((success) => {
                 this.zone.runOutsideAngular(() => {
-                    let interfaceData = JSON.parse(model.selectedCProgramVersion.virtual_input_output);
+                    let interfaceData = JSON.parse(model.selected_c_program_version.virtual_input_output);
                     if (interfaceData) {
                         callback({
                             color: '#30f485',
                             code: {
                                 programId: model.selected_c_program.id,
-                                versionId: model.selectedCProgramVersion.id
+                                versionId: model.selected_c_program_version.id
                             },
-                            displayName: model.selectedCProgramVersion.id,
+                            displayName: model.selected_c_program_version.id,
                             interface: interfaceData
                         });
                     }
@@ -502,6 +507,9 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             return;
         }
 
+        console.log('iface.code.programId', iface.code.programId);
+        console.log('iface.code.versionId', iface.code.versionId);
+
         let model = new ModalsSelectCodeModel(this.projectId, null, {
             c_program_id: iface.code.programId,
             c_program_version_id: iface.code.versionId
@@ -509,15 +517,15 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         this.modalService.showModal(model)
             .then((success) => {
                 this.zone.runOutsideAngular(() => {
-                    let interfaceData = JSON.parse(model.selectedCProgramVersion.virtual_input_output);
+                    let interfaceData = JSON.parse(model.selected_c_program_version.virtual_input_output);
                     if (interfaceData) {
                         callback({
                             color: '#30f485',
                             code: {
                                 programId: model.selected_c_program.id,
-                                versionId: model.selectedCProgramVersion.id
+                                versionId: model.selected_c_program_version.id
                             },
-                            displayName: model.selectedCProgramVersion.id,
+                            displayName: model.selected_c_program_version.id,
                             interface: interfaceData
                         });
                     }

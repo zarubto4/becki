@@ -16,6 +16,7 @@
                       [title_object_description]="codeProgram.description"
                       [icon]="'fa-tachometer'"
                       (onClick)="onPortletClick($event)"
+                      [btns_group_name]="'btn_label_option'|bkTranslate:this"
                       [btns]="[
                                  {
                                       condition: (codeProgram && codeProgram.update_permission),

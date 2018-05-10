@@ -122,7 +122,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
             page = 1;
         }
 
-        this.tyrionBackendService.bProgramGetByFilter(page, {
+        this.tyrionBackendService.bProgramGetListByFilter(page, {
             project_id: this.project_id
         })
             .then((bProgramList) => {

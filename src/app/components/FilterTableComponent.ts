@@ -9,25 +9,25 @@ import {TyrionBackendService} from "../services/BackendService";
     template: `
 
         <!-- Find and Select Program -->
-        <div class="portlet light">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class="icon-equalizer font-dark hide"></i>
-                    <span class="caption-subject font-dark bold uppercase">Filter </span>
+        <div class="portlet light" style="padding: 0 0 0 0; margin: 0 0 0 0; min-height: 0px !important">
+            <div class="portlet-title" style="min-height: 0px !important">
+                <div class="caption" style="padding: 0 0 0 0;">
+                    <i class="icon-equalizer hide"></i>
+                    <span class="caption-subject bold uppercase">Filter </span>
                     <span class="caption-helper">Choose or not to choose, that is the question...</span>
                 </div>
-                <div class="tools">
-                    <a [class.collapse]="hidden" [class.expand]="!hidden"  data-original-title="" title="" (click)="onHide()"> </a>
-                    <!--   <a data-toggle="modal" class="config" data-original-title="" title=""> </a> -->
-                    <!--  <a href="" class="reload" data-original-title="" title=""> </a> -->
-                   <!-- <a href="" class="remove" data-original-title="" title=""> </a> -->
+                <div class="tools" style="padding-bottom: 5px; padding-top: 5px;">
+                    <a [class.collapse]="closed" [class.expand]="!closed"  data-original-title="" title="" (click)="onHide()"> </a>
+                    <!-- <a data-toggle="modal" class="config" data-original-title="" title=""> </a> -->
+                    <!-- <a href="" class="reload" data-original-title="" title=""> </a> -->
+                    <!-- <a href="" class="remove" data-original-title="" title=""> </a> -->
                 </div>
             </div>
-            <div class="portlet-body" [style.display]="hidden ? 'none': 'block'">
+            <div class="portlet-body" [style.display]="closed ? 'none': 'block'" style="margin-left: 10px; margin-right: 10px">
 
                 <div class="filter-option row" *ngIf="filter_parameters">
 
-                    <div class="col-md-{{ (12 / filter_parameters.length)}}" *ngFor="let component of filter_parameters; let i = index">
+                    <div class="col-center col-sm-{{ (12 / filter_parameters.length)}}" *ngFor="let component of filter_parameters; let i = index">
 
                         <!-- CHECK BOXS LIST-->
                         <div *ngIf="component.type == 'CHECKBOX_LIST'" [class.md-checkbox-list]="!component.content.horizontal" [class.md-checkbox-inline]="component.content.horizontal">
@@ -91,24 +91,26 @@ export class FilterTableComponent implements OnInit {
     onChange: EventEmitter<{key: string, value: any}> = new EventEmitter<{key: string, value: any}>();
 
     @Input()
-    hidden: boolean = false;
+    closed: boolean = false;
 
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {}
 
     ngOnInit() {
 
+        console.info("filter_parameters: ", this.filter_parameters);
         this.filter_parameters.forEach((parameter) => {
 
             if (parameter.type == 'LIST_SELECT') {
+
                 (parameter.content as LIST_SELECT).form = this.formBuilder.group({
                     'list': ['', [Validators.required]]
                 });
 
                 (parameter.content as LIST_SELECT).optionForm = (parameter.content as LIST_SELECT).options.map((pv) => {
                     return {
-                        label: pv.name,
-                        value: pv.id
+                        label: pv.label,
+                        value: pv.value
                     };
                 });
             }
@@ -131,8 +133,8 @@ export class FilterTableComponent implements OnInit {
     }
 
     onHide(){
-        console.info('hidden: ', this.hidden);
-        this.hidden = !this.hidden;
+        console.info('closed: ', this.closed);
+        this.closed = !this.closed;
     }
 
 
@@ -195,9 +197,12 @@ class FIND_BY_TAG {
 }
 
 class LIST_SELECT {
-    options: any[] = [];
+    options: {
+        label: string,
+        value: string
+    }[] = [];
     label: string;
     key: string;       // List Type "HW_LIST" "CODE_LIST"
     form: FormGroup;
-    optionForm:FormSelectComponentOption[];
+    optionForm:FormSelectComponentOption[] = [];
 }

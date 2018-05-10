@@ -589,7 +589,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }
 
         this.blockUI();
-        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+        this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId],
             instance_snapshots: groups.length > 0 ? [] : [this.instance.current_snapshot.id],
             hardware_groups_id: groups.map(group => group.id)
@@ -616,7 +616,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     onFilterForBlockoSelectHardware(pageNumber: number = 0): void {
 
         this.blockUI();
-        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+        this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId]
         })
             .then((values) => {

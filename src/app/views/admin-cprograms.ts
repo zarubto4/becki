@@ -89,7 +89,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
     }
 
     onShowPublicLibraryByFilter(page: number = 0): void {
-        Promise.all<any>([this.tyrionBackendService.libraryGetShortListByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.libraryGetListByFilter(page, {
             public_library: true,       // For public its required
         })
         ])
@@ -104,7 +104,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
     }
 
     onShowForDecisionsLibraryByFilter(page: number = 0): void {
-        Promise.all<any>([this.tyrionBackendService.libraryGetShortListByFilter(page, {
+        Promise.all<any>([this.tyrionBackendService.libraryGetListByFilter(page, {
             pending_library: true,       // For public its required
         })
         ])

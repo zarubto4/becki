@@ -16,7 +16,16 @@
         [title_object_description]="gridProject?gridProject.description:''"
         [icon]="'fa-desktop'"
         (onClick)="onPortletClick($event)"
+        [btns_group_name]="'btn_label_option'|bkTranslate:this"
         [btns]="[
+                      {
+                          condition: (gridProject && gridProject.m_programs.length),
+                          btn_label_for_person: ('btn_add_grid_program'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'ADD',
+                          btn_tag: 'add_program',
+                          permission: (gridProject && gridProject.update_permission)
+                      },
                       {
                           condition: true,
                           btn_label_for_person: ('btn_edit_project'|bkTranslate:this),
@@ -33,14 +42,7 @@
                           btn_tag: 'remove_project',
                           permission: (gridProject && gridProject.delete_permission)
                       },
-                      {
-                          condition: (gridProject && gridProject.m_programs.length),
-                          btn_label_for_person: ('btn_add_grid_program'|bkTranslate:this),
-                          icon: 'fa-plus-circle',
-                          colorType: 'ADD',
-                          btn_tag: 'add_program',
-                          permission: (gridProject && gridProject.update_permission)
-                      }
+
                  ]">
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->

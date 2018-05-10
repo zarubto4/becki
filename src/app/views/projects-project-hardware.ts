@@ -300,7 +300,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
         this.blockUI();
-        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+        this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId],
             hardware_type_ids: boardTypes
         })
