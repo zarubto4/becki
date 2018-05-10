@@ -1485,7 +1485,7 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
 }
 
 .font-color-byzance-blue {
-    color: #00ABE9;
+    color: #00ABE9 !important;
 
     &-dark {
         color: #037391;
@@ -1494,7 +1494,7 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
 
 
 .font-color-hardware {
-    color: #0b85db;
+    color: #0b85db !important;
 
     &-dark {
         color: #064f83;
@@ -1502,7 +1502,7 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
 }
 
 .font-color-cloud {
-    color: #ffab4c;
+    color: #ffab4c !important;
 
     &-dark {
         color: #99662d;
@@ -1510,7 +1510,7 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
 }
 
 .font-color-instance {
-    color: #ffab4c;
+    color: #ffab4c !important;
 
     &-dark {
         color: #99662d;
@@ -1518,7 +1518,7 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
 }
 
 .font-color-code, .font-color-grid, .font-color-blocko {
-    color: #fa739c;
+    color: #fa739c !important;
 
     &-dark {
         color: #96455d;

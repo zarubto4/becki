@@ -24,13 +24,13 @@ import {red} from "chalk";
                        <span *ngFor="let tag of tags; let i = index" [attr.data-index]="i">
                            <span *ngIf="i <= index_stop || index_stop == null" style="margin-right: 3px; padding-right: 3px !important;">
                                 
-                               <bk-tag-component [tag]="tag" 
+                               <bk-single-tag-template-component [tag]="tag" 
                                                  [tag_color]="'label-info'"
                                                  [tag_popup_color]="tag_popup_selected_tag == tag"
                                                  [tag_faded]="tag_faded"
                                                  [readonly]="readonly"
                                                  (onRemoveClick)="onRemoveClick($event)">
-                                </bk-tag-component>
+                                </bk-single-tag-template-component>
                                
                            </span>
                        </span>

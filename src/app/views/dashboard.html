@@ -2,114 +2,6 @@
     [title]="'main_title'|bkTranslate:this">
 
     <div class="portlet-body">
-
-        <div class="row">
-            <h1>Testy</h1>
-
-            <bk-filter-component
-                [filter_parameters]="[
-                    {
-                        type: 'CHECKBOX_LIST',
-                        content: {
-                            options:[
-                                {
-                                    key: 'pepa',
-                                    label: 'pepa',
-                                    selected: false
-                                },
-                                {
-                                    key: 'franta',
-                                    label: 'franta',
-                                    selected: false
-                                },
-                                {
-                                    key: 'ondra',
-                                    label: 'ondra',
-                                    selected: true
-                                }
-                                ]
-                        }
-                    },
-                    {
-                        type: 'CHECKBOX_LIST',
-                        content: {
-                            options:[
-                                {
-                                    key: 'realna_hodnota_jana',
-                                    label: 'jana',
-                                    selected: realna_hodnota_jana
-                                },
-                                {
-                                    key: 'monika',
-                                    label: 'monika',
-                                    selected: true
-                                },
-                                {
-                                    key: 'petra',
-                                    label: 'petra',
-                                    selected: false
-                                }
-                                ],
-                            horizontal: true
-                        }
-                    },
-                    {
-                        type: 'LIST_SELECT',
-                        content: {
-                            label: 'Seznam',
-                            key: 'Seznam',
-                            options:[
-                                {
-                                    label: 'pepa',
-                                    value: 'pepa'
-                                },
-                                {
-                                    label: 'ondra',
-                                    value: 'ondra'
-                                },
-                                {
-                                    label: 'jana',
-                                    value: 'pedro'
-                                }
-                            ]
-                        }
-
-                    },
-                    {
-                        type: 'FIND_BY_TEXT',
-                        content: {
-                            key: 'text',
-                            label: 'aasfdssdf'
-                        }
-                    },
-                    {
-                        type: 'FIND_BY_TAG',
-                        content: {
-                            key: 'text',
-                            label: 'aasfdssdf',
-                            tags: []
-                        }
-                    },
-                    {
-                        type: 'FIND_BY_TAG',
-                        content: {
-                            key: 'text',
-                            label: 'aasfdssdf',
-                            tags: []
-                        }
-                    }
-                ]"
-                (onChange)="onFilterChange($event)">
-            </bk-filter-component>
-
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-
         <div class="row">
 
             <!--- Welcome Row Part -->
@@ -154,6 +46,17 @@
                     <bk-portlet-title
                         [title_name]="'title_platform_news'|bkTranslate:this"
                         [icon]="'fa-flag'"
+                        (onClick)="onPortletClick($event)"
+                        [btns]="[
+                              {
+                                  condition: (create_article_permission == true),
+                                  btn_label_for_person: ('btn_add_article'|bkTranslate:this),
+                                  icon: 'fa-plus-circle',
+                                  colorType: 'ADD',
+                                  permission: true,
+                                  btn_tag: 'add_article'
+                              }
+                        ]"
                         (onTabClick)="onToggleTab($event)"
                         [tab_selected_name]="tab"
                         [tabBtns]="[
@@ -186,36 +89,84 @@
                                     condition: (true),
                                     tab_color: 'GRID',
                                     tab_label: ('tab_grid'|bkTranslate:this)
+                                },
+                                {
+                                    tab_name: 'cloud',
+                                    condition: (true),
+                                    tab_color: 'CLOUD',
+                                    tab_label: ('tab_cloud'|bkTranslate:this)
                                 }
                             ]">
                     </bk-portlet-title>
-                    <div class="portlet-body">
-                        <div class="slimScrollDiv"
-                             style="position: relative; overflow: hidden; width: auto; height: 310px;">
-                            <p> Bla bla bla bsafjsd lbjkadfklbsadf kn  ds dasd Hi! This is an amazing UI! Is there a way to turn sidebar completely off with a simple
-                                body class, like that which is used to minimize the sidebar? Also, I’m looking for a way
-                                to make portlets fill the vertical space
-                                between the fixed header and fixed footer. I know that full height divs are a chore, but
-                                I’m wondering if you have already written any code that checks the height of the window
-                                and adjusts the height of an element
-                                that I could re-purpose or extend for these full height content areas? If you have, I’d
-                                love a tip on where to find it in app.js or wherever else. Otherwise any other
-                                suggestions you may have. Thanks a ton!Hi! This
-                                is an amazing UI! Is there a way to turn sidebar completely off with a simple body
-                                class, like that which is used to minimize the sidebar? Also, I’m looking for a way to
-                                make portlets fill the vertical space between
-                                the fixed header and fixed footer. I know that full height divs are a chore, but I’m
-                                wondering if you have already written any code that checks the height of the window and
-                                adjusts the height of an element that
-                                I could re-purpose or extend for these full height content areas? If you have, I’d love
-                                a tip on where to find it in app.js or wherever else. Otherwise any other suggestions
-                                you may have. Thanks a ton!Hi!
-                            </p>
+                    <div *ngIf="articles" class="portlet-body" >
+
+                        <div *ngIf="tab == 'general' && articles.general" class="timeline">
+                            <template ngFor let-article="$implicit" [ngForOf]="articles.general.content">
+                                <bk-article-time-line
+                                    [article]="article"
+                                    [icon]="'fa-info'"
+                                    (onBtnClick)="onPortletClick($event, article)"
+                                    [article_head_color]="'BYZANCE'">
+                                </bk-article-time-line>
+                            </template>
+                        </div>
+                        <div *ngIf="tab == 'hardware' && articles.hardware" class="timeline">
+                            <template ngFor let-article="$implicit" [ngForOf]="articles.hardware.content">
+                                <bk-article-time-line
+                                    [article]="article"
+                                    [icon]="'fa-microchip'"
+                                    (onBtnClick)="onPortletClick($event, article)"
+                                    [article_head_color]="'HARDWARE'">
+                                </bk-article-time-line>
+                            </template>
+                        </div>
+                        <div *ngIf="tab == 'code' && articles.code" class="timeline">
+                            <template ngFor let-article="$implicit" [ngForOf]="articles.code.content">
+                                <bk-article-time-line
+                                    [article]="article"
+                                    [icon]="'fa-code'"
+                                    (onBtnClick)="onPortletClick($event, article)"
+                                    [article_head_color]="'CODE'">
+                                </bk-article-time-line>
+                            </template>
+                        </div>
+                        <div *ngIf="tab == 'blocko' && articles.blocko" class="timeline">
+                            <template ngFor let-article="$implicit" [ngForOf]="articles.blocko.content">
+                                <bk-article-time-line
+                                    [article]="article"
+                                    (onBtnClick)="onPortletClick($event, article)"
+                                    [icon]="'fa-sitemap fa-rotate-90'"
+                                    [article_head_color]="'BLOCKO'">
+                                </bk-article-time-line>
+                            </template>
+                        </div>
+                        <div *ngIf="tab == 'grid' && articles.grid" class="timeline">
+                            <template ngFor let-article="$implicit" [ngForOf]="articles.grid.content">
+                                <bk-article-time-line
+                                    [article]="article"
+                                    [icon]="'fa-desktop'"
+                                    (onBtnClick)="onPortletClick($event, article)"
+                                    [article_head_color]="'GRID'">
+                                </bk-article-time-line>
+                            </template>
+                        </div>
+                        <div *ngIf="tab == 'cloud' && articles.cloud" class="timeline">
+                            <template ngFor let-article="$implicit" [ngForOf]="articles.grid.content">
+                                <bk-article-time-line
+                                    [article]="article"
+                                    [icon]="'fa-cloud'"
+                                    (onBtnClick)="onDrobDownEmiter($event, article)"
+                                    [article_head_color]="'CLOUD'">
+                                </bk-article-time-line>
+                            </template>
                         </div>
                     </div>
                 </div>
+                <div *ngIf="!articles" class="portlet-body" >
+                    Loading!!!!!!! TODO
+                </div>
 
-    </div>
+            </div>
 
         </div>
     </div>

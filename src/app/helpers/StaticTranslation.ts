@@ -1,6 +1,8 @@
 import {ModalsWidgetsWidgetCopyComponent} from "../modals/widgets-widget-copy";
 import {ModalsGridProjectSelectComponent} from "../modals/grid-project-select";
 import {ModalsBlockSelectComponent} from "../modals/block-select";
+import {ModalsArticleComponent} from "../modals/article";
+import {ArticleComponent} from "../components/ArticleComponent";
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
@@ -63,6 +65,10 @@ export class StaticTranslation {
                 'title': 'Make a Private Copy',
                 'label_widget_name': 'Widget name',
                 'label_widget_description': 'Widget description',
+            }, 'ModalsArticleComponent': {
+                'title': 'News Editor',
+                'label_name': 'Name',
+                'label_description': 'Description',
             }, 'ModalsPublicShareResponseComponent': {
                 'title': 'Publishing decisions',
                 'label_program_additional_comment': 'If the user shares a new version of the same program as before, the program (not version) will be named the same as the one which has already been used since the previous approval.',
@@ -415,6 +421,10 @@ export class StaticTranslation {
                 'title': 'Set as default',
                 'body_text': 'Some settings may have fatal consequences. Please reconsider what you are doing! Are you sure that you want to set the parameter as a default?',
 
+            }, 'ArticleComponent': {
+                'label_article_edit': 'Edit',
+                'label_article_remove': 'Remove',
+
             }, 'ModalsSelectHardwareComponent': {
                 'title': 'Select <strong class="font-color-hardware">HARDWARE</strong>',
                 'label_hardware': 'Hardware Device',
@@ -494,14 +504,16 @@ export class StaticTranslation {
             'DashboardComponent': {
                 'title_first_steps': 'FIRST STEPS',
                 'table_name': 'Name',
+                'btn_add_article': 'Add',
                 'table_description': 'Description',
                 'title_platform_news': 'News',
                 'title_your_project': 'Your Projects',
                 'tab_general': 'General',
                 'tab_hardware': '<strong class="font-color-hardware">Hardware</strong>',
                 'tab_blocko': '<strong class="font-color-blocko">Blocko</strong>',
-                'tab_code': 'Code',
-                'tab_grid': 'Grid',
+                'tab_code': '<strong class="font-color-code">Code</strong>',
+                'tab_grid': '<strong class="font-color-grid">Grid</strong>',
+                'tab_cloud': '<strong class="font-color-cloud">Cloud</strong>',
                 'main_title': 'Dashboard',
                 'btn_qrcode': 'Scan a QR code',
                 'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',

@@ -236,6 +236,9 @@
             <template [ngSwitchCase]="'ModalsSelectBlockModel'">
                 <bk-modals-block-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-block-select>
             </template>
+            <template [ngSwitchCase]="'ModalsArticleModel'">
+                <bk-modals-article [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-article>
+            </template>
         </div>
     </div>
 </div>

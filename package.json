@@ -7,7 +7,7 @@
   "scripts": {
     "tyrion-generator": "./generator-tyrion/generator",
     "tyrion-generator-win": "node ./generator-tyrion/generator-win",
-    "homer-generator": "./generator-homer/generator",
+    "homer-generator": "./generator-homer/generator -d",
     "homer-generator-win": "node ./generator-homer/generator-win",
     "clean": "rimraf node_modules doc dist && npm cache clean --force",
     "clean-install": "npm run clean && npm install",

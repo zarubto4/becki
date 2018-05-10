@@ -220,6 +220,8 @@ import { FinancialProductEmployeesComponent } from './views/financial-product-em
 import { FilterTableComponent } from './components/FilterTableComponent';
 import {ModalsGridProjectSelectComponent} from "./modals/grid-project-select";
 import {ModalsBlockSelectComponent} from "./modals/block-select";
+import {ArticleComponent} from "./components/ArticleComponent";
+import {ModalsArticleComponent} from "./modals/article";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -598,7 +600,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProducersComponent,
         ProducersProducerComponent,
         ProjectsProjectLibrariesComponent,
-
+        ArticleComponent,
         // ProjectsProjectLibrariesLibraryComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
@@ -683,7 +685,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsSnapShotDeployComponent,
         ModalsGridProjectSelectComponent,
         ModalsBlockSelectComponent,
-
+        ModalsArticleComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

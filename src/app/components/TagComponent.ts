@@ -9,7 +9,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { TranslationService } from '../services/TranslationService';
 
 @Component({
-    selector: 'bk-tag-component',
+    selector: 'bk-single-tag-template-component',
 /* tslint:disable:max-line-length */
     template: `        
         <span class="tag label" 

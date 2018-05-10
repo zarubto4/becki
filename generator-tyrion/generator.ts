@@ -7,6 +7,7 @@ import * as program from 'commander';
 import { readFileSync, writeFileSync } from 'fs';
 import * as moment from 'moment';
 import * as chalk from 'chalk';
+import {config} from "shelljs";
 
 let request = require('sync-request');
 /* tslint:disable:no-console max-line-length */
@@ -36,7 +37,10 @@ if (!program['className']) {
 
 let DEBUG = false;
 if (program['debug'] === true) {
+    console.error("DEBUG VALUE:  DEBUG IS ACTIVE");
     DEBUG = true;
+}else {
+    console.error("DEBUG VALUE:  DEBUG IS NOT ACTIVE. For activation add '-d' parameter");
 }
 
 // CONFIG
@@ -62,6 +66,7 @@ let CONFIG = {
         'get:/facebook/{return_link}': '__loginFacebook',
         'get:/github/{return_link}': '__loginGitHub',
     },
+    allowedDefinitions: ['MSINumber'],   // ignore cases
     methodsOkCodes: [200, 201, 202],
 };
 
@@ -286,12 +291,21 @@ definitionsKeys.forEach((defName) => {
                     + chalk.yellow('\" .. property KEY contain space!!!')
                 );
             }
+
             if (!propKey.match(/^([a-z0-9_])+$/g)) {
-                number_of_bugs++;
-                console.log( chalk.yellow('Something is wrong with property name \"')
-                    + chalk.red(propKey) + chalk.yellow('\" of definition \"') + chalk.red(defName)
-                    + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s BiG size Latter?')
+
+                if(CONFIG.allowedDefinitions.indexOf(propKey) < 0) {
+                    number_of_bugs++;
+
+                    console.log(chalk.yellow('Something is wrong with property name \"')
+                        + chalk.red(propKey) + chalk.yellow('\" of definition \"') + chalk.red(defName)
+                        + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s BiG size Latter?')
                     );
+
+                    console.log('Definitions: ', definitions[defName])
+                } else {
+                    console.log(chalk.yellow('Definitions: property name ' + propKey + ' is ignored and allowed by config CONFIG.allowedDefinitions'))
+                }
             }
 
             fileWriteLine('    /**');
@@ -342,6 +356,12 @@ let makeReadableMethodName = (method: string, url: string, pathObj: string) => {
         console.log('method:: ', url);
         console.log('method:: ', pathObj);
         console.log('method:: ', method);
+    }
+
+    if(pathObj['summary'] == null) {
+        console.error('method:: ', url, ' NOT CONTAINS SUMMARY!!! SOMETHING IS WRONG!');
+        console.error('method:: ', url, ' NOT CONTAINS SUMMARY!!! \n', pathObj);
+        return null;
     }
 
     let partsAll = pathObj['summary'].replace(/{[a-zA-Z0-9_-]+}/g, '').split(/[ \/,]/);

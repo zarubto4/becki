@@ -5,8 +5,15 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
+import {
+    IApplicableProduct, IArticle, IArticleFilter, IArticleList, IHardwareType,
+    IProject
+} from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs/Rx';
+import {ModalsAddHardwareModel} from "../modals/add-hardware";
+import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
+import {ModalsArticleModel} from "../modals/article";
+import {ModalsRemovalModel} from "../modals/removal";
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -16,11 +23,19 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     tab: string = 'general';
     projects: IProject[] = null;
+    articles: {
+        general?: IArticleList,
+        hardware?: IArticleList,
+        blocko?: IArticleList,
+        code?: IArticleList,
+        grid?: IArticleList,
+        cloud?: IArticleList,
+    } = {};
+    create_article_permission: boolean = false;
 
     projectsUpdateSubscription: Subscription;
 
 
-    realna_hodnota_jana: boolean = true;
 
     constructor(injector: Injector) {
         super(injector);
@@ -32,15 +47,20 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
 
     ngOnInit(): void {
-        this.refresh();
+
+        // Allow to create new Article
+        if (this.tyrionBackendService.personPermissions.indexOf('Article_create') >= 0) {
+            this.create_article_permission = true;
+        }
 
         this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'ProjectsRefreshAfterInvite') {
-                this.refresh();
+                this.projectRefresh();
             }
         });
 
-
+        this.projectRefresh();
+        this.onFilterArticle();
     }
 
     ngOnDestroy(): void {
@@ -49,26 +69,137 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
         }
     }
 
+    onPortletClick(action: string, object?: any ): void {
+        if (action === 'add_article') {
+            this.onCreateArticle();
+        }
+
+        if (action === 'article_edit') {
+            this.onEditArticle(object);
+        }
+
+        if (action === 'article_remove') {
+            this.onRemoveArticle(object);
+        }
+    }
+
     onToggleTab(tab: string) {
         this.tab = tab;
     }
 
-
-    refresh(): void {
+    projectRefresh(): void {
         this.tyrionBackendService.projectGetByLoggedPerson()
             .then((projects: IProject[]) => {
                 this.projects = projects;
             });
     }
 
+    onFilterArticle(): void {
+        this.blockUI();
+        Promise.all<any>([
+            this.tyrionBackendService.articleGetListByFilter(0, {
+                count_on_page: 5,
+                tags: ['general']
+            }),
+            this.tyrionBackendService.articleGetListByFilter(0, {
+                count_on_page: 5,
+                tags: ['hardware']
+            }),
+            this.tyrionBackendService.articleGetListByFilter(0, {
+                count_on_page: 5,
+                tags: ['blocko']
+            }),
+            this.tyrionBackendService.articleGetListByFilter(0, {
+                count_on_page: 5,
+                tags: ['code']
+            }),
+            this.tyrionBackendService.articleGetListByFilter(0, {
+                count_on_page: 5,
+                tags: ['grid']
+            }),
+            this.tyrionBackendService.articleGetListByFilter(0, {
+                count_on_page: 5,
+                tags: ['cloud']
+            })
+        ])
+            .then((values: [IArticleList, IArticleList, IArticleList, IArticleList, IArticleList, IArticleList]) => {
+                this.articles.general = values[0];
+                this.articles.hardware = values[1];
+                this.articles.blocko = values[2];
+                this.articles.code = values[3];
+                this.articles.grid = values[4];
+                this.articles.cloud = values[5];
+                this.unblockUI();
+            }).catch((err) => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_article_create_error', err)));
+                this.unblockUI();
+            });
+    }
 
-    onFilterChange(filter: {key: string, value: any}) {
-        console.info('onFilterChange: Key', filter.key, 'value', filter.value);
+    onEditArticle(article: IArticle): void {
+        let model = new ModalsArticleModel(true, article.name, article.description, article.mark_down_text, article.tags);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.articleCreate({
+                    name: model.name,
+                    description: model.description,
+                    mark_down_text: model.mark_down_text,
+                    tags: model.tags
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_article_create_success')));
+                        this.unblockUI();
+                        this.onFilterArticle();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_article_create_error', reason)));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
 
-        if (filter.key == 'realna_hodnota_jana') {
-            this.realna_hodnota_jana = filter.value;
-        }
+    onRemoveArticle(article: IArticle): void {
+        this.modalService.showModal(new ModalsRemovalModel(article.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.articleDelete(article.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_article_remove')));
+                        this.unblockUI();
+                       this.onFilterArticle();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_article'), reason));
+                        this.onFilterArticle();
+                    });
+            }
+        });
+    }
 
+    onCreateArticle(): void {
+        let model = new ModalsArticleModel(false);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.articleCreate({
+                    name: model.name,
+                    description: model.description,
+                    mark_down_text: model.mark_down_text,
+                    tags: model.tags
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_article_create_success')));
+                        this.unblockUI();
+                        this.onFilterArticle();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_article_create_error', reason)));
+                        this.unblockUI();
+                    });
+            }
+        });
     }
 
 
