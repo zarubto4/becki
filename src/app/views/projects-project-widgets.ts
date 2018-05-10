@@ -100,10 +100,9 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));
+                        this.unblockUI();
                         this.onShowProgramPrivateWidgetFilter();
                         this.tab = 'my_widgets';
-                        this.unblockUI();
-
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail'), reason));
@@ -239,7 +238,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onShowProgramPrivateWidgetFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.widgetGetByFilter(page, {
+        this.tyrionBackendService.widgetGetListByFilter(page, {
             project_id: this.projectId,
         })
             .then((list) => {
@@ -254,7 +253,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onShowProgramPublicWidgetFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.widgetGetByFilter(page, {
+        this.tyrionBackendService.widgetGetListByFilter(page, {
             public_programs: true,
         })
             .then((list) => {
@@ -269,7 +268,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onShowProgramPendingWidgetFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.widgetGetByFilter(page, {
+        this.tyrionBackendService.widgetGetListByFilter(page, {
             pending_widgets: true,       // For public its required
         })
             .then((list) => {

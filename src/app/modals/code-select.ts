@@ -11,11 +11,11 @@ import { FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
-import { ICProgram, ICProgramList, ICProgramVersion } from '../backend/TyrionAPI';
+import {ICProgram, ICProgramList, ICProgramVersion, IHardwareType} from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
 
 export class ModalsSelectCodeModel extends ModalModel {
-    public selectedCProgramVersion: ICProgramVersion = null;
+    public selected_c_program_version: ICProgramVersion = null;
     public selected_c_program: ICProgram = null;
 
     constructor(public project_id: string = null, public hardware_type_id: string = null, public already_selected_code_for_version_change: {
@@ -44,22 +44,48 @@ export class ModalsCodeSelectComponent implements OnInit {
 
     programs: ICProgramList = null;
     errorMessage: string = null;
+
+
+    // For Filter parameters
+    hardware_type_option: {
+        label: string,
+        value: string
+    }[] = null;
+
     // Filter parameters
-    hardware_type_ids: string [] = null;
+    page: number = 0;
+    hardware_type_id: string  = null;
     public_programs: boolean = false;
+    private_programs: boolean = true;
 
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
     }
 
     ngOnInit(): void {
-        if (this.modalModel.hardware_type_id != null) {
-            this.hardware_type_ids = [];
-            this.hardware_type_ids.push(this.modalModel.hardware_type_id);
+
+        if(this.modalModel.hardware_type_id) {
+            this.hardware_type_id = this.modalModel.hardware_type_id;
+
         }
 
         // Expression has changed after it was checked -  setTimeout is protection
         if (!this.modalModel.already_selected_code_for_version_change) {
-            this.onFilterPrograms(0);
+
+            // Get All Prerequsities
+            Promise.all<any>([
+                this.tyrionBackendService.hardwareTypesGetAll()
+            ])
+                .then((values: [IHardwareType[]]) => {
+
+                    this.hardware_type_option = values[0].map((pv) => {
+                        return {
+                            label: pv.name,
+                            value: pv.id,
+                        };
+                    });
+                    this.onFilterPrograms(0);
+                });
+
         } else {
             this.tyrionBackendService.cProgramGet(this.modalModel.already_selected_code_for_version_change.c_program_id)
                 .then((program) => {
@@ -72,7 +98,7 @@ export class ModalsCodeSelectComponent implements OnInit {
     }
 
     onSubmitClick(): void {
-        if (!this.modalModel.selectedCProgramVersion) {
+        if (!this.modalModel.selected_c_program_version) {
             this.errorMessage = this.translationService.translate('label_no_version_selected', this) ; // There is no version selected. ;
         } else {
             this.modalClose.emit(true);
@@ -81,6 +107,10 @@ export class ModalsCodeSelectComponent implements OnInit {
 
     onSelectProgramClick(cprogram: ICProgram): void {
         this.modalModel.selected_c_program = cprogram;
+    }
+
+    onSelectProgramVersionClick(version: ICProgramVersion): void {
+        this.modalModel.selected_c_program_version = version;
     }
 
     onBack(cprogram: ICProgram): void {
@@ -93,12 +123,36 @@ export class ModalsCodeSelectComponent implements OnInit {
         }
     }
 
-    onFilterPrograms(page: number = 0): void {
+    onFilterChange(filter: {key: string, value: any}) {
+        console.info('onFilterChange: Key', filter.key, 'value', filter.value);
 
-        this.tyrionBackendService.cProgramGetListByFilter(page, {
-            project_id: this.modalModel.project_id,
+        if (filter.key == 'public_programs') {
+            this.public_programs = filter.value;
+        }
+
+        if (filter.key == 'private_programs') {
+            this.private_programs = filter.value;
+        }
+
+        if (filter.key == 'hardware_type_id') {
+            this.hardware_type_id = filter.value;
+        }
+
+        this.onFilterPrograms();
+    }
+
+    onFilterPrograms(page?: number): void {
+
+        if(page != null) {
+            this.page = page;
+        }
+
+        this.programs = null;
+
+        this.tyrionBackendService.cProgramGetListByFilter(this.page, {
+            project_id: this.private_programs ? this.modalModel.project_id : null,
             public_programs: this.public_programs,
-            hardware_type_ids: this.hardware_type_ids,
+            hardware_type_ids: [this.hardware_type_id],
             count_on_page: 10
         })
             .then((iCProgramList) => {
@@ -109,9 +163,6 @@ export class ModalsCodeSelectComponent implements OnInit {
             });
     }
 
-    onValueChanged(version: ICProgramVersion) {
-        this.modalModel.selectedCProgramVersion = version;
-    }
 
     onCloseClick(): void {
         this.modalClose.emit(false);

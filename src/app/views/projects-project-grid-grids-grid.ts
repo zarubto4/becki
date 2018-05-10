@@ -221,7 +221,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onWidgetFilter(page: number = 0): void {
-        this.tyrionBackendService.widgetGetByFilter(page, {
+        this.tyrionBackendService.widgetGetListByFilter(page, {
             project_id: this.projectId,
         })
             .then((widgets) => {

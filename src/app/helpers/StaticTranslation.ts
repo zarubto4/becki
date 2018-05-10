@@ -1153,6 +1153,8 @@ export class StaticTranslation {
                 'label_blocko_description': '<strong class="font-color-blocko">BLOCKO </strong> Program Description: <strong>{0}</strong >',
                 'label_connections': 'Connections',
                 'label_blocko_program_properties': 'Program properties',
+                'btn_label_option': 'Option',
+                'label_blocko_save': 'Save',
                 'label_remove_blocko_program': 'Remove program',
                 'label_used_in_cloud': 'Latest Used in Cloud',
                 'label_saved_versions': 'Saved Versions',
@@ -1245,6 +1247,9 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Action',
                 'label_select_code': 'Select',
+                'filter_public_programs': 'Public Programs',
+                'filter_private_programs': 'My Own',
+                'filter_hardware_type': '<strong class="font-color-hardware">HARDWARE</strong>Type',
 
             }, 'ModalsBlockSelectComponent': {
 
@@ -2040,6 +2045,7 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> <strong>IDE</strong>',
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Code Editor',
+                'btn_label_option': 'Option',
 
                 'label_library_version': 'Library Version',
                 'label_program_properties': 'Settings',
@@ -2197,7 +2203,8 @@ export class StaticTranslation {
 
                 'btn_edit_project': 'Edit Apps Project',
                 'btn_remove_project': 'Remove Group',
-                'btn_add_grid_program': 'Create GRID Program',
+                'btn_add_grid_program': 'Create New App',
+                'btn_label_option': 'Option',
 
                 'label_no_grid_programs': 'No <strong class="font-color-grid">GRID</strong> programs available',
                 'label_no_grid_programs_comment': 'Click on the button bellow to create a new one',

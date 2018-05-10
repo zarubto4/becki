@@ -65,7 +65,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
     }
 
     onFilterHardware(pageNumber: number = 0 ): void {
-        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+        this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.modalModel.project_id],
             hardware_type_ids: [ (this.modalModel.hardware_type != null) ? this.modalModel.hardware_type.id : null],
             count_on_page: 10

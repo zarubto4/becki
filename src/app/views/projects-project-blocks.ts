@@ -104,6 +104,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));
                         this.unblockUI();
+                        this.onShowProgramPrivateBlocksFilter();
+                        this.tab = 'my_blocks';
 
                     })
                     .catch(reason => {
@@ -235,7 +237,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onShowProgramPrivateBlocksFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.blockGetByFilter(page, {
+        this.tyrionBackendService.blockGetListByFilter(page, {
             project_id: this.projectId,
         })
             .then((list) => {
@@ -250,7 +252,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onShowProgramPublicBlocksFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.blockGetByFilter(page, {
+        this.tyrionBackendService.blockGetListByFilter(page, {
             public_programs: true
         })
             .then((list) => {
@@ -265,7 +267,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onShowProgramPendingBlocksFilter(page: number = 0): void {
         this.blockUI();
-        this.tyrionBackendService.blockGetByFilter(page, {
+        this.tyrionBackendService.blockGetListByFilter(page, {
             pending_blocks: true,       // For public its required
         })
             .then((list) => {

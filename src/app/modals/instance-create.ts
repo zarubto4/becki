@@ -73,7 +73,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
                 });
 
             // Find B_Programs
-            this.tyrionBackendService.bProgramGetByFilter(0, {
+            this.tyrionBackendService.bProgramGetListByFilter(0, {
                 project_id: this.modalModel.project_id
             })
                 .then((value) => {

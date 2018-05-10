@@ -181,6 +181,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.onFilterPrivatePrograms();
+                        this.tab = 'my_programs';
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));

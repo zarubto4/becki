@@ -4,32 +4,69 @@
         <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
-        <div class="portlet light">
-            <div class="portlet-body">
-                <div *ngIf="modalModel.selected_c_program == null">
-                    <div *ngIf="(programs && programs.content.length)" class="table-scrollable table-scrollable-borderless">
-                        <table class="table table-hover table-light byzance-table">
-                            <thead>
-                            <tr>
-                                <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
-                                <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
-                                <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
-                                <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
-                            </tr>
-                            </thead>
-                            <tbody class="hide-bk-drob-down-button">
-                                <tr *ngFor="let program of programs.content">
-                                    <td class="vert-align no-wrap"><a (click)="onSelectProgramClick(program)">{{program.name}}</a></td>
-                                    <td class="vert-align">{{program.description}}</td>
-                                    <td class="vert-align">
-                                        <bk-form-tag-input [tags_without_form]="program.tags" [readonly]="true"></bk-form-tag-input>
-                                    </td>
 
-                                    <td class="action-btn-col">
+        <bk-filter-component
+            *ngIf="hardware_type_option"
+            [hidden]="modalModel.selected_c_program != null"
+            [closed]="true"
+            [filter_parameters]="[
+                            {
+                                type: 'CHECKBOX_LIST',
+                                content: {
+                                    options:[
+                                        {
+                                            key: 'public_programs',
+                                            label: 'filter_public_programs'|bkTranslate:this,
+                                            selected: public_programs
+                                        },
+                                        {
+                                            key: 'private_programs',
+                                            label: 'filter_private_programs'|bkTranslate:this,
+                                            selected: private_programs
+                                        }
+                                        ],
+                                    horizontal: true
+                                }
+                            },
+                            {
+                                type: 'LIST_SELECT',
+                                content: {
+                                   label: 'filter_hardware_type'|bkTranslate:this,
+                                   key: 'hardware_type_id',
+                                   options: hardware_type_option
+                                }
+                            }
+                        ]"
+            (onChange)="onFilterChange($event)">
+        </bk-filter-component>
 
-                                        <bk-drob-down-button
-                                            [btns_group_name]="('label_code_program_properties'|bkTranslate:this)"
-                                            [btns]="[
+        <div [hidden]="modalModel.selected_c_program != null">
+            <div *ngIf="(programs && programs.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_public_type'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let program of programs.content">
+                        <td class="vert-align no-wrap"><a (click)="onSelectProgramClick(program)">{{program.name}}</a></td>
+                        <td class="vert-align">{{program.description}}</td>
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="program.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+                        <td class="vert-align text-center">
+                            <bk-public-state [state]="program.publish_type"></bk-public-state>
+                        </td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_properties'|bkTranslate:this)"
+                                [btns]="[
                                             {
                                                 condition: true,
                                                 btn_label_for_person: ('label_select_code'|bkTranslate:this),
@@ -39,55 +76,48 @@
                                                 permission: true
                                             }
                                         ]"
-                                            (onValueChanged)="onDrobDownEmiter($event, program)"
-                                        >
-                                        </bk-drob-down-button>
+                                (onValueChanged)="onDrobDownEmiter($event, program)"
+                            >
+                            </bk-drob-down-button>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <bk-filter-page-component [from]="programs.from" [to]="programs.to"
-                                                  [total]="programs.total" [totalPages]="programs.pages"
-                                                  (onSelect)="onFilterPrograms($event)"></bk-filter-page-component>
-                    </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <bk-filter-page-component [from]="programs.from" [to]="programs.to"
+                                          [total]="programs.total" [totalPages]="programs.pages"
+                                          (onSelect)="onFilterPrograms($event)"></bk-filter-page-component>
+            </div>
 
-                    <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-                    <bk-nothing-to-show [condition_loading]="(programs == null)"
-                                        [condition_empty]="(programs != null && programs.content.length == 0)"
-                                        [main_message_link]="'label_no_code'|bkTranslate:this"
-                                        [main_message_comment_link]="'label_no_code_comment'|bkTranslate:this"
-                                        [show_button]="false">
-                    </bk-nothing-to-show>
-                    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
-                </div>
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(programs == null)"
+                                [condition_empty]="(programs != null && programs.content.length == 0)"
+                                [main_message_link]="'label_no_code'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_code_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
 
-                <!-- Select Version -->
-                <div *ngIf="modalModel.selected_c_program">
-
-                    <div *ngIf="modalModel.already_selected_code_for_version_change == null">
-                        <button  type="button" class="btn default red" (click)="onBack()">
-                            <i class="fa fa-arrow-left"></i>
-                        </button>
-                        <br>
-                        <br>
-                    </div>
-
-                    <div>
-                        <bk-program-version-selector [programs]="[modalModel.selected_c_program]"
-                                                     [type]="'ICProgram'"
-                                                     [already_selected_program_id]="modalModel.selected_c_program.id"
-                                                     (valueChanged)="onValueChanged($event)">
-                        </bk-program-version-selector>
-                    </div>
-                </div>
+        <!-- Select Version -->
+        <div *ngIf="modalModel.selected_c_program">
+            <div>
+                <bk-program-version-selector [programs]="[modalModel.selected_c_program]"
+                                             [type]="'ICProgram'"
+                                             [already_selected_program_id]="modalModel.selected_c_program.id"
+                                             [already_selected_program_version_id]="modalModel.already_selected_code_for_version_change ? modalModel.already_selected_code_for_version_change.c_program_version_id :''"
+                                             (valueChanged)="onSelectProgramVersionClick($event)">
+                </bk-program-version-selector>
             </div>
         </div>
+
+
         <div *ngIf="errorMessage">
             <span class="font-red bold">{{errorMessage}}</span>
         </div>
     </div>
     <div class="modal-footer">
+        <button *ngIf="modalModel.selected_c_program && modalModel.already_selected_code_for_version_change == null" type="button" class="btn default red" style="float: left;" (click)="onBack()"><i class="fa fa-arrow-left"></i> </button>
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
         <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>
     </div>

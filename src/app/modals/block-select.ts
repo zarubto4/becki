@@ -49,6 +49,7 @@ export class ModalsBlockSelectComponent implements OnInit {
     // Filter parameters
     public_block: boolean = false;
     private_block: boolean = true;
+    page: number = 0;
 
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
     }
@@ -97,12 +98,23 @@ export class ModalsBlockSelectComponent implements OnInit {
             this.public_block = filter.value;
         }
 
+        if (filter.key == 'private_block') {
+            this.private_block = filter.value;
+        }
+
+        this.onFilterBlocks();
     }
 
-    onFilterBlocks(page: number = 0): void {
+    onFilterBlocks(page?: number): void {
 
-        this.tyrionBackendService.blockGetByFilter(page, {
-            project_id: this.modalModel.project_id,
+        if(page != null) {
+            this.page = page;
+        }
+
+        this.blocks = null;
+
+        this.tyrionBackendService.blockGetListByFilter(this.page , {
+            project_id: this.private_block ? this.modalModel.project_id : null,
             public_programs: this.public_block,
             count_on_page: 10
         })

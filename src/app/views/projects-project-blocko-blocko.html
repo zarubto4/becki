@@ -17,7 +17,16 @@
                       [title_object_description]="blockoProgram.description"
                       [icon]="'fa-sitemap'"
                       (onClick)="onPortletClick($event)"
+                      [btns_group_name]="'btn_label_option'|bkTranslate:this"
                       [btns]="[
+                        {
+                              condition: !!blockoProgram,
+                              btn_label_for_person: ('label_blocko_save'|bkTranslate:this),
+                              icon: 'fa-cog',
+                              colorType: 'CREATE',
+                              btn_tag: 'save_program',
+                              permission: blockoProgram.update_permission
+                          },
                           {
                               condition: !!blockoProgram,
                               btn_label_for_person: ('label_blocko_program_properties'|bkTranslate:this),

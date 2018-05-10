@@ -4,13 +4,11 @@
         <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
-        <div class="portlet light">
-            <div class="portlet-body">
 
-                <div *ngIf="modalModel.selectedBlock == null">
-
-                    <bk-filter-component
-                        [filter_parameters]="[
+        <bk-filter-component
+            [closed]="true"
+            [hidden]="modalModel.selectedBlock != null"
+            [filter_parameters]="[
                             {
                                 type: 'CHECKBOX_LIST',
                                 content: {
@@ -30,35 +28,37 @@
                                 }
                             }
                         ]"
-                        (onChange)="onFilterChange($event)">
-                    </bk-filter-component>
+            (onChange)="onFilterChange($event)" style="padding: 0 0 0 0">
+        </bk-filter-component>
 
-                    <div *ngIf="(blocks && blocks.content.length)" class="table-scrollable table-scrollable-borderless">
-                        <table class="table table-hover table-light byzance-table">
-                            <thead>
-                            <tr>
-                                <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
-                                <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
-                                <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
-                                <th class="text-center" [innerHTML]="'table_public_type'|bkTranslate:this"></th>
-                                <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
-                            </tr>
-                            </thead>
-                            <tbody class="hide-bk-drob-down-button">
-                            <tr *ngFor="let block of blocks.content">
-                                <td class="vert-align no-wrap"><a (click)="onSelectBlockClick(block)">{{block.name}}</a></td>
-                                <td class="vert-align">{{block.description}}</td>
-                                <td class="vert-align">
-                                    <bk-form-tag-input [tags_without_form]="block.tags" [readonly]="true"></bk-form-tag-input>
-                                </td>
-                                <td class="vert-align text-center">
-                                    <bk-public-state [state]="block.publish_type"></bk-public-state>
-                                </td>
-                                <td class="action-btn-col">
+        <div [hidden]="modalModel.selectedBlock != null">
 
-                                    <bk-drob-down-button
-                                        [btns_group_name]="('label_properties'|bkTranslate:this)"
-                                        [btns]="[
+            <div *ngIf="(blocks && blocks.content.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_public_type'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let block of blocks.content">
+                        <td class="vert-align no-wrap"><a (click)="onSelectBlockClick(block)">{{block.name}}</a></td>
+                        <td class="vert-align">{{block.description}}</td>
+                        <td class="vert-align">
+                            <bk-form-tag-input [tags_without_form]="block.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
+                        <td class="vert-align text-center">
+                            <bk-public-state [state]="block.publish_type"></bk-public-state>
+                        </td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_properties'|bkTranslate:this)"
+                                [btns]="[
                                             {
                                                 condition: true,
                                                 btn_label_for_person: ('label_select_code'|bkTranslate:this),
@@ -68,57 +68,47 @@
                                                 permission: true
                                             }
                                         ]"
-                                        (onValueChanged)="onDrobDownEmiter($event, block)"
-                                    >
-                                    </bk-drob-down-button>
+                                (onValueChanged)="onDrobDownEmiter($event, block)"
+                            >
+                            </bk-drob-down-button>
 
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <bk-filter-page-component [from]="blocks.from" [to]="blocks.to"
-                                                  [total]="blocks.total" [totalPages]="blocks.pages"
-                                                  (onSelect)="onFilterPrograms($event)"></bk-filter-page-component>
-                    </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <bk-filter-page-component [from]="blocks.from" [to]="blocks.to"
+                                          [total]="blocks.total" [totalPages]="blocks.pages"
+                                          (onSelect)="onFilterPrograms($event)"></bk-filter-page-component>
+            </div>
 
-                    <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-                    <bk-nothing-to-show [condition_loading]="(blocks == null)"
-                                        [condition_empty]="(blocks != null && blocks.content.length == 0)"
-                                        [main_message_link]="'label_no_blocks'|bkTranslate:this"
-                                        [main_message_comment_link]="'label_no_blocks_comment'|bkTranslate:this"
-                                        [show_button]="false">
-                    </bk-nothing-to-show>
-                    <!-- Temporary page content if content is being loaded or if there is no content -- END -->
-                </div>
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(blocks == null)"
+                                [condition_empty]="(blocks != null && blocks.content.length == 0)"
+                                [main_message_link]="'label_no_blocks'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_blocks_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
 
-                <!-- Select Version -->
-                <div *ngIf="modalModel.selectedBlock">
-
-                    <div *ngIf="modalModel.already_selected_code_for_version_change == null">
-                        <button  type="button" class="btn default red" (click)="onBack()">
-                            <i class="fa fa-arrow-left"></i>
-                        </button>
-                        <br>
-                        <br>
-                    </div>
-
-                    <div>
-                        <bk-program-version-selector [programs]="[modalModel.selectedBlock]"
-                                                     [type]="'IBlock'"
-                                                     [already_selected_program_id]="modalModel.selectedBlock.id"
-                                                     (valueChanged)="onValueChanged($event)">
-                        </bk-program-version-selector>
-                    </div>
-                </div>
-
+        <!-- Select Version -->
+        <div *ngIf="modalModel.selectedBlock">
+            <div>
+                <bk-program-version-selector [programs]="[modalModel.selectedBlock]"
+                                             [type]="'IBlock'"
+                                             [already_selected_program_id]="modalModel.selectedBlock.id"
+                                             (valueChanged)="onValueChanged($event)">
+                </bk-program-version-selector>
             </div>
         </div>
+
         <div *ngIf="errorMessage">
             <span class="font-red bold">{{errorMessage}}</span>
         </div>
     </div>
 
     <div class="modal-footer">
+        <button *ngIf="modalModel.selectedBlock && modalModel.already_selected_code_for_version_change == null" type="button" class="btn default red" style="float: left;" (click)="onBack()"><i class="fa fa-arrow-left"></i> </button>
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
         <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>
     </div>

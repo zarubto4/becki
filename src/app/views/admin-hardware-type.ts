@@ -358,7 +358,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
 
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
 
-        this.tyrionBackendService.boardsGetWithFilterParameters(pageNumber, {
+        this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             hardware_type_ids: boardTypes
         })
             .then((values) => {

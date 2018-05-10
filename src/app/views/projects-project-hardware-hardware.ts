@@ -475,7 +475,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
 
                     this.tyrionBackendService.cProgramUploadIntoHardware({
                         hardware_ids: [this.hardware.id],
-                        c_program_version_id: model.selectedCProgramVersion.id
+                        c_program_version_id: model.selected_c_program_version.id
                     })
                         .then(() => {
                             this.refresh();
