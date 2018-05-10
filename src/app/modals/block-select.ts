@@ -94,11 +94,11 @@ export class ModalsBlockSelectComponent implements OnInit {
     onFilterChange(filter: {key: string, value: any}) {
         console.info('onFilterChange: Key', filter.key, 'value', filter.value);
 
-        if (filter.key == 'public_block') {
+        if (filter.key === 'public_block') {
             this.public_block = filter.value;
         }
 
-        if (filter.key == 'private_block') {
+        if (filter.key === 'private_block') {
             this.private_block = filter.value;
         }
 
@@ -107,7 +107,7 @@ export class ModalsBlockSelectComponent implements OnInit {
 
     onFilterBlocks(page?: number): void {
 
-        if(page != null) {
+        if (page != null) {
             this.page = page;
         }
 

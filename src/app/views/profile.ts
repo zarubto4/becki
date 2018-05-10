@@ -2,17 +2,17 @@
  * Created by dominikkrisztof on 24/08/16.
  */
 
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {_BaseMainComponent} from './_BaseMainComponent';
-import {NotificationService, Notification, FlashMessage} from '../services/NotificationService';
-import {TyrionBackendService} from '../services/BackendService';
-import {FlashMessageSuccess, FlashMessageError} from '../services/NotificationService';
-import {FormGroup, Validators} from '@angular/forms';
-import {BeckiValidators} from '../helpers/BeckiValidators';
-import {FormSelectComponentOption} from '../components/FormSelectComponent';
-import {StaticOptionLists} from '../helpers/StaticOptionLists';
-import {ModalsPictureUploadModel} from '../modals/picture-upload';
-import {IAuthorizationToken, IPerson, IRole} from '../backend/TyrionAPI';
+import { Component, Injector, OnInit } from '@angular/core';
+import { _BaseMainComponent } from './_BaseMainComponent';
+import { NotificationService } from '../services/NotificationService';
+import { TyrionBackendService } from '../services/BackendService';
+import { FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
+import { FormGroup, Validators } from '@angular/forms';
+import { BeckiValidators } from '../helpers/BeckiValidators';
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { StaticOptionLists } from '../helpers/StaticOptionLists';
+import { ModalsPictureUploadModel } from '../modals/picture-upload';
+import { IAuthorizationToken, IPerson, IRole } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-profile',

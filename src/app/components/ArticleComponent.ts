@@ -1,6 +1,6 @@
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { IArticle } from "../backend/TyrionAPI";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { IArticle } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-article-time-line',

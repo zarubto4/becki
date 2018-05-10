@@ -20,7 +20,6 @@ import { StorageService } from '../services/StorageService';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
-import {IGridProgram, IProject} from '../backend/TyrionAPI';
 import { IError } from '../services/_backend_class/Responses';
 /* tslint:disable:class-name  */
 export abstract class _BaseMainComponent {

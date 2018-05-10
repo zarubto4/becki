@@ -17,7 +17,7 @@ import { ModalsHardwareRestartMQTTPassModel } from '../modals/hardware-restart-m
 import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-server';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { ModalsSelectCodeModel } from '../modals/code-select';
-import {FormSelectComponentOption} from "../components/FormSelectComponent";
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 export interface ConfigParameters {
     key: string;
@@ -134,7 +134,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
 
         this.tab = tab;
 
-        if (tab === 'updates' && this.actualizationTaskFilter == null) {
+        if (tab === 'updates' && this.actualizationTaskFilter === null) {
             this.onFilterActualizationProcedureTask();
         }
 
@@ -193,7 +193,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     }
 
     onEditClick(device: IHardware): void {
-        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description, device.dominant_entity, (!device.dominant_entity && device.dominant_project_active == null));
+        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description, device.dominant_entity, (!device.dominant_entity && device.dominant_project_active === null));
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

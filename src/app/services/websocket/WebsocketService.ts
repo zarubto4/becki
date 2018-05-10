@@ -58,14 +58,14 @@ export class WebsocketService {
 
         let socket: WebsocketClientHardwareLogger = new WebsocketClientHardwareLogger(server_url + ':' + port + '/'  + TyrionApiBackend.getToken());
         if (!socket.isWebSocketOpen()) {
-            console.log('connectDeviceTerminalWebSocket:: !socket.isWebSocketOpen() Není Open - Callback');
+            console.error('connectDeviceTerminalWebSocket:: !socket.isWebSocketOpen() Není Open - Callback');
             socket.onOpenCallback = (e) => {
-                console.log('connectDeviceTerminalWebSocket:: Connected - return socket');
+                // console.log('connectDeviceTerminalWebSocket:: Connected - return socket');
                 this.hardwareTerminalwebSockets.push(socket);
                 return callback(socket, null);
             };
         } else {
-            console.log('connectDeviceTerminalWebSocket:: socket.isWebSocketOpen() JE Open - Callback');
+            // console.log('connectDeviceTerminalWebSocket:: socket.isWebSocketOpen() JE Open - Callback');
             this.hardwareTerminalwebSockets.push(socket);
             return callback(socket, null);
         }

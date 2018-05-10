@@ -283,7 +283,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param hardware
      */
     onHardwareUnSubscribeClick(hardware: IHardware): void {
-        console.log('onHardwareUnSubscribeClick: Hardware::', hardware.id);
+        // console.log('onHardwareUnSubscribeClick: Hardware::', hardware.id);
 
         this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
 
@@ -304,11 +304,11 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      */
     onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace') = 'info'): void {
 
-        console.log('onHardwareSubscribeClick: Hardware::', hardware.id);
+        // console.log('onHardwareSubscribeClick: Hardware::', hardware.id);
 
         this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel , (response_message: WebsocketMessage, error: any) => {
 
-            console.log('onHardwareSubscribeClick: response_message::', response_message);
+            // console.log('onHardwareSubscribeClick: response_message::', response_message);
 
             if (response_message && response_message.status == 'success') {
                 this.logLevel[hardware.id].subscribed = true;
@@ -326,12 +326,12 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      */
     onUserChangeLogLevelClick(logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace'), hardware: IHardware): void { // změna log levelu
 
-        console.log('onUserChangeLogLevelClick:: Hardware', hardware.id, 'LogLevel', logLevel);
-        console.log('onUserChangeLogLevelClick:: Server URL: ', this.logLevel[hardware.id].socket.url);
-        console.log('onUserChangeLogLevelClick:: Log on : ', this.logLevel[hardware.id].log);
+        // console.log('onUserChangeLogLevelClick:: Hardware', hardware.id, 'LogLevel', logLevel);
+        // console.log('onUserChangeLogLevelClick:: Server URL: ', this.logLevel[hardware.id].socket.url);
+        // console.log('onUserChangeLogLevelClick:: Log on : ', this.logLevel[hardware.id].log);
 
         if (this.logLevel[hardware.id].log === logLevel) {
-            console.log('onUserChangeLogLevelClick:: jsou stejné - vracím');
+           // console.log('onUserChangeLogLevelClick:: jsou stejné - vracím');
             return;
         } else {
 
@@ -367,7 +367,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      */
     onUserChangeColorClick(color: string, hardware: IHardware): void { // změna log levelu
 
-        console.log('onUserChangeColorClick:: Hardware', hardware.id, 'Color', color);
+        // console.log('onUserChangeColorClick:: Hardware', hardware.id, 'Color', color);
 
         this.colorForm.controls['color_' + hardware.id].setValue(color);
         this.consoleLog.set_color(hardware.id, this.colorForm.controls['color_' + hardware.id].value);
@@ -379,7 +379,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param hardware
      */
     removeHardwareFromSubscribeList(hardware: IHardware): void {
-        console.log('removeHardwareFromSubscribeList: Hardware::', hardware.id);
+        // console.log('removeHardwareFromSubscribeList: Hardware::', hardware.id);
         this.onHardwareUnSubscribeClick(hardware);
         for(let i = this.selected_hw_for_subscribe.length - 1; i >= 0; i--) {
             if(this.selected_hw_for_subscribe[i].id === hardware.id) {
@@ -390,7 +390,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
 
     addNewHardwareToSubscribeModal(): void {
-        console.log('addNewHardwareToSubscribeModal: ');
+        // console.log('addNewHardwareToSubscribeModal: ');
         let m = new ModalsSelectHardwareModel(this.project_id);
         this.modalService.showModal(m)
             .then((success) => {
@@ -416,7 +416,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      */
     public addNewHardwareToSubscribeList(hardware: IHardware, color: string = '#0082c8'): void {
 
-        console.log('addNewHardwareToSubscribeList: hardware:: ', hardware.id, 'color: ', color);
+       // console.log('addNewHardwareToSubscribeList: hardware:: ', hardware.id, 'color: ', color);
 
         this.colorForm.addControl('color_' + hardware.id, new FormControl('color_' + hardware.id));
         this.colorForm.addControl('log_' + hardware.id, new FormControl('log_' + hardware.id));
@@ -424,8 +424,8 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
         this.colorForm.controls['color_' + hardware.id].setValue(color);
         this.colorForm.controls['log_' + hardware.id].setValue('info');
 
-        console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe size: ', this.selected_hw_for_subscribe.length);
-        console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe: ', this.selected_hw_for_subscribe);
+       // console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe size: ', this.selected_hw_for_subscribe.length);
+       // console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe: ', this.selected_hw_for_subscribe);
 
         if(hardware.server == null) {
             this.consoleLog.set_color(hardware.id, color);

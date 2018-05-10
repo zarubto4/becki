@@ -1,7 +1,7 @@
 import { WebsocketMessage } from './WebsocketMessage';
 import { WebsocketMessageBuffer } from './WebsocketMessageBuffer';
-import {TyrionBackendService} from "../BackendService";
-import {TyrionApiBackend} from "../../backend/BeckiBackend";
+import { TyrionBackendService } from '../BackendService';
+import { TyrionApiBackend } from '../../backend/BeckiBackend';
 
 
 export abstract class IndividualWebSocketOutComingMessage {
@@ -41,14 +41,12 @@ export abstract class WebsocketClientAbstract {
      */
     constructor(public url: string) {
         if (!(url.includes('ws://') || this.url.includes('wss://'))) {
-            if (TyrionApiBackend.protocol == 'http') {
+            if (TyrionApiBackend.protocol === 'http') {
                 this.url = 'ws://' + url;
             } else {
                 this.url = 'wss://' + url;
             }
         }
-
-        console.info('Konečná podoba URL: ',  this.url);
     }
 
     public disconnectWebSocket(): void {
@@ -139,7 +137,7 @@ export abstract class WebsocketClientAbstract {
      */
     public connectWs() {
         if (!(this.url.includes('ws://') || this.url.includes('wss://'))) {
-            if (TyrionApiBackend.protocol == 'http') {
+            if (TyrionApiBackend.protocol === 'http') {
                 this.url = 'ws://' + this.url;
             } else {
                 this.url = 'wss://' + this.url;

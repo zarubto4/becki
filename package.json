@@ -10,7 +10,7 @@
     "homer-generator": "./generator-homer/generator -d",
     "homer-generator-win": "node ./generator-homer/generator-win",
     "clean": "rimraf node_modules doc dist && npm cache clean --force",
-    "clean-install": "npm run clean && npm install",
+    "clean-install": "npm run clean --force && npm install",
     "watch": "webpack --watch --progress --profile",
     "build": "rimraf dist && webpack --progress --profile --bail",
     "server": "webpack-dev-server --inline --progress --port 8080",

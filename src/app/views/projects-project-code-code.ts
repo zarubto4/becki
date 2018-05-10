@@ -606,7 +606,6 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     saveCode() {
-        console.log('saveCode modal');
         let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
         this.modalService.showModal(m).then((success) => {
             if (success) {

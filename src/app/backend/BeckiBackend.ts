@@ -108,13 +108,13 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     protected abstract requestRestGeneral(request: RestRequest): Promise<RestResponse>;
 
     public requestRestPath<T>(method: string, path: string, body: Object, success: number[]): Promise<T> {
-        console.info('requestRestPath:: method', method, 'path: ', path);
+        // console.info('requestRestPath:: method', method, 'path: ', path);
 
         // If path contains http on beginning! or first char is "/" its on 100% api path from TyrionAPI
         // For example /login or /get_projects:{all}
         // But if contains https - for example https://homer.server.cz/get_something - it didnt used ${this.protocol}://${this.host}${path}
         if (path.charAt(0) === '/') {
-            console.info('Its a Tyrion API');
+            // console.info('Its a Tyrion API');
             return this.requestRest(method, `${TyrionApiBackend.protocol}://${TyrionApiBackend.host}${path}`, body, success);
         } else {
             console.info('Its a External outside API');
@@ -282,7 +282,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     // PERSON INFO
     public refreshPersonInfo(): void {
-        console.info('refreshPersonInfo');
+        // console.info('refreshPersonInfo');
         this.personInfoSnapshotDirty = true;
         if (TyrionApiBackend.tokenExist()) {
             this.getTyrionWebsocketConnection().onReady();

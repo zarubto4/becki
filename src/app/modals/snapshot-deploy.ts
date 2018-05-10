@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {IInstanceSnapshot, IShortReference} from '../backend/TyrionAPI';
+import { IInstanceSnapshot, IShortReference } from '../backend/TyrionAPI';
 import { IMyDpOptions } from 'mydatepicker';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import * as moment from 'moment';

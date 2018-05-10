@@ -10,7 +10,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { IApplicableProduct } from '../backend/TyrionAPI';
-import {BeckiValidators} from "../helpers/BeckiValidators";
+import { BeckiValidators } from '../helpers/BeckiValidators';
 
 
 export class ModalsProjectPropertiesModel extends ModalModel {

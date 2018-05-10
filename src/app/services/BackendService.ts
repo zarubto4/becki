@@ -18,7 +18,7 @@ export class TyrionBackendService extends TyrionApiBackend {
 
     constructor(protected http: Http, protected router: Router, private translationService: TranslationService) {
         super();
-        console.info('TyrionBackendService init');
+        // console.info('TyrionBackendService init');
         this.refreshPersonInfo();
     }
 

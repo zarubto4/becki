@@ -1,8 +1,3 @@
-import {ModalsWidgetsWidgetCopyComponent} from "../modals/widgets-widget-copy";
-import {ModalsGridProjectSelectComponent} from "../modals/grid-project-select";
-import {ModalsBlockSelectComponent} from "../modals/block-select";
-import {ModalsArticleComponent} from "../modals/article";
-import {ArticleComponent} from "../components/ArticleComponent";
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */

@@ -105,7 +105,7 @@ export class CurrentParamsService {
     public currentActualizationProcedureSnapShot: string = null;
 
     constructor(protected router: Router, protected backendService: TyrionBackendService) {
-        console.info('BreadcrumbsService init');
+        // console.info('BreadcrumbsService init');
 
         this.currentParams = this.currentParamsSubject = new Subject<{ [key: string]: string }>();
         this.currentProjectName = this.currentProjectNameSubject = new Subject<string>();

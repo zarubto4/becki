@@ -1,7 +1,7 @@
 import { Component, Output, Input, EventEmitter, AfterViewInit, OnInit } from '@angular/core';
 import { FormSelectComponentOption } from './FormSelectComponent';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {TyrionBackendService} from "../services/BackendService";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TyrionBackendService } from '../services/BackendService';
 
 /* tslint:disable: */
 @Component({
@@ -98,10 +98,10 @@ export class FilterTableComponent implements OnInit {
 
     ngOnInit() {
 
-        console.info("filter_parameters: ", this.filter_parameters);
+        console.info('filter_parameters: ', this.filter_parameters);
         this.filter_parameters.forEach((parameter) => {
 
-            if (parameter.type == 'LIST_SELECT') {
+            if (parameter.type === 'LIST_SELECT') {
 
                 (parameter.content as LIST_SELECT).form = this.formBuilder.group({
                     'list': ['', [Validators.required]]
@@ -115,13 +115,13 @@ export class FilterTableComponent implements OnInit {
                 });
             }
 
-            if (parameter.type == 'FIND_BY_TEXT') {
+            if (parameter.type === 'FIND_BY_TEXT') {
                 (parameter.content as LIST_SELECT).form = this.formBuilder.group({
                     'text': ['']
                 });
             }
 
-            if (parameter.type == 'FIND_BY_TAG') {
+            if (parameter.type === 'FIND_BY_TAG') {
                 (parameter.content as LIST_SELECT).form = this.formBuilder.group({
                     'tags': ['']
                 });
@@ -132,7 +132,7 @@ export class FilterTableComponent implements OnInit {
 
     }
 
-    onHide(){
+    onHide() {
         console.info('closed: ', this.closed);
         this.closed = !this.closed;
     }
@@ -167,10 +167,11 @@ export class FilterTableComponent implements OnInit {
         }, 50);
     }
 }
+/* tslint:disable */
 
 interface Filter_parameter {
-    type: ('CHECKBOX_LIST' | 'LIST_SELECT' | 'FIND_BY_TEXT' | 'FIND_BY_TAG'),
-    content: (CHECKBOX_LIST_Interface | LIST_SELECT | FIND_BY_TEXT | FIND_BY_TAG)
+    type: ('CHECKBOX_LIST' | 'LIST_SELECT' | 'FIND_BY_TEXT' | 'FIND_BY_TAG');
+    content: (CHECKBOX_LIST_Interface | LIST_SELECT | FIND_BY_TEXT | FIND_BY_TAG);
 }
 
 class CHECKBOX_LIST_Interface {
@@ -204,5 +205,8 @@ class LIST_SELECT {
     label: string;
     key: string;       // List Type "HW_LIST" "CODE_LIST"
     form: FormGroup;
-    optionForm:FormSelectComponentOption[] = [];
+    optionForm: FormSelectComponentOption[] = [];
 }
+
+
+/* tslint:enable  */

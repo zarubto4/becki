@@ -66,7 +66,7 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
     /***** ON MESSAGES *******/
     onMessageReceive(m: WebsocketMessage) {
 
-        console.log('WebsocketClientTyrion:: onMessageReceive:: ', m);
+        // console.log('WebsocketClientTyrion:: onMessageReceive:: ', m);
         if (m.message_type === 'ping') {
             let message = new IWebSocketPingResponse();
             message.message_id = m.message_id;

@@ -257,7 +257,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.selectedProgramVersion = programVersionFull;
 
                 // TODO run update fo grid widgets version, then setDataJson ...
-                console.log('selectProgramVersion: ', this.selectedProgramVersion.program_version);
+                // console.log('selectProgramVersion: ', this.selectedProgramVersion.program_version);
                 this.gridView.setDataJson(this.selectedProgramVersion.program_version);
 
                 this.gridDeviceProfile = this.gridView.getDeviceProfile();
@@ -373,7 +373,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onWidgetRequestingSource(event: any) {
-        console.log('onWidgetRequestingSource', event.type);
+        // console.log('onWidgetRequestingSource', event.type);
         this.tyrionBackendService.widgetVersionGet(event.type.version_id)
             .then((widgetVersion) => {
                 // this.widgetSourceCache[event.type.id] = widgetVersion.id;

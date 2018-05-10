@@ -17,7 +17,7 @@ export class BlockUIService {
 
 
     constructor() {
-        console.info('BlockUIService init');
+        // console.info('BlockUIService init');
     }
 
     blockUI(): void {

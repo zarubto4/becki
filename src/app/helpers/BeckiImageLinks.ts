@@ -29,7 +29,7 @@ export class BeckiImageLinks {
     */
 
     constructor() {
-        console.info('ImageService init');
+       //  console.info('ImageService init');
 
     }
 }

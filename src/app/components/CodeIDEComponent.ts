@@ -216,12 +216,12 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         cursorAt: { left: -5, top: -5 }
     };
 
-    private _show_files_portlet: boolean = true;
-    private _show_libraries_portlet: boolean = false;
-    private _show_integrated_hardware_portlet: boolean = false;
-    private _show_blocko_interface_portlet: boolean = false;
-    private _show_code_settings_portlet: boolean = false;
-    private _latest_blockoInterface = null;
+    public _show_files_portlet: boolean = true;
+    public _show_libraries_portlet: boolean = false;
+    public _show_integrated_hardware_portlet: boolean = false;
+    public _show_blocko_interface_portlet: boolean = false;
+    public _show_code_settings_portlet: boolean = false;
+    public _latest_blockoInterface = null;
     private _editorView: BlockoViewComponent = null;
 
     constructor(protected modalService: ModalService, private translationService: TranslationService,  private formBuilder: FormBuilder) {

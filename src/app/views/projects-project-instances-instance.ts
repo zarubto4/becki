@@ -10,7 +10,7 @@ import {
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
     IUpdateProcedure
 } from '../backend/TyrionAPI';
-import { BlockoCore, Blocks} from 'blocko';
+import { BlockoCore, Blocks } from 'blocko';
 import {
     Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef, ViewChildren, QueryList,
     AfterViewInit
@@ -23,10 +23,8 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
-import { OnlineChangeStatus, TyrionApiBackend } from '../backend/BeckiBackend';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 import { ModalsSelectVersionModel } from '../modals/version-select';
-import { DraggableEventParams } from '../components/DraggableDirective';
 import { WebsocketClientBlockoView } from '../services/websocket/Websocket_Client_BlockoView';
 import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';

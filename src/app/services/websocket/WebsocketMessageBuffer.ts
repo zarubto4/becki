@@ -30,7 +30,7 @@ export class WebsocketMessageBuffer {
             if (message.data['error_code'] != null || message.data['error_code']) {
 
                 /* tslint:disable */
-                console.log('WebsocketMessageBuffer: Incoming Message contains  error_code');
+                 console.log('WebsocketMessageBuffer: Incoming Message contains  error_code');
                 console.log('Code:: ' , message.data['error_code']);
                 console.log('Message:: ' , message.data['error_message']);
                 /* tslint:enable */

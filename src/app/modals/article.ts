@@ -8,12 +8,6 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IProductExtensionType } from '../backend/TyrionAPI';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {ModalsRemovalModel} from "./removal";
-import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
-import {ModalsAddHardwareModel} from "./add-hardware";
-import {_BaseMainComponent} from "../views/_BaseMainComponent";
 
 export class ModalsArticleModel extends ModalModel {
     constructor(
@@ -64,7 +58,7 @@ export class ModalsArticleComponent implements OnInit {
         this.modalModel.tags = this.form.controls['tags'].value;
         this.modalModel.mark_down_text = this.form.controls['mark_down_text'].value;
 
-        console.info("ModalsArticleComponent: tags:", this.modalModel.tags);
+        // console.info('ModalsArticleComponent: tags:', this.modalModel.tags);
         this.modalClose.emit(true);
     }
 

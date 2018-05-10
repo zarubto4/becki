@@ -11,7 +11,7 @@ import { FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
-import {ICProgram, ICProgramList, ICProgramVersion, IHardwareType} from '../backend/TyrionAPI';
+import { ICProgram, ICProgramList, ICProgramVersion, IHardwareType } from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
 
 export class ModalsSelectCodeModel extends ModalModel {
@@ -63,9 +63,8 @@ export class ModalsCodeSelectComponent implements OnInit {
 
     ngOnInit(): void {
 
-        if(this.modalModel.hardware_type_id) {
+        if (this.modalModel.hardware_type_id) {
             this.hardware_type_id = this.modalModel.hardware_type_id;
-
         }
 
         // Expression has changed after it was checked -  setTimeout is protection
@@ -126,15 +125,15 @@ export class ModalsCodeSelectComponent implements OnInit {
     onFilterChange(filter: {key: string, value: any}) {
         console.info('onFilterChange: Key', filter.key, 'value', filter.value);
 
-        if (filter.key == 'public_programs') {
+        if (filter.key === 'public_programs') {
             this.public_programs = filter.value;
         }
 
-        if (filter.key == 'private_programs') {
+        if (filter.key === 'private_programs') {
             this.private_programs = filter.value;
         }
 
-        if (filter.key == 'hardware_type_id') {
+        if (filter.key === 'hardware_type_id') {
             this.hardware_type_id = filter.value;
         }
 
@@ -143,7 +142,7 @@ export class ModalsCodeSelectComponent implements OnInit {
 
     onFilterPrograms(page?: number): void {
 
-        if(page != null) {
+        if (page != null) {
             this.page = page;
         }
 

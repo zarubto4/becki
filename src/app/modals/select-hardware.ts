@@ -8,10 +8,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {IHardware, IHardwareGroup, IHardwareGroupList, IHardwareList, IHardwareType} from '../backend/TyrionAPI';
-import { Subscription } from 'rxjs/Rx';
-import {FlashMessageError} from "../services/NotificationService";
+import { IHardware, IHardwareGroup, IHardwareGroupList, IHardwareList, IHardwareType } from '../backend/TyrionAPI';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {

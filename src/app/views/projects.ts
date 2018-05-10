@@ -3,8 +3,8 @@
  * directory of this distribution.
  */
 
-import {Component, OnInit, Injector, OnDestroy} from '@angular/core';
-import {_BaseMainComponent} from './_BaseMainComponent';
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import {
     FlashMessageError, FlashMessageSuccess,
     FlashMessageInfo, FlashMessageWarning, FlashMessage

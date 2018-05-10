@@ -3,12 +3,11 @@
  * of this distribution.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {ValidatorErrorsService} from '../services/ValidatorErrorsService';
-import {TranslationService} from '../services/TranslationService';
-import {TagComponent} from "./TagComponent";
-import {red} from "chalk";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
+import { TranslationService } from '../services/TranslationService';
+import { TagComponent } from './TagComponent';
 
 @Component({
     selector: 'bk-form-tag-input',
@@ -105,7 +104,7 @@ export class FormInputTagsComponent implements OnInit {
         if (this.control != null) {
             this.control.setValue([]);
 
-        } else if(this.tags != null){
+        } else if (this.tags != null) {
 
             this.tags = this.tags_without_form;
 
@@ -187,7 +186,7 @@ export class FormInputTagsComponent implements OnInit {
         this.valueChange.emit(this.tags);
     }
 
-    changeColor(tag: TagComponent, color: string) : void {
+    changeColor(tag: TagComponent, color: string): void {
 
     }
 

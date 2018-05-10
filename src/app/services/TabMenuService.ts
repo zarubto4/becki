@@ -16,7 +16,7 @@ export class TabMenuService {
     protected currentMenus: { [menuName: string]: LabeledLink[] } = {};
 
     constructor( @Inject('tabMenus') protected tabMenus: { [menuName: string]: LabeledLink[] }, protected currentParamsService: CurrentParamsService, private translationService: TranslationService) {
-        console.info('TabMenuService init');
+        // console.info('TabMenuService init');
         currentParamsService.currentParams.subscribe(params => {
             this.refresh();
         });

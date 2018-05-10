@@ -168,7 +168,7 @@ import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoList
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
 import { TyrionComponent } from './views/admin-tyrion';
-import {LogLevelComponent, OnlineStateComponent, PublicStateComponent} from './components/OnlineStateComponent';
+import { LogLevelComponent, OnlineStateComponent, PublicStateComponent } from './components/OnlineStateComponent';
 import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
 import { CompilationStatusComponent } from './components/CompilationStatusComponent';
 import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
@@ -218,10 +218,10 @@ import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-progr
 import { BeckiDrobDownButtonComponent } from './components/DrobDownButton';
 import { FinancialProductEmployeesComponent } from './views/financial-product-employees';
 import { FilterTableComponent } from './components/FilterTableComponent';
-import {ModalsGridProjectSelectComponent} from "./modals/grid-project-select";
-import {ModalsBlockSelectComponent} from "./modals/block-select";
-import {ArticleComponent} from "./components/ArticleComponent";
-import {ModalsArticleComponent} from "./modals/article";
+import { ModalsGridProjectSelectComponent } from './modals/grid-project-select';
+import { ModalsBlockSelectComponent } from './modals/block-select';
+import { ArticleComponent } from './components/ArticleComponent';
+import { ModalsArticleComponent } from './modals/article';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!

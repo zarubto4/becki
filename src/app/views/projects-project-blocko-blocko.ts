@@ -1,6 +1,4 @@
 import { ModalsSelectCodeModel } from '../modals/code-select';
-
-
 declare let $: JQueryStatic;
 import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
@@ -507,8 +505,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             return;
         }
 
-        console.log('iface.code.programId', iface.code.programId);
-        console.log('iface.code.versionId', iface.code.versionId);
+        // console.log('iface.code.programId', iface.code.programId);
+        // console.log('iface.code.versionId', iface.code.versionId);
 
         let model = new ModalsSelectCodeModel(this.projectId, null, {
             c_program_id: iface.code.programId,

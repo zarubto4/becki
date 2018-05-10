@@ -96,7 +96,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
 
                     if (this.selectedProgram && this.already_selected_program_id) {
 
-                        if (this.type == 'ICProgram') {
+                        if (this.type === 'ICProgram') {
                             this.backendService.cProgramGet(this.selectedProgramId)
                                 .then((program) => {
                                     this.selectedVersions = program.program_versions.filter((version) => {
@@ -108,7 +108,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                             this.selectedVersion = cp;
                                         }
                                     });
-                                    if(this.selectedProgramVersionId == null) {
+                                    if (this.selectedProgramVersionId == null) {
                                         console.info('Nevybraná žádná verze - raději vyberu první!');
                                         this.onSelectedProgramVersionIdChange(program.program_versions[0].id);
                                     }
@@ -117,7 +117,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                 });
                         }
 
-                        if (this.type == 'IGridProgram') {
+                        if (this.type === 'IGridProgram') {
                             this.backendService.gridProgramGet(this.selectedProgramId)
                                 .then((program) => {
                                     this.selectedVersions = program.program_versions;
@@ -127,7 +127,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                             this.selectedVersion = cp;
                                         }
                                     });
-                                    if(this.selectedProgramVersionId == null) {
+                                    if (this.selectedProgramVersionId == null) {
                                         console.info('Nevybraná žádná verze - raději vyberu první!');
                                         this.onSelectedProgramVersionIdChange(program.program_versions[0].id);
                                     }
@@ -136,7 +136,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                 });
                         }
 
-                        if (this.type == 'IBlock') {
+                        if (this.type === 'IBlock') {
                             this.backendService.blockGet(this.selectedProgramId)
                                 .then((program) => {
                                     this.selectedVersions = program.versions;
@@ -146,7 +146,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                             this.selectedVersion = cp;
                                         }
                                     });
-                                    if(this.selectedProgramVersionId == null) {
+                                    if (this.selectedProgramVersionId == null) {
                                         console.info('Nevybraná žádná verze - raději vyberu první!');
                                         this.onSelectedProgramVersionIdChange(program.versions[0].id);
                                     }
@@ -155,7 +155,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                 });
                         }
 
-                        if (this.type == 'IWidget') {
+                        if (this.type === 'IWidget') {
                             this.backendService.widgetGet(this.selectedProgramId)
                                 .then((program) => {
                                     this.selectedVersions = program.versions;
@@ -165,7 +165,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                             this.selectedVersion = cp;
                                         }
                                     });
-                                    if(this.selectedProgramVersionId == null) {
+                                    if (this.selectedProgramVersionId == null) {
                                         console.info('Nevybraná žádná verze - raději vyberu první!');
                                         this.onSelectedProgramVersionIdChange(program.versions[0].id);
                                     }
@@ -193,7 +193,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
 
     public onSelectedProgramGetVersion() {
         console.info('onSelectedProgramGetVersion');
-        if(this.type == 'ICProgram') {
+        if (this.type === 'ICProgram') {
             this.backendService.cProgramGet(this.selectedProgramId)
                 .then((program) => {
                     this.selectedVersions = program.program_versions.filter((version) => {
@@ -206,15 +206,15 @@ export class ProgramVersionSelectorComponent implements OnInit {
                         }
                     });
 
-                    if(this.selectedProgramVersionId == null) {
-                        console.info('Nevybraná žádná verze - raději vyberu první!')
+                    if (this.selectedProgramVersionId == null) {
+                        console.info('Nevybraná žádná verze - raději vyberu první!');
                     }
                 })
                 .catch(reason => {
                 });
         }
 
-        if(this.type == 'IGridProgram') {
+        if (this.type === 'IGridProgram') {
             this.backendService.gridProgramGet(this.selectedProgramId)
                 .then((program) => {
                     this.selectedVersions = program.program_versions;
@@ -225,15 +225,15 @@ export class ProgramVersionSelectorComponent implements OnInit {
                         }
                     });
 
-                    if(this.selectedProgramVersionId == null) {
-                        console.info('Nevybraná žádná verze - raději vyberu první!')
+                    if (this.selectedProgramVersionId == null) {
+                        console.info('Nevybraná žádná verze - raději vyberu první!');
                     }
                 })
                 .catch(reason => {
                 });
         }
 
-        if(this.type == 'IBlock') {
+        if (this.type === 'IBlock') {
             this.backendService.blockGet(this.selectedProgramId)
                 .then((program) => {
                     this.selectedVersions = program.versions;
@@ -244,15 +244,15 @@ export class ProgramVersionSelectorComponent implements OnInit {
                         }
                     });
 
-                    if(this.selectedProgramVersionId == null) {
-                        console.info('Nevybraná žádná verze - raději vyberu první!')
+                    if (this.selectedProgramVersionId == null) {
+                        console.info('Nevybraná žádná verze - raději vyberu první!');
                     }
                 })
                 .catch(reason => {
                 });
         }
 
-        if(this.type == 'IWidget') {
+        if (this.type === 'IWidget') {
             this.backendService.widgetGet(this.selectedProgramId)
                 .then((program) => {
                     this.selectedVersions = program.versions;
@@ -263,8 +263,8 @@ export class ProgramVersionSelectorComponent implements OnInit {
                         }
                     });
 
-                    if(this.selectedProgramVersionId == null) {
-                        console.info('Nevybraná žádná verze - raději vyberu první!')
+                    if (this.selectedProgramVersionId == null) {
+                        console.info('Nevybraná žádná verze - raději vyberu první!');
                     }
                 })
                 .catch(reason => {
@@ -275,7 +275,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
     onSelectedProgramIdChange(newValue: string) {
         console.info('onSelectedProgramIdChange:: value', newValue);
 
-        if(newValue === null) {
+        if (newValue === null) {
             console.error('onSelectedProgramIdChange:: value is null!');
             return;
         }

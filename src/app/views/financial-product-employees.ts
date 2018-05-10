@@ -4,10 +4,10 @@
  */
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {IProduct, IEmployee, IProductExtension, IProjectParticipant} from '../backend/TyrionAPI';
+import { IProduct, IEmployee, IProductExtension, IProjectParticipant } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import {ModalsConfirmModel} from "../modals/confirm";
-import {ModalsMembersAddModel} from "../modals/members-add";
+import { ModalsConfirmModel } from '../modals/confirm';
+import { ModalsMembersAddModel } from '../modals/members-add';
 
 
 @Component({
@@ -21,6 +21,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
     routeParamsSubscription: Subscription;
 
     product: IProduct = null;
+    selfId: string = null;
 
     constructor(injector: Injector) {
         super(injector);
@@ -28,6 +29,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
 
     ngOnInit(): void {
         this.blockUI();
+        this.selfId = this.tyrionBackendService.personInfoSnapshot.id;
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params['product'];
             this.refresh();

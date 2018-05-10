@@ -5,10 +5,10 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IGitHubReleases, IServerUpdate, IServerUpdates } from '../backend/TyrionAPI';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import * as moment from 'moment';
-import {IMyDpOptions} from "mydatepicker";
+import { IMyDpOptions } from 'mydatepicker';
 
 @Component({
     selector: 'bk-view-admin-tyrion',
@@ -101,7 +101,7 @@ export class TyrionComponent extends _BaseMainComponent implements OnInit {
         complete_date.setHours(time[0]);
         complete_date.setMinutes(time[1]);
 
-        console.log("ON TIME ", complete_date.getTime());
+        // console.log('ON TIME ', complete_date.getTime());
 
         this.tyrionBackendService.serverUpdateServerComponent({
             version: this.form.controls['version'].value,

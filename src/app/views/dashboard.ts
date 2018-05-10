@@ -5,15 +5,11 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {
-    IApplicableProduct, IArticle, IArticleFilter, IArticleList, IHardwareType,
-    IProject
-} from '../backend/TyrionAPI';
+import { IArticle, IArticleList, IProject } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs/Rx';
-import {ModalsAddHardwareModel} from "../modals/add-hardware";
-import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
-import {ModalsArticleModel} from "../modals/article";
-import {ModalsRemovalModel} from "../modals/removal";
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsArticleModel } from '../modals/article';
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -34,8 +30,6 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
     create_article_permission: boolean = false;
 
     projectsUpdateSubscription: Subscription;
-
-
 
     constructor(injector: Injector) {
         super(injector);
@@ -168,7 +162,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_article_remove')));
                         this.unblockUI();
-                       this.onFilterArticle();
+                        this.onFilterArticle();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_article'), reason));
