@@ -372,6 +372,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });*/
     }
 
+    registerBlockRemovedCallback(callback: (block: BlockoCore.Block) => void): void {
+        this.blocko.core.registerBlockRemovedCallback(callback);
+    }
+
     registerAddBlockCallback(callback: (callback: (block: BlockoCore.Block) => void) => void): void {
         this.blocko.registerAddBlockCallback(callback);
     }
