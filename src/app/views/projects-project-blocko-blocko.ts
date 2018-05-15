@@ -351,7 +351,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 let gridProject = {};
                 for (let key in model.selectedGridProgramVersions) {
                     if (model.selectedGridProgramVersions.hasOwnProperty(key)) {
-                        gridProject[key] = model.selectedGridProgramVersions[key].version;
+                        gridProject[key] = model.selectedGridProgramVersions[key].version.id;
                     }
                 }
 
