@@ -31,7 +31,38 @@
             (onChange)="onFilterChange($event)" style="padding: 0 0 0 0">
         </bk-filter-component>
 
-        <div [hidden]="modalModel.selectedBlock != null">
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+            [show_title]="false"
+            (onTabClick)="onToggleTab($event)"
+            [tab_selected_name]="tab"
+            [tabBtns]="[
+                            {
+                                tab_name: 'filter_blocks',
+                                condition: (true),
+                                permission: true,
+                                tab_color: 'CODE',
+                                tab_label: ('tab_filter_blocks'|bkTranslate:this)
+                            },
+                            {
+                                tab_name: 'debug_blocks',
+                                condition: (true),
+                                permission: true,
+                                tab_color: 'CODE',
+                                tab_label: ('tab_debug_blocks'|bkTranslate:this)
+                            },
+                            {
+                                tab_name: 'logic_blocks',
+                                condition: (project_id == null),
+                                permission: true,
+                                tab_color: 'CODE',
+                                tab_label: ('tab_logic_blocks'|bkTranslate:this)
+                            }
+                    ]">
+        </bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+        <div [hidden]="!(modalModel.selectedBlock == null && tab == 'filter_blocks')">
 
             <div *ngIf="(blocks && blocks.content.length)" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
@@ -79,20 +110,99 @@
                 <bk-filter-page-component [from]="blocks.from" [to]="blocks.to"
                                           [total]="blocks.total" [totalPages]="blocks.pages"
                                           (onSelect)="onFilterBlocks($event)"></bk-filter-page-component>
-            </div>
 
-            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-            <bk-nothing-to-show [condition_loading]="(blocks == null)"
-                                [condition_empty]="(blocks != null && blocks.content.length == 0)"
-                                [main_message_link]="'label_no_blocks'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_blocks_comment'|bkTranslate:this"
-                                [show_button]="false">
-            </bk-nothing-to-show>
-            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+                <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                <bk-nothing-to-show [condition_loading]="(blocks == null)"
+                                    [condition_empty]="(blocks != null && blocks.content.length == 0)"
+                                    [main_message_link]="'label_no_blocks'|bkTranslate:this"
+                                    [main_message_comment_link]="'label_no_blocks_comment'|bkTranslate:this"
+                                    [show_button]="false">
+                </bk-nothing-to-show>
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+            </div>
         </div>
 
+
+        <!-- !-->
+
+        <div *ngIf="tab == 'logic_blocks'">
+            <div *ngIf="(logic_blocks && logic_blocks.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let block of logic_blocks">
+                        <td class="vert-align no-wrap"><a (click)="onSelectBlockClick(block)">{{block.name}}</a></td>
+                        <td class="vert-align">{{block.description}}</td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_properties'|bkTranslate:this)"
+                                [btns]="[
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_select_code'|bkTranslate:this),
+                                                btn_tag: 'label_select_debug_block',
+                                                icon: 'fa-check',
+                                                colorType: 'CREATE',
+                                                permission: true
+                                            }
+                                        ]"
+                                (onValueChanged)="onDrobDownEmiter($event, block)">
+                            </bk-drob-down-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="tab == 'debug_blocks'">
+            <div *ngIf="(debug_blocks && debug_blocks.length)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let block of debug_blocks">
+                        <td class="vert-align no-wrap"><a (click)="onSelectBlockClick(block)">{{block.name}}</a></td>
+                        <td class="vert-align">{{block.description}}</td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_properties'|bkTranslate:this)"
+                                [btns]="[
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_select_code'|bkTranslate:this),
+                                                btn_tag: 'label_select_debug_block',
+                                                icon: 'fa-check',
+                                                colorType: 'CREATE',
+                                                permission: true
+                                            }
+                                        ]"
+                                (onValueChanged)="onDrobDownEmiter($event, block)">
+                            </bk-drob-down-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
         <!-- Select Version -->
-        <div *ngIf="modalModel.selectedBlock">
+        <div *ngIf="modalModel.selectedBlock && tab == 'filter_blocks'">
             <div>
                 <bk-program-version-selector [programs]="[modalModel.selectedBlock]"
                                              [type]="'IBlock'"

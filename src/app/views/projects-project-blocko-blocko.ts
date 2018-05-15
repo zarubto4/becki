@@ -62,87 +62,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     show_console: boolean = false;
 
-
-    /* tslint:disable:max-line-length */
-    staticBlocks = [
-        {
-            id: 'logic_blocks',
-            name: 'Logic Blocks',
-            blocks: [
-                {
-                    name: 'NOT',
-                    blockoName: 'not',
-                    backgroundColor: 'rgb(161, 136, 127)'
-                },
-                {
-                    name: 'AND',
-                    blockoName: 'and',
-                    backgroundColor: 'rgb(161, 136, 127)'
-                },
-                {
-                    name: 'OR',
-                    blockoName: 'or',
-                    backgroundColor: 'rgb(161, 136, 127)'
-                },
-                {
-                    name: 'XOR',
-                    blockoName: 'xor',
-                    backgroundColor: 'rgb(161, 136, 127)'
-                }
-            ]
-        },
-        {
-            id: 'debug_blocks',
-            name: 'Debug Blocks',
-            blocks: [
-                {
-                    name: 'Switch',
-                    blockoName: 'switch',
-                    backgroundColor: 'rgb(204, 204, 255)'
-                },
-                {
-                    name: 'Push button',
-                    blockoName: 'pushButton',
-                    backgroundColor: 'rgb(204, 204, 255)'
-                },
-                {
-                    name: 'Digital output',
-                    blockoName: 'light',
-                    backgroundColor: 'rgb(204, 204, 255)'
-                },
-                {
-                    name: 'Analog input',
-                    blockoName: 'analogInput',
-                    backgroundColor: 'rgb(204, 255, 204)'
-                },
-                {
-                    name: 'Analog output',
-                    blockoName: 'analogOutput',
-                    backgroundColor: 'rgb(204, 255, 204)'
-                }
-            ]
-        },
-        {
-            id: 'ts_blocks',
-            name: 'TypeScript Blocks',
-            blocks: [
-                {
-                    name: 'All in one example',
-                    blockoDesignJson: '{\'displayName\':\'fa-font\',\'backgroundColor\':\'#32C5D2\',\'description\':\'All in one\'}',
-                    blockoTsCode: '// add inputs\nlet din = context.inputs.add(\'din\', \'digital\', \'Digital input\');\nlet ain = context.inputs.add(\'ain\', \'analog\', \'Analog input\');\nlet min = context.inputs.add(\'min\', \'message\', \'Message input\', [\'boolean\', \'integer\', \'float\', \'string\']);\n\n// add outputs\nlet mout = context.outputs.add(\'mout\', \'message\', \'Message output\', [\'string\']);\nlet aout = context.outputs.add(\'aout\', \'analog\', \'Analog output\');\nlet dout = context.outputs.add(\'dout\', \'digital\', \'Digital output\');\n\n// add config properties\nlet offset = context.configProperties.add(\'offset\', \'float\', \'Analog offset\', 12.3, {\n    min: 0,\n    max: 50,\n    step: 0.1,\n    range: true\n});\n\nlet refreshAnalogValue = () => {\n    aout.value = ain.value + offset.value;\n};\n\n// set outputs on block ready\ncontext.listenEvent(\'ready\', () => {\n    dout.value = !din.value;\n    refreshAnalogValue();\n});\n\n// refresh analog value when ain or offset config property changed\nain.listenEvent(\'valueChanged\', refreshAnalogValue);\noffset.listenEvent(\'valueChanged\', refreshAnalogValue);\n\ndin.listenEvent(\'valueChanged\', () => {\n    dout.value = !din.value;\n});\n\nmin.listenEvent(\'messageReceived\', (event) => {\n    let val3 = event.message.values[3];\n    mout.send([\'Received \' + val3]);\n});\n',
-                    backgroundColor: '#32C5D2'
-                },
-                {
-                    name: 'Analog to digital example',
-                    blockoDesignJson: '{\'displayName\':\'fa-line-chart\',\'backgroundColor\':\'#1BA39C\',\'description\':\'Analog to digital\'}',
-                    blockoTsCode: '// add input and output\nlet ain = context.inputs.add(\'ain\', \'analog\', \'Analog input\');\nlet dout = context.outputs.add(\'dout\', \'digital\', \'Digital output\');\n\n// add config properties for min a max value\nlet min = context.configProperties.add(\'min\', \'float\', \'Min\', 5, {\n    min: 0,\n    max: 100,\n    step: 0.1,\n    range: true\n});\nlet max = context.configProperties.add(\'max\', \'float\', \'Min\', 25, {\n    min: 0,\n    max: 100,\n    step: 0.1,\n    range: true\n});\n\n// function for refresh digital output value\nlet refreshOutput = () => {\n    dout.value = ((ain.value >= min.value) && (ain.value <= max.value));\n};\n\n// trigger refreshOutput function when block ready, ain and config value changed\ncontext.listenEvent(\'ready\', refreshOutput);\nain.listenEvent(\'valueChanged\', refreshOutput);\ncontext.configProperties.listenEvent(\'valueChanged\', refreshOutput);\n',
-                    backgroundColor: '#1BA39C'
-                }
-            ]
-        }
-    ];
-    /* tslint:enable */
-
     tab: string = 'ide';
     tab_under_ide: string = 'console';
 
@@ -183,7 +102,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     ngAfterViewInit(): void {
-        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
+        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib,
+            Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
 
         this.blockoView.registerAddBlockCallback(this.onAddBlock.bind(this));
         this.blockoView.registerAddGridCallback(this.onAddGrid.bind(this));
@@ -262,9 +182,16 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         let model = new ModalsSelectBlockModel(this.projectId);
         this.modalService.showModal(model)
             .then((success) => {
-                this.zone.runOutsideAngular(() => {
-                    callback(this.blockoView.getCoreBlock(model.selectedBlockVersion, model.selectedBlock));
-                });
+
+                if (model.selectedBlock) {
+                    this.zone.runOutsideAngular(() => {
+                        callback(this.blockoView.getCoreBlock(model.selectedBlockVersion, model.selectedBlock));
+                    });
+                } else if (model.selectedSpecialBlock) {
+                    this.zone.runOutsideAngular(() => {
+                        callback(this.blockoView.getStaticBlock(model.selectedSpecialBlock.blockoName));
+                    });
+                }
             })
             .catch((err) => {
 

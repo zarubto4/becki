@@ -4,20 +4,17 @@
  */
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {
-    ICompilationServer, IHomerServer, IHomerServerFilter, IHomerServerList, IProject, IResultOk,
+import { IHomerServer, IHomerServerList, IProject,
     IServerRegistrationFormData, IServerRegistrationFormDataServerRegion, IServerRegistrationFormDataServerSize
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import {RestRequest} from "../services/_backend_class/Responses";
-import {TyrionApiBackend} from "../backend/BeckiBackend";
+import { TyrionApiBackend } from '../backend/BeckiBackend';
 
 @Component({
     selector: 'bk-view-projects-project-server',

@@ -8,7 +8,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import {FormSelectComponentOption} from "../components/FormSelectComponent";
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 export class ModalsArticleModel extends ModalModel {
     constructor(
@@ -37,8 +37,8 @@ export class ModalsArticleComponent implements OnInit {
     form: FormGroup;
     article_options: FormSelectComponentOption[] = [
         {
-          value: 'general',
-          label: 'General'
+            value: 'general',
+            label: 'General'
         },
         {
             value: 'hardware',
