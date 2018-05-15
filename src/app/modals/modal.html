@@ -239,6 +239,9 @@
             <template [ngSwitchCase]="'ModalsArticleModel'">
                 <bk-modals-article [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-article>
             </template>
+            <template [ngSwitchCase]="'ModalsAddGSMModel'">
+                <bk-modals-add-gsm [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-add-gsm>
+            </template>
         </div>
     </div>
 </div>

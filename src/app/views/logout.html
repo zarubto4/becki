@@ -13,7 +13,7 @@
         <p class="text-center" *ngIf="logoutInProgress"> <i class="fa fa-3x fa-spinner fa-spin"></i> </p>
         <div class="create-account">
             <p>
-                <a [routerLink]="['/login']" class="uppercase">{{'label_log_in'|bkTranslate:this}}</a>
+                <a (click)="onLoginClick()" class="uppercase">{{'label_log_in'|bkTranslate:this}}</a>
             </p>
         </div>
     </form>

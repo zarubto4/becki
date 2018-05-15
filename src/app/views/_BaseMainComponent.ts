@@ -117,6 +117,14 @@ export abstract class _BaseMainComponent {
 
 // -- ON CLIC ----------------------------------------------------------------------------------------------------------------
 
+    public onProfileClick(): void {
+        this.navigate(['/profile']);
+    }
+
+    public onLogOutClick(): void {
+        this.navigate(['/logout']);
+    }
+
     public onFinanceClick(): void {
         this.navigate(['/financial']);
     }
@@ -128,7 +136,6 @@ export abstract class _BaseMainComponent {
     public onGarfieldListClick(): void {
         this.navigate(['/admin/garfield']);
     }
-
 
     public onRoleClick(role_id: string): void {
         this.navigate(['admin/permission-group', role_id]);
@@ -154,8 +161,8 @@ export abstract class _BaseMainComponent {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'hardware', device_id]);
     }
 
-    public onActualizationProcedureClick(procedure_id: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'actualization_procedure', procedure_id]);
+    public onActualizationProcedureClick(procedure_id?: string): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'actualization_procedures', procedure_id]);
     }
 
     public onLibraryAdminClick(library_id: string): void {
@@ -166,16 +173,16 @@ export abstract class _BaseMainComponent {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries', library_id]);
     }
 
-    public onCProgramClick(cProgram_id: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'code', cProgram_id]);
+    public onCProgramClick(cProgram_id: string, version_id?: string): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'code', cProgram_id, version_id]);
     }
 
     public onCProgramAdminClick(c_program_id: string): void {
         this.router.navigate(['/admin/hardware/code', c_program_id]);
     }
 
-    public onBProgramClick(bProgram_id: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgram_id]);
+    public onBProgramClick(bProgram_id: string, version_id?: string): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgram_id, version_id]);
     }
 
     public onDeviceClick_Admin(device_id: string): void {

@@ -1,0 +1,122 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [show_title]="false"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-signal'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                      {
+                          condition: (gsmList != null && gsmList.content.length > 0),
+                          btn_label_for_person: ('btn_add_gsm'|bkTranslate:this),
+                          icon: 'fa-plus-circle',
+                          colorType: 'ADD',
+                          permission: true,
+                          btn_tag: 'add_gsm'
+                      }
+                    ]"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name]="tab"
+    >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <div class="portlet-body">
+
+        <div *ngIf="tab == 'my_gsm'">
+            <div *ngIf="(gsmList != null && gsmList.content.length)"
+                 class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_msi_number'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_msi_status'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let gsm of gsmList.content">
+                        <td class="vert-align no-wrap">{{gsm.name ? gsm.name : gsm.id}}</td>
+                        <td class="vert-align">{{gsm.description}}</td>
+                        <td class="vert-align text-center no-wrap">{{gsm.msi_number}}</td>
+                        <td class="vert-align"></td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_gsm_properties'|bkTranslate:this)"
+                                [btns]="[
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_gsm_edit'|bkTranslate:this),
+                                            btn_tag: 'gsm_edit',
+                                            icon: 'fa-cog',
+                                            colorType: 'EDIT',
+                                            permission: (gsm.update_permission)
+                                        },
+                                        {
+                                            condition: (gsm.delete_permission),
+                                            btn_label_for_person: ('label_gsm_remove'|bkTranslate:this),
+                                            btn_tag: 'gsm_delete',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (gsm.delete_permission)
+                                        },
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_gsm_un_register'|bkTranslate:this),
+                                            btn_tag: 'gsm_un_register',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (gsm.un_registration_permission)
+                                        },
+                                        {
+                                            condition: (gsm.delete_permission),
+                                            btn_label_for_person: ('label_gsm_print_sticker'|bkTranslate:this),
+                                            btn_tag: 'gsm_print_sticker',
+                                            icon: 'fa-print',
+                                            colorType: 'ACTIVE',
+                                            permission: (gsm.delete_permission)
+                                        }
+
+                                    ]"
+                                (onValueChanged)="onDrobDownEmiter($event, code)"
+                            >
+                            </bk-drob-down-button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <bk-filter-page-component [from]="gsmList.from" [to]="gsmList.to"
+                                          [total]="gsmList.total" [totalPages]="gsmList.pages"
+                                          (onSelect)="onFilter($event)"></bk-filter-page-component>
+            </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(gsmList == null)"
+                                [condition_empty]="(gsmList != null && gsmList.content.length == 0)"
+                                [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59d793dea7327a00016b151f_code%20web%20small.png'"
+                                [main_message_link]="'label_no_gsm'|bkTranslate:this"
+                                [main_message_comment_link]="'label_no_gsm_comment'|bkTranslate:this"
+                                [btn_label]="'btn_add_gsm'|bkTranslate:this"
+                                (onButtonClick)="onAddClick()">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+        </div>
+
+    </div>
+
+</bk-layout-main>

@@ -190,7 +190,7 @@ import { ProjectsProjectInstancesComponent } from './views/projects-project-inst
 import { ProjectsProjectServersComponent } from './views/projects-project-servers';
 import { ModalsInstanceCreateComponent } from './modals/instance-create';
 import { ProjectsProjectBlockoComponent } from './views/projects-project-blocko';
-import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
+import { ProjectsProjectActualizationProceduresProcedureComponent } from './views/projects-project-actualization-procedures-procedure';
 import { TagComponent } from './components/TagComponent';
 import { ProjectsProjectCodeCodeComponent } from './views/projects-project-code-code';
 import { BlockoViewComponent } from './components/BlockoViewComponent';
@@ -222,6 +222,9 @@ import { ModalsGridProjectSelectComponent } from './modals/grid-project-select';
 import { ModalsBlockSelectComponent } from './modals/block-select';
 import { ArticleComponent } from './components/ArticleComponent';
 import { ModalsArticleComponent } from './modals/article';
+import { ProjectsProjectActualizationProceduresComponent } from './views/projects-project-actualization-procedures';
+import { ProjectsProjectGSMComponent } from './views/projects-project-gsm';
+import { ModalsAddGSMComponent } from './modals/add-gsm';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -269,17 +272,25 @@ let routes: Routes = [
     { path: 'projects/:project/hardware', data: { breadName: 'HARDWARE devices' }, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware/:hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
 
+    { path: 'projects/:project/actualization-procedures', data: { breadName: 'Actualization procedures' }, component: ProjectsProjectActualizationProceduresComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/actualization_procedures/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProceduresProcedureComponent, canActivate: [AuthGuard]},
+
+    { path: 'projects/:project/gsm', data: { breadName: 'CELLULAR modules' }, component: ProjectsProjectGSMComponent, canActivate: [AuthGuard]},
+
+
     { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
+
     { path: 'projects/:project/blocks', data: { breadName: 'BLOCKO blocks' }, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
     { path: 'projects/:project/code', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
+
     { path: 'projects/:project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
     // { path: 'projects/:project/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
 
-    { path: 'projects/:project/actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard]},
+
 
     { path: 'projects/:project/grid', data: { breadName: 'GRID projects' }, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
     { path: 'projects/:project/grid/:grids', data: { breadName: ':grids' }, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
@@ -370,7 +381,13 @@ let tabMenus = {
         new LabeledLink('Dashboard', ['/', 'projects', ':project'], null, { linkActiveExact: true }),
         new LabeledLink('Members', ['/', 'projects', ':project', 'members'], null),
         new LabeledLink(null, null),
-        new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', ['/', 'projects', ':project', 'hardware'], null, { styleClass: 'color-hardware' }),
+        new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', null, null, {
+            styleClass: 'color-hardware', items: [
+                new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong> list', ['/', 'projects', ':project', 'hardware'], null),
+                new LabeledLink('<strong class="font-color-hardware">RELEASES</strong> updates', ['/', 'projects', ':project', 'actualization-procedures'], null),
+                new LabeledLink('<strong class="font-color-hardware">CELLULAR</strong> modules', ['/', 'projects', ':project', 'gsm'], null),
+            ]
+        }),
         new LabeledLink('<strong class="font-color-code">CODE</strong>', null, null, {
             styleClass: 'color-code', items: [
                 new LabeledLink('<strong class="font-color-code">CODE</strong> programs', ['/', 'projects', ':project', 'code'], null),
@@ -588,6 +605,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProductRegistrationComponent,
         ProjectsProjectInstancesComponent,
         ProjectsProjectInstancesInstanceComponent,
+        ProjectsProjectGSMComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
         ProjectsProjectMembersComponent,
@@ -606,7 +624,8 @@ class BeckiErrorHandler implements ErrorHandler {
         MobileAddHardwareComponent,
         SupportComponent,
         CompilationStatusComponent,
-        ProjectsProjectActualizationProcedureComponent,
+        ProjectsProjectActualizationProceduresComponent,
+        ProjectsProjectActualizationProceduresProcedureComponent,
         FirmwareTypeComponent,
         // Modals components
         ModalsLogLevelComponent,
@@ -686,6 +705,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsGridProjectSelectComponent,
         ModalsBlockSelectComponent,
         ModalsArticleComponent,
+        ModalsAddGSMComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

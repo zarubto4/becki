@@ -62,11 +62,11 @@
                         </a>
                         <ul class="dropdown-menu" [style.display]="showUserMenu?'block':'none'">
                             <li>
-                                <a [routerLink]="['/profile']">
+                                <a (click)="onProfileClick()">
                                     <i class="icon-settings"></i> {{'label_profile'|bkTranslate:this}}</a>
                             </li>
                             <li>
-                                <a [routerLink]="['/logout']">
+                                <a (click)="onLogOutClick()">
                                     <i class="icon-key"></i> {{'label_log_out'|bkTranslate:this}}</a>
                             </li>
                         </ul>

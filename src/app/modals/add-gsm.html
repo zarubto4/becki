@@ -1,0 +1,102 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
+    </div>
+
+    <div *ngIf="step==null" class="row tiles" style="width: auto !important; margin-left: 10px !important; margin-right: 10px !important; margin-top: 20px !important; margin-bottom: 20px !important;">
+
+        <div class="col-md-6 text-center">
+            <a (click)="set_singleRegistration()" style="text-decoration: none !important;">
+                <div class="tile double byzance-blue" style="width: auto !important; float: none !important;">
+                    <div class="tile-body">
+                        <i class="fa fa-signal medium"></i>
+                    </div>
+                    <div class="tile-object">
+                        <div class="name" style="position: relative !important;">{{'label_single_registration'|bkTranslate:this}}</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div (click)="set_multipleRegistration()" class="col-md-6 text-center">
+            <a style="text-decoration: none !important;">
+                <div class="tile double bg-blue-hoki" style="width: auto !important; float: none !important;">
+                    <div class="tile-body">
+                        <i class="fa fa-signal"></i>
+                    </div>
+                    <div class="tile-object">
+                        <div class="name" style="position: relative !important;">
+                            <span [innerHTML]="'label_multiple_registration'|bkTranslate:this"></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+
+    <div *ngIf="step=='singleRegistration'" style="width: auto !important; margin-left: 10px !important; margin-right: 10px !important; margin-top: 20px !important;">
+        <div class="modal-body">
+            <form [formGroup]="form">
+
+                <bk-form-input [control]="form.controls.id" [placeholder]="'label_hash_token_label'|bkTranslate:this" [label]="'label_hash_token'|bkTranslate:this" (valueChange)="onChangeIndividualHashValue($event)"></bk-form-input>
+                 <div *ngIf="single_error_status != null" class="text-center">
+                    <span *ngIf="single_error_status == 'CAN_REGISTER'" class="font-green-jungle bold">{{'Ready to register'}}</span>
+                    <span *ngIf="single_error_status == 'ALREADY_REGISTERED_IN_YOUR_ACCOUNT'" class="font-yellow-casablanca bold">{{'Already Registered in this project'}}</span>
+                    <span *ngIf="single_error_status == 'ALREADY_REGISTERED'" class="font-red-flamingo bold">{{'Already Registered - Cannot registered again!'}}</span>
+                    <span *ngIf="single_error_status == 'PERMANENTLY_DISABLED'" class="font-red-flamingo bold">{{'Device is permanently blocked. Please Contact Technical support'}}</span>
+                    <span *ngIf="single_error_status == 'BROKEN_DEVICE'" class="font-red-flamingo bold">{{'Device is Broken'}}</span>
+                    <span *ngIf="single_error_status == 'NOT_EXIST'" class="font-red-flamingo bold">{{'Not Found...'}}</span>
+                    <br>
+                    <br>
+                 </div>
+
+                <div *ngIf="single_error_message != null">
+                    <span class="font-red bold">{{single_error_message}}</span>
+                </div>
+            </form>
+            <br>
+            <br>
+        </div>
+    </div>
+
+
+    <div *ngIf="step=='multipleRegistration'" style="width: auto !important; margin-left: 10px !important; margin-right: 10px !important; margin-top: 20px !important;">
+        <div class="modal-body">
+            <form [formGroup]="multiForm">
+                <bk-form-text-area [control]="multiForm.controls.listOfIds" [row]="6" [cols]="250" [placeholder]="'xxxxxxx; yyyyyyyy; ... '"
+                    [label]="'label_hash_tokens'|bkTranslate:this"></bk-form-text-area>
+                <br>
+            </form>
+            <br>
+            <div *ngIf="afterFirstConfirm">
+                <hr>
+                <h3 class="text-center">Registration Result <i *ngIf="inprogress" class="fa fa-spinner fa-spin"></i></h3>
+                <div>
+                    <div>
+                        <span>
+                            <i class="font-green-jungle fa fa-check"></i> {{'label_successfully_registered'|bkTranslate:this}}: </span>
+                        <bk-form-text-area [control]="deviceInfoTextForm.controls['successfulGSMs']" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
+                    </div>
+                    <br>
+                    <br>
+                    <div>
+                        <span>
+                            <i class="font-red-thunderbird fa fa-warning"></i> {{'label_failed_to_register'|bkTranslate:this}}: </span>
+                        <bk-form-text-area [control]="deviceInfoTextForm.controls['failedGSMs']" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+
+
+    <div *ngIf="step" class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" [disabled]="!((multiForm.valid)||(form.valid)) || inprogress" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
+    </div>
+</div>

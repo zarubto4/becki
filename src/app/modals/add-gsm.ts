@@ -7,30 +7,29 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IHardware, IHardwareGroupList, IResultBadRequest } from '../backend/TyrionAPI';
+import { IGSM, IHardware, IHardwareGroupList, IResultBadRequest } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessage } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
 
 
-export class ModalsAddHardwareModel extends ModalModel {
+export class ModalsAddGSMModel extends ModalModel {
     constructor(
-        public project_id: string,
-        public deviceGroup: IHardwareGroupList = null
+        public project_id: string
     ) {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-add-hardware',
-    templateUrl: './add-hardware.html'
+    selector: 'bk-modals-add-gsm',
+    templateUrl: './add-gsm.html'
 })
-export class ModalsAddHardwareComponent  implements OnInit {
+export class ModalsAddGSMComponent  implements OnInit {
 
     @Input()
-    modalModel: ModalsAddHardwareModel;
+    modalModel: ModalsAddGSMModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -44,15 +43,12 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
     deviceInfoTextForm: FormGroup;
 
-    registeredDevices: string[] = [];
-    failedDevices: string[] = [];
+    registeredGSMs: string[] = [];
+    failedGSMs: string[] = [];
 
     afterFirstConfirm: boolean = false;
 
-    multiSelectedHardwareGroups: string[] = null;
-
     step: string = null;
-    group_options_available: FormSelectComponentOption[] = []; // Select Groups
 
     @ViewChild('groupList')
     listGroup: MultiSelectComponent;
@@ -61,7 +57,7 @@ export class ModalsAddHardwareComponent  implements OnInit {
     single_error_message: string = null;
 
 
-    devicesForRegistration: string[] = null;
+    GSMsForRegistration: string[] = null;
     inprogress: boolean = false;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
@@ -74,8 +70,8 @@ export class ModalsAddHardwareComponent  implements OnInit {
         });
 
         this.deviceInfoTextForm = this.formBuilder.group({
-            'successfulDevices': ['', []],
-            'failedDevices': ['', []],
+            'successfulGSMs': ['', []],
+            'failedGSMs': ['', []],
         });
     }
 
@@ -89,13 +85,6 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
     ngOnInit() {
 
-        this.group_options_available = this.modalModel.deviceGroup.content.map((pv) => {
-            return {
-                label: pv.name,
-                value: pv.id
-            };
-        });
-
         (<FormControl>(this.form.controls['id'])).setValue('');
         (<FormControl>(this.multiForm.controls['listOfIds'])).setValue('');
 
@@ -106,9 +95,9 @@ export class ModalsAddHardwareComponent  implements OnInit {
      * @param hw_value
      * @returns {(control:FormControl)=>Promise<T>}
      */
-    onChangeIndividualHashValue(hw_value: string) {
+    onChangeIndividualHashValue(value: string) {
         this.single_error_status = null;
-        this.backendService.boardCheckRegistrationStatus(hw_value, this.modalModel.project_id)
+        this.backendService.simCheckRegistrationStatus(value, this.modalModel.project_id)
             .then((result) => {
                 // CAN_REGISTER, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE
                 this.single_error_status = result.status;
@@ -121,14 +110,10 @@ export class ModalsAddHardwareComponent  implements OnInit {
     sequenceRegistration() {
 
         console.info('Console Registration');
-        this.devicesForRegistration = null;
+        this.GSMsForRegistration = null;
 
-        this.registeredDevices = [];
-        this.failedDevices = [];
-
-        if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.content.length > 0) {
-            this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
-        }
+        this.registeredGSMs = [];
+        this.failedGSMs = [];
 
         this.inprogress = true;
 
@@ -139,12 +124,12 @@ export class ModalsAddHardwareComponent  implements OnInit {
         data = data.replace(/(\r?\n|\r)*(\s)*/g, '');
 
 
-        console.info('Result P5ed splitem: ', data);
-        let devicesForRegistration: string[] = data.split(';');
+        console.info('Result Pred splitem: ', data);
+        let GSMsForRegistration: string[] = data.split(';');
 
-        console.info('Result list:', devicesForRegistration);
-        this.devicesForRegistration = devicesForRegistration.filter(device => device.length > 20);
-        console.info('Result list:',  this.devicesForRegistration);
+        console.info('Result list:', GSMsForRegistration);
+        this.GSMsForRegistration = GSMsForRegistration.filter(device => device.length > 20);
+        console.info('Result list:',  this.GSMsForRegistration);
 
 
         this.sequenceRegistrationPromise(0);
@@ -154,33 +139,30 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
     sequenceRegistrationPromise(pointer: number) {
 
-        if (pointer >= this.devicesForRegistration.length) {
+        if (pointer >= this.GSMsForRegistration.length) {
             this.inprogress = false;
             return;
         }
 
-        // console.info("Registurji number: ", pointer, "Pole: ", this.devicesForRegistration[pointer]);
-
-        this.backendService.projectAddHW({
-            group_ids: this.multiSelectedHardwareGroups,
-            registration_hash: this.devicesForRegistration[pointer],
+        this.backendService.simRegister({
+            registration_hash: this.GSMsForRegistration[pointer],
             project_id: this.modalModel.project_id
         })
-            .then((device: IHardware) => {
+            .then((gsm: IGSM) => {
 
-                console.error('Podařilo se ', device.id );
+                console.error('Podařilo se ', gsm.id );
 
-                this.registeredDevices.push(device.id + ' - Success');
-                this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registeredDevices.join(',  \n'));
+                this.registeredGSMs.push(gsm.msi_number + ' - Success');
+                this.deviceInfoTextForm.controls['successfulGSMs'].setValue(this.registeredGSMs.join(',  \n'));
 
                 this.sequenceRegistrationPromise(++pointer);
 
             })
             .catch((reason: IResultBadRequest) => {
-                console.error('Nepodařilo se pro ', this.devicesForRegistration[pointer], ' důvod?', reason.message);
+                console.error('Nepodařilo se pro ', this.GSMsForRegistration[pointer], ' důvod?', reason.message);
 
-                this.failedDevices.push(this.devicesForRegistration[pointer] + ': ' + reason.message);
-                this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
+                this.failedGSMs.push(this.GSMsForRegistration[pointer] + ': ' + reason.message);
+                this.deviceInfoTextForm.controls['failedGSMs'].setValue(this.failedGSMs.join(',  \n'));
 
                 this.sequenceRegistrationPromise(++pointer);
             });
@@ -188,19 +170,10 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
 
 
-
-
-
     singleRegistration() {
-
         this.single_error_message = null;
 
-        if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.content.length > 0) {
-            this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
-        }
-
-        this.backendService.projectAddHW({
-            group_ids: this.multiSelectedHardwareGroups,
+        this.backendService.simRegister({
             registration_hash: this.form.controls['id'].value,
             project_id: this.modalModel.project_id
         })

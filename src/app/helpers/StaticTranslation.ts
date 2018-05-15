@@ -17,9 +17,20 @@ export class StaticTranslation {
                 'label_payment_method_required': 'Payment mode required (User have to select a mode.)',
                 'label_credit_for_beginning': 'Pre-Paid Credit for user at the beginning 1USD == 1000 !!!!!',
                 'label_icon': 'FA-ICON (http://fontawesome.io/)',
+
+            }, 'ModalsAddGSMComponent': {
+                'title': '<strong class="font-color-hardware">CELLULAR</strong> registration',
+                'label_successfully_registered': '2. Successfully registered',
+                'label_failed_to_register': '3. Failed to register',
+                'label_hash_token': 'Hash Token',
+                'label_hash_tokens': '1. Hash Tokens',
+                'label_multiple_registration': 'Multiple Registration <br> (From B2B Invoices, Files etc.)',
+                'label_single_registration': 'Single Registration (QR - code)',
+                'label_hash_token_label': 'Hash Token from Label',
+
             }, 'ModalsAddHardwareComponent': {
                 'title': '<strong class="font-color-hardware">Hardware</strong> registration',
-                'label_successfully_registered': '2. Successfully registred',
+                'label_successfully_registered': '2. Successfully registered',
                 'label_failed_to_register': '3. Failed to register',
                 'label_hash_token': 'Hash Token',
                 'label_hash_tokens': '1. Hash Tokens',
@@ -27,7 +38,7 @@ export class StaticTranslation {
                 'label_no_hardware_groups': 'Not Available any <strong class="font-color-hardware">Hardware Groups</strong>',
                 'label_hash_token_label': 'Hash Token from Label',
                 'label_multiple_registration': 'Multiple Registration <br> (From B2B Invoices, Files etc.)',
-                'label_single_registration': 'Single Registration (QR)',
+                'label_single_registration': 'Single Registration (QR - code)',
                 'label_little_advice': 'Little Advice',
                 'label_advice_single_registration': '<p><strong>You will find HashToken on the sticker on Hardware</strong></p> <br> <p> If you own a smart-phone with camera <strong>(That\'s the thing that girls do with selfie. True gourmets can also use tablet.)</strong>, you can sign in to the portal and quickly and easily capture the QR code sticker on the Hardware.</p> <br> <p> Trust us, it\'s much more comfortable...</p>',
                 'label_advice_multiple_registration': '<p> For register new <strong class="font-color-hardware">Hardware</strong> to this project, upload a text file below or insert text. The file or text should contain a list of device registration hash, where each key is separated by a semicolon. The spaces will be ignored. </p> <br><p><strong>Example: </strong> XXXXXXX; YYYYYYY;BBBBBB;  CCCCCC;DDDDD;</p><br><p> Each hash is sequentially registered. If a problem occurs - we\'ll show you which key is not valid and why. Attention - Multiple <strong>unsuccessful</strong> registration is flagged as a security breach attempt and your account may be blocked.</p><p>HASH keys are remove from list number 1, and registered one by one. If Registration is <strong>successful</strong> - HASH key will be entered in list number 2. If an <span class="font-red-flamingo bold">error has occurred</span> - the HASH key is not removed from list 1 and a reason "why" is entered in list number 3.</p>',
@@ -1326,12 +1337,9 @@ export class StaticTranslation {
                 'label_activate_hardware': 'Activate for project',
                 'label_foreign_project': 'Active in Foreign project <br> without Access',
                 'label_project_not_active': 'Freeze',
-                'label_release_documentation_description': '<p>Here you can create group orders. For example, update hardware in <strong>"North Korea"</strong> or execute <strong><a target="_blank" href="https://www.youtube.com/watch?v=xSN6BOgrSSU">order 66</a></strong>.<p/><p class="text-center"> Heavy times for the republic..</p>',
-
                 'tab_hardware_list': 'Hardware List',
                 'tab_hardware_groups': 'Hardware Groups',
                 'tab_updates': 'Updates',
-
                 'label_hardware_group_documentation_description': '<p>Hardware can be registered to any number of groups. Using groups, you can more easily filter hardware.</p><br><p class="text-center"> <span class="text-center">Import it. Export. Create statistics. And other miracles.<br> But only if we have already implemented it.</p><br><p class="text-center">Trololo...</p>',
 
                 'table_description': 'Description',
@@ -1382,6 +1390,52 @@ export class StaticTranslation {
                 'table_connection_confirmed': 'Connected',
                 'label_select_logLevel': 'Select Log Level',
                 'label_select_color': 'Select Log Color',
+            }, 'ProjectsProjectActualizationProceduresComponent' : {
+
+                'title': 'Project <strong class="font-color-hardware">UPDATES</strong> Overview',
+                'label_loading': 'Loading',
+                'label_name': 'Name',
+                'label_id': 'Full ID',
+                'label_description': 'Description',
+                'label_type': '<strong class="font-color-hardware">Hardware</strong> Type',
+                'label_status': 'Status',
+                'label_actions': 'Actions',
+                'btn_add_new_update': 'Release Firmware',
+                'label_cancel_update': 'Stop Procedure',
+                'label_change_update_parameters': 'Change Configuration (TODO)',
+                'label_no_updates': 'No <strong class="font-color-code">FIRMWARE </strong> release',
+                'label_no_updates_comment': 'Click on the button bellow to update <strong class="font-color-hardware">HARDWARE</strong>, or <strong class="font-color-hardware">Hardware Groups</strong>.',
+                'label_device_properties': 'Device properties',
+                'label_settings': 'Settings',
+                'label_set_hardware_group': 'Set Hardware Groups',
+                'label_blink_hardware': 'Blink',
+                'label_remove_device': 'Remove permanently',
+                'label_time_missing_in_json': 'Not Yet',
+
+                'label_project_not_active': 'Freeze',
+                'label_release_documentation_description': '<p>Here you can create group orders. For example, update hardware in <strong>"North Korea"</strong> or execute <strong><a target="_blank" href="https://www.youtube.com/watch?v=xSN6BOgrSSU">order 66</a></strong>.<p/><p class="text-center"> Heavy times for the republic..</p>',
+                'tab_hardware_list': 'Hardware List',
+                'tab_hardware_groups': 'Hardware Groups',
+                'tab_updates': 'Updates',
+
+                'table_description': 'Description',
+                'table_id': 'Updates',
+                'table_update_id': 'Update HASH',
+                'table_project_status': 'Project Assign',
+                'table_finished': 'Finished',
+                'table_created': 'Created',
+                'table_planed': 'Planed',
+                'table_program': 'Program',
+                'table_version': 'Version',
+                'table_status': 'Status',
+                'table_details': 'Additional Details',
+                'table_update_state': 'Update State',
+                'table_firmware_type': 'Firmware Type',
+                'table_update_progress': 'Progress',
+                'table_update_type': 'Who initiated the update',
+                'table_hardware_group_name': 'Group Name',
+                'table_groups': 'Groups',
+                'table_actions': 'Actions',
 
             }, 'ProjectsProjectHardwareHardwareComponent': {
 
@@ -1527,6 +1581,25 @@ export class StaticTranslation {
                 'btn_create_manually_server': 'Register Server Entity',
                 'btn_create_server': 'Create Server',
                 'btn_create_automatically_server': ' Create SaaS Server',
+
+            }, 'ProjectsProjectGSMComponent': {
+
+                'title': 'Byzance<strong class="font-color-hardware">CELLULAR</strong> Modules',
+                'label_no_gsm': 'No <strong class="font-color-hardware">CELLULAR</strong> Modules',
+                'label_no_gsm_comment': 'You have not registered any CELLULAR modules yet. It\'s time to pull out a credit card and buy some.',
+                'btn_add_gsm': 'Register New Module',
+                'table_msi_number': 'MSI Number',
+                'table_id': 'ID',
+                'table_name': 'Name',
+                'table_msi_status': 'CELLULAR status',
+                'table_description': 'Description',
+                'table_status': 'Status',
+                'table_actions': 'Actions',
+                'label_gsm_properties': 'Properties',
+                'label_gsm_edit': 'Edit',
+                'label_gsm_remove': 'Remove',
+                'label_gsm_un_register': 'Un Register',
+                'label_gsm_print_sticker': 'Print Sticker',
 
             }, 'ProjectsProjectInstancesComponent': {
 

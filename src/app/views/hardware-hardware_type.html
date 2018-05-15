@@ -89,11 +89,11 @@
                     </div>
                     <div>
                         {{'label_producer'|bkTranslate:this}}:
-                        <a [routerLink]="['/producers', hardwareType.producer_id]" class="bold">{{hardwareType.producer_name}}</a>
+                        <a (click)="onProducerClick(hardwareType.producer.id)" class="bold">{{hardwareType.producer.name}}</a>
                     </div>
                     <div>
                         {{'label_processor'|bkTranslate:this}}:
-                        <span class="font-color-neutral-dark bold">{{hardwareType.processor_name}}</span>
+                        <span class="font-color-neutral-dark bold">{{hardwareType.processor.name}}</span>
                     </div>
                     <div>
                         {{'label_target_name'|bkTranslate:this}}:
@@ -276,7 +276,7 @@
                             <tr *ngFor="let version of hardwareType.main_c_program.program_versions">
                                 <!-- NAME -->
                                 <td class="no-wrap vert-align bold">
-                                    <a [routerLink]="[hardwareType.main_c_program.id]">
+                                    <a (click)="onCProgramAdminClick(hardwareType.main_c_program.id)">
                                         {{version.name}}
                                     </a>
                                 </td>
@@ -407,7 +407,7 @@
                             <tr *ngFor="let version of hardwareType.main_test_c_program.program_versions">
                                 <!-- NAME -->
                                 <td class="vert-align bold no-wrap">
-                                    <a [routerLink]="[hardwareType.main_test_c_program.id]">
+                                    <a (click)="onCProgramAdminClick(hardwareType.main_test_c_program.id)">
                                         {{version.name}}
                                     </a>
                                 </td>
