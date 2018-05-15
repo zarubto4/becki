@@ -64,6 +64,8 @@ export class StaticTranslation {
                 'title': 'News Editor',
                 'label_name': 'Name',
                 'label_description': 'Description',
+                'mark_down_text': 'Text In Markdown',
+                'label_select': 'Select Article Group',
             }, 'ModalsPublicShareResponseComponent': {
                 'title': 'Publishing decisions',
                 'label_program_additional_comment': 'If the user shares a new version of the same program as before, the program (not version) will be named the same as the one which has already been used since the previous approval.',
@@ -1257,6 +1259,8 @@ export class StaticTranslation {
                 'filter_public_programs': 'Public Programs',
                 'filter_private_programs': 'My Own',
                 'filter_hardware_type': '<strong class="font-color-hardware">HARDWARE</strong>Type',
+                'label_no_code': 'No <strong class="font-color-code">CODE</strong> Programs',
+                'label_no_code_comment': 'Unfortunately we did not find anything... We came to the same conclusion as in your live...',
 
             }, 'ModalsBlockSelectComponent': {
 
@@ -1268,6 +1272,9 @@ export class StaticTranslation {
                 'filter_public_block': 'Public',
                 'filter_private_block': 'Own Blocks',
                 'table_public_type': 'Type',
+                'label_no_blocks': 'No <strong class="font-color-blocko">BLOCKS</strong>',
+                'label_no_blocks_comment': 'We found nothing... same result as the search for your friends...',
+
 
             }, 'ModalsGridProjectSelectComponent': {
 
@@ -1511,7 +1518,7 @@ export class StaticTranslation {
 
                 'label_select_size': 'Select Server Size',
                 'label_select_destination': 'Choose a datacenter region',
-                'btn_create_manually_server': 'Create Server API',
+                'btn_create_manually_server': 'Register Server Entity',
                 'btn_create_server': 'Create Server',
                 'btn_create_automatically_server': ' Create SaaS Server',
 
@@ -1987,12 +1994,14 @@ export class StaticTranslation {
                 'label_remove_device': 'Remove device',
                 'label_block_code_change': 'Block code has been changed, you must test the program first, then save it.',
 
+                'table_name': 'Name',
                 'table_version_name': 'Name',
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
                 'label_version_properties': 'Version properties',
                 'label_remove_version': 'Remove version',
+                'table_status': 'Status',
 
                 'ts_error_typescript_error': 'TypeScript Error',
                 'ts_error_block_error': 'Block Error',
@@ -2123,7 +2132,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectCodeComponent': {
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL PROGRAMS',
-                'label_no_code': 'New <strong class="font-color-code">CODE</strong> Program',
+                'label_no_code': 'No <strong class="font-color-code">CODE</strong> Program',
                 'label_no_code_comment': 'Time to create another miracle.. or to find an alternative path to your nerd life',
                 'label_remove_code_program': 'Remove CODE program',
 

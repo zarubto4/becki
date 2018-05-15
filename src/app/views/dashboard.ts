@@ -131,7 +131,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
     }
 
     onEditArticle(article: IArticle): void {
-        let model = new ModalsArticleModel(true, article.name, article.description, article.mark_down_text, article.tags);
+        let model = new ModalsArticleModel(true, article.name, article.description, article.mark_down_text, article.tags[0]);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -139,7 +139,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                     name: model.name,
                     description: model.description,
                     mark_down_text: model.mark_down_text,
-                    tags: model.tags
+                    tags: [model.tag]
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_article_create_success')));
@@ -181,7 +181,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                     name: model.name,
                     description: model.description,
                     mark_down_text: model.mark_down_text,
-                    tags: model.tags
+                    tags: [model.tag]
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_article_create_success')));

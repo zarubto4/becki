@@ -161,7 +161,7 @@
                     <small>You install the server yourself on your hardware</small>
                     </h3>
                     <br>
-                    <button class="btn blue" (click)="onCreateHomerServerManuallyClick()">
+                    <button class="btn blue" (click)="onToggleTab('create_server_manually')">
                         <i class="fa fa-plus-circle"></i> {{'btn_create_manually_server'|bkTranslate:this}}
                     </button>
                 </div>
@@ -229,6 +229,113 @@
             </div>
 
         </div>
+
+        <div *ngIf="tab == 'create_server_manually'">
+            <div class="row">
+                <div class="col-lg-6 text-center">
+
+                    <h3>On Premise Server<br>
+                        <small>You install the server yourself on your hardware</small>
+                    </h3>
+                    <br>
+                    <img style="width: auto; height: 90%;" src="https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5aa164e6efcfd2000162a317_server%20oranzovy.svg">
+
+                </div>
+                <div class="col-lg-6 mt-element-step">
+
+                    <div class="step-no-background-thin margin-bottom-30">
+                        <div class="margin-bottom-30">
+                            <div class="mt-step-col">
+                                <div class="mt-step-number font-grey-cascade">1</div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Prerequisites</div>
+                                <div class="mt-step-content font-grey-cascade">Please, Resolve all prerequisites to run</div>
+                            </div>
+                            <div style="margin-left: 65px">
+                                <p>For deploy your new Homer server, you need basic environments. For example on Microsoft Azure - Own Virtual Machine.
+                                    <strong>Ubuntu Linux v.16+ with latest update is recommended.</strong>
+                                </p>
+
+                                <p class="bold">Before - check that you have open this Ports</p>
+
+                                <p>On Microsoft Azure or AWS, you have to do that manually!</p>
+                                <ul>
+                                    <li>1881 (MQTT)</li>
+                                    <li>1883 (TEST MQTT)</li>
+                                    <li>3000 (API)</li>
+                                    <li>3433 (API)</li>
+                                    <li>8503 (GRID Apps)</li>
+                                    <li>8501 (Terminal WebView)</li>
+                                    <li>8505 (Terminal HW logs)</li>
+                                    <li>10233 (Reserve Mongo API)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="margin-bottom-30">
+                            <div class="mt-step-col">
+                                <div class="mt-step-number font-grey-cascade">2</div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Download</div>
+                                <div class="mt-step-content font-grey-cascade">Download latest recommended release for selected platform</div>
+                            </div>
+                            <div style="margin-left: 65px">
+                                <ul>
+                                    <li> <a href="{{protocol + '://' + host}}/homer_server/download/linux" class="no-wrap" download="homer_server_linux">Linux</a></li>
+                                    <li> <a href="{{protocol + '://' + host}}/homer_server/download/mac" class="no-wrap" download="homer_server_mac">Mac OS X</a></li>
+                                    <li> <a href="{{protocol + '://' + host}}/homer_server/download/mac" class="no-wrap" download="homer_server_windows.exe">Windows 7, 8, 10</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="margin-bottom-30">
+                            <div class="mt-step-col">
+                                <div class="mt-step-number font-grey-cascade">3</div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Install with Terminal Commands</div>
+                                <div class="mt-step-content font-grey-cascade">For more details look at  <a href="https://docu.byzance.cz" class="no-wrap" target="_blank">Docu</a></div>
+                            </div>
+                            <div style="margin-left: 65px">
+                                <p>Find your file in your directory and use this commands:</p>
+                                <ul>
+                                    <li> chmod +x homer-server-linux</li>
+                                    <li> sudo ./homer-server-linux &amp;>/dev/null &amp;</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="margin-bottom-30">
+                            <div class="mt-step-col">
+                                <div class="mt-step-number font-grey-cascade">4</div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Set CName Record for your IP Address</div>
+                                <div class="mt-step-content font-grey-cascade">Fallow Installation Tutorial</div>
+                            </div>
+                            <div style="margin-left: 65px">
+                                <p>For Secure Configuration with Certificates Set CName Record on your Domain to local IP address of your server</p>
+                                <p>And Wait a few Minutes. Try to use your new domain configuration  my<em>cname</em>name.my_domain.com:3000.</p>
+
+                                <p>If you see configuration page, you can continue to next step.</p>
+                            </div>
+                        </div>
+
+
+                        <div class="margin-bottom-30">
+                            <div class="mt-step-col">
+                                <div class="mt-step-number font-grey-cascade">5</div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Create New Server Record on Byzance</div>
+                                <div class="mt-step-content font-grey-cascade">Fallow Installation Tutorial</div>
+                            </div>
+                            <div style="margin-left: 65px">
+                                <p>And don't forget to use your my<em>cname</em>name.my_domain.com  instead IP Address!</p>
+
+                                <p>Server will automatically configure your server and also install domain certificates. </p>
+                                <button class="btn blue" (click)="onCreateHomerServerManuallyClick()">
+                                    <i class="fa fa-plus-circle"></i> {{'btn_create_manually_server'|bkTranslate:this}}
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </bk-layout-main>

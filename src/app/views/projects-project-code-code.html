@@ -138,17 +138,17 @@
                             <span *ngIf="!version.author">No One</span>
                         </td>
                         <!-- STATUS -->
-                        <td class="vert-align">
+                        <td class="vert-align  text-center">
                             <bk-compilation-status-component [status]="version.status"></bk-compilation-status-component>
                             <bk-compilation-status-component [status]="version.approval_state"></bk-compilation-status-component>
                         </td>
                         <!-- UPLOAD -->
 
-                            <td class="vert-align no-wrap">
-                                <button *ngIf="projectId && hardwareType && hardwareType.connectible_to_internet && version.status=='SUCCESS' && codeProgram && codeProgram.publish_type == 'PRIVATE'" class="btn blue">
-                                    {{'btn_upload_to_hardware'|bkTranslate:this}}
-                                </button>
-                            </td>
+                        <td class="vert-align no-wrap">
+                            <button *ngIf="projectId && hardwareType && hardwareType.connectible_to_internet && version.status=='SUCCESS' && codeProgram && codeProgram.publish_type == 'PRIVATE'" class="btn blue">
+                                {{'btn_upload_to_hardware'|bkTranslate:this}}
+                            </button>
+                        </td>
 
                         <!-- ACTIONS -->
                         <td class="action-btn-col">

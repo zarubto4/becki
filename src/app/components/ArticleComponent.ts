@@ -63,9 +63,7 @@ import { IArticle } from '../backend/TyrionAPI';
                     </div>
                 </div>
                 <div class="timeline-body-content">
-                     <span class="font-grey-cascade"> 
-                         {{article.mark_down_text}}
-                      </span>
+                     <span class="font-grey-cascade" [innerHTML]="article.mark_down_text|bkMd2Html"></span>
                 </div>
             </div>
         </div>
