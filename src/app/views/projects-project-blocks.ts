@@ -80,7 +80,6 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         }
     }
 
-
     onBlockClick(block: IBlock): void {
         if (this.projectId) {
             this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', block.id]);

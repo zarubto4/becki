@@ -21,6 +21,7 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
 import { IError } from '../services/_backend_class/Responses';
+
 /* tslint:disable:class-name  */
 export abstract class _BaseMainComponent {
 /* tslint:disable:class-name  */
@@ -173,16 +174,20 @@ export abstract class _BaseMainComponent {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries', library_id]);
     }
 
-    public onCProgramClick(cProgram_id: string, version_id?: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'code', cProgram_id, version_id]);
+    public onCProgramClick(cProgram_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'code', cProgram_id, {version_id}]);
     }
 
     public onCProgramAdminClick(c_program_id: string): void {
         this.router.navigate(['/admin/hardware/code', c_program_id]);
     }
 
-    public onBProgramClick(bProgram_id: string, version_id?: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgram_id, version_id]);
+    public onBProgramClick(bProgram_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgram_id, {version_id}]);
+    }
+
+    public onBlockClick(block_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', block_id, {version_id}]);
     }
 
     public onDeviceClick_Admin(device_id: string): void {
@@ -202,6 +207,10 @@ export abstract class _BaseMainComponent {
     }
 
     public onGridProgramVersionClick(grid_project_id: string, grid_program_id: string, grid_program_version_id: string) {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', grid_project_id, grid_program_id, grid_program_version_id]);
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', grid_project_id, grid_program_id, {grid_program_version_id}]);
+    }
+
+    public onWidgetClick(widget_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', widget_id, {version_id}]);
     }
 }
