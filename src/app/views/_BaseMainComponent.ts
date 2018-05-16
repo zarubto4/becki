@@ -190,6 +190,10 @@ export abstract class _BaseMainComponent {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', block_id, {version_id}]);
     }
 
+    public onBlockAdminClick(block_id: string, version_id: string = null): void {
+        this.navigate(['admin/blocks', block_id, {version_id}]);
+    }
+
     public onDeviceClick_Admin(device_id: string): void {
         this.navigate(['/device', device_id]);
     }
@@ -212,5 +216,9 @@ export abstract class _BaseMainComponent {
 
     public onWidgetClick(widget_id: string, version_id: string = null): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', widget_id, {version_id}]);
+    }
+
+    public onWidgetAdminClick(widget_id: string, version_id: string = null): void {
+        this.navigate(['admin/widgets', widget_id, {version_id}]);
     }
 }

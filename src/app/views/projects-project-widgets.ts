@@ -78,15 +78,6 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
         }
     }
 
-    onWidgetClick(widget: IWidget): void {
-        if (this.projectId) {
-            this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', widget.id]);
-        } else {
-            this.navigate(['/admin/widget/', widget.id]);
-        }
-    }
-
-
     onMakeClone(widget: IWidget): void {
         let model = new ModalsWidgetsWidgetCopyModel(widget.name, widget.description, widget.tags);
         this.modalService.showModal(model).then((success) => {
@@ -303,7 +294,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
         }
 
         if (action === 'make_decision') {
-            this.onWidgetClick(object);
+            this.onWidgetAdminClick(object.id);
         }
     }
 
