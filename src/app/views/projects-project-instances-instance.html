@@ -471,6 +471,7 @@
             <div *ngIf="instance && instance.online_state === 'ONLINE'">
 
                 <bk-blocko-view [id]="'liveview'"
+                                [full_page]="true"
                                 [disableExecution]="true"
                                 [canConfig]="false"
                                 [readonly]="true"

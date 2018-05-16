@@ -144,8 +144,6 @@ export abstract class WebsocketClientAbstract {
             }
         }
 
-        console.info('Adresa Pro připojení: ',  this.url);
-        // Logger.info('TyrionWebsocketClient:: MainServer Connection:: reconnect to Main server url:: ',this.websocketUrl);
         this._websocket = new WebSocket(this.url);
         this._websocket.addEventListener('close', (e) => this.onError(e));
         this._websocket.addEventListener('open', (e) => this.onOpen(e));
@@ -155,9 +153,6 @@ export abstract class WebsocketClientAbstract {
     }
 
     protected onError = (e) => {
-        console.error('WebsocketClientAbstract::onError or Close::', e);
-        console.error('WebsocketClientAbstract::onError or Close::', e);
-        console.error('WebsocketClientAbstract::onError or Close::', e);
         console.error('WebsocketClientAbstract::onError or Close::', e);
         if (this._onErrorCallback) {
             this._onErrorCallback(e);
@@ -180,8 +175,6 @@ export abstract class WebsocketClientAbstract {
 
     protected onMessageParse(e: any): void {
         try {
-
-            console.info('WebsocketClientAbstract:: onMessageParse:', e);
 
             if (e && e.data) {
 
