@@ -67,7 +67,7 @@ export class ProjectsProjectGSMComponent extends _BaseMainComponent implements O
 
 
     onRemoveClick(gsm: IGSM): void {
-        this.modalService.showModal(new ModalsRemovalModel(gsm.name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(gsm.msi_number ?  gsm.msi_number  + '' : 'unknown')).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.simDelete(gsm.id)
@@ -100,6 +100,19 @@ export class ProjectsProjectGSMComponent extends _BaseMainComponent implements O
                     });
             }
         });
+    }
+
+    onPrintStickerClick(gsm: IGSM): void {
+        this.tyrionBackendService.simPrintSticker(gsm.id)
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
+                this.unblockUI();
+                this.onFilter();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_gsm'), reason));
+                this.onFilter();
+            });
     }
 
     onAddClick(): void {
@@ -140,16 +153,20 @@ export class ProjectsProjectGSMComponent extends _BaseMainComponent implements O
 
     onDrobDownEmiter(action: string, object: any): void {
 
-        if (action === 'edit_gsm') {
+        if (action === 'gsm_edit') {
             this.onEditClick(object);
         }
 
-        if (action === 'remove_gsm') {
+        if (action === 'gsm_delete') {
             this.onRemoveClick(object);
         }
 
-        if (action === 'un_registration_gsm') {
+        if (action === 'gsm_un_register') {
             this.onUnRegistrationClick(object);
+        }
+
+        if (action === 'gsm_print_sticker') {
+            this.onPrintStickerClick(object);
         }
     }
 

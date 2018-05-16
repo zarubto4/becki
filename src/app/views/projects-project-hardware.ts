@@ -16,7 +16,7 @@ import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-descript
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareGroupPropertiesModel } from '../modals/hardware-group-properties';
 import { ModalsHardwareGroupDeviceSettingsModel } from '../modals/hardware-group-device-settings';
-import {ModalsUpdateReleaseFirmwareModel} from "../modals/update-release-firmware";
+import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
 
 @Component({
     selector: 'bk-view-projects-project-hardware',

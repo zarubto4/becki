@@ -57,41 +57,40 @@
                             <bk-drob-down-button
                                 [btns_group_name]="('label_gsm_properties'|bkTranslate:this)"
                                 [btns]="[
-                                        {
-                                            condition: true,
-                                            btn_label_for_person: ('label_gsm_edit'|bkTranslate:this),
-                                            btn_tag: 'gsm_edit',
-                                            icon: 'fa-cog',
-                                            colorType: 'EDIT',
-                                            permission: (gsm.update_permission)
-                                        },
-                                        {
-                                            condition: (gsm.delete_permission),
-                                            btn_label_for_person: ('label_gsm_remove'|bkTranslate:this),
-                                            btn_tag: 'gsm_delete',
-                                            icon: 'fa-trash',
-                                            colorType: 'REMOVE',
-                                            permission: (gsm.delete_permission)
-                                        },
-                                        {
-                                            condition: true,
-                                            btn_label_for_person: ('label_gsm_un_register'|bkTranslate:this),
-                                            btn_tag: 'gsm_un_register',
-                                            icon: 'fa-trash',
-                                            colorType: 'REMOVE',
-                                            permission: (gsm.un_registration_permission)
-                                        },
-                                        {
-                                            condition: (gsm.delete_permission),
-                                            btn_label_for_person: ('label_gsm_print_sticker'|bkTranslate:this),
-                                            btn_tag: 'gsm_print_sticker',
-                                            icon: 'fa-print',
-                                            colorType: 'ACTIVE',
-                                            permission: (gsm.delete_permission)
-                                        }
-
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_gsm_edit'|bkTranslate:this),
+                                                btn_tag: 'gsm_edit',
+                                                icon: 'fa-cog',
+                                                colorType: 'EDIT',
+                                                permission: (gsm.update_permission)
+                                            },
+                                            {
+                                                condition: (gsm.delete_permission),
+                                                btn_label_for_person: ('label_gsm_remove'|bkTranslate:this),
+                                                btn_tag: 'gsm_delete',
+                                                icon: 'fa-trash',
+                                                colorType: 'REMOVE',
+                                                permission: (gsm.delete_permission)
+                                            },
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_gsm_un_register'|bkTranslate:this),
+                                                btn_tag: 'gsm_un_register',
+                                                icon: 'fa-trash',
+                                                colorType: 'REMOVE',
+                                                permission: (gsm.un_registration_permission)
+                                            },
+                                            {
+                                                condition: (gsm.delete_permission),
+                                                btn_label_for_person: ('label_gsm_print_sticker'|bkTranslate:this),
+                                                btn_tag: 'gsm_print_sticker',
+                                                icon: 'fa-print',
+                                                colorType: 'ACTIVE',
+                                                permission: (gsm.delete_permission)
+                                            }
                                     ]"
-                                (onValueChanged)="onDrobDownEmiter($event, code)"
+                                (onValueChanged)="onDrobDownEmiter($event, gsm)"
                             >
                             </bk-drob-down-button>
 
@@ -107,7 +106,7 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(gsmList == null)"
                                 [condition_empty]="(gsmList != null && gsmList.content.length == 0)"
-                                [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59d793dea7327a00016b151f_code%20web%20small.png'"
+                                [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5a0c3d306b2b6e0001417b96_Kreslic%C3%AD%20pl%C3%A1tno%2019-fin1.svg'"
                                 [main_message_link]="'label_no_gsm'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_gsm_comment'|bkTranslate:this"
                                 [btn_label]="'btn_add_gsm'|bkTranslate:this"
