@@ -326,13 +326,7 @@
         <div *ngIf="tab == 'editor'">
             <div class="portlet light" style="padding: 0 0 0 0;">
                 <div class="portlet-body">
-                    <bk-blocko-view [id]="'snapshot_editor'"
-                                    [full_page]="true"
-                                    [disableExecution]="true"
-                                    [canConfig]="false"
-                                    [readonly]="false"
-                                    [simpleMode]="false"
-                                    [showBlockNames]="true">
+                    <bk-blocko-view [id]="'snapshot_editor'" [full_page]="true" [disableExecution]="true" [readonly]="false" [showBlockNames]="true">
                     </bk-blocko-view>
                 </div>
             </div>
@@ -470,13 +464,7 @@
 
             <div *ngIf="instance && instance.online_state === 'ONLINE'">
 
-                <bk-blocko-view [id]="'liveview'"
-                                [full_page]="true"
-                                [disableExecution]="true"
-                                [canConfig]="false"
-                                [readonly]="true"
-                                [simpleMode]="false"
-                                [showBlockNames]="true"></bk-blocko-view>
+                <bk-blocko-view [id]="'liveview'" [full_page]="true" [disableExecution]="true" [readonly]="true" [showBlockNames]="true"></bk-blocko-view>
 
                 <div style="margin-top: 30px">
                     <bk-console-log maxHeight="400px"></bk-console-log>

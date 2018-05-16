@@ -294,7 +294,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     gridRemove(gridBlock: Blocks.BaseInterfaceBlock) {
-        console.log('GRID REMOVE', gridBlock);
         if (gridBlock.interface.grid.projectId && this.selectedGrid.hasOwnProperty(gridBlock.interface.grid.projectId)) {
             delete this.selectedGrid[gridBlock.interface.grid.projectId];
         }
