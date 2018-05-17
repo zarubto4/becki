@@ -41,6 +41,7 @@
     "moment": "^2.22.1",
     "monaco-editor": "^0.8.3",
     "mydatepicker": "^2.6.3",
+    "ng2-charts": "^1.6.0",
     "ng2-img-cropper": "^0.7.7",
     "open-sans-fontface": "^1.4.0",
     "parse-color": "^1.0.0",

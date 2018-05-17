@@ -1,0 +1,71 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [show_title]="false"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title *ngIf="gsm"
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-signal'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+            {
+                 condition: true,
+                 btn_label_for_person: ('label_gsm_edit'|bkTranslate:this),
+                 btn_tag: 'gsm_edit',
+                 icon: 'fa-cog',
+                 colorType: 'EDIT',
+                 permission: (gsm.update_permission)
+            },
+            {
+                 condition: (gsm.delete_permission),
+                 btn_label_for_person: ('label_gsm_remove'|bkTranslate:this),
+                 btn_tag: 'gsm_delete',
+                 icon: 'fa-trash',
+                 colorType: 'REMOVE',
+                 permission: (gsm.delete_permission)
+            },
+            {
+                 condition: true,
+                 btn_label_for_person: ('label_gsm_un_register'|bkTranslate:this),
+                 btn_tag: 'gsm_un_register',
+                 icon: 'fa-trash',
+                 colorType: 'REMOVE',
+                 permission: (gsm.un_registration_permission)
+            },
+            {
+                 condition: (gsm.delete_permission),
+                 btn_label_for_person: ('label_gsm_print_sticker'|bkTranslate:this),
+                 btn_tag: 'gsm_print_sticker',
+                 icon: 'fa-print',
+                 colorType: 'ACTIVE',
+                 permission: (gsm.delete_permission)
+            }
+        ]"
+        (onTabClick)="onToggleTab($event)"
+        [tab_selected_name]="tab"
+    >
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <div class="portlet-body">
+
+        <div *ngIf="tab == 'my_gsm'">
+            <bk-form-chart-bar
+                [title]="'label_gsm_traffic'|bkTranslate:this"
+                [btns_group_name]="'label_filter'|bkTranslate:this"
+                [show_legend]="false"
+                [values]="chart_data"
+            >
+            </bk-form-chart-bar>
+        </div>
+    </div>
+
+</bk-layout-main>

@@ -48,12 +48,11 @@
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let gsm of gsmList.content">
-                        <td class="vert-align no-wrap">{{gsm.name ? gsm.name : gsm.id}}</td>
+                        <td class="vert-align no-wrap"><a (click)="onGSMClick(gsm.id)">{{gsm.name ? gsm.name : gsm.id}}</a></td>
                         <td class="vert-align">{{gsm.description}}</td>
                         <td class="vert-align text-center no-wrap">{{gsm.msi_number}}</td>
-                        <td class="vert-align"></td>
+                        <td class="vert-align">{{gsm.blocked}}</td>
                         <td class="action-btn-col">
-
                             <bk-drob-down-button
                                 [btns_group_name]="('label_gsm_properties'|bkTranslate:this)"
                                 [btns]="[
@@ -90,10 +89,8 @@
                                                 permission: (gsm.delete_permission)
                                             }
                                     ]"
-                                (onValueChanged)="onDrobDownEmiter($event, gsm)"
-                            >
+                                (onValueChanged)="onDrobDownEmiter($event, gsm)">
                             </bk-drob-down-button>
-
                         </td>
                     </tr>
                     </tbody>

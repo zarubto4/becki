@@ -223,9 +223,12 @@ import { ModalsBlockSelectComponent } from './modals/block-select';
 import { ArticleComponent } from './components/ArticleComponent';
 import { ModalsArticleComponent } from './modals/article';
 import { ProjectsProjectActualizationProceduresComponent } from './views/projects-project-actualization-procedures';
-import { ProjectsProjectGSMComponent } from './views/projects-project-gsm';
+import { ProjectsProjectGSMSComponent } from './views/projects-project-gsms';
 import { ModalsAddGSMComponent } from './modals/add-gsm';
 import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
+import { ChartsModule } from 'ng2-charts';
+import { ChartBarComponent } from './components/ChartBarComponent';
+import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -276,8 +279,8 @@ let routes: Routes = [
     { path: 'projects/:project/actualization-procedures', data: { breadName: 'Actualization procedures' }, component: ProjectsProjectActualizationProceduresComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/actualization_procedures/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProceduresProcedureComponent, canActivate: [AuthGuard]},
 
-    { path: 'projects/:project/gsm', data: { breadName: 'CELLULAR modules' }, component: ProjectsProjectGSMComponent, canActivate: [AuthGuard]},
-
+    { path: 'projects/:project/gsm', data: { breadName: 'CELLULAR modules' }, component: ProjectsProjectGSMSComponent, canActivate: [AuthGuard]},
+    { path: 'projects/:project/gsm/:gsm',  data: { breadName: ':last' }, component: ProjectsProjectGSMSGSMComponent, canActivate: [AuthGuard]},
 
     { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
@@ -473,6 +476,7 @@ class BeckiErrorHandler implements ErrorHandler {
         HttpModule,
         JsonpModule,
         MyDatePickerModule,
+        ChartsModule,
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
@@ -562,6 +566,8 @@ class BeckiErrorHandler implements ErrorHandler {
         BeckiDrobDownButtonComponent,
         FilterTableComponent,
         PublicStateComponent,
+        FormColorPickerComponent,
+        ChartBarComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -588,6 +594,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectBlockoBlockoComponent,
         ProjectsProjectCodeComponent,
         ProjectsProjectCodeCodeComponent,
+        ProjectsProjectGSMSGSMComponent,
         NotificationsComponent,
         ProfileComponent,
         ForgotPasswordComponent,
@@ -606,7 +613,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProductRegistrationComponent,
         ProjectsProjectInstancesComponent,
         ProjectsProjectInstancesInstanceComponent,
-        ProjectsProjectGSMComponent,
+        ProjectsProjectGSMSComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
         ProjectsProjectMembersComponent,
