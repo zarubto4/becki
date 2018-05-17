@@ -80,7 +80,7 @@ export class IWebSocketGetValues extends IndividualWebSocketOutComingMessage {
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
@@ -92,7 +92,7 @@ export class IWebSocketGetLogs extends IndividualWebSocketOutComingMessage {
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
@@ -105,7 +105,7 @@ export class IWebSocketSubscribeInstance extends IndividualWebSocketOutComingMes
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
@@ -117,7 +117,7 @@ export class IWebSocketGetBProgramValues extends IndividualWebSocketOutComingMes
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
