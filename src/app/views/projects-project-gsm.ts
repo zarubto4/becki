@@ -13,6 +13,7 @@ import { IProject, IHardwareType, ICProgram, ICProgramList, IGSMList, IGSM } fro
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsAddGSMModel } from '../modals/add-gsm';
+import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 
 @Component({
     selector: 'bk-view-projects-project-gsm',
@@ -95,7 +96,7 @@ export class ProjectsProjectGSMComponent extends _BaseMainComponent implements O
                         this.onFilter();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_gsm'), reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_success'), reason));
                         this.onFilter();
                     });
             }
@@ -105,12 +106,12 @@ export class ProjectsProjectGSMComponent extends _BaseMainComponent implements O
     onPrintStickerClick(gsm: IGSM): void {
         this.tyrionBackendService.simPrintSticker(gsm.id)
             .then(() => {
-                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_cellular_print_success')));
                 this.unblockUI();
                 this.onFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_gsm'), reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_error'), reason));
                 this.onFilter();
             });
     }
@@ -126,7 +127,33 @@ export class ProjectsProjectGSMComponent extends _BaseMainComponent implements O
     }
 
     onEditClick(gsm: IGSM): void {
-
+        let model = new ModalsGsmPropertiesModel(gsm);
+        this.modalService.showModal(model)
+            .then((success) => {
+                this.tyrionBackendService.simUpdate(gsm.id, {
+                    daily_traffic_threshold: model.gsm.daily_traffic_threshold,
+                    daily_traffic_threshold_exceeded_limit: model.gsm.daily_traffic_threshold_exceeded_limit,
+                    daily_traffic_threshold_notify_type: model.gsm.daily_traffic_threshold_notify_type,
+                    monthly_traffic_threshold: model.gsm.monthly_traffic_threshold,
+                    monthly_traffic_threshold_exceeded_limit: model.gsm.monthly_traffic_threshold_exceeded_limit,
+                    monthly_traffic_threshold_notify_type: model.gsm.monthly_traffic_threshold_notify_type,
+                    total_traffic_threshold: model.gsm.total_traffic_threshold,
+                    total_traffic_threshold_exceeded_limit: model.gsm.total_traffic_threshold_exceeded_limit,
+                    total_traffic_threshold_notify_type: model.gsm.total_traffic_threshold_notify_type,
+                    name: model.gsm.name,
+                    description: model.gsm.description,
+                    tags: model.gsm.tags,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_cellular_update_success')));
+                        this.unblockUI();
+                        this.onFilter();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+                        this.onFilter();
+                    });
+            });
     }
 
     onFilter(page: number = 0): void {

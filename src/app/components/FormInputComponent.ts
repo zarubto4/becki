@@ -22,7 +22,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
     
     <div [class.input-group]="showButton != null">
         
-        <div class="input-icon">
+        <div class="input-icon right">
             <i *ngIf="icon != null" class="fa {{icon}} fa-fw"></i>
             
             <i class="right fa fa-check" *ngIf="icon == null && !readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
@@ -37,7 +37,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
                    [class.input-xlarge]="widthSize == 'large'" 
                    [class.input-fluid]="widthSize == 'fluid'" 
                    [attr.type]="type" 
-                   [attr.placeholder]="(placeholder?placeholder:label)"
+                   [attr.placeholder]="(placeholder?placeholder:'')"
                    [readonly]="readonly"
                    [formControl]="control" 
                    >
@@ -50,7 +50,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
                    [class.input-xlarge]="widthSize == 'large'"
                    [class.input-fluid]="widthSize == 'fluid'"
                    [attr.type]="type"
-                   [attr.placeholder]="(placeholder?placeholder:label)"
+                   [attr.placeholder]="(placeholder?placeholder:'')"
                    [readonly]="readonly">
     
         </div>

@@ -1,3 +1,4 @@
+import {ModalsGsmPropertiesComponent} from "../modals/gsm-properties";
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
@@ -27,6 +28,17 @@ export class StaticTranslation {
                 'label_multiple_registration': 'Multiple Registration <br> (From B2B Invoices, Files etc.)',
                 'label_single_registration': 'Single Registration (QR - code)',
                 'label_hash_token_label': 'Hash Token from Label',
+
+            }, 'ModalsGsmPropertiesComponent': {
+                'title': '<strong class="font-color-hardware">CELLULAR</strong> basic & Threshold settings',
+                'label_personal_server_name': 'Alias',
+                'label_personal_server_description': 'Description',
+                'table_maximum_threshold': 'Maximum data traffic threshold',
+                'table_notify_me': 'Send Email',
+                'table_block_sim': 'Block Sim',
+                'table_daily_threshold': 'Daily (MB)',
+                'table_monthly_threshold': 'Monthly (MB)',
+                'table_total_threshold': 'Total (MB)',
 
             }, 'ModalsAddHardwareComponent': {
                 'title': '<strong class="font-color-hardware">Hardware</strong> registration',
@@ -1987,7 +1999,7 @@ export class StaticTranslation {
                 'label_publish_decision': 'Decide of Publish',
                 'label_version_set_as_main': 'Set as main',
 
-            }, 'ProjectsProjectActualizationProcedureComponent': {
+            }, 'ProjectsProjectActualizationProceduresProcedureComponent': {
                 'title': 'Actualization Procedure',
                 'table_finished': 'Finished',
                 'table_created': 'Created',
@@ -2068,6 +2080,8 @@ export class StaticTranslation {
                 'label_datatype_integer': 'integer <strong>Arg #{0}</strong>',
                 'label_datatype_string': 'string <strong>Arg #{0}</strong>',
                 'label_block': 'block',
+                'label_program_versions': 'No <strong class="font-color-blocko">BLOCK</strong> version',
+                'label_program_versions_comment': 'Save your code first, and you will never see this screen again',
                 'label_saved_versions': 'Saved versions',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
