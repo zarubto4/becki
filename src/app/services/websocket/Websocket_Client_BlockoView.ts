@@ -10,8 +10,19 @@ export class WebsocketClientBlockoView extends  WebsocketClientAbstract {
         this.connectWs();
 
         console.info('WebsocketClientBlockoView connection URL: ', websocketUrl);
-        super.onError = (e: any) => this.reconnectWebSocketAfterTimeout(e);
+        super.onError = (e: any) => {
+
+            console.info('WebsocketClientBlockoView:: On Error - ', e);
+            this.reconnectWebSocketAfterTimeout(e);
+
+        };
     }
+
+
+
+
+
+
 
     /***** Requests *******/
 
@@ -101,7 +112,7 @@ export class IWebSocketSubscribeInstance extends IndividualWebSocketOutComingMes
     instance_id: string;
 
     getType(): string {
-        return 'subscribe_instace';
+        return 'subscribe_instance';
     }
 
     getChannel(): string {

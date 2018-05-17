@@ -225,6 +225,7 @@ import { ModalsArticleComponent } from './modals/article';
 import { ProjectsProjectActualizationProceduresComponent } from './views/projects-project-actualization-procedures';
 import { ProjectsProjectGSMComponent } from './views/projects-project-gsm';
 import { ModalsAddGSMComponent } from './modals/add-gsm';
+import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -706,6 +707,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBlockSelectComponent,
         ModalsArticleComponent,
         ModalsAddGSMComponent,
+        ModalsGsmPropertiesComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

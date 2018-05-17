@@ -155,6 +155,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             if (this.liveViewLoaded) {
                 this.liveViewLoaded = false;
                 if (this.homerDao) {
+                    this.homerDao.isWebSocketOpen();
                     this.homerDao.disconnectWebSocket();
                     this.homerDao = null;
                 }
@@ -166,8 +167,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.routeParamsSubscription.unsubscribe();
 
         if (this.homerDao) {
+            console.info('ProjectsProjectInstancesInstanceComponent: ngOnDestroy: close homerDao Is Open?: ', this.homerDao.isWebSocketOpen());
             this.homerDao.disconnectWebSocket();
             this.homerDao = null;
+        } else  {
+            console.info('ProjectsProjectInstancesInstanceComponent: ngOnDestroy: homerDao is null');
         }
     }
 
@@ -677,16 +681,16 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                     if (response_message) {
                                         this.homerMessageReceived(response_message);
                                     } else {
-                                        console.error('this.homerDao.requestGetValues Error: ', error_response);
+                                        console.error('loadBlockoLiveView:: requestGetValues Error: ', error_response);
                                     }
                                 });
 
                                 this.homerDao.requestGetLogs(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
-                                    console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView requestGetLogs: response', response_message);
+                                    console.info('ProjectsProjectInstancesInstanceComponent::requestGetLogs requestGetLogs: response', response_message);
                                     if (response_message) {
                                         this.homerMessageReceived(response_message);
                                     } else {
-                                        console.error('this.homerDao.requestGetValues Error: ', error_response);
+                                        console.error('loadBlockoLiveView:: requestGetLogs  Error: ', error_response);
                                     }
                                 });
 
@@ -857,29 +861,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    onAddGrid(callback: (iface: Blocks.BlockoTargetInterface) => void) {
-        let model = new ModalsSelectGridProjectModel(this.projectId);
-        this.modalService.showModal(model)
-            .then((success) => {
-                // TODO Doplnit do BLOCKA
-
-            })
-            .catch((err) => {
-
-            });
-    }
-
-    onAddBlock(callback: (block: BlockoCore.Block) => void) {
-        let model = new ModalsSelectBlockModel(this.projectId);
-        this.modalService.showModal(model)
-            .then((success) => {
-                // TODO Doplnit do BLOCKA
-
-            })
-            .catch((err) => {
-
-            });
-    }
 
     onSetHardwareByInterfaceClick(callback: (targetId: string, group?: boolean) => BlockoCore.BoundInterface): void {
         let model = new ModalsSelectHardwareModel(this.projectId, null, false, true);
