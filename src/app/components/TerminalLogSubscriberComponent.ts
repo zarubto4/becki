@@ -416,7 +416,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      */
     public addNewHardwareToSubscribeList(hardware: IHardware, color: string = '#0082c8'): void {
 
-       // console.log('addNewHardwareToSubscribeList: hardware:: ', hardware.id, 'color: ', color);
+        // console.log('addNewHardwareToSubscribeList: hardware:: ', hardware.id, 'color: ', color);
 
         this.colorForm.addControl('color_' + hardware.id, new FormControl('color_' + hardware.id));
         this.colorForm.addControl('log_' + hardware.id, new FormControl('log_' + hardware.id));
@@ -424,8 +424,8 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
         this.colorForm.controls['color_' + hardware.id].setValue(color);
         this.colorForm.controls['log_' + hardware.id].setValue('info');
 
-       // console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe size: ', this.selected_hw_for_subscribe.length);
-       // console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe: ', this.selected_hw_for_subscribe);
+        // console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe size: ', this.selected_hw_for_subscribe.length);
+        // console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe: ', this.selected_hw_for_subscribe);
 
         if(hardware.server == null) {
             this.consoleLog.set_color(hardware.id, color);

@@ -10,8 +10,19 @@ export class WebsocketClientBlockoView extends  WebsocketClientAbstract {
         this.connectWs();
 
         console.info('WebsocketClientBlockoView connection URL: ', websocketUrl);
-        super.onError = (e: any) => this.reconnectWebSocketAfterTimeout(e);
+        super.onError = (e: any) => {
+
+            console.info('WebsocketClientBlockoView:: On Error - ', e);
+            this.reconnectWebSocketAfterTimeout(e);
+
+        };
     }
+
+
+
+
+
+
 
     /***** Requests *******/
 
@@ -80,7 +91,7 @@ export class IWebSocketGetValues extends IndividualWebSocketOutComingMessage {
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
@@ -92,7 +103,7 @@ export class IWebSocketGetLogs extends IndividualWebSocketOutComingMessage {
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
@@ -101,11 +112,11 @@ export class IWebSocketSubscribeInstance extends IndividualWebSocketOutComingMes
     instance_id: string;
 
     getType(): string {
-        return 'subscribe_instace';
+        return 'subscribe_instance';
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
@@ -117,7 +128,7 @@ export class IWebSocketGetBProgramValues extends IndividualWebSocketOutComingMes
     }
 
     getChannel(): string {
-        return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
+        return WebsocketClientAbstract.BECKI_CHANNEL_NAME;
     }
 }
 
