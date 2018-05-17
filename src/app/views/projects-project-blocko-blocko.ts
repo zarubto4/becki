@@ -186,7 +186,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     onToggleIDETab(tab: string): void {
         if (this.tab_under_ide === tab) {
             this.tab_under_ide = ''; // Hide tab
-        }else {
+        } else {
             this.tab_under_ide = tab;
         }
     }
@@ -686,8 +686,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         let validHw = true;
 
         if (!validHw) {
+            /*tslint:disable:no-shadowed-variable*/
             let m = new ModalsConfirmModel(this.translate('label_modal_error'), this.translate('label_modal_cant_save_blocko_hw_without_version'), true, this.translate('label_modal_ok'), null);
             this.modalService.showModal(m);
+            /*tslint:enable:no-shadowed-variable*/
             return;
         }
 
@@ -708,8 +710,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         });
 
         if (!validGrid) {
+            /*tslint:disable:no-shadowed-variable*/
             let m = new ModalsConfirmModel(this.translate('label_modal_error'), this.translate('label_modal_cant_save_grid_hw_without_version'), true, this.translate('label_modal_ok'), null);
             this.modalService.showModal(m);
+            /*tslint:enable:no-shadowed-variable*/
             return;
         }
 

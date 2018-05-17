@@ -125,55 +125,55 @@
 
                                 <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
 
-                                    <template [ngIf]="connector.isDigital() && connector.isInput()">
+                                    <ng-template [ngIf]="connector.isDigital() && connector.isInput()">
                                         <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                         <div class="col-md-8">
                                             <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
                                             <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value"
                                                 (click)="onDigitalInputClick(connector)"></i>
                                         </div>
-                                    </template>
+                                    </ng-template>
 
-                                    <template [ngIf]="connector.isAnalog() && connector.isInput()">
+                                    <ng-template [ngIf]="connector.isAnalog() && connector.isInput()">
                                         <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                         <div class="col-md-8">
                                             <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
                                             <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
                                         </div>
-                                    </template>
+                                    </ng-template>
 
-                                    <template [ngIf]="connector.isMessage() && connector.isInput()">
+                                    <ng-template [ngIf]="connector.isMessage() && connector.isInput()">
                                         <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                         <div *ngFor="let argType of connector.messageTypes; let index = index">
 
                                             <div *ngIf="index" class="col-md-4"></div>
 
-                                            <template [ngIf]="argType == 'boolean'">
+                                            <ng-template [ngIf]="argType == 'boolean'">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">Bool <strong>Arg #{{index}}</strong>:</div>
                                                     <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]"
                                                         [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]"
                                                         (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
                                                 </div>
-                                            </template>
-                                            <template [ngIf]="argType == 'float' ">
+                                            </ng-template>
+                                            <ng-template [ngIf]="argType == 'float' ">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">Float <strong>Arg #{{index}}</strong>:</div>
                                                     <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                                 </div>
-                                            </template>
-                                            <template [ngIf]="argType == 'integer'">
+                                            </ng-template>
+                                            <ng-template [ngIf]="argType == 'integer'">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">Int <strong>Arg #{{index}}</strong>:</div>
                                                     <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                                 </div>
-                                            </template>
-                                            <template [ngIf]="argType == 'string'">
+                                            </ng-template>
+                                            <ng-template [ngIf]="argType == 'string'">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">String <strong>Arg #{{index}}</strong>:</div>
                                                     <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                                 </div>
-                                            </template>
+                                            </ng-template>
 
                                         </div>
 
@@ -184,7 +184,7 @@
                                             </button>
                                         </div>
 
-                                    </template>
+                                    </ng-template>
 
 
                                 </div>

@@ -305,12 +305,14 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     loadProcessAndStart() {
         this.actions = [];
         this.mainStep = 1;
+        /*tslint:disable:no-use-before-declare*/
         this.actions.push(new GarfieldAction(this.uploadBootLoaderProcess.bind(this)));
         this.actions.push(new GarfieldAction(this.uploadTestFirmwareProcess.bind(this)));
         this.actions.push(new GarfieldAction(this.testDeviceProcess.bind(this)));
         this.actions.push(new GarfieldAction(this.uploadProductionFirmwareProcess.bind(this)));
         this.actions.push(new GarfieldAction(this.configureDeviceProcess.bind(this)));
         this.actions.push(new GarfieldAction(this.backUpProcess.bind(this)));
+        /*tslint:enable:no-use-before-declare*/
         this.continueProcess();
     }
 

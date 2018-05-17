@@ -25,10 +25,13 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
     constructor(injector: Injector) {
         super(injector);
 
-        this.scanLoop = Observable.interval(100).subscribe(() => {
-            this.onCapture();
-        });
-
+        this.scanLoop = function() {
+            return Observable.create()
+                .interval(100)
+                .subscribe(() => {
+                    this.onCapture();
+                });
+        }
     };
 
     ngOnInit(): void {

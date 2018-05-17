@@ -12,36 +12,36 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 /* tslint:disable:max-line-length */
     template: `
 
-      
-        
-<div class="form-group" 
-     [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" 
-     [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" 
+
+
+<div class="form-group"
+     [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"
+     [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"
      [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label *ngIf="showLabel">{{label}}</label>
-    
+
     <div [class.input-group]="showButton != null">
-        
+
         <div class="input-icon">
             <i *ngIf="icon != null" class="fa {{icon}} fa-fw"></i>
-            
+
             <i class="right fa fa-check" *ngIf="icon == null && !readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
             <i class="right fa fa-warning" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
             <i class="right fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
-           
-            <input  *ngIf="control" class="form-control" 
+
+            <input  *ngIf="control" class="form-control"
                    (keydown)="onEnter($event)"
-                   (ngModelChange)="onSelectedChange($event)" 
-                   [class.input-small]="widthSize == 'small'" 
+                   (ngModelChange)="onSelectedChange($event)"
+                   [class.input-small]="widthSize == 'small'"
                    [class.input-medium]="widthSize == 'medium'"
-                   [class.input-xlarge]="widthSize == 'large'" 
-                   [class.input-fluid]="widthSize == 'fluid'" 
-                   [attr.type]="type" 
+                   [class.input-xlarge]="widthSize == 'large'"
+                   [class.input-fluid]="widthSize == 'fluid'"
+                   [attr.type]="type"
                    [attr.placeholder]="(placeholder?placeholder:label)"
                    [readonly]="readonly"
-                   [formControl]="control" 
+                   [formControl]="control"
                    >
-    
+
             <input *ngIf="!control" class="form-control"
                    (keydown)="onEnter($event)"
                    (ngModelChange)="onSelectedChange($event)"
@@ -52,9 +52,9 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
                    [attr.type]="type"
                    [attr.placeholder]="(placeholder?placeholder:label)"
                    [readonly]="readonly">
-    
+
         </div>
-    
+
         <span *ngIf="showButton != null" class="input-group-btn">
                <button class="btn"
                        [class.red-sunglo]="showButton.colorType=='REMOVE'"
@@ -63,13 +63,13 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
                        [class.purple-plum]="showButton.colorType=='DEACTIVE'"
                        [class.blue]="showButton.colorType=='ADD' || showButton.colorType=='CREATE'"
                        [class.grey-cascade]="showButton.colorType == '' || showButton.colorType == null"
-                       type="button" 
+                       type="button"
                        (click)="onBtnClick()">
                        <i class="fa {{showButton.btn_icon}} fa-fw"></i> {{showButton.btn_label_for_person}}
                 </button>
         </span>
 
-        
+
     </div>
     <span class="help-block" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" >{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
 </div>

@@ -1,7 +1,8 @@
 {
   "rulesDirectory": [
     "node_modules/codelyzer",
-    "node_modules/tslint-eslint-rules/dist/rules"
+    "node_modules/tslint-eslint-rules/dist/rules",
+    "node_modules/rxjs-tslint"
   ],
   "exclude": [
     "node_modules"
@@ -151,7 +152,10 @@
     "no-forward-ref": true,
     "import-destructuring-spacing": true,
     "no-access-missing-member": false,
-    "templates-use-public": true,
-    "invoke-injectable": true
+
+    "rxjs-collapse-imports": true,
+    "rxjs-pipeable-operators-only": true,
+    "rxjs-no-static-observable-methods": true,
+    "rxjs-proper-imports": true
   }
 }

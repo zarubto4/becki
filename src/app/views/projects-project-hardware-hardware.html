@@ -595,7 +595,7 @@
                             </td>
 
                             <!-- Firmware -->
-                            <template [ngIf]="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'">
+                            <ng-template [ngIf]="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'">
                                 <td class="vert-align font-grey-mint">
                                     <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_program_name}}</a>
                                     <span *ngIf="!update.c_program_detail.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
@@ -604,15 +604,15 @@
                                     <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_version_name}}</a>
                                     <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                 </td>
-                            </template>
+                            </ng-template>
 
                             <!-- BootLoader -->
-                            <template [ngIf]="update.firmware_type == 'BOOTLOADER'">
+                            <ng-template [ngIf]="update.firmware_type == 'BOOTLOADER'">
                                 <td class="vert-align font-grey-mint"></td>
                                 <td class="vert-align font-grey-mint">
                                     <span *ngIf="update.bootloader_detail" class="font-grey-mint bold"> {{update.bootloader_detail.bootloader_name}}</span>
                                 </td>
-                            </template>
+                            </ng-template>
 
                             <!-- type -->
                             <td class="vert-align">

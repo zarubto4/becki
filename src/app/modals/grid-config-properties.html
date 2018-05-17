@@ -4,7 +4,7 @@
         <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
     <div class="modal-body widget-config">
-        <template [ngIf]="widgetVersions && widgetVersions.length > 0">
+        <ng-template [ngIf]="widgetVersions && widgetVersions.length > 0">
             <h4>{{'label_widget_code_version'|bkTranslate:this}}</h4>
             <div>
                 <select name="{{'label_select_widget_version'|bkTranslate:this}}" class="form-control" [(ngModel)]="formModelVersion">
@@ -12,8 +12,8 @@
                 </select>
             </div>
             <hr />
-        </template>
-        <template [ngIf]="inputs.length || outputs.length">
+        </ng-template>
+        <ng-template [ngIf]="inputs.length || outputs.length">
             <h4>{{'label_interface'|bkTranslate:this}}</h4>
             <h3 *ngIf="inputs.length">{{'label_inputs'|bkTranslate:this}}</h3>
             <div *ngFor="let input of inputs;">
@@ -30,8 +30,8 @@
                 </div>
             </div>
             <hr />
-        </template>
-        <template [ngIf]="configProperties.length">
+        </ng-template>
+        <ng-template [ngIf]="configProperties.length">
             <h4>{{'label_configuration'|bkTranslate:this}}</h4>
             <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
             <div *ngFor="let configProperty of configProperties;">
@@ -69,18 +69,18 @@
                         <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
                     </select>
                 </div>
-                <template [ngIf]="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Color">
+                <ng-template [ngIf]="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Color">
                     <div class="input-row">
                         <bk-form-color-picker [rgbaOutput]="true" [label]="configProperty.displayName" [(value)]="formModelProperties[configProperty.id]"></bk-form-color-picker>
                     </div>
-                </template>
-                <template [ngIf]="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.FAIcon">
+                </ng-template>
+                <ng-template [ngIf]="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.FAIcon">
                     <div class="input-row">
                         <bk-form-fa-icon-select [label]="configProperty.displayName" [(value)]="formModelProperties[configProperty.id]"></bk-form-fa-icon-select>
                     </div>
-                </template>
+                </ng-template>
             </div>
-        </template>
+        </ng-template>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>

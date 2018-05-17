@@ -6,11 +6,11 @@
     <div class="modal-body">
         <h4 class="text-center" *ngIf="loading">
         </h4>
-        <template [ngIf]="library">
+        <ng-template [ngIf]="library">
             <h4 class="text-center" *ngIf="!(library.versions && library.versions.length)">
                 {{'label_no_library'|bkTranslate:this}} <strong>{{library.name}}</strong>
             </h4>
-            <template [ngIf]="library.versions && library.versions.length">
+            <ng-template [ngIf]="library.versions && library.versions.length">
                 <div *ngFor="let libraryVersion of library.versions" class="cursor-pointer"
                      [class.bg-grey-steel]="libraryVersion != selectedLibraryVersion"
                      [class.bg-green-turquoise]="libraryVersion == selectedLibraryVersion"
@@ -18,8 +18,8 @@
                     <h4><strong>{{libraryVersion.name}}</strong></h4>
                     <h5>{{libraryVersion.description}}</h5>
                 </div>
-            </template>
-        </template>
+            </ng-template>
+        </ng-template>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()"> {{'btn_cancel'|bkTranslate:this}}</button>

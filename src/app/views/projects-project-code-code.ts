@@ -127,7 +127,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     onToggleIDETab(tab: string) {
         if (this.tab_under_ide === tab) {
             this.tab_under_ide = ''; // Hide tab
-        }else {
+        } else {
             this.tab_under_ide = tab;
         }
     }

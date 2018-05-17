@@ -1,12 +1,11 @@
 
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { HostBinding } from '@angular/compiler/src/core';
+import { HostListener } from '@angular/core';
 
 
 @Component({
     selector: 'bk-drob-down-button',
-    host: {
-        '(document:click)': 'onOutsideClickDropdownMenu($event)',
-    },
     /* tslint:disable */
     template: `
 
@@ -131,6 +130,12 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
     @Output()
     onValueChanged: EventEmitter<string> = new EventEmitter<string>();
 
+    @HostListener('click') onOutsideClickDropdownMenu(event) {
+        if (!this._eref.nativeElement.contains(event.target)) { // or some similar check
+            this.drob_down_clicked = false;
+        }
+    }
+
     constructor(private _eref: ElementRef) { }
 
     ngOnInit(): void {
@@ -180,13 +185,6 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
         console.info('Kliknul NA Drobdown');
         this.drob_down_clicked = !this.drob_down_clicked;
     }
-
-    onOutsideClickDropdownMenu(event) {
-        if (!this._eref.nativeElement.contains(event.target)) { // or some similar check
-            this.drob_down_clicked = false;
-        }
-    }
-
 
 }
 

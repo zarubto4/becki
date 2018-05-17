@@ -44,7 +44,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
             this.projectId = params['project'];
             if (this.projectId) {
                 this.onShowProgramPrivateBlocksFilter();
-            }else {
+            } else {
                 this.tab = 'public_blocks';
                 this.onShowProgramPublicBlocksFilter();
             }

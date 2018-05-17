@@ -173,7 +173,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
                         }
 
                     });
-                }else {
+                } else {
                   // console.log("onGroupChange:: Nemám žádné skupiny, ukončuju a přiřazuji skupinu :", devgroup);
                     // No HW groups
                     this.selectedDeviceGroup = devgroup;

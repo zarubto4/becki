@@ -15,7 +15,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
 
 
                 <div *ngIf="btns && getConditionSize() == 1" class="becki-actions">
-                    <template ngFor let-element="$implicit" [ngForOf]="btns">
+                    <ng-template ngFor let-element="$implicit" [ngForOf]="btns">
 
                         <!-- Only if not a external link link !-->
                         <span *ngIf="!element.btn_link">
@@ -45,7 +45,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                             </button>
                         </a>
                         
-                    </template>
+                    </ng-template>
                 </div>
                 
                 <div *ngIf="btns && getConditionSize() > 1" class="becki-actions">
@@ -59,7 +59,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                 
                 <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line">
                     <ul class="nav nav-tabs becki-tab-menu" style="padding-top: 0px;">
-                        <template ngFor let-btn="$implicit" [ngForOf]="tabBtns">
+                        <ng-template ngFor let-btn="$implicit" [ngForOf]="tabBtns">
                             <li *ngIf="btn.condition" [class.active]="tab_selected_name == btn.tab_name"
                                 [class.color-hardware]="btn.tab_color === 'HARDWARE'"
                                 [class.color-cloud]="btn.tab_color === 'CLOUD'"
@@ -72,7 +72,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                                     <span [innerHTML]="btn.tab_label"></span>
                                 </a>
                             </li>
-                        </template>
+                        </ng-template>
                     </ul>
                 </div>
             </div>

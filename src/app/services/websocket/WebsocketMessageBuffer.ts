@@ -16,9 +16,11 @@ export class WebsocketMessageBuffer {
         // Nothing
     }
 
+    /*tslint:disable:no-unused-expression*/
     public sendMessage(websocket: WebsocketClientAbstract, message: WebsocketMessage, time: number, delay: number, numberOfRetries: number, callback: (message: WebsocketMessage, error: any) => void) {
         new WebsocketSendingMessage(websocket, message, this, time, delay, numberOfRetries, callback);
     }
+    /*tslint:disable:no-unused-expression*/
 
     public parseAnswer(message: WebsocketMessage): boolean {
 

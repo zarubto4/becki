@@ -1,8 +1,7 @@
 import { IndividualWebSocketOutComingMessage, WebsocketClientAbstract } from './Websocket_Client_Abstract';
-import { TyrionApiBackend } from '../../backend/BeckiBackend';
 import { WebsocketMessage } from './WebsocketMessage';
 
-
+/*tslint:disable:no-use-before-declare*/
 export class WebsocketClientBlockoView extends  WebsocketClientAbstract {
 
     public constructor(public websocketUrl: string) {
@@ -120,5 +119,6 @@ export class IWebSocketGetBProgramValues extends IndividualWebSocketOutComingMes
         return WebsocketClientAbstract.HOMER_CHANNEL_NAME;
     }
 }
+/*tslint:enable:no-use-before-declare*/
 
 

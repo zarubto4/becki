@@ -10,7 +10,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
     <i *ngIf="componentValue" class="fa fa-toggle-on font-green-jungle cursor-hand" [style.vertical-align]="verticalAlign" [style.font-size]="fontSize"
     (click)="switchValue()"></i>
     <i *ngIf="!componentValue" class="fa fa-toggle-off font-grey-mint cursor-hand" [style.vertical-align]="verticalAlign" [style.font-size]="fontSize"
-    (click)="switchValue()"></i>   
+    (click)="switchValue()"></i>
 `
     /* tslint:enable */
 })

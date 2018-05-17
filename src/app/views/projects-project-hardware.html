@@ -347,14 +347,14 @@
                             <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
                         </td>
                         <td class="vert-align text-center">
-                            <template [ngIf]="procedure.program">
+                            <ng-template [ngIf]="procedure.program">
                                 <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
                                 -
                                 <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
-                            </template>
-                            <template [ngIf]="procedure.bootloader">
+                            </ng-template>
+                            <ng-template [ngIf]="procedure.bootloader">
                                 <a class="bold" [routerLink]="['/hardware', procedure.bootloader.bootloader_id]">{{procedure.bootloader.bootloader_name}}</a>
-                            </template>
+                            </ng-template>
                         </td>
 
                         <td class="vert-align text-center">

@@ -24,5 +24,8 @@
   "awesomeTypescriptLoaderOptions": {
     "forkChecker": true,
     "useWebpackText": true
+  },
+    "angularCompilerOptions": {
+        "preserveWhitespaces": false
   }
 }

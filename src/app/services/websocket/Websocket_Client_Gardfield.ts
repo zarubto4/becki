@@ -3,7 +3,7 @@ import { WebsocketMessage } from './WebsocketMessage';
 import { IHardwareNewSettingsResultConfiguration } from '../../backend/TyrionAPI';
 import { WebsocketClientTyrion } from './Websocket_Client_Tyrion';
 
-
+/*tslint:disable:no-use-before-declare*/
 export class WebsocketClientGardfield  extends WebsocketClientAbstract {
 
     public tyrion: WebsocketClientTyrion;
@@ -185,4 +185,4 @@ export class IWebSocketGetDeviceId extends IndividualWebSocketOutComingMessage {
         return WebsocketClientAbstract.GARFIELD_CHANNEL_NAME;
     }
 }
-
+/*tslint:enable:no-use-before-declare*/

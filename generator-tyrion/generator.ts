@@ -7,7 +7,6 @@ import * as program from 'commander';
 import { readFileSync, writeFileSync } from 'fs';
 import * as moment from 'moment';
 import * as chalk from 'chalk';
-import {config} from "shelljs";
 
 let request = require('sync-request');
 /* tslint:disable:no-console max-line-length */
@@ -37,10 +36,10 @@ if (!program['className']) {
 
 let DEBUG = false;
 if (program['debug'] === true) {
-    console.error("DEBUG VALUE:  DEBUG IS ACTIVE");
+    console.error('DEBUG VALUE:  DEBUG IS ACTIVE');
     DEBUG = true;
-}else {
-    console.error("DEBUG VALUE:  DEBUG IS NOT ACTIVE. For activation add '-d' parameter");
+} else {
+    console.error('DEBUG VALUE:  DEBUG IS NOT ACTIVE. For activation add "-d" parameter');
 }
 
 // CONFIG
@@ -294,7 +293,7 @@ definitionsKeys.forEach((defName) => {
 
             if (!propKey.match(/^([a-z0-9_])+$/g)) {
 
-                if(CONFIG.allowedDefinitions.indexOf(propKey) < 0) {
+                if (CONFIG.allowedDefinitions.indexOf(propKey) < 0) {
                     number_of_bugs++;
 
                     console.log(chalk.yellow('Something is wrong with property name \"')
@@ -358,7 +357,7 @@ let makeReadableMethodName = (method: string, url: string, pathObj: string) => {
         console.log('method:: ', method);
     }
 
-    if(pathObj['summary'] == null) {
+    if (pathObj['summary'] == null) {
         console.error('method:: ', url, ' NOT CONTAINS SUMMARY!!! SOMETHING IS WRONG!');
         console.error('method:: ', url, ' NOT CONTAINS SUMMARY!!! \n', pathObj);
         return null;

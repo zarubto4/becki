@@ -94,7 +94,7 @@ export abstract class WebsocketClientAbstract {
             if (this._websocket.readyState === WebSocket.OPEN) {
                 this._websocket.send(message.toJsonString());
                 return true;
-            }else {
+            } else {
                 console.error('WebsocketClientAbstract:: send_without_callback this._websocket.readyState !== WebSocket.OPEN');
                 return false;
             }

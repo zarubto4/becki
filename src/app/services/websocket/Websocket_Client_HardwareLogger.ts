@@ -4,7 +4,7 @@ import { WebsocketMessage } from './WebsocketMessage';
 import { ConsoleLogType } from '../../components/ConsoleLogComponent';
 import { IWebSocketPingResponse } from './Websocket_Client_Tyrion';
 
-
+/*tslint:disable:no-use-before-declare*/
 export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
 
     private _onlogsCallback: ((m: ITerminalWebsocketMessage) => void);
@@ -123,4 +123,4 @@ export class ITerminalWebsocketMessage {
     level: ConsoleLogType;
     message: string;
 }
-
+/*tslint:enable:no-use-before-declare*/

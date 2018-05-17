@@ -8,237 +8,237 @@
          [class.modal-width-80]="modalWrapper.modalModel?modalWrapper.modalModel.modalWide:false">
         <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
 
-            <template [ngSwitchCase]="'ModalsInstanceCreateModel'">
+            <ng-template [ngSwitchCase]="'ModalsInstanceCreateModel'">
                 <bk-modals-instance-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-create>
-            </template>
-            <template [ngSwitchCase]="'ModalsHardwareFindHash'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsHardwareFindHash'">
                 <bk-modals-hardware-find-hash-component [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-find-hash-component>
-            </template>
-            <template [ngSwitchCase]="'ModalsUpdateHomerServerModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsUpdateHomerServerModel'">
                 <bk-modals-homer-update-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-homer-update-server>
-            </template>
-            <template [ngSwitchCase]="'ModalsHardwareChangeServerModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsHardwareChangeServerModel'">
                 <bk-modals-hardware-change-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-change-server>
-            </template>
-            <template [ngSwitchCase]="'ModalsUpdateReleaseFirmwareModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsUpdateReleaseFirmwareModel'">
                 <bk-modals-update-release-firmware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-update-release-firmware>
-            </template>
-            <template [ngSwitchCase]="'ModalsHardwareRestartMQTTPassModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsHardwareRestartMQTTPassModel'">
                 <bk-modals-hardware-restart-mqtt-pass [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-restart-mqtt-pass>
-            </template>
-            <template [ngSwitchCase]="'ModalsHardwareGroupDeviceSettingsModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsHardwareGroupDeviceSettingsModel'">
                 <bk-modals-hardware-group-device-settings [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-group-device-settings>
-            </template>
-            <template [ngSwitchCase]="'ModalsHardwareGroupPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsHardwareGroupPropertiesModel'">
                 <bk-modals-hardware-group-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-group-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsPermissionPermissionPropertyModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsPermissionPermissionPropertyModel'">
                 <bk-modals-permission-permission-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-permission-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlockoBlockCopyModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlockoBlockCopyModel'">
                 <bk-modals-blocko-block-copy [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-block-copy>
-            </template>
-            <template [ngSwitchCase]="'ModalsWidgetsWidgetCopyModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsWidgetsWidgetCopyModel'">
                 <bk-modals-widgets-widget-copy [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-widgets-widget-copy>
-            </template>
-            <template [ngSwitchCase]="'ModalsPublicShareResponseModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsPublicShareResponseModel'">
                 <bk-modals-public-share-response [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-public-share-response>
-            </template>
-            <template [ngSwitchCase]="'ModalsPublicShareRequestModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsPublicShareRequestModel'">
                 <bk-modals-public-share-request [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-public-share-request>
-            </template>
-            <template [ngSwitchCase]="'ModalsCompanyInformationModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCompanyInformationModel'">
                 <bk-modals-company-information [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-company-information>
-            </template>
-            <template [ngSwitchCase]="'ModalsBillingInformationModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBillingInformationModel'">
                 <bk-modals-billing-information [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-billing-information>
-            </template>
-            <template [ngSwitchCase]="'ModalsFinancialProductModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsFinancialProductModel'">
                 <bk-modals-financial-product [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-financial-product>
-            </template>
-            <template [ngSwitchCase]="'ModalsExtensionModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsExtensionModel'">
                 <bk-modals-extension [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-extension>
-            </template>
-            <template [ngSwitchCase]="'ModalsTariffModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsTariffModel'">
                 <bk-modals-tariff [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-tariff>
-            </template>
-            <template [ngSwitchCase]="'ModalsCreateHardwareTypeBatchModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCreateHardwareTypeBatchModel'">
                 <bk-modals-type-of-board-batch-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-type-of-board-batch-create>
-            </template>
-            <template [ngSwitchCase]="'ModalsAdminCreateHardwareModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsAdminCreateHardwareModel'">
                 <bk-modals-admin-create-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-admin-create-hardware>
-            </template>
-            <template [ngSwitchCase]="'ModalsFileUploadModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsFileUploadModel'">
                 <bk-modals-file-upload [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-file-upload>
-            </template>
-            <template [ngSwitchCase]="'ModalsPictureUploadModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsPictureUploadModel'">
                 <bk-modals-picture-upload [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-picture-upload>
-            </template>
-            <template [ngSwitchCase]="'ModalsGarfieldModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsGarfieldModel'">
                 <bk-modals-garfield [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-garfield>
-            </template>
-            <template [ngSwitchCase]="'ModalsRolePermissionAddModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsRolePermissionAddModel'">
                 <bk-modals-role-permission-add [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-role-permission-add>
-            </template>
-            <template [ngSwitchCase]="'ModalsPermissionGroupModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsPermissionGroupModel'">
                 <bk-modals-permission-group [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-group>
-            </template>
-            <template [ngSwitchCase]="'ModalsRemovalModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsRemovalModel'">
                 <bk-modals-removal [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-removal>
-            </template>
-            <template [ngSwitchCase]="'ModalsCreateProducerModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCreateProducerModel'">
                 <bk-modals-create-producer [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-create-producer>
-            </template>
-            <template [ngSwitchCase]="'ModalsCreateProcessorModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCreateProcessorModel'">
                 <bk-modals-create-processor [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-create-processor>
-            </template>
-            <template [ngSwitchCase]="'ModalsBootloaderPropertyModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBootloaderPropertyModel'">
                 <bk-modals-bootloader-property [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-bootloader-property>
-            </template>
-            <template [ngSwitchCase]="'ModalsSetAsMainModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSetAsMainModel'">
                 <bk-modals-set-as-main [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-set-as-main>
-            </template>
-            <template [ngSwitchCase]="'ModalsCreateHardwareTypeModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCreateHardwareTypeModel'">
                 <bk-modals-type-of-board-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-type-of-board-create>
-            </template>
-            <template [ngSwitchCase]="'ModalsDeactivateModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsDeactivateModel'">
                 <bk-modals-deactivate [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-deactivate>
-            </template>
-            <template [ngSwitchCase]="'ModalsProjectPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsProjectPropertiesModel'">
                 <bk-modals-project-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-project-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsAddHardwareModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsAddHardwareModel'">
                 <bk-modals-add-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-add-hardware>
-            </template>
-            <template [ngSwitchCase]="'ModalsCodePropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCodePropertiesModel'">
                 <bk-modals-code-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlockoPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlockoPropertiesModel'">
                 <bk-modals-blocko-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsLogLevelModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsLogLevelModel'">
                 <bk-modals-terminal-loglevel-change [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-terminal-loglevel-change>
-            </template>
-            <template [ngSwitchCase]="'ModalsLibraryPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsLibraryPropertiesModel'">
                 <bk-modals-library-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-library-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsCodeFileDialogModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCodeFileDialogModel'">
                 <bk-modals-code-file-dialog [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-file-dialog>
-            </template>
-            <template [ngSwitchCase]="'ModalsConfirmModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsConfirmModel'">
                 <bk-modals-confirm [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-confirm>
-            </template>
-            <template [ngSwitchCase]="'ModalsVersionDialogModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsVersionDialogModel'">
                 <bk-modals-version-dialog [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-version-dialog>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlockoBlockCodeEditorModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlockoBlockCodeEditorModel'">
                 <bk-modals-blocko-block-code-editor [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-block-code-editor>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlockoConfigPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlockoConfigPropertiesModel'">
                 <bk-modals-blocko-config-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-config-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlockoAddHardwareModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlockoAddHardwareModel'">
                 <bk-modals-blocko-add-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-add-hardware>
-            </template>
-            <template [ngSwitchCase]="'ModalsGridConfigPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsGridConfigPropertiesModel'">
                 <bk-modals-grid-config-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-grid-config-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsGridProjectPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsGridProjectPropertiesModel'">
                 <bk-modals-grid-project-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-grid-project-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsGridProgramPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsGridProgramPropertiesModel'">
                 <bk-modals-grid-program-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-grid-program-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlockoAddGridModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlockoAddGridModel'">
                 <bk-modals-blocko-add-grid [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-add-grid>
-            </template>
-             <template [ngSwitchCase]="'ModalsBlockoAddGridEmptyModel'">
+            </ng-template>
+             <ng-template [ngSwitchCase]="'ModalsBlockoAddGridEmptyModel'">
                 <bk-modals-blocko-add-grid-empty [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-add-grid-empty>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlocksTypePropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlocksTypePropertiesModel'">
                 <bk-modals-blocks-type-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocks-type-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlocksBlockPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlocksBlockPropertiesModel'">
                 <bk-modals-blocks-block-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocks-block-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsHighImportanceNotificationModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsHighImportanceNotificationModel'">
                 <bk-modals-high-importance-notification [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-high-importance-notification>
-            </template>
-            <template [ngSwitchCase]="'ModalsDeviceEditDescriptionModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsDeviceEditDescriptionModel'">
                 <bk-modals-device-edit-description [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-device-edit-description>
-            </template>
-            <template [ngSwitchCase]="'ModalsDeviceEditDeveloperParameterValueModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsDeviceEditDeveloperParameterValueModel'">
                 <bk-modals-device-edit-developer-parameter-value [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-device-edit-developer-parameter-value>
-            </template>
-            <template [ngSwitchCase]="'ModalsInstanceEditDescriptionModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsInstanceEditDescriptionModel'">
                 <bk-modals-instance-edit-description [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-edit-description>
-            </template>
-            <template [ngSwitchCase]="'ModalsBlockoVersionSelectModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsBlockoVersionSelectModel'">
                 <bk-modals-blocko-version-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-version-select>
-            </template>
-            <template [ngSwitchCase]="'ModalsMembersAddModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsMembersAddModel'">
                 <bk-modals-members-add [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-members-add>
-            </template>
-            <template [ngSwitchCase]="'ModalsWidgetsTypePropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsWidgetsTypePropertiesModel'">
                 <bk-modals-widgets-type-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-widgets-type-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsWidgetsWidgetPropertiesModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsWidgetsWidgetPropertiesModel'">
                 <bk-modals-widgets-widget-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-widgets-widget-properties>
-            </template>
-            <template [ngSwitchCase]="'ModalsSendInvoiceModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSendInvoiceModel'">
                 <bk-modals-send-invoice [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-send-invoice>
-            </template>
-            <template [ngSwitchCase]="'ModalsCreateHomerServerModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCreateHomerServerModel'">
                 <bk-modals-homer-create-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-homer-create-server>
-            </template>
-            <template [ngSwitchCase]="'ModalsCreateCompilerServerModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCreateCompilerServerModel'">
                 <bk-modals-compiler-create-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-compiler-create-server>
-            </template>
-            <template [ngSwitchCase]="'ModalsSelectHardwareModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSelectHardwareModel'">
                 <bk-modals-select-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-select-hardware>
-            </template>
-            <template [ngSwitchCase]="'ModalsHardwareBootloaderUpdateModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsHardwareBootloaderUpdateModel'">
                 <bk-modals-hardware-bootloader-update [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-bootloader-update>
-            </template>
-            <template [ngSwitchCase]="'ModalsCodeAddLibraryModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCodeAddLibraryModel'">
                 <bk-modals-code-add-library [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-add-library>
-            </template>
-            <template [ngSwitchCase]="'ModalsCodeLibraryVersionModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsCodeLibraryVersionModel'">
                 <bk-modals-code-library-version [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-library-version>
-            </template>
-            <template [ngSwitchCase]="'ModalsHardwareCodeProgramVersionSelectModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsHardwareCodeProgramVersionSelectModel'">
                 <bk-modals-hardware-code-program-version-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-code-program-version-select>
-            </template>
-            <template [ngSwitchCase]="'ModalsSelectCodeModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSelectCodeModel'">
                 <bk-modals-code-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-select>
-            </template>
-            <template [ngSwitchCase]="'ModalsSelectVersionModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSelectVersionModel'">
                 <bk-modals-version-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-version-select>
-            </template>
-            <template [ngSwitchCase]="'ModalsSelectProgramVersionModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSelectProgramVersionModel'">
                 <bk-modals-program-version-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-program-version-select>
-            </template>
-            <template [ngSwitchCase]="'ModalsSnapShotInstanceModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSnapShotInstanceModel'">
                 <bk-modals-snap-shot-instance [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-snap-shot-instance>
-            </template>
-            <template [ngSwitchCase]="'ModalsSnapShotDeployModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSnapShotDeployModel'">
                 <bk-modals-snap-shot-deploy [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-snap-shot-deploy>
-            </template>
-            <template [ngSwitchCase]="'ModalsShowQRModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsShowQRModel'">
                 <bk-modals-show-qr [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-show-qr>
-            </template>
-            <template [ngSwitchCase]="'ModalsGridProgramSettingsModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsGridProgramSettingsModel'">
                 <bk-modals-instance-grid-program-settings [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-grid-program-settings>
-            </template>
-            <template [ngSwitchCase]="'ModalsSelectGridProjectModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSelectGridProjectModel'">
                 <bk-modals-grid-project-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-grid-project-select>
-            </template>
-            <template [ngSwitchCase]="'ModalsSelectBlockModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsSelectBlockModel'">
                 <bk-modals-block-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-block-select>
-            </template>
-            <template [ngSwitchCase]="'ModalsArticleModel'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsArticleModel'">
                 <bk-modals-article [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-article>
-            </template>
+            </ng-template>
         </div>
     </div>
 </div>

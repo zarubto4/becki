@@ -1,4 +1,4 @@
-import { Component, Output, Input, EventEmitter, AfterViewInit, OnInit } from '@angular/core';
+import { Component, Output, Input, EventEmitter, OnInit } from '@angular/core';
 import { FormSelectComponentOption } from './FormSelectComponent';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
@@ -73,12 +73,12 @@ import { TyrionBackendService } from '../services/BackendService';
                         <!-- Set Date From To -->
 
                     </div>
-                    
+
                 </div>
             </div>
         </div>
-        
-      
+
+
     `
 })
 /* tslint:enable */

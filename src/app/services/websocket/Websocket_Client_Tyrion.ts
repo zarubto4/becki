@@ -3,7 +3,7 @@ import { ModelChangeStatus, OnlineChangeStatus, TyrionApiBackend } from '../../b
 import { WebsocketMessage } from './WebsocketMessage';
 import { INotification, IWebSocketToken } from '../../backend/TyrionAPI';
 
-
+/*tslint:disable:no-use-before-declare*/
 export class WebsocketClientTyrion extends WebsocketClientAbstract {
 
     protected pingTimeout;
@@ -19,7 +19,7 @@ export class WebsocketClientTyrion extends WebsocketClientAbstract {
 
                 if (response && response.status === 'success') {
                     // Nothing
-                }else {
+                } else {
                     console.error('WebsocketClientTyrion: requestNotificationsSubscribe:: ERRTOR: ',  error);
                 }
 
@@ -190,3 +190,4 @@ export interface IWebSocketErrorMessage {
 export interface IWebSocketNotification extends INotification, IndividualWebSocketOutComingMessage {
     state: ('CREATED' | 'UPDATED' | 'CONFIRMED' | 'DELETED');
 }
+/*tslint:enable:no-use-before-declare*/

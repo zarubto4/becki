@@ -112,7 +112,7 @@
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let device of boardsFiler.content">
-                            <template [ngIf]="device">
+                            <ng-template [ngIf]="device">
                                 <td class="vert-align no-wrap">
                                             <span class="icon-hint-wraper red"
                                                   *ngIf="device.alert_list && device.alert_list.length > 0">
@@ -167,7 +167,7 @@
                                     >
                                     </bk-drob-down-button>
                                 </td>
-                            </template>
+                            </ng-template>
                         </tr>
                     </tbody>
                 </table>

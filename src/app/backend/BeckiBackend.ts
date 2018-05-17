@@ -34,8 +34,8 @@ export interface ModelChangeStatus {
 
 export abstract class TyrionApiBackend extends TyrionAPI {
 
-    public static host = '127.0.0.1:9000';
-    public static protocol = 'http';
+    public static host = 'tyrion.stage.byzance.cz';
+    public static protocol = 'https';
 
     public requestProxyServerUrl = 'http://127.0.0.1:4000/fetch/';
 
@@ -67,7 +67,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     public constructor() {
         super();
 
-
+        /*
         if (location && location.hostname) {
             if (location.hostname.indexOf('portal.') === 0) {
                 TyrionApiBackend.host = location.hostname.replace('portal.', 'tyrion.');
@@ -90,6 +90,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         if (location && location.hostname.indexOf('test.byzance.dev') > -1) {
             this.requestProxyServerUrl = 'http://test.byzance.dev:4000/fetch/';
         }
+        */
 
         // Create WebSocket Connection
         this.websocketService = new WebsocketService(this);
