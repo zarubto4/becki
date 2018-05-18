@@ -10,7 +10,7 @@ import { TranslationService } from './TranslationService';
 export class ValidatorErrorsService {
 
     constructor(private translationService: TranslationService) {
-        console.info('ValidatorErrorsService init');
+        // console.info('ValidatorErrorsService init');
     }
     translate(key: string, ...args: any[]): string {
         return this.translationService.translate(key, this, null, args);

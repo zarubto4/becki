@@ -270,16 +270,44 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
 
 
-    onMessage(msg: ITerminalWebsocketMessage) {
-        // console.log('onMessage: Logger Message:: ', msg);
-        let hardware = this.selected_hw_for_subscribe.find(device => device.id === msg.hardware_id); // najdeme hardware, kterého se zpráva týká
-        if (hardware) {
-            if (this.consoleLog) {
-                // console.log('onMessage: some message from Hardware', msg);
-                this.consoleLog.add(msg.level, msg.message, hardware.id, hardware.name); // přidání zprávy do consoleComponent
+    onMessage(msg: WebsocketMessage) {
+        console.info('onMessage: Logger Message:: ', msg);
 
+        if (msg.message_type === 'message_log') {
+
+            let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
+            if (hardware) {
+                if (this.consoleLog) {
+                    console.info('onMessage: some message from Hardware', msg);
+                    this.consoleLog.add(msg.data['level'], msg.data['message'], hardware.id, hardware.name); // přidání zprávy do consoleComponent
+
+                }
+            }
+
+        }
+
+        if (msg.message_type === 'hardware_disconnect') {
+            let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
+            if (hardware) {
+                if (this.consoleLog) {
+                    console.info('onMessage: some message from Hardware', msg);
+                    this.consoleLog.add('info', 'Hardware Disconnect ------------------------------------------------------------ ', hardware.id, hardware.name); // přidání zprávy do consoleComponent
+
+                }
             }
         }
+
+        if (msg.message_type === 'hardware_connect') {
+            let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
+            if (hardware) {
+                if (this.consoleLog) {
+                    console.info('onMessage: some message from Hardware', msg);
+                    this.consoleLog.add('info','Hardware Connected ------------------------------------------------------------ ', hardware.id, hardware.name); // přidání zprávy do consoleComponent
+
+                }
+            }
+        }
+
     }
 
     /**
@@ -287,7 +315,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param hardware
      */
     onHardwareUnSubscribeClick(hardware: IHardware): void {
-        // console.log('onHardwareUnSubscribeClick: Hardware::', hardware.id);
+        console.info('onHardwareUnSubscribeClick: Hardware::', hardware.id);
 
         this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
 
@@ -308,13 +336,15 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      */
     onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace') = 'info'): void {
 
-        // console.log('onHardwareSubscribeClick: Hardware::', hardware.id);
+        console.info('onHardwareSubscribeClick: Hardware::', hardware.id);
 
         this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel , (response_message: WebsocketMessage, error: any) => {
 
             // console.log('onHardwareSubscribeClick: response_message::', response_message);
 
             if (response_message && response_message.status == 'success') {
+
+                console.info('onHardwareSubscribeClick:: Hardware', hardware.id, 'response_message', response_message);
                 this.logLevel[hardware.id].subscribed = true;
             }else {
                 console.error('onHardwareSubscribeClick:: Hardware', hardware.id, 'LogLevel', logLevel, 'Error', error);
@@ -453,7 +483,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
                     this.onHardwareSubscribeClick(hardware, this.logLevel[hardware.id].log);
 
-                    socket.onLogsCallback = (log: ITerminalWebsocketMessage) => this.onMessage(log);
+                    socket.onLogsCallback = (log: WebsocketMessage) => this.onMessage(log);
 
                     this.consoleLog.add('output', 'Initializing the device. More information in settings', hardware.id, hardware.name);
                     this.consoleLog.set_color(hardware.id, this.colorForm.controls['color_' + hardware.id].value);

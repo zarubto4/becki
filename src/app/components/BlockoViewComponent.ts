@@ -124,7 +124,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 editorElement: this.field.nativeElement,
                 singleBlockView: this.singleBlockView
             });
-            this.blocko.config.bindInterfaceEnabled = true;
+           // this.blocko.config.bindInterfaceEnabled = true;
             this.blocko.registerOpenConfigCallback((block) => {
                 this.zone.run(() => {
                     if (block.blockId) {

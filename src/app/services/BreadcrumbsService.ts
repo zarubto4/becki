@@ -25,7 +25,7 @@ export class BreadcrumbsService {
         protected currentParamsService: CurrentParamsService,
         protected backendService: TyrionBackendService
     ) {
-        console.info('BreadcrumbsService init');
+        // console.info('BreadcrumbsService init');
 
         this.refresh();
 

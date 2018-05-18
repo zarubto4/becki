@@ -32,8 +32,7 @@ export interface DataCharInterface {
 @Component({
     selector: 'bk-form-chart-bar',
     /* tslint:disable:max-line-length */
-    template: `
-
+    template: `        
         <div class="portlet light">
             
             <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
@@ -102,7 +101,7 @@ export class ChartBarComponent implements OnInit, OnDestroy, OnChanges {
     @Output()
     onClick: EventEmitter<string> = new EventEmitter<string>();
 
-    protected chart_colors: Array<any> = [
+    public chart_colors: Array<any> = [
         { // byzance blue
             backgroundColor: 'rgba(0, 171, 233, 1)',
             borderColor: 'rgba(0, 171, 233, 1)',
