@@ -6,7 +6,7 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 import { IProject, ILibrary, ILibraryList } from '../backend/TyrionAPI';

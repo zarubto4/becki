@@ -5,9 +5,8 @@
 
 
 import { FormControl, AsyncValidatorFn, AbstractControl } from '@angular/forms';
-import { Observable, Observer } from 'rxjs/Rx';
+import { Observable, Observer } from 'rxjs';
 import { TyrionBackendService } from '../services/BackendService';
-import { IBProgram } from '../backend/TyrionAPI';
 
 export class AsyncValidatorDebounce {
     _validate: (x: any) => any;

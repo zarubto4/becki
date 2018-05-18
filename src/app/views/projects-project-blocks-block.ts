@@ -6,7 +6,7 @@
 import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import {
     IBlock, IBlockVersion, IProject
 } from '../backend/TyrionAPI';

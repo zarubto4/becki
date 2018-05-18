@@ -2,11 +2,11 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/add/operator/map';
+
+
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, ReplaySubject } from 'rxjs/Rx';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IProject, IHardwareType } from '../backend/TyrionAPI';
 import { TyrionBackendService } from './BackendService';
 

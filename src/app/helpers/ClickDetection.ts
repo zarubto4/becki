@@ -1,5 +1,6 @@
+import { fromEvent as observableFromEvent } from 'rxjs';
+import { tap, delay } from 'rxjs/operators';
 import { Directive, OnInit, OnDestroy, Output, EventEmitter, ElementRef } from '@angular/core';
-import { Observable } from 'rxjs';
 
 @Directive({
     selector: '[bkClickOutside]'
@@ -16,16 +17,13 @@ export class BeckiClickOutsideDirective implements OnInit, OnDestroy {
         this.clickOutside = new EventEmitter();
     }
     ngOnInit() {
-        this.globalClick = function() {
-            return Observable.create()
-                .fromEvent(document, 'click')
-                .delay(1)
-                .do(() => {
-                    this.listening = true;
-                }).subscribe((event: MouseEvent) => {
-                    this.onGlobalClick(event);
-                });
-        }
+        this.globalClick = observableFromEvent(document, 'click').pipe(
+            delay(1),
+            tap(() => {
+                this.listening = true;
+            }), ).subscribe((event: MouseEvent) => {
+                this.onGlobalClick(event);
+            });
     }
     ngOnDestroy() {
         // this.globalClick.unsubscribe();

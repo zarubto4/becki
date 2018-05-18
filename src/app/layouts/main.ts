@@ -3,17 +3,15 @@
  * directory of this distribution.
  */
 
-import {
-    Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges, NgZone,
-    ViewEncapsulation, ChangeDetectorRef
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges, NgZone, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TyrionBackendService } from '../services/BackendService';
 import { BreadcrumbsService } from '../services/BreadcrumbsService';
 import { TabMenuService } from '../services/TabMenuService';
 import { LabeledLink } from '../helpers/LabeledLink';
 import { NotificationService } from '../services/NotificationService';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
+
 
 declare const BECKI_VERSION: string;
 declare const BECKI_VERSION_ID: number;

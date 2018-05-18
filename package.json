@@ -52,7 +52,6 @@
     "pre-commit": "^1.2.2",
     "qrcode": "^0.8.2",
     "rxjs": "^6.1.0",
-    "rxjs-compat": "^6.1.0",
     "rxjs-tslint": "^0.1.4",
     "script-engine": "git+ssh://git@github.com/ByzanceIoT/script-engine.git#v0.0.39",
     "systemjs": "^0.19.47",

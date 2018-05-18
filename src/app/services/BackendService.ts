@@ -2,8 +2,8 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/add/operator/map';
+
+
 import { EventEmitter, Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';

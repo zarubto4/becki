@@ -5,11 +5,10 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import {
-    ICompilationServer, IHomerServer, IHomerServerFilter, IHomerServerList, IProject,
+    IHomerServer, IHomerServerList, IProject,
     IServerRegistrationFormData, IServerRegistrationFormDataServerRegion, IServerRegistrationFormDataServerSize
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';

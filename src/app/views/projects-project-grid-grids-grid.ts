@@ -5,7 +5,7 @@
 import { Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import {
     IWidget, IProject, IGridProgram, IGridProject, IGridProgramVersion,
     IGridWidgetList
