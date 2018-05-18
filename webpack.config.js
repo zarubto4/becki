@@ -112,7 +112,7 @@ module.exports = function makeWebpackConfig() {
             // Support for CSS as raw text
             // use 'null' loader in test mode (https://github.com/webpack/null-loader)
             // all css in src/style will be bundled in an external css file
-            {
+                {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
                 use: isTest ? 'null-loader' : ExtractTextPlugin.extract(
