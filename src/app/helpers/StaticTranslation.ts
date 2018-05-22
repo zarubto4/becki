@@ -1,4 +1,3 @@
-import {ModalsGsmPropertiesComponent} from "../modals/gsm-properties";
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
@@ -1594,7 +1593,7 @@ export class StaticTranslation {
                 'btn_create_server': 'Create Server',
                 'btn_create_automatically_server': ' Create SaaS Server',
 
-            }, 'ProjectsProjectGSMComponent': {
+            }, 'ProjectsProjectGSMSComponent': {
 
                 'title': 'Byzance<strong class="font-color-hardware">CELLULAR</strong> Modules',
                 'label_no_gsm': 'No <strong class="font-color-hardware">CELLULAR</strong> Modules',
@@ -1612,6 +1611,23 @@ export class StaticTranslation {
                 'label_gsm_remove': 'Remove',
                 'label_gsm_un_register': 'Un Register',
                 'label_gsm_print_sticker': 'Print Sticker',
+
+            }, 'ProjectsProjectGSMSGSMComponent': {
+
+                'title': 'Byzance<strong class="font-color-hardware">CELLULAR</strong> Module',
+                'label_msi_number': 'MSI Number',
+                'label_id': 'ID',
+                'label_name': 'Name',
+                'label_msi_status': 'CELLULAR status',
+                'label_description': 'Description',
+                'label_status': 'Status',
+                'label_actions': 'Actions',
+                'label_gsm_properties': 'Properties',
+                'label_gsm_edit': 'Edit',
+                'label_gsm_remove': 'Remove',
+                'label_gsm_un_register': 'Un Register',
+                'label_gsm_print_sticker': 'Print Sticker',
+                'label_gsm_traffic': 'Cellular Module Traffic',
 
             }, 'ProjectsProjectInstancesComponent': {
 

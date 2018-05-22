@@ -65,7 +65,7 @@ export class ModalService {
     public modalWrappers: ModalWrapper[] = [];
 
     constructor(protected ngZone: NgZone, private translationService: TranslationService) {
-        console.info('ModalService init');
+        // console.info('ModalService init');
     }
 
 

@@ -25,12 +25,13 @@ import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
 @Component({
     selector: 'bk-terminal-log-component',
     template: `
+        <div class="portlet light">
 
-        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-        <bk-portlet-title [title_name]="'title'|bkTranslate:this"
-                          [icon]="'fa-microchip'"
-                          (onClick)="onPortletClick($event)"
-                          [btns]="[
+            <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+            <bk-portlet-title [title_name]="'title'|bkTranslate:this"
+                              [icon]="'fa-microchip'"
+                              (onClick)="onPortletClick($event)"
+                              [btns]="[
                               {
                                   condition: (tab == 'settings'),
                                   btn_label_for_person: ('btn_add_hardware'|bkTranslate:this),
@@ -40,9 +41,9 @@ import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
                               }
 
                           ]"
-                          (onTabClick)="onToggleTab($event)"
-                          [tab_selected_name]="tab"
-                          [tabBtns]="[
+                              (onTabClick)="onToggleTab($event)"
+                              [tab_selected_name]="tab"
+                              [tabBtns]="[
                             {
                                 tab_name: 'terminal',
                                 condition: (true),
@@ -57,35 +58,35 @@ import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
                             }
                           
                     ]"
-        >
-        </bk-portlet-title>
-        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+            >
+            </bk-portlet-title>
+            <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-        <!-- Terminal -->
-        <div [hidden]="!(tab == 'terminal')">
-            <bk-console-log maxHeight="800px" #console></bk-console-log>
-            <br>
-            <button class="btn blue" (click)="consoleLog.clear()">
-                <i class="fa fa-times-circle"></i> {{'btn_clear_console'|bkTranslate:this}}
-            </button>
-        </div>
-        <!-- Terminal END -->
+            <!-- Terminal -->
+            <div [hidden]="!(tab == 'terminal')">
+                <bk-console-log maxHeight="800px" #console></bk-console-log>
+                <br>
+                <button class="btn blue" (click)="consoleLog.clear()">
+                    <i class="fa fa-times-circle"></i> {{'btn_clear_console'|bkTranslate:this}}
+                </button>
+            </div>
+            <!-- Terminal END -->
 
-        <div [hidden]="!(tab == 'settings')">
+            <div [hidden]="!(tab == 'settings')">
 
-            <table *ngIf="selected_hw_for_subscribe && selected_hw_for_subscribe.length >= 1" class="table table-hover">
-                <thead>
-                <tr>
-                    <th class="">{{'table_id' | bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_logLevel' | bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_state' | bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_logLevel' | bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_connection' | bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_color' | bkTranslate:this}}</th>
-                    <th class="text-right no-wrap">{{'table_actions' | bkTranslate:this}}</th>
-                </tr>
-                </thead>
-                <tbody>
+                <table *ngIf="selected_hw_for_subscribe && selected_hw_for_subscribe.length >= 1" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="">{{'table_id' | bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_logLevel' | bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_state' | bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_logLevel' | bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_connection' | bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_color' | bkTranslate:this}}</th>
+                        <th class="text-right no-wrap">{{'table_actions' | bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <tr *ngFor="let hardware of selected_hw_for_subscribe">
                         <td class="vert-align">
                             {{(hardware.name ? hardware.name : hardware.id)}}
@@ -95,7 +96,7 @@ import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
                         <td class="vert-align text-center">
                             <bk-log-level [log_level]="logLevel[hardware.id].log"></bk-log-level>
                         </td>
-                        
+
                         <!-- Subsrcibe Statel !-->
                         <td class="text-center vert-align">
                             <span *ngIf="logLevel[hardware.id].subscribed" class="font-green-jungle" >Subscribing</span>
@@ -106,36 +107,36 @@ import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
                         </td>
 
                         <!-- Log Selector !-->
-                        <td class="text-center vert-align"> 
-                            <bk-form-select [control]="colorForm.controls['log_' + hardware.id]"  
-                                            [label]="'label_select_logLevel'|bkTranslate:this" 
+                        <td class="text-center vert-align">
+                            <bk-form-select [control]="colorForm.controls['log_' + hardware.id]"
+                                            [label]="'label_select_logLevel'|bkTranslate:this"
                                             [placeholder]="'placeholder_info_level'|bkTranslate:this"
                                             [regexFirstOption]="logLevel[hardware.id].log"
                                             (valueChanged)="onUserChangeLogLevelClick($event, hardware)"
                                             [options]="logLevelOptions"></bk-form-select>
-                            
+
                         </td>
-                        
+
                         <!-- Online State !-->
                         <td class="vert-align  text-center">
                             <bk-online-state [online_state]="hardware.online_state"></bk-online-state>
                         </td>
-                        
+
                         <!-- Color !-->
                         <td class="vert-align  text-center">
-                            <bk-form-color-picker [control]="colorForm.controls['color_' + hardware.id]"  
+                            <bk-form-color-picker [control]="colorForm.controls['color_' + hardware.id]"
                                                   [label]="'label_select_color'|bkTranslate:this"
                                                   (valueChange)="onUserChangeColorClick($event, hardware)"
                                                   [waitForTouch]="false"></bk-form-color-picker>
                         </td>
-    
+
                         <td class="no-wrap text-right vert-align">
-                            
+
                             <button *ngIf="logLevel[hardware.id].subscribed" title="{{'label_unsubscribe_hardware'|bkTranslate:this}}" class="btn btn-icon-only orange"
                                     (click)="onHardwareUnSubscribeClick(hardware)">
                                 <i class="fa fa-times"></i>
                             </button>
-                            
+
                             <button *ngIf="hardware.online_state == 'ONLINE' && !logLevel[hardware.id].subscribed" title="{{'label_subscribe_hardware'|bkTranslate:this}}" class="btn btn-icon-only blue"
                                     (click)="onHardwareSubscribeClick(hardware)">
                                 <i class="fa fa-check"></i>
@@ -147,18 +148,21 @@ import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
                             </button>
                         </td>
                     </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
-            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-            <bk-nothing-to-show [condition_loading]="(selected_hw_for_subscribe == null)"
-                                [condition_empty]="(selected_hw_for_subscribe != null && selected_hw_for_subscribe.length == 0)"
-                                [main_message_link]="'label_no_hardware_to_show'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_hardware_to_show_comment'|bkTranslate:this"
-                                [btn_label]="'btn_add_hardware'|bkTranslate:this"
-                                (onButtonClick)="addNewHardwareToSubscribeModal()">
-            </bk-nothing-to-show>
-            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+                <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                <bk-nothing-to-show [condition_loading]="(selected_hw_for_subscribe == null)"
+                                    [condition_empty]="(selected_hw_for_subscribe != null && selected_hw_for_subscribe.length == 0)"
+                                    [main_message_link]="'label_no_hardware_to_show'|bkTranslate:this"
+                                    [main_message_comment_link]="'label_no_hardware_to_show_comment'|bkTranslate:this"
+                                    [btn_label]="'btn_add_hardware'|bkTranslate:this"
+                                    (onButtonClick)="addNewHardwareToSubscribeModal()">
+                </bk-nothing-to-show>
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+            </div>
+       
 
         </div>
 
@@ -266,16 +270,44 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
 
 
-    onMessage(msg: ITerminalWebsocketMessage) {
-        // console.log('onMessage: Logger Message:: ', msg);
-        let hardware = this.selected_hw_for_subscribe.find(device => device.id === msg.hardware_id); // najdeme hardware, kterého se zpráva týká
-        if (hardware) {
-            if (this.consoleLog) {
-                // console.log('onMessage: some message from Hardware', msg);
-                this.consoleLog.add(msg.level, msg.message, hardware.id, hardware.name); // přidání zprávy do consoleComponent
+    onMessage(msg: WebsocketMessage) {
+        console.info('onMessage: Logger Message:: ', msg);
 
+        if (msg.message_type === 'message_log') {
+
+            let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
+            if (hardware) {
+                if (this.consoleLog) {
+                    console.info('onMessage: some message from Hardware', msg);
+                    this.consoleLog.add(msg.data['level'], msg.data['message'], hardware.id, hardware.name); // přidání zprávy do consoleComponent
+
+                }
+            }
+
+        }
+
+        if (msg.message_type === 'hardware_disconnect') {
+            let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
+            if (hardware) {
+                if (this.consoleLog) {
+                    console.info('onMessage: some message from Hardware', msg);
+                    this.consoleLog.add('info', 'Hardware Disconnect ------------------------------------------------------------ ', hardware.id, hardware.name); // přidání zprávy do consoleComponent
+
+                }
             }
         }
+
+        if (msg.message_type === 'hardware_connect') {
+            let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
+            if (hardware) {
+                if (this.consoleLog) {
+                    console.info('onMessage: some message from Hardware', msg);
+                    this.consoleLog.add('info','Hardware Connected ------------------------------------------------------------ ', hardware.id, hardware.name); // přidání zprávy do consoleComponent
+
+                }
+            }
+        }
+
     }
 
     /**
@@ -283,7 +315,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param hardware
      */
     onHardwareUnSubscribeClick(hardware: IHardware): void {
-        // console.log('onHardwareUnSubscribeClick: Hardware::', hardware.id);
+        console.info('onHardwareUnSubscribeClick: Hardware::', hardware.id);
 
         this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
 
@@ -304,13 +336,15 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      */
     onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace') = 'info'): void {
 
-        // console.log('onHardwareSubscribeClick: Hardware::', hardware.id);
+        console.info('onHardwareSubscribeClick: Hardware::', hardware.id);
 
         this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel , (response_message: WebsocketMessage, error: any) => {
 
             // console.log('onHardwareSubscribeClick: response_message::', response_message);
 
             if (response_message && response_message.status == 'success') {
+
+                console.info('onHardwareSubscribeClick:: Hardware', hardware.id, 'response_message', response_message);
                 this.logLevel[hardware.id].subscribed = true;
             }else {
                 console.error('onHardwareSubscribeClick:: Hardware', hardware.id, 'LogLevel', logLevel, 'Error', error);
@@ -449,7 +483,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
                     this.onHardwareSubscribeClick(hardware, this.logLevel[hardware.id].log);
 
-                    socket.onLogsCallback = (log: ITerminalWebsocketMessage) => this.onMessage(log);
+                    socket.onLogsCallback = (log: WebsocketMessage) => this.onMessage(log);
 
                     this.consoleLog.add('output', 'Initializing the device. More information in settings', hardware.id, hardware.name);
                     this.consoleLog.set_color(hardware.id, this.colorForm.controls['color_' + hardware.id].value);

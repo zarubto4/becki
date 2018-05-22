@@ -16,10 +16,10 @@ import { ModalsAddGSMModel } from '../modals/add-gsm';
 import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 
 @Component({
-    selector: 'bk-view-projects-project-gsm',
-    templateUrl: './projects-project-gsm.html',
+    selector: 'bk-view-projects-project-gsms',
+    templateUrl: './projects-project-gsms.html',
 })
-export class ProjectsProjectGSMComponent extends _BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     project_id: string;
 
@@ -143,16 +143,14 @@ export class ProjectsProjectGSMComponent extends _BaseMainComponent implements O
                     name: model.gsm.name,
                     description: model.gsm.description,
                     tags: model.gsm.tags,
-                })
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_cellular_update_success')));
-                        this.unblockUI();
-                        this.onFilter();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
-                        this.onFilter();
-                    });
+                }).then(() => {
+                    this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_cellular_update_success')));
+                    this.unblockUI();
+                    this.onFilter();
+                }).catch(reason => {
+                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+                    this.onFilter();
+                });
             });
     }
 

@@ -36,9 +36,8 @@ export class WebsocketService {
     public connectDeviceTerminalWebSocket(server_url: string, port: string, callback: (socket: WebsocketClientHardwareLogger, error: any) => void) {
 
         /* tslint:disable */
-        console.log('Server URL:', server_url);
-        console.log('Server Port:', port);
-
+        // console.log('Server URL:', server_url);
+        // console.log('Server Port:', port);
         /* tslint:enable */
 
         if (server_url === null || port === null) {
@@ -58,7 +57,7 @@ export class WebsocketService {
 
         let socket: WebsocketClientHardwareLogger = new WebsocketClientHardwareLogger(server_url + ':' + port + '/'  + TyrionApiBackend.getToken());
         if (!socket.isWebSocketOpen()) {
-            console.error('connectDeviceTerminalWebSocket:: !socket.isWebSocketOpen() Není Open - Callback');
+            console.info('connectDeviceTerminalWebSocket:: !socket.isWebSocketOpen() Není Open - Callback');
             socket.onOpenCallback = (e) => {
                 // console.log('connectDeviceTerminalWebSocket:: Connected - return socket');
                 this.hardwareTerminalwebSockets.push(socket);

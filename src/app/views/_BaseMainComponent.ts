@@ -138,6 +138,15 @@ export abstract class _BaseMainComponent {
         this.navigate(['/admin/garfield']);
     }
 
+    public onGSMListClick(): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'gsm']);
+    }
+
+    public onGSMClick(gsm_id: string): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'gsm', gsm_id]);
+    }
+
+
     public onRoleClick(role_id: string): void {
         this.navigate(['admin/permission-group', role_id]);
     }
