@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-md-12">
 
-                    <div [hidden]="!tsBlock" class="row">
+                    <div class="row">
                         <div class="col-md-4">
                             <h4 class="text-center">{{'label_inputs_simulator'|bkTranslate:this}}</h4>
                             <div class="block-tester no-select">
@@ -188,14 +188,12 @@
                         <div class="col-md-2">
                             <h4 class="text-center">{{'label_block'|bkTranslate:this}}</h4>
                             <bk-blocko-view
-                                [square_size]="200"
                                 [singleBlockView]="true"
                                 readonly="true"
                                 [safeRun]="true"
                                 (onError)="onBlockoError($event)"
                                 (onLog)="onBlockoLog($event)"
-                                >
-                            </bk-blocko-view>
+                            ></bk-blocko-view>
                         </div>
                         <div class="col-md-6">
                             <h4 class="text-center">{{'label_console'|bkTranslate:this}}</h4>

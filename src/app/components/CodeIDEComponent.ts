@@ -4,7 +4,7 @@
  */
 
 import {
-    Component, OnChanges, Input, Output, SimpleChanges, EventEmitter, ViewChild, OnInit,
+    Component, OnChanges, Input, Output, SimpleChanges, EventEmitter, OnInit,
     AfterViewInit, QueryList, ViewChildren
 } from '@angular/core';
 import { FileTreeObject, FileTreeObjectInterface } from './FileTreeComponent';
@@ -13,10 +13,10 @@ import { ModalService } from '../services/ModalService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { TranslationService } from '../services/TranslationService';
 import { FormSelectComponentOption } from './FormSelectComponent';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IHardware } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from './BlockoViewComponent';
-import { BlockoTargetInterface } from 'blocko/dist';
+import { Blocks } from 'blocko';
 
 export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
 
@@ -221,7 +221,7 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
     public _show_integrated_hardware_portlet: boolean = false;
     public _show_blocko_interface_portlet: boolean = false;
     public _show_code_settings_portlet: boolean = false;
-    public _latest_blockoInterface = null;
+    public _latest_blockoInterface: Blocks.BlockoTargetInterface = null;
     private _editorView: BlockoViewComponent = null;
 
     constructor(protected modalService: ModalService, private translationService: TranslationService,  private formBuilder: FormBuilder) {
@@ -269,8 +269,8 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
             });
 
             if (this._editorView) {
-                if (this._latest_blockoInterface != null && this._latest_blockoInterface !== null && this._latest_blockoInterface !== '') {
-                    this._editorView.addInterface(this._latest_blockoInterface);
+                if (this._latest_blockoInterface !== null) {
+                    this._editorView.setSingleInterface(this._latest_blockoInterface);
                 }
             }
 
@@ -341,28 +341,23 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
 
     refreshInterface(ios: any = this._latest_blockoInterface) {
 
-        console.error('refreshInterface');
-
         if (ios == null) {
             return;
         }
 
-        console.error('refreshInterface:: ', ios);
-
         this._latest_blockoInterface = {
-            interfaceId : 'dummy_id',
+            code: {
+                programId: 'dummy_program_id',
+                versionId: 'dummy_version_id'
+            },
             displayName: 'Program',
             color: '#99ccff',
-            interface : ios,
-            pos_x : 50,
-            pos_y : 20
+            interface : ios
         };
 
-
-        console.error('refreshInterface:: _latest_blockoInterface ',  this._latest_blockoInterface);
-
         if (this._editorView) {
-            this._editorView.addInterface(this._latest_blockoInterface);
+            this._editorView.setSingleInterface(this._latest_blockoInterface);
+            this._editorView.centerView();
         }
 
     }

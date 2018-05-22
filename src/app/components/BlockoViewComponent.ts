@@ -20,9 +20,8 @@ import { FlashMessageError, NotificationService } from '../services/Notification
 @Component({
     selector: 'bk-blocko-view',
     template: `
-        <div [class.blocko-editor]="full_page" [class.blocko-editor-square]="!full_page">
-            <div #field [style.max-width]="full_page ? '' : square_size + 'px'" [style.max-height]="full_page ? '' : square_size + 'px'" class="blocko-container">
-            </div>
+        <div [class.blocko-single-view]="singleBlockView">
+            <div #field class="blocko-view"></div>
         </div>
     `
 })
@@ -39,6 +38,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     @Input()
     singleBlockView: boolean = false;
+
+    @Input()
+    bindInterfaceEnabled: boolean = false;
 
     @Input()
     disableExecution: boolean = false;
@@ -122,9 +124,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
             this.blocko = new BlockoPaperRenderer.Controller({
                 editorElement: this.field.nativeElement,
-                singleBlockView: this.singleBlockView
+                singleBlockView: this.singleBlockView,
+                readonly: this.readonly,
+                bindHardwareEnabled: this.bindInterfaceEnabled
             });
-            this.blocko.config.bindInterfaceEnabled = true;
             this.blocko.registerOpenConfigCallback((block) => {
                 this.zone.run(() => {
                     if (block.blockId) {
@@ -146,9 +149,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                     this.modalService.showModal(new ModalsBlockoBlockCodeEditorModel(block));
                 });
             });
-            this.blocko.anyChangeCallback = () => {
+            this.blocko.registerAnyChangeCallback(() => {
                 this.onChange.emit({});
-            };
+            });
 
             this.blocko.showBlockNames = this.showBlockNames;
 
@@ -218,10 +221,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
     }
 
-    setSingleBlock() {
-        // this.blocko.setBlockView()
-    }
-
     getCoreBlock(version: IBlockVersion|string, block?: IBlock): BlockoCore.Block {
         if (typeof version === 'string') {
             return this.getStaticBlock(version);
@@ -262,47 +261,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return b;
     }
 
-    addTsBlock(tsCode: string, designJson: string, x: number = 0, y: number = 0, typeOfBlock: string = null, version: string = null): BlockoBasicBlocks.TSBlock {
-        if (this.readonly) {
-            throw new Error(this.translate('error_read_only'));
-        }
-        return this.addTsBlockWithoutReadonlyCheck(tsCode, designJson, x, y, typeOfBlock, version);
-    }
-
-    addTsBlockWithoutReadonlyCheck(tsCode: string, designJson: string, x: number = 0, y: number = 0, typeOfBlock: string = null, version: string = null): BlockoBasicBlocks.TSBlock {
-        let b: BlockoBasicBlocks.TSBlock = null;
+    centerView() {
         this.zone.runOutsideAngular(() => {
-
-            if (typeOfBlock) {
-                const json = JSON.parse(designJson);
-
-                if (version) {
-                    json['block_version'] = version;
-                }
-
-                designJson = JSON.stringify(json);
-            }
-
-            b = new BlockoBasicBlocks.TSBlock(this.blocko.core.getFreeBlockId(), '', designJson);
-            b.x = Math.round(x / 22) * 22; // TODO: move this to blocko
-            b.y = Math.round(y / 22) * 22;
-            this.blocko.core.addBlock(b);
-            b.setCode(tsCode);
+            this.blocko.centerView();
         });
-        this.onChange.emit({});
-        return b;
-    }
-
-    addBlock(cls: BlockoCore.BlockClass): BlockoCore.Block {
-        let b: BlockoCore.Block = null;
-        this.zone.runOutsideAngular(() => {
-            if (this.readonly) {
-                throw new Error(this.translate('error_read_only'));
-            }
-            b = new cls(this.blocko.core.getFreeBlockId());
-            this.blocko.core.addBlock(b);
-        });
-        return b;
     }
 
     removeAllBlocks(): void {
@@ -320,6 +282,21 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
     }
 
+    setSingleBlock(logic: string, design: string): BlockoBasicBlocks.TSBlock {
+        let tsBlock: BlockoBasicBlocks.TSBlock;
+        this.zone.runOutsideAngular(() => {
+            tsBlock = new BlockoBasicBlocks.TSBlock(null, logic, design);
+            this.blocko.setBlockView(tsBlock);
+        });
+        return tsBlock;
+    }
+
+    setSingleInterface(iface: Blocks.BlockoTargetInterface) {
+        this.zone.runOutsideAngular(() => {
+            this.blocko.setBlockView(iface);
+        });
+    }
+
     setDataJson(json: string): string {
         let s: string = null;
         this.zone.runOutsideAngular(() => {
@@ -334,12 +311,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             s = this.blocko.core.getDataJson();
         });
         return s;
-    }
-
-    addInterface(iface: BlockoTargetInterface): void {
-        this.zone.runOutsideAngular(() => {
-            this.blocko.core.addInterface(iface);
-        });
     }
 
     getBindings(): Array<BlockoCore.BoundInterface> {

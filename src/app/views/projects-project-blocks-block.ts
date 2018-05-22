@@ -458,8 +458,9 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                         displayName: this.blockForm.controls['icon'].value,
                         description: this.blockForm.controls['description'].value
                     });
-                    this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck('', designJson, 25      , 50);
+                    this.tsBlock = this.blockoView.setSingleBlock('', designJson);
                 } catch (e) {
+                    console.error(e);
                 }
 
                 this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean | number | Core.MessageJson)) => {
@@ -476,6 +477,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 });
 
                 this.tsBlock.setCode(this.blockCode);
+                this.blockoView.centerView();
 
             });
 
