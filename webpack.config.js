@@ -102,7 +102,7 @@ module.exports = function makeWebpackConfig() {
 
             { test: /\.xml$/, loader: 'xml-loader' }, // support for .xml files
 
-
+            // Unnecessary for webpack 4
             // Support for *.json files.
             {
                 test: /\.json$/,

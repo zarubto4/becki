@@ -19,6 +19,11 @@ const prodConfig = {
 
     devtool: 'source-map',
 
+    output: {
+        filename: 'js/[name].[hash].js',
+        chunkFilename: '[id].[hash].chunk.js'
+    },
+
     plugins: [
         new CleanWebpackPlugin(['dist']),
 
@@ -43,7 +48,8 @@ const prodConfig = {
                 exclude: root('src', 'app'),
                 use: isTest ? 'null-loader' : {
                     fallback: 'style-loader',
-                    use: [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'] }
+                    use: [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
+                }
             },
 
             // Support for CSS as raw text
@@ -60,16 +66,16 @@ const prodConfig = {
             }
         ]
     },
-
-    plugins: [
-
-        new CleanWebpackPlugin(['dist']),
-
-        new MiniCssExtractPlugin({
-            filename: "[name].css",
-        })
-
-    ],
+    //
+    // plugins: [
+    //
+    //     new CleanWebpackPlugin(['dist']),
+    //
+    //     new MiniCssExtractPlugin({
+    //         filename: "[name].css",
+    //     })
+    //
+    // ],
 
     // optimization: {
     //     runtimeChunk: false,
@@ -102,12 +108,6 @@ const prodConfig = {
             new OptimizeCSSAssetsPlugin({})
 
         ]
-    },
-
-    output: {
-        filename: 'js/[name].[hash].js',
-        chunkFilename: '[id].[hash].chunk.js'
-    }
 };
 
 

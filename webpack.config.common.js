@@ -1,10 +1,17 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const xmlConfig = require('xml-loader');
 
 var ENV = process.env.npm_lifecycle_event;
 var isTestWatch = ENV === 'test-watch';
 var isTest = ENV === 'test' || isTestWatch;
+
+
+var atlOptions = '';
+if (isTest && !isTestWatch) {
+    // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
+    atlOptions = 'inlineSourceMap=true&sourceMap=false';
+}
 
 module.exports = {
 
@@ -22,45 +29,6 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html']
     },
-
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendors: {
-                    name: 'vendors',
-                    chunks: 'all',
-                    reuseExistingChunk: true,
-                    priority: 1,
-                    enforce: true,
-                    test(module, chunks) {
-                        const name = module.nameForCondition && module.nameForCondition();
-                        return chunks.some(chunk => {
-                            return chunk.name === 'main' && /[\\/]node_modules[\\/]/.test(name);
-                    });
-                    }
-                },
-                polyfills: {
-                    name: 'secondary',
-                    chunks: 'all',
-                    priority: 2,
-                    enforce: true,
-                    test(module, chunks) {
-                        return chunks.some(chunk => chunk.name === 'secondary');
-                    }
-                },
-                secondary: {
-                    name: 'secondary',
-                    chunks: 'all',
-                    priority: 2,
-                    enforce: true,
-                    test(module, chunks) {
-                        return chunks.some(chunk => chunk.name === 'secondary');
-                    }
-                }
-            }
-        }
-    },
-
 
     module: {
         rules: [
@@ -87,9 +55,14 @@ module.exports = {
                 test: /\.html$/,
                 use: 'raw-loader',
                 exclude: root('src', 'public')
-            }
+            },
+
+            // support for .xml files
+            { test: /\.xml$/, loader: 'xml-loader' }
+
         ]
     },
+
     plugins: [
 
         // Clean output directory before evey build
@@ -100,10 +73,9 @@ module.exports = {
             'process.env': {
                 ENV: JSON.stringify(ENV)
             }
-        }),
+        })
 
-    ],
-
+    ]
 
 };
 
@@ -111,3 +83,46 @@ function root(args) {
     args = Array.prototype.slice.call(arguments, 0);
     return path.join.apply(path, [__dirname].concat(args));
 }
+
+
+
+
+
+// optimization: {
+//     splitChunks: {
+//         cacheGroups: {
+//             vendors: {
+//                 name: 'vendors',
+//                 chunks: 'all',
+//                 reuseExistingChunk: true,
+//                 priority: 1,
+//                 enforce: true,
+//                 test(module, chunks) {
+//                     const name = module.nameForCondition && module.nameForCondition();
+//                     return chunks.some(chunk => {
+//                         return chunk.name === 'main' && /[\\/]node_modules[\\/]/.test(name);
+//                 });
+//                 }
+//             },
+//             polyfills: {
+//                 name: 'secondary',
+//                 chunks: 'all',
+//                 priority: 2,
+//                 enforce: true,
+//                 test(module, chunks) {
+//                     return chunks.some(chunk => chunk.name === 'secondary');
+//                 }
+//             },
+//             secondary: {
+//                 name: 'secondary',
+//                 chunks: 'all',
+//                 priority: 2,
+//                 enforce: true,
+//                 test(module, chunks) {
+//                     return chunks.some(chunk => chunk.name === 'secondary');
+//                 }
+//             }
+//         }
+//     }
+// }
+
