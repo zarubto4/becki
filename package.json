@@ -12,8 +12,8 @@
     "clean": "rimraf node_modules doc dist && npm cache clean --force",
     "clean-install": "npm run clean --force && npm install",
     "watch": "webpack --watch --progress --profile",
-    "build": "rimraf dist && webpack --config webpack.config.prod.js ./src/main.ts --progress --profile --bail --mode production",
-    "server": "webpack-dev-server --mode development ./src/main.ts --inline --hot --progress --port 8080",
+    "build": "rimraf dist && webpack --config webpack.config.prod.js ./src/main.ts --progress --profile --bail --mode production --display-error-details",
+    "server": "webpack-dev-server --config webpack.config.dev.js --mode development --inline --hot --progress --port 8080  --display-error-details",
     "start-https": "webpack-dev-server --inline --progress --port 8181 --https",
     "lint": "tslint --force \"src/**/*.ts\"",
     "docs": "typedoc --options typedoc.json src/app/main.ts",
@@ -22,7 +22,7 @@
     "prod": "webpack --config ./webpack.config.prod.js  --mode production",
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
-    "check": "webpack --config webpack.config.dev.js ./src/main.ts  --display-error-details"
+    "check": "webpack --config webpack.config.dev.js --display-error-details"
   },
   "dependencies": {
     "@angular/animations": "^6.0.3",
