@@ -1,9 +1,8 @@
 const webpack = require('webpack');
+const path = require('path');
 const merge = require('webpack-merge');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const common = require('./webpack.config.common.js');
@@ -19,13 +18,41 @@ const prodConfig = {
 
     devtool: 'source-map',
 
+
     output: {
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
         filename: 'js/[name].[hash].js',
         chunkFilename: '[id].[hash].chunk.js'
     },
 
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                styles: {
+                    name: 'styles',
+                    test: /\.css$/,
+                    chunks: 'all',
+                    enforce: true
+                }
+            }
+        },
+
+        minimizer: [
+
+            new UglifyJSPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: true // set to true if you want JS source maps
+            }),
+            new OptimizeCSSAssetsPlugin({})
+        ],
+
+        noEmitOnErrors: true
+
+    },
+
     plugins: [
-        new CleanWebpackPlugin(['dist']),
 
         new MiniCssExtractPlugin({
             filename: '[name].css',
@@ -46,10 +73,7 @@ const prodConfig = {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' : {
-                    fallback: 'style-loader',
-                    use: [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
-                }
+                use: isTest ? 'null-loader' : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader' ]
             },
 
             // Support for CSS as raw text
@@ -58,58 +82,20 @@ const prodConfig = {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' :
-                    {
-                        fallback: 'style-loader',
-                        use: [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
-                    }
+                use: isTest ? 'null-loader' : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
             }
         ]
-    },
-    //
-    // plugins: [
-    //
-    //     new CleanWebpackPlugin(['dist']),
-    //
-    //     new MiniCssExtractPlugin({
-    //         filename: "[name].css",
-    //     })
-    //
-    // ],
-
-    // optimization: {
-    //     runtimeChunk: false,
-    //     splitChunks: {
-    //         cacheGroups: {
-    //             commons: {
-    //                 test: /[\\/]node_modules[\\/]/,
-    //                 name: 'vendors',
-    //                 chunks: 'all',
-    //             },
-    //             cacheGroups: {
-    //                 styles: {
-    //                     name: 'styles',
-    //                     test: /\.css$/,
-    //                     chunks: 'all',
-    //                     enforce: true
-    //                 }
-    //             }
-    //         }
-    //     },
-
-
-        minimizer: [
-            new UglifyJSPlugin({
-                usourceMap: true,
-                mangle: {
-                    keep_fnames: true
-                }
-            }),
-            new OptimizeCSSAssetsPlugin({})
-
-        ]
+    }
 };
 
 
 
+
+function root(args) {
+    args = Array.prototype.slice.call(arguments, 0);
+    return path.join.apply(path, [__dirname].concat(args));
+}
+
 module.exports = merge(common, prodConfig);
+
+console.log(module.exports.module.rules);

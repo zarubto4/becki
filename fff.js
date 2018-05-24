@@ -91,7 +91,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.ts$/,
                 loaders: ['awesome-typescript-loader?' + atlOptions, 'angular2-template-loader'],
-                exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/],
+                exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/]
             },
 
             // copy those assets to output
@@ -111,8 +111,8 @@ module.exports = function makeWebpackConfig() {
 
             // Support for CSS as raw text
             // use 'null' loader in test mode (https://github.com/webpack/null-loader)
-            // all css in src/style will be bundled in an external css file
-                {
+            // all css in src/style  will be bundled in an external css file
+            {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
                 use: isTest ? 'null-loader' : ExtractTextPlugin.extract(
@@ -148,8 +148,9 @@ module.exports = function makeWebpackConfig() {
             // todo: change the loader to something that adds a hash to images
             {
                 test: /\.html$/,
-                loader: 'raw-loader',
-                exclude: root('src', 'public')
+                exclude: root('src', 'public'),
+                loader: 'raw-loader'
+
             },
         ]
     };
@@ -284,11 +285,11 @@ module.exports = function makeWebpackConfig() {
                 to: 'libs/monaco-editor/vs'
             }
         ])
-    )
+    );
 
     config.plugins.push(
         new webpack.IgnorePlugin(/mongodb/)
-    )
+    );
 
     /**
      * Dev server configuration
@@ -306,6 +307,7 @@ module.exports = function makeWebpackConfig() {
 
     return config;
 }();
+
 
 // Helper functions
 function root(args) {

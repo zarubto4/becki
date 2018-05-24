@@ -1,43 +1,62 @@
-const path = require('path');
 const webpack = require('webpack');
+const path = require('path');
 const xmlConfig = require('xml-loader');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 
 var ENV = process.env.npm_lifecycle_event;
 var isTestWatch = ENV === 'test-watch';
 var isTest = ENV === 'test' || isTestWatch;
 
 
-var atlOptions = '';
-if (isTest && !isTestWatch) {
-    // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
-    atlOptions = 'inlineSourceMap=true&sourceMap=false';
-}
+module.exports = function makeWebpackConfig() {
 
-module.exports = {
+    var config = {};
 
-    entry: {
-        polyfills: './src/polyfills.ts',
-        vendor: './src/vendor.ts',
-        app: './src/main.ts'
-    },
+    // config.stats = {
+    //     errorDetails: true
+    // };
 
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        publicPath: '/'
-    },
+    config.entry = isTest ? {} : {
+        'polyfills': './src/polyfills.ts',
+        'vendor': './src/vendor.ts',
+        'app': './src/main.ts'
+    };
 
-    resolve: {
-        extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html']
-    },
+    console.log('test');
 
-    module: {
+    config.resolve = {
+        extensions: ['', '.ts', '.js', '.json', '.css', '.scss', '.html']
+    };
+
+    console.log('after extensions');
+
+    var atlOptions = '';
+    if (isTest && !isTestWatch) {
+        // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
+        atlOptions = 'inlineSourceMap=true&sourceMap=false';
+    }
+
+    config.module = {
         rules: [
-
             // Support for .ts files.
             {
                 test: /\.ts$/,
                 use: ['awesome-typescript-loader?' + atlOptions, 'angular2-template-loader'],
                 exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/],
+            },
+
+            {
+                test: /\.ts$/,
+                use: [
+                    {
+                        loader: 'awesome-typescript-loader',
+                        options: { configFileName: root('src', 'tsconfig.json') }
+                    } , 'angular2-template-loader'
+                ]
             },
 
             // Support for images and fonts
@@ -55,15 +74,27 @@ module.exports = {
                 test: /\.html$/,
                 use: 'raw-loader',
                 exclude: root('src', 'public')
-            },
-
-            // support for .xml files
-            { test: /\.xml$/, loader: 'xml-loader' }
+            }
 
         ]
-    },
+    };
 
-    plugins: [
+
+
+    if (!isTest || !isTestWatch) {
+        // tslint support
+        config.module.rules.push({
+            test: /\.ts$/,
+            exclude: /node_modules/,
+            enforce: 'pre',
+            loader: 'tslint-loader'
+        });
+    }
+
+    console.log(config.module.rules);
+
+
+    config.plugins = [
 
         // Clean output directory before evey build
         // new CleanWebpackPlugin(['dist']),
@@ -73,56 +104,65 @@ module.exports = {
             'process.env': {
                 ENV: JSON.stringify(ENV)
             }
+        }),
+        new CleanWebpackPlugin(['dist']),
+
+        // Inject script and link tags into html files
+        // Reference: https://github.com/ampedandwired/html-webpack-plugin
+        new HtmlWebpackPlugin({
+            template: './src/public/index.html',
+            chunksSortMode: 'dependency'
+        }),
+
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                /**
+                 * Apply the tslint loader as pre/postLoader
+                 * Reference: https://github.com/wbuchwalter/tslint-loader
+                 */
+                tslint: {
+                    emitErrors: false,
+                    failOnHint: false
+                },
+                /**
+                 * Sass
+                 * Reference: https://github.com/jtangelder/sass-loader
+                 * Transforms .scss files to .css
+                 */
+                sassLoader: {
+                    //includePaths: [path.resolve(__dirname, "node_modules/foundation-sites/scss")]
+                },
+                /**
+                 * PostCSS
+                 * Reference: https://github.com/postcss/autoprefixer-core
+                 * Add vendor prefixes to your css
+                 */
+                postcss: [
+                    autoprefixer({
+                        browsers: ['last 2 version']
+                    })
+                ]
+            }
         })
+        ];
 
-    ]
 
-};
+    config.plugins.push(
+        new CopyWebpackPlugin([
+            {
+                from: root('node_modules/monaco-editor/min/vs'),
+                to: 'libs/monaco-editor/vs'
+            }
+        ])
+    );
+
+    config.plugins.push(
+        new webpack.IgnorePlugin(/mongodb/)
+    );
+
+}();
 
 function root(args) {
     args = Array.prototype.slice.call(arguments, 0);
     return path.join.apply(path, [__dirname].concat(args));
 }
-
-
-
-
-
-// optimization: {
-//     splitChunks: {
-//         cacheGroups: {
-//             vendors: {
-//                 name: 'vendors',
-//                 chunks: 'all',
-//                 reuseExistingChunk: true,
-//                 priority: 1,
-//                 enforce: true,
-//                 test(module, chunks) {
-//                     const name = module.nameForCondition && module.nameForCondition();
-//                     return chunks.some(chunk => {
-//                         return chunk.name === 'main' && /[\\/]node_modules[\\/]/.test(name);
-//                 });
-//                 }
-//             },
-//             polyfills: {
-//                 name: 'secondary',
-//                 chunks: 'all',
-//                 priority: 2,
-//                 enforce: true,
-//                 test(module, chunks) {
-//                     return chunks.some(chunk => chunk.name === 'secondary');
-//                 }
-//             },
-//             secondary: {
-//                 name: 'secondary',
-//                 chunks: 'all',
-//                 priority: 2,
-//                 enforce: true,
-//                 test(module, chunks) {
-//                     return chunks.some(chunk => chunk.name === 'secondary');
-//                 }
-//             }
-//         }
-//     }
-// }
-
