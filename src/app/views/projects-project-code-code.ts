@@ -322,7 +322,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                 });
         }).catch(reason => {
             this.unblockUI();
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_code_types'), reason));
+            this.fmError(this.translate('flash_cant_load_code_types'), reason);
         });
     }
 
