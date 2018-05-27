@@ -97,6 +97,7 @@
         <button *ngIf="modalModel.selected_grid_project && modalModel.already_selected_project_for_version_change == null" type="button" class="btn default red" style="float: left;" (click)="onBack()"><i class="fa fa-arrow-left"></i> </button>
 
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!modalModel.selected_grid_project" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>
     </div>
 </div>
+

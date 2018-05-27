@@ -1128,6 +1128,9 @@ export class StaticTranslation {
                 'label_when': 'When',
                 'label_immediately': 'Immediately',
                 'label_on_time': 'At a set time',
+                'label_program_name': '<strong class="font-color-code">CODE</strong>Program',
+                'label_program_version_name': '<strong class="font-color-code">CODE</strong>Version',
+                'btn_select_version': 'Select',
 
             }, 'ProducersComponent': {
                 'main_title': 'Manufacturers',
@@ -1306,13 +1309,15 @@ export class StaticTranslation {
 
             }, 'ModalsGridProjectSelectComponent': {
 
-                'title': 'Select <strong class="font-color-grid">GRID</strong> Project',
+                'title': 'Select <strong class="font-color-grid">GRID</strong> Collection',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_program': 'Program',
                 'table_version': 'Version',
                 'table_actions': 'Action',
                 'label_select_project': 'Select',
+                'label_no_grid_project': 'No <strong class="font-color-grid">GRID</strong> Collection',
+                'label_no_grid_project_comment': 'First create a Grid collection, at least with one application.',
 
             }, 'ProjectsProjectHardwareComponent': {
 

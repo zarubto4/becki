@@ -9,14 +9,16 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
-import { ModalModel } from '../services/ModalService';
+import {ModalModel, ModalService} from '../services/ModalService';
 import {
-    IHardwareGroup, IBootLoader, IActualizationProcedureMakeHardwareType, ICProgramList, IHardwareType, IHardwareGroupList
+    IHardwareGroup, IBootLoader, IActualizationProcedureMakeHardwareType, ICProgramList, IHardwareType,
+    IHardwareGroupList, IShortReference, ICProgramVersion, ICProgram
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
 import * as moment from 'moment';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { ModalsSelectCodeModel } from './code-select';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
@@ -50,12 +52,15 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
     formGroupList: FormSelectComponent;
     groupsForSelect: FormSelectComponentOption[] = null;
 
-    type_of_boards: IHardwareType[] = null;
     selectedDeviceGroup: IHardwareGroup = null;
+    selectedProgram: { [hardwareTypeId: string]: {
+        program: ICProgram,
+        version: ICProgramVersion
+    } } = {}; // List of Bootloaders ordered by HArdware Group ID
+
     immediately: boolean = true;
 
-    cPrograms: { [hardwareTypeId: string]: ICProgramList } = {};
-    bootloaders: { [hardwareTypeId: string]: IBootLoader[] } = {};
+    bootloaders: { [hardwareTypeId: string]: FormSelectComponentOption[] } = {}; // List of Bootloaders ordered by HArdware Group ID
 
     firmwareTypeSelect: FormSelectComponentOption[] = [];
 
@@ -88,14 +93,13 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
         }
     }
 
-    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef) {
+    constructor(public backendService: TyrionBackendService, private modalService: ModalService, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef) {
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]],
             'firmwareType': ['', [Validators.required]],
             'date': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
             'time': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
             'timeZoneOffset': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
-            'versionSelected': ['', [Validators.required]]
         });
     }
 
@@ -114,87 +118,63 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
             return;
         }
 
-        (<FormControl>(this.form.controls['versionSelected'])).setValue(null);
         let devgroup: IHardwareGroup = null;
 
         for (let i: number = 0; i < this.modalModel.deviceGroup.content.length; i++) {
 
             if (this.modalModel.deviceGroup.content[i].id === value ) {
 
-              // console.log("onGroupChange:: Našel jsem skupinu a jmenuje se", this.modalModel.deviceGroup.content[i].name);
-              // console.log("onGroupChange:: hardware_types nad skupinou", this.modalModel.deviceGroup.content[i].hardware_types);
+                console.info('onGroupChange:: Našel jsem skupinu a jmenuje se', this.modalModel.deviceGroup.content[i].name);
+                console.info('onGroupChange:: hardware_types nad skupinou', this.modalModel.deviceGroup.content[i].hardware_types);
 
                 devgroup = this.modalModel.deviceGroup.content[i];
                 if ( devgroup.hardware_types != null && devgroup.hardware_types.length > 0) {
 
-                 // console.log("onGroupChange:: Budu hledat pro každý typ hardware_types");
+                    console.info('onGroupChange:: Budu hledat pro každý typ hardware_types');
 
                     devgroup.hardware_types.forEach((tp: IHardwareType) => {
 
-                   // console.log("onGroupChange:: Pro každého: ", tp.name);
-
+                        console.info('onGroupChange:: Pro každého: ', tp.name);
                         this.form.addControl(tp.id + '_selectedBootloaderId', new FormControl('', []));
                         this.form.addControl(tp.id + '_selectedCProgramVersionId', new FormControl('', []));
 
-                        if (this.cPrograms[tp.id] == null) {
-                          // console.log("onGroupChange:: this.cPrograms[tp.id] == null ");
-                            this.backendService.cProgramGetListByFilter(0, {
-                                project_id: this.modalModel.project_id,
-                                hardware_type_ids: [tp.id]
-                            }).then((list: ICProgramList) => {
-                                this.cPrograms[tp.id] = list;
-
-                                if (this.cPrograms[tp.id] && this.bootloaders[tp.id]) {
-                                    this.selectedDeviceGroup = devgroup;
-                                }
+                        this.backendService.hardwareTypeGet(tp.id)
+                            .then((hardwareType) => {
+                                this.bootloaders[tp.id] = hardwareType.boot_loaders.map((pv) => {
+                                    return {
+                                        label: pv.name,
+                                        value: pv.id
+                                    };
+                                });
 
                             }).catch(reason => {
-                                console.error('Error:cProgramGetListByFilter', reason);
+                                console.error('hardwareTypeGet:cProgramGetListByFilter', reason);
                             });
-                        }
-
-                        if (this.bootloaders[tp.id] == null) {
-                           // console.log("onGroupChange:: this.bootloaders[tp.id] == null ");
-                            this.backendService.hardwareTypeGet(tp.id)
-                                .then((hardwareType) => {
-                                    this.bootloaders[tp.id] = hardwareType.boot_loaders;
-
-                                    if (this.cPrograms[tp.id] && this.bootloaders[tp.id]) {
-                                        this.selectedDeviceGroup = devgroup;
-                                    }
-                                }).catch(reason => {
-                                    console.error('hardwareTypeGet:cProgramGetListByFilter', reason);
-                                });
-                        }
-
-                        if (this.cPrograms[tp.id] && this.bootloaders[tp.id]) {
-                            // console.log("this.cPrograms[tp.id] && this.bootloaders[tp.id] ");
-                            this.selectedDeviceGroup = devgroup;
-                        }
 
                     });
-                }else {
-                  // console.log("onGroupChange:: Nemám žádné skupiny, ukončuju a přiřazuji skupinu :", devgroup);
-                    // No HW groups
-                    this.selectedDeviceGroup = devgroup;
+
                 }
+
+
+                this.selectedDeviceGroup = devgroup;
+
             }
         }
     }
 
-    hwCProgramVersionChanged(hardwareTypeId: string, cProgramVersion: string) {
-        (<FormControl>(this.form.controls[hardwareTypeId + '_selectedCProgramVersionId'])).setValue(cProgramVersion);
-        (<FormControl>(this.form.controls['versionSelected'])).setValue(cProgramVersion);
-    }
-
-    get_bootloader_option(boot_loaders: IBootLoader[]): FormSelectComponentOption[] {
-        return boot_loaders.map((pv) => {
-            return {
-                label: pv.name,
-                value: pv.id
-            };
+    onSelectCProgramVersion(hardwareType: IShortReference) {
+        let model = new ModalsSelectCodeModel(this.modalModel.project_id, hardwareType.id);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.selectedProgram[hardwareType.id] = {
+                    program: model.selected_c_program,
+                    version: model.selected_c_program_version
+                };
+                (<FormControl>(this.form.controls[hardwareType.id + '_selectedCProgramVersionId'])).setValue(model.selected_c_program_version.id);
+            }
         });
     }
+
 
     ngOnInit() {
         this.set_firmware();
@@ -247,8 +227,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
 
             let gr: IActualizationProcedureMakeHardwareType = {
                 hardware_type_id: hardwareType.id,
-                bootloader_id: bootloader_id, // TODO check if this contain id too
-                c_program_version_id: c_program_version_id // FIXME somehow this contains whole CProgramVersion object instead of just id
+                bootloader_id: bootloader_id,               // TODO check if this contain id too
+                c_program_version_id: c_program_version_id
             };
 
             this.modalModel.groups.push(gr);

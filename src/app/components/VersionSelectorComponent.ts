@@ -6,7 +6,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, NgZone } from '@angular/core';
 import {
     IBlock, IBlockVersion, ICProgram, ICProgramVersion, IGridProgram, IGridProgramVersion,
-    IGridProject, IWidget, IWidgetVersion
+    IGridProject, IShortReference, IWidget, IWidgetVersion
 } from '../backend/TyrionAPI';
 import { _BaseMainComponent } from '../views/_BaseMainComponent';
 import { TyrionBackendService } from '../services/BackendService';
