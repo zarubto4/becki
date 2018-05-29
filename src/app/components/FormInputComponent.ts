@@ -10,10 +10,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 @Component({
     selector: 'bk-form-input',
 /* tslint:disable:max-line-length */
-    template: `
-
-      
-        
+    template: `        
 <div class="form-group" 
      [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" 
      [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" 
