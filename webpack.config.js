@@ -3,15 +3,10 @@ var path = require('path');
 var webpack = require('webpack');
 
 // Webpack Plugins
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-var autoprefixer = require('autoprefixer');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var browserConfig = require('web-app-browserconfig-loader');
-var xmlConfig = require('xml-loader');
-
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 /**
  * Env
@@ -38,10 +33,6 @@ module.exports = function makeWebpackConfig() {
     if (isProd) {
         config.devtool = 'source-map';
     }
-    else {
-        config.devtool = 'eval';
-    }
-
     /**
      * Entry
      * Reference: http://webpack.github.io/docs/configuration.html#entry
@@ -85,7 +76,7 @@ module.exports = function makeWebpackConfig() {
      * This handles most of the magic responsible for converting modules
      */
     config.module = {
-        loaders: [
+        rules: [
 
             // Support for .ts files.
             {
@@ -102,12 +93,6 @@ module.exports = function makeWebpackConfig() {
 
             { test: /\.xml$/, loader: 'xml-loader' }, // support for .xml files
 
-            // Unnecessary for webpack 4
-            // Support for *.json files.
-            {
-                test: /\.json$/,
-                loader: 'json-loader'
-            },
 
             // Support for CSS as raw text
             // use 'null' loader in test mode (https://github.com/webpack/null-loader)
@@ -115,13 +100,9 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' : ExtractTextPlugin.extract(
-                    {
-                        fallback: 'style-loader',
-                        use: ['css-loader', 'postcss-loader']
-                    }
-                )
+                use: isTest ? ['null-loader'] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
             },
+
             // all css required in src/app files will be merged in js files
             {
                 test: /\.css$/,
@@ -135,7 +116,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' : ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'postcss-loader', 'sass-loader'] })
+                use: isTest ? ['null-loader'] :[ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
             },
             // all css required in src/app files will be merged in js files
             {
@@ -157,7 +138,7 @@ module.exports = function makeWebpackConfig() {
 
     if (!isTest || !isTestWatch) {
         // tslint support
-        config.module.loaders.push({
+        config.module.rules.push({
             test: /\.ts$/,
             exclude: /node_modules/,
             enforce: 'pre',
@@ -172,7 +153,7 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
-        new CleanWebpackPlugin(['dist']),
+        new CleanWebpackPlugin('dist', {} ),
         // Define env variables to help with builds
         // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
         new webpack.DefinePlugin({
@@ -181,56 +162,10 @@ module.exports = function makeWebpackConfig() {
                 ENV: JSON.stringify(ENV)
             }
         }),
-
-        // Workaround needed for angular 2 angular/angular#11580
-        new webpack.ContextReplacementPlugin(
-            // The (\\|\/) piece accounts for path separators in *nix and Windows
-            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            root('./src') // location of your src
-        ),
-
-        // Tslint configuration for webpack 2
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                /**
-                 * Apply the tslint loader as pre/postLoader
-                 * Reference: https://github.com/wbuchwalter/tslint-loader
-                 */
-                tslint: {
-                    emitErrors: false,
-                    failOnHint: false
-                },
-                /**
-                 * Sass
-                 * Reference: https://github.com/jtangelder/sass-loader
-                 * Transforms .scss files to .css
-                 */
-                sassLoader: {
-                    //includePaths: [path.resolve(__dirname, "node_modules/foundation-sites/scss")]
-                },
-                /**
-                 * PostCSS
-                 * Reference: https://github.com/postcss/autoprefixer-core
-                 * Add vendor prefixes to your css
-                 */
-                postcss: [
-                    autoprefixer({
-                        browsers: ['last 2 version']
-                    })
-                ]
-            }
-        })
     ];
 
     if (!isTest && !isTestWatch) {
         config.plugins.push(
-            // Generate common chunks if necessary
-            // Reference: https://webpack.github.io/docs/code-splitting.html
-            // Reference: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-            new CommonsChunkPlugin({
-                name: ['vendor', 'polyfills']
-            }),
-
             // Inject script and link tags into html files
             // Reference: https://github.com/ampedandwired/html-webpack-plugin
             new HtmlWebpackPlugin({
@@ -241,35 +176,13 @@ module.exports = function makeWebpackConfig() {
             // Extract css files
             // Reference: https://github.com/webpack/extract-text-webpack-plugin
             // Disabled when in test mode or not in build mode
-            new ExtractTextPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
+            new MiniCssExtractPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
         );
     }
 
     // Add build specific plugins
     if (isProd) {
         config.plugins.push(
-            // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
-            // Only emit files when there are no errors
-            new webpack.NoEmitOnErrorsPlugin(),
-
-            // // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
-            // // Dedupe modules in the output
-            // new webpack.optimize.DedupePlugin(),
-
-            // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-            // Minify all javascript, switch loaders to minimizing mode
-            /**
-            new webpack.optimize.UglifyJsPlugin( {
-                    uglifyOptions: {
-                        sourceMap: true,
-                        mangle: {
-                            keep_fnames: true
-                        }
-                    }
-                }
-            ),
-            */
-
             // Copy assets from the public folder
             // Reference: https://github.com/kevlened/copy-webpack-plugin
             new CopyWebpackPlugin([{
@@ -296,6 +209,8 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html#devserver
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
+
+    if(!isProd)
     config.devServer = {
         host: '0.0.0.0',
         port: 8080,
@@ -307,7 +222,6 @@ module.exports = function makeWebpackConfig() {
 
     return config;
 }();
-
 
 // Helper functions
 function root(args) {
