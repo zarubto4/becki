@@ -51,7 +51,7 @@
     "script-engine": "git+ssh://git@github.com/ByzanceIoT/script-engine.git#v0.0.39",
     "systemjs": "^0.19.47",
     "the-grid": "git+ssh://git@github.com/ByzanceIoT/the-grid.git#v0.1.164",
-    "tslib": "^1.9.0",
+    "tslib": "^1.9.2",
     "web-app-browserconfig-loader": "0.0.0",
     "xml-loader": "^1.2.1",
     "zone.js": "^0.7.8"

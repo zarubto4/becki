@@ -100,10 +100,10 @@
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
     <!-- Page Content -- START -->
-    <div class="portlet-body" *ngIf="hardware">
+    <div class="portlet-body" *ngIf="hardware && hardwareType">
 
         <div *ngIf="tab == 'overview'">
-            <div *ngIf="hardware && hardwareType">
+            <div>
 
                 <!-- Main Overview -->
                 <div class="row">
@@ -345,7 +345,7 @@
                                     </div>
                                     <div>
                                         <span [innerHTML]="'label_actual_program_version'|bkTranslate:this"></span>:
-                                        <a *ngIf="hardware.actual_c_program_version" class="bold" (click)="onCProgramClick(hardware.actual_c_program.id, hardware.actual_c_program_version.id)">{{hardware.actual_c_program_version.name}}</a>
+                                        <a *ngIf="hardware.actual_c_program_version && hardware.actual_c_program_version" class="bold" (click)="onCProgramClick(hardware.actual_c_program.id, hardware.actual_c_program_version.id)">{{hardware.actual_c_program_version.name}}</a>
                                         <span *ngIf="!hardware.actual_c_program_version" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                     </div>
                                 </div>
@@ -376,7 +376,7 @@
                                         </div>
                                         <div>
                                             <span [innerHTML]="'label_actual_backup_program_version'|bkTranslate:this"></span>:
-                                            <a *ngIf="hardware.actual_c_program_backup_version" class=" bold"
+                                            <a *ngIf="hardware.actual_c_program_backup_version && hardware.actual_c_program_backup" class=" bold"
                                                (click)="onCProgramClick(hardware.actual_c_program_backup.id, hardware.actual_c_program_backup_version.id)">{{hardware.actual_c_program_backup_version.name}}</a>
                                             <span *ngIf="!hardware.actual_c_program_backup_version" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
@@ -439,7 +439,7 @@
 
         <div *ngIf="tab == 'developer'">
 
-            <div *ngIf="hardware && hardwareType" class="row">
+            <div class="row">
 
                 <div class="col-md-6 portlet light">
 

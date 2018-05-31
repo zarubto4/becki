@@ -56,9 +56,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     devicesFilter: IHardwareList = null;
     deviceGroupFilter: IHardwareGroupList = null;
 
-    allHw: IHardwareList = null;
-    allHwGroups: IHardwareGroupList = null;
-
     bindings: BlockoCore.BoundInterface[] = [];
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
@@ -113,6 +110,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     ngAfterViewInit() {
 
+        console.info('ProjectsProjectInstancesInstanceComponent::ngAfterViewInit');
 
         this.blockoViews.changes.subscribe((views: QueryList<BlockoViewComponent>) => {
 
@@ -238,6 +236,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.onSaveSnapshotClick();
                 break;
             }
+            case 'save_deploy_snapshot': {
+                this.onSaveSnapshotClick(true);
+                break;
+            }
             case 'change_version': {
                 this.onChangeVersion();
                 break;
@@ -255,13 +257,44 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             this.onFilterActualizationProcedureTask();
         }
 
-        if (tab === 'editor' && ( !this.allHw || !this.allHwGroups)) {
-            this.onFilterForBlockoSelectHardware();
-            this.onFilterForBlockoSelectHardwareGroup();
-        }
-
         if (tab === 'hardware' && !this.deviceGroupFilter) {
             this.onFilterHardwareGroup();
+        }
+
+        // Set latest used Blocko program
+        if (tab === 'editor') {
+            console.info('onToggleTab editor');
+            console.info('Co je BProgram: ', this.bProgram);
+
+            let that = this;
+            setTimeout(function() {
+
+                console.info('Co je BProgram: ', that.bProgram);
+                console.info('Co je BProgram length: ', that.bProgram.program_versions.length);
+
+                if (that.instance.current_snapshot) {
+                    console.info('onToggleTab editor that.instance.current_snapshot is not null!');
+                    that.editorView.setDataJson(that.instance.current_snapshot.program.snapshot);
+                    that.bindings = that.editorView.getBindings();
+
+                    let version = that.bProgram.program_versions.find( vrs => vrs.id === that.instance.current_snapshot.b_program_version.id);
+
+                    if (version != null ) {
+                        that.bProgramVersion = version;
+                    } else if (that.bProgram.program_versions.length > 0) {
+                        that.onChangeVersion(that.bProgram.program_versions[0]);
+                    }
+
+                } else if (that.bProgram.program_versions.length > 0) {
+                    console.info('onToggleTab editor this.bProgram.program_versions.length >0');
+                    console.info('onToggleTab Selected Version0', that.bProgram.program_versions[0]);
+                    that.onChangeVersion(that.bProgram.program_versions[0]);
+                } else {
+                    that.fmError(this.translate('flash_bprogram_no_versions'));
+                }
+            }, 300);
+
+
         }
 
     }
@@ -286,31 +319,24 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
     }
 
-    onEditorPortletClick(action: string) {
-        switch (action) {
-            case 'save_snapshot': {
-                this.onSaveSnapshotClick();
-                break;
-            }
-            case 'change_version': {
-                this.onChangeVersion();
-                break;
-            }
-            default:
-                console.warn('undefined for:', action);
-        }
-    }
+    onSaveSnapshotClick(deploy_immediately: boolean = false): void {
 
-    onSaveSnapshotClick(): void {
+        if (this.editorView == null) {
+            console.info('onSaveSnapshotClick: this.editorView');
+        }
         if (this.editorView.isDeployable()) {
+            console.info('onSaveSnapshotClick: isDeployable true');
             let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
             this.modalService.showModal(m).then((success) => {
                 if (success) {
 
                     this.blockUI();
-                    let version_id = this.bProgramVersion.id;
+                    console.info('onSaveSnapshotClick: this.bProgramVersion', this.bProgramVersion);
 
+                    let version_id = this.bProgramVersion.id;
                     let interfaces: IInstanceSnapshotJsonFileInterface[] = [];
+
+                    console.info('onSaveSnapshotClick: this.bindings', this.bindings);
 
                     this.bindings.forEach((binding) => {
                         interfaces.push({
@@ -327,6 +353,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         interfaces: interfaces,
                         snapshot: this.editorView.getDataJson()
                     }).then((snapshot) => {
+
+                        if (deploy_immediately) {
+                            this.onInstanceDeployClick(snapshot);
+                        }
+
                         this.unblockUI();
                         this.refresh();
                     }).catch((reason) => {
@@ -341,26 +372,33 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }
     }
 
-    onChangeVersion(): void {
-        let m: ModalsSelectVersionModel = new ModalsSelectVersionModel(this.bProgram.program_versions);
-        this.modalService.showModal(m)
-            .then((success) => {
-                if (success && m.selectedId) {
-                    this.tyrionBackendService.bProgramVersionGet(m.selectedId)
-                        .then((bpv) => {
-                            this.bProgramVersion = bpv;
-                            this.tab = 'editor';
-                            if (this.editorView) {
-                                console.info('ProjectsProjectInstancesInstanceComponent:: onChangeVersion:: Version::', this.bProgramVersion);
-                                this.editorView.setDataJson(this.bProgramVersion.program);
-                                this.bindings = this.editorView.getBindings();
-                            }
-                        })
-                        .catch((reason) => {
-                            this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
-                        });
-                }
-            });
+    onChangeVersion(version: IBProgramVersion = null): void {
+        if (version == null) {
+            let m: ModalsSelectVersionModel = new ModalsSelectVersionModel(this.bProgram.program_versions);
+            this.modalService.showModal(m)
+                .then((success) => {
+                    if (success && m.selectedId) {
+                        this.tyrionBackendService.bProgramVersionGet(m.selectedId)
+                            .then((bpv) => {
+                                this.bProgramVersion = bpv;
+                                this.tab = 'editor';
+                                if (this.editorView) {
+                                    console.info('ProjectsProjectInstancesInstanceComponent:: onChangeVersion:: Version::', this.bProgramVersion);
+                                    this.editorView.setDataJson(this.bProgramVersion.program);
+                                    this.bindings = this.editorView.getBindings();
+                                }
+                            })
+                            .catch((reason) => {
+                                this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                            });
+                    }
+                });
+        }else {
+            this.bProgramVersion = version;
+            console.info('ProjectsProjectInstancesInstanceComponent:: onChangeVersion:: Version::', this.bProgramVersion);
+            this.editorView.setDataJson(this.bProgramVersion.program);
+            this.bindings = this.editorView.getBindings();
+        }
     }
 
     isBound(targetId: string): boolean {
@@ -580,41 +618,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
-
-    onFilterForBlockoSelectHardware(pageNumber: number = 0): void {
-
-        this.blockUI();
-        this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
-            projects: [this.projectId]
-        })
-            .then((values) => {
-                this.allHw = values;
-
-                this.unblockUI();
-            })
-            .catch((reason) => {
-                this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
-            });
-    }
-
-    onFilterForBlockoSelectHardwareGroup(pageNumber: number = 0): void {
-
-        this.blockUI();
-        this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
-            project_id: this.projectId
-        })
-            .then((values) => {
-                this.allHwGroups = values;
-
-                this.unblockUI();
-            })
-            .catch((reason) => {
-                this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
-            });
-    }
-
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedureTask(pageNumber: number = 0,

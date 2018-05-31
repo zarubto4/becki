@@ -66,6 +66,14 @@
                       },
                       {
                           condition: (tab == 'editor'),
+                          btn_label_for_person: ('btn_save_deploy'|bkTranslate:this),
+                          icon: 'fa-share',
+                          colorType: 'ADD',
+                          permission: true,
+                          btn_tag: 'save_deploy_snapshot'
+                      },
+                      {
+                          condition: (tab == 'editor'),
                           btn_label_for_person: ('btn_change_version'|bkTranslate:this),
                           icon: 'fa-cog',
                           colorType: 'EDIT',
@@ -217,7 +225,7 @@
                                 <div class="margin-left-15 margin-top-15 margin-bottom-15">
                                     <div>
                                         <span [innerHTML]="'label_b_program_version_name'|bkTranslate:this"></span>: <a
-                                        (click)="onBProgramClick(instance.current_snapshot.b_program_version.id)">{{instance.current_snapshot.b_program_version.name}}</a>
+                                        (click)="onBProgramClick(instance.current_snapshot.b_program.id, instance.current_snapshot.b_program_version.id)">{{instance.current_snapshot.b_program_version.name}}</a>
                                     </div>
                                     <div>
                                         <span
@@ -323,10 +331,17 @@
 
         </div>
 
-        <div *ngIf="tab == 'editor'">
+        <div  *ngIf="tab == 'editor'">
+            {{'label_version_name'|bkTranslate:this}}:
+            <span *ngIf="bProgramVersion" class="font-grey-mint bold">{{bProgramVersion.name}}</span>
+
             <div class="portlet light" style="padding: 0 0 0 0;">
                 <div class="portlet-body">
-                    <bk-blocko-view [id]="'snapshot_editor'" [full_page]="true" [disableExecution]="true" [bindInterfaceEnabled]="true" [showBlockNames]="true">
+                    <bk-blocko-view [id]="'snapshot_editor'"
+                                    [full_page]="true"
+                                    [disableExecution]="true"
+                                    [bindInterfaceEnabled]="true"
+                                    [showBlockNames]="true">
                     </bk-blocko-view>
                 </div>
             </div>

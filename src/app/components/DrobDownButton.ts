@@ -1,12 +1,9 @@
 
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, Directive, HostBinding, HostListener } from '@angular/core';
 
 
 @Component({
     selector: 'bk-drob-down-button',
-    host: {
-        '(document:click)': 'onOutsideClickDropdownMenu($event)',
-    },
     /* tslint:disable */
     template: `
 
@@ -139,6 +136,17 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
        // nevím
+    }
+
+    @HostListener('document:click', ['$event'])
+    clickout(event) {
+        if (this._eref.nativeElement.contains(event.target)) {
+            // console.info('document:click Inside');
+            // this.onOutsideClickDropdownMenu(event);
+        } else {
+            // console.info('document:click OutSide');
+            this.onOutsideClickDropdownMenu(event);
+        }
     }
 
     getConditionSize(): number {

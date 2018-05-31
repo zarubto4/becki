@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
-import {ModalModel, ModalService} from '../services/ModalService';
+import { ModalModel, ModalService } from '../services/ModalService';
 import {
     IHardwareGroup, IBootLoader, IActualizationProcedureMakeHardwareType, ICProgramList, IHardwareType,
     IHardwareGroupList, IShortReference, ICProgramVersion, ICProgram
