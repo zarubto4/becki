@@ -1,6 +1,6 @@
 {
   "name": "Becki",
-  "version": "v1.3.16",
+  "version": "v1.3.17",
   "author": "Byzance Becki authors",
   "license": "UNLICENSED",
   "private": true,
@@ -38,7 +38,7 @@
     "jquery-ui-bundle": "^1.12.1",
     "jsqr": "^0.2.2",
     "markdown": "^0.5.0",
-    "moment": "^2.22.1",
+    "moment": "^2.22.2",
     "monaco-editor": "^0.8.3",
     "mydatepicker": "^2.6.3",
     "ng2-charts": "^1.6.0",
