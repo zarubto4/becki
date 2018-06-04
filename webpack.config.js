@@ -1,21 +1,23 @@
 // Helper: root() is defined at the bottom
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
 // Webpack Plugins
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 /**
  * Env
  * Get npm lifecycle event to identify the environment
  */
-var ENV = process.env.npm_lifecycle_event;
-var isTestWatch = ENV === 'test-watch';
-var isTest = ENV === 'test' || isTestWatch;
-var isProd = ENV === 'build';
+const ENV = process.env.npm_lifecycle_event;
+const isTestWatch = ENV === 'test-watch';
+const isTest = ENV === 'test' || isTestWatch;
+const isProd = ENV === 'build';
+
 
 module.exports = function makeWebpackConfig() {
     /**
@@ -23,7 +25,7 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html
      * This is the object where all configuration gets set
      */
-    var config = {};
+    const config = {};
 
     /**
      * Devtool
@@ -40,18 +42,21 @@ module.exports = function makeWebpackConfig() {
     config.entry = isTest ? {} : {
         'polyfills': './src/polyfills.ts',
         'vendor': './src/vendor.ts',
-        'app': './src/main.ts' // our angular app
+        'app': './src/main' // our angular app
     };
 
     /**
      * Output
      * Reference: http://webpack.github.io/docs/configuration.html#output
      */
-    config.output = isTest ? {} : {
-        path: root('dist'),
+
+    config.output = {
+        filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
+        chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js',
         publicPath: '/',
-        filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
-        chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
+        path: root('dist')
+        // publicPath: publicPath,
+
     };
 
     /**
@@ -91,8 +96,11 @@ module.exports = function makeWebpackConfig() {
                 loader: 'file-loader?name=assets/[name].[hash].[ext]?'
             },
 
-            { test: /\.xml$/, loader: 'xml-loader' }, // support for .xml files
-
+            // support for .xml files
+            {
+                test: /\.xml$/,
+                loader: 'xml-loader'
+            },
 
             // Support for CSS as raw text
             // use 'null' loader in test mode (https://github.com/webpack/null-loader)
@@ -100,7 +108,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+                use: isTest ? [ 'null-loader' ] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader' ]
             },
 
             // all css required in src/app files will be merged in js files
@@ -116,7 +124,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] :[ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
+                use: isTest ? [ 'null-loader' ] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader' ]
             },
             // all css required in src/app files will be merged in js files
             {
@@ -153,7 +161,11 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
-        new CleanWebpackPlugin('dist', {} ),
+        // new BundleAnalyzerPlugin({
+        //     analyzerMode: 'static'
+        // }),
+
+        // new CleanWebpackPlugin('dist', {}),
         // Define env variables to help with builds
         // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
         new webpack.DefinePlugin({
@@ -162,6 +174,8 @@ module.exports = function makeWebpackConfig() {
                 ENV: JSON.stringify(ENV)
             }
         }),
+
+        new webpack.optimize.SplitChunksPlugin()
     ];
 
     if (!isTest && !isTestWatch) {
@@ -176,7 +190,7 @@ module.exports = function makeWebpackConfig() {
             // Extract css files
             // Reference: https://github.com/webpack/extract-text-webpack-plugin
             // Disabled when in test mode or not in build mode
-            new MiniCssExtractPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
+            new MiniCssExtractPlugin({filename: 'css/[name].[hash].css', disable: !isProd})
         );
     }
 
@@ -185,6 +199,9 @@ module.exports = function makeWebpackConfig() {
         config.plugins.push(
             // Copy assets from the public folder
             // Reference: https://github.com/kevlened/copy-webpack-plugin
+
+            new webpack.HashedModuleIdsPlugin(),
+
             new CopyWebpackPlugin([{
                 from: root('src/public')
             }])
@@ -204,27 +221,47 @@ module.exports = function makeWebpackConfig() {
         new webpack.IgnorePlugin(/mongodb/)
     );
 
+    if (isProd) {
+
+        config.optimization = {
+
+            // Turn off default Uglify plugin
+            minimize: false
+
+        };
+    }
+
     /**
      * Dev server configuration
      * Reference: http://webpack.github.io/docs/configuration.html#devserver
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
 
-    if(!isProd)
-    config.devServer = {
-        host: '0.0.0.0',
-        port: 8080,
-        contentBase: './src/public',
-        historyApiFallback: true,
-        quiet: true,
-        stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
-    };
+    if (!isProd) {
+
+        config.devServer = {
+            host: '0.0.0.0',
+            port: 8080,
+            contentBase: './src/public',
+            historyApiFallback: true,
+            quiet: true,
+            stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
+        };
+    }
 
     return config;
+
 }();
 
 // Helper functions
 function root(args) {
+    console.log(args);
     args = Array.prototype.slice.call(arguments, 0);
-    return path.join.apply(path, [__dirname].concat(args));
+    console.log(args);
+    const kisa = path.join.apply(path, [__dirname].concat(args));
+    console.log(kisa);
+    return kisa;
 }
+
+
+
