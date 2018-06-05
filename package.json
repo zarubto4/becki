@@ -11,12 +11,13 @@
     "homer-generator-win": "node ./generator-homer/generator-win",
     "clean": "rimraf node_modules doc dist && npm cache clean --force",
     "clean-install": "npm run clean --force && npm install",
-    "build": "webpack -p --config webpack.config.js --mode production --progress --profile --bail --display-error-details",
+    "build": "webpack --config webpack.config.js --mode production --progress --profile --bail --display-error-details --display-reasons",
     "server": "webpack-dev-server --config webpack.config.js --mode development --inline --hot --progress --port 8080  --display-error-details",
     "start-https": "webpack-dev-server --inline --progress --port 8181 --https",
     "lint": "tslint --force \"src/**/*.ts\"",
     "docs": "typedoc --options typedoc.json src/app/main.ts",
-    "start": "npm run server"
+    "start": "npm run server",
+    "build:stats": "webpack --config webpack.config.js --mode production --json > stats.json"
   },
   "dependencies": {
     "@angular/animations": "^6.0.3",

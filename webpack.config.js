@@ -8,6 +8,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
 
 /**
  * Env
@@ -17,6 +19,8 @@ const ENV = process.env.npm_lifecycle_event;
 const isTestWatch = ENV === 'test-watch';
 const isTest = ENV === 'test' || isTestWatch;
 const isProd = ENV === 'build';
+const devMode = process.env.NODE_ENV !== 'production';
+
 
 
 module.exports = function makeWebpackConfig() {
@@ -51,11 +55,10 @@ module.exports = function makeWebpackConfig() {
      */
 
     config.output = {
-        filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
-        chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js',
+        path: root('dist'),
         publicPath: '/',
-        path: root('dist')
-        // publicPath: publicPath,
+        filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
+        chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
 
     };
 
@@ -161,9 +164,9 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
-        // new BundleAnalyzerPlugin({
-        //     analyzerMode: 'static'
-        // }),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static'
+        }),
 
         // new CleanWebpackPlugin('dist', {}),
         // Define env variables to help with builds
@@ -174,6 +177,8 @@ module.exports = function makeWebpackConfig() {
                 ENV: JSON.stringify(ENV)
             }
         }),
+
+        new webpack.ContextReplacementPlugin( /(.+)?angular(\\|\/)core(.+)?/, root('./src'), {} ),
 
         new webpack.optimize.SplitChunksPlugin()
     ];
@@ -190,7 +195,12 @@ module.exports = function makeWebpackConfig() {
             // Extract css files
             // Reference: https://github.com/webpack/extract-text-webpack-plugin
             // Disabled when in test mode or not in build mode
-            new MiniCssExtractPlugin({filename: 'css/[name].[hash].css', disable: !isProd})
+            new MiniCssExtractPlugin({
+                // Options similar to the same options in webpackOptions.output
+                // both options are optional
+                filename: devMode ? '[name].css' : '[name].[contenthash].css',
+                chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
+            })
         );
     }
 
@@ -203,7 +213,7 @@ module.exports = function makeWebpackConfig() {
             new webpack.HashedModuleIdsPlugin(),
 
             new CopyWebpackPlugin([{
-                from: root('src/public')
+                from: root('src','public')
             }])
         );
     }
@@ -225,8 +235,19 @@ module.exports = function makeWebpackConfig() {
 
         config.optimization = {
 
-            // Turn off default Uglify plugin
-            minimize: false
+            // // Turn off default Uglify plugin
+            minimize: false,
+            //
+            // splitChunks: {
+            //     cacheGroups: {
+            //         styles: {
+            //             name: 'styles',
+            //             test: /\.css$/,
+            //             chunks: 'all',
+            //             enforce: true
+            //         }
+            //     }
+            // }
 
         };
     }
@@ -237,17 +258,14 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
 
-    if (!isProd) {
-
-        config.devServer = {
-            host: '0.0.0.0',
-            port: 8080,
-            contentBase: './src/public',
-            historyApiFallback: true,
-            quiet: true,
-            stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
-        };
-    }
+    config.devServer = {
+        host: '0.0.0.0',
+        port: 8080,
+        contentBase: './src/public',
+        historyApiFallback: true,
+        quiet: true,
+        stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
+    };
 
     return config;
 
