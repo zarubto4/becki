@@ -3,13 +3,10 @@ const path = require('path');
 const webpack = require('webpack');
 
 // Webpack Plugins
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
 
 /**
  * Env
@@ -20,8 +17,6 @@ const isTestWatch = ENV === 'test-watch';
 const isTest = ENV === 'test' || isTestWatch;
 const isProd = ENV === 'build';
 const devMode = process.env.NODE_ENV !== 'production';
-
-
 
 module.exports = function makeWebpackConfig() {
     /**
@@ -37,16 +32,16 @@ module.exports = function makeWebpackConfig() {
      * Type of sourcemap to use per build type
      */
     if (isProd) {
-        config.devtool = 'source-map';
+        config.devtool = 'cheap-module-source-map';
     }
     /**
      * Entry
      * Reference: http://webpack.github.io/docs/configuration.html#entry
      */
     config.entry = isTest ? {} : {
-        'polyfills': './src/polyfills.ts',
-        'vendor': './src/vendor.ts',
-        'app': './src/main' // our angular app
+        polyfills: './src/polyfills.ts',
+        vendor: './src/vendor.ts',
+        app: './src/main' // our angular app
     };
 
     /**
@@ -57,8 +52,8 @@ module.exports = function makeWebpackConfig() {
     config.output = {
         path: root('dist'),
         publicPath: '/',
-        filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
-        chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
+        filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
+        chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
 
     };
 
@@ -71,7 +66,7 @@ module.exports = function makeWebpackConfig() {
         extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html'],
     };
 
-    var atlOptions = '';
+    let atlOptions = '';
     if (isTest && !isTestWatch) {
         // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
         atlOptions = 'inlineSourceMap=true&sourceMap=false';
@@ -178,9 +173,7 @@ module.exports = function makeWebpackConfig() {
             }
         }),
 
-        new webpack.ContextReplacementPlugin( /(.+)?angular(\\|\/)core(.+)?/, root('./src'), {} ),
-
-        new webpack.optimize.SplitChunksPlugin()
+        new webpack.ContextReplacementPlugin( /(.+)?angular([\\\/])core(.+)?/, root('./src'), {} ),
     ];
 
     if (!isTest && !isTestWatch) {
@@ -206,12 +199,8 @@ module.exports = function makeWebpackConfig() {
 
     // Add build specific plugins
     if (isProd) {
+
         config.plugins.push(
-            // Copy assets from the public folder
-            // Reference: https://github.com/kevlened/copy-webpack-plugin
-
-            new webpack.HashedModuleIdsPlugin(),
-
             new CopyWebpackPlugin([{
                 from: root('src','public')
             }])
@@ -232,23 +221,9 @@ module.exports = function makeWebpackConfig() {
     );
 
     if (isProd) {
-
         config.optimization = {
-
             // // Turn off default Uglify plugin
             minimize: false,
-            //
-            // splitChunks: {
-            //     cacheGroups: {
-            //         styles: {
-            //             name: 'styles',
-            //             test: /\.css$/,
-            //             chunks: 'all',
-            //             enforce: true
-            //         }
-            //     }
-            // }
-
         };
     }
 
@@ -273,12 +248,8 @@ module.exports = function makeWebpackConfig() {
 
 // Helper functions
 function root(args) {
-    console.log(args);
     args = Array.prototype.slice.call(arguments, 0);
-    console.log(args);
-    const kisa = path.join.apply(path, [__dirname].concat(args));
-    console.log(kisa);
-    return kisa;
+    return path.join.apply(path, [__dirname].concat(args));
 }
 
 
