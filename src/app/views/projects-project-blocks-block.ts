@@ -63,7 +63,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     blockoView: BlockoViewComponent;
     tsBlock: Blocks.TSBlock;
     tsBlockHeight: number = 0;
-    testInputConnectors: Core.Connector[];
+    testInputConnectors: Array<Core.Connector<boolean|number|Core.Message|Object>>;
     messageInputsValueCache: { [key: string]: boolean | number | string } = {};
     successfullyTested: boolean = false;
 
@@ -337,20 +337,20 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
         return JSON.stringify(value);
     }
 
-    onDigitalInputClick(connector: Core.Connector): void {
+    onDigitalInputClick(connector: Core.Connector<boolean|number|Core.Message|Object>): void {
         this.zone.runOutsideAngular(() => {
             connector._inputSetValue(!connector.value);
         });
     }
 
-    onAnalogInputChange(event: Event, connector: Core.Connector): void {
+    onAnalogInputChange(event: Event, connector: Core.Connector<boolean|number|Core.Message|Object>): void {
         this.zone.runOutsideAngular(() => {
             let f = parseFloat((<HTMLInputElement>event.target).value);
             connector._inputSetValue(!isNaN(f) ? f : 0);
         });
     }
 
-    onMessageInputSendClick(connector: Core.Connector): void {
+    onMessageInputSendClick(connector: Core.MessageConnector): void {
         let values: any[] = [];
 
         connector.argTypes.forEach((argType, index) => {
@@ -463,7 +463,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                     console.error(e);
                 }
 
-                this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean | number | Core.MessageJson)) => {
+                this.tsBlock.registerOutputEventCallback((connector: Core.Connector<boolean|number|Core.Message|Object>, eventType: Core.ConnectorEventType, value: (boolean | number | Core.MessageJson)) => {
                     this.zone.run(() => {
                         if (this.consoleLog) {
                             this.consoleLog.add(
@@ -485,7 +485,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
             if (this.tsBlock) {
                 this.testInputConnectors = this.tsBlock.getInputConnectors();
 
-                this.tsBlockHeight = this.tsBlock.rendererGetBlockSize().height + 10; // for borders
+                // this.tsBlockHeight = this.tsBlock.rendererGetBlockSize().height + 10; // for borders
                 this.successfullyTested = true;
             }
 
