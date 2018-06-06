@@ -6,8 +6,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 /**
  * Env
  * Get npm lifecycle event to identify the environment
@@ -16,7 +14,6 @@ const ENV = process.env.npm_lifecycle_event;
 const isTestWatch = ENV === 'test-watch';
 const isTest = ENV === 'test' || isTestWatch;
 const isProd = ENV === 'build';
-const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = function makeWebpackConfig() {
     /**
@@ -66,7 +63,7 @@ module.exports = function makeWebpackConfig() {
         extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html'],
     };
 
-    let atlOptions = '';
+    var atlOptions = '';
     if (isTest && !isTestWatch) {
         // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
         atlOptions = 'inlineSourceMap=true&sourceMap=false';
@@ -159,11 +156,6 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
-        new BundleAnalyzerPlugin({
-            analyzerMode: 'static'
-        }),
-
-        // new CleanWebpackPlugin('dist', {}),
         // Define env variables to help with builds
         // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
         new webpack.DefinePlugin({
@@ -183,16 +175,6 @@ module.exports = function makeWebpackConfig() {
             new HtmlWebpackPlugin({
                 template: './src/public/index.html',
                 chunksSortMode: 'dependency'
-            }),
-
-            // Extract css files
-            // Reference: https://github.com/webpack/extract-text-webpack-plugin
-            // Disabled when in test mode or not in build mode
-            new MiniCssExtractPlugin({
-                // Options similar to the same options in webpackOptions.output
-                // both options are optional
-                filename: devMode ? '[name].css' : '[name].[contenthash].css',
-                chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
             })
         );
     }
@@ -203,7 +185,17 @@ module.exports = function makeWebpackConfig() {
         config.plugins.push(
             new CopyWebpackPlugin([{
                 from: root('src','public')
-            }])
+            }]),
+
+            // Extract css files
+            // Reference: https://github.com/webpack/extract-text-webpack-plugin
+            // Disabled when in test mode or not in build mode
+            new MiniCssExtractPlugin({
+                // Options similar to the same options in webpackOptions.output
+                // both options are optional
+                filename: '[name].[contenthash].css',
+                chunkFilename: '[id].[contenthash].css'
+            })
         );
     }
 
@@ -224,6 +216,8 @@ module.exports = function makeWebpackConfig() {
         config.optimization = {
             // // Turn off default Uglify plugin
             minimize: false,
+            noEmitOnErrors: true
+
         };
     }
 
@@ -233,14 +227,17 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
 
-    config.devServer = {
-        host: '0.0.0.0',
-        port: 8080,
-        contentBase: './src/public',
-        historyApiFallback: true,
-        quiet: true,
-        stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
-    };
+    if(!isProd) {
+
+        config.devServer = {
+            host: '0.0.0.0',
+            port: 8080,
+            contentBase: './src/public',
+            historyApiFallback: true,
+            quiet: true,
+            stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
+        };
+    }
 
     return config;
 
@@ -252,5 +249,5 @@ function root(args) {
     return path.join.apply(path, [__dirname].concat(args));
 }
 
-
+console.log(module.exports);
 
