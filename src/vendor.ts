@@ -8,16 +8,16 @@ import '@angular/router';
 
 import 'rxjs';
 
-// node_modules
-const w = <any>window;
-w['$'] = w['jquery'] = w['jQuery'] = require('jquery');
-require('jquery-ui-bundle');
-w['ts'] = require('imports-loader?require=>undefined!typescript');
-
-// Version
-w['BECKI_VERSION'] = require('../package.json').version;
-w['BECKI_VERSION_ID'] = require('../version.json').id;
-w['BECKI_VERSION_DATE'] = require('../version.json').date;
+// // node_modules
+// const w = <any>window;
+// w['$'] = w['jquery'] = w['jQuery'] = require('jquery');
+// require('jquery-ui-bundle');
+// w['ts'] = require('imports-loader?require=>undefined!typescript');
+//
+// // Version
+// w['BECKI_VERSION'] = require('../package.json').version;
+// w['BECKI_VERSION_ID'] = require('../version.json').id;
+// w['BECKI_VERSION_DATE'] = require('../version.json').date;
 
 // Fonts
 import 'font-awesome/css/font-awesome.min.css';

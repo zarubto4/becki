@@ -16,10 +16,10 @@
     "start-https": "webpack-dev-server --inline --progress --port 8181 --https",
     "lint": "tslint --force \"src/**/*.ts\"",
     "docs": "typedoc --options typedoc.json src/app/main.ts",
-    "start": "npm run server"
+    "start": "npm run server",
+    "build:library": "webpack --config library.webpack.config.js"
   },
   "dependencies": {
-    "@angular/animations": "^6.0.3",
     "@angular/cdk": "^6.2.1",
     "@angular/common": "^6.0.3",
     "@angular/compiler": "^6.0.3",

@@ -11,8 +11,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
  * Get npm lifecycle event to identify the environment
  */
 const ENV = process.env.npm_lifecycle_event;
-const isTestWatch = ENV === 'test-watch';
-const isTest = ENV === 'test' || isTestWatch;
 const isProd = ENV === 'build';
 
 module.exports = function makeWebpackConfig() {
@@ -35,7 +33,7 @@ module.exports = function makeWebpackConfig() {
      * Entry
      * Reference: http://webpack.github.io/docs/configuration.html#entry
      */
-    config.entry = isTest ? {} : {
+    config.entry = {
         polyfills: './src/polyfills.ts',
         vendor: './src/vendor.ts',
         app: './src/main' // our angular app
@@ -63,11 +61,11 @@ module.exports = function makeWebpackConfig() {
         extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html'],
     };
 
-    var atlOptions = '';
-    if (isTest && !isTestWatch) {
-        // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
-        atlOptions = 'inlineSourceMap=true&sourceMap=false';
-    }
+    var atlOptions = 'inlineSourceMap=true&sourceMap=false';
+    // if (isTest && !isTestWatch) {
+    //     // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
+    //     atlOptions = 'inlineSourceMap=true&sourceMap=false';
+    // }
 
     /**
      * Loaders
@@ -81,8 +79,8 @@ module.exports = function makeWebpackConfig() {
             // Support for .ts files.
             {
                 test: /\.ts$/,
-                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular2-template-loader'],
-                exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
+                use: ['awesome-typescript-loader?' + atlOptions, 'angular2-template-loader'],
+                exclude: [/\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
             // copy those assets to output
@@ -96,14 +94,13 @@ module.exports = function makeWebpackConfig() {
                 test: /\.xml$/,
                 loader: 'xml-loader'
             },
-
             // Support for CSS as raw text
             // use 'null' loader in test mode (https://github.com/webpack/null-loader)
             // all css in src/style  will be bundled in an external css file
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? [ 'null-loader' ] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader' ]
+                use: [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader' ]
             },
 
             // all css required in src/app files will be merged in js files
@@ -119,7 +116,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? [ 'null-loader' ] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader' ]
+                use: [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader' ]
             },
             // all css required in src/app files will be merged in js files
             {
@@ -136,18 +133,27 @@ module.exports = function makeWebpackConfig() {
                 loader: 'raw-loader'
 
             },
+
+            // tslint support
+            {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                enforce: 'pre',
+                loader: 'tslint-loader'
+            }
+
         ]
     };
 
-    if (!isTest || !isTestWatch) {
-        // tslint support
-        config.module.rules.push({
-            test: /\.ts$/,
-            exclude: /node_modules/,
-            enforce: 'pre',
-            loader: 'tslint-loader'
-        });
-    }
+    // if (!isTest || !isTestWatch) {
+    //     // tslint support
+    //     config.module.rules.push({
+    //         test: /\.ts$/,
+    //         exclude: /node_modules/,
+    //         enforce: 'pre',
+    //         loader: 'tslint-loader'
+    //     });
+    // }
 
     /**
      * Plugins
@@ -166,18 +172,38 @@ module.exports = function makeWebpackConfig() {
         }),
 
         new webpack.ContextReplacementPlugin( /(.+)?angular([\\\/])core(.+)?/, root('./src'), {} ),
+
+        // new webpack.DllReferencePlugin({
+        //     context: '.',
+        //     manifest: require('./build/library/polyfills.json')&&require('./build/library/vendor.json')
+        // }),
+
+        new HtmlWebpackPlugin({
+            template: './src/public/index.html',
+            chunksSortMode: 'dependency'
+        }),
+
+        new CopyWebpackPlugin([
+            {
+                from: root('node_modules/monaco-editor/min/vs'),
+                to: 'libs/monaco-editor/vs'
+            }
+        ]),
+
+
+        new webpack.IgnorePlugin(/mongodb/)
     ];
 
-    if (!isTest && !isTestWatch) {
-        config.plugins.push(
-            // Inject script and link tags into html files
-            // Reference: https://github.com/ampedandwired/html-webpack-plugin
-            new HtmlWebpackPlugin({
-                template: './src/public/index.html',
-                chunksSortMode: 'dependency'
-            })
-        );
-    }
+    // if (!isTest && !isTestWatch) {
+    //     config.plugins.push(
+    //         // Inject script and link tags into html files
+    //         // Reference: https://github.com/ampedandwired/html-webpack-plugin
+    //         new HtmlWebpackPlugin({
+    //             template: './src/public/index.html',
+    //             chunksSortMode: 'dependency'
+    //         })
+    //     );
+    // }
 
     // Add build specific plugins
     if (isProd) {
@@ -199,18 +225,18 @@ module.exports = function makeWebpackConfig() {
         );
     }
 
-    config.plugins.push(
-        new CopyWebpackPlugin([
-            {
-                from: root('node_modules/monaco-editor/min/vs'),
-                to: 'libs/monaco-editor/vs'
-            }
-        ])
-    );
+    // config.plugins.push(
+    //     new CopyWebpackPlugin([
+    //         {
+    //             from: root('node_modules/monaco-editor/min/vs'),
+    //             to: 'libs/monaco-editor/vs'
+    //         }
+    //     ])
+    // );
 
-    config.plugins.push(
-        new webpack.IgnorePlugin(/mongodb/)
-    );
+    // config.plugins.push(
+    //     new webpack.IgnorePlugin(/mongodb/)
+    // );
 
     if (isProd) {
         config.optimization = {
