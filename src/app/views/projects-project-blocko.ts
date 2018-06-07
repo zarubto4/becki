@@ -79,7 +79,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
     }
 
     onAddClick(): void {
-        let model = new ModalsBlockoPropertiesModel(this.project_id);
+        let model = new ModalsBlockoPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -97,7 +97,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
     }
 
     onEditClick(blocko: IBProgram): void {
-        let model = new ModalsBlockoPropertiesModel(this.project_id, blocko.name, blocko.description, true, blocko.name);
+        let model = new ModalsBlockoPropertiesModel(blocko.name, blocko.description, true, blocko.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

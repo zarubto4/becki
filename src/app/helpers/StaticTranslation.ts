@@ -236,6 +236,11 @@ export class StaticTranslation {
                 'label_blocko_program_name': 'Name',
                 'label_blocko_program_description': 'Description',
 
+            }, 'ModalsInstanceApiPropertiesComponent': {
+                'title_edit': '<strong class="font-color-instance">INSTANCE</strong> Token Properties',
+                'title_add': 'New <strong class="font-color-instance">INSTANCE</strong> Token',
+                'label_token_description': 'Token Description',
+
             }, 'ModalsBlockoVersionSelectComponent': {
                 'title': 'Change Version',
                 'label_program_version': 'Program Version',
@@ -1673,6 +1678,8 @@ export class StaticTranslation {
                 'tab_name_hardware': '<strong class="font-color-hardware">HARDWARE</strong>',
                 'tab_name_grid': '<strong class="font-color-grid">GRID</strong> Apps',
                 'tab_name_history': 'History',
+                'tab_name_api': 'Rest-API',
+                'tab_name_mesh': 'Mesh Network',
                 'tab_name_update_progress': 'Update Progress',
                 'tab_name_update_view': 'Realtime Overview',
                 'tab_name_logs': 'Logs',
@@ -1703,6 +1710,9 @@ export class StaticTranslation {
                 'btn_select_cloud_version': 'Select & Upload Version to Cloud',
                 'btn_save_deploy': 'Save & Deploy now',
                 'btn_deploy_snapshot': 'Deploy Some Snapshot',
+                'btn_add_key': 'Add new Api Key',
+                'btn_edit_token': 'Edit',
+                'btn_remove_token': 'Remove',
                 'label_grid_project': 'Byzance<strong class="font-color-grid">Grid</strong> Project',
                 'table_grid_program_name': 'Program',
                 'table_grid_program_description': 'Description',
@@ -1710,6 +1720,7 @@ export class StaticTranslation {
                 'table_grid_program_version_description': 'Description',
                 'table_grid_program_settings': 'Access Type',
                 'table_grid_link': 'Access Link',
+                'table_api_key': 'API KEY',
                 'btn_turn_off_instance': 'Shut Down',
                 'btn_change_version': 'Change Blocko Version',
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',

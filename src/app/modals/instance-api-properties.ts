@@ -11,20 +11,20 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 
 
-export class ModalsBlockoPropertiesModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public edit: boolean = false, public exceptName: string = null) {
+export class ModalsInstanceApiPropertiesModel extends ModalModel {
+    constructor(public description: string = '', public edit: boolean = false) {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-blocko-properties',
-    templateUrl: './blocko-properties.html'
+    selector: 'bk-modals-instance-api-properties',
+    templateUrl: './instance-api-properties.html'
 })
-export class ModalsBlockoPropertiesComponent implements OnInit {
+export class ModalsInstanceApiPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsBlockoPropertiesModel;
+    modalModel: ModalsInstanceApiPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -34,18 +34,15 @@ export class ModalsBlockoPropertiesComponent implements OnInit {
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': ['']
+            'description': ['', [Validators.required, Validators.minLength(4)]],
         });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
         this.modalClose.emit(true);
     }

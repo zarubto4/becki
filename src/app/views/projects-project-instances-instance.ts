@@ -8,7 +8,7 @@ import {
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
     ISwaggerInstanceSnapShotConfigurationProgram, ISwaggerInstanceSnapShotConfiguration,
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
-    IUpdateProcedure
+    IUpdateProcedure, ISwaggerInstanceSnapShotConfigurationApiKeys
 } from '../backend/TyrionAPI';
 import { BlockoCore, Blocks } from 'blocko';
 import {
@@ -37,6 +37,8 @@ import { ModalsGridProgramSettingsModel } from '../modals/instance-grid-program-
 import { ModalsSelectGridProjectModel } from '../modals/grid-project-select';
 import { ModalsSelectBlockModel } from '../modals/block-select';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
+import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
+import { ModalsInstanceApiPropertiesModel } from '../modals/instance-api-properties';
 
 
 @Component({
@@ -85,6 +87,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     tab: string = 'overview';
 
     private liveViewLoaded: boolean = false;
+
+
 
     constructor(injector: Injector) {
         super(injector);
@@ -203,6 +207,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.instance.online_state = status.online_state;
                     }
                 });
+
             })
             .catch(reason => {
                 this.fmError(`Instances ${this.projectId} cannot be loaded.`, reason);
@@ -244,6 +249,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.onChangeVersion();
                 break;
             }
+            case 'add_api_key': {
+                this.onAddApiKey();
+                break;
+            }
+            case 'add_mesh_key': {
+                this.onAddMeshNetworkKey();
+                break;
+            }
             default: {
                 console.warn('TODO action for:', action);
             }
@@ -265,6 +278,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         if (tab === 'editor') {
             console.info('onToggleTab editor');
             console.info('Co je BProgram: ', this.bProgram);
+
+
+            if (this.bProgram == null) {
+                return;
+            }
 
             let that = this;
             setTimeout(function() {
@@ -371,6 +389,113 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             this.fmError(this.translate('flash_not_deployable'));
         }
     }
+
+
+    // API KEY
+    onAddApiKey(): void {
+        let model = new ModalsInstanceApiPropertiesModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.tyrionBackendService.instanceAddApiKey(this.instanceId, {
+                    description: model.description
+                })
+                    .then((bpv) => {
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onRemoveApiKey(token: ISwaggerInstanceSnapShotConfigurationApiKeys): void {
+        this.modalService.showModal(new ModalsRemovalModel(token.description)).then((success) => {
+            if (success) {
+                this.tyrionBackendService.instanceRemoveApiKey(this.instance.id, token.token)
+                    .then((sanpshot) => {
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_cannot_remove_api_token'), reason);
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditApiKey(token: ISwaggerInstanceSnapShotConfigurationApiKeys): void {
+        let model = new ModalsInstanceApiPropertiesModel(token.description);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.tyrionBackendService.instanceUpdateApiKey(this.instanceId, token.token, {
+                    description: model.description
+                })
+                    .then((bpv) => {
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+
+    onAddMeshNetworkKey(): void {
+        let model = new ModalsInstanceApiPropertiesModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.tyrionBackendService.instanceAddMeshNetworkKey(this.instanceId, {
+                    description: model.description
+                })
+                    .then((bpv) => {
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onRemoveMeshNetworkKey(token: ISwaggerInstanceSnapShotConfigurationApiKeys): void {
+        this.modalService.showModal(new ModalsRemovalModel(token.description)).then((success) => {
+            if (success) {
+                this.tyrionBackendService.instanceRemoveMeshNetworkKey(this.instance.id, token.token)
+                    .then((sanpshot) => {
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_cannot_remove_api_token'), reason);
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditMeshNetworkKey(token: ISwaggerInstanceSnapShotConfigurationApiKeys): void {
+        let model = new ModalsInstanceApiPropertiesModel(token.description);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.tyrionBackendService.instanceUpdateMeshNetworkKey(this.instanceId, token.token, {
+                    description: model.description
+                })
+                    .then((bpv) => {
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+
 
     onChangeVersion(version: IBProgramVersion = null): void {
         if (version == null) {
@@ -911,6 +1036,22 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
         if (action === 'deploy_selected_snapshot') {
             this.onInstanceDeployClick(object);
+        }
+
+        if (action === 'remove_api_token') {
+            this.onRemoveApiKey(object);
+        }
+
+        if (action === 'edit_api_token') {
+            this.onEditApiKey(object);
+        }
+
+        if (action === 'remove_mesh_network_token') {
+            this.onRemoveMeshNetworkKey(object);
+        }
+
+        if (action === 'edit_mesh_network_token') {
+            this.onEditMeshNetworkKey(object);
         }
 
 

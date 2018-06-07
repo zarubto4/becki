@@ -62,8 +62,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
     tsBlock: Blocks.TSBlock;
-    tsBlockHeight: number = 0;
-    testInputConnectors: Array<Core.Connector<boolean|number|Core.Message|Object>>;
+    testInputConnectors: Core.Connector<boolean | number | object | Core.Message>[];
     messageInputsValueCache: { [key: string]: boolean | number | string } = {};
     successfullyTested: boolean = false;
 
@@ -337,13 +336,13 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
         return JSON.stringify(value);
     }
 
-    onDigitalInputClick(connector: Core.Connector<boolean|number|Core.Message|Object>): void {
+    onDigitalInputClick(connector: Core.Connector<boolean | number | object | Core.Message>): void {
         this.zone.runOutsideAngular(() => {
             connector._inputSetValue(!connector.value);
         });
     }
 
-    onAnalogInputChange(event: Event, connector: Core.Connector<boolean|number|Core.Message|Object>): void {
+    onAnalogInputChange(event: Event, connector: Core.Connector<boolean | number | object | Core.Message>): void {
         this.zone.runOutsideAngular(() => {
             let f = parseFloat((<HTMLInputElement>event.target).value);
             connector._inputSetValue(!isNaN(f) ? f : 0);
@@ -354,6 +353,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
         let values: any[] = [];
 
         connector.argTypes.forEach((argType, index) => {
+
             let val = this.messageInputsValueCache[connector.name + argType];
             if (argType === Types.Type.Boolean) {
                 if (!val) {
@@ -399,7 +399,6 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
             this.consoleLog.clear();
         }
         this.testInputConnectors = [];
-        this.tsBlockHeight = 0;
         this.messageInputsValueCache = {};
     }
 
@@ -463,7 +462,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                     console.error(e);
                 }
 
-                this.tsBlock.registerOutputEventCallback((connector: Core.Connector<boolean|number|Core.Message|Object>, eventType: Core.ConnectorEventType, value: (boolean | number | Core.MessageJson)) => {
+                this.tsBlock.registerOutputEventCallback((connector: Core.Connector<boolean | number | object | Core.Message>, eventType: Core.ConnectorEventType, value: (boolean | number | Core.MessageJson)) => {
                     this.zone.run(() => {
                         if (this.consoleLog) {
                             this.consoleLog.add(

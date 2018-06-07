@@ -507,7 +507,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     onBlockoProgramEditClick(): void {
-        let model = new ModalsBlockoPropertiesModel(this.projectId, this.blockoProgram.name, this.blockoProgram.description, true, this.blockoProgram.name);
+        let model = new ModalsBlockoPropertiesModel(this.blockoProgram.name, this.blockoProgram.description, true, this.blockoProgram.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -529,7 +529,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     selectBProgramVersionByVersionId(versionId: string) {
         // Select B_Program Version by ID if it is in URL parameter (or select last one)
         if (this.blockoProgramVersions) {
-            console.log('selectBProgramVersionByVersionId:: this.blockoProgramVersions');
+             // console.log('selectBProgramVersionByVersionId:: this.blockoProgramVersions');
             let version = null;
             if (versionId) {
                 version = this.blockoProgramVersions.find((bpv) => bpv.id === versionId);
@@ -539,7 +539,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 this.selectBProgramVersion(version);
             }
         } else {
-            console.log('selectBProgramVersionByVersionId:: version id', versionId, 'afterLoadSelectedVersionId');
+            // console.log('selectBProgramVersionByVersionId:: version id', versionId, 'afterLoadSelectedVersionId');
             this.afterLoadSelectedVersionId = versionId;
         }
     }
@@ -550,7 +550,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             return;
         }
 
-        console.log('selectBProgramVersion:: programVersion ', programVersion.name);
+        // console.log('selectBProgramVersion:: programVersion ', programVersion.name);
 
         this.blockUI();
         this.tyrionBackendService.bProgramVersionGet(programVersion.id)
@@ -562,7 +562,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 this.selectedProgramVersion = programVersionFull;
                 this.selectedGrid = {};
 
-                console.log('selectBProgramVersion:: its time to set  grid_project_snapshots ', JSON.stringify(programVersionFull.grid_project_snapshots, null, 2) );
+                // console.log('selectBProgramVersion:: its time to set  grid_project_snapshots ', JSON.stringify(programVersionFull.grid_project_snapshots, null, 2) );
 
                 programVersionFull.grid_project_snapshots.forEach((pps: IBProgramVersionSnapGridProject) => {
                     this.selectedGrid[pps.grid_project.id] = {};
@@ -577,7 +577,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     }
                 });
 
-                console.log('selectBProgramVersion:: selectedGrid: ',  JSON.stringify(this.selectedGrid, null, 2) );
+                // console.log('selectBProgramVersion:: selectedGrid: ',  JSON.stringify(this.selectedGrid, null, 2) );
 
                 this.blockoView.setDataJson(this.selectedProgramVersion.program);
                 if (this.consoleLog) {
@@ -643,7 +643,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
     onSaveClick(): void {
 
-        console.log('onSaveClick:: selectedGrid: ',  JSON.stringify(this.selectedGrid, null, 2));
+        // console.log('onSaveClick:: selectedGrid: ',  JSON.stringify(this.selectedGrid, null, 2));
 
         // Grid validation
         let validGrid = true;

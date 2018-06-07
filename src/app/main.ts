@@ -229,6 +229,7 @@ import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
 import { ChartsModule } from 'ng2-charts';
 import { ChartBarComponent } from './components/ChartBarComponent';
 import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
+import { ModalsInstanceApiPropertiesComponent } from './modals/instance-api-properties';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -715,6 +716,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsArticleComponent,
         ModalsAddGSMComponent,
         ModalsGsmPropertiesComponent,
+        ModalsInstanceApiPropertiesComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

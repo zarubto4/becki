@@ -16,70 +16,86 @@
                       [icon]="'fa-cloud'"
                       (onClick)="onPortletClick($event)"
                       [btns]="[
-                      {
-                          condition: (tab == 'overview'),
-                          btn_label_for_person: ('label_instance_properties'|bkTranslate:this),
-                          icon: 'fa-cog',
-                          colorType: 'EDIT',
-                          permission: true,
-                          btn_tag: 'edit_Instance'
-                      },
-                      {
-                          condition: (tab == 'overview' && instance.current_snapshot && instance.online_state != 'SHUT_DOWN'),
-                          btn_label_for_person: ('label_deactivate_instance'|bkTranslate:this),
-                          icon: 'fa-plus-circle',
-                          colorType: 'DEACTIVE',
-                          permission: instance.update_permission,
-                          btn_tag: 'deactivate_instance'
-                      },
-                      {
-                          condition: (tab == 'overview' && instance.current_snapshot && instance.online_state == 'SHUT_DOWN' ),
-                          btn_label_for_person: ('label_activate_instance'|bkTranslate:this),
-                          icon: 'fa-plus-circle',
-                          colorType: 'ACTIVE',
-                          permission: instance.update_permission,
-                          btn_tag: 'active_instance'
-                      },
-                      {
-                          condition: ((tab === 'overview' || tab === 'editor') && instance.snapshots != null && instance.snapshots.length > 0),
-                          btn_label_for_person: ('btn_deploy_snapshot'|bkTranslate:this),
-                          icon: 'fa-upload',
-                          colorType: 'ACTIVE',
-                          permission: instance.update_permission,
-                          btn_tag: 'deploy_snapshot'
-                      },
-                      {
-                          condition: (tab === 'overview'),
-                          btn_label_for_person: ('btn_select_cloud_version'|bkTranslate:this),
-                          icon: 'fa-plus-circle',
-                          colorType: 'UPDATE',
-                          permission: instance.update_permission,
-                          btn_tag: 'change_version_instance'
-                      },
-                      {
-                          condition: (tab == 'editor'),
-                          btn_label_for_person: ('btn_save'|bkTranslate:this),
-                          icon: 'fa-share',
-                          colorType: 'ADD',
-                          permission: true,
-                          btn_tag: 'save_snapshot'
-                      },
-                      {
-                          condition: (tab == 'editor'),
-                          btn_label_for_person: ('btn_save_deploy'|bkTranslate:this),
-                          icon: 'fa-share',
-                          colorType: 'ADD',
-                          permission: true,
-                          btn_tag: 'save_deploy_snapshot'
-                      },
-                      {
-                          condition: (tab == 'editor'),
-                          btn_label_for_person: ('btn_change_version'|bkTranslate:this),
-                          icon: 'fa-cog',
-                          colorType: 'EDIT',
-                          permission: true,
-                          btn_tag: 'change_version'
-                      }
+                          {
+                              condition: (tab == 'overview'),
+                              btn_label_for_person: ('label_instance_properties'|bkTranslate:this),
+                              icon: 'fa-cog',
+                              colorType: 'EDIT',
+                              permission: true,
+                              btn_tag: 'edit_Instance'
+                          },
+                          {
+                              condition: (tab == 'overview' && instance.current_snapshot && instance.online_state != 'SHUT_DOWN'),
+                              btn_label_for_person: ('label_deactivate_instance'|bkTranslate:this),
+                              icon: 'fa-plus-circle',
+                              colorType: 'DEACTIVE',
+                              permission: instance.update_permission,
+                              btn_tag: 'deactivate_instance'
+                          },
+                          {
+                              condition: (tab == 'overview' && instance.current_snapshot && instance.online_state == 'SHUT_DOWN' ),
+                              btn_label_for_person: ('label_activate_instance'|bkTranslate:this),
+                              icon: 'fa-plus-circle',
+                              colorType: 'ACTIVE',
+                              permission: instance.update_permission,
+                              btn_tag: 'active_instance'
+                          },
+                          {
+                              condition: ((tab === 'overview' || tab === 'editor') && instance.snapshots != null && instance.snapshots.length > 0),
+                              btn_label_for_person: ('btn_deploy_snapshot'|bkTranslate:this),
+                              icon: 'fa-upload',
+                              colorType: 'ACTIVE',
+                              permission: instance.update_permission,
+                              btn_tag: 'deploy_snapshot'
+                          },
+                          {
+                              condition: (tab === 'overview'),
+                              btn_label_for_person: ('btn_select_cloud_version'|bkTranslate:this),
+                              icon: 'fa-plus-circle',
+                              colorType: 'UPDATE',
+                              permission: instance.update_permission,
+                              btn_tag: 'change_version_instance'
+                          },
+                          {
+                              condition: (tab == 'editor'),
+                              btn_label_for_person: ('btn_save'|bkTranslate:this),
+                              icon: 'fa-share',
+                              colorType: 'ADD',
+                              permission: true,
+                              btn_tag: 'save_snapshot'
+                          },
+                          {
+                              condition: (tab == 'editor'),
+                              btn_label_for_person: ('btn_save_deploy'|bkTranslate:this),
+                              icon: 'fa-share',
+                              colorType: 'ADD',
+                              permission: true,
+                              btn_tag: 'save_deploy_snapshot'
+                          },
+                          {
+                              condition: (tab == 'editor'),
+                              btn_label_for_person: ('btn_change_version'|bkTranslate:this),
+                              icon: 'fa-cog',
+                              colorType: 'EDIT',
+                              permission: true,
+                              btn_tag: 'change_version'
+                          },
+                          {
+                              condition: (tab == 'api'),
+                              btn_label_for_person: ('btn_add_key'|bkTranslate:this),
+                              icon: 'fa-plus',
+                              colorType: 'CREATE',
+                              permission: instance.update_permission,
+                              btn_tag: 'add_api_key'
+                          },
+                           {
+                              condition: (tab == 'mesh'),
+                              btn_label_for_person: ('btn_add_key'|bkTranslate:this),
+                              icon: 'fa-plus',
+                              colorType: 'CREATE',
+                              permission: instance.update_permission,
+                              btn_tag: 'add_mesh_key'
+                          }
                     ]"
                       (onTabClick)="onToggleTab($event)"
                       [tab_selected_name]="tab"
@@ -112,6 +128,18 @@
                             tab_label: ('tab_name_grid'|bkTranslate:this)
                         },
                         {
+                            tab_name: 'api',
+                            condition: (instance && instance.current_snapshot),
+                            tab_color: 'CLOUD',
+                            tab_label: ('tab_name_api'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'mesh',
+                            condition: (instance && instance.current_snapshot),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_name_mesh'|bkTranslate:this)
+                        },
+                        {
                             tab_name: 'history',
                             condition: (true),
                             tab_color: 'CLOUD',
@@ -138,13 +166,6 @@
                             tab_color: 'CLOUD',
                             permission: instance.update_permission,
                             tab_label: ('tab_name_logs'|bkTranslate:this)
-                        },
-                        {
-                            tab_name: 'debug',
-                            condition: (false),
-                            tab_color: 'CLOUD',
-                            permission: instance.update_permission,
-                            tab_label: ('tab_name_debugs'|bkTranslate:this)
                         }
                     ]"
     >
@@ -592,6 +613,94 @@
         </div>
 
         <div *ngIf="tab == 'debug'">
+        </div>
+
+        <div *ngIf="tab == 'api' && instance">
+            <div *ngIf="(instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
+                        <th [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                        <tr *ngFor="let key of instance.current_snapshot.settings.api_keys">
+                            <td class="vert-align bold">{{key.token}}</td>
+                            <td class="vert-align bold">{{key.description}}</td>
+                            <td class="action-btn-col">
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                    [btns]="[
+                                       {
+                                           condition: true,
+                                           btn_label_for_person: ('btn_edit_token'|bkTranslate:this),
+                                           btn_tag: 'edit_api_token',
+                                           icon: 'fa-cog',
+                                           colorType: 'EDIT',
+                                           permission: (instance.update_permission)
+                                       },
+                                       {
+                                           condition: true,
+                                           btn_label_for_person: ('btn_remove_token'|bkTranslate:this),
+                                           btn_tag: 'remove_api_token',
+                                           icon: 'fa-trash',
+                                           colorType: 'REMOVE',
+                                           permission: (instance.delete_permission)
+                                       }
+                                   ]"
+                            (onValueChanged)="onDrobDownEmiter($event, key)">
+                        </bk-drob-down-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="tab == 'mesh' && instance">
+            <div *ngIf="(instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
+                        <th [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let key of instance.current_snapshot.settings.mesh_keys">
+                        <td class="vert-align bold">{{key.token}}</td>
+                        <td class="vert-align bold">{{key.description}}</td>
+                        <td class="action-btn-col">
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
+                                           {
+                                               condition: true,
+                                               btn_label_for_person: ('btn_edit_token'|bkTranslate:this),
+                                               btn_tag: 'edit_mesh_network_token',
+                                               icon: 'fa-cog',
+                                               colorType: 'EDIT',
+                                               permission: (instance.update_permission)
+                                           },
+                                           {
+                                               condition: true,
+                                               btn_label_for_person: ('btn_remove_token'|bkTranslate:this),
+                                               btn_tag: 'remove_mesh_network_token',
+                                               icon: 'fa-trash',
+                                               colorType: 'REMOVE',
+                                               permission: (instance.delete_permission)
+                                           }
+                                   ]"
+                                (onValueChanged)="onDrobDownEmiter($event, key)">
+                            </bk-drob-down-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div *ngIf="tab == 'history' && instance">
