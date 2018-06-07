@@ -97,7 +97,13 @@ export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestro
                     readOnly: this.readonly,
                     theme: 'vs-dark',
                     automaticLayout: true,
-                    autoClosingBrackets: false
+                    autoIndent: true,
+                    renderIndentGuides: true,
+                    formatOnPaste: true,
+                    multiCursorModifier: 'ctrlCmd',
+                    parameterHints: true,
+                    useTabStops: true,
+                    scrollBeyondLastLine: false
                 });
                 this.editor.getModel().onDidChangeContent(() => {
                     this.code = this.editor.getModel().getValue();
