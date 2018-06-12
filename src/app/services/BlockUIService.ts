@@ -4,7 +4,7 @@
  */
 
 
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class BlockUIService {

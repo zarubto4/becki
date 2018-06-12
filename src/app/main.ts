@@ -223,6 +223,11 @@ import { ModalsBlockSelectComponent } from './modals/block-select';
 import { ArticleComponent } from './components/ArticleComponent';
 import { ModalsArticleComponent } from './modals/article';
 
+import { SharedModule } from '../shared'; // Common dependencies
+import { FinancialModule } from './views/baseModule';
+
+
+
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -247,7 +252,7 @@ let routes: Routes = [
 
     { path: 'profile', data: { breadName: 'Profile' }, component: ProfileComponent, canActivate: [AuthGuard] },
 
-    { path: 'financial', data: { breadName: 'Financial' }, component: FinancialComponent, canActivate: [AuthGuard] },
+    { path: 'financial', data: { breadName: 'Financial' }, loadChildren: './views/baseModule#FinancialModule', canActivate: [AuthGuard] },
 
     { path: 'financial/product-registration', data: { breadName: 'Product subscription' }, component: ProductRegistrationComponent, canActivate: [AuthGuard] },
 
@@ -455,6 +460,8 @@ class BeckiErrorHandler implements ErrorHandler {
         HttpModule,
         JsonpModule,
         MyDatePickerModule,
+        SharedModule,
+        FinancialModule
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
@@ -481,11 +488,11 @@ class BeckiErrorHandler implements ErrorHandler {
     ],
     declarations: [
         // Generic app components
-        AppComponent,
-        ModalComponent,
-        BlockUIComponent,
+        // AppComponent,
+        // ModalComponent,
+        // BlockUIComponent,
         // Layouts components
-        LayoutMainComponent,
+        // LayoutMainComponent,
         LayoutNotLoggedComponent,
         // Other components
         ImageCropperComponent,
@@ -494,8 +501,8 @@ class BeckiErrorHandler implements ErrorHandler {
         Nl2BrPipe,
         UnixTimeFormatPipe,
         StringReplacerPipe,
-        TranslatePipe,
-        TranslateTablePipe,
+        // TranslatePipe,
+        // TranslateTablePipe,
         HtmlSanitizeBypassPipe,
         IconFileComponent,
         // Components
@@ -532,16 +539,16 @@ class BeckiErrorHandler implements ErrorHandler {
         TypeOfUpdateComponent,
         TimeZoneSelectorComponent,
         TagComponent,
-        NothingToShowComponent,
-        PortletTitleComponent,
-        PaymentMethodComponent,
+        // NothingToShowComponent,
+        // PortletTitleComponent,
+        // PaymentMethodComponent,
         PortletPanelMenuComponent,
         ServerSizeSelectorComponent,
         ServerRegionSelectorComponent,
         TerminalLogSubscriberComponent,
         LogLevelComponent,
         GridViewComponent,
-        BeckiDrobDownButtonComponent,
+        // BeckiDrobDownButtonComponent,
         FilterTableComponent,
         PublicStateComponent,
         // Views components
@@ -556,7 +563,7 @@ class BeckiErrorHandler implements ErrorHandler {
         BugsBugComponent,
         DashboardComponent,
         CommunityCProgramComponent,
-        FinancialComponent,
+        // FinancialComponent,
         FinancialProductComponent,
         FinancialProductExtensionsComponent,
         FinancialProductInvoicesComponent,
@@ -687,7 +694,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBlockSelectComponent,
         ModalsArticleComponent,
     ],
-    exports: [AppComponent],
+    // exports: [AppComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -82,7 +82,7 @@ module.exports = function makeWebpackConfig() {
             // Support for TS files.
             {
                 test: /\.ts$/,
-                loaders: ['ts-loader?' + atlOptions, 'angular2-template-loader'],
+                loaders: ['ts-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
                 exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 

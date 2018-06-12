@@ -6,9 +6,9 @@
 
 
 import { Router, ActivatedRoute } from '@angular/router';
-import { TyrionBackendService } from '../services/BackendService';
+import { TyrionBackendService } from '../services/BackendService';``
 import { ModalService } from '../services/ModalService';
-import { Injector, NgZone } from '@angular/core';
+import { Component, Injector, NgZone} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockUIService } from '../services/BlockUIService';
@@ -22,6 +22,7 @@ import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
 import { IError } from '../services/_backend_class/Responses';
 /* tslint:disable:class-name  */
+
 export abstract class _BaseMainComponent {
 /* tslint:disable:class-name  */
 
