@@ -52,11 +52,11 @@
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user">
                         <a class="dropdown-toggle" (click)="onUserToggleClick($event)">
-                            <img alt="" class="img-circle" *ngIf="backendService.personInfoSnapshot.picture_link" [attr.src]="backendService.personInfoSnapshot.picture_link?backendService.personInfoSnapshot.picture_link:''"
+                            <img alt="" class="img-circle" *ngIf="backendService.personInfoSnapshot?.picture_link" [attr.src]="backendService.personInfoSnapshot.picture_link?backendService.personInfoSnapshot.picture_link:''"
                             />
-                            <div class="empty-avatar" *ngIf="!backendService.personInfoSnapshot.picture_link"></div>
+                            <div class="empty-avatar" *ngIf="!backendService.personInfoSnapshot?.picture_link"></div>
                             <span class="username">
-                                {{backendService.personInfoSnapshot.full_name?backendService.personInfoSnapshot.full_name:backendService.personInfoSnapshot.nick_name}}
+                                {{backendService.personInfoSnapshot?.full_name?backendService.personInfoSnapshot?.full_name:backendService.personInfoSnapshot?.nick_name}}
                             </span>
                             <i class="fa fa-angle-down"></i>
                         </a>

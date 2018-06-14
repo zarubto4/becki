@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutMainComponent } from './app/layouts/main';
 import { TranslatePipe } from './app/pipes/TranslationPipe';
 import { PortletTitleComponent } from './app/components/PortletTitleComponent';
@@ -12,12 +12,17 @@ import { BlockUIComponent } from './app/components/BlockUIComponent';
 import { ModalComponent } from './app/modals/modal';
 import { RouterModule } from '@angular/router';
 import { TranslateTablePipe } from './app/pipes/TranslationTablePipe';
+import { FormSelectComponent } from './app/components/FormSelectComponent';
+import { FormInputComponent } from './app/components/FormInputComponent';
+import { UnixTimeFormatPipe } from './app/pipes/UnixTimeFormatPipe';
+import { StringReplacerPipe } from './app/pipes/StringReplacerPipe';
 
 
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule
+        RouterModule,
+        ReactiveFormsModule
     ],
     declarations: [
         AppComponent,
@@ -29,12 +34,17 @@ import { TranslateTablePipe } from './app/pipes/TranslationTablePipe';
         NothingToShowComponent,
         BlockUIComponent,
         ModalComponent,
-        TranslateTablePipe
+        TranslateTablePipe,
+        FormSelectComponent,
+        FormInputComponent,
+        UnixTimeFormatPipe,
+        StringReplacerPipe,
     ],
     exports:      [
         AppComponent,
         CommonModule,
-        FormsModule ,
+        FormsModule,
+        ReactiveFormsModule,
         LayoutMainComponent,
         TranslatePipe,
         PortletTitleComponent,
@@ -43,7 +53,11 @@ import { TranslateTablePipe } from './app/pipes/TranslationTablePipe';
         NothingToShowComponent,
         BlockUIComponent,
         ModalComponent,
-        TranslateTablePipe
+        TranslateTablePipe,
+        FormSelectComponent,
+        FormInputComponent,
+        UnixTimeFormatPipe,
+        StringReplacerPipe,
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
