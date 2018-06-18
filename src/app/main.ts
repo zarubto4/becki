@@ -4,17 +4,14 @@
  */
 
 // Imports
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app';
-import { ModalComponent } from './modals/modal';
 import { LabeledLink } from './helpers/LabeledLink';
 import { Nl2BrPipe } from './pipes/Nl2BrPipe';
-import { UnixTimeFormatPipe } from './pipes/UnixTimeFormatPipe';
-import { LayoutMainComponent } from './layouts/main';
 import { LayoutNotLoggedComponent } from './layouts/not-logged';
 import { TyrionBackendService } from './services/BackendService';
 import { AuthGuard, NonAuthGuard } from './services/AuthGuard';
@@ -26,9 +23,7 @@ import { CurrentParamsService } from './services/CurrentParamsService';
 import { NotificationService } from './services/NotificationService';
 import { FormColorPickerComponent } from './components/FormColorPickerComponent';
 import { FormFAIconSelectComponent } from './components/FormFAIconSelectComponent';
-import { FormInputComponent } from './components/FormInputComponent';
 import { FormInputTagsComponent } from './components/FormInputTagsComponent';
-import { FormSelectComponent } from './components/FormSelectComponent';
 import { CodeIDEComponent } from './components/CodeIDEComponent';
 import { ProgramVersionSelectorComponent } from './components/VersionSelectorComponent';
 import { DraggableDirective } from './components/DraggableDirective';
@@ -46,7 +41,6 @@ import { ForgotPasswordComponent } from './views/login-forgot-password';
 import { PasswordRestartComponent } from './views/login-password-restart';
 import { CreateUserComponent } from './views/create-user';
 import { RedirectOkComponent } from './components/redirect-ok';
-import { ProductRegistrationComponent } from './views/financial-product-registration';
 import { ModalsProjectPropertiesComponent } from './modals/project-properties';
 import { ModalsRemovalComponent } from './modals/removal';
 import { ModalsAddHardwareComponent } from './modals/add-hardware';
@@ -69,21 +63,13 @@ import { ModalsDeviceEditDescriptionComponent } from './modals/device-edit-descr
 import { ModalsInstanceEditDescriptionComponent } from './modals/instance-edit-description';
 import { ModalsWidgetsTypePropertiesComponent } from './modals/widgets-type-properties';
 import { BlockUIService } from './services/BlockUIService';
-import { BlockUIComponent } from './components/BlockUIComponent';
-import { FinancialComponent } from './views/financial';
 import { NotificationsOverlayComponent } from './components/NotificationsOverlayComponent';
 import { NotificationsListComponent } from './components/NotificationsListComponent';
 import { ModalsBlockoVersionSelectComponent } from './modals/blocko-version-select';
-import { FinancialProductComponent } from './views/financial-product';
 import { HardwareComponent } from './views/hardware';
 import { HardwareHardwareTypeComponent } from './views/hardware-hardware_type';
 import { ProjectsProjectMembersComponent } from './views/projects-project-members';
 import { ModalsMembersAddComponent } from './modals/members-add';
-import { FinancialProductExtensionsComponent } from './views/financial-product-extensions';
-import { FinancialProductInvoicesComponent } from './views/financial-product-invoices';
-import { FinancialProductInvoicesInvoiceComponent } from './views/financial-product-invoices-invoice';
-import { FinancialProductBillingComponent } from './views/financial-product-billing';
-import { StringReplacerPipe } from './pipes/StringReplacerPipe';
 import { StorageService } from './services/StorageService';
 import { ServerComponent } from './views/admin-server';
 import { ModalsWidgetsWidgetPropertiesComponent } from './modals/widgets-widget-properties';
@@ -102,8 +88,6 @@ import { ImageCropperComponent } from 'ngx-img-cropper';
 import { ModalsSelectHardwareComponent } from './modals/select-hardware';
 import { GoPayLoaderService } from './services/GoPayLoaderService';
 import { TranslationService } from './services/TranslationService';
-import { TranslateTablePipe } from './pipes/TranslationTablePipe';
-import { TranslatePipe } from './pipes/TranslationPipe';
 import { Md2HtmlPipe } from './pipes/Md2HtmlPipe';
 import { ModalsHardwareBootloaderUpdateComponent } from './modals/hardware-bootloader-update';
 import { InstanceHistoryTimeLineComponent } from './components/InstanceHistoryTimeLineComponent';
@@ -145,7 +129,6 @@ import { AdminFinancialTariffComponent } from './views/admin-financial-tariff';
 import { ModalsExtensionComponent } from './modals/extension';
 import { FormTextAreaComponent } from './components/FormTextAreaComponent';
 import { FormJsonNiceTextAreaComponent } from './components/FormJsonNiceTextAreaComponent';
-import { ModalsFinancialProductComponent } from './modals/financial-product';
 import { ModalsBillingInformationComponent } from './modals/billing-information';
 import { ModalsCompanyInformationComponent } from './modals/company-information';
 import { ModalsPublicShareRequestComponent } from './modals/public-share-request';
@@ -179,9 +162,6 @@ import { TimeZoneSelectorComponent } from './components/TimeZoneComponent';
 import { BeckiClickOutsideDirective } from './helpers/ClickDetection';
 import { ModalsCodeSelectComponent } from './modals/code-select';
 import { BeckiBooleanButtonComponent } from './components/BooleanButtonComponent';
-import { NothingToShowComponent } from './components/NothingToShowComponent';
-import { PortletTitleComponent } from './components/PortletTitleComponent';
-import { PaymentMethodComponent } from './components/PaymentMehtodComponent';
 import { PortletPanelMenuComponent } from './components/PortletPanelMenu';
 import { ModalsHardwareFindHashComponent } from './modals/hardware-find-hash';
 import { ProjectsProjectCodeComponent } from './views/projects-project-code';
@@ -215,18 +195,15 @@ import { ProjectsProjectGridGridsComponent } from './views/projects-project-grid
 import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-grid-grids-grid';
 import { ModalsShowQRComponent } from './modals/show_QR';
 import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-program-settings';
-import { BeckiDrobDownButtonComponent } from './components/DrobDownButton';
-import { FinancialProductEmployeesComponent } from './views/financial-product-employees';
 import { FilterTableComponent } from './components/FilterTableComponent';
 import { ModalsGridProjectSelectComponent } from './modals/grid-project-select';
 import { ModalsBlockSelectComponent } from './modals/block-select';
 import { ArticleComponent } from './components/ArticleComponent';
 import { ModalsArticleComponent } from './modals/article';
-
-import { SharedModule } from '../shared'; // Common dependencies
-import { FinancialModule } from './views/baseModule';
-
-
+// Common dependencies
+import { SharedModule } from '../shared';
+import { AuthModule } from './views/auth-module';
+import { ProductRegistrationComponent } from './views/financial-product-registration';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -252,9 +229,9 @@ let routes: Routes = [
 
     { path: 'profile', data: { breadName: 'Profile' }, component: ProfileComponent, canActivate: [AuthGuard] },
 
-    { path: 'financial', data: { breadName: 'Financial' }, loadChildren: './views/baseModule#FinancialModule', canActivate: [AuthGuard] },
+    { path: 'financial', data: { breadName: 'Financial' }, loadChildren: './views/financial-module#FinancialModule' /*, canActivate: [AuthGuard]*/ },
 
-    // { path: 'financial/product-registration', data: { breadName: 'Product subscription' }, component: ProductRegistrationComponent, canActivate: [AuthGuard] },
+    { path: 'financial/product-registration', data: { breadName: 'Product subscription' }, component: ProductRegistrationComponent, canActivate: [AuthGuard] },
     //
     // { path: 'financial/:product', data: { breadName: ':product' }, component: FinancialProductComponent, canActivate: [AuthGuard] },
     // { path: 'financial/:product/extensions', data: { breadName: 'extensions' }, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard] },
@@ -262,6 +239,7 @@ let routes: Routes = [
     // { path: 'financial/:product/invoices', data: { breadName: 'invoices' }, component: FinancialProductInvoicesComponent, canActivate: [AuthGuard] },
     // { path: 'financial/:product/invoices/:invoice', data: { breadName: ':invoice' }, component: FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard] },
     // { path: 'financial/:product/billing', data: { breadName: 'billing' }, component: FinancialProductBillingComponent, canActivate: [AuthGuard] },
+
 
     { path: 'hardware', data: { breadName: 'Hardware types' }, component: HardwareComponent, canActivate: [AuthGuard] },
     { path: 'hardware/:hardware_type', data: { breadName: ':last' }, component: HardwareHardwareTypeComponent, canActivate: [AuthGuard] },
@@ -454,17 +432,17 @@ class BeckiErrorHandler implements ErrorHandler {
 @NgModule({
     imports: [
         BrowserModule,
-        // ReactiveFormsModule,
         FormsModule,
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(routes, { enableTracing: true }),
         HttpModule,
         JsonpModule,
         MyDatePickerModule,
-        SharedModule
+        SharedModule,
+        AuthModule.forRoot()
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
-        ValidatorErrorsService,
+        // ValidatorErrorsService,
         TyrionBackendService,
         AuthGuard, // AuthGuard service must be after TyrionBackendService
         ExitConfirmGuard,
@@ -487,24 +465,16 @@ class BeckiErrorHandler implements ErrorHandler {
     ],
     declarations: [
         // Generic app components
-        // AppComponent,
-        // ModalComponent,
-        // BlockUIComponent,
-        // Layouts components
-        // LayoutMainComponent,
         LayoutNotLoggedComponent,
         // Other components
         ImageCropperComponent,
         // Pipes
         Md2HtmlPipe,
         Nl2BrPipe,
-        // UnixTimeFormatPipe,
-        // StringReplacerPipe,
-        // TranslatePipe,
-        // TranslateTablePipe,
         HtmlSanitizeBypassPipe,
         IconFileComponent,
         // Components
+        ProductRegistrationComponent,
         MultiSelectComponent,
         BlockoViewComponent,
         BeckiBooleanButtonComponent,
@@ -512,10 +482,8 @@ class BeckiErrorHandler implements ErrorHandler {
         FormColorPickerComponent,
         FormFAIconSelectComponent,
         IconComponent,
-        // FormInputComponent,
         FormInputTagsComponent,
         FormTextAreaComponent,
-        // FormSelectComponent,
         FormJsonNiceTextAreaComponent,
         FilterPagerComponent,
         CodeIDEComponent,
@@ -538,16 +506,12 @@ class BeckiErrorHandler implements ErrorHandler {
         TypeOfUpdateComponent,
         TimeZoneSelectorComponent,
         TagComponent,
-        // NothingToShowComponent,
-        // PortletTitleComponent,
-        // PaymentMethodComponent,
         PortletPanelMenuComponent,
         ServerSizeSelectorComponent,
         ServerRegionSelectorComponent,
         TerminalLogSubscriberComponent,
         LogLevelComponent,
         GridViewComponent,
-        // BeckiDrobDownButtonComponent,
         FilterTableComponent,
         PublicStateComponent,
         // Views components
@@ -562,13 +526,6 @@ class BeckiErrorHandler implements ErrorHandler {
         BugsBugComponent,
         DashboardComponent,
         CommunityCProgramComponent,
-        // FinancialComponent,
-        // FinancialProductComponent,
-        // FinancialProductExtensionsComponent,
-        // FinancialProductInvoicesComponent,
-        // FinancialProductInvoicesInvoiceComponent,
-        // FinancialProductBillingComponent,
-        // FinancialProductEmployeesComponent,
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,
@@ -591,7 +548,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectGridComponent,
         ProjectsProjectGridGridsComponent,
         ProjectsProjectGridGridsGridComponent,
-        // ProductRegistrationComponent,
         ProjectsProjectInstancesComponent,
         ProjectsProjectInstancesInstanceComponent,
         HardwareComponent,
@@ -607,7 +563,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ProducersProducerComponent,
         ProjectsProjectLibrariesComponent,
         ArticleComponent,
-        // ProjectsProjectLibrariesLibraryComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
         SupportComponent,
@@ -621,7 +576,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsProjectPropertiesComponent,
         ModalsCreateHomerServerComponent,
         ModalsUpdateHomerServerComponent,
-        // ModalsFinancialProductComponent,
         ModalsTariffComponent,
         ModalsPublicShareResponseComponent,
         ModalsCreateProcessorComponent,
@@ -693,8 +647,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBlockSelectComponent,
         ModalsArticleComponent,
     ],
-    // exports: [AppComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {
 }
+
+

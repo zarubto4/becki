@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutMainComponent } from './app/layouts/main';
 import { TranslatePipe } from './app/pipes/TranslationPipe';
@@ -24,6 +24,7 @@ import { StringReplacerPipe } from './app/pipes/StringReplacerPipe';
         RouterModule,
         ReactiveFormsModule
     ],
+    providers: [],
     declarations: [
         AppComponent,
         LayoutMainComponent,
@@ -57,8 +58,8 @@ import { StringReplacerPipe } from './app/pipes/StringReplacerPipe';
         FormSelectComponent,
         FormInputComponent,
         UnixTimeFormatPipe,
-        StringReplacerPipe,
+        StringReplacerPipe
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
-export class SharedModule { }
+export class SharedModule {}
