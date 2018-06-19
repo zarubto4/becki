@@ -65,6 +65,7 @@
         "zone.js": "^0.8.26"
     },
     "devDependencies": {
+        "@angular/cli": "^6.0.8",
         "@types/chalk": "^2.2.0",
         "@types/core-js": "^0.9.46",
         "@types/handlebars": "^4.0.38",
