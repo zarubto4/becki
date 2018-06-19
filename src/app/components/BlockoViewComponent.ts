@@ -4,7 +4,7 @@
  */
 
 
-import { BlockoCore, BlockoPaperRenderer, BlockoBasicBlocks, BlockoTargetInterface, Blocks } from 'blocko';
+import { BlockoCore, Blocko, BlockoBasicBlocks, Blocks } from 'blocko';
 import { Component, AfterViewInit, OnChanges, OnDestroy, Input, ViewChild, ElementRef,
     SimpleChanges, Output, EventEmitter, NgZone } from '@angular/core';
 import { ModalService } from '../services/ModalService';
@@ -74,7 +74,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @Output()
     onLog: EventEmitter<{ block: BlockoCore.Block, type: string, message: string }> = new EventEmitter<{ block: BlockoCore.Block, type: string, message: string }>();
 
-    protected blocko: BlockoPaperRenderer.Controller;
+    protected blocko: Blocko.Controller;
 
     @ViewChild('field')
     field: ElementRef;
@@ -122,7 +122,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
 
-            this.blocko = new BlockoPaperRenderer.Controller({
+            this.blocko = new Blocko.Controller({
                 editorElement: this.field.nativeElement,
                 singleBlockView: this.singleBlockView,
                 readonly: this.readonly,
@@ -130,8 +130,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             });
             this.blocko.registerOpenConfigCallback((block) => {
                 this.zone.run(() => {
-                    if (block.blockId) {
-                        this.backendService.blockGet(block.blockId)
+                    if (block.codeBlock && (<Blocks.TSBlock>block).blockId) {
+                        this.backendService.blockGet((<Blocks.TSBlock>block).blockId)
                             .then((b: IBlock) => {
                                 this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block, b.versions, this.blockChangeVersion));
                             })
@@ -237,7 +237,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 throw new Error(this.translate('error_read_only'));
             }
 
-            let bc: BlockoCore.BlockClass = this.blocko.core.getBlockClassByVisualType(blockName);
+            let bc: BlockoCore.BlockClass = this.blocko.core.getBlockClassByType(blockName);
             if (!bc) {
                 throw new Error(this.translate('error_block_not_found', blockName));
             }
@@ -255,7 +255,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             json['version_id'] = version.id;
             json['block_id'] = block.id;
 
-            b = new BlockoBasicBlocks.TSBlock(null, version.logic_json, JSON.stringify(json));
+            b = new BlockoBasicBlocks.TSBlock(null, version.logic_json);
         });
         this.onChange.emit({});
         return b;
@@ -285,7 +285,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     setSingleBlock(logic: string, design: string): BlockoBasicBlocks.TSBlock {
         let tsBlock: BlockoBasicBlocks.TSBlock;
         this.zone.runOutsideAngular(() => {
-            tsBlock = new BlockoBasicBlocks.TSBlock(null, logic, design);
+            tsBlock = new BlockoBasicBlocks.TSBlock(null, logic);
             this.blocko.setBlockView(tsBlock);
         });
         return tsBlock;
@@ -300,7 +300,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     setDataJson(json: string): string {
         let s: string = null;
         this.zone.runOutsideAngular(() => {
-            s = this.blocko.core.setDataJson(json);
+            s = this.blocko.setDataJson(JSON.parse(json));
         });
         return s;
     }
@@ -308,7 +308,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     getDataJson(): string {
         let s: string = null;
         this.zone.runOutsideAngular(() => {
-            s = this.blocko.core.getDataJson();
+            s = JSON.stringify(this.blocko.getDataJson());
         });
         return s;
     }

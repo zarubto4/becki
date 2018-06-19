@@ -102,8 +102,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     ngAfterViewInit(): void {
-        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib,
-            Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
+        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.DatabaseLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
 
         this.blockoView.registerAddBlockCallback(this.onAddBlock.bind(this));
         this.blockoView.registerAddGridCallback(this.onAddGrid.bind(this));
@@ -309,7 +308,12 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             messageOutputs: {},
         };
 
-        let programs: Array<{ programId: string, versionId: string }> = [];
+        let programs: Array<{
+            programId: string,
+            programName: string,
+            versionId: string,
+            versionName: string
+        }> = [];
 
         for (let key in summary) {
             if (summary.hasOwnProperty(key)) {
@@ -320,7 +324,9 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
                 programs.push({
                     programId: program.id,
-                    versionId: version.id
+                    programName: program.name,
+                    versionId: version.id,
+                    versionName: version.name
                 });
 
                 let iface: any = {};
@@ -407,12 +413,11 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             Object.keys(out.messageOutputs).length
         ) {
             return {
-                color: '#9966ff',  // change color [TZ]
                 grid: {
                     projectId: project.id,
+                    projectName: project.name,
                     programs: programs
                 },
-                displayName: project.name,
                 interface: out
             };
         }
@@ -431,12 +436,13 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     let interfaceData = JSON.parse(model.selected_c_program_version.virtual_input_output);
                     if (interfaceData) {
                         callback({
-                            color: '#30f485',
                             code: {
                                 programId: model.selected_c_program.id,
-                                versionId: model.selected_c_program_version.id
+                                programName: model.selected_c_program.name,
+                                versionId: model.selected_c_program_version.id,
+                                versionName: model.selected_c_program_version.name,
+                                versionDescription: model.selected_c_program_version.description
                             },
-                            displayName: model.selected_c_program_version.id,
                             interface: interfaceData
                         });
                     }
@@ -455,9 +461,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             return;
         }
 
-        // console.log('iface.code.programId', iface.code.programId);
-        // console.log('iface.code.versionId', iface.code.versionId);
-
         let model = new ModalsSelectCodeModel(this.projectId, null, {
             c_program_id: iface.code.programId,
             c_program_version_id: iface.code.versionId
@@ -468,12 +471,13 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     let interfaceData = JSON.parse(model.selected_c_program_version.virtual_input_output);
                     if (interfaceData) {
                         callback({
-                            color: '#30f485',
                             code: {
                                 programId: model.selected_c_program.id,
-                                versionId: model.selected_c_program_version.id
+                                programName: model.selected_c_program.name,
+                                versionId: model.selected_c_program_version.id,
+                                versionName: model.selected_c_program_version.name,
+                                versionDescription: model.selected_c_program_version.description
                             },
-                            displayName: model.selected_c_program_version.id,
                             interface: interfaceData
                         });
                     }

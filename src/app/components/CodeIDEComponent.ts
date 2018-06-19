@@ -339,7 +339,7 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         });
     }
 
-    refreshInterface(ios: any = this._latest_blockoInterface) {
+    refreshInterface(ios: any) {
 
         if (ios == null) {
             return;
@@ -348,10 +348,11 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         this._latest_blockoInterface = {
             code: {
                 programId: 'dummy_program_id',
-                versionId: 'dummy_version_id'
+                programName: '',
+                versionId: 'dummy_version_id',
+                versionName: '',
+                versionDescription: ''
             },
-            displayName: 'Program',
-            color: '#99ccff',
             interface : ios
         };
 
