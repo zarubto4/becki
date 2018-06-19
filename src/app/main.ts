@@ -176,7 +176,6 @@ import { ModalsArticleComponent } from './modals/article';
 // Common dependencies
 import { SharedModule } from '../shared';
 
-
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -201,6 +200,7 @@ let routes: Routes = [
 
     { path: 'profile', data: { breadName: 'Profile' }, component: ProfileComponent, canActivate: [AuthGuard] },
 
+    // GOOD
     { path: 'financial', data: { breadName: 'Financial' }, loadChildren: './views/financial-module#FinancialModule' },
 
     { path: 'hardware', data: { breadName: 'Hardware types' }, component: HardwareComponent, canActivate: [AuthGuard] },
@@ -210,7 +210,7 @@ let routes: Routes = [
     // ____________________________________
 
 
-    // Project component with project list and CODE library
+    // Project component with project list
     { path: 'projects', data: { breadName: 'Projects' }, loadChildren: './views/projects-module#ProjectsModule' },
 
     // Project HARDWARE

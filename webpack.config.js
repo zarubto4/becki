@@ -82,7 +82,7 @@ module.exports = function makeWebpackConfig() {
             // Support for TS files.
             {
                 test: /\.ts$/,
-                loaders: ['ts-loader?' + atlOptions, 'angular2-template-loader'],
+                loaders: ['ts-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
                 exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
@@ -157,6 +157,8 @@ module.exports = function makeWebpackConfig() {
      * List: http://webpack.github.io/docs/list-of-plugins.html
      */
     config.plugins = [
+
+        new HardSourceWebpackPlugin(),
         // Define env variables to help with builds
         // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
         new webpack.DefinePlugin({
@@ -203,11 +205,11 @@ module.exports = function makeWebpackConfig() {
                 cssProcessor: require('cssnano'),
                 cssProcessorOptions: { discardComments: { removeAll: true } },
                 canPrint: true
-            }),
+            })
 
             // Plugin for webpack to provide an intermediate caching step for modules(to see the result - run webpack twice).
             // Reference: https://github.com/mzgoddard/hard-source-webpack-plugin
-            new HardSourceWebpackPlugin()
+            // new HardSourceWebpackPlugin()
         );
     }
 
@@ -258,5 +260,3 @@ function root(args) {
     args = Array.prototype.slice.call(arguments, 0);
     return path.join.apply(path, [__dirname].concat(args));
 }
-
-
