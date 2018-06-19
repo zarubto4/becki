@@ -382,7 +382,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             command: 'BLINK'
         })
             .then(() => {
-                this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_restart_success')));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_success')));
             })
             .catch((reason) => {
                 this.fmError(this.translate('flash_device_restart_success_fail', reason));

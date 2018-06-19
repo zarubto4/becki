@@ -694,7 +694,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
                 // console.log(mProjectSnapshots);
                 this.blockUI();
-                this.tyrionBackendService.bProgramVersionCreate(this.blockoId, { // TODO [permission]: B_program.update_permission
+                this.tyrionBackendService.bProgramVersionCreate(this.blockoId, {
                     name: m.name,
                     description: m.description,
                     m_project_snapshots: mProjectSnapshots,

@@ -131,6 +131,10 @@
                         </td>
 
                         <td class="action-btn-col">
+
+                            <bk-icon-component [condition]="device.online_state=='ONLINE'" [icon]="'fa-lightbulb-o'" [color]="'font-silver'" [color_on]="'font-color-byzance-blue'" (onClickEvent)="onBlinkDeviceClick(device)">
+                            </bk-icon-component>
+
                             <bk-drob-down-button
                                 [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[

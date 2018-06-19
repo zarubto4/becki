@@ -282,7 +282,8 @@ export class FileTreeComponent {
 @Component({
     selector: 'bk-icon-component',
     template: `
-        <i *ngIf="condition"  class="fa {{icon}}" (click)="onIconClick()" [class.fa-lg]="_hoover" [class.bold]="_hoover" (mouseover)="hoover(true)" (mouseleave)="hoover(false)"></i>
+        <i *ngIf="condition"  class="fa {{icon}} {{_hoover ? color_on : ''}} {{_hoover ? '' : color}}" (click)="onIconClick()" [class.fa-lg]="_hoover" [class.bold]="_hoover" (mouseover)="hoover(true)" (mouseleave)="hoover(false)"
+           style=" margin-right: 2px;"></i>
     `,
 })
 /* tslint:enable */
@@ -293,6 +294,12 @@ export class IconComponent {
 
     @Input()
     icon: string = '';
+
+    @Input()
+    color: string = '';
+
+    @Input()
+    color_on: string = '';
 
     @Output()
     onClickEvent = new EventEmitter<boolean>();

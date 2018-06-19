@@ -1362,7 +1362,7 @@ export class StaticTranslation {
                 'tab_hardware_groups': 'Hardware Groups',
                 'tab_updates': 'Updates',
                 'label_hardware_group_documentation_description': '<p>Hardware can be registered to any number of groups. Using groups, you can more easily filter hardware.</p><br><p class="text-center"> <span class="text-center">Import it. Export. Create statistics. And other miracles.<br> But only if we have already implemented it.</p><br><p class="text-center">Trololo...</p>',
-
+                'blink_device_success' : 'Blink Success',
                 'table_description': 'Description',
                 'table_id': 'Updates',
                 'table_update_id': 'Update HASH',
@@ -1519,6 +1519,8 @@ export class StaticTranslation {
                 'label_no_hardware_to_show_comment': 'There are no devices to show, but you can add some',
                 'label_unsubscribe_device': 'Unsubscribe device',
                 'label_manual_individual_update': 'Manual Change',
+
+                'blink_device_success' : 'Blink Success',
 
 
                 'label_actual_program_name': 'Current <strong class="font-color-code">FIRMWARE </strong> name',
@@ -1704,6 +1706,7 @@ export class StaticTranslation {
                 'table_b_program_version_name': '<strong class="font-color-blocko">BLOCKO</strong>Version',
                 'table_b_program_version_description': 'Description',
                 'table_update_progress': 'Progress',
+                'table_mesh_key': 'Mash Token',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
@@ -2471,7 +2474,7 @@ export class StaticTranslation {
                 'label_profile': 'Account Settings',
                 'label_log_out': 'Log out',
                 'label_view_all': 'view all',
-                'label_with_love': '2017 © ',
+                'label_with_love': '2018 © ',
                 'label_byzance': 'Byzance',
 
             }, 'MonacoEditorComponent': {
@@ -2609,6 +2612,7 @@ export class StaticTranslation {
                 'label_producer': 'Producer',
                 'label_processor': 'Processor',
                 'label_actions': 'Actions',
+                'label_project': 'Project',
 
                 'label_table_id': 'UUID ID',
                 'label_table_full_id': 'Processor ID <strong class="font-red-flamingo"> It can be repeated!</strong>',
