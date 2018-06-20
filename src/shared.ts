@@ -31,6 +31,9 @@ import { ConsoleLogComponent } from './app/components/ConsoleLogComponent';
 import { MonacoEditorComponent } from './app/components/MonacoEditorComponent';
 import { FormColorPickerComponent } from './app/components/FormColorPickerComponent';
 import { FormFAIconSelectComponent } from './app/components/FormFAIconSelectComponent';
+import { ServerRegionSelectorComponent, ServerSizeSelectorComponent } from './app/components/ServerSizeSelectorComponent';
+import { GridViewComponent } from './app/components/GridViewComponent';
+import { DraggableDirective } from './app/components/DraggableDirective';
 
 
 @NgModule({
@@ -69,7 +72,11 @@ import { FormFAIconSelectComponent } from './app/components/FormFAIconSelectComp
         ConsoleLogComponent,
         MonacoEditorComponent,
         FormColorPickerComponent,
-        FormFAIconSelectComponent
+        FormFAIconSelectComponent,
+        ServerSizeSelectorComponent,
+        ServerRegionSelectorComponent,
+        GridViewComponent,
+        DraggableDirective
     ],
     exports:      [
         AppComponent,
@@ -103,6 +110,10 @@ import { FormFAIconSelectComponent } from './app/components/FormFAIconSelectComp
         MonacoEditorComponent,
         FormColorPickerComponent,
         FormFAIconSelectComponent,
+        ServerSizeSelectorComponent,
+        ServerRegionSelectorComponent,
+        GridViewComponent,
+        DraggableDirective
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

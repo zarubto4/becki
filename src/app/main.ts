@@ -175,6 +175,8 @@ import { ArticleComponent } from './components/ArticleComponent';
 import { ModalsArticleComponent } from './modals/article';
 // Common dependencies
 import { SharedModule } from '../shared';
+import { ProjectsProjectLibrariesComponent } from './views/projects-project-libraries';
+import { ProjectsProjectMembersComponent } from './views/projects-project-members';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -210,24 +212,8 @@ let routes: Routes = [
     // ____________________________________
 
 
-    // Project component with project list
+    // PROJECT PAGE
     { path: 'projects', data: { breadName: 'Projects' }, loadChildren: './views/projects-module#ProjectsModule' },
-
-    // Project HARDWARE
-    { path: 'projects/:project/hardware', data: { breadName: 'HARDWARE devices' }, loadChildren: './views/project-hardware-module#ProjectHardwareModule' },
-
-    // Project BLOCKO
-    { path: 'projects/:project', data: { breadName: 'BLOCKO programs' }, loadChildren: './views/project-blocko-module#ProjectBlockoModule' },
-
-    // Project CODE
-    { path: 'projects/:project', data: { breadName: 'CODE programs' }, loadChildren: './views/project-code-module#ProjectCodeModule' },
-
-    // Project GRID & WIDGET
-    { path: 'projects/:project', data: { breadName: 'GRID projects' }, loadChildren: './views/project-grid-widget-module#ProjectGridWidgetModule' },
-
-    // Project CLOUD
-    { path: 'projects/:project', data: { breadName: 'CLOUD servers' }, loadChildren: './views/project-cloud-module#ProjectCloudModule' },
-
 
     // ____________________________________
     { path: 'producers', data: { breadName: 'Producers' }, component: ProducersComponent, canActivate: [AuthGuard] },
@@ -242,9 +228,9 @@ let routes: Routes = [
     // { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     // { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
-    { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
-    { path: 'admin/widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard]},          // Only for community decisions - Link without project path
-    { path: 'admin/widget/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+    // { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    // { path: 'admin/widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard]},          // Only for community decisions - Link without project path
+    // { path: 'admin/widget/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
     // { path: 'admin/blocks', data: {breadName: 'Blocko Blocks'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
     // { path: 'admin/blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard]},             // Only for community decisions - Link without project path
@@ -432,7 +418,7 @@ class BeckiErrorHandler implements ErrorHandler {
         FormJsonNiceTextAreaComponent,
         TableListComponent,
         ProgramVersionSelectorComponent,
-        DraggableDirective,
+        // DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
         FileTreeLineComponent,
@@ -446,11 +432,11 @@ class BeckiErrorHandler implements ErrorHandler {
         TimeZoneSelectorComponent,
         TagComponent,
         PortletPanelMenuComponent,
-        ServerSizeSelectorComponent,
-        ServerRegionSelectorComponent,
+        // ServerSizeSelectorComponent,
+        // ServerRegionSelectorComponent,
         // TerminalLogSubscriberComponent,
         LogLevelComponent,
-        GridViewComponent,
+        // GridViewComponent,
         FilterTableComponent,
         PublicStateComponent,
         // Views components
@@ -475,18 +461,19 @@ class BeckiErrorHandler implements ErrorHandler {
         GarfieldGarfieldComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
-        ProjectsProjectGridComponent,
-        ProjectsProjectGridGridsComponent,
-        ProjectsProjectGridGridsGridComponent,
-        ProjectsProjectInstancesComponent,
-        ProjectsProjectInstancesInstanceComponent,
+        // ProjectsProjectGridComponent,
+        // ProjectsProjectGridGridsComponent,
+        // ProjectsProjectGridGridsGridComponent,
+        // ProjectsProjectInstancesComponent,
+        // ProjectsProjectInstancesInstanceComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
-        ProjectsProjectServersComponent,
-        ProjectsProjectWidgetsComponent,
+        // ProjectsProjectServersComponent,
+        // ProjectsProjectLibrariesComponent,
+        // ProjectsProjectWidgetsComponent,
         ServerComponent,
         TyrionComponent,
-        ProjectsProjectWidgetsWidgetComponent,
+        // ProjectsProjectWidgetsWidgetComponent,
         ProducersComponent,
         ProducersProducerComponent,
         ArticleComponent,
@@ -570,6 +557,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsGridProjectSelectComponent,
         ModalsBlockSelectComponent,
         ModalsArticleComponent,
+        // ProjectsProjectMembersComponent
     ],
     bootstrap: [AppComponent]
 })

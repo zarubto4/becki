@@ -13,10 +13,8 @@ import { ProjectsProjectLibrariesComponent } from './projects-project-libraries'
 // routes
 export const PROJECT_CODE_ROUTES: Routes = [
 
-    { path: 'code', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
+    { path: '', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
     { path: ':code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
-    { path: 'libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
-
 ];
 
 @NgModule({
@@ -28,7 +26,6 @@ export const PROJECT_CODE_ROUTES: Routes = [
     declarations: [
         ProjectsProjectCodeComponent,
         ProjectsProjectCodeCodeComponent,
-        ProjectsProjectLibrariesComponent
     ],
     exports: [ RouterModule ]
 })
