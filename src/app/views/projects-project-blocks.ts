@@ -80,15 +80,6 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         }
     }
 
-
-    onBlockClick(block: IBlock): void {
-        if (this.projectId) {
-            this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', block.id]);
-        } else {
-            this.navigate(['/admin/blocks/', block.id]);
-        }
-    }
-
     onMakeClone(block: IBlock): void {
         let model = new ModalsBlockoBlockCopyModel(block.name, block.description, this.project.tags);
         this.modalService.showModal(model).then((success) => {
@@ -295,7 +286,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
         }
 
         if (action === 'make_decision') {
-            this.onBlockClick(object);
+            this.onBlockAdminClick(object.id);
         }
 
         if (action === 'activate_block') {

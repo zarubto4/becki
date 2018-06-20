@@ -21,6 +21,7 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
 import { IError } from '../services/_backend_class/Responses';
+
 /* tslint:disable:class-name  */
 export abstract class _BaseMainComponent {
 /* tslint:disable:class-name  */
@@ -117,6 +118,14 @@ export abstract class _BaseMainComponent {
 
 // -- ON CLIC ----------------------------------------------------------------------------------------------------------------
 
+    public onProfileClick(): void {
+        this.navigate(['/profile']);
+    }
+
+    public onLogOutClick(): void {
+        this.navigate(['/logout']);
+    }
+
     public onFinanceClick(): void {
         this.navigate(['/financial']);
     }
@@ -127,6 +136,14 @@ export abstract class _BaseMainComponent {
 
     public onGarfieldListClick(): void {
         this.navigate(['/admin/garfield']);
+    }
+
+    public onGSMListClick(): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'gsm']);
+    }
+
+    public onGSMClick(gsm_id: string): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'gsm', gsm_id]);
     }
 
 
@@ -154,28 +171,36 @@ export abstract class _BaseMainComponent {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'hardware', device_id]);
     }
 
-    public onActualizationProcedureClick(procedure_id: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'actualization_procedure', procedure_id]);
+    public onActualizationProcedureClick(procedure_id?: string): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'actualization_procedures', procedure_id]);
     }
 
     public onLibraryAdminClick(library_id: string): void {
         this.navigate(['/admin/hardware/libraries', library_id]);
     }
 
-    public onLibraryClick(library_id: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries', library_id]);
+    public onLibraryClick(library_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries', library_id, {version: version_id}]);
     }
 
-    public onCProgramClick(cProgram_id: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'code', cProgram_id]);
+    public onCProgramClick(cProgram_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'code', cProgram_id, {version: version_id}]);
     }
 
-    public onCProgramAdminClick(c_program_id: string): void {
-        this.router.navigate(['/admin/hardware/code', c_program_id]);
+    public onCProgramAdminClick(c_program_id: string, version_id: string = null): void {
+        this.router.navigate(['/admin/hardware/code', c_program_id, {version: version_id}]);
     }
 
-    public onBProgramClick(bProgram_id: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgram_id]);
+    public onBProgramClick(bProgram_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgram_id, { version: version_id}]);
+    }
+
+    public onBlockClick(block_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', block_id, { version: version_id}]);
+    }
+
+    public onBlockAdminClick(block_id: string, version_id: string = null): void {
+        this.navigate(['admin/blocks', block_id, {version: version_id}]);
     }
 
     public onDeviceClick_Admin(device_id: string): void {
@@ -195,6 +220,14 @@ export abstract class _BaseMainComponent {
     }
 
     public onGridProgramVersionClick(grid_project_id: string, grid_program_id: string, grid_program_version_id: string) {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', grid_project_id, grid_program_id, grid_program_version_id]);
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', grid_project_id, grid_program_id, {version: grid_program_version_id}]);
+    }
+
+    public onWidgetClick(widget_id: string, version_id: string = null): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', widget_id, {version: version_id}]);
+    }
+
+    public onWidgetAdminClick(widget_id: string, version_id: string = null): void {
+        this.navigate(['admin/widgets', widget_id, {version: version_id}]);
     }
 }

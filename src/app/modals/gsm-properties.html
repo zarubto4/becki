@@ -1,0 +1,95 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+
+            <bk-form-input [control]="form.controls.name" [label]="'label_personal_server_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" [label]="'label_personal_server_description'|bkTranslate:this"></bk-form-input>
+
+            <!-- Tags -->
+            <bk-form-tag-input [control]="form.controls.tags" [label]="'Optional Tags'"></bk-form-tag-input>
+
+            <hr>
+
+            <table class="table table-hover table-light" *ngIf="modalModel.gsm">
+                <thead>
+                <tr>
+                    <th class=""></th>
+                    <th class="text-center" [innerHTML]="'table_maximum_threshold'|bkTranslate:this"></th>
+                    <th class="text-center" [innerHTML]="'table_notify_me'|bkTranslate:this"></th>
+                    <th class="text-center" [innerHTML]="'table_block_sim'|bkTranslate:this"></th>
+                </tr>
+                </thead>
+                <tbody class="hide-bk-drob-down-button">
+                    <tr>
+                        <td class="vert-align" [innerHTML]="'table_daily_threshold'|bkTranslate:this"></td>
+                        <td class="vert-align">
+                            <bk-form-input [control]="form.controls.daily_traffic_threshold" [showLabel]="false"></bk-form-input>
+                        </td>
+                        <td class="vert-align text-center">
+                            <i [class.fa-toggle-on]="modalModel.gsm.daily_traffic_threshold_notify_type"
+                               [class.fa-toggle-off]="!modalModel.gsm.daily_traffic_threshold_notify_type"
+                               style="font-size: 1.8em;"
+                               class="fa font-green-jungle cursor-hand"
+                               (click)="modalModel.gsm.daily_traffic_threshold_notify_type = !modalModel.gsm.daily_traffic_threshold_notify_type"></i>
+                        </td>
+                        <td class="vert-align text-center">
+                             <i [class.fa-toggle-on]="modalModel.gsm.daily_traffic_threshold_exceeded_limit"
+                               [class.fa-toggle-off]="!modalModel.gsm.daily_traffic_threshold_exceeded_limit"
+                               style="font-size: 1.8em;"
+                               class="fa font-green-jungle cursor-hand"
+                               (click)="modalModel.gsm.daily_traffic_threshold_exceeded_limit = !modalModel.gsm.daily_traffic_threshold_exceeded_limit"></i>
+                    </tr>
+                    <tr>
+                        <td class="vert-align" [innerHTML]="'table_monthly_threshold'|bkTranslate:this"></td>
+                        <td class="vert-align">
+                            <bk-form-input [control]="form.controls.monthly_traffic_threshold" [showLabel]="false"></bk-form-input>
+                        </td>
+                        <td class="vert-align text-center">
+                            <i [class.fa-toggle-on]="modalModel.gsm.monthly_traffic_threshold_notify_type"
+                               [class.fa-toggle-off]="!modalModel.gsm.monthly_traffic_threshold_notify_type"
+                               style="font-size: 1.8em;"
+                               class="fa font-green-jungle cursor-hand"
+                               (click)="modalModel.gsm.monthly_traffic_threshold_notify_type = !modalModel.gsm.monthly_traffic_threshold_notify_type"></i>
+                        </td>
+                        <td class="vert-align text-center">
+                            <i [class.fa-toggle-on]="modalModel.gsm.monthly_traffic_threshold_exceeded_limit"
+                               [class.fa-toggle-off]="!modalModel.gsm.monthly_traffic_threshold_exceeded_limit"
+                               style="font-size: 1.8em;"
+                               class="fa font-green-jungle cursor-hand"
+                               (click)="modalModel.gsm.monthly_traffic_threshold_exceeded_limit = !modalModel.gsm.monthly_traffic_threshold_exceeded_limit"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vert-align" [innerHTML]="'table_total_threshold'|bkTranslate:this"></td>
+                        <td class="vert-align">
+                            <bk-form-input [control]="form.controls.total_traffic_threshold" [showLabel]="false"></bk-form-input>
+                        </td>
+                        <td class="vert-align text-center">
+                            <i [class.fa-toggle-on]="modalModel.gsm.total_traffic_threshold_notify_type"
+                               [class.fa-toggle-off]="!modalModel.gsm.total_traffic_threshold_notify_type"
+                               style="font-size: 1.8em;"
+                               class="fa font-green-jungle cursor-hand"
+                               (click)="modalModel.gsm.total_traffic_threshold_notify_type = !modalModel.gsm.total_traffic_threshold_notify_type"></i>
+                        </td>
+                        <td class="vert-align text-center">
+                            <i [class.fa-toggle-on]="modalModel.gsm.total_traffic_threshold_exceeded_limit"
+                               [class.fa-toggle-off]="!modalModel.gsm.total_traffic_threshold_exceeded_limit"
+                               style="font-size: 1.8em;"
+                               class="fa font-green-jungle cursor-hand"
+                               (click)="modalModel.gsm.total_traffic_threshold_exceeded_limit = !modalModel.gsm.total_traffic_threshold_exceeded_limit"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_update'|bkTranslate:this}}</button>
+    </div>
+</div>

@@ -16,7 +16,7 @@ export class TranslationService {
     lang: string = 'en'; // TODO TOM - Vrátit před commitem
 
     constructor() {
-        console.info('TranslationService init');
+        // console.info('TranslationService init');
     }
 
     translate(key: string, environment: any, lang: string = null, args: any[] = null): string {

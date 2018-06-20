@@ -132,11 +132,11 @@
                                 <br>
                                 <div>
                                     {{'label_type'|bkTranslate:this}}:
-                                    <a [routerLink]="['/hardware', hardware.hardware_type.id]" class="bold">{{hardware.hardware_type.name}}</a>
+                                    <a (click)="onHardwareTypeClick(hardware.hardware_type.id)" class="bold">{{hardware.hardware_type.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_producer'|bkTranslate:this}}:
-                                    <a [routerLink]="['/producers', hardwareType.producer.id]" class="bold">{{hardwareType.producer.name}}</a>
+                                    <a (click)="onProducerClick(hardwareType.producer.id)" class="bold">{{hardwareType.producer.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_revision'|bkTranslate:this}}:
@@ -340,12 +340,12 @@
                                 <div>
                                     <div>
                                         <span [innerHTML]="'label_actual_program_name'|bkTranslate:this"></span>:
-                                        <a *ngIf="hardware.actual_c_program" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', hardware.actual_c_program.id]">{{hardware.actual_c_program.name}}</a>
+                                        <a *ngIf="hardware.actual_c_program" class="bold" (click)="onCProgramClick(hardware.actual_c_program.id, hardware.actual_c_program_version.id)">{{hardware.actual_c_program.name}}</a>
                                         <span *ngIf="!hardware.actual_c_program" class="bold">{{'label_alerts'|bkTranslate:this}}</span>
                                     </div>
                                     <div>
                                         <span [innerHTML]="'label_actual_program_version'|bkTranslate:this"></span>:
-                                        <a *ngIf="hardware.actual_c_program_version" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', hardware.actual_c_program.id, { version: hardware.actual_c_program_version.id }]">{{hardware.actual_c_program_version.name}}</a>
+                                        <a *ngIf="hardware.actual_c_program_version" class="bold" (click)="onCProgramClick(hardware.actual_c_program.id, hardware.actual_c_program_version.id)">{{hardware.actual_c_program_version.name}}</a>
                                         <span *ngIf="!hardware.actual_c_program_version" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                     </div>
                                 </div>
@@ -370,12 +370,14 @@
                                     <div>
                                         <div>
                                             <span [innerHTML]="'label_actual_backup_program_name'|bkTranslate:this"></span>:
-                                            <a *ngIf="hardware.actual_c_program_backup" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', hardware.actual_c_program_backup.id]">{{hardware.actual_c_program_backup.name}}</a>
+                                            <a *ngIf="hardware.actual_c_program_backup" class="bold"
+                                               (click)="onCProgramClick(hardware.actual_c_program_backup.id, hardware.actual_c_program_backup_version.id)">{{hardware.actual_c_program_backup.name}}</a>
                                             <span *ngIf="!hardware.actual_c_program_backup" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
                                         <div>
                                             <span [innerHTML]="'label_actual_backup_program_version'|bkTranslate:this"></span>:
-                                            <a *ngIf="hardware.actual_c_program_backup_version" class=" bold" [routerLink]="['/projects', hardware.project.id, 'code', hardware.actual_c_program_backup_version.id, {version: hardware.actual_c_program_backup_version.name }]">{{hardware.actual_c_program_backup_version.name}}</a>
+                                            <a *ngIf="hardware.actual_c_program_backup_version" class=" bold"
+                                               (click)="onCProgramClick(hardware.actual_c_program_backup.id, hardware.actual_c_program_backup_version.id)">{{hardware.actual_c_program_backup_version.name}}</a>
                                             <span *ngIf="!hardware.actual_c_program_backup_version" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
                                     </div>
@@ -579,7 +581,7 @@
 
 
                             <td class="vert-align">
-                                <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', update.actualization_procedure_id]">{{update.id.substr(0, 12)}}</a>
+                                <a class="bold" (click)="onActualizationProcedureClick(update.actualization_procedure_id)">{{update.id.substr(0, 12)}}</a>
                             </td>
                             <td class="vert-align">{{update.created|bkUnixTimeToDate}}</td>
 
@@ -597,11 +599,11 @@
                             <!-- Firmware -->
                             <ng-template [ngIf]="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'">
                                 <td class="vert-align font-grey-mint">
-                                    <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_program_name}}</a>
+                                    <a *ngIf="update.c_program_detail" class="bold" (click)="onCProgramClick(update.c_program_detail.c_program_id, update.c_program_detail.c_program_version_id)">{{update.c_program_detail.c_program_program_name}}</a>
                                     <span *ngIf="!update.c_program_detail.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                 </td>
                                 <td class="vert-align font-grey-mint">
-                                    <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', hardware.project.id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_version_name}}</a>
+                                    <a *ngIf="update.c_program_detail" class="bold" (click)="onCProgramClick(update.c_program_detail.c_program_id, update.c_program_detail.c_program_version_id)">{{update.c_program_detail.c_program_version_name}}</a>
                                     <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                 </td>
                             </ng-template>

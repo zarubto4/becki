@@ -24,7 +24,7 @@ export class StorageService {
     protected hardwareTypesInProgress: boolean = false;
 
     constructor(protected backendService: TyrionBackendService, protected router: Router) {
-        console.info('StorageService init');
+        // console.info('StorageService init');
     }
 
     // project

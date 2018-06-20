@@ -183,7 +183,6 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
     }
 
     onDrobDownClick() {
-        console.info('Kliknul NA Drobdown');
         this.drob_down_clicked = !this.drob_down_clicked;
     }
 }

@@ -43,24 +43,24 @@
                         <div class="col col-lg-3">
                             <div *ngIf="hardwareType">
                                 <strong>{{'label_hardware_type'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/hardware', hardwareType.id]" class="bold">{{hardwareType.name}}</a>
+                                <a (click)="onHardwareTypeClick(hardwareType.id)" class="bold">{{hardwareType.name}}</a>
                             </div>
                             <div *ngIf="hardwareType">
                                 <strong>{{'label_producer'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/producers', garfield.producer.id]" class="bold">{{garfield.producer.name}}</a>
+                                <a (click)="onProducerClick(garfield.producer.id)" class="bold">{{garfield.producer.name}}</a>
                             </div>
                             <br>
                             <div *ngIf="firmwareTestMainVersion">
                                 <strong>{{'label_main_test_version'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/admin/hardware/code', hardwareType.main_test_c_program.id]" class="bold">{{firmwareTestMainVersion.version_name}}</a>
+                                <a (click)="onCProgramAdminClick(hardwareType.main_test_c_program.id)" class="bold">{{firmwareTestMainVersion.version_name}}</a>
                             </div>
                             <div *ngIf="firmwareMainVersion">
                                 <strong>{{'label_main_version'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/admin/hardware/code', hardwareType.main_c_program.id]" class="bold">{{firmwareMainVersion.version_name}}</a>
+                                <a (click)="onCProgramAdminClick(hardwareType.main_c_program.id)" class="bold">{{firmwareMainVersion.version_name}}</a>
                             </div>
                             <div *ngIf="bootLoader">
                                 <strong>{{'label_main_bootloader'|bkTranslate:this}}:</strong>
-                                <a [routerLink]="['/hardware', hardwareType.id]" class="bold">{{bootLoader.version_identifier}}</a>
+                                <a (click)="onHardwareTypeClick(hardwareType.id)" class="bold">{{bootLoader.version_identifier}}</a>
                             </div>
 
                         </div>
@@ -229,7 +229,7 @@
                                         {{mainServer.name}}
                                     </span>
                                     <bk-online-state [online_state]="mainServer.online_state"></bk-online-state>
-                                     <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', mainServer.id]"></i>
+                                     <i  class="fa fa-server font-blue-dark cursor-hand"></i>
                                 </span>
                             </div>
                             <hr>
@@ -243,7 +243,7 @@
                                         {{backupServer.name}}
                                     </span>
                                     <bk-online-state [online_state]="backupServer.online_state"></bk-online-state>
-                                    <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', backupServer.id]"></i>
+                                    <i  class="fa fa-server font-blue-dark cursor-hand"></i>
                                 </span>
                             </div>
                         </div>

@@ -14,9 +14,18 @@ import { TranslationService } from '../services/TranslationService';
 import { IBlock, IBlockList, IBlockVersion } from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
 
+
+export interface BlockInterface {
+    name: string;
+    description: string;
+    blockoName: string;
+    backgroundColor: string;
+}
+
 export class ModalsSelectBlockModel extends ModalModel {
     public selectedBlockVersion: IBlockVersion = null;
     public selectedBlock: IBlock = null;
+    public selectedSpecialBlock: BlockInterface = null;
 
     constructor(public project_id: string = null, public already_selected_code_for_version_change: {
         block_id: string,
@@ -44,7 +53,74 @@ export class ModalsBlockSelectComponent implements OnInit {
 
     errorMessage: string = null;
 
+    tab: string = 'filter_blocks';
+
     blocks: IBlockList = null;
+    logic_blocks: BlockInterface[] = [
+        {
+            name: 'NOT',
+            description: 'Boolean Algebra (negation) - DIGITAL',
+            blockoName: 'not',
+            backgroundColor: 'rgb(161, 136, 127)'
+        },
+        {
+            name: 'AND',
+            description: 'Boolean Algebra (Conjunction) - DIGITAL',
+            blockoName: 'and',
+            backgroundColor: 'rgb(161, 136, 127)'
+        },
+        {
+            name: 'OR',
+            description: 'Boolean Algebra (Disjunction) - DIGITAL',
+            blockoName: 'or',
+            backgroundColor: 'rgb(161, 136, 127)'
+        },
+        {
+            name: 'XOR',
+            description: 'Boolean Algebra (Exclusive-or) - DIGITAL',
+            blockoName: 'xor',
+            backgroundColor: 'rgb(161, 136, 127)'
+        }
+    ];
+
+    debug_blocks: BlockInterface[] = [
+        {
+            name: 'Switch',
+            description: 'Interactive simulations of Switch Button',
+            blockoName: 'switch',
+            backgroundColor: 'rgb(204, 204, 255)'
+        },
+        {
+            name: 'Push button',
+            description: 'Interactive simulations of Classic Button',
+            blockoName: 'pushButton',
+            backgroundColor: 'rgb(204, 204, 255)'
+        },
+        {
+            name: 'Digital output',
+            description: 'Interactive simulations ',
+            blockoName: 'light',
+            backgroundColor: 'rgb(204, 204, 255)'
+        },
+        {
+            name: 'Analog input',
+            description: '',
+            blockoName: 'analogInput',
+            backgroundColor: 'rgb(204, 255, 204)'
+        },
+        {
+            name: 'Analog output',
+            description: '',
+            blockoName: 'analogOutput',
+            backgroundColor: 'rgb(204, 255, 204)'
+        },
+        {
+            name: 'WebHook',
+            description: '',
+            blockoName: 'webHook',
+            backgroundColor: 'rgb(204, 255, 204)'
+        }
+    ];
 
     // Filter parameters
     public_block: boolean = false;
@@ -68,9 +144,14 @@ export class ModalsBlockSelectComponent implements OnInit {
         }
     }
 
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
 
     onSubmitClick(): void {
-        if (!this.modalModel.selectedBlockVersion) {
+        console.info('onSubmitClick::selectedBlockVersion', this.modalModel.selectedBlockVersion);
+        console.info('onSubmitClick::label_no_version_selected', this.modalModel.selectedSpecialBlock);
+        if (!this.modalModel.selectedBlockVersion && !this.modalModel.selectedSpecialBlock) {
             this.errorMessage = this.translationService.translate('label_no_version_selected', this) ; // There is no version selected. ;
         } else {
             this.modalClose.emit(true);
@@ -85,9 +166,17 @@ export class ModalsBlockSelectComponent implements OnInit {
         this.modalModel.selectedBlock = null;
     }
 
+    onSelectSpecialBlockClick(block: BlockInterface): void {
+        this.modalModel.selectedSpecialBlock = block;
+        this.onSubmitClick();
+    }
+
     onDrobDownEmiter(action: string, object: any): void {
         if (action === 'label_select_block') {
             this.onSelectBlockClick(object);
+        }
+        if (action === 'label_select_debug_block') {
+            this.onSelectSpecialBlockClick(object);
         }
     }
 

@@ -69,7 +69,7 @@
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let widget of widgetList.content">
                         <td class="vert-align no-wrap bold">
-                            <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
+                            <a (click)="onWidgetClick(widget.id)">{{widget.name}}</a>
                             <span *ngIf="!projectId && widget.active" class="font-green-jungle bold">(Active)</span>
                             <!-- Only for Administrator -->
                             <span *ngIf="!projectId && !widget.active"
@@ -166,7 +166,7 @@
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let widget of widgetPublicList.content">
                         <td class="vert-align no-wrap bold">
-                            <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
+                            <a (click)="onWidgetClick(widget.id)">{{widget.name}}</a>
                         </td>
                         <td *ngIf="projectId == null" class="vert-align">
                             <span *ngIf="widget.active" class="font-green-jungle bold">(Active)</span>
@@ -261,7 +261,7 @@
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let widget of widgetListNotApproved.content">
                         <td class="vert-align no-wrap bold">
-                            <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
+                            <a (click)="onWidgetClick(widget.id)">{{widget.name}}</a>
                         </td>
                         <td class="vert-align">{{widget.description}}</td>
 

@@ -6,10 +6,10 @@ import { Subscription } from 'rxjs';
 import { IActualizationProcedureTaskList, IProject, IUpdateProcedure } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 @Component({
-    selector: 'bk-view-projects-project-actualization-procedure',
-    templateUrl: './projects-project-actualization-procedure.html',
+    selector: 'bk-view-projects-project-actualization-procedures-procedure',
+    templateUrl: './projects-project-actualization-procedures-procedure.html',
 })
-export class ProjectsProjectActualizationProcedureComponent extends _BaseMainComponent implements OnInit {
+export class ProjectsProjectActualizationProceduresProcedureComponent extends _BaseMainComponent implements OnInit {
 
     projectId: string;
     project: IProject = null;

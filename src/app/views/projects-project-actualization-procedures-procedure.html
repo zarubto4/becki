@@ -42,12 +42,12 @@
                             <a class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
                             <br>
                             <span [innerHTML]="'label_code_version'|bkTranslate:this"></span>
-                            <a class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_version_name}}</a>
+                            <a class="bold" (click)="onCProgramClick(procedure.program.c_program_id, procedure.program.c_program_version_id)">{{procedure.program.c_program_version_name}}</a>
                         </ng-template>
                         <ng-template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
                             <h4 [innerHTML]="'label_update_type'|bkTranslate:this"><bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type></h4>
                             <span [innerHTML]="'label_bootloader_version'|bkTranslate:this"></span>
-                            <a class="bold" [routerLink]="['/projects', projectId, 'hardware', procedure.bootloader.hardware_type_id]">{{procedure.bootloader.bootloader_name}}</a>
+                            <a class="bold" (click)="onHardwareTypeClick(procedure.bootloader.hardware_type_id)">{{procedure.bootloader.bootloader_name}}</a>
                         </ng-template>
                     </ng-template>
                 </div>
@@ -90,7 +90,7 @@
 
                         <!-- Table Hardware ID !-->
                         <td class="vert-align">
-                            <a class="bold" [routerLink]="['/projects', projectId, 'hardware', update.hardware.id]">{{ update.hardware.name ? update.hardware.name : update.hardware.id}}</a>
+                            <a class="bold" (click)="onDeviceClick(update.hardware.id)">{{ update.hardware.name ? update.hardware.name : update.hardware.id}}</a>
                         </td>
 
                         <!-- Time Finish !-->
@@ -107,11 +107,13 @@
                         <!-- Firmware -->
                         <ng-template [ngIf]="procedure.firmware_type== 'FIRMWARE' || procedure.firmware_type == 'BACKUP'">
                             <td class="vert-align font-grey-mint text-center">
-                                <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', projectId, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_program_name}}</a>
+                                <a *ngIf="update.c_program_detail" class="bold"
+                                   (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_program_name}}</a>
                                 <span *ngIf="!update.c_program_detail.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                             </td>
                             <td class="font-grey-mint text-center">
-                                <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', projectId, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_version_name}}</a>
+                                <a *ngIf="update.c_program_detail" class="bold"
+                                   (click)="onCProgramClick(update.c_program_detail.c_program_id, update.c_program_detail.c_program_version_id)">{{update.c_program_detail.c_program_version_name}}</a>
                                 <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                             </td>
                         </ng-template>

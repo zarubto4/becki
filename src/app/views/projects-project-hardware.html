@@ -29,14 +29,6 @@
                           colorType: 'ADD',
                           permission: true,
                           btn_tag: 'add_hardware_group'
-                      },
-                      {
-                          condition: (tab == 'updates' && actualizationFilter && actualizationFilter.content.length > 0),
-                          btn_label_for_person: ('btn_add_new_update'|bkTranslate:this),
-                          icon: 'fa-plus-circle',
-                          colorType: 'ADD',
-                          permission: true,
-                          btn_tag: 'new_release'
                       }
                   ]"
         (onTabClick)="onToggleTab($event)"
@@ -53,12 +45,6 @@
                             condition: (true),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_hardware_groups'|bkTranslate:this)
-                        },
-                        {
-                            tab_name: 'updates',
-                            condition: (true),
-                            tab_color: 'HARDWARE',
-                            tab_label: ('tab_updates'|bkTranslate:this)
                         }
                     ]"
     >
@@ -308,119 +294,6 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
         </div>
-
-
-        <div *ngIf="tab == 'updates'">
-            <div *ngIf="(actualizationFilter && actualizationFilter.content.length > 0)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
-                    <thead>
-                    <tr>
-                        <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
-                        <th class="vert-align text-center">{{'table_firmware_type'|bkTranslate:this}}</th>
-                        <th class="vert-align text-center">{{'table_details'|bkTranslate:this}}</th>
-                        <th class="vert-align text-center">{{'table_update_type'|bkTranslate:this}}</th>
-                        <th class="vert-align text-center">{{'table_update_progress'|bkTranslate:this}}</th>
-                        <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
-                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
-                    </tr>
-                    </thead>
-                    <tbody class="hide-bk-drob-down-button">
-                    <tr *ngFor="let procedure of actualizationFilter.content">
-                        <td class="vert-align">
-                            <a class="bold"
-                               [routerLink]="['/projects', projectId, 'actualization_procedure', procedure.id]">{{procedure.id.substr(0,
-                                12)}}</a>
-                        </td>
-                        <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
-                        <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
-                        <td class="vert-align">
-                            <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
-                            <span
-                                *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
-                        </td>
-
-                        <td class="vert-align text-center">
-                            <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
-                        </td>
-                        <td class="vert-align text-center">
-                            <ng-template [ngIf]="procedure.program">
-                                <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
-                                -
-                                <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
-                            </ng-template>
-                            <ng-template [ngIf]="procedure.bootloader">
-                                <a class="bold" [routerLink]="['/hardware', procedure.bootloader.bootloader_id]">{{procedure.bootloader.bootloader_name}}</a>
-                            </ng-template>
-                        </td>
-
-                        <td class="vert-align text-center">
-                            <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
-                        </td>
-                        <td class="vert-align text-center">
-                            <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
-                            <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 "
-                                  class="bold">-/-</span>
-                        </td>
-
-                        <!-- Update State -->
-                        <td class="vert-align text-center">
-                            <bk-update-state [updateState]="procedure.state"></bk-update-state>
-                        </td>
-
-                        <td class="action-btn-col">
-
-                            <bk-drob-down-button
-                                [btns_group_name]="('label_settings'|bkTranslate:this)"
-                                [btns]="[
-                                {
-                                    condition: true,
-                                    btn_label_for_person: ('label_change_update_parameters'|bkTranslate:this),
-                                    btn_tag: 'edit_procedure',
-                                    icon: 'fa-cog',
-                                    colorType: 'EDIT',
-                                    permission: (procedure.update_permission)
-                                },
-                                {
-                                    condition: true,
-                                    btn_label_for_person: ('label_cancel_update'|bkTranslate:this),
-                                    btn_tag: 'remove_procedure',
-                                    icon: 'fa-trash',
-                                    colorType: 'REMOVE',
-                                    permission: (procedure.delete_permission)
-                                }
-                            ]"
-                            (onValueChanged)="onDrobDownEmiter($event, procedure)"
-                            >
-                            </bk-drob-down-button>
-
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <bk-filter-page-component [from]="actualizationFilter.from" [to]="actualizationFilter.to"
-                                          [total]="actualizationFilter.total" [totalPages]="actualizationFilter.pages"
-                                          (onSelect)="onFilterActualizationProcedure($event)"></bk-filter-page-component>
-            </div>
-
-
-            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-            <bk-nothing-to-show [condition_loading]="(actualizationFilter == null)"
-                                [condition_empty]="(actualizationFilter != null && actualizationFilter.content.length == 0)"
-                                [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5a0c3d316b2b6e0001417b9b_Kreslic%C3%AD%20pl%C3%A1tno%2016-fin1.svg'"
-                                [image_description]="'label_release_documentation_description'|bkTranslate:this"
-                                [main_message_link]="'label_no_updates'|bkTranslate:this"
-                                [main_message_comment_link]="'label_no_updates_comment'|bkTranslate:this"
-                                [btn_label]="'btn_add_new_update'|bkTranslate:this"
-                                (onButtonClick)="onProcedureCreateClick()">
-            </bk-nothing-to-show>
-            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
-
-        </div>
-
 
     </div>
     <!-- Page Content -- END -->

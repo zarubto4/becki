@@ -27,7 +27,7 @@ export class MonacoEditorLoaderService {
     protected loadedTypings: { [name: string]: monaco.IDisposable } = {};
 
     constructor() {
-        console.info('MonacoEditorLoaderService init');
+        // console.info('MonacoEditorLoaderService init');
 
         this.monacoLoaded = this.monacoLoadedSubject = new ReplaySubject<any>(1);
 
@@ -45,7 +45,7 @@ export class MonacoEditorLoaderService {
                     allowNonTsExtensions: true
                 });
 
-                console.info('MonacoEditorLoaderService monaco editor loaded');
+                // console.info('MonacoEditorLoaderService monaco editor loaded');
                 this.monacoLoadedSubject.next(monaco);
             });
         });

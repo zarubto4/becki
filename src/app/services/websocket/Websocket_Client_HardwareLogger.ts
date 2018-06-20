@@ -7,7 +7,7 @@ import { IWebSocketPingResponse } from './Websocket_Client_Tyrion';
 /*tslint:disable:no-use-before-declare*/
 export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
 
-    private _onlogsCallback: ((m: ITerminalWebsocketMessage) => void);
+    private _onlogsCallback: ((m: WebsocketMessage) => void);
 
     public constructor(public websocketUrl: string) {
         super(websocketUrl);
@@ -25,29 +25,12 @@ export class WebsocketClientHardwareLogger extends  WebsocketClientAbstract {
     /***** ON MESSAGES *******/
     private onMessageReceive(m: WebsocketMessage) {
 
-        // console.log('WebsocketClientHardwareLogger:: onMessageReceive', m);
-
-        if (m.message_type === 'message_log') {
-
-            let log: ITerminalWebsocketMessage = new ITerminalWebsocketMessage();
-
-            log.hardware_id = m.data['hardware_id'];
-            log.level = m.data['level'];
-            log.message = m.data['message'];
-
-            if (log) {
-                if (this._onlogsCallback) {
-                    this._onlogsCallback(log);
-                }
-            }
-
-            let message = new IWebSocketPingResponse();
-            message.message_id = m.message_id;
+        if (this._onlogsCallback) {
+            this._onlogsCallback(m);
         }
-
     }
 
-    public set onLogsCallback(callback: ((log: ITerminalWebsocketMessage) => void)) {
+    public set onLogsCallback(callback: ((log: WebsocketMessage) => void)) {
         this._onlogsCallback = callback;
     }
 
@@ -123,4 +106,10 @@ export class ITerminalWebsocketMessage {
     level: ConsoleLogType;
     message: string;
 }
+
+export class ITerminalWebsocketOnlineStateMessage {
+    hardware_id: string;
+    online: boolean;
+}
+
 /*tslint:enable:no-use-before-declare*/

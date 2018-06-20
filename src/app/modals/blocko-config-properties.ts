@@ -57,8 +57,8 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
             this.blockVersions = this.modalModel.versions;
         }
 
-        if (this.modalModel.block.versionId) {
-            this.formModelVersion = this.modalModel.block.versionId;
+        if (this.modalModel.block.codeBlock && (<Blocks.TSBlock>this.modalModel.block).versionId) {
+            this.formModelVersion = (<Blocks.TSBlock>this.modalModel.block).versionId;
         }
     }
 

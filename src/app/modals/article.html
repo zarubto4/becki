@@ -16,8 +16,10 @@
                                [label]="'mark_down_text'|bkTranslate:this">
             </bk-form-text-area>
 
-            <!-- Tags -->
-            <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
+
+            <bk-form-select [control]="form.controls['tag']"
+                            [label]="'label_select'|bkTranslate:this"
+                            [options]="article_options"></bk-form-select>
         </form>
     </div>
     <div class="modal-footer">

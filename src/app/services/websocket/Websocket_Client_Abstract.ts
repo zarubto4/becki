@@ -34,6 +34,7 @@ export abstract class WebsocketClientAbstract {
     protected _onMessageCallback: ((m: WebsocketMessage) => void);
     protected _onOpenCallback: ((e: any) => void);
     protected _onErrorCallback: ((e: any) => void);
+    protected _onCloseCallback: ((e: any) => void);
 
     /**
      * @param url: Adresa  -  bez wss Portu pokud je vyžadován (Nepřekryt C_Name doménou)
@@ -50,11 +51,11 @@ export abstract class WebsocketClientAbstract {
     }
 
     public disconnectWebSocket(): void {
-        console.error('disconnectWebSocket()');
+        console.info('disconnectWebSocket()');
         if (this._websocket) {
-            this._websocket.removeEventListener('close', (e) => this.onError(e));
+            this._websocket.removeEventListener('close', (e) => this.onClose(e));
             this._websocket.removeEventListener('onerror', (e) => this.onError(e));
-            this._websocket.removeEventListener('onclose', (e) => this.onError(e));
+            this._websocket.removeEventListener('onclose', (e) => this.onClose(e));
             this._websocket.close();
         }
         this._websocket = null;
@@ -144,23 +145,25 @@ export abstract class WebsocketClientAbstract {
             }
         }
 
-        console.info('Adresa Pro připojení: ',  this.url);
-        // Logger.info('TyrionWebsocketClient:: MainServer Connection:: reconnect to Main server url:: ',this.websocketUrl);
         this._websocket = new WebSocket(this.url);
-        this._websocket.addEventListener('close', (e) => this.onError(e));
+        this._websocket.addEventListener('close', (e) => this.onClose(e));
         this._websocket.addEventListener('open', (e) => this.onOpen(e));
         this._websocket.addEventListener('message', (e) => this.onMessageParse(e));
         this._websocket.addEventListener('onerror', (e) => this.onError(e));
-        this._websocket.addEventListener('onclose', (e) => this.onError(e));
+        this._websocket.addEventListener('onclose', (e) => this.onClose(e));
     }
 
     protected onError = (e) => {
-        console.error('WebsocketClientAbstract::onError or Close::', e);
-        console.error('WebsocketClientAbstract::onError or Close::', e);
-        console.error('WebsocketClientAbstract::onError or Close::', e);
-        console.error('WebsocketClientAbstract::onError or Close::', e);
+        console.info('WebsocketClientAbstract::onError::', e);
         if (this._onErrorCallback) {
             this._onErrorCallback(e);
+        }
+    }
+
+    protected onClose = (e) => {
+        console.info('WebsocketClientAbstract::onClose::', e);
+        if (this._onCloseCallback) {
+            this._onCloseCallback(e);
         }
     }
 
@@ -180,8 +183,6 @@ export abstract class WebsocketClientAbstract {
 
     protected onMessageParse(e: any): void {
         try {
-
-            console.info('WebsocketClientAbstract:: onMessageParse:', e);
 
             if (e && e.data) {
 

@@ -10,19 +10,16 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 @Component({
     selector: 'bk-form-input',
 /* tslint:disable:max-line-length */
-    template: `
-
-
-
-<div class="form-group"
-     [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"
-     [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"
+    template: `        
+<div class="form-group" 
+     [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" 
+     [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" 
      [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label *ngIf="showLabel">{{label}}</label>
 
     <div [class.input-group]="showButton != null">
-
-        <div class="input-icon">
+        
+        <div class="input-icon right">
             <i *ngIf="icon != null" class="fa {{icon}} fa-fw"></i>
 
             <i class="right fa fa-check" *ngIf="icon == null && !readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
@@ -34,10 +31,10 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
                    (ngModelChange)="onSelectedChange($event)"
                    [class.input-small]="widthSize == 'small'"
                    [class.input-medium]="widthSize == 'medium'"
-                   [class.input-xlarge]="widthSize == 'large'"
-                   [class.input-fluid]="widthSize == 'fluid'"
-                   [attr.type]="type"
-                   [attr.placeholder]="(placeholder?placeholder:label)"
+                   [class.input-xlarge]="widthSize == 'large'" 
+                   [class.input-fluid]="widthSize == 'fluid'" 
+                   [attr.type]="type" 
+                   [attr.placeholder]="(placeholder?placeholder:'')"
                    [readonly]="readonly"
                    [formControl]="control"
                    >
@@ -50,7 +47,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
                    [class.input-xlarge]="widthSize == 'large'"
                    [class.input-fluid]="widthSize == 'fluid'"
                    [attr.type]="type"
-                   [attr.placeholder]="(placeholder?placeholder:label)"
+                   [attr.placeholder]="(placeholder?placeholder:'')"
                    [readonly]="readonly">
 
         </div>

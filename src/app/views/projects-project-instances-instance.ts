@@ -155,6 +155,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             if (this.liveViewLoaded) {
                 this.liveViewLoaded = false;
                 if (this.homerDao) {
+                    this.homerDao.isWebSocketOpen();
                     this.homerDao.disconnectWebSocket();
                     this.homerDao = null;
                 }
@@ -166,8 +167,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.routeParamsSubscription.unsubscribe();
 
         if (this.homerDao) {
+            console.info('ProjectsProjectInstancesInstanceComponent: ngOnDestroy: close homerDao Is Open?: ', this.homerDao.isWebSocketOpen());
             this.homerDao.disconnectWebSocket();
             this.homerDao = null;
+        } else  {
+            console.info('ProjectsProjectInstancesInstanceComponent: ngOnDestroy: homerDao is null');
         }
     }
 
@@ -671,23 +675,22 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.homerDao = socket;
 
                             this.homerDao.onOpenCallback = (e) => {
-                                console.error('ProjectsProjectInstancesInstanceComponent: Instance WebSocket WebView is open ');
 
                                 this.homerDao.requestGetValues(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
                                     console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView requestGetValues: response', response_message);
                                     if (response_message) {
                                         this.homerMessageReceived(response_message);
                                     } else {
-                                        console.error('this.homerDao.requestGetValues Error: ', error_response);
+                                        console.error('loadBlockoLiveView:: requestGetValues Error: ', error_response);
                                     }
                                 });
 
                                 this.homerDao.requestGetLogs(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
-                                    console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView requestGetLogs: response', response_message);
+                                    console.info('ProjectsProjectInstancesInstanceComponent::requestGetLogs requestGetLogs: response', response_message);
                                     if (response_message) {
                                         this.homerMessageReceived(response_message);
                                     } else {
-                                        console.error('this.homerDao.requestGetValues Error: ', error_response);
+                                        console.error('loadBlockoLiveView:: requestGetLogs  Error: ', error_response);
                                     }
                                 });
 
@@ -712,22 +715,22 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             const controller = this.liveView.getBlockoController();
 
             if (m.message_type === 'new_input_connector_value') {
-                controller.setInputConnectorValue(m.block_id, m.interface_name, typeof m.value === 'object' ? new BlockoCore.Message(m.value) : m.value);
+                controller.setInputConnectorValue(m.data.block_id, m.data.interface_name, typeof m.data.value === 'object' ? new BlockoCore.Message(m.data.value) : m.data.value);
                 return;
             }
 
             if (m.message_type === 'new_output_connector_value') {
-                controller.setOutputConnectorValue(m.block_id, m.interface_name, typeof m.value === 'object' ? new BlockoCore.Message(m.value) : m.value);
+                controller.setOutputConnectorValue(m.data.block_id, m.data.interface_name, typeof m.data.value === 'object' ? new BlockoCore.Message(m.data.value) : m.data.value);
                 return;
             }
 
             if (m.message_type === 'new_external_input_connector_value') {
-                controller.setInputConnectorValue(m.block_id, m.interface_name, m.value);
+                controller.setInputConnectorValue(m.data.block_id, m.data.interface_name, m.data.value);
                 return;
             }
 
             if (m.message_type === 'new_external_output_connector_value') {
-                controller.setOutputConnectorValue(m.block_id, m.interface_name, m.value);
+                controller.setOutputConnectorValue(m.data.block_id, m.data.interface_name, m.data.value);
                 return;
             }
 
@@ -747,7 +750,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             if (m.message_type === 'new_error_event') {
                 console.info('homerMessageReceived:: new_error_event:: ', JSON.stringify(m.data['error_message'], null, 4));
-                controller.setError(m.block_id, true);
+                controller.setError(m.data.block_id, true);
                 this.zone.run(() => {
                     this.consoleLog.add(
                         'error', // type
@@ -858,29 +861,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    onAddGrid(callback: (iface: Blocks.BlockoTargetInterface) => void) {
-        let model = new ModalsSelectGridProjectModel(this.projectId);
-        this.modalService.showModal(model)
-            .then((success) => {
-                // TODO Doplnit do BLOCKA
-
-            })
-            .catch((err) => {
-
-            });
-    }
-
-    onAddBlock(callback: (block: BlockoCore.Block) => void) {
-        let model = new ModalsSelectBlockModel(this.projectId);
-        this.modalService.showModal(model)
-            .then((success) => {
-                // TODO Doplnit do BLOCKA
-
-            })
-            .catch((err) => {
-
-            });
-    }
 
     onSetHardwareByInterfaceClick(callback: (targetId: string, group?: boolean) => BlockoCore.BoundInterface): void {
         let model = new ModalsSelectHardwareModel(this.projectId, null, false, true);

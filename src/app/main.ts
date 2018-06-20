@@ -292,7 +292,13 @@ let tabMenus = {
         new LabeledLink('Dashboard', ['/', 'projects', ':project'], null, { linkActiveExact: true }),
         new LabeledLink('Members', ['/', 'projects', ':project', 'members'], null),
         new LabeledLink(null, null),
-        new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', ['/', 'projects', ':project', 'hardware'], null, { styleClass: 'color-hardware' }),
+        new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', null, null, {
+            styleClass: 'color-hardware', items: [
+                new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong> list', ['/', 'projects', ':project', 'hardware'], null),
+                new LabeledLink('<strong class="font-color-hardware">RELEASES</strong> updates', ['/', 'projects', ':project', 'actualization-procedures'], null),
+                new LabeledLink('<strong class="font-color-hardware">CELLULAR</strong> modules', ['/', 'projects', ':project', 'gsm'], null),
+            ]
+        }),
         new LabeledLink('<strong class="font-color-code">CODE</strong>', null, null, {
             styleClass: 'color-code', items: [
                 new LabeledLink('<strong class="font-color-code">CODE</strong> programs', ['/', 'projects', ':project', 'code'], null),
@@ -376,6 +382,7 @@ class BeckiErrorHandler implements ErrorHandler {
         JsonpModule,
         MyDatePickerModule,
         SharedModule
+        ChartsModule,
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
@@ -402,41 +409,67 @@ class BeckiErrorHandler implements ErrorHandler {
     ],
     declarations: [
         // Generic app components
+        AppComponent,
+        ModalComponent,
+        BlockUIComponent,
+        // Layouts components
+        LayoutMainComponent,
         LayoutNotLoggedComponent,
         // Other components
         ImageCropperComponent,
         // Pipes
         Md2HtmlPipe,
         Nl2BrPipe,
+        UnixTimeFormatPipe,
+        StringReplacerPipe,
+        TranslatePipe,
+        TranslateTablePipe,
         HtmlSanitizeBypassPipe,
         IconFileComponent,
         // Components
         MultiSelectComponent,
+        BlockoViewComponent,
         BeckiBooleanButtonComponent,
+        MonacoEditorComponent,
+        FormColorPickerComponent,
+        FormFAIconSelectComponent,
         IconComponent,
+        FormInputComponent,
+        FormInputTagsComponent,
         FormTextAreaComponent,
+        FormSelectComponent,
         FormJsonNiceTextAreaComponent,
+        FilterPagerComponent,
+        CodeIDEComponent,
         TableListComponent,
         ProgramVersionSelectorComponent,
-        // DraggableDirective,
+        DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
         FileTreeLineComponent,
         NotificationsOverlayComponent,
         NotificationsListComponent,
+        ConsoleLogComponent,
         InstanceHistoryTimeLineComponent,
         QRCodeComponent,
         DatePickerComponent,
         TimePickerComponent,
         FormSwitchTwoListSelectComponent,
+        UpdateStateComponent,
+        OnlineStateComponent,
+        TypeOfUpdateComponent,
         TimeZoneSelectorComponent,
         TagComponent,
+        NothingToShowComponent,
+        PortletTitleComponent,
+        PaymentMethodComponent,
         PortletPanelMenuComponent,
-        // ServerSizeSelectorComponent,
-        // ServerRegionSelectorComponent,
-        // TerminalLogSubscriberComponent,
+        ServerSizeSelectorComponent,
+        ServerRegionSelectorComponent,
+        TerminalLogSubscriberComponent,
         LogLevelComponent,
-        // GridViewComponent,
+        GridViewComponent,
+        BeckiDrobDownButtonComponent,
         FilterTableComponent,
         PublicStateComponent,
         // Views components
@@ -563,6 +596,3 @@ class BeckiErrorHandler implements ErrorHandler {
 })
 export class AppModule {
 }
-
-
-

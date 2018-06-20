@@ -4,8 +4,7 @@
  */
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {
-    IHomerServer, IHomerServerList, IProject,
+import { IHomerServer, IHomerServerList, IProject,
     IServerRegistrationFormData, IServerRegistrationFormDataServerRegion, IServerRegistrationFormDataServerSize
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -15,6 +14,7 @@ import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { TyrionApiBackend } from '../backend/BeckiBackend';
 
 @Component({
     selector: 'bk-view-projects-project-server',
@@ -40,6 +40,8 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
     selected_server_slug: IServerRegistrationFormDataServerSize = null;
     selected_destination_slug: IServerRegistrationFormDataServerRegion = null;
     form: FormGroup;
+    host = 'tyrion.byzance.cz'; // Its not possible to get directly from HTML URL address form TyrionApiBackend
+    protocol = 'https';         // Its not possible to get directly from HTML protocol form TyrionApiBackend
 
     constructor(injector: Injector) {
         super(injector);
@@ -53,6 +55,9 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
             });
             this.onFilterHomerServer();
         });
+
+        this.host = TyrionApiBackend.host;
+        this.protocol = TyrionApiBackend.protocol;
 
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],

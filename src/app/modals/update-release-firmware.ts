@@ -247,8 +247,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
 
             let gr: IActualizationProcedureMakeHardwareType = {
                 hardware_type_id: hardwareType.id,
-                bootloader_id: bootloader_id,
-                c_program_version_id: c_program_version_id
+                bootloader_id: bootloader_id, // TODO check if this contain id too
+                c_program_version_id: c_program_version_id // FIXME somehow this contains whole CProgramVersion object instead of just id
             };
 
             this.modalModel.groups.push(gr);

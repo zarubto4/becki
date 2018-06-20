@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
-    IProject, IHardware, IHardwareList, IActualizationProcedureList, IUpdateProcedure, IHardwareGroupList, IHardwareGroup
+    IProject, IHardware, IHardwareList, IHardwareGroupList, IHardwareGroup
 } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -32,7 +32,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     devicesFilter: IHardwareList = null;
     deviceGroup: IHardwareGroupList = null;
-    actualizationFilter: IActualizationProcedureList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
@@ -71,11 +70,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         if (tab === 'hardware_groups' && this.deviceGroup == null) {
             this.onFilterHardwareGroup();
         }
-
-        if (tab === 'updates' && this.actualizationFilter == null) {
-            this.onFilterActualizationProcedure();
-        }
-
     }
 
     onPortletClick(action: string): void {
@@ -85,10 +79,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
         if (action === 'add_hardware_group') {
             this.onGroupAddClick();
-        }
-
-        if (action === 'new_release') {
-            this.onProcedureCreateClick();
         }
     }
 
@@ -322,52 +312,10 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             });
     }
 
-
-    /* tslint:disable:max-line-length ter-indent */
-    onFilterActualizationProcedure(pageNumber: number = 0,
-        states: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE' , 'COMPLETE_WITH_ERROR' , 'CANCELED' , 'IN_PROGRESS' , 'NOT_START_YET'],
-        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL' , 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE']): void {
-        this.blockUI();
-        this.tyrionBackendService.actualizationProcedureGetByFilter(pageNumber, {
-            project_id: this.projectId,
-            update_states: states,
-            type_of_updates: type_of_updates
-        })
-            .then((values) => {
-                this.actualizationFilter = values;
-
-                this.actualizationFilter.content.forEach((procedure, index, obj) => {
-                    this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
-                        if (status.model === 'ActualizationProcedure' && procedure.id === status.model_id) {
-
-                            this.tyrionBackendService.actualizationProcedureGet(procedure.id)
-                                .then((value) => {
-                                    procedure.state = value.state;
-                                    procedure.procedure_size_complete = value.procedure_size_complete;
-                                    procedure.date_of_finish = value.date_of_finish;
-                                })
-                                .catch((reason) => {
-                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
-                                });
-
-                        }
-                    });
-                });
-
-                this.unblockUI();
-            })
-            .catch((reason) => {
-                this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
-            });
-    }
-    /* tslint:disable:max-line-length ter-indent*/
-
-
     onFilterHardwareGroup(pageNumber: number = 0): void {
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
-          project_id : this.projectId
+            project_id : this.projectId
         })
             .then((values) => {
                 this.deviceGroup = values;
@@ -382,31 +330,14 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     // Actualization Procedure -----------------------------------------------------------------------------------------
 
-    onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
-        this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
-            .then(() => {
-                this.unblockUI();
-                this.onFilterActualizationProcedure();
-            })
-            .catch((reason) => {
-                this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
-            });
-    }
-
-    onUpdateProcedureUpdateClick(procedure: IUpdateProcedure): void {
-        // TODO
-    }
-
-
     onProcedureCreateClick() {
 
         // Get all deviceGroup - Recursion
         if (this.deviceGroup == null) {
             this.blockUI();
             this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
-                    project_id: this.projectId
-                })
+                project_id: this.projectId
+            })
                 .then((values) => {
                     this.unblockUI();
                     this.deviceGroup = values;
@@ -433,7 +364,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 })
                     .then(() => {
                         this.unblockUI();
-                        this.onFilterActualizationProcedure();
+                        this.onActualizationProcedureClick();
                     })
                     .catch(reason => {
                         this.unblockUI();
@@ -443,6 +374,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         });
 
     }
+
 
     onBlinkDeviceClick(device: IHardware): void {
         this.tyrionBackendService.boardCommandExecution({
@@ -479,14 +411,6 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
         if (action === 'remove_group') {
             this.onGroupDeleteClick(object);
-        }
-
-        if (action === 'edit_procedure') {
-            this.onUpdateProcedureUpdateClick(object);
-        }
-
-        if (action === 'remove_procedure') {
-            this.onUpdateProcedureCancelClick(object);
         }
 
         if (action === 'activate_hardware') {
