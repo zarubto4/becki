@@ -163,12 +163,8 @@ import { ArticleComponent } from './components/ArticleComponent';
 import { ModalsArticleComponent } from './modals/article';
 // Common dependencies
 import { SharedModule } from '../shared';
-import { ProjectsProjectGSMSComponent } from './views/projects-project-gsms';
 import { ModalsAddGSMComponent } from './modals/add-gsm';
 import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
-import { ChartsModule } from 'ng2-charts';
-import { ChartBarComponent } from './components/ChartBarComponent';
-import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
 import { ModalsVersionSelectComponent } from './modals/version-select';
 
 // @formatter:off
@@ -205,9 +201,6 @@ let routes: Routes = [
 
     // PROJECT PAGE
     { path: 'projects', data: { breadName: 'Projects' }, loadChildren: './views/projects-module#ProjectsModule' },
-
-    { path: 'projects/:project/gsm', data: { breadName: 'CELLULAR modules' }, component: ProjectsProjectGSMSComponent, canActivate: [AuthGuard]},
-    { path: 'projects/:project/gsm/:gsm',  data: { breadName: ':last' }, component: ProjectsProjectGSMSGSMComponent, canActivate: [AuthGuard]},
 
     { path: 'producers', data: { breadName: 'Producers' }, component: ProducersComponent, canActivate: [AuthGuard] },
     { path: 'producers/:producer', data: { breadName: ':producer' }, component: ProducersProducerComponent, canActivate: [AuthGuard] },
@@ -375,8 +368,7 @@ class BeckiErrorHandler implements ErrorHandler {
         RouterModule.forRoot(routes),
         HttpModule,
         JsonpModule,
-        MyDatePickerModule,
-        ChartsModule
+        MyDatePickerModule
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
@@ -419,7 +411,6 @@ class BeckiErrorHandler implements ErrorHandler {
         FormJsonNiceTextAreaComponent,
         TableListComponent,
         ProgramVersionSelectorComponent,
-        // DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
         FileTreeLineComponent,
@@ -433,11 +424,7 @@ class BeckiErrorHandler implements ErrorHandler {
         TimeZoneSelectorComponent,
         TagComponent,
         PortletPanelMenuComponent,
-        // ServerSizeSelectorComponent,
-        // ServerRegionSelectorComponent,
-        // TerminalLogSubscriberComponent,
         LogLevelComponent,
-        // GridViewComponent,
         FilterTableComponent,
         PublicStateComponent,
         // Views components
@@ -452,7 +439,6 @@ class BeckiErrorHandler implements ErrorHandler {
         BugsBugComponent,
         DashboardComponent,
         CommunityCProgramComponent,
-        ProjectsProjectGSMSGSMComponent,
         NotificationsComponent,
         ProfileComponent,
         ForgotPasswordComponent,
@@ -463,13 +449,6 @@ class BeckiErrorHandler implements ErrorHandler {
         GarfieldGarfieldComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
-        ChartBarComponent,
-        // ProjectsProjectGridComponent,
-        // ProjectsProjectGridGridsComponent,
-        // ProjectsProjectGridGridsGridComponent,
-        // ProjectsProjectInstancesComponent,
-        // ProjectsProjectInstancesInstanceComponent,
-        ProjectsProjectGSMSComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
         ServerComponent,
@@ -559,9 +538,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsArticleComponent,
         ModalsAddGSMComponent,
         ModalsGsmPropertiesComponent,
-        ChartBarComponent
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }

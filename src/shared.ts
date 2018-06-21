@@ -34,6 +34,8 @@ import { FormFAIconSelectComponent } from './app/components/FormFAIconSelectComp
 import { ServerRegionSelectorComponent, ServerSizeSelectorComponent } from './app/components/ServerSizeSelectorComponent';
 import { GridViewComponent } from './app/components/GridViewComponent';
 import { DraggableDirective } from './app/components/DraggableDirective';
+import { ChartBarComponent } from './app/components/ChartBarComponent';
+import { ChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -41,7 +43,8 @@ import { DraggableDirective } from './app/components/DraggableDirective';
         CommonModule,
         FormsModule,
         RouterModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ChartsModule
     ],
     providers: [],
     declarations: [
@@ -76,7 +79,8 @@ import { DraggableDirective } from './app/components/DraggableDirective';
         ServerSizeSelectorComponent,
         ServerRegionSelectorComponent,
         GridViewComponent,
-        DraggableDirective
+        DraggableDirective,
+        ChartBarComponent
     ],
     exports:      [
         AppComponent,
@@ -113,7 +117,8 @@ import { DraggableDirective } from './app/components/DraggableDirective';
         ServerSizeSelectorComponent,
         ServerRegionSelectorComponent,
         GridViewComponent,
-        DraggableDirective
+        DraggableDirective,
+        ChartBarComponent
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

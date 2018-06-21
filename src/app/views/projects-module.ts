@@ -17,10 +17,16 @@ export const PROJECTS_ROUTES: Routes = [
     { path: '', data: { breadName: 'Projects' }, component: ProjectsComponent, canActivate: [AuthGuard] },
     { path: ':project', data: { breadName: ':project' }, component: ProjectsProjectComponent, canActivate: [AuthGuard] },
 
-    { path: ':project/actualization_procedure/:procedure', data: { breadName: ':last' }, loadChildren: './project-actualization_procedure-module#ProjectActulizationProcedureModule' },
+    // Project ACTUALIZATION PROCEDURE
+    { path: ':project/actualization_procedures', data: { breadName: ':last' }, loadChildren: './project-actualization_procedure-module#ProjectActulizationProcedureModule' },
 
+    // Project GSM
+    { path: ':project/gsm', data: { breadName: 'CELLULAR modules' }, loadChildren: './project-gsms-module#ProjectGSMSModule' },
+
+    // Project MEMBERS
     { path: ':project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
 
+    // Project Code Libraries
     { path: ':project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
 
     // Project HARDWARE
