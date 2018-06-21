@@ -25,7 +25,7 @@ import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
-    templateUrl: './projects-project-blocko-blocko.html',
+    templateUrl: './projects-project-blocko-blocko.html'
 })
 export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -413,13 +413,11 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             Object.keys(out.messageOutputs).length
         ) {
             return {
-                color: '#9966ff',  // change color [TZ]
                 grid: {
                     projectId: project.id,
                     projectName: project.name,
                     programs: programs
                 },
-                displayName: project.name,
                 interface: out
             };
         }
@@ -438,7 +436,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     let interfaceData = JSON.parse(model.selected_c_program_version.virtual_input_output);
                     if (interfaceData) {
                         callback({
-                            color: '#30f485',
                             code: {
                                 programId: model.selected_c_program.id,
                                 programName: model.selected_c_program.name,
@@ -446,7 +443,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                                 versionName: model.selected_c_program_version.name,
                                 versionDescription: model.selected_c_program_version.description
                             },
-                            displayName: model.selected_c_program_version.id,
                             interface: interfaceData
                         });
                     }

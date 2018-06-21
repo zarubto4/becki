@@ -6,22 +6,16 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsCodePropertiesModel } from '../modals/code-properties';
-import {
-    IProject, IHardwareType, ICProgram, ICProgramList, IGSMList, IGSM,
-    IDataSimOverview
-} from '../backend/TyrionAPI';
+import { IProject, IGSM, IDataSimOverview } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalsAddHardwareModel } from '../modals/add-hardware';
-import { ModalsAddGSMModel } from '../modals/add-gsm';
 import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 import { DataCharInterface } from '../components/ChartBarComponent';
 
 @Component({
     selector: 'bk-view-projects-project-gsms-gsm',
-    templateUrl: './projects-project-gsms-gsm.html',
+    templateUrl: './projects-project-gsms-gsm.html'
 })
 export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 

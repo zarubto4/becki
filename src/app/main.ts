@@ -21,7 +21,6 @@ import { ValidatorErrorsService } from './services/ValidatorErrorsService';
 import { CurrentParamsService } from './services/CurrentParamsService';
 import { NotificationService } from './services/NotificationService';
 import { ProgramVersionSelectorComponent } from './components/VersionSelectorComponent';
-import { DraggableDirective } from './components/DraggableDirective';
 import { FileTreeComponent } from './components/FileTreeComponent';
 import { Error404Component } from './views/error404';
 import { LoginComponent } from './views/login';
@@ -147,25 +146,14 @@ import { ModalsCodeSelectComponent } from './modals/code-select';
 import { BeckiBooleanButtonComponent } from './components/BooleanButtonComponent';
 import { PortletPanelMenuComponent } from './components/PortletPanelMenu';
 import { ModalsHardwareFindHashComponent } from './modals/hardware-find-hash';
-import { ProjectsProjectInstancesComponent } from './views/projects-project-instances';
-import { ProjectsProjectServersComponent } from './views/projects-project-servers';
 import { ModalsInstanceCreateComponent } from './modals/instance-create';
 import { TagComponent } from './components/TagComponent';
 import { FileTreeLineComponent } from './components/FileTreeLineCompinent';
 import { IconComponent } from './components/FileTreeComponent';
 import { IconFileComponent } from './components/FileTreeComponent';
-import { ServerRegionSelectorComponent, ServerSizeSelectorComponent } from './components/ServerSizeSelectorComponent';
-import { ProjectsProjectWidgetsComponent } from './views/projects-project-widgets';
-import { ProjectsProjectInstancesInstanceComponent } from './views/projects-project-instances-instance';
-import { ModalsVersionSelectComponent } from './modals/version-select';
 import { ModalsProgramVersionSelectComponent } from './modals/program-version-select';
 import { ModalsSnapShotInstanceComponent } from './modals/snapshot-properties';
 import { ModalsSnapShotDeployComponent } from './modals/snapshot-deploy';
-import { ProjectsProjectWidgetsWidgetComponent } from './views/projects-project-widgets-widget';
-import { GridViewComponent } from './components/GridViewComponent';
-import { ProjectsProjectGridComponent } from './views/projects-project-grid';
-import { ProjectsProjectGridGridsComponent } from './views/projects-project-grid-grids';
-import { ProjectsProjectGridGridsGridComponent } from './views/projects-project-grid-grids-grid';
 import { ModalsShowQRComponent } from './modals/show_QR';
 import { ModalsGridProgramSettingsComponent } from './modals/instance-grid-program-settings';
 import { FilterTableComponent } from './components/FilterTableComponent';
@@ -175,8 +163,13 @@ import { ArticleComponent } from './components/ArticleComponent';
 import { ModalsArticleComponent } from './modals/article';
 // Common dependencies
 import { SharedModule } from '../shared';
-import { ProjectsProjectLibrariesComponent } from './views/projects-project-libraries';
-import { ProjectsProjectMembersComponent } from './views/projects-project-members';
+import { ProjectsProjectGSMSComponent } from './views/projects-project-gsms';
+import { ModalsAddGSMComponent } from './modals/add-gsm';
+import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
+import { ChartsModule } from 'ng2-charts';
+import { ChartBarComponent } from './components/ChartBarComponent';
+import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
+import { ModalsVersionSelectComponent } from './modals/version-select';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -199,23 +192,23 @@ let routes: Routes = [
 
     { path: 'qr-reader-hardware', data: { breadName: 'qr-add-hardware' }, component: MobileAddHardwareComponent, canActivate: [AuthGuard] },
 
-
     { path: 'profile', data: { breadName: 'Profile' }, component: ProfileComponent, canActivate: [AuthGuard] },
 
-    // GOOD
+    // FINANCIAL
     { path: 'financial', data: { breadName: 'Financial' }, loadChildren: './views/financial-module#FinancialModule' },
 
     { path: 'hardware', data: { breadName: 'Hardware types' }, component: HardwareComponent, canActivate: [AuthGuard] },
     { path: 'hardware/:hardware_type', data: { breadName: ':last' }, component: HardwareHardwareTypeComponent, canActivate: [AuthGuard] },
+
     // { path: 'hardware/:hardware_type/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     // { path: 'device/:hardware', data: { breadName: ':last' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
-    // ____________________________________
-
 
     // PROJECT PAGE
     { path: 'projects', data: { breadName: 'Projects' }, loadChildren: './views/projects-module#ProjectsModule' },
 
-    // ____________________________________
+    { path: 'projects/:project/gsm', data: { breadName: 'CELLULAR modules' }, component: ProjectsProjectGSMSComponent, canActivate: [AuthGuard]},
+    { path: 'projects/:project/gsm/:gsm',  data: { breadName: ':last' }, component: ProjectsProjectGSMSGSMComponent, canActivate: [AuthGuard]},
+
     { path: 'producers', data: { breadName: 'Producers' }, component: ProducersComponent, canActivate: [AuthGuard] },
     { path: 'producers/:producer', data: { breadName: ':producer' }, component: ProducersProducerComponent, canActivate: [AuthGuard] },
 
@@ -225,6 +218,7 @@ let routes: Routes = [
     { path: 'admin', data: { breadName: 'Admin Site' }, component: AdminDashboardComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/hardware', data: { breadName: 'Hardware' }, component: AdminHardwareComponent, canActivate: [AuthGuard] },
+
     // { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     // { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
@@ -376,12 +370,12 @@ class BeckiErrorHandler implements ErrorHandler {
 
 @NgModule({
     imports: [
+        SharedModule,
         BrowserModule,
         RouterModule.forRoot(routes),
         HttpModule,
         JsonpModule,
         MyDatePickerModule,
-        SharedModule,
         ChartsModule
     ],
     providers: [
@@ -409,8 +403,6 @@ class BeckiErrorHandler implements ErrorHandler {
     ],
     declarations: [
         // Generic app components
-        AppComponent,
-        // Layouts components
         LayoutNotLoggedComponent,
         // Other components
         ImageCropperComponent,
@@ -427,7 +419,7 @@ class BeckiErrorHandler implements ErrorHandler {
         FormJsonNiceTextAreaComponent,
         TableListComponent,
         ProgramVersionSelectorComponent,
-        DraggableDirective,
+        // DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
         FileTreeLineComponent,
@@ -441,10 +433,11 @@ class BeckiErrorHandler implements ErrorHandler {
         TimeZoneSelectorComponent,
         TagComponent,
         PortletPanelMenuComponent,
-        ServerSizeSelectorComponent,
-        ServerRegionSelectorComponent,
+        // ServerSizeSelectorComponent,
+        // ServerRegionSelectorComponent,
+        // TerminalLogSubscriberComponent,
         LogLevelComponent,
-        GridViewComponent,
+        // GridViewComponent,
         FilterTableComponent,
         PublicStateComponent,
         // Views components
@@ -459,6 +452,7 @@ class BeckiErrorHandler implements ErrorHandler {
         BugsBugComponent,
         DashboardComponent,
         CommunityCProgramComponent,
+        ProjectsProjectGSMSGSMComponent,
         NotificationsComponent,
         ProfileComponent,
         ForgotPasswordComponent,
@@ -469,19 +463,17 @@ class BeckiErrorHandler implements ErrorHandler {
         GarfieldGarfieldComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
+        ChartBarComponent,
         // ProjectsProjectGridComponent,
         // ProjectsProjectGridGridsComponent,
         // ProjectsProjectGridGridsGridComponent,
         // ProjectsProjectInstancesComponent,
         // ProjectsProjectInstancesInstanceComponent,
+        ProjectsProjectGSMSComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
-        // ProjectsProjectServersComponent,
-        // ProjectsProjectLibrariesComponent,
-        // ProjectsProjectWidgetsComponent,
         ServerComponent,
         TyrionComponent,
-        // ProjectsProjectWidgetsWidgetComponent,
         ProducersComponent,
         ProducersProducerComponent,
         ArticleComponent,
@@ -565,7 +557,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsGridProjectSelectComponent,
         ModalsBlockSelectComponent,
         ModalsArticleComponent,
-        // ProjectsProjectMembersComponent
+        ModalsAddGSMComponent,
+        ModalsGsmPropertiesComponent,
+        ChartBarComponent
     ],
     bootstrap: [AppComponent]
 })

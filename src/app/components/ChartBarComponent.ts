@@ -32,9 +32,9 @@ export interface DataCharInterface {
 @Component({
     selector: 'bk-form-chart-bar',
     /* tslint:disable:max-line-length */
-    template: `        
+    template: `
         <div class="portlet light">
-            
+
             <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
             <bk-portlet-title [title_name]="title"
                               [icon]="'fa-chart-bar'"
@@ -44,7 +44,7 @@ export interface DataCharInterface {
             >
             </bk-portlet-title>
             <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
-            
+
             <div class="portlet-body">
                 <div style="display: block" *ngIf="values">
                     <canvas baseChart
@@ -73,7 +73,7 @@ export interface DataCharInterface {
                             (chartClick)="chartClicked($event)"></canvas>
                 </div>
             </div>
-            
+
         </div>
     `
     /* tslint:enable */

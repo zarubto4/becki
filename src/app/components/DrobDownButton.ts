@@ -1,8 +1,5 @@
-
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { HostBinding } from '@angular/compiler/src/core';
 import { HostListener } from '@angular/core';
-
 
 @Component({
     selector: 'bk-drob-down-button',
@@ -105,7 +102,6 @@ import { HostListener } from '@angular/core';
 })
 export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
 
-
     private  drob_down_clicked: boolean = false;
 
     @Input()
@@ -127,6 +123,9 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
         onClick?: () => void
     }[] = null;
 
+    @Output()
+    onValueChanged: EventEmitter<string> = new EventEmitter<string>();
+
     @HostListener('click')
     onOutsideClickDropdownMenu(event) {
         if (!this._eref.nativeElement.contains(event.target)) { // or some similar check
@@ -134,8 +133,6 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
         }
     }
 
-    @Output()
-    onValueChanged: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(private _eref: ElementRef) { }
 

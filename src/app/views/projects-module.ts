@@ -8,17 +8,16 @@ import { AuthGuard } from '../services/AuthGuard';
 import { ProjectsComponent } from './projects';
 import { ProjectsProjectComponent } from './projects-project';
 import { ProjectsProjectMembersComponent } from './projects-project-members';
-import { ProjectsProjectActualizationProcedureComponent } from './projects-project-actualization-procedure';
 import { ProjectsProjectLibrariesComponent } from './projects-project-libraries';
 
 
 // routes
-export const PROJECT_ROUTES: Routes = [
+export const PROJECTS_ROUTES: Routes = [
 
     { path: '', data: { breadName: 'Projects' }, component: ProjectsComponent, canActivate: [AuthGuard] },
     { path: ':project', data: { breadName: ':project' }, component: ProjectsProjectComponent, canActivate: [AuthGuard] },
 
-    { path: 'actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard]},
+    { path: ':project/actualization_procedure/:procedure', data: { breadName: ':last' }, loadChildren: './project-actualization_procedure-module#ProjectActulizationProcedureModule' },
 
     { path: ':project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
 
@@ -53,12 +52,11 @@ export const PROJECT_ROUTES: Routes = [
     imports: [
         CommonModule,
         SharedModule,
-        RouterModule.forChild(PROJECT_ROUTES)
+        RouterModule.forChild(PROJECTS_ROUTES)
     ],
     declarations: [
         ProjectsComponent,
         ProjectsProjectComponent,
-        ProjectsProjectActualizationProcedureComponent,
         ProjectsProjectMembersComponent,
         ProjectsProjectLibrariesComponent
     ],
