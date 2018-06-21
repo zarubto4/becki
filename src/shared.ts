@@ -36,6 +36,12 @@ import { GridViewComponent } from './app/components/GridViewComponent';
 import { DraggableDirective } from './app/components/DraggableDirective';
 import { ChartBarComponent } from './app/components/ChartBarComponent';
 import { ChartsModule } from 'ng2-charts';
+import { ProjectsProjectCodeCodeComponent } from './app/views/projects-project-code-code';
+import { ProjectsProjectBlocksBlockComponent } from './app/views/projects-project-blocks-block';
+import { ProjectsProjectBlocksComponent } from './app/views/projects-project-blocks';
+import { ProjectsProjectWidgetsWidgetComponent } from './app/views/projects-project-widgets-widget';
+import { ProjectsProjectWidgetsComponent } from './app/views/projects-project-widgets';
+import { ProjectsProjectHardwareHardwareComponent } from './app/views/projects-project-hardware-hardware';
 
 
 @NgModule({
@@ -80,7 +86,13 @@ import { ChartsModule } from 'ng2-charts';
         ServerRegionSelectorComponent,
         GridViewComponent,
         DraggableDirective,
-        ChartBarComponent
+        ChartBarComponent,
+        ProjectsProjectCodeCodeComponent,
+        ProjectsProjectHardwareHardwareComponent,
+        ProjectsProjectWidgetsComponent,
+        ProjectsProjectWidgetsWidgetComponent,
+        ProjectsProjectBlocksComponent,
+        ProjectsProjectBlocksBlockComponent,
     ],
     exports:      [
         AppComponent,
@@ -118,7 +130,13 @@ import { ChartsModule } from 'ng2-charts';
         ServerRegionSelectorComponent,
         GridViewComponent,
         DraggableDirective,
-        ChartBarComponent
+        ChartBarComponent,
+        ProjectsProjectCodeCodeComponent,
+        ProjectsProjectHardwareHardwareComponent,
+        ProjectsProjectWidgetsComponent,
+        ProjectsProjectWidgetsWidgetComponent,
+        ProjectsProjectBlocksComponent,
+        ProjectsProjectBlocksBlockComponent,
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

@@ -193,11 +193,11 @@ let routes: Routes = [
     // FINANCIAL
     { path: 'financial', data: { breadName: 'Financial' }, loadChildren: './views/financial-module#FinancialModule' },
 
-    { path: 'hardware', data: { breadName: 'Hardware types' }, component: HardwareComponent, canActivate: [AuthGuard] },
-    { path: 'hardware/:hardware_type', data: { breadName: ':last' }, component: HardwareHardwareTypeComponent, canActivate: [AuthGuard] },
+    // HARDWARE
+    { path: 'hardware', data: { breadName: 'Hardware types' }, loadChildren: './views/hardware-module#HardwareModule' },
 
-    // { path: 'hardware/:hardware_type/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
-    // { path: 'device/:hardware', data: { breadName: ':last' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
+    // HARDWARE DEVICE
+    { path: 'device/:hardware', data: { breadName: ':last' }, loadChildren: './views/hardware-device-module#HardwareDeviceModule' },
 
     // PROJECT PAGE
     { path: 'projects', data: { breadName: 'Projects' }, loadChildren: './views/projects-module#ProjectsModule' },
@@ -208,13 +208,13 @@ let routes: Routes = [
     { path: 'support', data: { breadName: 'Producers' }, component: SupportComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
     { path: 'support/:ticket', data: { breadName: ':ticket' }, component: ProducersProducerComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
 
-    { path: 'admin', data: { breadName: 'Admin Site' }, component: AdminDashboardComponent, canActivate: [AuthGuard] },
-
-    { path: 'admin/hardware', data: { breadName: 'Hardware' }, component: AdminHardwareComponent, canActivate: [AuthGuard] },
-
+    // { path: 'admin', data: { breadName: 'Admin Site' }, component: AdminDashboardComponent, canActivate: [AuthGuard] },
+    //
+    // { path: 'admin/hardware', data: { breadName: 'Hardware' }, component: AdminHardwareComponent, canActivate: [AuthGuard] },
+    //
     // { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     // { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
-
+    //
     // { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
     // { path: 'admin/widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard]},          // Only for community decisions - Link without project path
     // { path: 'admin/widget/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
@@ -449,8 +449,8 @@ class BeckiErrorHandler implements ErrorHandler {
         GarfieldGarfieldComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
-        HardwareComponent,
-        HardwareHardwareTypeComponent,
+        // HardwareComponent,
+        // HardwareHardwareTypeComponent,
         ServerComponent,
         TyrionComponent,
         ProducersComponent,
