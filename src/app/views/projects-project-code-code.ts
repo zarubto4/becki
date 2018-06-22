@@ -629,7 +629,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                 });
 
                 this.blockUI();
-                this.tyrionBackendService.cProgramVersionCreate(this.codeId, {
+                this.tyrionBackendService.cProgramVersionCreateSaveAs(this.codeId, {
                     imported_libraries: libs,
                     name: m.name,
                     description: m.description,
@@ -649,6 +649,43 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                     });
             }
         });
+    }
+
+    saveAsCode() {
+
+        let main = '';
+        let userFiles: ILibraryRecord[] = [];
+        let libs: string[] = [];
+
+        this.selectedCodeFiles.forEach((file) => {
+            if (file.objectFullPath === 'main.cpp') {
+                main = file.content;
+            } else if (file.library) {
+                libs.push(file.libraryVersionId);
+            } else {
+                userFiles.push({
+                    file_name: file.objectFullPath,
+                    content: file.content
+                });
+            }
+        });
+
+        this.blockUI();
+        this.tyrionBackendService.cProgramVersionWorkingcopysave(this.codeId, {
+            imported_libraries: libs,
+            main: main,
+            files: userFiles,
+            library_compilation_version: this.codeIDE.formLibrarySelector.controls['compilation_version_library_tag'].value,
+           // name: 'Working Cpy'
+        })
+            .then(() => {
+                this.exitConfirmationService.setConfirmationEnabled(false);
+                this.refresh();
+            })
+            .catch((err) => {
+                this.fmError(this.translate('flash_cant_save_code_version', 'Working Copy', err));
+                this.unblockUI();
+            });
 
     }
 
@@ -667,6 +704,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
             this.saveCode();
         }
     }
+
 
     onBuildClick() {
         if (!this.selectedCodeFiles) {
@@ -701,7 +739,9 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
             main: main,
             files: userFiles,
             hardware_type_id: this.codeProgram.hardware_type.id,
-            library_compilation_version: this.codeIDE.formLibrarySelector.controls['compilation_version_library_tag'].value
+            library_compilation_version: this.codeIDE.formLibrarySelector.controls['compilation_version_library_tag'].value,
+            immediately_hardware_update: this.codeIDE.upload_after_build,
+            hardware_ids: this.codeIDE.selectedHardware.map(x => x.id)
         })
             .then((success) => {
                 this.buildInProgress = false;

@@ -68,7 +68,6 @@
     <!-- Page Content IDE -- START -->
     <div class="portlet-body">
 
-
         <div [hidden]="tab!='ide'">
             <bk-code-ide [files]="selectedCodeFiles"
                          [defaultOpenFilename]="'main.cpp'"
@@ -78,7 +77,8 @@
                          [enableBuildButton]="true"
                          [buildInProgress]="buildInProgress"
                          [selectedHardware]="selected_hardware"
-                         (onBuildClick)="onBuildClick()"
+                         (onBuildClick)="onBuildClick($event)"
+                         (onSaveAsClick)="saveAsCode()"
                          (onSaveClick)="onSaveClick()"
                          (onAddLibraryClick)="onAddLibraryClick()"
                          (onAddHardwareClick)="onAddDeveloperHardwareClick()"
@@ -166,7 +166,7 @@
                                         permission: (version.update_permission)
                                     },
                                     {
-                                        condition: version.update_permission,
+                                        condition: version.update_permission && !version.working_copy,
                                         btn_label_for_person: ('label_version_properties'|bkTranslate:this),
                                         btn_tag: 'version_properties',
                                         icon: 'fa-cog',
@@ -174,7 +174,7 @@
                                         permission: (version.update_permission)
                                     },
                                     {
-                                        condition: (project_Id != null && version.approval_state == null),
+                                        condition: (project_Id != null && version.approval_state == null && !version.working_copy),
                                         btn_label_for_person: ('label_publish'|bkTranslate:this),
                                         btn_tag: 'version_properties_community',
                                         icon: 'fa-heart',
@@ -182,7 +182,7 @@
                                         permission: (version.update_permission)
                                     },
                                     {
-                                        condition: version.approval_state == 'PENDING' && version.community_publishing_permission,
+                                        condition: version.approval_state == 'PENDING' && version.community_publishing_permission && !version.working_copy,
                                         btn_label_for_person: ('label_publish_decision'|bkTranslate:this),
                                         btn_tag: 'version_publish',
                                         icon: 'fa-heart',
@@ -190,7 +190,7 @@
                                         permission: (version.update_permission)
                                     },
                                     {
-                                        condition: markupableAsMain(version),
+                                        condition: markupableAsMain(version) && !version.working_copy,
                                         btn_label_for_person: ('label_main_c_program_version_set_as_main'|bkTranslate:this),
                                         btn_tag: 'set_as_main',
                                         icon: 'fa-flag',
@@ -258,7 +258,9 @@
 
             <div *ngIf="(buildErrors && buildErrors.length)">
                 <div *ngFor="let buildError of buildErrors" class="mt-element-ribbon bg-grey-steel">
-                    <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'" [class.ribbon-color-warning]="buildError.type=='warning'">{{buildError.type}}</div>
+                    <div class="ribbon ribbon-shadow uppercase"
+                         [class.ribbon-color-danger]="buildError.type=='error'"
+                         [class.ribbon-color-warning]="buildError.type=='warning'">{{buildError.type}}</div>
                     <p class="ribbon-content">
                         <span [innerHTML]="'label_file_and_line'|bkTranslate:this:buildError.filename:buildError.line"></span>
                         <br>

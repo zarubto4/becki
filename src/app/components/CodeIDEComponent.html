@@ -68,7 +68,7 @@
                         <span class="font-sm" [innerHTML]="'label_panel_hardware'|bkTranslate:this"></span>
                     </div>
                     <div class="actions">
-                        <a class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="toolbarAddHardwareClick($event)">
+                        <a class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="toolbarAddHardwareClick($event)" [class.hidden]="selectedHardware.length > 4">
                             <i class="icon-plus"></i>
                         </a>
                         <a *ngIf="_show_integrated_hardware_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_integrated_hardware_portlet(false)">
@@ -87,13 +87,13 @@
                         <table class="table table-hover table-light byzance-table">
                             <tbody>
                                 <tr *ngFor="let hardware of selectedHardware">
-                                    <td class="vert-align no-wrap">
-                                        {{hardware.name}}
+                                    <td class="vert-align no-wrap col-lg-4">
+                                        {{hardware.name ? hardware.name : hardware.id.substr(0,12)}}
                                     </td>
-                                    <td class="vert-align no-wrap">
-                                        {{hardware.online_state}}
+                                    <td class="vert-align no-wrap col-lg-4">
+                                        <bk-online-state [online_state]="hardware.online_state"></bk-online-state>
                                     </td>
-                                    <td class="vert-align no-wrap">
+                                    <td class="vert-align no-wrap col-lg-2">
                                         <bk-icon-component [condition]="true" [icon]="'fa-trash'" (onClickEvent)="toolbarRemoveHardwareClick(hardware)"></bk-icon-component>
                                     </td>
                                 </tr>
@@ -109,6 +109,28 @@
                         </div>
                         <br>
                     </div>
+
+                    <!-- Multiple Select -->
+                    <td class="vert-align text-center no-wrap margin-top-30 margin-right-15">
+
+                        <hr style="margin-right: 10%; margin-left: 10%"  *ngIf="selectedHardware.length > 0">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <span class="font-sm">Upload Successful Build Automatically to Hardware</span>
+                            </div>
+                            <div class="col-md-3 text-right">
+                                <div class="md-checkbox" (click)="upload_after_build = !upload_after_build" style="margin-top: 10px">
+                                    <input type="checkbox" class="md-check" [checked]="upload_after_build">
+                                    <label>
+                                        <span class="inc"></span>
+                                        <span [class.check]="upload_after_build"></span>
+                                        <span class="box"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
 
                 </div>
             </div>
@@ -178,7 +200,12 @@
                     <button *ngIf="enableBuildButton" type="button" class="btn default yellow-gold pull-right" (click)="onToolBarBuildClick()" [disabled]="buildInProgress">
                         <i class="fa fa-play" *ngIf="!buildInProgress"></i> <i class="fa fa-spinner fa-spin" *ngIf="buildInProgress"></i> {{'btn_build'|bkTranslate:this}}
                     </button>
+
                     <button *ngIf="enableSaveButton" type="button" class="btn default green-haze pull-right" (click)="onToolBarSaveClick()" style="margin-right: 3px;">
+                        <i class="fa fa-floppy-o"></i>
+                        <i class="fa fa-bookmark"></i>
+                    </button>
+                    <button *ngIf="enableSaveButton" type="button" class="btn default blue pull-right" (click)="onToolBarSaveAsClick()" style="margin-right: 3px;">
                         <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
                     </button>
                 </ul>
