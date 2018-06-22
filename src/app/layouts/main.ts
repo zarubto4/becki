@@ -117,6 +117,10 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         this.router.navigate(['/logout']);
     }
 
+    public onProfileClick(): void {
+        this.router.navigate(['/profile']);
+    }
+
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)
     mouseUpEvent = (e: MouseEvent) => {
 

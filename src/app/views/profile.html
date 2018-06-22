@@ -61,10 +61,10 @@
                                    [control]="infoForm.controls['last_name']"></bk-form-input>
                     <bk-form-input [label]="'label_nick_name'|bkTranslate:this" type="text"
                                    [control]="infoForm.controls['nickName']"></bk-form-input>
-                    <bk-form-select [label]="'label_gender'|bkTranslate:this" [options]="genderList"
+                    <bk-form-select [label]="'label_gender'|bkTranslate:this" [regexFirstOption]="person.gender"  [options]="genderList"
                                     [control]="infoForm.controls['gender']"></bk-form-select>
-                    <bk-form-select [label]="'label_state'|bkTranslate:this" [options]="countryList"
-                                    [control]="infoForm.controls['state']"></bk-form-select>
+                    <bk-form-select [label]="'label_state'|bkTranslate:this"  [regexFirstOption]="person.country" [options]="countryList"
+                                    [control]="infoForm.controls['country']"></bk-form-select>
 
                     <div *ngIf="person.update_permission" class="margin-top-10">
                         <button (click)="changeInfo()" class="btn green">{{'btn_save'|bkTranslate:this}}</button>

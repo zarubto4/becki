@@ -118,9 +118,7 @@ export abstract class _BaseMainComponent {
 
 // -- ON CLIC ----------------------------------------------------------------------------------------------------------------
 
-    public onProfileClick(): void {
-        this.navigate(['/profile']);
-    }
+
 
     public onLogOutClick(): void {
         this.navigate(['/logout']);
