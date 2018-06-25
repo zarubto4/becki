@@ -42,8 +42,17 @@ export class ModalsSelectHardwareComponent implements OnInit {
     selectedGroupList: { [id: string]: IHardwareGroup } = {};
 
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    formHardwareFilter: FormGroup;
 
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+        this.formHardwareFilter = this.formBuilder.group({
+            'alias': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)]],
+            'full_id': ['', [Validators.maxLength(60)]],
+            'description': ['', [Validators.maxLength(60)]],
+            'orderBy': ['NAME', []],
+            'order_schema': ['ASC', []],
+        });
     }
 
     ngOnInit() {
@@ -65,7 +74,13 @@ export class ModalsSelectHardwareComponent implements OnInit {
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.modalModel.project_id],
             hardware_type_ids: [ (this.modalModel.hardware_type != null) ? this.modalModel.hardware_type.id : null],
-            count_on_page: 10
+            count_on_page: 10,
+            order_by: this.formHardwareFilter.controls['orderBy'].value,
+            order_schema: this.formHardwareFilter.controls['order_schema'].value,
+            full_id: this.formHardwareFilter.controls['full_id'].value,
+            id: this.formHardwareFilter.controls['id'].value,
+            name: this.formHardwareFilter.controls['alias'].value,
+            description: this.formHardwareFilter.controls['description'].value
         })
             .then((values) => {
                 this.devicesFilter = values;

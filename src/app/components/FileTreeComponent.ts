@@ -290,7 +290,7 @@ export class FileTreeComponent {
 export class IconComponent {
 
     @Input()
-    condition = false;
+    condition = true;
 
     @Input()
     icon: string = '';

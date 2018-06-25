@@ -17,6 +17,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareGroupPropertiesModel } from '../modals/hardware-group-properties';
 import { ModalsHardwareGroupDeviceSettingsModel } from '../modals/hardware-group-device-settings';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
+import { FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'bk-view-projects-project-hardware',
@@ -37,8 +38,22 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     tab: string = 'hardware_list';
 
+
+    formFilterGroup: FormGroup;
+
+
     constructor(injector: Injector) {
         super(injector);
+
+        // Filter Helper
+        this.formFilterGroup = this.formBuilder.group({
+            'alias': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)]],
+            'full_id': ['', [Validators.maxLength(60)]],
+            'description': ['', [Validators.maxLength(60)]],
+            'orderBy': ['NAME', []],
+            'order_schema': ['ASC', []],
+        });
     };
 
     ngOnInit(): void {
@@ -288,11 +303,17 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
     // FILTER ----------------------------------------------------------------------------------------------------------
 
-    onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
+    onFilterHardware(pageNumber: number = 0): void {
         this.blockUI();
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId],
-            hardware_type_ids: boardTypes
+            hardware_type_ids: [],
+            order_by: this.formFilterGroup.controls['orderBy'].value,
+            order_schema: this.formFilterGroup.controls['order_schema'].value,
+            full_id: this.formFilterGroup.controls['full_id'].value,
+            id: this.formFilterGroup.controls['id'].value,
+            name: this.formFilterGroup.controls['alias'].value,
+            description: this.formFilterGroup.controls['description'].value
         })
             .then((values) => {
                 this.unblockUI();
