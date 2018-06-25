@@ -9,9 +9,25 @@ import { ExitConfirmGuard } from '../services/ExitConfirmGuard';
 import { AdminDashboardComponent } from './admin';
 import { ProjectsProjectWidgetsWidgetComponent } from './projects-project-widgets-widget';
 import { ProjectsProjectBlocksBlockComponent } from './projects-project-blocks-block';
-import { TyrionComponent } from './admin-tyrion';
 import { ServerComponent } from './admin-server';
+import { TyrionComponent } from './admin-tyrion';
 import { CommunityCProgramComponent } from './admin-cprograms';
+import { RoleGroupComponent } from './admin-permission-group';
+import { RoleGroupGroupComponent } from './admin-permission-group-group';
+import { AdminFinancialComponent } from './admin-financial';
+import { AdminFinancialTariffComponent } from './admin-financial-tariff';
+import { GarfieldGarfieldComponent } from './garfield-garfield';
+import { GarfieldComponent } from './garfield';
+import { BugsBugComponent } from './admin-bugs-bug';
+import { BugsComponent } from './admin-bugs';
+import { ProjectsProjectBlocksComponent } from './projects-project-blocks';
+import { ProjectsProjectWidgetsComponent } from './projects-project-widgets';
+import { ProjectsProjectCodeCodeComponent } from './projects-project-code-code';
+import { AdminHardwareComponent } from './admin-hardware-type';
+
+
+// routes
+
 
 
 // routes
@@ -20,34 +36,36 @@ export const ADMIN_ROUTES: Routes = [
     { path: '', component: AdminDashboardComponent, canActivate: [AuthGuard] },
 
     // Admin HARDWARE
-    { path: 'hardware', data: { breadName: 'Hardware' }, loadChildren: './admin-hardware-module#AdminHardwareModule' },
+    { path: 'hardware', data: { breadName: 'Hardware' }, component: AdminHardwareComponent, canActivate: [AuthGuard] },
+    { path: 'hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
+    // { path: 'hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
-    // Admin WIDGETS
-    { path: 'widgets', data: {breadName: 'Community Grid Widgets Group'}, loadChildren: './admin-widgets-module#AdminWidgetsModule' },
+    { path: 'widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    { path: 'widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard]},          // Only for community decisions - Link without project path
     { path: 'widget/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
-    // Admin BLOCKS & BLOCK
-    { path: 'blocks', data: {breadName: 'Blocko Blocks'}, loadChildren: './admin-blocks-module#AdminBlocksModule' }, // Only for community decisions - Link without project path
-
+    { path: 'blocks', data: {breadName: 'Blocko Blocks'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
+    { path: 'blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard]},             // Only for community decisions - Link without project path
     { path: 'block/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
-    // Admin BUGS
-    { path: 'bugs', data: {breadName: 'Bugs'}, loadChildren: './admin-bugs-module#AdminBugsModule'},
+    { path: 'bugs', data: {breadName: 'Bugs'}, component: BugsComponent, canActivate: [AuthGuard]},
+    { path: 'bugs/:bug', data: {breadName: ':bug'}, component: BugsBugComponent, canActivate: [AuthGuard]},
 
-    // Admin GARFIELD
-    { path: 'garfield', data: {breadName: 'Garfield'}, loadChildren: './admin-garfield-module.ts'},
-
-    // Admin FINANCIAL
-    { path: 'financial', data: { breadName: 'Tariff' }, loadChildren: './admin-financial-module#AdminFinancialModule' },
+    { path: 'garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
+    { path: 'garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
 
     { path: 'tyrion', data: { breadName: 'Tyrion' }, component: TyrionComponent, canActivate: [AuthGuard] },
-
     { path: 'server', data: { breadName: 'Servers' }, component: ServerComponent, canActivate: [AuthGuard] },
 
-    // Admin PERMISSION GROUP
-    { path: 'permission-group', data: { breadName: 'Permission Group' }, loadChildren: './admin-permission-group-module#AdminPermissionGroupModule' },
+    { path: 'financial', data: { breadName: 'Tariff' }, component: AdminFinancialComponent, canActivate: [AuthGuard] },
+    { path: 'financial/:tariff', data: { breadName: ':tariff' }, component: AdminFinancialTariffComponent, canActivate: [AuthGuard] },
 
-    { path: 'c-program/c-program', data: { breadName: 'Community Management Code' }, component: CommunityCProgramComponent, canActivate: [AuthGuard] }
+    { path: 'permission-group', data: { breadName: 'Permission Group' }, component: RoleGroupComponent, canActivate: [AuthGuard] },
+    { path: 'permission-group/:group', data: { breadName: ':group' }, component: RoleGroupGroupComponent, canActivate: [AuthGuard] },
+
+    { path: 'c-program/c-program', data: { breadName: 'Community Management Code' }, component: CommunityCProgramComponent, canActivate: [AuthGuard] },
+
+
 
 ];
 
@@ -61,7 +79,17 @@ export const ADMIN_ROUTES: Routes = [
         AdminDashboardComponent,
         TyrionComponent,
         ServerComponent,
-        CommunityCProgramComponent
+        CommunityCProgramComponent,
+        AdminHardwareComponent,
+        BugsComponent,
+        BugsBugComponent,
+        GarfieldComponent,
+        GarfieldGarfieldComponent,
+        AdminFinancialTariffComponent,
+        AdminFinancialComponent,
+        RoleGroupGroupComponent,
+        RoleGroupComponent
+
     ],
     exports: [ RouterModule ]
 })

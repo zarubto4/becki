@@ -8,7 +8,7 @@ import { AuthGuard } from '../services/AuthGuard';
 import { ProjectsProjectHardwareHardwareComponent } from './projects-project-hardware-hardware';
 
 // routes
-export const PROJECT_HARDWARE_DEVICE_ROUTES: Routes = [
+export const HARDWARE_DEVICE_ROUTES: Routes = [
 
     { path: '', component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] }
 ];
@@ -17,10 +17,7 @@ export const PROJECT_HARDWARE_DEVICE_ROUTES: Routes = [
     imports: [
         CommonModule,
         SharedModule,
-        RouterModule.forChild(PROJECT_HARDWARE_DEVICE_ROUTES)
-    ],
-    declarations: [
-        ProjectsProjectHardwareHardwareComponent
+        RouterModule.forChild(HARDWARE_DEVICE_ROUTES)
     ],
     exports: [ RouterModule ]
 })

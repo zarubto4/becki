@@ -42,6 +42,10 @@ import { ProjectsProjectBlocksComponent } from './app/views/projects-project-blo
 import { ProjectsProjectWidgetsWidgetComponent } from './app/views/projects-project-widgets-widget';
 import { ProjectsProjectWidgetsComponent } from './app/views/projects-project-widgets';
 import { ProjectsProjectHardwareHardwareComponent } from './app/views/projects-project-hardware-hardware';
+import {TimePickerComponent} from "./app/components/TimePickerComponent";
+import {DatePickerComponent} from "./app/components/datePickerComponent";
+import {Nl2BrPipe} from "./app/pipes/Nl2BrPipe";
+import {FormJsonNiceTextAreaComponent} from "./app/components/FormJsonNiceTextAreaComponent";
 
 
 @NgModule({
@@ -93,6 +97,11 @@ import { ProjectsProjectHardwareHardwareComponent } from './app/views/projects-p
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
+        DatePickerComponent,
+        TimePickerComponent,
+        Nl2BrPipe,
+        FormJsonNiceTextAreaComponent
+
     ],
     exports:      [
         AppComponent,
@@ -137,6 +146,11 @@ import { ProjectsProjectHardwareHardwareComponent } from './app/views/projects-p
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
+        DatePickerComponent,
+        TimePickerComponent,
+        Nl2BrPipe,
+        FormJsonNiceTextAreaComponent
+
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
