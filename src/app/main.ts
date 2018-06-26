@@ -166,6 +166,10 @@ import { SharedModule } from '../shared';
 import { ModalsAddGSMComponent } from './modals/add-gsm';
 import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
 import { ModalsVersionSelectComponent } from './modals/version-select';
+import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
+import {ProjectsProjectBlocksBlockComponent} from "./views/projects-project-blocks-block";
+import {ProjectsProjectWidgetsComponent} from "./views/projects-project-widgets";
+import {ProjectsProjectWidgetsWidgetComponent} from "./views/projects-project-widgets-widget";
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -210,6 +214,15 @@ let routes: Routes = [
 
     // ADMIN PAGE
     { path: 'admin', data: { breadName: 'Admin Site' }, loadChildren: './views/admin-module#AdminModule' },
+
+
+    { path: 'admin/blocks', data: {breadName: 'Blocko Blocks'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
+    { path: 'admin/blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard]},             // Only for community decisions - Link without project path
+    { path: 'admin/block/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
+
+    { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    { path: 'admin/widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard]},          // Only for community decisions - Link without project path
+    { path: 'admin/widget/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
     // Zatím není nic co ukázat  {path: 'admin/server/homer/:homer_server', data: {breadName: ':homer_server'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN (Breadcump je připraven)
     // Zatím není nic co ukázat  {path: 'admin/server/compilation/:code_server', data: {breadName: ':code_server'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN (Breadcump je připraven)
