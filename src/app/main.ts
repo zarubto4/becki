@@ -10,7 +10,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app';
 import { LabeledLink } from './helpers/LabeledLink';
-import { Nl2BrPipe } from './pipes/Nl2BrPipe';
 import { LayoutNotLoggedComponent } from './layouts/not-logged';
 import { TyrionBackendService } from './services/BackendService';
 import { AuthGuard, NonAuthGuard } from './services/AuthGuard';
@@ -57,16 +56,11 @@ import { BlockUIService } from './services/BlockUIService';
 import { NotificationsOverlayComponent } from './components/NotificationsOverlayComponent';
 import { NotificationsListComponent } from './components/NotificationsListComponent';
 import { ModalsBlockoVersionSelectComponent } from './modals/blocko-version-select';
-import { HardwareComponent } from './views/hardware';
-import { HardwareHardwareTypeComponent } from './views/hardware-hardware_type';
 import { ModalsMembersAddComponent } from './modals/members-add';
 import { StorageService } from './services/StorageService';
-import { ServerComponent } from './views/admin-server';
 import { ModalsWidgetsWidgetPropertiesComponent } from './modals/widgets-widget-properties';
 import { MonacoEditorLoaderService } from './services/MonacoEditorLoaderService';
 import { ModalsBlockoBlockCodeEditorComponent } from './modals/blocko-block-code-editor';
-import { ProducersComponent } from './views/producers';
-import { ProducersProducerComponent } from './views/producers-producer';
 import { ModalsSendInvoiceComponent } from './modals/financial-send-invoice';
 import { ExitConfirmationService } from './services/ExitConfirmationService';
 import { ExitConfirmGuard } from './services/ExitConfirmGuard';
@@ -86,35 +80,25 @@ import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
 import { TableListComponent } from './components/TableListComponent';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
-import { AdminDashboardComponent } from './views/admin';
 import { ModalsCreateHomerServerComponent } from './modals/homer-server-create';
 import { ModalsUpdateHomerServerComponent } from './modals/homer-server-update';
 import { ModalsCreateCompilationServerComponent } from './modals/compiler-server-create';
 import { ModalsCreateProducerComponent } from './modals/create-producer';
 import { ModalsCreateProcessorComponent } from './modals/create-processor';
 import { ModalsCreateHardwareTypeComponent } from './modals/type-of-board-create';
-import { AdminHardwareComponent } from './views/admin-hardware-type';
 import { ModalsSetAsMainComponent } from './modals/set-as-main';
 import { ModalsBootloaderPropertyComponent } from './modals/bootloader-property';
 import { ModalsPermissionGroupComponent } from './modals/permission-group';
-import { RoleGroupComponent } from './views/admin-permission-group';
-import { RoleGroupGroupComponent } from './views/admin-permission-group-group';
 import { ModalsRolePermissionAddComponent } from './modals/role-permission-add';
 import { ModalsPermissionPermissionPropertyComponent } from './modals/permission-permission-properties';
-import { CommunityCProgramComponent } from './views/admin-cprograms';
-import { GarfieldComponent } from './views/garfield';
 import { ModalsGarfieldComponent } from './modals/garfield';
-import { GarfieldGarfieldComponent } from './views/garfield-garfield';
 import { ModalsFileUploadComponent } from './modals/file-upload';
 import { ModalsPictureUploadComponent } from './modals/picture-upload';
 import { ModalsAdminCreateHardwareComponent } from './modals/admin-create-hardware';
 import { ModalsCreateHardwareTypeBatchComponent } from './modals/type-of-board-batch-create';
 import { ModalsTariffComponent } from './modals/tariff';
-import { AdminFinancialComponent } from './views/admin-financial';
-import { AdminFinancialTariffComponent } from './views/admin-financial-tariff';
 import { ModalsExtensionComponent } from './modals/extension';
 import { FormTextAreaComponent } from './components/FormTextAreaComponent';
-import { FormJsonNiceTextAreaComponent } from './components/FormJsonNiceTextAreaComponent';
 import { ModalsBillingInformationComponent } from './modals/billing-information';
 import { ModalsCompanyInformationComponent } from './modals/company-information';
 import { ModalsPublicShareRequestComponent } from './modals/public-share-request';
@@ -123,19 +107,13 @@ import { ReaderQrComponent } from './views/qr-reader';
 import { MobileAddHardwareComponent } from './views/mobile-add-hardware';
 import { ModalsWidgetsWidgetCopyComponent } from './modals/widgets-widget-copy';
 import { ModalsBlockoBlockCopyComponent } from './modals/blocko-block-copy';
-import { SupportComponent } from './views/support';
 import { BeckiImageLinks } from './helpers/BeckiImageLinks';
 import { MyDatePickerModule } from 'mydatepicker';
-import { BugsComponent } from './views/admin-bugs';
-import { BugsBugComponent } from './views/admin-bugs-bug';
-import { TimePickerComponent } from './components/TimePickerComponent';
-import { DatePickerComponent } from './components/DatePickerComponent';
 import { ModalsHardwareGroupPropertiesComponent } from './modals/hardware-group-properties';
 import { ModalsHardwareGroupDeviceSettingsComponent } from './modals/hardware-group-device-settings';
 import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoListSelectComponent';
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
-import { TyrionComponent } from './views/admin-tyrion';
 import { LogLevelComponent, PublicStateComponent } from './components/OnlineStateComponent';
 import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
@@ -161,15 +139,11 @@ import { ModalsGridProjectSelectComponent } from './modals/grid-project-select';
 import { ModalsBlockSelectComponent } from './modals/block-select';
 import { ArticleComponent } from './components/ArticleComponent';
 import { ModalsArticleComponent } from './modals/article';
-// Common dependencies
-import { SharedModule } from '../shared';
 import { ModalsAddGSMComponent } from './modals/add-gsm';
 import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
 import { ModalsVersionSelectComponent } from './modals/version-select';
-import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
-import {ProjectsProjectBlocksBlockComponent} from "./views/projects-project-blocks-block";
-import {ProjectsProjectWidgetsComponent} from "./views/projects-project-widgets";
-import {ProjectsProjectWidgetsWidgetComponent} from "./views/projects-project-widgets-widget";
+// Common dependencies
+import { SharedModule } from '../shared';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -206,11 +180,11 @@ let routes: Routes = [
     // PROJECT PAGE
     { path: 'projects', data: { breadName: 'Projects' }, loadChildren: './views/projects-module#ProjectsModule' },
 
-    { path: 'producers', data: { breadName: 'Producers' }, component: ProducersComponent, canActivate: [AuthGuard] },
-    { path: 'producers/:producer', data: { breadName: ':producer' }, component: ProducersProducerComponent, canActivate: [AuthGuard] },
+    // PRODUCERS
+    { path: 'producers', data: { breadName: 'Producers' }, loadChildren: './views/producers-module#ProducersModule' },
 
-    { path: 'support', data: { breadName: 'Producers' }, component: SupportComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
-    { path: 'support/:ticket', data: { breadName: ':ticket' }, component: ProducersProducerComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
+    // SUPPORT
+    { path: 'support', data: { breadName: 'Producers' }, loadChildren: './views/support-module#SupportModule' }, // TODO - Rozpracováno koncept [TZ]
 
     // ADMIN PAGE
     { path: 'admin', data: { breadName: 'Admin Site' }, loadChildren: './views/admin-module#AdminModule' },
@@ -335,7 +309,6 @@ class BeckiErrorHandler implements ErrorHandler {
 
 }
 
-
 @NgModule({
     imports: [
         SharedModule,
@@ -375,7 +348,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ImageCropperComponent,
         // Pipes
         Md2HtmlPipe,
-        // Nl2BrPipe,
         HtmlSanitizeBypassPipe,
         IconFileComponent,
         // Components
@@ -383,7 +355,6 @@ class BeckiErrorHandler implements ErrorHandler {
         BeckiBooleanButtonComponent,
         IconComponent,
         FormTextAreaComponent,
-        // FormJsonNiceTextAreaComponent,
         TableListComponent,
         ProgramVersionSelectorComponent,
         BeckiClickOutsideDirective,
@@ -393,8 +364,6 @@ class BeckiErrorHandler implements ErrorHandler {
         NotificationsListComponent,
         InstanceHistoryTimeLineComponent,
         QRCodeComponent,
-        // DatePickerComponent,
-        // TimePickerComponent,
         FormSwitchTwoListSelectComponent,
         TimeZoneSelectorComponent,
         TagComponent,
@@ -402,39 +371,19 @@ class BeckiErrorHandler implements ErrorHandler {
         LogLevelComponent,
         FilterTableComponent,
         PublicStateComponent,
-        // Views components
-        // AdminDashboardComponent,
         Error404Component,
         LoginComponent,
         LogoutComponent,
-        // AdminHardwareComponent,
-        // AdminFinancialComponent,
-        // AdminFinancialTariffComponent,
-        // BugsComponent,
-        // BugsBugComponent,
         DashboardComponent,
-        // CommunityCProgramComponent,
         NotificationsComponent,
         ProfileComponent,
         ForgotPasswordComponent,
         PasswordRestartComponent,
         CreateUserComponent,
         RedirectOkComponent,
-        // GarfieldComponent,
-        // GarfieldGarfieldComponent,
-        // RoleGroupComponent,
-        // RoleGroupGroupComponent,
-        // HardwareComponent,
-        // HardwareHardwareTypeComponent,
-        // ServerComponent,
-        // TyrionComponent,
-        ProducersComponent,
-        ProducersProducerComponent,
         ArticleComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
-        SupportComponent,
-        // Modals components
         ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
         ModalsBillingInformationComponent,

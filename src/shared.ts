@@ -46,6 +46,7 @@ import {TimePickerComponent} from "./app/components/TimePickerComponent";
 import {DatePickerComponent} from "./app/components/datePickerComponent";
 import {Nl2BrPipe} from "./app/pipes/Nl2BrPipe";
 import {FormJsonNiceTextAreaComponent} from "./app/components/FormJsonNiceTextAreaComponent";
+import { ProducersProducerComponent } from './app/views/producers-producer';
 
 
 @NgModule({
@@ -100,7 +101,8 @@ import {FormJsonNiceTextAreaComponent} from "./app/components/FormJsonNiceTextAr
         DatePickerComponent,
         TimePickerComponent,
         Nl2BrPipe,
-        FormJsonNiceTextAreaComponent
+        FormJsonNiceTextAreaComponent,
+        ProducersProducerComponent
 
     ],
     exports:      [
@@ -149,7 +151,8 @@ import {FormJsonNiceTextAreaComponent} from "./app/components/FormJsonNiceTextAr
         DatePickerComponent,
         TimePickerComponent,
         Nl2BrPipe,
-        FormJsonNiceTextAreaComponent
+        FormJsonNiceTextAreaComponent,
+        ProducersProducerComponent
 
 
     ],
