@@ -8,6 +8,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CompressionPlugin = require("compression-webpack-plugin");
+
 
 /**
  * Env
@@ -32,7 +35,7 @@ module.exports = function makeWebpackConfig() {
      * Type of sourcemap to use per build type
      */
     if (isProd) {
-        config.devtool = 'cheap-source-map';
+        config.devtool = 'cheap-module-source-map';
     }
     /**
      * Entry
@@ -158,6 +161,8 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
+        new CompressionPlugin(),
+
         new HardSourceWebpackPlugin(),
         // Define env variables to help with builds
         // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
@@ -193,6 +198,7 @@ module.exports = function makeWebpackConfig() {
     // Add build(production mode) specific plugins.
     if (isProd) {
         config.plugins.push(
+
             new CopyWebpackPlugin([{
                 from: root('src','public')
             }]),

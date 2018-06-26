@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { LayoutMainComponent } from './app/layouts/main';
 import { TranslatePipe } from './app/pipes/TranslationPipe';
 import { PortletTitleComponent } from './app/components/PortletTitleComponent';
@@ -42,12 +41,11 @@ import { ProjectsProjectBlocksComponent } from './app/views/projects-project-blo
 import { ProjectsProjectWidgetsWidgetComponent } from './app/views/projects-project-widgets-widget';
 import { ProjectsProjectWidgetsComponent } from './app/views/projects-project-widgets';
 import { ProjectsProjectHardwareHardwareComponent } from './app/views/projects-project-hardware-hardware';
-import {TimePickerComponent} from "./app/components/TimePickerComponent";
-import {DatePickerComponent} from "./app/components/datePickerComponent";
-import {Nl2BrPipe} from "./app/pipes/Nl2BrPipe";
-import {FormJsonNiceTextAreaComponent} from "./app/components/FormJsonNiceTextAreaComponent";
+import { TimePickerComponent } from './app/components/TimePickerComponent';
+import { DatePickerComponent } from './app/components/datePickerComponent';
+import { Nl2BrPipe } from './app/pipes/Nl2BrPipe';
+import { FormJsonNiceTextAreaComponent } from './app/components/FormJsonNiceTextAreaComponent';
 import { ProducersProducerComponent } from './app/views/producers-producer';
-
 
 @NgModule({
     imports: [
@@ -103,7 +101,6 @@ import { ProducersProducerComponent } from './app/views/producers-producer';
         Nl2BrPipe,
         FormJsonNiceTextAreaComponent,
         ProducersProducerComponent
-
     ],
     exports:      [
         AppComponent,
@@ -153,8 +150,6 @@ import { ProducersProducerComponent } from './app/views/producers-producer';
         Nl2BrPipe,
         FormJsonNiceTextAreaComponent,
         ProducersProducerComponent
-
-
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

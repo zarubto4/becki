@@ -6,7 +6,7 @@
 // Imports
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule, JsonpModule } from '@angular/http';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app';
 import { LabeledLink } from './helpers/LabeledLink';
@@ -313,7 +313,7 @@ class BeckiErrorHandler implements ErrorHandler {
     imports: [
         SharedModule,
         BrowserModule,
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
         HttpModule,
         JsonpModule,
         MyDatePickerModule
