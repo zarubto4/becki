@@ -15,6 +15,7 @@ import { IBlock, IBlockVersion } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { BlockRenderer } from 'blocko/dist/editor/block/BlockRenderer';
 
 
 @Component({
@@ -153,8 +154,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 this.onChange.emit({});
             });
 
-            this.blocko.showBlockNames = this.showBlockNames;
-
             if (this.disableExecution) {
                 this.blocko.core.configuration.asyncEventsEnabled = false;
                 this.blocko.core.configuration.inputEnabled = false;
@@ -250,12 +249,30 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     getTSBlock(version: IBlockVersion, block?: IBlock) {
         let b: BlockoBasicBlocks.TSBlock = null;
         this.zone.runOutsideAngular(() => {
-            const json = JSON.parse(version.design_json);
 
-            json['version_id'] = version.id;
-            json['block_id'] = block.id;
+            let data: object;
+            try {
+                data = JSON.parse(version.logic_json);
+            } catch (error) {
+                if (version.design_json !== '') {
+                    try {
+                        let design = JSON.parse(version.design_json);
+                        data = {
+                            code: version.logic_json,
+                            name: design.displayName,
+                            description: design.description,
+                            block_id: design.block_id ? design.block_id : block.id
+                        };
+                    } catch (err) {
+                        console.error(err);
+                    }
+                }
+            }
 
-            b = new BlockoBasicBlocks.TSBlock(null, version.logic_json);
+            data['version_id'] = version.id;
+
+            b = new Blocks.TSBlock(null);
+            b.setDataJson(data);
         });
         this.onChange.emit({});
         return b;
@@ -282,13 +299,14 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
     }
 
-    setSingleBlock(logic: string, design: string): BlockoBasicBlocks.TSBlock {
-        let tsBlock: BlockoBasicBlocks.TSBlock;
+    setSingleBlock(data: object): BlockRenderer {
+        let renderer: BlockRenderer;
         this.zone.runOutsideAngular(() => {
-            tsBlock = new BlockoBasicBlocks.TSBlock(null, logic);
-            this.blocko.setBlockView(tsBlock);
+            let ts: Blocks.TSBlock = new Blocks.TSBlock(null);
+            ts.setDataJson(data);
+            renderer = this.blocko.setBlockView(ts);
         });
-        return tsBlock;
+        return renderer;
     }
 
     setSingleInterface(iface: Blocks.BlockoTargetInterface) {

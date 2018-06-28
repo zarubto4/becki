@@ -13,7 +13,6 @@ import {
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { Blocks, Core } from 'blocko';
 import { FormGroup, Validators } from '@angular/forms';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import { Types, Libs } from 'common-lib';
 import { TypescriptBuildError } from 'script-engine';
@@ -26,6 +25,9 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
 import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
+import { BlockRenderer } from 'blocko/dist/editor/block/BlockRenderer';
+import { IconData } from 'blocko/dist/editor/IconRenderer';
+import { ModalsFileUploadModel } from '../modals/file-upload';
 
 @Component({
     selector: 'bk-view-projects-project-blocks-block',
@@ -41,12 +43,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    // project: IProject = null;
-
     block: IBlock = null;
 
     blockoBlockVersions: IBlockVersion[] = [];
-    selectedBlockoBlockVersion: IBlockVersion = null;
+    selectedBlockVersion: IBlockVersion = null;
     unsavedChanges: boolean = false;
 
     connectorTypes = Types.ConnectorType;
@@ -54,6 +54,8 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
     blockForm: FormGroup = null;
     blockCode: string = '';
+    blockIcon: IconData;
+    svgIcon: boolean = false;
 
     tsErrors: { name: string, message: string, line?: number }[] = [];
     tab: string = 'ide';
@@ -61,6 +63,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     // Properties for test view:
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
+    renderer: BlockRenderer;
     tsBlock: Blocks.TSBlock;
     tsBlockHeight: number = 0;
     testInputConnectors: Array<Core.Connector<boolean|number|Core.Message|Object>>;
@@ -83,8 +86,8 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
         this.exitConfirmationService = injector.get(ExitConfirmationService);
 
         this.blockForm = this.formBuilder.group({
-            'color': ['#3baedb', [Validators.required]],
-            'icon': ['fa-question', [Validators.required]],
+            'name': ['Change me!', [Validators.required]],
+            'icon': [''],
             'description': ['']
         });
 
@@ -196,7 +199,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 }
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_block'), reason));
+                this.fmError(this.translate('flash_cant_load_block'), reason);
                 this.unblockUI();
             });
 
@@ -212,10 +215,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                     name: model.name,
                     description: model.description
                 }).then(() => {
-                    this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_edit')));
+                    this.fmSuccess(this.translate('flash_blocko_edit'));
                     this.refresh();
                 }).catch(reason => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block'), reason));
+                    this.fmError(this.translate('flash_cant_edit_block'), reason);
                     this.refresh();
                 });
             }
@@ -230,11 +233,11 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.blockUI();
                 this.tyrionBackendService.blockDelete(this.block.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
+                        this.fmSuccess(this.translate('flash_block_remove'));
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block'), reason));
+                        this.fmError(this.translate('flash_cant_remove_block'), reason);
                         this.refresh();
                     });
             }
@@ -248,11 +251,11 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.blockUI();
                 this.tyrionBackendService.blockVersionDelete(version.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
+                        this.fmSuccess(this.translate('flash_version_remove'));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version'), reason));
+                        this.fmError(this.translate('flash_cant_remove_version'), reason);
                         this.refresh();
                     });
             }
@@ -268,10 +271,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                     name: model.name,
                     description: model.description
                 }).then(() => {
-                    this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_change', model.name)));
+                    this.fmSuccess(this.translate('flash_version_change', model.name));
                     this.refresh();
                 }).catch(reason => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_version', model.name, reason)));
+                    this.fmError(this.translate('flash_cant_change_version', model.name, reason));
                     this.refresh();
                 });
             }
@@ -285,33 +288,58 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     selectBlockVersion(version: IBlockVersion) {
         this.blockUI();
         this.tyrionBackendService.blockVersionGet(version.id)
-            .then((blockoBlockVersion) => {
+            .then((blockVersion) => {
 
-                // console.log(blockoBlockVersion);
+                // console.log(blockVersion);
                 this.cleanTestView();
 
-                this.selectedBlockoBlockVersion = blockoBlockVersion;
+                this.selectedBlockVersion = blockVersion;
 
-                this.blockCode = this.selectedBlockoBlockVersion.logic_json;
+                let data: object;
+                try {
+                    data = JSON.parse(this.selectedBlockVersion.logic_json);
+                    if (data['code']) {
+                        this.blockCode = data['code'];
+                    }
+                } catch (error) {
+                    if (this.selectedBlockVersion.design_json !== '') {
+                        try {
+                            data = JSON.parse(this.selectedBlockVersion.design_json);
 
-                let designJson = JSON.parse(this.selectedBlockoBlockVersion.design_json);
-
-                if (designJson.backgroundColor) {
-                    this.blockForm.controls['color'].setValue(designJson.backgroundColor);
+                            this.blockCode = this.selectedBlockVersion.logic_json;
+                        } catch (err) {
+                            this.fmError(this.translate('flash_cant_load_block_version'));
+                        }
+                    }
                 }
-                if (designJson.displayName) {
-                    this.blockForm.controls['icon'].setValue(designJson.displayName);
+
+                if (data['name']) {
+                    this.blockForm.controls['name'].setValue(data['name']);
                 }
-                if (designJson.description) {
-                    this.blockForm.controls['description'].setValue(designJson.description);
+
+                if (data['description']) {
+                    this.blockForm.controls['description'].setValue(data['description']);
+                }
+
+                if (data['data'] && data['data']['editor']) {
+                    let editor = data['data']['editor'];
+                    if (editor.icon) {
+                        this.blockIcon = editor.icon;
+                        this.svgIcon = this.blockIcon.type === 'json';
+                        if (this.blockIcon.type === 'fa') {
+                            this.blockForm.controls['icon'].setValue(this.blockIcon.data);
+                        }
+                    }
                 }
 
                 this.unblockUI();
+
+                this.onTestClick();
             })
             .catch(reason => {
-                this.selectedBlockoBlockVersion = null;
+                this.selectedBlockVersion = null;
                 // console.log(this.blockCode);
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_block_version'), reason));
+                this.fmError(this.translate('flash_cant_load_block_version'), reason);
                 this.unblockUI();
             });
     }
@@ -335,6 +363,19 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
             return '[' + value.values.map((val: any) => this.toReadableValue(val)).join(', ') + ']';
         }
         return JSON.stringify(value);
+    }
+
+    onSvgUploadClick() {
+        let m: ModalsFileUploadModel = new ModalsFileUploadModel('SVG file', '', ['.svg'], true);
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success) {
+                    this.blockIcon = {
+                        type: 'svg',
+                        data: m.file
+                    };
+                }
+            });
     }
 
     onDigitalInputClick(connector: Core.Connector<boolean|number|Core.Message|Object>): void {
@@ -394,6 +435,8 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     cleanTestView(): void {
         this.blockoView.removeAllBlocksWithoutReadonlyCheck();
         this.tsBlock = null;
+        this.renderer = null;
+        this.blockIcon = null;
         this.successfullyTested = false;
         if (this.consoleLog) {
             this.consoleLog.clear();
@@ -440,7 +483,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     }
 
     onTestClick(): void {
-        this.cleanTestView();
+
         this.tsErrors = [];
 
         if (!this.blockCode) {
@@ -448,17 +491,16 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
             return;
         }
 
-        if (this.tsErrors.length === 0) {
-
-            this.zone.runOutsideAngular(() => {
-
+        this.zone.runOutsideAngular(() => {
+            if (!this.tsBlock && !this.renderer) {
                 try {
-                    let designJson = JSON.stringify({
-                        backgroundColor: this.blockForm.controls['color'].value,
-                        displayName: this.blockForm.controls['icon'].value,
+                    let data = {
+                        name: this.blockForm.controls['name'].value,
+                        // icon: this.blockForm.controls['icon'].value, TODO fa or svg
                         description: this.blockForm.controls['description'].value
-                    });
-                    this.tsBlock = this.blockoView.setSingleBlock('', designJson);
+                    };
+                    this.renderer = this.blockoView.setSingleBlock(data);
+                    this.tsBlock = <Blocks.TSBlock>this.renderer.block;
                 } catch (e) {
                     console.error(e);
                 }
@@ -475,57 +517,73 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                         }
                     });
                 });
-
-                this.tsBlock.setCode(this.blockCode);
-                this.blockoView.centerView();
-
-            });
-
-            // build errors can clean test view ... must check if still exist
-            if (this.tsBlock) {
-                this.testInputConnectors = this.tsBlock.getInputConnectors();
-
-                // this.tsBlockHeight = this.tsBlock.rendererGetBlockSize().height + 10; // for borders
-                this.successfullyTested = true;
             }
 
-        }
+            this.tsBlock.setCode(this.blockCode);
+            this.tsBlock.name = this.blockForm.controls['name'].value;
+            this.tsBlock.description = this.blockForm.controls['description'].value;
 
+            this.renderer.refreshName();
+
+            if (!this.svgIcon && this.blockForm.controls['icon'].value !== '') {
+                this.blockIcon = {
+                    type: 'fa',
+                    data: this.blockForm.controls['icon'].value
+                };
+            }
+
+            if (this.blockIcon) {
+                this.renderer.setIcon(this.blockIcon);
+            }
+            this.blockoView.centerView();
+        });
+
+        if (this.tsBlock) {
+            this.testInputConnectors = this.tsBlock.getInputConnectors();
+
+            // this.tsBlockHeight = this.tsBlock.rendererGetBlockSize().height + 10; // for borders
+            this.successfullyTested = true;
+        }
     }
 
     onSaveClick(): void {
-        if (!this.successfullyTested) {
-            return;
+        if (this.successfullyTested && this.renderer) {
+            let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
+            this.modalService.showModal(m).then((success) => {
+                if (success) {
+
+                    let data: object = {
+                        name: this.blockForm.controls['name'].value,
+                        description: this.blockForm.controls['description'].value,
+                        code: this.blockCode,
+                        block_id: this.block.id,
+                        data: {}
+                    };
+
+                    if (this.renderer.icon) {
+                        data['data']['editor'] = {
+                            icon: this.renderer.icon.getData()
+                        };
+                    }
+
+                    this.blockUI();
+                    this.tyrionBackendService.blockVersionCreate(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
+                        name: m.name,
+                        description: m.description,
+                        logic_json: JSON.stringify(data),
+                        design_json: 'empty' // TODO remove in future
+                    }).then(() => {
+                        this.fmSuccess(this.translate('flash_version_save', m.name));
+                        this.refresh(); // also unblockUI
+                        this.unsavedChanges = false;
+                        this.exitConfirmationService.setConfirmationEnabled(false);
+                    }).catch((err) => {
+                        this.fmError(this.translate('flash_cant_save_version', m.name, err));
+                        this.unblockUI();
+                    });
+                }
+            });
         }
-
-        let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-        this.modalService.showModal(m).then((success) => {
-            if (success) {
-
-                let designJson = JSON.stringify({
-                    backgroundColor: this.blockForm.controls['color'].value,
-                    displayName: this.blockForm.controls['icon'].value,
-                    description: this.blockForm.controls['description'].value
-                });
-
-                this.blockUI();
-                this.tyrionBackendService.blockVersionCreate(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
-                    name: m.name,
-                    description: m.description,
-                    logic_json: this.blockCode,
-                    design_json: designJson
-                }).then(() => {
-                    this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save', m.name)));
-                    this.refresh(); // also unblockUI
-                    this.unsavedChanges = false;
-                    this.exitConfirmationService.setConfirmationEnabled(false);
-                }).catch((err) => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name, err)));
-                    this.unblockUI();
-                });
-            }
-        });
-
     }
 
     onCommunityPublicVersionClick(programVersion: IBlockVersion) {
@@ -534,11 +592,11 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.blockUI();
                 this.tyrionBackendService.blockVersionPublish(programVersion.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
+                        this.fmSuccess(this.translate('flash_code_was_publisher'));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
+                        this.fmError(this.translate('flash_code_publish_error'), reason);
                         this.refresh();
                     });
             }
@@ -570,10 +628,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                     program_description: model.program_description,
                     program_name: model.program_name
                 }).then(() => {
-                    this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                    this.fmSuccess(this.translate('flash_code_update'));
                     this.navigate(['/admin/blocks']);
                 }).catch(reason => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                    this.fmError(this.translate('flash_cant_update_code'), reason);
                     this.refresh();
                 });
             }
@@ -591,10 +649,10 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                     name: model.name,
                     description: model.description
                 }).then(() => {
-                    this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                    this.fmSuccess(this.translate('flash_code_update'));
                     this.unblockUI();
                 }).catch(reason => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                    this.fmError(this.translate('flash_cant_update_code'), reason);
                     this.unblockUI();
                 });
             }
@@ -608,27 +666,22 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+                this.fmError(this.translate('flash_extension_deactived_error'), reason);
                 this.refresh();
             });
     }
 
-    onDrobDownEmiter(action: string, version: IBlockVersion): void {
+    onDropDownEmitter(action: string, version: IBlockVersion): void {
 
         if (action === 'version_publish_community') {
             this.onCommunityPublicVersionClick(version);
-        }
-
-        if (action === 'version_publish_admin') {
+        } else if (action === 'version_publish_admin') {
             this.onProgramVersionPublishResult(version);
-        }
-        if (action === 'version_set_as_main') {
+        } else if (action === 'version_set_as_main') {
             this.onBlockSetMainClick(version);
-        }
-        if (action === 'version_properties') {
+        } else if (action === 'version_properties') {
             this.onEditVersionClick(version);
-        }
-        if (action === 'remove_version') {
+        } else if (action === 'remove_version') {
             this.onRemoveVersionClick(version);
         }
     }

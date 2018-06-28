@@ -555,9 +555,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         this.tyrionBackendService.bProgramVersionGet(programVersion.id)
             .then((programVersionFull) => {
 
-                this.unsavedChanges = false;
-                this.exitConfirmationService.setConfirmationEnabled(false);
-
                 this.selectedProgramVersion = programVersionFull;
                 this.selectedGrid = {};
 
@@ -578,6 +575,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 if (this.consoleLog) {
                     this.consoleLog.clear();
                 }
+
+                this.unsavedChanges = false;
+                this.exitConfirmationService.setConfirmationEnabled(false);
+
                 this.unblockUI();
             })
             .catch((err) => {

@@ -13,6 +13,7 @@ export class ModalsFileUploadModel extends ModalModel {
         public fileTypeTitle: string = '',
         public fileTypeDescription: string = '',
         public acceptFileType: string[] = [],
+        public asString: boolean = false,
         public file: any = '',
     ) {
         super();
@@ -57,8 +58,12 @@ export class ModalsFileUploadComponent implements OnInit {
             myReader.addEventListener('load', () => {
                 this.data = myReader.result;
             }, false);
-            myReader.readAsDataURL(file);
 
+            if (this.modalModel.asString) {
+                myReader.readAsText(file);
+            } else {
+                myReader.readAsDataURL(file);
+            }
         }
     }
 
