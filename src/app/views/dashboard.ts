@@ -31,6 +31,8 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     projectsUpdateSubscription: Subscription;
 
+    buttonIsShown: boolean = false;
+
     constructor(injector: Injector) {
         super(injector);
     };
@@ -63,7 +65,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
         }
     }
 
-    onPortletClick(action: string, object?: any ): void {
+    onPortletClick(action: string, object?: any): void {
         if (action === 'add_article') {
             this.onCreateArticle();
         }
@@ -195,11 +197,4 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
             }
         });
     }
-
-
-
 }
-
-
-
-

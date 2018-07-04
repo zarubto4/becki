@@ -8,8 +8,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const CompressionPlugin = require("compression-webpack-plugin");
+const CompressionPlugin = require('compression-webpack-plugin');
+const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
+
 
 
 /**
@@ -56,6 +57,23 @@ module.exports = function makeWebpackConfig() {
         publicPath: '/',
         filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
+    };
+
+    config.optimization = {
+        minimize: true,
+        minimizer: [
+            new UglifyWebpackPlugin({
+                cache: true,
+                parallel: true,
+                uglifyOptions: {
+                    compress: true,
+                    ecma: 6,
+                    mangle: true
+                },
+                sourceMap: true
+            })
+        ],
+        noEmitOnErrors: true
     };
 
     /**
@@ -160,8 +178,6 @@ module.exports = function makeWebpackConfig() {
      * List: http://webpack.github.io/docs/list-of-plugins.html
      */
     config.plugins = [
-
-        new CompressionPlugin(),
 
         new HardSourceWebpackPlugin(),
         // Define env variables to help with builds
