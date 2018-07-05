@@ -44,10 +44,6 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
 
     ngOnInit() {
         this.code = this.modalModel.block.code;
-        let data = JSON.parse(this.modalModel.block.designJson);
-        this.blockForm.controls['color'].setValue(data['backgroundColor']);
-        this.blockForm.controls['icon'].setValue(data['displayName']);
-        this.blockForm.controls['description'].setValue(data['description']);
     }
 
     newCode(code: string) {
@@ -56,13 +52,6 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
 
     onSubmitClick(): void {
         this.zone.runOutsideAngular(() => {
-            let designJson = JSON.stringify({
-                backgroundColor: this.blockForm.controls['color'].value,
-                displayName: this.blockForm.controls['icon'].value,
-                description: this.blockForm.controls['description'].value,
-                blockVersion: null
-            });
-            this.modalModel.block.setDesignJson(designJson);
             this.modalModel.block.setCode(this.code);
             /*if (this.modalModel.block.controller) {
                 this.modalModel.block.controller._emitDataChanged();

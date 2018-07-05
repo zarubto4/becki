@@ -1,8 +1,6 @@
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
-    /* <!-- <br><br><b>TODO: DELETE ME! -></b> {{'hello_world'|bkTranslate:this:'Becki':55}} -->*/
-    // TODO: delete me! -> alert(this.translate('hello_world', 'Pepa', 66))
 
     public static translate: { [lang: string]: { [keyOrEnv: string]: (string | { [key: string]: string }) } } = {
         'en': {
@@ -2104,6 +2102,7 @@ export class StaticTranslation {
                 'label_group_remove': 'Remove BLOCKO block',
                 'label_code': 'IDE',
                 'label_version': 'Version',
+                'label_block_name': 'Display name',
                 'label_block_color': 'Colour',
                 'label_block_icon': 'Icon',
                 'label_block_description': 'Description',
@@ -2122,6 +2121,9 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
                 'label_block_code_change': 'Block code has been changed, you must test the program first, then save it.',
+                'label_icon_svg': 'SVG icon',
+
+                'btn_upload_svg': 'Upload SVG file',
 
                 'table_name': 'Name',
                 'table_version_name': 'Name',
