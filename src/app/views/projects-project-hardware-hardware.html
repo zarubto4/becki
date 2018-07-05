@@ -248,7 +248,7 @@
 
                                 </div>
 
-                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE'">
+                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE' && hardware.bootloader_core_configuration.netsource ===  'ETHERNET'">
                                     <hr style="margin-right: 5%; margin-left: 5%">
 
                                     <div class="font-blue-dark">
@@ -258,13 +258,31 @@
                                     <div class="font-blue-dark margin-left-15 margin-top-10">
                                         <span class="font-grey-mint">Link: </span>
                                         <span *ngIf="!hardware.ip_address" class="bold">
-                                                      <i class="fa fa-spinner fa-spin"></i>
-                                                </span>
+                                              <i class="fa fa-spinner fa-spin"></i>
+                                        </span>
                                         <span *ngIf="hardware.ip_address">
-                                                      <a target="_blank" href="http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}" class="bold">http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}</a>
-                                                </span>
+                                             <a target="_blank" href="http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}" class="bold">http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}</a>
+                                        </span>
                                         <br>
                                         <span>(working only on same local network)</span>
+                                    </div>
+                                </div>
+
+                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE' && hardware.bootloader_core_configuration.netsource.toLowerCase() ===  '6lowpan'">
+                                    <hr style="margin-right: 5%; margin-left: 5%">
+
+                                    <div class="font-blue-dark">
+                                        <i class="fa fa-lg fa-link"></i>
+                                        <span class="margin-left-10" [innerHTML]="'label_ipv6_address'|bkTranslate:this"></span>
+                                    </div>
+                                    <div class="font-blue-dark margin-left-15 margin-top-10">
+                                        <span *ngIf="!hardware.ip_address" class="bold">
+                                            <i class="fa fa-spinner fa-spin"></i>
+                                        </span>
+                                        <span *ngIf="hardware.ip_address" class="bold">
+                                            {{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}
+                                         </span>
+                                        <br>
                                     </div>
                                 </div>
 
@@ -320,22 +338,28 @@
                 <div *ngIf="hardware && hardwareType" class="row margin-top-40">
                     <div class="col-md-6">
                         <div class="portlet portlet light bordered">
+
                             <bk-portlet-title
                                 [title_name]="'label_byzance_code'|bkTranslate:this"
                                 [icon]="'fa-code'"
                                 (onClick)="onPortletClick($event)"
                                 [btns]="[
-                                      {
-                                          condition: (hardware.online_state == 'ONLINE'),
-                                          btn_label_for_person: ('label_manual_individual_update'|bkTranslate:this),
-                                          icon: 'fa-code',
-                                          colorType: 'UPDATE',
-                                          btn_tag: 'hardware_manual_update',
-                                          permission: (hardware.update_permission && hardware.online_state == 'ONLINE')
-
-                                      }
-                                      ]">
+                                          {
+                                              condition: (hardware.online_state == 'ONLINE'),
+                                              btn_label_for_person: ('label_manual_individual_update'|bkTranslate:this),
+                                              icon: 'fa-code',
+                                              colorType: 'UPDATE',
+                                              btn_tag: 'hardware_manual_update',
+                                              permission: (hardware.update_permission && hardware.online_state == 'ONLINE' && hardware.database_synchronize)
+                                          }
+                                    ]">
                             </bk-portlet-title>
+
+                            <span class="icon-hint-wraper red pull-right">
+                                <span class="hint pull-right" [innerHTML]="'label_alerts'|bkTranslate:this"></span>
+                            </span>
+
+
                             <div class="portlet-body">
                                 <div>
                                     <div>

@@ -157,7 +157,7 @@
                                     [btns_group_name]="('label_version_properties'|bkTranslate:this)"
                                     [btns]="[
                                     {
-                                        condition: version.download_link_bin_file,
+                                        condition: (version.download_link_bin_file != null && version.status === 'SUCCESS'),
                                         btn_label_for_person: ('label_download_file'|bkTranslate:this),
                                         btn_tag: 'download_file',
                                         icon: 'fa-cloud-download',

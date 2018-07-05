@@ -11,8 +11,10 @@
                         [title_name]="'title_your_project'|bkTranslate:this"
                         [icon]="'fa-briefcase'">
                     </bk-portlet-title>
-                    <div class="portlet-body">
-                        <div *ngIf="projects && projects.length" class="table-scrollable table-scrollable-borderless">
+
+                    <!-- There is some projects -->
+                    <div *ngIf="projects && projects.length" class="portlet-body" id="list_of_projects">
+                        <div class="table-scrollable table-scrollable-borderless" >
                             <table class="table table-hover table-light byzance-table">
                                 <thead>
                                 <tr>
@@ -37,6 +39,60 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- No projects but there is a tariff -->
+                    <div *ngIf="projects && !projects.length && products && products.length" class="portlet-body" id="first_message_create_project">
+
+                        <div class="table-scrollable table-scrollable-borderless" >
+                            <div>
+                                <div style="text-align: center;">
+                                    <img style="width: 80%; height: auto;" src="https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5b339ed366fa843bd9f29916_ProjectPictureRedefined.svg">
+                                </div>
+                                <div class="list-no-items">
+                                    <p class="list-no-items__main-label">
+                                        <span [innerHTML]="'label_no_projects'|bkTranslate:this"></span>
+                                    </p>
+                                    <p class="list-no-items__sub-label">
+                                        <span [innerHTML]="'label_no_projects_comment'|bkTranslate:this"></span>
+                                    </p>
+                                    <br>
+                                    <p>
+                                        <button class="btn blue" (click)="onAddProjectClick()" id="first_button_create_project" >
+                                            <i class="fa fa-dollar"></i> {{'btn_create_project'|bkTranslate:this}}
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- No projects and no Tariff -->
+                    <div *ngIf="projects && !projects.length && products && !products.length" class="portlet-body" id="first_message_product_need">
+
+                        <div  class="table-scrollable table-scrollable-borderless" >
+                            <div>
+                                <div style="text-align: center;">
+                                    TODO - obrázek se změní <br>
+                                    <img style="width: 80%; height: auto;" src="https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59e539077e037500010492d5_data%20flow%203.svg">
+                                </div>
+                                <div class="list-no-items">
+                                    <p class="list-no-items__main-label">
+                                        <span [innerHTML]="'label_create_tenant'|bkTranslate:this">></span>
+                                    </p>
+                                    <p class="list-no-items__sub-label">
+                                        <span [innerHTML]="'label_create_tenant_comment'|bkTranslate:this"></span>
+                                    </p>
+                                    <br>
+                                    <p>
+                                        <button class="btn blue" (click)="onAddProductClick()">
+                                            <i class="fa fa-dollar"></i> {{'btn_create_tenant'|bkTranslate:this}}
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

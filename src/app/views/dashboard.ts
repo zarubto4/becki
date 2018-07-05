@@ -5,11 +5,12 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IArticle, IArticleList, IProject } from '../backend/TyrionAPI';
+import {IApplicableProduct, IArticle, IArticleList, IProduct, IProject, ITariff} from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs/Rx';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsArticleModel } from '../modals/article';
 import { ModalsRemovalModel } from '../modals/removal';
+import {ModalsProjectPropertiesModel} from "../modals/project-properties";
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -19,6 +20,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     tab: string = 'general';
     projects: IProject[] = null;
+    products: IApplicableProduct[] = null;
     articles: {
         general?: IArticleList,
         hardware?: IArticleList,
@@ -85,6 +87,44 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
         this.tyrionBackendService.projectGetByLoggedPerson()
             .then((projects: IProject[]) => {
                 this.projects = projects;
+
+                if (projects.length === 0) {
+                    this.tariffRefresh();
+                }
+            });
+    }
+
+    // Only for first project!
+    onAddProjectClick(): void {
+
+        if (!this.products) {
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
+        }
+
+        let model = new ModalsProjectPropertiesModel(this.products);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.projectCreate({
+                    name: model.name,
+                    description: model.description,
+                    product_id: model.product
+                }) // TODO: add tarrif nebo produkt či jak se to bude jmenovat
+                    .then((project: IProject) => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.name)));
+                        this.onProjectClick(project.id);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.name, reason.message)));
+                    });
+            }
+        });
+    }
+
+    tariffRefresh(): void {
+        this.tyrionBackendService.productsGetUserCanUsed()
+            .then((products: IApplicableProduct[]) => {
+                this.products = products;
             });
     }
 

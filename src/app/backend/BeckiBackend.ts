@@ -294,6 +294,47 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                     this.personInfoSnapshot = lr.person;
                     this.personInfo.next(this.personInfoSnapshot);
 
+
+                    // https://app.inlinemanual.com/ - its used for Guidelines - also very important is User tracking data sets in backend - like user id..etc  - You can find this comment on another places
+                    window['inlineManualTracking'] = {
+                        uid: lr.person.id, // Only this field is mandatory
+                        email: lr.person.email,
+                        username: lr.person.nick_name,
+                        name: lr.person.first_name + ' ' + lr.person.last_name,
+                        first_name: lr.person.first_name,
+                        last_name: lr.person.last_name,
+                        created: lr.person.created,
+                        updated: lr.person.updated,
+                        roles: lr.roles.map(x => x.name),
+                        plan: 'Not Defined'
+                    };
+
+                    // line_manual_player.setOptions({hide_trigger: true});
+
+                    // Language for Inline Manual
+                    window['InlineManualOptions'] = {
+                        language: 'en'
+                    };
+
+                    // "a5e626bda2d1636e3c6b147fa55fbba0d6f193a96029bb830966c223e6f40bca"
+                    // "a5e626bda2d1636e3c6b147fa55fbba0d6f193a96029bb830966c223e6f40bca"
+                    // "a5e626bda2d1636e3c6b147fa55fbba0d6f193a96029bb830966c223e6f40bca"
+
+                    console.info('hmac: ', lr.hmac);
+
+                    window['intercomSettings'] = {
+                        app_id: 'cnrrdzsk',
+                        id: lr.person.id,
+                        user_id: lr.person.id,
+                        name: lr.person.first_name + ' ' + lr.person.last_name, // Full name
+                        email: lr.person.email, // Email address
+                        user_hash: lr.hmac,
+                        created_at: lr.person.created, // Signup Date
+                        alignment: 'left',
+                        horizontal_padding: 20,
+                        vertical_padding: 40
+                    };
+
                 })
                 .catch((error) => {
                     console.error(error);

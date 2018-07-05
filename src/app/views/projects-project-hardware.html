@@ -220,7 +220,7 @@
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_set_hardware_group'|bkTranslate:this),
-                                    btn_tag: 'edit_hardware_group',
+                                    btn_tag: 'edit_hardware_group_device',
                                     icon: 'fa-object-group',
                                     colorType: 'UPDATE',
                                     permission: (device.update_permission)
@@ -337,6 +337,14 @@
                             <bk-drob-down-button
                                 [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
+                                 {
+                                    condition: true,
+                                    btn_label_for_person: ('label_set_hardware_group'|bkTranslate:this),
+                                    btn_tag: 'edit_hardware_group_group',
+                                    icon: 'fa-object-group',
+                                    colorType: 'UPDATE',
+                                    permission: (group.update_permission)
+                                },
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_group_properties'|bkTranslate:this),

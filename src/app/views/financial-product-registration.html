@@ -1,4 +1,5 @@
 <bk-layout-main
+    [show_title]="step < 3"
     [title]="'main_title'|bkTranslate:this" xmlns="http://www.w3.org/1999/html">
 
 
@@ -149,21 +150,9 @@
         </div>
     </div>
 
-    <div *ngIf="step===4" class="row">
-        <div class="col-md-12">
-            <div class="portlet light portlet-fit bordered">
-                <div class="portlet-body">
-                    <div class="caption-desc font-grey-cascade">
-                        <span [innerHTML]="'financial_monologue'|bkTranslate:this"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div *ngIf="step > 3" class="row">
         <div class="col-md-12">
-            <div class="portlet light portlet-fit bordered">
+            <div class="portlet light portlet-fit">
                 <div class="portlet-body">
 
                     <div class="mt-element-step">
@@ -210,69 +199,72 @@
     </div>
 
     <div *ngIf="step===4">
-        <div class="portlet light portlet-fit bordered">
-            <div class="portlet-title">
-                <div class="becki-caption">
-                    <span class="font-blue-dark uppercase">
-                        <i class="fa fa-fw fa-bars"></i>
-                        {{'step_one_title'|bkTranslate:this}}
-                    </span>
-                </div>
-            </div>
-            <div class="portlet-body">
-                <div class="pricing-content-1">
-                    <div class="row">
-                        <div *ngFor="let tariff of tariffs" class="col-md-3">
-                            <div class="price-column-container border-active tariff">
-                                <div class="price-table-head bg-{{tariff.color|lowercase}}">
-                                    <h2 class="no-margin">{{tariff.name}}</h2>
-                                </div>
-                                <div class="arrow-down border-top-{{tariff.color|lowercase}}"></div>
 
-                                <div class="price-table-pricing">
-                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(tariff.price).length>=7?'40px':'50px'">{{makePrice(tariff.price)}}</h3>
-                                    <p class="font-grey-salt">{{'average_monthly_cost'|bkTranslate:this}}</p>
-                                    <div *ngIf="tariff == selectedTariff" class="price-ribbon">{{'ribbon_selected'|bkTranslate:this}}</div>
+        <div class="pricing-content-1">
+            <div class="row">
+                <div *ngFor="let tariff of tariffs" class="col-md-3">
+                    <div class="price-column-container border-active tariff">
+                        <div class="price-table-head bg-{{tariff.color|lowercase}}">
+                            <h2 class="no-margin">{{tariff.name}}</h2>
+                        </div>
+                        <div class="arrow-down border-top-{{tariff.color|lowercase}}"></div>
+
+                        <div class="price-table-pricing">
+                            <h3 style="line-height: 50px;" [style.font-size]="makePrice(tariff.price).length>=7?'40px':'50px'">{{makePrice(tariff.price)}}</h3>
+                            <p class="font-grey-salt">{{'average_monthly_cost'|bkTranslate:this}}</p>
+                            <div *ngIf="tariff == selectedTariff" class="price-ribbon">{{'ribbon_selected'|bkTranslate:this}}</div>
+                        </div>
+                        <div class="price-table-content">
+                            <div *ngFor="let label of tariff.labels"  class="row mobile-padding">
+                                <div class="col-xs-3 text-right mobile-padding">
+                                    <i *ngIf="label.icon.indexOf('fa') !== -1" class="fa {{label.icon}}"></i>
+                                    <i *ngIf="label.icon.indexOf('icon') !== -1" class="{{label.icon}}"></i>
                                 </div>
-                                <div class="price-table-content">
-                                    <div *ngFor="let label of tariff.labels"  class="row mobile-padding">
-                                        <div class="col-xs-3 text-right mobile-padding">
-                                            <i *ngIf="label.icon.indexOf('fa') !== -1" class="fa {{label.icon}}"></i>
-                                            <i *ngIf="label.icon.indexOf('icon') !== -1" class="{{label.icon}}"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-left mobile-padding">{{label.description}}</div>
-                                    </div>
-                                </div>
-                                <div class="arrow-down arrow-grey"></div>
-                                <div class="price-table-footer">
-                                    <button type="button" (click)="chooseTariff(tariff)" class="btn uppercase price-button {{tariff.color|lowercase}}">
-                                        {{'btn_select'|bkTranslate:this}}
-                                    </button>
-                                </div>
+                                <div class="col-xs-9 text-left mobile-padding">{{label.description}}</div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row margin-bottom-15 margin-top-15">
-                    <div class="col-md-12 text-center">
-                        <div class="btn-group btn-group-solid">
-
-                            <button *ngIf="companies && companies.length > 0" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(2)">
-                                {{'btn_back'|bkTranslate:this}}
-                            </button>
-                            <button *ngIf="!companies || companies.length == 0" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(1)">
-                                {{'btn_back'|bkTranslate:this}}
-                            </button>
-
-                            <button *ngIf="selectedTariff" type="button" class="btn blue btn-lg" (click)="stepClick(5)">
-                                {{'btn_continue'|bkTranslate:this}}
+                        <div class="arrow-down arrow-grey"></div>
+                        <div class="price-table-footer">
+                            <button type="button" (click)="chooseTariff(tariff)" class="btn uppercase price-button {{tariff.color|lowercase}}">
+                                {{'btn_select'|bkTranslate:this}}
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row margin-bottom-15 margin-top-15">
+            <div class="col-md-12 text-center">
+                <div class="btn-group btn-group-solid">
+
+                    <button *ngIf="companies && companies.length > 0" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(2)">
+                        {{'btn_back'|bkTranslate:this}}
+                    </button>
+                    <button *ngIf="!companies || companies.length == 0" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(1)">
+                        {{'btn_back'|bkTranslate:this}}
+                    </button>
+
+                    <button *ngIf="selectedTariff" type="button" class="btn blue btn-lg" (click)="stepClick(5)">
+                        {{'btn_continue'|bkTranslate:this}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <div *ngIf="step===4" class="row">
+        <div class="col-md-12">
+            <div class="portlet light portlet-fit ">
+                <div class="portlet-body">
+                    <div class="caption-desc font-grey-cascade">
+                        <span [innerHTML]="'financial_monologue'|bkTranslate:this"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div *ngIf="step===5">
 

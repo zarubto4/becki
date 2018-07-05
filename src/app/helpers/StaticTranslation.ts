@@ -540,10 +540,14 @@ export class StaticTranslation {
                 'btn_qrcode': 'Scan a QR code',
                 'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',
                 'dashboard_info_text': 'We are Byzance – a technological laboratory of advanced automatization developing a toolkit for design, development and managing the \'Internet of Things\' (IoT) for industrial uses. We do not create smart washing machines, nor smart city furniture. We develop everything for our customers to let them do it themselves, easily and without any problems.',
-                'step_one': '<strong class="font-grey" style="font-size: 1.5em;">1.</strong> Select best matching <strong>tariff</strong> for you and create your <strong>product</strong> in <a onclick="ngNavigate([\'/financial\'])">Financial section</a>',
-                'step_two': '<strong class="font-grey" style="font-size: 1.5em;">2.</strong> Create your first <strong>project</strong> in <a onclick="ngNavigate([\'/projects\'])">Projects section</a>',
-                'step_three': '<strong class="font-grey" style="font-size: 1.5em;">3.</strong> Create your own Byzance<strong class="font-color-code">CODE</strong>, Byzance<strong class="font-color-grid">GRID</strong> and Byzance<strong class="font-color-blocko">BLOCKO</strong> programs',
-                'step_four': '<strong class="font-grey" style="font-size: 1.5em;">4.</strong> Run it on Byzance<strong class="font-color-hardware">HARDWARE</strong> and in Byzance<strong class="font-color-cloud">CLOUD</strong>.',
+                'label_create_tenant' : 'First step you need to do is register your organization.',
+                'label_create_tenant_comment' : '<p>Creating a <strong>tenant</strong> account. We only bill most of the services from large numbers. <strong>So if you are small organizations or DIY developer don\'t worry. ;)</strong></p><p><strong> What is Tenant? </strong> Its a account for organization. Organization what own everything, what you create. This account then binds everything up. That\'s means user accounts, administrators, domains, subscriptions, available services, and so on.</p>',
+                'btn_create_tenant' : 'Create Tenant',
+                'label_no_projects': '<strong class="font-color-byzance-blue">Nerds</strong> rule N.1',
+                'label_no_projects_comment': 'Create project first, connect hardware and <strong class="font-color-byzance-blue">start slowly control the world</strong>... Step by step...',
+                'btn_create_project' : 'Create First Project',
+                'flash_project_create' : 'Project created successfully',
+                'flash_cant_create_project' : 'Can\'t create project. Something is wrong',
 
             }, 'ProjectsComponent': {
                 'main_title': 'Projects',
@@ -931,6 +935,7 @@ export class StaticTranslation {
                 'label_active': 'active',
                 'label_actions': 'Actions',
                 'label_subscription_id': 'ID',
+                'table_actions' : 'Action',
                 'label_hibernation': 'hibernation',
                 'label_modal_body_text': 'By deactivating, you disable instances in the cloud and disconnect hardware from our servers. Remote administration will stop working. But All data and settings will be saved and you can reactivate the product at any time.',
 
@@ -951,7 +956,7 @@ export class StaticTranslation {
                 'label_free': 'Free',
                 'label_not_set_yet': 'Not set yet',
                 'label_no_product': 'No product',
-                'label_no_product_comment': 'First create a financial entity under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, pay invoices :P and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
+                'label_no_product_comment': 'First create a financial <strong>Tenant</strong> under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, pay invoices and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
                 'flash_cant_deactivate_product': 'The product cannot be deactivated. ',
                 'flash_product_activated': 'The product has been activated.',
                 'flash_cant_activate_product': 'The product cannot be activated. ',
@@ -1475,6 +1480,7 @@ export class StaticTranslation {
                 'label_revision': 'Revision',
                 'label_id': 'ID',
                 'label_web_link': 'Hardware Web view',
+                'label_ipv6_address': 'Ipv6 Address',
                 'label_ethernet_address': 'Ethernet MAC address',
                 'label_device_is_not_dominant': 'Hardware is not actually assigned to this project. You can create new commands, schedule updates, but nothing will be done until Hardware be signed under this project again.',
                 'label_device_project_dominant': 'Currently, Hardware is actively used in the Project:',
@@ -2819,6 +2825,7 @@ export class StaticTranslation {
                 'btn_schedule_update': 'Schedule',
                 'btn_immediately': 'Immediately',
                 'btn_stop': 'Remove Action!',
+                'flash_successfully_scheduled': 'Successfully Scheduled!',
             },
 
 

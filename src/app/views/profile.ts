@@ -137,7 +137,10 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
                 this.backendService.logout()
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
+                        let message = new FlashMessageSuccess(this.translate('flash_email_was_send'), null);
+                        message.closeTime = 10000;
+
+                        this.addFlashMessage(message);
                         this.navigate(['/login']);
                     })
                     .catch((error) => {

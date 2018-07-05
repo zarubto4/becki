@@ -8,14 +8,14 @@
         <div class="portlet light">
 
             <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-            <bk-portlet-title *ngIf="modalModel.support_select_hw_groups"
+            <bk-portlet-title *ngIf="modalModel.support_select_hw_groups && modalModel.support_select_hw"
                               [show_title]="false"
                               (onTabClick)="onToggleTab($event)"
                               [tab_selected_name]="tab"
                               [tabBtns]="[
                             {
                                 tab_name: 'hardware',
-                                condition: (true),
+                                condition: (modalModel.support_select_hw),
                                 tab_color: 'HARDWARE',
                                 tab_label: ('tab_hardware'|bkTranslate:this)
                             },
@@ -114,7 +114,6 @@
                             <tbody class="hide-bk-drob-down-button">
                                 <tr *ngFor="let device of devicesFilter.content">
                                     <td class="vert-align">
-
                                         <a (click)="!selectedHardwareList[device.id] ? onHardwareAddToList(device) : onHardwareRemoveFromList(device)" class="no-wrap">
                                             <strong *ngIf="device.name && device.name != 'null'">{{device.name}}</strong>
                                             <strong *ngIf="!device.name || device.name == 'null' ">{{device.full_id}}</strong>
@@ -208,8 +207,8 @@
 
                                 <!-- Multiple Select -->
                                 <td class="vert-align text-center no-wrap" *ngIf="modalModel.multiple_select_support">
-                                    <div class="md-checkbox" (click)="selectedHardwareList[group.id] == null ? onGroupAddToList(group) : onGroupRemoveFromList(group)">
-                                        <input type="checkbox" class="md-check" [checked]="selectedHardwareList[group.id] != null">
+                                    <div class="md-checkbox" (click)="selectedGroupList[group.id] == null ? onGroupAddToList(group) : onGroupRemoveFromList(group)">
+                                        <input type="checkbox" class="md-check" [checked]="selectedGroupList[group.id] != null">
                                         <label>
                                             <span class="inc"></span>
                                             <span [class.check]="selectedGroupList[group.id] != null"></span>

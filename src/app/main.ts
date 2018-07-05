@@ -163,7 +163,6 @@ import { BugsBugComponent } from './views/admin-bugs-bug';
 import { TimePickerComponent } from './components/TimePickerComponent';
 import { DatePickerComponent } from './components/DatePickerComponent';
 import { ModalsHardwareGroupPropertiesComponent } from './modals/hardware-group-properties';
-import { ModalsHardwareGroupDeviceSettingsComponent } from './modals/hardware-group-device-settings';
 import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoListSelectComponent';
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
@@ -701,7 +700,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsExtensionComponent,
         ModalsBlockoBlockCopyComponent,
         ModalsHardwareGroupPropertiesComponent,
-        ModalsHardwareGroupDeviceSettingsComponent,
         ModalsUpdateReleaseFirmwareComponent,
         ModalsHardwareRestartMQTTPassComponent,
         ModalsHardwareChangeServerComponent,

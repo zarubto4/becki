@@ -15,9 +15,9 @@ import {
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareGroupPropertiesModel } from '../modals/hardware-group-properties';
-import { ModalsHardwareGroupDeviceSettingsModel } from '../modals/hardware-group-device-settings';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
 import { FormGroup, Validators } from '@angular/forms';
+import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 
 @Component({
     selector: 'bk-view-projects-project-hardware',
@@ -208,14 +208,16 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 .catch((reason) => {
                     this.unblockUI();
                 });
+
         } else {
-            let model = new ModalsHardwareGroupDeviceSettingsModel(device, this.deviceGroup);
+
+            let model = new ModalsSelectHardwareModel(this.projectId, null, true, true, false, device.hardware_groups);
             this.modalService.showModal(model).then((success) => {
                 if (success) {
                     this.tyrionBackendService.boardGroupUpdateDeviceList({
                         device_synchro: {
                             hardware_id: device.id,
-                            hardware_group_ids: model.deviceGroupStringIdsSelected
+                            hardware_group_ids: model.selected_hardware_groups.map((d) => {return d.id; } )
                         },
                         group_synchro: null
                     })
@@ -233,6 +235,32 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 }
             });
         }
+    }
+
+    onGroupEditHardwareClick(group: IHardwareGroup) {
+        let model = new ModalsSelectHardwareModel(this.projectId, null, true, false, true, null, group);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.tyrionBackendService.boardGroupUpdateDeviceList({
+                    device_synchro: null,
+                    group_synchro: {
+                        group_id: group.id,
+                        hardware_ids: model.selected_hardware.map((hw) => hw.id)
+                    }
+                })
+                    .then(() => {
+                        this.unblockUI();
+                        this.onFilterHardwareGroup();
+                        this.onFilterHardware();
+                    })
+                    .catch(reason => {
+                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                        this.onFilterHardwareGroup();
+                        this.onFilterHardware();
+                    });
+            }
+        });
     }
 
 // Hardware Group  -----------------------------------------------------------------------------------------------------
@@ -414,8 +442,12 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     onDrobDownEmiter(action: string, object: any): void {
 
 
-        if (action === 'edit_hardware_group') {
+        if (action === 'edit_hardware_group_device') {
             this.onDeviceEditGroupClick(object);
+        }
+
+        if (action === 'edit_hardware_group_group') {
+            this.onGroupEditHardwareClick(object);
         }
 
         if (action === 'edit_hardware') {

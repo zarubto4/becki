@@ -26,9 +26,6 @@
             <template [ngSwitchCase]="'ModalsHardwareRestartMQTTPassModel'">
                 <bk-modals-hardware-restart-mqtt-pass [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-restart-mqtt-pass>
             </template>
-            <template [ngSwitchCase]="'ModalsHardwareGroupDeviceSettingsModel'">
-                <bk-modals-hardware-group-device-settings [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-group-device-settings>
-            </template>
             <template [ngSwitchCase]="'ModalsHardwareGroupPropertiesModel'">
                 <bk-modals-hardware-group-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-group-properties>
             </template>
