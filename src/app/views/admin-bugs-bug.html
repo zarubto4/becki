@@ -16,21 +16,24 @@
                     colorType: 'ACTIVE',
                     icon: 'fa-bug',
                     btn_tag: '',
-                    btn_link: bug.youtrack_url
+                    btn_link: bug.youtrack_url,
+                    permission: true
                 },
                 {
                     condition: (bug.youtrack_url == null),
                     btn_label_for_person: ('label_report_bug'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-bug',
-                    btn_tag: 'report_bug'
+                    btn_tag: 'report_bug',
+                    permission: true
                 },
                 {
                     condition: (true),
                     btn_label_for_person: ('label_remove_bug'|bkTranslate:this),
                     colorType: 'REMOVE',
                     icon: 'fa-trash',
-                    btn_tag: 'remove_bug'
+                    btn_tag: 'remove_bug',
+                    permission: true
                 }
             ]"
         >

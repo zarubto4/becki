@@ -5,12 +5,12 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {IApplicableProduct, IArticle, IArticleList, IProduct, IProject, ITariff} from '../backend/TyrionAPI';
+import { IApplicableProduct, IArticle, IArticleList, IProduct, IProject, ITariff } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs/Rx';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsArticleModel } from '../modals/article';
 import { ModalsRemovalModel } from '../modals/removal';
-import {ModalsProjectPropertiesModel} from "../modals/project-properties";
+import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 
 @Component({
     selector: 'bk-view-dashboard',

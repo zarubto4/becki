@@ -53,6 +53,8 @@ export class RestResponse {
     constructor(status: number, body: Object) {
         this.status = status;
         this.body = body;
+
+        console.warn('RestResponse: ', this);
     }
 }
 
@@ -107,6 +109,10 @@ export abstract class IError extends Error {
     name: string = null;
     message: string = null;
     exception: any = null;
+
+    public get status(): number {
+        return this.code;
+    }
 }
 
 /**
@@ -242,7 +248,7 @@ export class InternalServerError extends IError {
 export class UserNotValidatedError extends IError {
 
     static fromRestResponse(response: RestResponse): UserNotValidatedError {
-        return new InternalServerError(response);
+        return new UserNotValidatedError(response);
     }
 
     constructor(response: RestResponse) {

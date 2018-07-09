@@ -1085,7 +1085,7 @@ export class StaticTranslation {
                 'btn_login': 'Login',
                 'btn_resend': 'Resend',
                 'msg_login_user_cant_login': 'The user could not be logged in.',
-                'msg_login_resend_vertification': '{0} \n Press the resend button to send verification E-mail again',
+                'msg_login_resend_vertification': 'Press the resend button to send verification E-mail again',
                 'msg_login_error': 'Error has occurred, when trying to log in.',
                 'msg_login_email_sent': 'Verification E-mail was sent',
 

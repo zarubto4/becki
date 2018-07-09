@@ -8,7 +8,7 @@ import { TyrionAPI, IPerson, ILoginResult, ISocialNetworkLogin } from './TyrionA
 import * as Rx from 'rxjs';
 import {
     BadRequest, BugFoundError, CodeCompileError,
-    CodeError, InternalServerError, InvalidBody, LostConnectionError, ObjectNotFound, PermissionMissingError,
+    CodeError, IError, InternalServerError, InvalidBody, LostConnectionError, ObjectNotFound, PermissionMissingError,
     RestRequest, RestResponse,
     UnauthorizedError, UnsupportedException, UserNotValidatedError
 } from '../services/_backend_class/Responses';
@@ -147,6 +147,8 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                     });
                     return <T>res;
                 }
+
+                console.trace('Error OK status - ', response.status);
                 switch (response.status) {
                     case 400: {
 
@@ -184,10 +186,19 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                         throw BugFoundError.fromRestResponse(response);
                 }
             })
-            .catch((e: any) => {
-                console.error('Error from Response', e);
+            .catch((response: RestResponse | IError) => {
+
+                console.warn('Response Error', response);
+
+                if (response instanceof IError) {
+                    throw response;
+                }
+
+                console.error('Error from Response', response);
+
                 this.decreaseTasks();
-                throw e;
+                throw response;
+
             });
     }
 

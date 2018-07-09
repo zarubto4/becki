@@ -45,14 +45,19 @@ export class TyrionBackendService extends TyrionApiBackend {
                         this.unsetToken();
                         this.router.navigate(['/login']);
                     }
+
                     resolve(new RestResponse(ngResponse.status, ngResponse.json()));
                 })
                 .catch((ngResponseOrError: Response|any) => {
                     if (ngResponseOrError instanceof Response) {
+
                         if (ngResponseOrError.status === 401) {
                             this.unsetToken();
                             this.router.navigate(['/login']);
                         }
+
+
+                        console.warn('Error on new Promise<RestResponse>: Error Status:: ', ngResponseOrError.status);
                         resolve(new RestResponse(ngResponseOrError.status, ngResponseOrError.json()));
                     } else {
                         reject(ngResponseOrError);

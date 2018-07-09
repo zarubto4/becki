@@ -16,11 +16,12 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                       {
-                          condition: (tab == 'my_blocks'),
+                          condition: (tab == 'my_blocks' && blockList && blockList.content.length > 0),
                           btn_label_for_person: ('btn_create'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
-                          btn_tag: 'add_block'
+                          btn_tag: 'add_block',
+                          permission: true
                       }
                  ]"
         (onTabClick)="onToggleTab($event)"
