@@ -991,7 +991,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
 
     onSetHardwareByInterfaceClick(callback: (targetId: string, group?: boolean) => BlockoCore.BoundInterface): void {
-        let model = new ModalsSelectHardwareModel(this.projectId, null, false, true);
+        let model = new ModalsSelectHardwareModel(this.projectId, null, false, true, true);
         this.modalService.showModal(model)
             .then((success) => {
                 let binding: BlockoCore.BoundInterface;
