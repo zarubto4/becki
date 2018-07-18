@@ -563,8 +563,12 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 this.selectedProgramVersion = programVersionFull;
                 this.selectedGrid = {};
 
-                // console.log('selectBProgramVersion:: its time to set  grid_project_snapshots ', JSON.stringify(programVersionFull.grid_project_snapshots, null, 2) );
+                this.blockoView.setDataJson(this.selectedProgramVersion.program);
+                if (this.consoleLog) {
+                    this.consoleLog.clear();
+                }
 
+                // Must be done after data json setting!!!
                 programVersionFull.grid_project_snapshots.forEach((pps: IBProgramVersionSnapGridProject) => {
                     this.selectedGrid[pps.grid_project.id] = {};
                     if (pps.grid_programs) {
@@ -577,13 +581,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         });
                     }
                 });
-
-                // console.log('selectBProgramVersion:: selectedGrid: ',  JSON.stringify(this.selectedGrid, null, 2) );
-
-                this.blockoView.setDataJson(this.selectedProgramVersion.program);
-                if (this.consoleLog) {
-                    this.consoleLog.clear();
-                }
 
                 this.unsavedChanges = false;
                 this.exitConfirmationService.setConfirmationEnabled(false);
