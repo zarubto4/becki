@@ -170,5 +170,5 @@
 
         </div>
     </div>
-    <button (click)="getCurrentVersion">Refresh</button>
+    <button (click)="getCurrentVersion()" [class.hidden] = "refreshIsHide">Refresh</button>
 </bk-layout-main>

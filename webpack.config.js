@@ -8,10 +8,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
-
-
+const becki_version = require('/Users/servertara/git/becki/package.json').version;
 
 /**
  * Env
@@ -197,7 +195,9 @@ module.exports = function makeWebpackConfig() {
             // Inject script and link tags into html files.
             // Reference: https://github.com/ampedandwired/html-webpack-plugin
             new HtmlWebpackPlugin({
+                filename: becki_version + '_' + 'index.html',
                 template: './src/public/index.html',
+                inject: true,
                 chunksSortMode: 'dependency'
             }),
 
@@ -206,7 +206,8 @@ module.exports = function makeWebpackConfig() {
             // Disabled when in test mode.
             new MiniCssExtractPlugin({
                 filename: !isProd ? '[name].css' : 'css/[name].[hash].css',
-                chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css'
+                chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
+                hash: true
             })
         );
     }
@@ -216,7 +217,7 @@ module.exports = function makeWebpackConfig() {
         config.plugins.push(
 
             new CopyWebpackPlugin([{
-                from: root('src','public')
+                from: root('src','public'), ignore: ['index.html']
             }]),
 
             // A Webpack plugin to optimize \ minimize CSS assets.
