@@ -195,9 +195,7 @@ module.exports = function makeWebpackConfig() {
             // Inject script and link tags into html files.
             // Reference: https://github.com/ampedandwired/html-webpack-plugin
             new HtmlWebpackPlugin({
-                filename: becki_version + '_' + 'index.html',
                 template: './src/public/index.html',
-                inject: true,
                 chunksSortMode: 'dependency'
             }),
 
@@ -217,7 +215,7 @@ module.exports = function makeWebpackConfig() {
         config.plugins.push(
 
             new CopyWebpackPlugin([{
-                from: root('src','public'), ignore: ['index.html']
+                from: root('src','public')
             }]),
 
             // A Webpack plugin to optimize \ minimize CSS assets.

@@ -31,7 +31,7 @@ available at same address as you have in browser and port 9000.
 ## Deploy To servers:
 
 ### Stage Server
-    
+
     SSH:  ssh becki@52.166.22.0
     Pass: PbSXLpb8-GAFML3D-eha-FAF-SSFAG
 
@@ -67,3 +67,12 @@ available at same address as you have in browser and port 9000.
 [npm]: http://www.npmjs.com/
 [web storage 2]: http://www.w3.org/TR/2015/PR-webstorage-20151126/
 
+
+## Changes in ngin.conf for caching
+
+        location / {
+            root   /Users/servertara/git/becki/dist;
+            index  index.html index.htm;
+			try_files $uri $uri/ /index.html;
+			add_header Cache-Control 'must-revalidate, proxy-revalidate, max-age=86400';
+        }

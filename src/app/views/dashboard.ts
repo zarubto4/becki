@@ -10,11 +10,6 @@ import { Subscription } from 'rxjs';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsArticleModel } from '../modals/article';
 import { ModalsRemovalModel } from '../modals/removal';
-// Old  way to load package.json
-// const { version: appVersion } = require('/Users/servertara/git/becki/package.json');
-import { HttpClient } from '@angular/common/http';
-
-declare const BECKI_VERSION: string;
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -44,7 +39,6 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     constructor(injector: Injector, private http: HttpClient) {
         super(injector);
-        // this.appVersion = appVersion;
     };
 
     onQrClick() {
@@ -207,24 +201,4 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
             }
         });
     }
-
-    getCurrentVersion(): void {
-        let versionFromServer = '';
-        console.info(BECKI_VERSION);
-
-        this.http.get<VersionFromServer>('https://portal.stage.byzance.cz/').subscribe(data => {
-            console.info(data.version)
-        });
-
-        if (versionFromServer !== BECKI_VERSION) {
-            this.refreshIsHide = false;
-        }
-    }
-
-
-}
-
-
-export interface VersionFromServer {
-    version: string;
 }
