@@ -49,6 +49,7 @@
         "mydatepicker": "^2.6.3",
         "ng2-charts": "^1.6.0",
         "ngx-img-cropper": "^0.10.4",
+        "ngx-progressbar": "^2.1.1",
         "open-sans-fontface": "^1.4.0",
         "parse-color": "^1.0.0",
         "postcss-import": "^11.1.0",

@@ -145,6 +145,7 @@ import { ModalsVersionSelectComponent } from './modals/version-select';
 // Common dependencies
 import { SharedModule } from '../shared';
 import { HttpClientModule } from '@angular/common/http';
+import { NgProgressModule } from 'ngx-progressbar';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -318,7 +319,8 @@ class BeckiErrorHandler implements ErrorHandler {
         HttpModule,
         JsonpModule,
         MyDatePickerModule,
-        HttpClientModule
+        HttpClientModule,
+        NgProgressModule
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
