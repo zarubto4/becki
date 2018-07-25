@@ -10,8 +10,6 @@ import { Subscription } from 'rxjs';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsArticleModel } from '../modals/article';
 import { ModalsRemovalModel } from '../modals/removal';
-import { NgProgress } from 'ngx-progressbar';
-
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -33,7 +31,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     projectsUpdateSubscription: Subscription;
 
-    constructor(injector: Injector, public ngProgress: NgProgress) {
+    constructor(injector: Injector) {
         super(injector);
     };
 
