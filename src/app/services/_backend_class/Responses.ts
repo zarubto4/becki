@@ -1,7 +1,8 @@
 
 
 // INTERFACES - Compiler
-import { IWebSocketErrorMessage } from '../websocket/Websocket_Client_Tyrion';
+
+import { IWebSocketMessage } from '../websocket/WebSocketMessage';
 
 export interface ICodeCompileErrorMessage {
     filename: string;
@@ -53,8 +54,6 @@ export class RestResponse {
     constructor(status: number, body: Object) {
         this.status = status;
         this.body = body;
-
-        console.warn('RestResponse: ', this);
     }
 }
 
@@ -83,7 +82,7 @@ export class BugFoundError extends Error {
         return new BugFoundError(response.body, `response ${response.status}: ${JSON.stringify(content)}`, message);
     }
 
-    static fromWsResponse(response: IWebSocketErrorMessage): BugFoundError {
+    static fromWsResponse(response: IWebSocketMessage): BugFoundError {
         return new BugFoundError(null, `response ${JSON.stringify(response)}`, response.error);
     }
 

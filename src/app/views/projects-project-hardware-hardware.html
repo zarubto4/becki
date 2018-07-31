@@ -132,11 +132,11 @@
                                 <br>
                                 <div>
                                     {{'label_type'|bkTranslate:this}}:
-                                    <a (click)="onHardwareTypeClick(hardware.hardware_type.id)" class="bold">{{hardware.hardware_type.name}}</a>
+                                    <a (click)="onHardwareTypeClick(hardware.hardware_type.id)" class="bold">{{hardwareType.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_producer'|bkTranslate:this}}:
-                                    <a (click)="onProducerClick(hardwareType.producer.id)" class="bold">{{hardwareType.producer.name}}</a>
+                                    <a *ngIf="hardwareType.producer" (click)="onProducerClick(hardwareType.producer.id)" class="bold">{{hardwareType.producer.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_revision'|bkTranslate:this}}:
@@ -229,7 +229,7 @@
 
 
                                         <!-- Update Bootlaoder on Hardware - There is condition - if user made update already - we must hide this button [TZ]-->
-                                        <div *ngIf="(!hardware.actual_bootloader || hardware.available_latest_bootloader.id != hardware.actual_bootloader.id) && !hardware.bootloader_update_in_progress" class="text-center">
+                                        <div *ngIf="hardware.available_latest_bootloader && (!hardware.actual_bootloader || hardware.available_latest_bootloader.id != hardware.actual_bootloader.id) && !hardware.bootloader_update_in_progress" class="text-center">
                                             <br>
                                             <button class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
                                                 <i class="fa fa-rocket"></i> {{'label_update_to'|bkTranslate:this}}
@@ -369,7 +369,7 @@
                                     </div>
                                     <div>
                                         <span [innerHTML]="'label_actual_program_version'|bkTranslate:this"></span>:
-                                        <a *ngIf="hardware.actual_c_program_version && hardware.actual_c_program_version" class="bold" (click)="onCProgramClick(hardware.actual_c_program.id, hardware.actual_c_program_version.id)">{{hardware.actual_c_program_version.name}}</a>
+                                        <a *ngIf="hardware.actual_c_program && hardware.actual_c_program_version" class="bold" (click)="onCProgramClick(hardware.actual_c_program.id, hardware.actual_c_program_version.id)">{{hardware.actual_c_program_version.name}}</a>
                                         <span *ngIf="!hardware.actual_c_program_version" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                     </div>
                                 </div>
@@ -421,7 +421,7 @@
 
                             <div class="portlet-body">
 
-                                <div *ngIf="hardware.server!=null">
+                                <div *ngIf="hardware.server">
                                     <div>
                                         <span [innerHTML]="'label_main_server'|bkTranslate:this"></span>: {{hardware.server.name}}
                                     </div>
@@ -429,7 +429,7 @@
                                         <span [innerHTML]="'label_server_online_state'|bkTranslate:this"></span>: <bk-online-state [online_state]="hardware.server.online_state"></bk-online-state>
                                     </div>
                                 </div>
-                                <div *ngIf="hardware.server==null">
+                                <div *ngIf="!hardware.server">
                                     <span [innerHTML]="'label_main_server_not_found'|bkTranslate:this"></span>
                                  </div>
 

@@ -105,8 +105,6 @@ export class FilterTableComponent implements OnInit {
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {}
 
     ngOnInit() {
-
-        console.info('filter_parameters: ', this.filter_parameters);
         this.filter_parameters.forEach((parameter) => {
 
             if (parameter.type === 'LIST_SELECT') {
@@ -124,8 +122,6 @@ export class FilterTableComponent implements OnInit {
             }
 
         });
-
-
     }
 
     onHide() {

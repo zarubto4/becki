@@ -4,13 +4,13 @@
  */
 import {
     IInstanceSnapshot, IInstance, IBProgram,
-    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, ITerminalConnectionSummary, IBProgramVersion,
+    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, IBProgramVersion,
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
-    ISwaggerInstanceSnapShotConfigurationProgram, ISwaggerInstanceSnapShotConfiguration,
+    ISwaggerInstanceSnapShotConfigurationProgram,
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
     IUpdateProcedure, ISwaggerInstanceSnapShotConfigurationApiKeys
 } from '../backend/TyrionAPI';
-import { BlockoCore, Blocks } from 'blocko';
+import { BlockoCore } from 'blocko';
 import {
     Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef, ViewChildren, QueryList,
     AfterViewInit
@@ -25,8 +25,6 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 import { ModalsSelectVersionModel } from '../modals/version-select';
-import { WebsocketClientBlockoView } from '../services/websocket/Websocket_Client_BlockoView';
-import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import moment = require('moment/moment');
 import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
@@ -34,11 +32,10 @@ import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsShowQRModel } from '../modals/show_QR';
 import { ModalsGridProgramSettingsModel } from '../modals/instance-grid-program-settings';
-import { ModalsSelectGridProjectModel } from '../modals/grid-project-select';
-import { ModalsSelectBlockModel } from '../modals/block-select';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
-import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
 import { ModalsInstanceApiPropertiesModel } from '../modals/instance-api-properties';
+import { WebSocketClientBlocko } from '../services/websocket/WebSocketClientBlocko';
+import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
 
 
 @Component({
@@ -82,20 +79,15 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
 
-    homerDao: WebsocketClientBlockoView;
+    homerDao: WebSocketClientBlocko;
 
     tab: string = 'overview';
 
     private liveViewLoaded: boolean = false;
 
-
-
     constructor(injector: Injector) {
         super(injector);
-
-
     };
-
 
     ngOnInit(): void {
 
@@ -114,8 +106,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     ngAfterViewInit() {
 
-        console.info('ProjectsProjectInstancesInstanceComponent::ngAfterViewInit');
-
         this.blockoViews.changes.subscribe((views: QueryList<BlockoViewComponent>) => {
 
             this.editorView = views.find((view) => {
@@ -124,15 +114,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             if (this.editorView) {
 
-                // this.editorView.registerAddBlockCallback(this.onAddBlock.bind(this));
-                // this.editorView.registerAddGridCallback(this.onAddGrid.bind(this));
-                // this.editorView.registerAddHardwareCallback(this.onSetHardwareByInterfaceClick.bind(this));
                 this.editorView.registerBindInterfaceCallback(this.onSetHardwareByInterfaceClick.bind(this));
 
                 if (this.instance && this.instance.current_snapshot) {
                     this.editorView.setDataJson(this.instance.current_snapshot.program.snapshot);
                 } else if (this.bProgramVersion) {
-                    console.info('ngAfterViewInit::this.bProgramVersion', this.bProgramVersion);
                     this.editorView.setDataJson(this.bProgramVersion.program);
                 }
 
@@ -157,8 +143,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             if (this.liveViewLoaded) {
                 this.liveViewLoaded = false;
                 if (this.homerDao) {
-                    this.homerDao.isWebSocketOpen();
-                    this.homerDao.disconnectWebSocket();
+                    this.homerDao.disconnect();
                     this.homerDao = null;
                 }
             }
@@ -169,11 +154,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.routeParamsSubscription.unsubscribe();
 
         if (this.homerDao) {
-            console.info('ProjectsProjectInstancesInstanceComponent: ngOnDestroy: close homerDao Is Open?: ', this.homerDao.isWebSocketOpen());
-            this.homerDao.disconnectWebSocket();
+            this.homerDao.disconnect();
             this.homerDao = null;
-        } else  {
-            console.info('ProjectsProjectInstancesInstanceComponent: ngOnDestroy: homerDao is null');
         }
     }
 
@@ -276,9 +258,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
         // Set latest used Blocko program
         if (tab === 'editor') {
-            console.info('onToggleTab editor');
-            console.info('Co je BProgram: ', this.bProgram);
-
 
             if (this.bProgram == null) {
                 return;
@@ -287,11 +266,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             let that = this;
             setTimeout(function() {
 
-                console.info('Co je BProgram: ', that.bProgram);
-                console.info('Co je BProgram length: ', that.bProgram.program_versions.length);
-
                 if (that.instance.current_snapshot) {
-                    console.info('onToggleTab editor that.instance.current_snapshot is not null!');
                     that.editorView.setDataJson(that.instance.current_snapshot.program.snapshot);
                     that.bindings = that.editorView.getBindings();
 
@@ -304,8 +279,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     }
 
                 } else if (that.bProgram.program_versions.length > 0) {
-                    console.info('onToggleTab editor this.bProgram.program_versions.length >0');
-                    console.info('onToggleTab Selected Version0', that.bProgram.program_versions[0]);
                     that.onChangeVersion(that.bProgram.program_versions[0]);
                 } else {
                     that.fmError(this.translate('flash_bprogram_no_versions'));
@@ -343,18 +316,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             console.info('onSaveSnapshotClick: this.editorView');
         }
         if (this.editorView.isDeployable()) {
-            console.info('onSaveSnapshotClick: isDeployable true');
             let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
             this.modalService.showModal(m).then((success) => {
                 if (success) {
-
                     this.blockUI();
-                    console.info('onSaveSnapshotClick: this.bProgramVersion', this.bProgramVersion);
 
                     let version_id = this.bProgramVersion.id;
                     let interfaces: IInstanceSnapshotJsonFileInterface[] = [];
-
-                    console.info('onSaveSnapshotClick: this.bindings', this.bindings);
 
                     this.bindings.forEach((binding) => {
                         interfaces.push({
@@ -389,7 +357,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             this.fmError(this.translate('flash_not_deployable'));
         }
     }
-
 
     // API KEY
     onAddApiKey(): void {
@@ -508,7 +475,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                 this.bProgramVersion = bpv;
                                 this.tab = 'editor';
                                 if (this.editorView) {
-                                    console.info('ProjectsProjectInstancesInstanceComponent:: onChangeVersion:: Version::', this.bProgramVersion);
                                     this.editorView.setDataJson(this.bProgramVersion.program);
                                     this.bindings = this.editorView.getBindings();
                                 }
@@ -518,9 +484,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             });
                     }
                 });
-        }else {
+        } else {
             this.bProgramVersion = version;
-            console.info('ProjectsProjectInstancesInstanceComponent:: onChangeVersion:: Version::', this.bProgramVersion);
             this.editorView.setDataJson(this.bProgramVersion.program);
             this.bindings = this.editorView.getBindings();
         }
@@ -789,47 +754,21 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     /* tslint:disable:max-line-length ter-indent*/
 
     loadBlockoLiveView() {
-        console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView start');
         this.zone.runOutsideAngular(() => {
             if (this.liveView && this.instance.current_snapshot) {
                 console.info(JSON.stringify(this.instance.current_snapshot.program));
                 this.liveView.setDataJson(this.instance.current_snapshot.program.snapshot);
 
                 if (this.instance.instance_remote_url) {
-                    console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView instance_remote_url', this.instance.instance_remote_url);
-                    this.tyrionBackendService.getWebsocketService().connectBlockoInstanceWebSocket(this.instance.instance_remote_url, (socket: WebsocketClientBlockoView, error: any) => {
+                    this.tyrionBackendService.getWebsocketService().connectBlockoInstanceWebSocket(this.instance.instance_remote_url, this.instanceId, (socket: WebSocketClientBlocko, error: any) => {
 
                         if (socket) {
                             this.homerDao = socket;
-
-                            this.homerDao.onOpenCallback = (e) => {
-
-                                this.homerDao.requestGetValues(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
-                                    console.info('ProjectsProjectInstancesInstanceComponent::loadBlockoLiveView requestGetValues: response', response_message);
-                                    if (response_message) {
-                                        this.homerMessageReceived(response_message);
-                                    } else {
-                                        console.error('loadBlockoLiveView:: requestGetValues Error: ', error_response);
-                                    }
-                                });
-
-                                this.homerDao.requestGetLogs(this.instanceId, (response_message: WebsocketMessage, error_response: any) => {
-                                    console.info('ProjectsProjectInstancesInstanceComponent::requestGetLogs requestGetLogs: response', response_message);
-                                    if (response_message) {
-                                        this.homerMessageReceived(response_message);
-                                    } else {
-                                        console.error('loadBlockoLiveView:: requestGetLogs  Error: ', error_response);
-                                    }
-                                });
-
-                                this.homerDao.onMessageCallback = (m: WebsocketMessage) => this.homerMessageReceived(m);
-                            };
-
+                            this.homerDao.messages.subscribe((m: IWebSocketMessage) => this.homerMessageReceived(m));
 
                         } else {
                             console.error('ProjectsProjectInstancesInstanceComponent:connectBlockoInstanceWebSocket:: ', error);
                         }
-
                     });
                 }
             }
@@ -837,7 +776,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     homerMessageReceived(m: any) {
-        console.info('ProjectsProjectInstancesInstanceComponent::homerMessageReceived m:', m);
         this.zone.runOutsideAngular(() => {
 
             const controller = this.liveView.getBlockoController();
@@ -912,56 +850,27 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         controller.setOutputConnectorValue(block, output, m.connector[block].outputs[output]);
                     }
 
-                    /* tslint:disable */
-
-                    console.log('homerMessageReceived:: .message_type === getValues, for:   ', m);
-
-                    /* tslint:enable */
-
                     for (let targetType in m.externalConnector) {
 
                         if (!m.externalConnector.hasOwnProperty(targetType)) {
                             continue;
                         }
 
-                        /* tslint:disable */
-
-                        console.log('homerMessageReceived:: .message_type ===  getValues, for:   ', targetType);
-
-                        /* tslint:enable */
-
                         for (let targetId in m.externalConnector[targetType]) {
                             if (!m.externalConnector[targetType].hasOwnProperty(targetId)) {
                                 continue;
                             }
 
-
-                            /* tslint:disable */
-
-                            console.log('homerMessageReceived:: m.message_type =  ', m.message_type);
-
-                            /* tslint:enable */
-
                             for (let input in m.externalConnector[targetType][targetId].inputs) {
                                 if (m.externalConnector[targetType][targetId].inputs.hasOwnProperty(input)) {
                                     continue;
                                 }
-                                // controller.set
-                                // controller.setInputExternalConnectorValue(targetType, targetId, input, m.externalConnector[targetType][targetId].inputs[input]);
-
-                                /* tslint:disable */
-                                console.log('homerMessageReceived:: setInputExternalConnectorValue, for: ', targetType, targetId, input, m.externalConnector[targetType][targetId].inputs[input]);
-                                /* tslint:enable */
                             }
 
                             for (let output in m.externalConnector[targetType][targetId].outputs) {
                                 if (!m.externalConnector[targetType][targetId].outputs.hasOwnProperty(output)) {
                                     continue;
                                 }
-                                /* tslint:disable */
-                                console.log('homerMessageReceived:: setOutputExternalConnectorValue, for: ', targetType, targetId, output, m.externalConnector[targetType][targetId].outputs[output]);
-                                /* tslint:enable */
-                                // controller.setOutputExternalConnectorValue(targetType, targetId, output, m.externalConnector[targetType][targetId].outputs[output]);
                             }
                         }
                     }
@@ -970,8 +879,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             if (m.message_type === 'get_logs') {
                 this.zone.run(() => {
-                    if (m.logs) {
-                        for (let i = 0; i < m.logs.length; i++) {
+                    if (m.data.logs) {
+                        for (let i = 0; i < m.data.logs.length; i++) {
                             const log = m.logs[i];
                             this.consoleLog.add(log.type, log.message, 'Block ' + log.block_id, new Date(log.time).toLocaleString());
                         }

@@ -4,23 +4,18 @@
 
 /* tslint:disable */
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { TranslationService } from '../services/TranslationService';
-import { ConsoleLogType, ConsoleLogComponent} from './ConsoleLogComponent';
+import { ConsoleLogComponent} from './ConsoleLogComponent';
 import { IHardware } from '../backend/TyrionAPI';
-import { FlashMessageError } from '../services/NotificationService';
-import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalService } from '../services/ModalService';
 import { FormSelectComponentOption } from './FormSelectComponent';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
-import {
-    ITerminalWebsocketMessage,
-    WebsocketClientHardwareLogger
-} from '../services/websocket/Websocket_Client_HardwareLogger';
-import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
+import { WebSocketClientHardware } from '../services/websocket/WebSocketClientHardware';
+import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
 
 @Component({
     selector: 'bk-terminal-log-component',
@@ -168,7 +163,7 @@ import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
 
     `
 })
-export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
+export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Project Id for Filter Parameters
     @Input()
@@ -184,25 +179,21 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     @Input()
     preselected_hardware: IHardware[] = null;
 
-    selected_hw_for_subscribe: IHardware[] = null;
+    selected_hw_for_subscribe: IHardware[] = [];
 
     // Array With Log Type Parameters
     logLevel: { [hardware_id: string]: {
         log: ('error' | 'warn' | 'info' | 'debug' | 'trace'),
         subscribed: boolean,
-        socket: WebsocketClientHardwareLogger
+        socket: WebSocketClientHardware
     }} = {};
 
     // First Preselect Tab
     tab: string = 'terminal';
 
-
-
     // Form For Color Selector
     colorForm: FormGroup;
     availableColors = ['#0082c8', '#e6194b', '#3cb44b', '#ffe119', '#f58231', '#911eb4', '#46f0f0', '#008080', '#aa6e28', '#ffd8b1']; // předdefinované barvy pro terminál
-
-    WSinit: boolean = false;
 
     @ViewChild('console')
     consoleLog: ConsoleLogComponent;
@@ -221,41 +212,22 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-
         this.colorForm = this.formBuilder.group({
         }); // inicializace prázdného formu pro barvy
+    }
 
-        new Promise<any>((resolve) => {
-            // todle je takovej "oblouk", protože nevíme kdy se console.log inicializuje, vytvoříme si interval kterej se každejch 100 ms ptá, zda již consoleLog existuje
-            // pokud kohokoliv napadne lepší řešení, tohoto, feel free to do it
-            let checker = setInterval(() => {
-                if (this.consoleLog) {
-                    clearInterval(checker);
-
-                    // Inicializace pole
-                    this.selected_hw_for_subscribe = [];
-
-                    // Pokud pole obsahuje už nějaký prvek na začátku inicializace
-                    if(this.preselected_hardware && this.preselected_hardware.length > 0) {
-                        this.preselected_hardware.forEach((hw) => {
-                            this.addNewHardwareToSubscribeList(hw);
-                        })
-                    }
-                }
-            }, 100);
-
-        }).then(() => {
-
-        });
-
+    ngAfterViewInit() {
+        if (this.preselected_hardware && this.preselected_hardware.length > 0) {
+            this.preselected_hardware.forEach((hw) => {
+                setImmediate(() => this.addNewHardwareToSubscribeList(hw));
+            });
+        }
     }
 
     ngOnDestroy() {
-
         this.selected_hw_for_subscribe.forEach(hardware => {
             this.onHardwareUnSubscribeClick(hardware);
         }); // odhlásíme každej HW co byl připojen
-
     }
 
     onToggleTab(tab: string) {
@@ -268,31 +240,21 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
-    onMessage(msg: WebsocketMessage) {
-        console.info('onMessage: Logger Message:: ', msg);
-
+    onMessage(msg: IWebSocketMessage) {
         if (msg.message_type === 'message_log') {
-
             let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
             if (hardware) {
                 if (this.consoleLog) {
-                    console.info('onMessage: some message from Hardware', msg);
                     this.consoleLog.add(msg.data['level'], msg.data['message'], hardware.id, hardware.name); // přidání zprávy do consoleComponent
-
                 }
             }
-
         }
 
         if (msg.message_type === 'hardware_disconnect') {
             let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
             if (hardware) {
                 if (this.consoleLog) {
-                    console.info('onMessage: some message from Hardware', msg);
-                    this.consoleLog.add('info', 'Hardware Disconnect ------------------------------------------------------------ ', hardware.id, hardware.name); // přidání zprávy do consoleComponent
-
+                    this.consoleLog.add('info', 'disconnected', hardware.id, hardware.name); // přidání zprávy do consoleComponent
                 }
             }
         }
@@ -301,13 +263,10 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
             let hardware = this.selected_hw_for_subscribe.find(device => device.id ===  msg.data['hardware_id']); // najdeme hardware, kterého se zpráva týká
             if (hardware) {
                 if (this.consoleLog) {
-                    console.info('onMessage: some message from Hardware', msg);
-                    this.consoleLog.add('info','Hardware Connected ------------------------------------------------------------ ', hardware.id, hardware.name); // přidání zprávy do consoleComponent
-
+                    this.consoleLog.add('info','connected', hardware.id, hardware.name); // přidání zprávy do consoleComponent
                 }
             }
         }
-
     }
 
     /**
@@ -315,18 +274,18 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param hardware
      */
     onHardwareUnSubscribeClick(hardware: IHardware): void {
-        console.info('onHardwareUnSubscribeClick: Hardware::', hardware.id);
-
         if (this.logLevel[hardware.id].socket) {
-            this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
-
-                if (response_message && response_message.status == 'success') {
-                    this.logLevel[hardware.id].subscribed = false;
-                } else {
-                    console.error('onHardwareUnSubscribeClick:: Hardware', hardware.id, 'LogLevel', 'Error', error);
-                }
-
-            });
+            this.logLevel[hardware.id].socket.requestDeviceTerminalUnsubscribe(hardware.id)
+                .then((response: IWebSocketMessage) => {
+                    if (response.isSuccessful()) {
+                        this.logLevel[hardware.id].subscribed = false;
+                    } else {
+                        throw new Error('Unable to unsubscribe the logger');
+                    }
+                })
+                .catch((reason) => {
+                    console.error('onUserChangeLogLevelClick:', reason);
+                });
         }
     }
 
@@ -337,22 +296,17 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
      * @param logLevel
      */
     onHardwareSubscribeClick(hardware: IHardware, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace') = 'info'): void {
-
-        console.info('onHardwareSubscribeClick: Hardware::', hardware.id);
-
-        this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel , (response_message: WebsocketMessage, error: any) => {
-
-            // console.log('onHardwareSubscribeClick: response_message::', response_message);
-
-            if (response_message && response_message.status == 'success') {
-
-                console.info('onHardwareSubscribeClick:: Hardware', hardware.id, 'response_message', response_message);
-                this.logLevel[hardware.id].subscribed = true;
-            }else {
-                console.error('onHardwareSubscribeClick:: Hardware', hardware.id, 'LogLevel', logLevel, 'Error', error);
-            }
-
-        });
+        this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel)
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
+                    this.logLevel[hardware.id].subscribed = true;
+                } else {
+                    throw new Error('Unable to subscribe new logger');
+                }
+            })
+            .catch((reason) => {
+                console.error('onUserChangeLogLevelClick:', reason);
+            });
     }
 
     /**
@@ -373,27 +327,24 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
         }
 
-        // Set New Default Values
-        this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message_unsubscribe: WebsocketMessage, error_unsubsribe: any) => {
-
-            if (response_message_unsubscribe && response_message_unsubscribe.status === 'success') {
-
-                this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel , (response_message_subscribe: WebsocketMessage, error_subsrribe: any) => {
-
-                    if (response_message_unsubscribe && response_message_unsubscribe.status === 'success') {
-
-                        this.logLevel[hardware.id].log = logLevel;
-
-                    }else {
-                        console.error('onUserChangeLogLevelClick:: Subsrcibe Hardware', hardware.id, 'LogLevel', logLevel, 'Error', error_subsrribe);
-                    }
-
-                });
-            }else {
-                console.error('onUserChangeLogLevelClick:: Unsubsribe Hardware', hardware.id, 'LogLevel', logLevel, 'Error', error_unsubsribe);
-            }
-
-        });
+        this.logLevel[hardware.id].socket.requestDeviceTerminalUnsubscribe(hardware.id)
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
+                    return this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel);
+                } else {
+                    throw new Error('Unable to unsubscribe previous logger');
+                }
+            })
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
+                    this.logLevel[hardware.id].log = logLevel;
+                } else {
+                    throw new Error('Unable to subscribe new logger');
+                }
+            })
+            .catch((reason) => {
+                console.error('onUserChangeLogLevelClick:', reason);
+            });
     }
 
     /**
@@ -465,13 +416,13 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
 
         if (hardware.server == null) {
             this.consoleLog.set_color(hardware.id, color);
-            this.consoleLog.add('error', 'Try to Initialize Device ID: '+ hardware.id + ' Device Full ID: ' + hardware.full_id +' but it looks like the device never joined the server. We have no required details where device is!', hardware.id, hardware.name);
+            this.consoleLog.add('error', 'Device has not connected to any server before. It is not possible to subscribe logs.', hardware.id, hardware.name);
             return
         }
 
         if (hardware.online_state !== 'ONLINE') {
             this.consoleLog.set_color(hardware.id, color);
-            this.consoleLog.add('output', 'Latest know server is offline. Its not possible to subscribe logs', hardware.id, hardware.name);
+            this.consoleLog.add('output', 'Device is offline. It is not possible to subscribe logs.', hardware.id, hardware.name);
 
             // Set Default Values
             this.logLevel[hardware.id] = {
@@ -484,30 +435,32 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.tyrionBackendService.getWebsocketService()
-            .connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString(),(socket: WebsocketClientHardwareLogger, error: any) => {
+        this.tyrionBackendService.getWebsocketService().connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString(),(socket: WebSocketClientHardware, error: any) => {
+            if (socket) {
 
-                if (socket) {
+                // Set Default Values
+                this.logLevel[hardware.id] = {
+                    log: 'info',
+                    subscribed: false,
+                    socket: socket
+                };
 
-                    // Set Default Values
-                    this.logLevel[hardware.id] = {
-                        log: 'info',
-                        subscribed: false,
-                        socket: socket
-                    };
+                this.selected_hw_for_subscribe.push(hardware);
 
-                    this.selected_hw_for_subscribe.push(hardware);
-
-                    this.onHardwareSubscribeClick(hardware, this.logLevel[hardware.id].log);
-
-                    socket.onLogsCallback = (log: WebsocketMessage) => this.onMessage(log);
-
-                    this.consoleLog.add('output', 'Initializing the device. More information in settings', hardware.id, hardware.name);
-                    this.consoleLog.set_color(hardware.id, this.colorForm.controls['color_' + hardware.id].value);
-
-                }else {
-                    console.error('addNewHardwareToSubscribeList: Connection Error ', error);
+                if (socket.isOpen()) {
+                    this.onHardwareSubscribeClick(hardware, this.logLevel[hardware.id].log)
+                } else {
+                    socket.onOpened = () => this.onHardwareSubscribeClick(hardware, this.logLevel[hardware.id].log);
                 }
+
+                socket.messages.subscribe(message => this.onMessage(message));
+
+                this.consoleLog.add('output', 'Initializing the device. More information in settings', hardware.id, hardware.name);
+                this.consoleLog.set_color(hardware.id, this.colorForm.controls['color_' + hardware.id].value);
+
+            } else {
+                console.error('addNewHardwareToSubscribeList: Connection Error ', error);
+            }
         });
 
     }

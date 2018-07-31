@@ -4,7 +4,7 @@
  */
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { ApplicationRef, EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
