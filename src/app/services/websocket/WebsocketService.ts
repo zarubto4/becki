@@ -46,6 +46,9 @@ export class WebsocketService {
 
         for (let socket in this.hardware) {
             if (this.hardware.hasOwnProperty(socket) && this.hardware[socket].matchUrl(url)) {
+                if (!this.hardware[socket].isOpen()) {
+                    this.hardware[socket].connect();
+                }
                 callback(this.hardware[socket], null);
                 return;
             }
@@ -68,6 +71,9 @@ export class WebsocketService {
 
         for (let socket in this.instances) {
             if (this.instances.hasOwnProperty(socket) && this.instances[socket].matchUrl(finalUrl)) {
+                if (!this.instances[socket].isOpen()) {
+                    this.instances[socket].connect();
+                }
                 callback(this.instances[socket], null);
                 return;
             }

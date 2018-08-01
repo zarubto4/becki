@@ -263,31 +263,26 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 return;
             }
 
-            let that = this;
-            setTimeout(function() {
+            setImmediate(() => {
+                if (this.instance.current_snapshot) {
+                    this.editorView.setDataJson(this.instance.current_snapshot.program.snapshot);
+                    this.bindings = this.editorView.getBindings();
 
-                if (that.instance.current_snapshot) {
-                    that.editorView.setDataJson(that.instance.current_snapshot.program.snapshot);
-                    that.bindings = that.editorView.getBindings();
-
-                    let version = that.bProgram.program_versions.find( vrs => vrs.id === that.instance.current_snapshot.b_program_version.id);
+                    let version = this.bProgram.program_versions.find( vrs => vrs.id === this.instance.current_snapshot.b_program_version.id);
 
                     if (version != null ) {
-                        that.bProgramVersion = version;
-                    } else if (that.bProgram.program_versions.length > 0) {
-                        that.onChangeVersion(that.bProgram.program_versions[0]);
+                        this.bProgramVersion = version;
+                    } else if (this.bProgram.program_versions.length > 0) {
+                        this.onChangeVersion(this.bProgram.program_versions[0]);
                     }
 
-                } else if (that.bProgram.program_versions.length > 0) {
-                    that.onChangeVersion(that.bProgram.program_versions[0]);
+                } else if (this.bProgram.program_versions.length > 0) {
+                    this.onChangeVersion(this.bProgram.program_versions[0]);
                 } else {
-                    that.fmError(this.translate('flash_bprogram_no_versions'));
+                    this.fmError(this.translate('flash_bprogram_no_versions'));
                 }
-            }, 300);
-
-
+            });
         }
-
     }
 
     onCreateNewSnapshotSelectBProgramVersion() {
@@ -311,10 +306,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onSaveSnapshotClick(deploy_immediately: boolean = false): void {
-
-        if (this.editorView == null) {
-            console.info('onSaveSnapshotClick: this.editorView');
-        }
         if (this.editorView.isDeployable()) {
             let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
             this.modalService.showModal(m).then((success) => {
@@ -461,8 +452,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
         });
     }
-
-
 
     onChangeVersion(version: IBProgramVersion = null): void {
         if (version == null) {
@@ -673,7 +662,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             })
             .catch((reason) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError('Cannot be loaded.', reason);
             });
     }
 
@@ -705,13 +694,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             })
             .catch((reason) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError('Cannot be loaded.', reason);
             });
     }
 
-    /* tslint:disable:max-line-length ter-indent */
-    onFilterActualizationProcedureTask(pageNumber: number = 0,
-                                       status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET']): void {
+    // tslint:disable:max-line-length
+    onFilterActualizationProcedureTask(pageNumber: number = 0, status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET']): void {
         this.blockUI();
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
@@ -737,9 +725,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                     task.date_of_finish = value.date_of_finish;
                                 })
                                 .catch((reason) => {
-                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                    this.fmError('Cannot be loaded.', reason);
                                 });
-
                         }
                     });
                 });
@@ -747,16 +734,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             })
             .catch((reason) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError('Cannot be loaded.', reason);
             });
     }
-
-    /* tslint:disable:max-line-length ter-indent*/
 
     loadBlockoLiveView() {
         this.zone.runOutsideAngular(() => {
             if (this.liveView && this.instance.current_snapshot) {
-                console.info(JSON.stringify(this.instance.current_snapshot.program));
                 this.liveView.setDataJson(this.instance.current_snapshot.program.snapshot);
 
                 if (this.instance.instance_remote_url) {
@@ -764,7 +748,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                         if (socket) {
                             this.homerDao = socket;
-                            this.homerDao.messages.subscribe((m: IWebSocketMessage) => this.homerMessageReceived(m));
+                            this.homerDao.messages.subscribe((m: IWebSocketMessage) => this.onMessage(m));
 
                         } else {
                             console.error('ProjectsProjectInstancesInstanceComponent:connectBlockoInstanceWebSocket:: ', error);
@@ -775,7 +759,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    homerMessageReceived(m: any) {
+    onMessage(m: any) {
         this.zone.runOutsideAngular(() => {
 
             const controller = this.liveView.getBlockoController();
@@ -801,7 +785,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
 
             if (m.message_type === 'new_console_event') {
-                console.info('homerMessageReceived:: new_console_event:: ', m);
                 this.zone.run(() => {
                     this.consoleLog.add(
                         m.data['console_message_type'],
@@ -815,7 +798,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
 
             if (m.message_type === 'new_error_event') {
-                console.info('homerMessageReceived:: new_error_event:: ', JSON.stringify(m.data['error_message'], null, 4));
                 controller.setError(m.data.block_id, true);
                 this.zone.run(() => {
                     this.consoleLog.add(
@@ -831,47 +813,19 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             if (m.message_type === 'get_values') {
 
-                for (let block in m.connector) {
-                    if (!m.connector.hasOwnProperty(block)) {
-                        continue;
-                    }
-
-                    for (let input in m.connector[block].inputs) {
-                        if (!m.connector[block].inputs.hasOwnProperty(input)) {
-                            continue;
-                        }
-                        controller.setInputConnectorValue(block, input, m.connector[block].inputs[input]);
-                    }
-
-                    for (let output in m.connector[block].outputs) {
-                        if (!m.connector[block].outputs.hasOwnProperty(output)) {
-                            continue;
-                        }
-                        controller.setOutputConnectorValue(block, output, m.connector[block].outputs[output]);
-                    }
-
-                    for (let targetType in m.externalConnector) {
-
-                        if (!m.externalConnector.hasOwnProperty(targetType)) {
-                            continue;
-                        }
-
-                        for (let targetId in m.externalConnector[targetType]) {
-                            if (!m.externalConnector[targetType].hasOwnProperty(targetId)) {
-                                continue;
-                            }
-
-                            for (let input in m.externalConnector[targetType][targetId].inputs) {
-                                if (m.externalConnector[targetType][targetId].inputs.hasOwnProperty(input)) {
-                                    continue;
+                // TODO what about external?
+                if (m.data.internal) {
+                    for (let blockId in m.data.internal) {
+                        if (m.data.internal.hasOwnProperty(blockId)) {
+                            if (m.data.internal[blockId].outputs) {
+                                for (let output in m.data.internal[blockId].outputs) {
+                                    if (m.data.internal[blockId].outputs.hasOwnProperty(output)) {
+                                        let val = m.data.internal[blockId].outputs[output];
+                                        controller.setOutputConnectorValue(blockId, output, typeof val === 'object' ? new BlockoCore.Message(val) : val);
+                                    }
                                 }
                             }
-
-                            for (let output in m.externalConnector[targetType][targetId].outputs) {
-                                if (!m.externalConnector[targetType][targetId].outputs.hasOwnProperty(output)) {
-                                    continue;
-                                }
-                            }
+                            // TODO maybe inputs?
                         }
                     }
                 }
@@ -881,7 +835,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.zone.run(() => {
                     if (m.data.logs) {
                         for (let i = 0; i < m.data.logs.length; i++) {
-                            const log = m.logs[i];
+                            const log = m.data.logs[i];
                             this.consoleLog.add(log.type, log.message, 'Block ' + log.block_id, new Date(log.time).toLocaleString());
                         }
                     }
@@ -962,9 +916,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         if (action === 'edit_mesh_network_token') {
             this.onEditMeshNetworkKey(object);
         }
-
-
-
     }
 
     onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
@@ -980,9 +931,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
     }
 
-
-
-    onDrobDownEmiterProgram(action: string, m_project: IBProgramVersionSnapGridProject, program: IBProgramVersionSnapGridProjectProgram) {
+    onDropDownEmitterProgram(action: string, m_project: IBProgramVersionSnapGridProject, program: IBProgramVersionSnapGridProjectProgram) {
 
         if (action === 'edit_grid_app') {
             this.onGridProgramPublishClick(m_project, program);
