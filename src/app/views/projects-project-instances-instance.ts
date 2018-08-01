@@ -407,7 +407,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.tyrionBackendService.instanceAddMeshNetworkKey(this.instanceId, {
-                    description: model.description
+                    description: model.description,
+                    short_prefix: 'TODO'
                 })
                     .then((bpv) => {
                         this.refresh();

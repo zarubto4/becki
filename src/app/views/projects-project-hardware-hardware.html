@@ -554,11 +554,7 @@
                                         <span class="font-grey-mint">{{conf.key}}</span>
                                     </td>
                                     <td>
-                                        <div *ngIf="conf.type == 'string' && conf.key != 'netsource'">
-                                            <span class="font-grey-mint bold">{{conf.value}}</span>
-                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
-                                        </div>
-                                        <div *ngIf="conf.type == 'string' && conf.key == 'netsource'">
+                                        <div *ngIf="conf.type == 'string'">
                                             <span class="font-grey-mint bold">{{conf.value}}</span>
                                             <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
                                         </div>
@@ -572,6 +568,9 @@
                                             <i *ngIf="!conf.value" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
                                                (click)="onEditParameterValue_Boolean_Click(conf.key, !conf.value)"></i>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <span *ngIf="conf.pending">Pending</span>
                                     </td>
                                 </tr>
                             </tbody>

@@ -23,6 +23,7 @@ export interface ConfigParameters {
     key: string;
     value: any;
     type: any;
+    pending: boolean;
 }
 
 
@@ -178,12 +179,16 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     config_array(): void {
 
         let configs: ConfigParameters[] = [];
+
+        let pending: Array<string> = this.hardware.bootloader_core_configuration.pending || [];
+
         for (let key in this.hardware.bootloader_core_configuration) {
-            if (true) {
+            if (this.hardware.bootloader_core_configuration.hasOwnProperty(key) && key !== 'pending') {
                 configs.push({
                     key: key,
                     value: (<any>this.hardware.bootloader_core_configuration)[key],
-                    type: typeof ((<any>this.hardware.bootloader_core_configuration)[key])
+                    type: typeof ((<any>this.hardware.bootloader_core_configuration)[key]),
+                    pending: pending.indexOf(key) !== -1
                 });
             }
         }
