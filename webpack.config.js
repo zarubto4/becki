@@ -57,22 +57,24 @@ module.exports = function makeWebpackConfig() {
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
     };
 
-    config.optimization = {
-        minimize: true,
-        minimizer: [
-            new UglifyWebpackPlugin({
-                cache: true,
-                parallel: true,
-                uglifyOptions: {
-                    compress: true,
-                    ecma: 6,
-                    mangle: true
-                },
-                sourceMap: true
-            })
-        ],
-        noEmitOnErrors: true
-    };
+    if(isProd) {
+        config.optimization = {
+            minimize: true,
+            minimizer: [
+                new UglifyWebpackPlugin({
+                    cache: true,
+                    parallel: true,
+                    uglifyOptions: {
+                        compress: true,
+                        ecma: 6,
+                        mangle: true
+                    },
+                    sourceMap: true
+                })
+            ],
+            noEmitOnErrors: true
+        };
+    }
 
     /**
      * Resolve
