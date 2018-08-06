@@ -500,7 +500,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         this.blockUI();
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
-            hardware_ids: [this.hardware.id],
+            hardware_ids: [this.hardwareId],
             update_states: states,
             type_of_updates: type_of_updates
         })
