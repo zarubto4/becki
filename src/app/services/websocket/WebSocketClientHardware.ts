@@ -21,6 +21,10 @@ export class WebSocketClientHardware extends WebSocketClient {
     public requestDeviceTerminalUnsubscribe(deviceId: string): Promise<IWebSocketMessage> {
         return this.sendWithResponse(new WSMessageUnsubscribeHardware([deviceId]));
     }
+
+    public requestDeviceTerminalLevelChange(deviceId: string, logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace')): Promise<IWebSocketMessage> {
+        return this.sendWithResponse(new WSMessageChangeLogLevel(logLevel, [deviceId]));
+    }
 }
 
 export class WSMessageSubscribeHardware extends WebSocketMessage {
@@ -38,13 +42,10 @@ export class WSMessageUnsubscribeHardware extends WebSocketMessage {
     }
 }
 
-export class ITerminalWebsocketMessage {
-    hardware_id: string;
-    level: ConsoleLogType;
-    message: string;
-}
-
-export class ITerminalWebsocketOnlineStateMessage {
-    hardware_id: string;
-    online: boolean;
+export class WSMessageChangeLogLevel extends WebSocketMessage {
+    constructor(level: string, ids: Array<string>) {
+        super('change_loglevel');
+        this.setData('log_level', level);
+        this.setData('hardware_ids', ids);
+    }
 }

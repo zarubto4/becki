@@ -327,24 +327,18 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
 
         }
 
-        this.logLevel[hardware.id].socket.requestDeviceTerminalUnsubscribe(hardware.id)
-            .then((response: IWebSocketMessage) => {
-                if (response.isSuccessful()) {
-                    return this.logLevel[hardware.id].socket.requestDeviceTerminalSubscribe(hardware.id, logLevel);
-                } else {
-                    throw new Error('Unable to unsubscribe previous logger');
-                }
-            })
+        this.logLevel[hardware.id].socket.requestDeviceTerminalLevelChange(hardware.id, logLevel)
             .then((response: IWebSocketMessage) => {
                 if (response.isSuccessful()) {
                     this.logLevel[hardware.id].log = logLevel;
                 } else {
-                    throw new Error('Unable to subscribe new logger');
+                    throw new Error('Unable to change log level');
                 }
             })
             .catch((reason) => {
                 console.error('onUserChangeLogLevelClick:', reason);
             });
+
     }
 
     /**
