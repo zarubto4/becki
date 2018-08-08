@@ -9,7 +9,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
-const becki_version = require('/Users/servertara/git/becki/package.json').version;
 
 /**
  * Env
@@ -197,8 +196,9 @@ module.exports = function makeWebpackConfig() {
             // Inject script and link tags into html files.
             // Reference: https://github.com/ampedandwired/html-webpack-plugin
             new HtmlWebpackPlugin({
+                inject: false,
                 template: './src/public/index.html',
-                chunksSortMode: 'dependency'
+                chunksSortMode: 'dependency',
             }),
 
             // This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS.

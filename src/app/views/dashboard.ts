@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IArticle, IArticleList, IProject } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
@@ -17,6 +17,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 })
 export class DashboardComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
+    check: boolean = true;
     tab: string = 'general';
     projects: IProject[] = null;
     articles: {
@@ -41,7 +42,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
 
     ngOnInit(): void {
-
+        console.info('ON INIT....');
         // Allow to create new Article
         if (this.tyrionBackendService.personPermissions.indexOf('Article_create') >= 0) {
             this.create_article_permission = true;

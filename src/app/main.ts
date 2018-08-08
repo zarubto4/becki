@@ -144,7 +144,7 @@ import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
 import { ModalsVersionSelectComponent } from './modals/version-select';
 // Common dependencies
 import { SharedModule } from '../shared';
-import { HttpClientModule } from '@angular/common/http';
+
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -316,8 +316,7 @@ class BeckiErrorHandler implements ErrorHandler {
         RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
         HttpModule,
         JsonpModule,
-        MyDatePickerModule,
-        HttpClientModule
+        MyDatePickerModule
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
