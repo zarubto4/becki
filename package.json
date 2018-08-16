@@ -1,6 +1,6 @@
 {
     "name": "Becki",
-    "version": "v1.3.10",
+    "version": "v1.3.17",
     "author": "Byzance Becki authors",
     "license": "UNLICENSED",
     "private": true,
@@ -11,6 +11,7 @@
         "homer-generator-win": "node ./generator-homer/generator-win",
         "clean": "rimraf node_modules doc dist && npm cache clean --force",
         "clean-install": "npm run clean --force && npm install",
+        "watch": "webpack --watch --progress --profile",
         "build": "rimraf dist && webpack --config webpack.config.js --mode production --progress --profile --bail",
         "server": "webpack-dev-server --config webpack.config.js --mode development --inline --hot --progress --port 8080",
         "start-https": "webpack-dev-server --inline --progress --port 8181 --https",

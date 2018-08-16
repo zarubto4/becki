@@ -1128,6 +1128,9 @@ export class StaticTranslation {
                 'label_when': 'When',
                 'label_immediately': 'Immediately',
                 'label_on_time': 'At a set time',
+                'label_program_name': '<strong class="font-color-code">CODE</strong>Program',
+                'label_program_version_name': '<strong class="font-color-code">CODE</strong>Version',
+                'btn_select_version': 'Select',
 
             }, 'ProducersComponent': {
                 'main_title': 'Manufacturers',
@@ -1306,13 +1309,15 @@ export class StaticTranslation {
 
             }, 'ModalsGridProjectSelectComponent': {
 
-                'title': 'Select <strong class="font-color-grid">GRID</strong> Project',
+                'title': 'Select <strong class="font-color-grid">GRID</strong> Collection',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_program': 'Program',
                 'table_version': 'Version',
                 'table_actions': 'Action',
                 'label_select_project': 'Select',
+                'label_no_grid_project': 'No <strong class="font-color-grid">GRID</strong> Collection',
+                'label_no_grid_project_comment': 'First create a Grid collection, at least with one application.',
 
             }, 'ProjectsProjectHardwareComponent': {
 
@@ -1696,7 +1701,8 @@ export class StaticTranslation {
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
                 'btn_select_cloud_version': 'Select & Upload Version to Cloud',
-                'btn_deploy_snapshot': 'Deploy Snapshot',
+                'btn_save_deploy': 'Save & Deploy now',
+                'btn_deploy_snapshot': 'Deploy Some Snapshot',
                 'label_grid_project': 'Byzance<strong class="font-color-grid">Grid</strong> Project',
                 'table_grid_program_name': 'Program',
                 'table_grid_program_description': 'Description',
@@ -1705,7 +1711,7 @@ export class StaticTranslation {
                 'table_grid_program_settings': 'Access Type',
                 'table_grid_link': 'Access Link',
                 'btn_turn_off_instance': 'Shut Down',
-                'btn_change_version': 'Change version',
+                'btn_change_version': 'Change Blocko Version',
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
                 'label_instance_properties': 'properties',

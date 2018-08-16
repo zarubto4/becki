@@ -292,6 +292,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     isDeployable() {
+        console.info('Check if is Blocko Deployable');
         return this.blocko.core.isDeployable();
     }
 

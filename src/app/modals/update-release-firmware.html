@@ -4,10 +4,12 @@
         <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
+
         <form [formGroup]="form">
 
+            <!-- Select Hardware Group -->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <h4>
                         <span [innerHTML]="'label_select'|bkTranslate:this"></span><br>
                         <span [innerHTML]="'label_hw_group_title'|bkTranslate:this"></span>
@@ -21,110 +23,81 @@
                         <bk-form-select #GroupList [options]="groupsForSelect"  [label]="'label_hardware_group'|bkTranslate:this"  [control]="form.controls.deviceGroupStringIdSelected" (valueChanged)="onGroupChange($event)"></bk-form-select>
                     </div>
                 </div>
-                <div *ngIf="modalModel.deviceGroup != null && !selectedDeviceGroup" class="col-md-6 text-centert">
+            </div>
+
+            <!-- Select Type -->
+            <div class="row">
+                <div *ngIf="modalModel.deviceGroup != null && !selectedDeviceGroup" class="col-md-12 text-center">
                     <br>
                     <br>
                     <i class="fa fa-3x fa-spinner fa-spin"></i>
                 </div>
-                <div *ngIf="selectedDeviceGroup" class="col-md-6">
-
+                <div *ngIf="selectedDeviceGroup" class="col-md-12">
                     <div>
                         <h4>
                             <span [innerHTML]="'label_select'|bkTranslate:this"></span><br>
-                            <span class="cursor-hand" [class.bold]="type == 'firmware'" [class.font-color-code]="type == 'firmware'" (click)="set_firmware()" [innerHTML]="'label_firmware_title'|bkTranslate:this"></span> / <span class="cursor-hand" [class.font-color-code]="type == 'bootloader'"  [class.bold]="type == 'bootloader'" (click)="set_bootloader()" [innerHTML]="'label_bootloader_title'|bkTranslate:this"></span>
+                            <span class="cursor-hand" [class.bold]="type == 'firmware'"
+                                  [class.font-color-code]="type == 'firmware'" (click)="set_firmware()"
+                                  [innerHTML]="'label_firmware_title'|bkTranslate:this"></span> / <span class="cursor-hand" [class.font-color-code]="type == 'bootloader'"  [class.bold]="type == 'bootloader'" (click)="set_bootloader()" [innerHTML]="'label_bootloader_title'|bkTranslate:this"></span>
                         </h4>
                         <br>
                     </div>
+                </div>
+            </div>
 
-                    <div *ngIf="selectedDeviceGroup.hardware_types && selectedDeviceGroup.hardware_types.length > 0">
-                        <div *ngIf="type == 'firmware'">
+            <!-- Select Bootloader -->
+            <div *ngIf="type == 'bootloader'">
 
-                            <div *ngIf="cPrograms">
-                                <div *ngFor="let type_of_board of selectedDeviceGroup.hardware_types">
-                                    <span class="bold">{{type_of_board.name}}</span>
-                                    <div *ngIf="cPrograms[type_of_board.id] != null && cPrograms[type_of_board.id].content.length > 0">
+                    <div *ngFor="let type_of_board of selectedDeviceGroup.hardware_types">
+                        <span class="bold">{{type_of_board.name}}</span>
+                        <div *ngIf="bootloaders[type_of_board.id] != null">
 
-                                    <bk-program-version-selector (valueChanged)="hwCProgramVersionChanged(type_of_board.id, $event)"
-                                                                 [type]="'ICProgram'"
-                                                                 [align_horizontal]="false"
-                                                                 [programs]="cPrograms[type_of_board.id].content"></bk-program-version-selector>
-                                    </div>
-                                    <div *ngIf="cPrograms[type_of_board.id] == null">
-                                        <!-- Not yet load -->
-                                        <span class="text-center">{{'label_loading'|bkTranslate:this}}</span>
-                                    </div>
-                                    <div *ngIf="cPrograms[type_of_board.id] == null">
-                                        <!-- Not yet load -->
-                                        <span class="text-center">{{'label_loading'|bkTranslate:this}}</span>
-                                    </div>
-                                    <div *ngIf="cPrograms[type_of_board.id] != null && cPrograms[type_of_board.id].content.length == 0">
-                                        <!-- List is empty :((( -->
-                                        <span class="text-center" [innerHTML]="'label_no_firmware_warning'|bkTranslate:this"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="!cPrograms">
-                                nic tu není shit piča
-                            </div>
+                            <bk-form-select [options]="bootloaders[type_of_board.id]"
+                                            [labelComment]="false"
+                                            [label]="'label_select_bootloader_version'|bkTranslate:this" type="text"
+                                            [control]="form.controls[type_of_board.id + '_selectedBootloaderId']">
+                            </bk-form-select>
+
                         </div>
-
-
-                        <div *ngIf="type == 'bootloader'">
-                            <div *ngIf="bootloaders">
-                                <div *ngFor="let type_of_board of selectedDeviceGroup.hardware_types">
-                                    <span class="bold">{{type_of_board.name}}</span>
-                                    <div *ngIf="bootloaders[type_of_board.id] != null">
-                                        <bk-form-select [options]="get_bootloader_option(bootloaders[type_of_board.id])" [labelComment]="false" [label]="'label_select_bootloader_version'|bkTranslate:this" type="text" [control]="form.controls[ type_of_board.id + '_selectedBootloaderId']"></bk-form-select>
-                                    </div>
-                                    <div *ngIf="bootloaders[type_of_board.id] == null">
-                                        Chybí bootloadery!!! :(((
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="selectedDeviceGroup.hardware_types.length == 0">
-                                <span class="text-center" [innerHTML]="'label_no_hw_types_in_group'|bkTranslate:this"></span>
-                            </div>
+                        <div *ngIf="bootloaders[type_of_board.id] == null">
+                            Chybí bootloadery!!! :(((
                         </div>
                     </div>
 
                     <div *ngIf="selectedDeviceGroup.hardware_types.length == 0">
                         <span class="text-center" [innerHTML]="'label_no_hw_types_in_group'|bkTranslate:this"></span>
                     </div>
+
+            </div>
+
+            <!-- Select Firmware -->
+            <div *ngIf="type == 'firmware' && selectedDeviceGroup">
+                <div *ngFor="let type_of_board of selectedDeviceGroup.hardware_types" class="margin-left-15">
+                    <span class="bold" [innerHTML]=" type_of_board.name"></span>
+                     <div class="row">
+                         <div class="col-md-9">
+                             <div class="margin-left-15">
+                                 <span [innerHTML]="'label_program_name'|bkTranslate:this"></span>:
+                                 <span *ngIf="selectedProgram[type_of_board.id]" class="bold">{{selectedProgram[type_of_board.id].program.name}}</span>
+                             </div>
+                             <div class="margin-left-15">
+                                 <span [innerHTML]="'label_program_version_name'|bkTranslate:this"></span>:
+                                 <span *ngIf="selectedProgram[type_of_board.id]" class="bold">{{selectedProgram[type_of_board.id].version.name}}</span>
+                             </div>
+                         </div>
+                         <div class="col-md-3">
+                             <button type="button" class="btn blue" (click)="onSelectCProgramVersion(type_of_board)">{{'btn_select_version'|bkTranslate:this}}</button>
+                         </div>
+                     </div>
+
+
+                </div>
+                <div *ngIf="!selectedDeviceGroup.hardware_types">
+                    Chybí Typy HW!!! :(((
                 </div>
             </div>
 
 
-            <!-- Step 2 -->
-
-            <div *ngIf="selectedDeviceGroup != null && selectedDeviceGroup.hardware_types.length > 0 && type == 'firmware'" class="text-center">
-                 <span>Affected devices: {{selectedDeviceGroup.size}}</span>
-            </div>
-            <div *ngIf="selectedDeviceGroup != null && selectedDeviceGroup.hardware_types.length > 0 && type == 'firmware'">
-                <hr>
-                <br>
-                <bk-form-select [control]="form.controls.firmwareType" [label]="'label_firmware_type'|bkTranslate:this"
-                                [options]="firmwareTypeSelect"></bk-form-select>
-            </div>
-
-            <div *ngIf="selectedDeviceGroup != null && selectedDeviceGroup.hardware_types.length > 0">
-                <hr>
-                <div class="text-center">
-                    <h4>
-                        <span [innerHTML]="'label_when'|bkTranslate:this"></span>
-                        <br>
-                        <span class="cursor-hand" [class.bold]="immediately" (click)="onBooleanClick(true)" [innerHTML]="'label_immediately'|bkTranslate:this"></span> / <span class="cursor-hand" [class.bold]="!immediately" (click)="onBooleanClick(false)" [innerHTML]="'label_on_time'|bkTranslate:this"></span>
-                    </h4>
-                </div>
-                <div *ngIf="!immediately">
-                    <br>
-                    <bk-date-picker [control]="form.controls.date" [label]="'label_select_date'|bkTranslate:this" [dateOption]="dateOption"></bk-date-picker>
-                    <br>
-                    <bk-time-picker [control]="form.controls.time" [label]="'label_select_time'|bkTranslate:this"></bk-time-picker>
-                    <br>
-                    <bk-time-zone-selector [control]="form.controls.timeZoneOffset" [labelEnabled]="true"></bk-time-zone-selector>
-                </div>
-
-            </div>
 
         </form>
     </div>

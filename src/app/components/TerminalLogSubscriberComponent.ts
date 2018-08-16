@@ -13,14 +13,14 @@ import { IHardware } from '../backend/TyrionAPI';
 import { FlashMessageError } from '../services/NotificationService';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 import { TyrionBackendService } from '../services/BackendService';
-import { ModalService } from "../services/ModalService";
-import { FormSelectComponentOption } from "./FormSelectComponent";
-import { ModalsSelectHardwareModel } from "../modals/select-hardware";
+import { ModalService } from '../services/ModalService';
+import { FormSelectComponentOption } from './FormSelectComponent';
+import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 import {
     ITerminalWebsocketMessage,
     WebsocketClientHardwareLogger
-} from "../services/websocket/Websocket_Client_HardwareLogger";
-import {WebsocketMessage} from "../services/websocket/WebsocketMessage";
+} from '../services/websocket/Websocket_Client_HardwareLogger';
+import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
 
 @Component({
     selector: 'bk-terminal-log-component',
@@ -317,15 +317,17 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
     onHardwareUnSubscribeClick(hardware: IHardware): void {
         console.info('onHardwareUnSubscribeClick: Hardware::', hardware.id);
 
-        this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
+        if (this.logLevel[hardware.id].socket) {
+            this.logLevel[hardware.id].socket.requestDeviceTerminalUnSubscribe(hardware.id, (response_message: WebsocketMessage, error: any) => {
 
-            if(response_message && response_message.status == 'success') {
-                this.logLevel[hardware.id].subscribed = false;
-            }else {
-                console.error('onHardwareUnSubscribeClick:: Hardware', hardware.id, 'LogLevel', 'Error', error);
-            }
+                if (response_message && response_message.status == 'success') {
+                    this.logLevel[hardware.id].subscribed = false;
+                } else {
+                    console.error('onHardwareUnSubscribeClick:: Hardware', hardware.id, 'LogLevel', 'Error', error);
+                }
 
-        });
+            });
+        }
     }
 
     /**
@@ -461,10 +463,25 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy {
         // console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe size: ', this.selected_hw_for_subscribe.length);
         // console.log('addNewHardwareToSubscribeList: this.selected_hw_for_subscribe: ', this.selected_hw_for_subscribe);
 
-        if(hardware.server == null) {
+        if (hardware.server == null) {
             this.consoleLog.set_color(hardware.id, color);
             this.consoleLog.add('error', 'Try to Initialize Device ID: '+ hardware.id + ' Device Full ID: ' + hardware.full_id +' but it looks like the device never joined the server. We have no required details where device is!', hardware.id, hardware.name);
             return
+        }
+
+        if (hardware.online_state !== 'ONLINE') {
+            this.consoleLog.set_color(hardware.id, color);
+            this.consoleLog.add('output', 'Latest know server is offline. Its not possible to subscribe logs', hardware.id, hardware.name);
+
+            // Set Default Values
+            this.logLevel[hardware.id] = {
+                log: 'info',
+                subscribed: false,
+                socket: null
+            };
+
+            this.selected_hw_for_subscribe.push(hardware);
+            return;
         }
 
         this.tyrionBackendService.getWebsocketService()

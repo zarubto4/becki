@@ -107,8 +107,8 @@ export class FormSelectComponent {
 
             if (this.regexFirstOption) {
 
-                // console.log("FormSelectComponent: Regex: ", this.regexFirstOption);
-                // console.log("FormSelectComponent: Option: ", option);
+                // console.log('FormSelectComponent: Regex: ', this.regexFirstOption);
+                // console.log('FormSelectComponent: Option: ', option);
 
                 let toPick: number = 0;
 
@@ -118,7 +118,7 @@ export class FormSelectComponent {
                     }
                 });
 
-                // console.log("FormSelectComponent: TO Pick: ", toPick);
+                // console.log('FormSelectComponent: TO Pick: ', toPick);
 
                 if (toPick === -1) {
                     this.selectedValue = option[0].value;
@@ -128,7 +128,7 @@ export class FormSelectComponent {
                     this.selectedValue = option[toPick].value;
                     this.control.setValue(option[toPick].value);
 
-                    //  console.log("FormSelectComponent: This Selected Value" , this.selectedValue );
+                    //  console.log('FormSelectComponent: This Selected Value' , this.selectedValue );
                 }
             } else if (this.positionFirstOption && this.positionFirstOption > -1 && this.positionFirstOption < option.length) {
 
@@ -138,7 +138,7 @@ export class FormSelectComponent {
             } else {
 
                 if (option.length > 0) {
-                    // console.log("options:: pickFirstOption selected ");
+                    // console.log('options:: pickFirstOption selected ');
                     this.selectedValue = option[0].value;
                     this.control.setValue(option[0].value);
                 }
@@ -152,9 +152,9 @@ export class FormSelectComponent {
 
     onSelectedChange(newValue: string) {
 
-        this.control.updateValueAndValidity();
+        // console.log('onSelectedChange:', newValue);
 
-        // console.log("onSelectedChange:", newValue);
+        this.control.updateValueAndValidity();
 
         // Select first
         if (newValue == null) {
@@ -162,19 +162,19 @@ export class FormSelectComponent {
         }
 
         if (this.firstSelect && newValue != null) {
-            // console.log("this.firstSelect && newValue != null");
+            // console.log('this.firstSelect && newValue != null');
             this.firstSelect = false;
             this.valueChanged.emit(newValue);
             return;
         }
 
         if (this.selectedValue === newValue) {
-            // console.log("onSelectedChange:: this.selectedValue === newValue ");
+            // console.log('onSelectedChange:: this.selectedValue === newValue ');
             return;
         }
 
         this.selectedValue = newValue;
-        // console.log("callEmit with:", this.selectedValue );
+        // console.log('callEmit with:', this.selectedValue );
 
         this.valueChanged.emit(newValue);
     }

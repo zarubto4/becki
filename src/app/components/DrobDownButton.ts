@@ -1,5 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { HostListener } from '@angular/core';
+
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, Directive, HostBinding, HostListener } from '@angular/core';
+
 
 @Component({
     selector: 'bk-drob-down-button',
@@ -126,14 +127,6 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
     @Output()
     onValueChanged: EventEmitter<string> = new EventEmitter<string>();
 
-    @HostListener('click')
-    onOutsideClickDropdownMenu(event) {
-        if (!this._eref.nativeElement.contains(event.target)) { // or some similar check
-            this.drob_down_clicked = false;
-        }
-    }
-
-
     constructor(private _eref: ElementRef) { }
 
     ngOnInit(): void {
@@ -142,6 +135,17 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
        // nevím
+    }
+
+    @HostListener('document:click', ['$event'])
+    clickout(event) {
+        if (this._eref.nativeElement.contains(event.target)) {
+            // console.info('document:click Inside');
+            // this.onOutsideClickDropdownMenu(event);
+        } else {
+            // console.info('document:click OutSide');
+            this.onOutsideClickDropdownMenu(event);
+        }
     }
 
     getConditionSize(): number {
@@ -182,5 +186,13 @@ export class BeckiDrobDownButtonComponent implements OnInit, OnChanges {
     onDrobDownClick() {
         this.drob_down_clicked = !this.drob_down_clicked;
     }
+
+    onOutsideClickDropdownMenu(event) {
+        if (!this._eref.nativeElement.contains(event.target)) { // or some similar check
+            this.drob_down_clicked = false;
+        }
+    }
+
+
 }
 

@@ -230,7 +230,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             .catch((err) => {
 
             });
-
     }
 
     // GRID ------------------------------------------------------------------------------------------------------------
@@ -262,6 +261,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     onChangeGrid(iface: Blocks.BlockoTargetInterface, callback: (iface: Blocks.BlockoTargetInterface) => void) {
+
+        console.info('onChangeGrid:: iface', iface);
 
         if (typeof iface.grid !== 'object') {
             this.fmWarning(this.translate('flash_old_interface'));
@@ -535,6 +536,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     selectBProgramVersionByVersionId(versionId: string) {
         // Select B_Program Version by ID if it is in URL parameter (or select last one)
         if (this.blockoProgramVersions) {
+            console.log('selectBProgramVersionByVersionId:: this.blockoProgramVersions');
             let version = null;
             if (versionId) {
                 version = this.blockoProgramVersions.find((bpv) => bpv.id === versionId);
@@ -544,6 +546,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 this.selectBProgramVersion(version);
             }
         } else {
+            console.log('selectBProgramVersionByVersionId:: version id', versionId, 'afterLoadSelectedVersionId');
             this.afterLoadSelectedVersionId = versionId;
         }
     }
@@ -553,6 +556,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         if (!this.blockoProgramVersions || this.blockoProgramVersions.indexOf(programVersion) === -1) {
             return;
         }
+
+        console.log('selectBProgramVersion:: programVersion ', programVersion.name);
 
         this.blockUI();
         this.tyrionBackendService.bProgramVersionGet(programVersion.id)
@@ -564,18 +569,22 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 this.selectedProgramVersion = programVersionFull;
                 this.selectedGrid = {};
 
+                console.log('selectBProgramVersion:: its time to set  grid_project_snapshots ', JSON.stringify(programVersionFull.grid_project_snapshots, null, 2) );
+
                 programVersionFull.grid_project_snapshots.forEach((pps: IBProgramVersionSnapGridProject) => {
                     this.selectedGrid[pps.grid_project.id] = {};
                     if (pps.grid_programs) {
                         pps.grid_programs.forEach((ps: IBProgramVersionSnapGridProjectProgram) => {
                             if (ps.grid_program_version) {
-                                this.selectedGrid[pps.grid_project.id][ps.id] = ps.grid_program_version.id;
+                                this.selectedGrid[pps.grid_project.id][ps.grid_program.id] = ps.grid_program_version.id;
                             } else {
                                 this.fmError(this.translate('flash_broken_grid_missing_version'));
                             }
                         });
                     }
                 });
+
+                console.log('selectBProgramVersion:: selectedGrid: ',  JSON.stringify(this.selectedGrid, null, 2) );
 
                 this.blockoView.setDataJson(this.selectedProgramVersion.program);
                 if (this.consoleLog) {
@@ -640,6 +649,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     onSaveClick(): void {
+
+        console.log('onSaveClick:: selectedGrid: ',  JSON.stringify(this.selectedGrid, null, 2));
 
         // Grid validation
         let validGrid = true;

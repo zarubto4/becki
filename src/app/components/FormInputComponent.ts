@@ -4,7 +4,7 @@
  */
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
 @Component({
@@ -118,7 +118,7 @@ export class FormInputComponent implements OnInit {
     @Output()
     onBtnClickEvent: EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(public validatorErrorsService: ValidatorErrorsService) {
+    constructor(public validatorErrorsService: ValidatorErrorsService, private formBuilder: FormBuilder) {
     }
 
     ngOnInit() {
@@ -129,6 +129,15 @@ export class FormInputComponent implements OnInit {
                     this.waitForTouch = false;
                 }
             }
+        }
+
+        if (this.control == null) {
+            console.info('FormInputComponent is null');
+            let form: FormGroup = this.formBuilder.group({
+                'value': ['']
+            });
+
+            this.control = form.controls['value'];
         }
     }
 
