@@ -42,34 +42,7 @@
     <meta name="msapplication-TileImage" content="/assets/images/icons/ms-icon-310x310.png">
     <meta name="theme-color" content="#ffffff">
 
-    <script>
-        function check() {
-            let arr = [];
-            let firstScript  = document.getElementById("scriptNumber_1");
-            arr.push(firstScript);
-
-            let secondScript  = document.getElementById("scriptNumber_2");
-            arr.push(secondScript);
-
-            let thirdScript  = document.getElementById("scriptNumber_3");
-            arr.push(thirdScript);
-
-            for (i = 0; i < arr.length; i++) {
-                if (arr[i] === null) {
-                    console.log('Script is missing.');
-                    return;
-                }
-            }
-
-            complete();
-        }
-
-
-        // Set timer if loading is too long
-        function complete() {
-
-        }
-    </script>
+    <% for (key in htmlWebpackPlugin.files.css) { %> <link href="<%= htmlWebpackPlugin.files.css[key] %>"  rel="stylesheet"> <% } %>
 
     <!-- Hotjar Tracking Code for www.byzance.cz
     <script>
@@ -84,45 +57,6 @@
     </script>
     -->
 
-    <style>
-        .myBar {
-            width: 100%;
-            height: 5px;
-            background-image: linear-gradient(to top, #96fbc4 0%, #f9f586 100%);
-            animation: loader 20s ease-in-out;
-        }
-
-        .myProgress {
-            width: 100%;
-            background-color: grey;
-        }
-
-        @keyframes loader {
-            0% {
-                width: 0%;
-                filter: hue-rotate(0deg);
-            }
-            25% {
-                width: 25%;
-                filter: hue-rotate(50deg);
-            }
-            50% {
-                width: 50%;
-                filter: hue-rotate(83deg);
-            }
-            75% {
-                width: 75%;
-                filter: hue-rotate(120deg);
-            }
-            100% {
-                width: 100%;
-                filter: hue-rotate(200deg);
-            }
-        }
-    </style>
-
-    <% for (key in htmlWebpackPlugin.files.css) { %> <link href="<%= htmlWebpackPlugin.files.css[key] %>"  rel="stylesheet"> <% } %>
-
 </head>
 
 <body>
@@ -130,11 +64,8 @@
         <div class="byzance-page-center">
             <div class="byzance-logo-spinner-white"></div>
         </div>
-
-        <div class="myProgress">
-            <div class="myBar" id="myBar"></div>
-        </div>
     </bk-app>
+
     <noscript>Failed! Scripting has to be enabled.</noscript>
 
     <% for (key in htmlWebpackPlugin.files.js) { %> <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>" id="<%= '_script'+key %>"></script> <% } %>
