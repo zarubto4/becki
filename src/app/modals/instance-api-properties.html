@@ -5,6 +5,8 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
+
+            <bk-form-input *ngIf="modalModel.mesh_prefix_required" [control]="form.controls.prefix" [label]="'label_mesh_network_prefix'|bkTranslate:this"></bk-form-input>
             <bk-form-input [control]="form.controls.description" [label]="'label_token_description'|bkTranslate:this"></bk-form-input>
         </form>
     </div>

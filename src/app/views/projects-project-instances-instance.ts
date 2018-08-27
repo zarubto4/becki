@@ -195,6 +195,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.fmError(`Instances ${this.projectId} cannot be loaded.`, reason);
                 this.unblockUI();
             });
+
     }
 
     onPortletClick(action: string): void {
@@ -403,12 +404,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
 
     onAddMeshNetworkKey(): void {
-        let model = new ModalsInstanceApiPropertiesModel();
+        let model = new ModalsInstanceApiPropertiesModel('', false, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.tyrionBackendService.instanceAddMeshNetworkKey(this.instanceId, {
-                    description: model.description,
-                    short_prefix: 'TODO'
+                    short_prefix: model.prefix,
+                    description: model.description
                 })
                     .then((bpv) => {
                         this.refresh();
@@ -502,6 +503,33 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     });
             }
         });
+    }
+
+    getWebHooks(): Array<BlockoCore.BlockClass> {
+
+        console.warn('getWebHooks() ');
+        console.warn('getWebHooks(): ',  this.instance.current_snapshot.program);
+        let blocko_program  = JSON.parse(this.instance.current_snapshot.program.snapshot);
+
+        console.warn('blocko_program::', blocko_program);
+        let blocks = blocko_program['blocks'];
+
+        // create list
+        let filteredList: any[] = [];
+
+        for (let key in blocks) {
+            if (!blocks.hasOwnProperty(key)) { continue; }
+
+            console.warn('Mám bloček : ', blocks[key]);
+
+            if (blocks[key]['type'] === 'webHook') {
+                console.warn('Bloček je nwebhook! : ');
+                filteredList.push(blocks[key]);
+            }
+
+        }
+
+        return filteredList;
     }
 
     selectedHistoryItem(event: { index: number, item: IInstanceSnapshot }) {

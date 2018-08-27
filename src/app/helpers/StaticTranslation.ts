@@ -238,6 +238,7 @@ export class StaticTranslation {
                 'title_edit': '<strong class="font-color-instance">INSTANCE</strong> Token Properties',
                 'title_add': 'New <strong class="font-color-instance">INSTANCE</strong> Token',
                 'label_token_description': 'Token Description',
+                'label_mesh_network_prefix': 'Prefix Name for better overview  "<strong>myHome</strong>_eafeef141..." or "<strong>factoryS1</strong>_eafeef1...."',
 
             }, 'ModalsBlockoVersionSelectComponent': {
                 'title': 'Change Version',
@@ -453,6 +454,8 @@ export class StaticTranslation {
                 'placeholder_hardware': 'Select',
                 'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
                 'label_no_hardware_comment': 'First, add the hardware to the project',
+                'label_no_hardware_group': 'No <strong class="font-color-hardware">HARDWARE GROUP</strong> in this project.',
+                'label_no_hardware_group_comment': 'Add Group on Hardware list page first.',
                 'table_hardware_id': 'ID',
                 'table_hardware_name': 'Alias',
                 'table_actions': 'Actions',
@@ -1494,6 +1497,7 @@ export class StaticTranslation {
                 'label_full_id': 'Processor ID:',
                 'label_update_in_que': 'Update in Que',
                 'label_developer_settings': 'Developer settings',
+                'label_update_prohibited_by_settings': 'Prohibited by developer settings. <strong>"Synchronize always with database"</strong>',
                 'label_port': 'Port',
                 'label_alerts': 'Alerts',
                 'label_overview': 'Overview',
@@ -1711,6 +1715,7 @@ export class StaticTranslation {
                 'table_b_program_version_description': 'Description',
                 'table_update_progress': 'Progress',
                 'table_mesh_key': 'Mash Token',
+                'table_api_url': 'API URL',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
@@ -1732,6 +1737,8 @@ export class StaticTranslation {
                 'btn_change_version': 'Change Blocko Version',
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
+                'label_no_api_keys': 'No Api Keys',
+                'label_no_api_keys_comment': 'Create New one, if you want use your <strong>Webhooks</strong> in this <strong class="font-color-instance">INSTANCE</strong>',
                 'label_instance_properties': 'properties',
                 'label_instance_name': 'Name',
                 'label_instance_description': 'Description',
@@ -1804,6 +1811,7 @@ export class StaticTranslation {
                 'label_select_version_for_details': 'Select version to see details',
                 'label_snapshot_editor': 'Editor',
                 'label_no_hardware': 'Nothing here',
+                'label_version_name': 'Version used:',
 
                 'label_no_running_update_on_hardware': 'No <strong class="font-color-code">FIRMWARE</strong> releases',
                 'label_no_running_update_on_hardware_comment': 'Actual <strong class="font-color-instance">INSTANCE</strong> SpanShots not required any updates on <strong class="font-color-hardware">HARDWARE</strong>',
@@ -2927,7 +2935,7 @@ export class StaticTranslation {
                 'ALREADY_ON': 'Already on'
             },
             'device_alerts': {
-                'BOOTLOADER_REQUIRED': 'Bootloader update is required.',
+                'BOOTLOADER_REQUIRED': 'Bootloader update is strongly recommended.',
                 'RESTART_REQUIRED': 'Device restart is required.'
             },
             'instance_status': {

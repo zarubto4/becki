@@ -228,6 +228,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         }
     }
 
+    getWebHooks(): Array<string> {
+        return this.blocko.core.getWebHooks();
+    }
+
     getStaticBlock(blockName: string): BlockoCore.Block {
         let b: BlockoCore.Block = null;
         this.zone.runOutsideAngular(() => {

@@ -370,15 +370,15 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             },
             {
                 value: '6lowPan',
-                label: '6lowPan'
+                label: '6 LowPan'
             },
             {
                 value: 'gsm',
-                label: 'gsm'
+                label: 'GSM'
             },
             {
                 value: 'wifi',
-                label: 'wifi'
+                label: 'Wi-Fi'
             }
         ];
 
@@ -510,7 +510,6 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.actualizationTaskFilter.content.forEach((task, index, obj) => {
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
-
                             this.tyrionBackendService.actualizationTaskGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
@@ -519,7 +518,6 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                                 .catch((reason) => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                                 });
-
                         }
                     });
                 });
@@ -540,7 +538,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         }
 
         if (backup_mode === 'STATIC_BACKUP') {
-            let m = new ModalsHardwareCodeProgramVersionSelectModel(this.projectId, this.hardware.hardware_type.id);
+            let m = new ModalsSelectCodeModel(this.projectId, this.hardware.hardware_type.id);
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success) {
@@ -550,12 +548,13 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                                 {
                                     hardware_id: this.hardware.id,
                                     backup_mode: false,
-                                    c_program_version_id: m.selectedProgramVersion.id
+                                    c_program_version_id: m.selected_c_program_version.id
                                 }
                             ]
                         })
                             .then(() => {
                                 this.refresh();
+                                this.onFilterActualizationProcedureTask();
                             })
                             .catch((reason) => {
                                 this.fmError(this.translate('flash_cant_edit_backup_mode', reason));

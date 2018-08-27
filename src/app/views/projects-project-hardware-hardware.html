@@ -231,10 +231,12 @@
                                         <!-- Update Bootlaoder on Hardware - There is condition - if user made update already - we must hide this button [TZ]-->
                                         <div *ngIf="hardware.available_latest_bootloader && (!hardware.actual_bootloader || hardware.available_latest_bootloader.id != hardware.actual_bootloader.id) && !hardware.bootloader_update_in_progress" class="text-center">
                                             <br>
-                                            <button class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
+                                            <button class="btn red btn-sm" [disabled]="!hardware.database_synchronize"  (click)="onUpdateBootloaderClick()">
                                                 <i class="fa fa-rocket"></i> {{'label_update_to'|bkTranslate:this}}
                                                 <strong>{{hardware.available_latest_bootloader.name}}</strong>
                                             </button>
+                                            <br *ngIf="!hardware.database_synchronize">
+                                            <span *ngIf="!hardware.database_synchronize" class="font-grey-mint" [innerHTML]="'label_update_prohibited_by_settings'|bkTranslate:this"></span>
                                         </div>
 
                                         <!-- Updae in Quue -->
@@ -248,7 +250,7 @@
 
                                 </div>
 
-                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE' && hardware.bootloader_core_configuration.netsource ===  'ETHERNET'">
+                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE' && hardware.bootloader_core_configuration.netsource.toLowerCase() ===  'ethernet'">
                                     <hr style="margin-right: 5%; margin-left: 5%">
 
                                     <div class="font-blue-dark">

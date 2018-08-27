@@ -15,7 +15,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
      [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" 
      [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" 
      [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
-    <label *ngIf="showLabel">{{label}}</label>
+    <label *ngIf="showLabel" [innerHTML]="label"></label>
     
     <div [class.input-group]="showButton != null">
         

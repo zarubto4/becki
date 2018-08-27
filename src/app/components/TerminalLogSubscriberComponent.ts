@@ -32,7 +32,8 @@ import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
                                   btn_label_for_person: ('btn_add_hardware'|bkTranslate:this),
                                   icon: 'fa-plus-circle',
                                   colorType: 'ADD',
-                                  btn_tag: 'add_hardware'
+                                  btn_tag: 'add_hardware',
+                                  permission: true
                               }
 
                           ]"
@@ -43,13 +44,15 @@ import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
                                 tab_name: 'terminal',
                                 condition: (true),
                                 tab_color: 'HARDWARE',
-                                tab_label: ('label_terminal'|bkTranslate:this)
+                                tab_label: ('label_terminal'|bkTranslate:this),
+                                permission: true
                             },
                             {
                                 tab_name: 'settings',
                                 condition: (show_settings_panel),
                                 tab_color: 'HARDWARE',
-                                tab_label: ('label_settings_terminal'|bkTranslate:this)
+                                tab_label: ('label_settings_terminal'|bkTranslate:this),
+                                permission: true
                             }
                           
                     ]"
@@ -228,6 +231,8 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
         this.selected_hw_for_subscribe.forEach(hardware => {
             this.onHardwareUnSubscribeClick(hardware);
         }); // odhlásíme každej HW co byl připojen
+
+
     }
 
     onToggleTab(tab: string) {
@@ -372,7 +377,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
 
     addNewHardwareToSubscribeModal(): void {
         // console.log('addNewHardwareToSubscribeModal: ');
-        let m = new ModalsSelectHardwareModel(this.project_id);
+        let m = new ModalsSelectHardwareModel(this.project_id, null, true, false, true);
         this.modalService.showModal(m)
             .then((success) => {
                 m.selected_hardware.forEach((hw) => {
