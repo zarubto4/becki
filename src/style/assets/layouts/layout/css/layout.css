@@ -1601,7 +1601,6 @@ Page content
   /* 992px */
   /* Page content */
   .page-content-wrapper {
-    float: left;
     width: 100%; }
     .page-content-wrapper .page-content {
       margin-left: 235px;
