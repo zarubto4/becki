@@ -4,6 +4,7 @@
  */
 
 // Imports
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
@@ -110,7 +111,6 @@ import { ModalsBlockoBlockCopyComponent } from './modals/blocko-block-copy';
 import { BeckiImageLinks } from './helpers/BeckiImageLinks';
 import { MyDatePickerModule } from 'mydatepicker';
 import { ModalsHardwareGroupPropertiesComponent } from './modals/hardware-group-properties';
-import { ModalsHardwareGroupDeviceSettingsComponent } from './modals/hardware-group-device-settings';
 import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoListSelectComponent';
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
@@ -144,6 +144,10 @@ import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
 import { ModalsVersionSelectComponent } from './modals/version-select';
 // Common dependencies
 import { SharedModule } from '../shared';
+import { ChartsModule } from 'ng2-charts';
+import { ChartBarComponent } from './components/ChartBarComponent';
+import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
+import { ModalsInstanceApiPropertiesComponent } from './modals/instance-api-properties';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -447,7 +451,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsExtensionComponent,
         ModalsBlockoBlockCopyComponent,
         ModalsHardwareGroupPropertiesComponent,
-        ModalsHardwareGroupDeviceSettingsComponent,
         ModalsUpdateReleaseFirmwareComponent,
         ModalsHardwareRestartMQTTPassComponent,
         ModalsHardwareChangeServerComponent,
@@ -462,6 +465,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsArticleComponent,
         ModalsAddGSMComponent,
         ModalsGsmPropertiesComponent,
+        ModalsInstanceApiPropertiesComponent,
     ],
     bootstrap: [AppComponent]
 })

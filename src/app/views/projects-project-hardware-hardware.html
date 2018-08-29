@@ -132,11 +132,11 @@
                                 <br>
                                 <div>
                                     {{'label_type'|bkTranslate:this}}:
-                                    <a (click)="onHardwareTypeClick(hardware.hardware_type.id)" class="bold">{{hardware.hardware_type.name}}</a>
+                                    <a (click)="onHardwareTypeClick(hardware.hardware_type.id)" class="bold">{{hardwareType.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_producer'|bkTranslate:this}}:
-                                    <a (click)="onProducerClick(hardwareType.producer.id)" class="bold">{{hardwareType.producer.name}}</a>
+                                    <a *ngIf="hardwareType.producer" (click)="onProducerClick(hardwareType.producer.id)" class="bold">{{hardwareType.producer.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_revision'|bkTranslate:this}}:
@@ -229,12 +229,14 @@
 
 
                                         <!-- Update Bootlaoder on Hardware - There is condition - if user made update already - we must hide this button [TZ]-->
-                                        <div *ngIf="(!hardware.actual_bootloader || hardware.available_latest_bootloader.id != hardware.actual_bootloader.id) && !hardware.bootloader_update_in_progress" class="text-center">
+                                        <div *ngIf="hardware.available_latest_bootloader && (!hardware.actual_bootloader || hardware.available_latest_bootloader.id != hardware.actual_bootloader.id) && !hardware.bootloader_update_in_progress" class="text-center">
                                             <br>
-                                            <button class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
+                                            <button class="btn red btn-sm" [disabled]="!hardware.database_synchronize"  (click)="onUpdateBootloaderClick()">
                                                 <i class="fa fa-rocket"></i> {{'label_update_to'|bkTranslate:this}}
                                                 <strong>{{hardware.available_latest_bootloader.name}}</strong>
                                             </button>
+                                            <br *ngIf="!hardware.database_synchronize">
+                                            <span *ngIf="!hardware.database_synchronize" class="font-grey-mint" [innerHTML]="'label_update_prohibited_by_settings'|bkTranslate:this"></span>
                                         </div>
 
                                         <!-- Updae in Quue -->
@@ -248,7 +250,7 @@
 
                                 </div>
 
-                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE'">
+                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE' && hardware.bootloader_core_configuration.netsource.toLowerCase() ===  'ethernet'">
                                     <hr style="margin-right: 5%; margin-left: 5%">
 
                                     <div class="font-blue-dark">
@@ -258,13 +260,31 @@
                                     <div class="font-blue-dark margin-left-15 margin-top-10">
                                         <span class="font-grey-mint">Link: </span>
                                         <span *ngIf="!hardware.ip_address" class="bold">
-                                                      <i class="fa fa-spinner fa-spin"></i>
-                                                </span>
+                                              <i class="fa fa-spinner fa-spin"></i>
+                                        </span>
                                         <span *ngIf="hardware.ip_address">
-                                                      <a target="_blank" href="http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}" class="bold">http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}</a>
-                                                </span>
+                                             <a target="_blank" href="http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}" class="bold">http://{{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}</a>
+                                        </span>
                                         <br>
                                         <span>(working only on same local network)</span>
+                                    </div>
+                                </div>
+
+                                <div class="margin-left-15 margin-top-15" *ngIf="hardware.ip_address && hardware.online_state == 'ONLINE' && hardware.bootloader_core_configuration.netsource.toLowerCase() ===  '6lowpan'">
+                                    <hr style="margin-right: 5%; margin-left: 5%">
+
+                                    <div class="font-blue-dark">
+                                        <i class="fa fa-lg fa-link"></i>
+                                        <span class="margin-left-10" [innerHTML]="'label_ipv6_address'|bkTranslate:this"></span>
+                                    </div>
+                                    <div class="font-blue-dark margin-left-15 margin-top-10">
+                                        <span *ngIf="!hardware.ip_address" class="bold">
+                                            <i class="fa fa-spinner fa-spin"></i>
+                                        </span>
+                                        <span *ngIf="hardware.ip_address" class="bold">
+                                            {{hardware.ip_address}}:{{hardware.bootloader_core_configuration.webport}}
+                                         </span>
+                                        <br>
                                     </div>
                                 </div>
 
@@ -320,22 +340,28 @@
                 <div *ngIf="hardware && hardwareType" class="row margin-top-40">
                     <div class="col-md-6">
                         <div class="portlet portlet light bordered">
+
                             <bk-portlet-title
                                 [title_name]="'label_byzance_code'|bkTranslate:this"
                                 [icon]="'fa-code'"
                                 (onClick)="onPortletClick($event)"
                                 [btns]="[
-                                      {
-                                          condition: (hardware.online_state == 'ONLINE'),
-                                          btn_label_for_person: ('label_manual_individual_update'|bkTranslate:this),
-                                          icon: 'fa-code',
-                                          colorType: 'UPDATE',
-                                          btn_tag: 'hardware_manual_update',
-                                          permission: (hardware.update_permission && hardware.online_state == 'ONLINE')
-
-                                      }
-                                      ]">
+                                          {
+                                              condition: (hardware.online_state == 'ONLINE'),
+                                              btn_label_for_person: ('label_manual_individual_update'|bkTranslate:this),
+                                              icon: 'fa-code',
+                                              colorType: 'UPDATE',
+                                              btn_tag: 'hardware_manual_update',
+                                              permission: (hardware.update_permission && hardware.online_state == 'ONLINE' && hardware.database_synchronize)
+                                          }
+                                    ]">
                             </bk-portlet-title>
+
+                            <span class="icon-hint-wraper red pull-right">
+                                <span class="hint pull-right" [innerHTML]="'label_alerts'|bkTranslate:this"></span>
+                            </span>
+
+
                             <div class="portlet-body">
                                 <div>
                                     <div>
@@ -345,7 +371,7 @@
                                     </div>
                                     <div>
                                         <span [innerHTML]="'label_actual_program_version'|bkTranslate:this"></span>:
-                                        <a *ngIf="hardware.actual_c_program_version && hardware.actual_c_program_version" class="bold" (click)="onCProgramClick(hardware.actual_c_program.id, hardware.actual_c_program_version.id)">{{hardware.actual_c_program_version.name}}</a>
+                                        <a *ngIf="hardware.actual_c_program && hardware.actual_c_program_version" class="bold" (click)="onCProgramClick(hardware.actual_c_program.id, hardware.actual_c_program_version.id)">{{hardware.actual_c_program_version.name}}</a>
                                         <span *ngIf="!hardware.actual_c_program_version" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                     </div>
                                 </div>
@@ -397,7 +423,7 @@
 
                             <div class="portlet-body">
 
-                                <div *ngIf="hardware.server!=null">
+                                <div *ngIf="hardware.server">
                                     <div>
                                         <span [innerHTML]="'label_main_server'|bkTranslate:this"></span>: {{hardware.server.name}}
                                     </div>
@@ -405,7 +431,7 @@
                                         <span [innerHTML]="'label_server_online_state'|bkTranslate:this"></span>: <bk-online-state [online_state]="hardware.server.online_state"></bk-online-state>
                                     </div>
                                 </div>
-                                <div *ngIf="hardware.server==null">
+                                <div *ngIf="!hardware.server">
                                     <span [innerHTML]="'label_main_server_not_found'|bkTranslate:this"></span>
                                  </div>
 
@@ -530,11 +556,7 @@
                                         <span class="font-grey-mint">{{conf.key}}</span>
                                     </td>
                                     <td>
-                                        <div *ngIf="conf.type == 'string' && conf.key != 'netsource'">
-                                            <span class="font-grey-mint bold">{{conf.value}}</span>
-                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
-                                        </div>
-                                        <div *ngIf="conf.type == 'string' && conf.key == 'netsource'">
+                                        <div *ngIf="conf.type == 'string'">
                                             <span class="font-grey-mint bold">{{conf.value}}</span>
                                             <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
                                         </div>
@@ -548,6 +570,9 @@
                                             <i *ngIf="!conf.value" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
                                                (click)="onEditParameterValue_Boolean_Click(conf.key, !conf.value)"></i>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <span *ngIf="conf.pending">Pending</span>
                                     </td>
                                 </tr>
                             </tbody>

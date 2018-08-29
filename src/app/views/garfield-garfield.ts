@@ -12,8 +12,8 @@ import { FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
-import { WebsocketClientGardfield } from '../services/websocket/Websocket_Client_Gardfield';
-import { WebsocketMessage } from '../services/websocket/WebsocketMessage';
+import { WebSocketClientGarfield } from '../services/websocket/WebSocketClientGarfield';
+import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
 
 @Component({
     selector: 'bk-view-garfield-garfield',
@@ -54,7 +54,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     actions: GarfieldAction[] = [];
 
     // Socket
-    websocket: WebsocketClientGardfield = null;
+    websocket: WebSocketClientGarfield = null;
 
     // For checking online state on printers
     reloadInterval: any = null;
@@ -163,20 +163,20 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         });
 
 
-        this.tyrionBackendService.getWebsocketService().connectGarfieldWebSocket( (socket: WebsocketClientGardfield, error: any) =>  {
+        this.tyrionBackendService.getWebsocketService().connectGarfieldWebSocket( (socket: WebSocketClientGarfield, error: any) =>  {
             if (socket) {
-                socket.tyrion.onMessageCallback = (m: WebsocketMessage) => this.onMessage(m);
                 this.websocket = socket;
+                this.websocket.messages.subscribe(m => this.onMessage(m));
 
-                this.websocket.requestSubscribe((response_message: WebsocketMessage, error_response: any) =>  {
-
-                    if (response_message && response_message.status === 'success') {
-                        // Nothing
-                        this.fmInfo(this.translate('flash_garfield_connected'));
-                    } else {
-                        console.error('connectGarfieldWebSocket:: requestSubscribe:: Error', error_response);
-                    }
-                });
+                this.websocket.requestSubscribe()
+                    .then((response: IWebSocketMessage) => {
+                        if (response.isSuccessful()) {
+                            this.fmInfo(this.translate('flash_garfield_connected'));
+                        }
+                    })
+                    .catch((reason) => {
+                        console.error('connectGarfieldWebSocket:', reason);
+                    });
 
             } else {
                 console.error('connectGarfieldWebSocket:: Error', error);
@@ -187,14 +187,18 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     ngOnDestroy(): void {
 
         if (this.websocket) {
-            this.websocket.requestUnSubscribe((response_message: WebsocketMessage, error_response: any) =>  {
-
-                if (response_message && response_message.status === 'success') {
-                    // Nothing
-                } else {
-                    console.error('connectGarfieldWebSocket:: requestSubscribe:: Error', error_response);
-                }
-            });
+            this.websocket.requestUnsubscribe()
+                .then((response: IWebSocketMessage) => {
+                    if (!response.isSuccessful()) {
+                        throw new Error('Unsubscribe failed');
+                    }
+                })
+                .catch((reason) => {
+                    console.error('ngOnDestroy:', reason);
+                })
+                .then(() => {
+                    this.websocket.disconnect();
+                });
         }
 
         clearInterval(this.reloadInterval);
@@ -457,14 +461,15 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     setDetection() {
         this.garfieldAppDetection = setTimeout(() => {
 
-            this.websocket.requestKeepAlive((response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message && response_message.status === 'success') {
-                    // Nothing
-                } else {
-                    console.error('setDetection:: Error Message: ', response_message);
-                    console.error('setDetection:: Error', error_response);
-                }
-            });
+            this.websocket.requestKeepAlive()
+                .then((response: IWebSocketMessage) => {
+                    if (!response.isSuccessful()) {
+                        throw new Error('Keep alive unsuccessful');
+                    }
+                })
+                .catch((reason) => {
+                    console.error('setDetection:', reason);
+                });
 
             this.garfieldAppDetection = setTimeout(() => {
                 this.onDisconnectGarfield();
@@ -503,35 +508,14 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
     }
 
     getDeviceId(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this.websocket.requestGetDeviceID((response_message: WebsocketMessage, error_response: any) =>  {
-
-                if (response_message && response_message.status === 'success') {
-                    // Nothing
-
-                    /* tslint:disable */
-                    console.log('getDeviceId:: Resoponse for deviceSafe:: ', response_message);
-                    console.log('getDeviceId:: Device ID ', response_message['device_id']);
-                    /* tslint:enable */
-
-                    resolve(response_message['device_id']);
-
+        return this.websocket.requestGetDeviceID()
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
+                    return response.data.device_id;
                 } else {
-
-                    console.error('getDeviceId:: Error Message: ', response_message);
-                    console.error('getDeviceId:: Error', error_response);
-
-                    if (error_response) {
-                        reject('Get Device ID Process:: Error:' + error_response);
-                    }
-
-                    if (response_message) {
-                        reject('Get Device ID Process:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
-                    }
-
+                    throw new Error('Unable to get id' + response.error);
                 }
             });
-        });
     }
 
     getDeviceOrRegister(full_id: string): Promise<IHardwareNewSettingsResult> {
@@ -551,159 +535,75 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
 
     uploadBootLoaderProcess(): Promise<string> {
         this.mainStep = 3;
-        return new Promise((resolve, reject) => {
-            this.websocket.requestProductionFirmwareProcess( this.bootLoader.file_path, 'BOOTLOADER', (response_message: WebsocketMessage, error_response: any) =>  {
-
-                if (response_message && response_message.status === 'success') {
-                    // Nothing
-                    resolve('bootloader upload successful');
+        return this.websocket.requestProductionFirmwareProcess(this.bootLoader.file_path, 'BOOTLOADER')
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
+                    return 'bootloader upload successful';
                 } else {
-                    console.error('uploadBootLoaderProcess:: Error Message: ', response_message);
-                    console.error('uploadBootLoaderProcess:: Error', error_response);
-
-                    if (error_response) {
-                        reject('Upload Bootloader Process:: :: Error:' + error_response);
-                    }
-
-                    if (response_message) {
-                        reject('Upload Bootloader Process:: :: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
-                    }
+                    throw new Error('upload bootloader unsuccessful: ' + response.error);
                 }
             });
-        });
     }
 
     uploadTestFirmwareProcess(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.websocket.requestProductionFirmwareProcess(this.firmwareTestMainVersion.download_link_bin_file, 'FIRMWARE', (response_message: WebsocketMessage, error_response: any) =>  {
-
-                if (response_message && response_message.status === 'success') {
-                    // Nothing
-                    resolve('test firmware upload successful');
+        return this.websocket.requestProductionFirmwareProcess(this.firmwareTestMainVersion.download_link_bin_file, 'FIRMWARE')
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
                     this.mainStep = 4;
-
+                    return 'test firmware upload successful';
                 } else {
-
-                    console.error('uploadTestFirmwareProcess:: Error Message: ', response_message);
-                    console.error('uploadTestFirmwareProcess:: Error', error_response);
-
-                    if (error_response) {
-                        reject('Upload Test Firmware Process:: :: Error:' + error_response);
-                    }
-
-                    if (response_message) {
-                        reject('Upload Production Firmware Process:: :: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
-                    }
+                    throw new Error('upload test firmware unsuccessful: ' + response.error);
                 }
             });
-        });
     }
 
     testDeviceProcess(): Promise<string> {
         this.mainStep = 5;
-        return new Promise((resolve, reject) => {
-            this.websocket.requestTestConfiguration( JSON.parse(this.formConfigJson.controls['test_config'].value), (response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message && response_message.status === 'success') {
-                    // Nothing
-                    resolve('device test successful');
+        return this.websocket.requestTestConfiguration(JSON.parse(this.formConfigJson.controls['test_config'].value))
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
                     this.mainStep = 6;
+                    return 'device test successful';
                 } else {
-                    console.error('testDeviceProcess:: Error Message: ', response_message);
-                    console.error('testDeviceProcess:: Error', error_response);
-
-                    if (error_response) {
-                        reject('Test Device Process:: Error:' + error_response);
-                    }
-
-                    if (response_message) {
-                        reject('Test Device Process:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
-                    }
+                    throw new Error('device test unsuccessful: ' + response.error);
                 }
             });
-        });
     }
 
     uploadProductionFirmwareProcess(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.websocket.requestProductionFirmwareProcess(this.firmwareMainVersion.download_link_bin_file, 'FIRMWARE', (response_message: WebsocketMessage, error_response: any) =>  {
-                if (response_message && response_message.status === 'success') {
-                    // Nothing
-                    resolve('firmware upload successful');
-
+        return this.websocket.requestProductionFirmwareProcess(this.firmwareMainVersion.download_link_bin_file, 'FIRMWARE')
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
+                    return 'production firmware upload successful';
                 } else {
-                    console.error('uploadProductionFirmwareProcess:: Error Message: ', response_message);
-                    console.error('uploadProductionFirmwareProcess:: Error', error_response);
-
-                    if (error_response) {
-                        reject('Upload Production Firmware Process:: Error:' + error_response);
-                    }
-
-                    if (response_message) {
-                        reject('Upload Production Firmware:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
-                    }
+                    throw new Error('upload production firmware unsuccessful: ' + response.error);
                 }
             });
-        });
     }
 
     configureDeviceProcess(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.deviceSafe()
-                .then((device: IHardwareNewSettingsResult) => {
-                    this.websocket.requestDeviceConfigure(device.configuration, (response_message: WebsocketMessage, error_response: any) =>  {
-                        if (response_message && response_message.status === 'success') {
-                            // Nothing
-                            resolve('device configuration successful');
-
-                        } else {
-                            console.error('configureDeviceProcess:: Error Message: ', response_message);
-                            console.error('configureDeviceProcess:: Error', error_response);
-
-
-                            if (error_response) {
-                                reject('Configuration Process:: Error:' + error_response);
-                            }
-
-                            if (response_message) {
-                                reject('Configuration Process:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
-                            }
-                        }
-                    });
-                })
-                .catch((reason) => {
-                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
-                        reject('device configuration failed - ' + reason['error']);
-                    } else if (typeof reason === 'string') {
-                        reject('device configuration failed - ' + reason);
-                    } else {
-                        reject('device configuration failed - unable to load device');
-                    }
-                });
-        });
+        return this.deviceSafe()
+            .then((device: IHardwareNewSettingsResult) => {
+                return this.websocket.requestDeviceConfigure(device.configuration);
+            })
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
+                    return 'device configuration successful';
+                } else {
+                    throw new Error('device configuration unsuccessful: ' + response.error);
+                }
+            });
     }
 
     backUpProcess(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.websocket.requestBackupProcess((response_message: WebsocketMessage, error_response: any) =>  {
-
-                if (response_message && response_message.status === 'success') {
-                    // Nothing
-                    resolve('device backup successful');
+        return this.websocket.requestBackupProcess()
+            .then((response: IWebSocketMessage) => {
+                if (response.isSuccessful()) {
+                    return 'device backup successful';
                 } else {
-
-                    console.error('backUpProcess:: Error Message: ', response_message);
-                    console.error('backUpProcess:: Error', error_response);
-
-                    if (error_response) {
-                        reject('BackUp Process:: Error:' + error_response);
-                    }
-
-                    if (response_message) {
-                        reject('BackUp Process:: Error Message:' + error_response['error'] + '' + + error_response['error_message']);
-                    }
+                    throw new Error('device backup unsuccessful: ' + response.error);
                 }
             });
-        });
     }
 
     /**************************
@@ -720,7 +620,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         }
     }
 
-    onSubscribeGarfieldMessage(message: WebsocketMessage) {
+    onSubscribeGarfieldMessage(message: IWebSocketMessage) {
         this.resetDetection();
         if (!this.garfieldAppConnected) {
             this.garfieldAppConnected = true;
@@ -731,7 +631,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         }
     }
 
-    onDeviceConnectMessage(message: WebsocketMessage) {
+    onDeviceConnectMessage(message: IWebSocketMessage) {
         if (!(this.garfield
                 && this.hardwareType
                 && this.bootLoader
@@ -773,7 +673,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         this.fmWarning(this.translate('flash_tester_disconnected'));
     }
 
-    onMessage(message: WebsocketMessage) {
+    onMessage(message: IWebSocketMessage) {
         switch (message.message_type) {
             case 'keepalive': this.onKeepAliveMessage(); break;
             case 'subscribe_garfield': this.onSubscribeGarfieldMessage(message); break;

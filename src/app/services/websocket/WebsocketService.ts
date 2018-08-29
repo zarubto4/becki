@@ -1,18 +1,17 @@
 import { TyrionApiBackend } from '../../backend/BeckiBackend';
-import { WebsocketClientTyrion } from './Websocket_Client_Tyrion';
-import { WebsocketClientHardwareLogger } from './Websocket_Client_HardwareLogger';
-import { WebsocketClientBlockoView } from './Websocket_Client_BlockoView';
-import { WebsocketClientGardfield } from './Websocket_Client_Gardfield';
+import { WebSocketClientTyrion } from './WebSocketClientTyrion';
+import { WebSocketClientHardware } from './WebSocketClientHardware';
+import { WebSocketClientBlocko } from './WebSocketClientBlocko';
+import { WebSocketClientGarfield } from './WebSocketClientGarfield';
 
 export class WebsocketService {
 
-    // List of Websockets to Homer servers
-    private hardwareTerminalwebSockets: WebsocketClientHardwareLogger[] = [];
-    private blockoInstancewebSockets: WebsocketClientBlockoView[] = [];
-    private tyrionWebSocketConnection: WebsocketClientTyrion = null;
-    private garfieldWebSocketConnection: WebsocketClientGardfield = null;
+    protected tyrion: WebSocketClientTyrion;
+    protected garfield: WebSocketClientGarfield;
+    protected hardware: WebSocketClientHardware[] = [];
+    protected instances: WebSocketClientBlocko[] = [];
 
-    private backend: TyrionApiBackend = null;
+    protected backend: TyrionApiBackend = null;
 
     public constructor(backend: TyrionApiBackend) {
         this.backend = backend;
@@ -21,110 +20,80 @@ export class WebsocketService {
     /**
      * Return Tyrion Connection
      */
-    public getTyrionWebsocketConnection(): WebsocketClientTyrion {
-        return this.tyrionWebSocketConnection;
+    public getTyrionConnection(): WebSocketClientTyrion {
+        return this.tyrion;
     }
 
     /**
      * Return Tyrion Connection
      */
-    public openTyrionWebsocketConnection(url: string): void {
-        this.tyrionWebSocketConnection = new WebsocketClientTyrion(this.backend, url);
+    public openTyrionConnection(url: string): void {
+        if (!this.tyrion) {
+            this.tyrion = new WebSocketClientTyrion(this.backend, url);
+        }
+        setImmediate(() => this.tyrion.connect());
     }
 
     // WebSocket Messages From Homer For HArdware Logger:
-    public connectDeviceTerminalWebSocket(server_url: string, port: string, callback: (socket: WebsocketClientHardwareLogger, error: any) => void) {
-
-        /* tslint:disable */
-        // console.log('Server URL:', server_url);
-        // console.log('Server Port:', port);
-        /* tslint:enable */
+    public connectDeviceTerminalWebSocket(server_url: string, port: string, callback: (socket: WebSocketClientHardware, error: any) => void) {
 
         if (server_url === null || port === null) {
-            return callback(null, 'Missing server_url or port');
+            callback(null, 'Missing server_url or port');
+            return;
         }
 
-        for (let ws in this.hardwareTerminalwebSockets) {
+        let url: string = `${this.backend.wsProtocol}://${server_url}:${port}/${TyrionApiBackend.getToken()}`;
 
-            if (!this.hardwareTerminalwebSockets.hasOwnProperty(ws)) {
-                continue;
+        for (let socket in this.hardware) {
+            if (this.hardware.hasOwnProperty(socket) && this.hardware[socket].matchUrl(url)) {
+                if (!this.hardware[socket].isOpen()) {
+                    this.hardware[socket].connect();
+                }
+                callback(this.hardware[socket], null);
+                return;
             }
-
-            if (this.hardwareTerminalwebSockets[ws].url.includes(server_url + ':' + port + '/'  + TyrionApiBackend.getToken())) {
-                return callback(this.hardwareTerminalwebSockets[ws], null);
-            }
         }
 
-        let socket: WebsocketClientHardwareLogger = new WebsocketClientHardwareLogger(server_url + ':' + port + '/'  + TyrionApiBackend.getToken());
-        if (!socket.isWebSocketOpen()) {
-            console.info('connectDeviceTerminalWebSocket:: !socket.isWebSocketOpen() Není Open - Callback');
-            socket.onOpenCallback = (e) => {
-                // console.log('connectDeviceTerminalWebSocket:: Connected - return socket');
-                this.hardwareTerminalwebSockets.push(socket);
-                return callback(socket, null);
-            };
-        } else {
-            // console.log('connectDeviceTerminalWebSocket:: socket.isWebSocketOpen() JE Open - Callback');
-            this.hardwareTerminalwebSockets.push(socket);
-            return callback(socket, null);
-        }
-
-
-
+        let socket: WebSocketClientHardware = new WebSocketClientHardware(url);
+        this.hardware.push(socket);
+        callback(socket, null);
     }
 
     // WebSocket Messages From Homer For HArdware Logger:
-    public connectBlockoInstanceWebSocket(server_url: string, callback: (socket: WebsocketClientBlockoView, error: any) => void) {
-        /* tslint:disable */
+    public connectBlockoInstanceWebSocket(url: string, instanceId: string, callback: (socket: WebSocketClientBlocko, error: any) => void) {
 
-        console.log('Server URL:', server_url);
-
-        const finalUrl = server_url.replace('#token',  TyrionApiBackend.getToken());
-
-        /* tslint:enable */
+        const finalUrl = url.replace('#token',  TyrionApiBackend.getToken());
 
         if (finalUrl === null) {
-            return callback(null, 'Missing server_url or port');
+            callback(null, 'Missing url or port');
+            return;
         }
 
-        for (let ws in this.blockoInstancewebSockets) {
-
-            if (!this.blockoInstancewebSockets.hasOwnProperty(ws)) {
-                continue;
-            }
-
-            if (this.blockoInstancewebSockets[ws].url.includes(finalUrl)) {
-                return callback(this.blockoInstancewebSockets[ws], null);
+        for (let socket in this.instances) {
+            if (this.instances.hasOwnProperty(socket) && this.instances[socket].matchUrl(finalUrl)) {
+                if (!this.instances[socket].isOpen()) {
+                    this.instances[socket].connect();
+                }
+                callback(this.instances[socket], null);
+                return;
             }
         }
 
-        let socket: WebsocketClientBlockoView = new WebsocketClientBlockoView(finalUrl);
-
-        this.blockoInstancewebSockets.push(socket);
-
-        return callback(socket, null);
-
+        let socket: WebSocketClientBlocko = new WebSocketClientBlocko(finalUrl, instanceId);
+        this.instances.push(socket);
+        callback(socket, null);
     }
 
-    // WebSocket Messages From Homer For HArdware Logger:
-    public connectGarfieldWebSocket(callback: (socket: WebsocketClientGardfield, error: any) => void) {
+    public connectGarfieldWebSocket(callback: (socket: WebSocketClientGarfield, error: any) => void) {
 
-        if (this.garfieldWebSocketConnection) {
-            return callback(this.garfieldWebSocketConnection, null);
+        if (this.garfield) {
+            callback(this.garfield, null);
+            return;
         }
 
-        let socket: WebsocketClientGardfield = new WebsocketClientGardfield(this.tyrionWebSocketConnection);
-        this.garfieldWebSocketConnection = socket;
+        let socket: WebSocketClientGarfield = new WebSocketClientGarfield(this.tyrion);
+        this.garfield = socket;
 
-        return callback(socket, null);
-
+        callback(socket, null);
     }
-
 }
-
-
-
-
-
-
-

@@ -104,7 +104,7 @@
                             <th class="" [innerHTML]="'label_name'|bkTranslate:this"></th>
                             <th class="" [innerHTML]="'label_table_id'|bkTranslate:this"></th>
                             <th class="" [innerHTML]="'label_table_full_id'|bkTranslate:this"></th>
-                            <th class="" [innerHTML]="'label_description'|bkTranslate:this"></th>
+                            <th class="" [innerHTML]="'label_project'|bkTranslate:this"></th>
                             <th class="" [innerHTML]="'label_table_type'|bkTranslate:this"></th>
                             <th class="" [innerHTML]="'label_table_status'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
@@ -127,7 +127,10 @@
                                 </td>
                                 <td class="vert-align no-wrap">{{device.id}}</td>
                                 <td class="vert-align no-wrap">{{device.full_id}}</td>
-                                <td class="vert-align no-wrap">{{device.description}}</td>
+                                <td class="vert-align no-wrap">
+                                    <a *ngIf="device.project" (click)="onProjectClick(device.project.id)">{{device.project.name}}</a>
+                                    <span *ngIf="!device.project">Not in Project</span>
+                                </td>
                                 <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a>
                                 </td>
                                 <td class="vert-align no-wrap">

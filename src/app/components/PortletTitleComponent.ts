@@ -20,13 +20,14 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                         <!-- Only if not a external link link !-->
                         <span *ngIf="!element.btn_link">
                             <button *ngIf="element.condition" class="btn btn-sm"
+                                    [class.disabled]="!element.permission"
                                     [class.red-sunglo]="element.colorType=='REMOVE'"
                                     [class.yellow-crusta]="element.colorType=='EDIT' || element.colorType=='UPDATE'"
                                     [class.blue-madison]="element.colorType=='ACTIVE'"
                                     [class.purple-plum]="element.colorType=='DEACTIVE'"
                                     [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
                                     [class.grey-cascade]="element.colorType == '' || element.colorType == null"
-                                    (click)="element.onClick ? element.onClick() : onClickButton(element.btn_tag)">
+                                    (click)="element.permission ? (element.onClick ? element.onClick() : onClickButton(element.btn_tag)) : null">
                                 <i class="fa {{element.icon}}"></i> {{element.btn_label_for_person}}
                             </button>
                         </span>
@@ -34,13 +35,14 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                         <!-- Only if its a external link - Stupid but easy to write !-->
                         <a  *ngIf="element.btn_link" href="{{element.btn_link}}" target="_blank">
                             <button *ngIf="element.condition" class="btn btn-sm"
+                                    [class.disabled]="!element.permission"
                                     [class.red-sunglo]="element.colorType=='REMOVE'"
                                     [class.yellow-crusta]="element.colorType=='EDIT' || element.colorType=='UPDATE'"
                                     [class.blue-madison]="element.colorType=='ACTIVE'"
                                     [class.purple-plum]="element.colorType=='DEACTIVE'"
                                     [class.blue]="element.colorType=='ADD' || element.colorType=='CREATE'"
                                     [class.grey-cascade]="element.colorType == '' || element.colorType == null"
-                                    (click)="onClickButton(element.btn_tag)">
+                                    (click)="element.permission ? (onClickButton(element.btn_tag)) : null">
                                 <i class="fa {{element.icon}}"></i> {{element.btn_label_for_person}}
                             </button>
                         </a>

@@ -221,26 +221,35 @@
         </div>
 
         <div [hidden]="!(tab=='configuration')">
-
-            <bk-form-color-picker label="{{'label_block_color'|bkTranslate:this}}"
-                                  [control]="blockForm.controls['color']"
-                                  [waitForTouch]="false">
-            </bk-form-color-picker>
-
+            <bk-form-input [label]="'label_block_name'|bkTranslate:this"
+                           [control]="blockForm.controls['name']"
+                           [waitForTouch]="false">
+            </bk-form-input>
             <br>
-            <bk-form-fa-icon-select label="{{'label_block_icon'|bkTranslate:this}}"
-                                    [control]="blockForm.controls['icon']"
-                                    [waitForTouch]="false">
-            </bk-form-fa-icon-select>
-            <br>
-
             <bk-form-input [label]="'label_block_description'|bkTranslate:this"
                            [control]="blockForm.controls['description']"
                            [waitForTouch]="false">
             </bk-form-input>
-
-
-
+            <br>
+            <label>
+                {{'label_icon_svg'|bkTranslate:this}}
+                <i class="fa cursor-hand"
+                   style="vertical-align: middle; font-size: 1.5em;"
+                   [class.fa-toggle-on]="svgIcon"
+                   [class.fa-toggle-off]="!svgIcon"
+                   (click)="svgIcon = !svgIcon"></i>
+            </label>
+            <br>
+            <bk-form-fa-icon-select *ngIf="!svgIcon"
+                                    label="{{'label_block_icon'|bkTranslate:this}}"
+                                    [control]="blockForm.controls['icon']"
+                                    [waitForTouch]="false">
+            </bk-form-fa-icon-select>
+            <button *ngIf="svgIcon"
+                    class="btn blue"
+                    (click)="onSvgUploadClick()">
+                <i class="fa fa-upload"></i>{{'btn_upload_svg'|bkTranslate:this}}
+            </button>
         </div>
 
         <div [hidden]="!(tab=='versions')">
@@ -258,7 +267,7 @@
                     <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let version of blockoBlockVersions">
                         <td class="vert-align no-wrap"
-                            [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
+                            [class.bold]="selectedBlockVersion && (selectedBlockVersion.id == version.id)">
                             <a (click)="onBlockoBlockVersionClick(version)"> {{version.name}}
                                 <span *ngIf="version.publish_type === 'default_version'"
                                       class="font-green-jungle bold">(Default)</span>
@@ -323,7 +332,7 @@
                                             permission: (version.delete_permission)
                                         }
                                     ]"
-                                (onValueChanged)="onDrobDownEmiter($event, version)"
+                                (onValueChanged)="onDropDownEmitter($event, version)"
                             >
                             </bk-drob-down-button>
 

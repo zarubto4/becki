@@ -42,7 +42,8 @@
                 <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let project of projects">
 
-                    <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a>
+                    <td *ngIf="project.active" class="no-wrap bold vert-align">
+                        <a (click)="onProjectClick(project.id)">{{project.name}}</a>
                     </td>
 
                     <td class="vert-align" *ngIf="!project.active">

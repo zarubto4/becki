@@ -192,6 +192,9 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
     onSaveClick = new EventEmitter<boolean>();
 
     @Output()
+    onSaveAsClick = new EventEmitter<boolean>();
+
+    @Output()
     onBuildClick = new EventEmitter<boolean>();
 
     directories: CodeDirectory[] = [];
@@ -224,6 +227,8 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
     public _latest_blockoInterface: Blocks.BlockoTargetInterface = null;
     private _editorView: BlockoViewComponent = null;
 
+
+    public upload_after_build: boolean = false;
     constructor(protected modalService: ModalService, private translationService: TranslationService,  private formBuilder: FormBuilder) {
 
         this.refreshRootFileTree();
@@ -846,6 +851,11 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
     onToolBarSaveClick() {
         console.info('onToolBarSaveClick');
         this.onSaveClick.emit(true);
+    }
+
+    onToolBarSaveAsClick() {
+        console.info('onToolBarSaveAsClick');
+        this.onSaveAsClick.emit(true);
     }
 
     onToolBarBuildClick() {

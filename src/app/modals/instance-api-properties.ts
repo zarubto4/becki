@@ -9,22 +9,23 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { BeckiValidators } from '../helpers/BeckiValidators';
 
 
-export class ModalsBlockoPropertiesModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public edit: boolean = false, public exceptName: string = null) {
+export class ModalsInstanceApiPropertiesModel extends ModalModel {
+    constructor(public description: string = '', public edit: boolean = false, public mesh_prefix_required: boolean = false, public prefix: string = '') {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-blocko-properties',
-    templateUrl: './blocko-properties.html'
+    selector: 'bk-modals-instance-api-properties',
+    templateUrl: './instance-api-properties.html'
 })
-export class ModalsBlockoPropertiesComponent implements OnInit {
+export class ModalsInstanceApiPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsBlockoPropertiesModel;
+    modalModel: ModalsInstanceApiPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -32,21 +33,22 @@ export class ModalsBlockoPropertiesComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-
-        this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': ['']
-        });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
+
+        this.form = this.formBuilder.group({
+            'description': ['', [Validators.required, Validators.minLength(4)]],
+            'prefix': ['', [BeckiValidators.condition(() => this.modalModel.mesh_prefix_required, Validators.required), Validators.minLength(4), Validators.maxLength(16)]],
+        });
+
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
+        (<FormControl>(this.form.controls['prefix'])).setValue(this.modalModel.prefix);
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
+        this.modalModel.prefix = this.form.controls['prefix'].value;
         this.modalClose.emit(true);
     }
 

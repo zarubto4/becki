@@ -105,7 +105,10 @@ export class FormSelectComponent {
     set options(option: FormSelectComponentOption[]) {
         if (option && option.length > 0) {
 
-            if (this.regexFirstOption) {
+            // if we already have a valid value to select, take it; otherwise follow the first option rules
+            if ( this.control.value && option.filter(op => op.value === this.control.value).length > 0) {
+                this.selectedValue = this.control.value;
+            } else if (this.regexFirstOption) {
 
                 // console.log('FormSelectComponent: Regex: ', this.regexFirstOption);
                 // console.log('FormSelectComponent: Option: ', option);

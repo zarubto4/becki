@@ -3,17 +3,16 @@
  * of this distribution.
  */
 
-
 import { TyrionAPI, IPerson, ILoginResult, ISocialNetworkLogin } from './TyrionAPI';
 import * as Rx from 'rxjs';
 import {
     BadRequest, BugFoundError, CodeCompileError,
-    CodeError, InternalServerError, InvalidBody, LostConnectionError, ObjectNotFound, PermissionMissingError,
+    CodeError, IError, InternalServerError, InvalidBody, LostConnectionError, ObjectNotFound, PermissionMissingError,
     RestRequest, RestResponse,
     UnauthorizedError, UnsupportedException, UserNotValidatedError
 } from '../services/_backend_class/Responses';
 import { WebsocketService } from '../services/websocket/WebsocketService';
-import { IWebSocketNotification, WebsocketClientTyrion } from '../services/websocket/Websocket_Client_Tyrion';
+import { IWebSocketNotification } from '../services/websocket/WebSocketClientTyrion';
 
 declare const BECKI_VERSION: string;
 // INTERFACES
@@ -36,6 +35,8 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     public static host = 'tyrion.stage.byzance.cz';
     public static protocol = 'https';
+
+    public wsProtocol: string = 'ws';
 
     public requestProxyServerUrl = 'http://127.0.0.1:4000/fetch/';
 
@@ -79,6 +80,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         if (location && location.protocol) {
             if (location.protocol === 'https:') {
                 TyrionApiBackend.protocol = 'https';
+                this.wsProtocol = 'wss';
             }
         }
 
@@ -96,7 +98,9 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         this.websocketService = new WebsocketService(this);
 
         // Open Websocket to Tyrion
-        this.websocketService.openTyrionWebsocketConnection(TyrionApiBackend.host + '/websocket/portal/');
+        if (TyrionApiBackend.tokenExist()) {
+            this.websocketService.openTyrionConnection(`${this.wsProtocol}://${TyrionApiBackend.host}/websocket/portal/`);
+        }
     }
 
 
@@ -118,7 +122,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
             // console.info('Its a Tyrion API');
             return this.requestRest(method, `${TyrionApiBackend.protocol}://${TyrionApiBackend.host}${path}`, body, success);
         } else {
-            console.info('Its a External outside API');
             return this.requestRest(method, path, body, success);
         }
     }
@@ -148,6 +151,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                     });
                     return <T>res;
                 }
+
                 switch (response.status) {
                     case 400: {
 
@@ -159,7 +163,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                             throw UnsupportedException.fromRestResponse(response);
                         }
 
-                        console.error('Incoming response.status: 400: state not recognize - ERROR 500: Incoming Response:: ', response);
                         // If there is not a state - Make a Critical error for sure
                         throw InternalServerError.fromRestResponse(response);
                     }
@@ -185,10 +188,15 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                         throw BugFoundError.fromRestResponse(response);
                 }
             })
-            .catch((e: any) => {
-                console.error('Error from Response', e);
+            .catch((response: RestResponse | IError) => {
+
+                if (response instanceof IError) {
+                    throw response;
+                }
+
                 this.decreaseTasks();
-                throw e;
+                throw response;
+
             });
     }
 
@@ -208,10 +216,10 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     private setToken(token: string, withRefreshPersonalInfo = true): void {
-        console.info('set_token');
         window.localStorage.setItem('auth_token', token);
         if (withRefreshPersonalInfo) {
             this.refreshPersonInfo();
+            this.websocketService.openTyrionConnection(`${this.wsProtocol}://${TyrionApiBackend.host}/websocket/portal/`);
         }
     }
 
@@ -286,14 +294,51 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         // console.info('refreshPersonInfo');
         this.personInfoSnapshotDirty = true;
         if (TyrionApiBackend.tokenExist()) {
-            this.getTyrionWebsocketConnection().onReady();
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
-                    console.info(lr);
                     this.personPermissions = lr.permissions;
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;
                     this.personInfo.next(this.personInfoSnapshot);
+
+
+                    // https://app.inlinemanual.com/ - its used for Guidelines - also very important is User tracking data sets in backend - like user id..etc  - You can find this comment on another places
+                    window['inlineManualTracking'] = {
+                        uid: lr.person.id, // Only this field is mandatory
+                        email: lr.person.email,
+                        username: lr.person.nick_name,
+                        name: lr.person.first_name + ' ' + lr.person.last_name,
+                        first_name: lr.person.first_name,
+                        last_name: lr.person.last_name,
+                        created: lr.person.created,
+                        updated: lr.person.updated,
+                        roles: lr.roles.map(x => x.name),
+                        plan: 'Not Defined'
+                    };
+
+                    // line_manual_player.setOptions({hide_trigger: true});
+
+                    // Language for Inline Manual
+                    window['InlineManualOptions'] = {
+                        language: 'en'
+                    };
+
+                    // "a5e626bda2d1636e3c6b147fa55fbba0d6f193a96029bb830966c223e6f40bca"
+                    // "a5e626bda2d1636e3c6b147fa55fbba0d6f193a96029bb830966c223e6f40bca"
+                    // "a5e626bda2d1636e3c6b147fa55fbba0d6f193a96029bb830966c223e6f40bca"
+
+                    window['intercomSettings'] = {
+                        app_id: 'cnrrdzsk',
+                        id: lr.person.id,
+                        user_id: lr.person.id,
+                        name: lr.person.first_name + ' ' + lr.person.last_name, // Full name
+                        email: lr.person.email, // Email address
+                        user_hash: lr.hmac,
+                        created_at: lr.person.created, // Signup Date
+                        alignment: 'left',
+                        horizontal_padding: 20,
+                        vertical_padding: 40
+                    };
 
                 })
                 .catch((error) => {
@@ -321,10 +366,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     public getWebsocketService(): WebsocketService {
         return this.websocketService;
-    }
-
-    public getTyrionWebsocketConnection(): WebsocketClientTyrion {
-        return this.websocketService.getTyrionWebsocketConnection();
     }
 
     /* tslint:disable */

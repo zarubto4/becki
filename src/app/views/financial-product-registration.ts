@@ -28,6 +28,7 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
 
     routeParamsSubscription: Subscription;
 
+
     step: number = -1;           // Step in creating new product
     totalStep: number = 4;      // Number of steps if type of registration not required 4 but only 3 - shorter and faster registration
 
@@ -53,6 +54,8 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
 
     // integrator or do_it_yourself - Flag Register
     extensionTab: string = 'recommended_extensions';
+
+    alreadyCreatedProducts: IProduct[] = null;
 
     constructor(injector: Injector) {
         super(injector);
@@ -367,7 +370,7 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
             this.totalStep = 3;
         }
 
-        this.router.navigate(['/financial/product-registration', { step: 4 }]);
+        this.router.navigate(['/financial/product-registration', { step: 5 }]);
     }
 
     getTotalPrice(): number {
@@ -582,7 +585,13 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
                 } else if ((<any>response)._code_ === 201) {
                     this.fmSuccess(this.translate('flash_product_created'));
                     this.unblockUI();
-                    this.router.navigate(['/financial']);
+
+                    // This is a first Product - redirect to dashboard
+                    if (this.alreadyCreatedProducts === null || this.alreadyCreatedProducts.length === 0) {
+                        this.onDashboardClick();
+                    } else {
+                        this.onFinanceClick();
+                    }
                 }
             })
             .catch(reason => {

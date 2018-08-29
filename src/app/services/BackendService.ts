@@ -2,8 +2,6 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-
-
 import { EventEmitter, Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
@@ -45,14 +43,19 @@ export class TyrionBackendService extends TyrionApiBackend {
                         this.unsetToken();
                         this.router.navigate(['/login']);
                     }
+
                     resolve(new RestResponse(ngResponse.status, ngResponse.json()));
                 })
                 .catch((ngResponseOrError: Response|any) => {
                     if (ngResponseOrError instanceof Response) {
+
                         if (ngResponseOrError.status === 401) {
                             this.unsetToken();
                             this.router.navigate(['/login']);
                         }
+
+
+                        console.warn('Error on new Promise<RestResponse>: Error Status:: ', ngResponseOrError.status);
                         resolve(new RestResponse(ngResponseOrError.status, ngResponseOrError.json()));
                     } else {
                         reject(ngResponseOrError);

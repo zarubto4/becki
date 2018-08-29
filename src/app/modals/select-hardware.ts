@@ -8,13 +8,24 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IHardware, IHardwareGroup, IHardwareGroupList, IHardwareList, IHardwareType } from '../backend/TyrionAPI';
+import {
+    IHardware, IHardwareGroup, IHardwareGroupList, IHardwareList, IHardwareType,
+    IShortReference
+} from '../backend/TyrionAPI';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
     public selected_hardware: IHardware[] = [];
     public selected_hardware_groups: IHardwareGroup[] = [];
-    constructor(public project_id: string, public hardware_type: IHardwareType = null, public multiple_select_support: boolean = true, public support_select_hw_groups = false) {
+    constructor(
+        public project_id: string,
+        public hardware_type: IHardwareType = null,
+        public multiple_select_support: boolean = true,
+        public support_select_hw_groups = false,
+        public support_select_hw = false,
+        public preselected_groups: IShortReference[] = [],   // already selected hw groups
+        public hw_group: IHardwareGroup = null               // for add HW to group and show what is in group
+    ) {
         super();
         this.modalLarge = true;
     }
@@ -34,7 +45,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     errorMessage: string = null;
 
-    tab: string = 'hardware';
+    tab: string = '';
 
     devicesFilter: IHardwareList = null;
     groupFilter: IHardwareGroupList = null;
@@ -42,14 +53,33 @@ export class ModalsSelectHardwareComponent implements OnInit {
     selectedGroupList: { [id: string]: IHardwareGroup } = {};
 
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    formHardwareFilter: FormGroup;
 
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+        this.formHardwareFilter = this.formBuilder.group({
+            'alias': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)]],
+            'full_id': ['', [Validators.maxLength(60)]],
+            'description': ['', [Validators.maxLength(60)]],
+            'orderBy': ['NAME', []],
+            'order_schema': ['ASC', []],
+        });
     }
 
     ngOnInit() {
-        setTimeout(() => {
-            this.onFilterHardware();
-        }, 100);
+
+        if (this.modalModel.support_select_hw) {
+            this.tab = 'hardware';
+            setTimeout(() => {
+                this.onFilterHardware();
+            }, 100);
+        } else if  (this.modalModel.support_select_hw_groups) {
+            this.tab = 'group';
+            setTimeout(() => {
+                this.onFilterHardwareGroup();
+            }, 100);
+        }
+
     }
 
     // TOGGLE TAB & PORTLET BUTTONS
@@ -65,7 +95,13 @@ export class ModalsSelectHardwareComponent implements OnInit {
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.modalModel.project_id],
             hardware_type_ids: [ (this.modalModel.hardware_type != null) ? this.modalModel.hardware_type.id : null],
-            count_on_page: 10
+            count_on_page: 10,
+            order_by: this.formHardwareFilter.controls['orderBy'].value,
+            order_schema: this.formHardwareFilter.controls['order_schema'].value,
+            full_id: this.formHardwareFilter.controls['full_id'].value,
+            id: this.formHardwareFilter.controls['id'].value,
+            name: this.formHardwareFilter.controls['alias'].value,
+            description: this.formHardwareFilter.controls['description'].value
         })
             .then((values) => {
                 this.devicesFilter = values;
@@ -76,6 +112,19 @@ export class ModalsSelectHardwareComponent implements OnInit {
                         }
                     });
                 });
+
+                if (this.modalModel.hw_group) {
+                    this.devicesFilter.content.forEach((device, index, obj) => {
+
+                        let group: IShortReference = device.hardware_groups.find((g) => {
+                            return g.id === this.modalModel.hw_group.id;
+                        });
+
+                        if (group) {
+                            this.selectedHardwareList[device.id] = device;
+                        }
+                    });
+                }
             })
             .catch((reason) => {
                 this.errorMessage = reason.message;
@@ -89,6 +138,21 @@ export class ModalsSelectHardwareComponent implements OnInit {
         })
             .then((values) => {
                 this.groupFilter = values;
+
+                if (this.modalModel.preselected_groups) {
+
+                    this.modalModel.preselected_groups.forEach((k, index, obj) => {
+
+                        let group: IHardwareGroup = this.groupFilter.content.find((g) => {
+                            return g.id === k.id;
+                        });
+
+                        if (group) {
+                            this.selectedGroupList[group.id] = group;
+                        }
+                    });
+
+                }
             })
             .catch((reason) => {
                 this.errorMessage = reason.message;

@@ -57,7 +57,7 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
             'last_name': ['', [Validators.required, Validators.minLength(2)]],
             'nickName': ['', [Validators.required, Validators.minLength(4)]],
             'interests': ['', [Validators.required, Validators.minLength(8)]],
-            'state': ['', [Validators.required, Validators.minLength(4)]],
+            'country': ['', [Validators.required, Validators.minLength(4)]],
             'gender': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(6)]]
         });
 
@@ -98,7 +98,7 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
                 this.infoForm.controls['first_name'].setValue(this.person.first_name);
                 this.infoForm.controls['last_name'].setValue(this.person.last_name);
                 this.infoForm.controls['nickName'].setValue(this.person.nick_name);
-                this.infoForm.controls['state'].setValue(this.person.country);
+                this.infoForm.controls['country'].setValue(this.person.country);
                 this.infoForm.controls['gender'].setValue(this.person.gender);
                 this.emailForm.controls['currentEmail'].setValue(this.person.email);
 
@@ -137,7 +137,10 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
                 this.backendService.logout()
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
+                        let message = new FlashMessageSuccess(this.translate('flash_email_was_send'), null);
+                        message.closeTime = 10000;
+
+                        this.addFlashMessage(message);
                         this.navigate(['/login']);
                     })
                     .catch((error) => {
@@ -221,7 +224,7 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
         this.blockUI();
         this.backendService.personEdit(this.personId, {
             nick_name: this.infoForm.controls['nickName'].value,
-            country: this.infoForm.controls['state'].value,
+            country: this.infoForm.controls['country'].value,
             first_name: this.infoForm.controls['first_name'].value,
             last_name: this.infoForm.controls['last_name'].value,
             gender: this.infoForm.controls['gender'].value

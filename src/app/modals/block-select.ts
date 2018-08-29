@@ -113,6 +113,12 @@ export class ModalsBlockSelectComponent implements OnInit {
             description: 'Interactive simulations of Outputs',
             blockoName: 'analogOutput',
             backgroundColor: 'rgb(204, 255, 204)'
+        },
+        {
+            name: 'WebHook',
+            description: '',
+            blockoName: 'webHook',
+            backgroundColor: 'rgb(204, 255, 204)'
         }
     ];
 

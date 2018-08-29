@@ -85,6 +85,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             .catch(reason => {
                 this.blockUIService.unblockUI();
 
+                console.trace('OnLoginClic Error Code: ', reason);
+
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
                 if (reason['code'] === 403) {
                     this.loginError = reason['message'];
@@ -93,7 +95,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
                 if (reason['code'] === 705) {
-                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null, reason['message']);
+                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null);
                     this.resendVertification = true;
                     return;
                 }
@@ -120,7 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
                 if (reason['code'] === 705) {
-                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null, reason['message']);
+                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null);
                     this.resendVertification = true;
                     return;
                 }
@@ -146,7 +148,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
                 if (reason['code'] === 705) {
-                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null, reason['message']);
+                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null);
                     this.resendVertification = true;
                     return;
                 }

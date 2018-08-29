@@ -118,16 +118,22 @@ export abstract class _BaseMainComponent {
 
 // -- ON CLIC ----------------------------------------------------------------------------------------------------------------
 
-    public onProfileClick(): void {
-        this.navigate(['/profile']);
-    }
+
 
     public onLogOutClick(): void {
         this.navigate(['/logout']);
     }
 
+    public onDashboardClick(): void {
+        this.navigate(['/dashboard']);
+    }
+
     public onFinanceClick(): void {
         this.navigate(['/financial']);
+    }
+
+    public onAddProductClick(): void {
+        this.navigate(['/financial/product-registration']);
     }
 
     public onGarfieldClick(garfield_id: string): void {

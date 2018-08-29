@@ -1,5 +1,6 @@
 // INTERFACES - Compiler
-import { IWebSocketErrorMessage } from '../websocket/Websocket_Client_Tyrion';
+
+import { IWebSocketMessage } from '../websocket/WebSocketMessage';
 
 export interface ICodeCompileErrorMessage {
     filename: string;
@@ -79,7 +80,7 @@ export class BugFoundError extends Error {
         return new BugFoundError(response.body, `response ${response.status}: ${JSON.stringify(content)}`, message);
     }
 
-    static fromWsResponse(response: IWebSocketErrorMessage): BugFoundError {
+    static fromWsResponse(response: IWebSocketMessage): BugFoundError {
         return new BugFoundError(null, `response ${JSON.stringify(response)}`, response.error);
     }
 
@@ -105,6 +106,10 @@ export abstract class IError extends Error {
     name: string = null;
     message: string = null;
     exception: any = null;
+
+    public get status(): number {
+        return this.code;
+    }
 }
 
 /**
@@ -240,7 +245,7 @@ export class InternalServerError extends IError {
 export class UserNotValidatedError extends IError {
 
     static fromRestResponse(response: RestResponse): UserNotValidatedError {
-        return new InternalServerError(response);
+        return new UserNotValidatedError(response);
     }
 
     constructor(response: RestResponse) {

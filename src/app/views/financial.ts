@@ -30,10 +30,6 @@ export class FinancialComponent extends _BaseMainComponent implements OnInit {
         this.refresh();
     }
 
-    onAddProductClick(): void {
-        this.router.navigate(['/financial/product-registration']);
-    }
-
     onEditClick(product: IProduct): void {
         let model = new ModalsFinancialProductModel(
             true,

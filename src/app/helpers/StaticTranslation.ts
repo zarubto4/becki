@@ -1,8 +1,6 @@
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
-    /* <!-- <br><br><b>TODO: DELETE ME! -></b> {{'hello_world'|bkTranslate:this:'Becki':55}} -->*/
-    // TODO: delete me! -> alert(this.translate('hello_world', 'Pepa', 66))
 
     public static translate: { [lang: string]: { [keyOrEnv: string]: (string | { [key: string]: string }) } } = {
         'en': {
@@ -236,6 +234,12 @@ export class StaticTranslation {
                 'label_blocko_program_name': 'Name',
                 'label_blocko_program_description': 'Description',
 
+            }, 'ModalsInstanceApiPropertiesComponent': {
+                'title_edit': '<strong class="font-color-instance">INSTANCE</strong> Token Properties',
+                'title_add': 'New <strong class="font-color-instance">INSTANCE</strong> Token',
+                'label_token_description': 'Token Description',
+                'label_mesh_network_prefix': 'Prefix Name for better overview  "<strong>myHome</strong>_eafeef141..." or "<strong>factoryS1</strong>_eafeef1...."',
+
             }, 'ModalsBlockoVersionSelectComponent': {
                 'title': 'Change Version',
                 'label_program_version': 'Program Version',
@@ -450,6 +454,8 @@ export class StaticTranslation {
                 'placeholder_hardware': 'Select',
                 'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
                 'label_no_hardware_comment': 'First, add the hardware to the project',
+                'label_no_hardware_group': 'No <strong class="font-color-hardware">HARDWARE GROUP</strong> in this project.',
+                'label_no_hardware_group_comment': 'Add Group on Hardware list page first.',
                 'table_hardware_id': 'ID',
                 'table_hardware_name': 'Alias',
                 'table_actions': 'Actions',
@@ -537,10 +543,14 @@ export class StaticTranslation {
                 'btn_qrcode': 'Scan a QR code',
                 'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',
                 'dashboard_info_text': 'We are Byzance – a technological laboratory of advanced automatization developing a toolkit for design, development and managing the \'Internet of Things\' (IoT) for industrial uses. We do not create smart washing machines, nor smart city furniture. We develop everything for our customers to let them do it themselves, easily and without any problems.',
-                'step_one': '<strong class="font-grey" style="font-size: 1.5em;">1.</strong> Select best matching <strong>tariff</strong> for you and create your <strong>product</strong> in <a onclick="ngNavigate([\'/financial\'])">Financial section</a>',
-                'step_two': '<strong class="font-grey" style="font-size: 1.5em;">2.</strong> Create your first <strong>project</strong> in <a onclick="ngNavigate([\'/projects\'])">Projects section</a>',
-                'step_three': '<strong class="font-grey" style="font-size: 1.5em;">3.</strong> Create your own Byzance<strong class="font-color-code">CODE</strong>, Byzance<strong class="font-color-grid">GRID</strong> and Byzance<strong class="font-color-blocko">BLOCKO</strong> programs',
-                'step_four': '<strong class="font-grey" style="font-size: 1.5em;">4.</strong> Run it on Byzance<strong class="font-color-hardware">HARDWARE</strong> and in Byzance<strong class="font-color-cloud">CLOUD</strong>.',
+                'label_create_tenant' : 'First step you need to do is register your organization.',
+                'label_create_tenant_comment' : '<p>Creating a <strong>tenant</strong> account. We only bill most of the services from large numbers. <strong>So if you are small organizations or DIY developer don\'t worry. ;)</strong></p><p><strong> What is Tenant? </strong> Its a account for organization. Organization what own everything, what you create. This account then binds everything up. That\'s means user accounts, administrators, domains, subscriptions, available services, and so on.</p>',
+                'btn_create_tenant' : 'Create Tenant',
+                'label_no_projects': '<strong class="font-color-byzance-blue">Nerds</strong> rule N.1',
+                'label_no_projects_comment': 'Create project first, connect hardware and <strong class="font-color-byzance-blue">start slowly control the world</strong>... Step by step...',
+                'btn_create_project' : 'Create First Project',
+                'flash_project_create' : 'Project created successfully',
+                'flash_cant_create_project' : 'Can\'t create project. Something is wrong',
 
             }, 'ProjectsComponent': {
                 'main_title': 'Projects',
@@ -928,6 +938,7 @@ export class StaticTranslation {
                 'label_active': 'active',
                 'label_actions': 'Actions',
                 'label_subscription_id': 'ID',
+                'table_actions' : 'Action',
                 'label_hibernation': 'hibernation',
                 'label_modal_body_text': 'By deactivating, you disable instances in the cloud and disconnect hardware from our servers. Remote administration will stop working. But All data and settings will be saved and you can reactivate the product at any time.',
 
@@ -948,7 +959,7 @@ export class StaticTranslation {
                 'label_free': 'Free',
                 'label_not_set_yet': 'Not set yet',
                 'label_no_product': 'No product',
-                'label_no_product_comment': 'First create a financial entity under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, pay invoices :P and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
+                'label_no_product_comment': 'First create a financial <strong>Tenant</strong> under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, pay invoices and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
                 'flash_cant_deactivate_product': 'The product cannot be deactivated. ',
                 'flash_product_activated': 'The product has been activated.',
                 'flash_cant_activate_product': 'The product cannot be activated. ',
@@ -1077,7 +1088,7 @@ export class StaticTranslation {
                 'btn_login': 'Login',
                 'btn_resend': 'Resend',
                 'msg_login_user_cant_login': 'The user could not be logged in.',
-                'msg_login_resend_vertification': '{0} \n Press the resend button to send verification E-mail again',
+                'msg_login_resend_vertification': 'Press the resend button to send verification E-mail again',
                 'msg_login_error': 'Error has occurred, when trying to log in.',
                 'msg_login_email_sent': 'Verification E-mail was sent',
 
@@ -1357,7 +1368,7 @@ export class StaticTranslation {
                 'tab_hardware_groups': 'Hardware Groups',
                 'tab_updates': 'Updates',
                 'label_hardware_group_documentation_description': '<p>Hardware can be registered to any number of groups. Using groups, you can more easily filter hardware.</p><br><p class="text-center"> <span class="text-center">Import it. Export. Create statistics. And other miracles.<br> But only if we have already implemented it.</p><br><p class="text-center">Trololo...</p>',
-
+                'blink_device_success' : 'Blink Success',
                 'table_description': 'Description',
                 'table_id': 'Updates',
                 'table_update_id': 'Update HASH',
@@ -1472,6 +1483,7 @@ export class StaticTranslation {
                 'label_revision': 'Revision',
                 'label_id': 'ID',
                 'label_web_link': 'Hardware Web view',
+                'label_ipv6_address': 'Ipv6 Address',
                 'label_ethernet_address': 'Ethernet MAC address',
                 'label_device_is_not_dominant': 'Hardware is not actually assigned to this project. You can create new commands, schedule updates, but nothing will be done until Hardware be signed under this project again.',
                 'label_device_project_dominant': 'Currently, Hardware is actively used in the Project:',
@@ -1485,6 +1497,7 @@ export class StaticTranslation {
                 'label_full_id': 'Processor ID:',
                 'label_update_in_que': 'Update in Que',
                 'label_developer_settings': 'Developer settings',
+                'label_update_prohibited_by_settings': 'Prohibited by developer settings. <strong>"Synchronize always with database"</strong>',
                 'label_port': 'Port',
                 'label_alerts': 'Alerts',
                 'label_overview': 'Overview',
@@ -1514,6 +1527,8 @@ export class StaticTranslation {
                 'label_no_hardware_to_show_comment': 'There are no devices to show, but you can add some',
                 'label_unsubscribe_device': 'Unsubscribe device',
                 'label_manual_individual_update': 'Manual Change',
+
+                'blink_device_success' : 'Blink Success',
 
 
                 'label_actual_program_name': 'Current <strong class="font-color-code">FIRMWARE </strong> name',
@@ -1673,6 +1688,8 @@ export class StaticTranslation {
                 'tab_name_hardware': '<strong class="font-color-hardware">HARDWARE</strong>',
                 'tab_name_grid': '<strong class="font-color-grid">GRID</strong> Apps',
                 'tab_name_history': 'History',
+                'tab_name_api': 'Rest-API',
+                'tab_name_mesh': 'Mesh Network',
                 'tab_name_update_progress': 'Update Progress',
                 'tab_name_update_view': 'Realtime Overview',
                 'tab_name_logs': 'Logs',
@@ -1697,12 +1714,17 @@ export class StaticTranslation {
                 'table_b_program_version_name': '<strong class="font-color-blocko">BLOCKO</strong>Version',
                 'table_b_program_version_description': 'Description',
                 'table_update_progress': 'Progress',
+                'table_mesh_key': 'Mash Token',
+                'table_api_url': 'API URL',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
                 'btn_select_cloud_version': 'Select & Upload Version to Cloud',
                 'btn_save_deploy': 'Save & Deploy now',
                 'btn_deploy_snapshot': 'Deploy Some Snapshot',
+                'btn_add_key': 'Add new Api Key',
+                'btn_edit_token': 'Edit',
+                'btn_remove_token': 'Remove',
                 'label_grid_project': 'Byzance<strong class="font-color-grid">Grid</strong> Project',
                 'table_grid_program_name': 'Program',
                 'table_grid_program_description': 'Description',
@@ -1710,10 +1732,13 @@ export class StaticTranslation {
                 'table_grid_program_version_description': 'Description',
                 'table_grid_program_settings': 'Access Type',
                 'table_grid_link': 'Access Link',
+                'table_api_key': 'API KEY',
                 'btn_turn_off_instance': 'Shut Down',
                 'btn_change_version': 'Change Blocko Version',
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
+                'label_no_api_keys': 'No Api Keys',
+                'label_no_api_keys_comment': 'Create New one, if you want use your <strong>Webhooks</strong> in this <strong class="font-color-instance">INSTANCE</strong>',
                 'label_instance_properties': 'properties',
                 'label_instance_name': 'Name',
                 'label_instance_description': 'Description',
@@ -1786,6 +1811,7 @@ export class StaticTranslation {
                 'label_select_version_for_details': 'Select version to see details',
                 'label_snapshot_editor': 'Editor',
                 'label_no_hardware': 'Nothing here',
+                'label_version_name': 'Version used:',
 
                 'label_no_running_update_on_hardware': 'No <strong class="font-color-code">FIRMWARE</strong> releases',
                 'label_no_running_update_on_hardware_comment': 'Actual <strong class="font-color-instance">INSTANCE</strong> SpanShots not required any updates on <strong class="font-color-hardware">HARDWARE</strong>',
@@ -2090,6 +2116,7 @@ export class StaticTranslation {
                 'label_group_remove': 'Remove BLOCKO block',
                 'label_code': 'IDE',
                 'label_version': 'Version',
+                'label_block_name': 'Display name',
                 'label_block_color': 'Colour',
                 'label_block_icon': 'Icon',
                 'label_block_description': 'Description',
@@ -2108,6 +2135,9 @@ export class StaticTranslation {
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
                 'label_block_code_change': 'Block code has been changed, you must test the program first, then save it.',
+                'label_icon_svg': 'SVG icon',
+
+                'btn_upload_svg': 'Upload SVG file',
 
                 'table_name': 'Name',
                 'table_version_name': 'Name',
@@ -2460,7 +2490,7 @@ export class StaticTranslation {
                 'label_profile': 'Account Settings',
                 'label_log_out': 'Log out',
                 'label_view_all': 'view all',
-                'label_with_love': '2017 © ',
+                'label_with_love': '2018 © ',
                 'label_byzance': 'Byzance',
 
             }, 'MonacoEditorComponent': {
@@ -2598,6 +2628,7 @@ export class StaticTranslation {
                 'label_producer': 'Producer',
                 'label_processor': 'Processor',
                 'label_actions': 'Actions',
+                'label_project': 'Project',
 
                 'label_table_id': 'UUID ID',
                 'label_table_full_id': 'Processor ID <strong class="font-red-flamingo"> It can be repeated!</strong>',
@@ -2802,6 +2833,7 @@ export class StaticTranslation {
                 'btn_schedule_update': 'Schedule',
                 'btn_immediately': 'Immediately',
                 'btn_stop': 'Remove Action!',
+                'flash_successfully_scheduled': 'Successfully Scheduled!',
             },
 
 
@@ -2903,7 +2935,7 @@ export class StaticTranslation {
                 'ALREADY_ON': 'Already on'
             },
             'device_alerts': {
-                'BOOTLOADER_REQUIRED': 'Bootloader update is required.',
+                'BOOTLOADER_REQUIRED': 'Bootloader update is strongly recommended.',
                 'RESTART_REQUIRED': 'Device restart is required.'
             },
             'instance_status': {

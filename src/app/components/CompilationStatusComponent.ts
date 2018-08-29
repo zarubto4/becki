@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 
         <span class="icon-hint-wraper red" *ngIf="status =='SERVER_OFFLINE'">
                                         <i class="fa fa-exclamation-triangle font-red-mint"></i>
-                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'version_status'"></span>
                                      </span>
 
         <span class="icon-hint-wraper green" *ngIf="status == 'SERVER_ERROR'">
@@ -46,25 +46,21 @@ import { Component, Input } from '@angular/core';
         <span class="icon-hint-wraper red" *ngIf="status == 'PENDING'">
                                         <i class="fa fa-heart font-red-flamingo"
                                            style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
         <span class="icon-hint-wraper green" *ngIf="status == 'APPROVED'">
                                         <i class="fa fa-heart font-green-jungle"
                                            style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
         <span class="icon-hint-wraper gray" *ngIf="status == 'DISAPPROVED'">
                                         <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
         <span class="icon-hint-wraper green" *ngIf="status == 'EDITED'">
                                         <i class="fa fa-heart font-blue"
                                            style="font-size: 1.6em; margin-left: 5px;"></i>
-                                        <span class="hint"
-                                              [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
+                                        <span class="hint" [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
 
     `

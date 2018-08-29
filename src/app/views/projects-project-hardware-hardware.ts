@@ -23,6 +23,7 @@ export interface ConfigParameters {
     key: string;
     value: any;
     type: any;
+    pending: boolean;
 }
 
 
@@ -76,7 +77,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             command: 'BLINK'
         })
             .then(() => {
-                this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_restart_success')));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_success')));
             })
             .catch((reason) => {
                 this.fmError(this.translate('flash_device_restart_success_fail', reason));
@@ -178,12 +179,16 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     config_array(): void {
 
         let configs: ConfigParameters[] = [];
+
+        let pending: Array<string> = this.hardware.bootloader_core_configuration.pending || [];
+
         for (let key in this.hardware.bootloader_core_configuration) {
-            if (true) {
+            if (this.hardware.bootloader_core_configuration.hasOwnProperty(key) && key !== 'pending') {
                 configs.push({
                     key: key,
                     value: (<any>this.hardware.bootloader_core_configuration)[key],
-                    type: typeof ((<any>this.hardware.bootloader_core_configuration)[key])
+                    type: typeof ((<any>this.hardware.bootloader_core_configuration)[key]),
+                    pending: pending.indexOf(key) !== -1
                 });
             }
         }
@@ -365,15 +370,15 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             },
             {
                 value: '6lowPan',
-                label: '6lowPan'
+                label: '6 LowPan'
             },
             {
                 value: 'gsm',
-                label: 'gsm'
+                label: 'GSM'
             },
             {
                 value: 'wifi',
-                label: 'wifi'
+                label: 'Wi-Fi'
             }
         ];
 
@@ -495,7 +500,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         this.blockUI();
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
-            hardware_ids: [this.hardware.id],
+            hardware_ids: [this.hardwareId],
             update_states: states,
             type_of_updates: type_of_updates
         })
@@ -505,7 +510,6 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.actualizationTaskFilter.content.forEach((task, index, obj) => {
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
-
                             this.tyrionBackendService.actualizationTaskGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
@@ -514,7 +518,6 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                                 .catch((reason) => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                                 });
-
                         }
                     });
                 });
@@ -535,7 +538,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         }
 
         if (backup_mode === 'STATIC_BACKUP') {
-            let m = new ModalsHardwareCodeProgramVersionSelectModel(this.projectId, this.hardware.hardware_type.id);
+            let m = new ModalsSelectCodeModel(this.projectId, this.hardware.hardware_type.id);
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success) {
@@ -545,12 +548,13 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                                 {
                                     hardware_id: this.hardware.id,
                                     backup_mode: false,
-                                    c_program_version_id: m.selectedProgramVersion.id
+                                    c_program_version_id: m.selected_c_program_version.id
                                 }
                             ]
                         })
                             .then(() => {
                                 this.refresh();
+                                this.onFilterActualizationProcedureTask();
                             })
                             .catch((reason) => {
                                 this.fmError(this.translate('flash_cant_edit_backup_mode', reason));

@@ -26,9 +26,6 @@
             <ng-template [ngSwitchCase]="'ModalsHardwareRestartMQTTPassModel'">
                 <bk-modals-hardware-restart-mqtt-pass [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-restart-mqtt-pass>
             </ng-template>
-            <ng-template [ngSwitchCase]="'ModalsHardwareGroupDeviceSettingsModel'">
-                <bk-modals-hardware-group-device-settings [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-group-device-settings>
-            </ng-template>
             <ng-template [ngSwitchCase]="'ModalsHardwareGroupPropertiesModel'">
                 <bk-modals-hardware-group-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-group-properties>
             </ng-template>
@@ -244,6 +241,9 @@
             </ng-template>
             <ng-template [ngSwitchCase]="'ModalsGsmPropertiesModel'">
                 <bk-modals-gsm-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-gsm-properties>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsInstanceApiPropertiesModel'">
+                <bk-modals-instance-api-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-api-properties>
             </ng-template>
         </div>
     </div>

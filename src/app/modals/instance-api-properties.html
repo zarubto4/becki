@@ -1,0 +1,17 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="(modalModel.edit?'title_edit':'title_add')|bkTranslate:this"></h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+
+            <bk-form-input *ngIf="modalModel.mesh_prefix_required" [control]="form.controls.prefix" [label]="'label_mesh_network_prefix'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" [label]="'label_token_description'|bkTranslate:this"></bk-form-input>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.edit?"btn_save":"btn_add")|bkTranslate:this}}</button>
+    </div>
+</div>

@@ -54,14 +54,93 @@
     <!-- Page Content -- START -->
     <div class="portlet-body">
         <div *ngIf="tab == 'hardware_list'">
-            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)"
-                 class="table-scrollable table-scrollable-borderless">
+
+            <bk-filter-component *ngIf="formFilterGroup"
+                [closed]="true"
+                [showFilterHead]="true"
+                (onEnterHit)="onFilterHardware()"
+                [filter_parameters]="[
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'alias',
+                                                label: 'Alias',
+                                                form: formFilterGroup,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'id',
+                                                label: 'Device ID',
+                                                form: formFilterGroup,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'full_id',
+                                                label: 'Full ID',
+                                                form: formFilterGroup,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'description',
+                                                label: 'Something in Description',
+                                                form: formFilterGroup,
+                                                showLabel: true
+                                            }
+                                        }
+                                    ]"
+            ></bk-filter-component>
+
+            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
+
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                         <tr>
-                            <th class="" [innerHTML]="'table_hardware_name'|bkTranslate:this"></th>
-                            <th class="" [innerHTML]="'table_hardware_id'|bkTranslate:this"></th>
-                            <th class="" [innerHTML]="'table_hardware_full_id'|bkTranslate:this"></th>
+                            <th class="">
+                                <a [innerHTML]="'table_hardware_name'|bkTranslate:this"
+                                   (click)="formFilterGroup.controls['orderBy'].setValue('NAME'); onFilterHardware()"
+                                   [class.bold]="formFilterGroup.controls['orderBy'].value === 'NAME'"></a>
+                                <bk-icon-component *ngIf="formFilterGroup.controls['orderBy'].value === 'NAME'"
+                                    [icon]="formFilterGroup.controls['order_schema'].value === 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                    [color]="'font-silver'"
+                                    [color_on]="'font-color-byzance-blue'"
+                                    [condition]="true"
+                                    (onClickEvent)="formFilterGroup.controls['order_schema'].value === 'ASC' ? formFilterGroup.controls['order_schema'].setValue('DESC') : formFilterGroup.controls['order_schema'].setValue('ASC'); onFilterHardware()">
+                                </bk-icon-component>
+                            </th>
+                            <th class="">
+                                <a [innerHTML]="'table_hardware_id'|bkTranslate:this"
+                                   (click)="formFilterGroup.controls['orderBy'].setValue('ID'); onFilterHardware()"
+                                   [class.bold]="formFilterGroup.controls['orderBy'].value === 'ID'"></a>
+                                <bk-icon-component *ngIf="formFilterGroup.controls['orderBy'].value === 'ID'"
+                                                   [icon]="formFilterGroup.controls['order_schema'].value === 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                                   [color]="'font-silver'"
+                                                   [color_on]="'font-color-byzance-blue'"
+                                                   [condition]="true"
+                                                   (onClickEvent)="formFilterGroup.controls['order_schema'].value === 'ASC' ? formFilterGroup.controls['order_schema'].setValue('DESC') : formFilterGroup.controls['order_schema'].setValue('ASC'); onFilterHardware()">
+                                </bk-icon-component>
+                            </th>
+                            <th class="">
+                                <a [innerHTML]="'table_hardware_full_id'|bkTranslate:this"
+                                   (click)="formFilterGroup.controls['orderBy'].setValue('FULL_ID'); onFilterHardware()"
+                                   [class.bold]="formFilterGroup.controls['orderBy'].value === 'FULL_ID'"></a>
+                                <bk-icon-component *ngIf="formFilterGroup.controls['orderBy'].value === 'FULL_ID'"
+                                                   [icon]="formFilterGroup.controls['order_schema'].value === 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                                   [color]="'font-silver'"
+                                                   [color_on]="'font-color-byzance-blue'"
+                                                   [condition]="true"
+                                                   (onClickEvent)="formFilterGroup.controls['order_schema'].value === 'ASC' ? formFilterGroup.controls['order_schema'].setValue('DESC') : formFilterGroup.controls['order_schema'].setValue('ASC'); onFilterHardware()">
+                                </bk-icon-component>
+                            </th>
+
                             <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
                             <th class="text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
@@ -131,13 +210,17 @@
                         </td>
 
                         <td class="action-btn-col">
+
+                            <bk-icon-component [condition]="device.online_state=='ONLINE'" [icon]="'fa-lightbulb-o'" [color]="'font-silver'" [color_on]="'font-color-byzance-blue'" (onClickEvent)="onBlinkDeviceClick(device)">
+                            </bk-icon-component>
+
                             <bk-drob-down-button
                                 [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_set_hardware_group'|bkTranslate:this),
-                                    btn_tag: 'edit_hardware_group',
+                                    btn_tag: 'edit_hardware_group_device',
                                     icon: 'fa-object-group',
                                     colorType: 'UPDATE',
                                     permission: (device.update_permission)
@@ -215,7 +298,9 @@
                 <table class="table table-hover table-light byzance-table">
                     <thead>
                     <tr>
-                        <th class="" [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></th>
+                        <th class="">
+                            <span [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></span>
+                        </th>
                         <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]=" 'table_size'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
@@ -252,6 +337,14 @@
                             <bk-drob-down-button
                                 [btns_group_name]="('label_settings'|bkTranslate:this)"
                                 [btns]="[
+                                 {
+                                    condition: true,
+                                    btn_label_for_person: ('label_set_hardware_group'|bkTranslate:this),
+                                    btn_tag: 'edit_hardware_group_group',
+                                    icon: 'fa-object-group',
+                                    colorType: 'UPDATE',
+                                    permission: (group.update_permission)
+                                },
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_group_properties'|bkTranslate:this),

@@ -8,14 +8,14 @@
         <div class="portlet light">
 
             <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-            <bk-portlet-title *ngIf="modalModel.support_select_hw_groups"
+            <bk-portlet-title *ngIf="modalModel.support_select_hw_groups && modalModel.support_select_hw"
                               [show_title]="false"
                               (onTabClick)="onToggleTab($event)"
                               [tab_selected_name]="tab"
                               [tabBtns]="[
                             {
                                 tab_name: 'hardware',
-                                condition: (true),
+                                condition: (modalModel.support_select_hw),
                                 tab_color: 'HARDWARE',
                                 tab_label: ('tab_hardware'|bkTranslate:this)
                             },
@@ -32,12 +32,81 @@
             <div class="portlet-body">
 
                 <div *ngIf="tab == 'hardware'">
+
+                    <bk-filter-component *ngIf="formHardwareFilter"
+                        [closed]="true"
+                        [showFilterHead]="true"
+                        (onEnterHit)="onFilterHardware()"
+                        [filter_parameters]="[
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'alias',
+                                                label: 'Alias',
+                                                form: formHardwareFilter,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'id',
+                                                label: 'Device ID',
+                                                form: formHardwareFilter,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'full_id',
+                                                label: 'Full ID',
+                                                form: formHardwareFilter,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'description',
+                                                label: 'Something in Description',
+                                                form: formHardwareFilter,
+                                                showLabel: true
+                                            }
+                                        }
+                                    ]"
+                    ></bk-filter-component>
+
+
                     <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
                         <table class="table table-hover table-light byzance-table">
                             <thead>
                             <tr>
-                                <th class="">{{'table_hardware_name'|bkTranslate:this}}</th>
-                                <th class="">{{'table_hardware_id'|bkTranslate:this}}</th>
+                                <th class="">
+                                    <a [innerHTML]="'table_hardware_name'|bkTranslate:this"
+                                       (click)="formHardwareFilter.controls['orderBy'].setValue('NAME'); onFilterHardware()"
+                                       [class.bold]="formHardwareFilter.controls['orderBy'].value === 'NAME'"></a>
+                                    <bk-icon-component *ngIf="formHardwareFilter.controls['orderBy'].value === 'NAME'"
+                                                       [icon]="formHardwareFilter.controls['order_schema'].value === 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                                       [color]="'font-silver'"
+                                                       [color_on]="'font-color-byzance-blue'"
+                                                       [condition]="true"
+                                                       (onClickEvent)="formHardwareFilter.controls['order_schema'].value === 'ASC' ? formHardwareFilter.controls['order_schema'].setValue('DESC') : formHardwareFilter.controls['order_schema'].setValue('ASC'); onFilterHardware()">
+                                    </bk-icon-component>
+
+                                </th>
+                                <th class="">
+                                    <a [innerHTML]="'table_hardware_id'|bkTranslate:this"
+                                       (click)="formHardwareFilter.controls['orderBy'].setValue('ID'); onFilterHardware()"
+                                       [class.bold]="formHardwareFilter.controls['orderBy'].value === 'ID'"></a>
+                                    <bk-icon-component *ngIf="formHardwareFilter.controls['orderBy'].value === 'ID'"
+                                                       [icon]="formHardwareFilter.controls['order_schema'].value === 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                                       [color]="'font-silver'"
+                                                       [color_on]="'font-color-byzance-blue'"
+                                                       [condition]="true"
+                                                       (onClickEvent)="formHardwareFilter.controls['order_schema'].value === 'ASC' ? formHardwareFilter.controls['order_schema'].setValue('DESC') : formHardwareFilter.controls['order_schema'].setValue('ASC'); onFilterHardware()">
+                                    </bk-icon-component>
+                                </th>
                                 <th class="text-center">{{'table_status'|bkTranslate:this}}</th>
                                 <th [class.text-right]="modalModel.multiple_select_support" [class.text-center]="!modalModel.multiple_select_support" style="width: 1px">{{'table_actions'|bkTranslate:this}}</th>
                             </tr>
@@ -45,7 +114,6 @@
                             <tbody class="hide-bk-drob-down-button">
                                 <tr *ngFor="let device of devicesFilter.content">
                                     <td class="vert-align">
-
                                         <a (click)="!selectedHardwareList[device.id] ? onHardwareAddToList(device) : onHardwareRemoveFromList(device)" class="no-wrap">
                                             <strong *ngIf="device.name && device.name != 'null'">{{device.name}}</strong>
                                             <strong *ngIf="!device.name || device.name == 'null' ">{{device.full_id}}</strong>
@@ -139,8 +207,8 @@
 
                                 <!-- Multiple Select -->
                                 <td class="vert-align text-center no-wrap" *ngIf="modalModel.multiple_select_support">
-                                    <div class="md-checkbox" (click)="selectedHardwareList[group.id] == null ? onGroupAddToList(group) : onGroupRemoveFromList(group)">
-                                        <input type="checkbox" class="md-check" [checked]="selectedHardwareList[group.id] != null">
+                                    <div class="md-checkbox" (click)="selectedGroupList[group.id] == null ? onGroupAddToList(group) : onGroupRemoveFromList(group)">
+                                        <input type="checkbox" class="md-check" [checked]="selectedGroupList[group.id] != null">
                                         <label>
                                             <span class="inc"></span>
                                             <span [class.check]="selectedGroupList[group.id] != null"></span>

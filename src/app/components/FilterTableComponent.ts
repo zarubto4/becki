@@ -1,6 +1,6 @@
 import { Component, Output, Input, EventEmitter, OnInit } from '@angular/core';
 import { FormSelectComponentOption } from './FormSelectComponent';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 
 /* tslint:disable: */
@@ -10,11 +10,11 @@ import { TyrionBackendService } from '../services/BackendService';
 
         <!-- Find and Select Program -->
         <div class="portlet light" style="padding: 0 0 0 0; margin: 0 0 0 0; min-height: 0px !important">
-            <div class="portlet-title" style="min-height: 0px !important">
-                <div class="caption" style="padding: 0 0 0 0;">
+            <div *ngIf="showFilterHead" class="portlet-title" style="min-height: 0px !important">
+                <div class="caption" style="padding: 0 0 0 0; cursor: pointer;">
                     <i class="icon-equalizer hide"></i>
-                    <span class="caption-subject bold uppercase">Filter </span>
-                    <span class="caption-helper">Choose or not to choose, that is the question...</span>
+                    <span class="caption-subject bold uppercase" (click)="onHide()">Filter </span>
+                    <span class="caption-helper" (click)="onHide()">Choose or not to choose, that is the question...</span>
                 </div>
                 <div class="tools" style="padding-bottom: 5px; padding-top: 5px;">
                     <a [class.collapse]="closed" [class.expand]="!closed"  data-original-title="" title="" (click)="onHide()"> </a>
@@ -55,18 +55,21 @@ import { TyrionBackendService } from '../services/BackendService';
 
                         <!-- Write Tags -->
                         <div *ngIf="component.type === 'FIND_BY_TAG'">
-                            <bk-form-tag-input [control]="component.content.form.controls.tags"
+                            <bk-form-tag-input [control]="component.content.form.controls[component.content.key]"
                                                [label]="'Optional Tags'"
                                                (valueChange)="onSELECT_TAGS_CHANGEClick($event, component.content.key)">
                             </bk-form-tag-input>
                         </div>
 
                         <!-- Write Name -->
+
                         <div *ngIf="component.type === 'FIND_BY_TEXT'">
                             <bk-form-input
-                                [control]="component.content.form.controls.text"
+                                [control]="component.content.form.controls[component.content.key]"
                                 [label]="component.content.label"
-                                (valueChange)="onSELECTLISTCHANGEClick($event, component.content.key)">
+                                [showLabel]="component.content.showLabel"
+                                (valueChange)="onSELECTLISTCHANGEClick($event, component.content.key)"
+                                (onEnterEvent)="onEnter($event)">
                             </bk-form-input>
                         </div>
 
@@ -93,12 +96,15 @@ export class FilterTableComponent implements OnInit {
     @Input()
     closed: boolean = false;
 
+    @Input()
+    showFilterHead: boolean = true;
+
+    @Output()
+    onEnterHit: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {}
 
     ngOnInit() {
-
-        console.info('filter_parameters: ', this.filter_parameters);
         this.filter_parameters.forEach((parameter) => {
 
             if (parameter.type === 'LIST_SELECT') {
@@ -115,21 +121,7 @@ export class FilterTableComponent implements OnInit {
                 });
             }
 
-            if (parameter.type === 'FIND_BY_TEXT') {
-                (parameter.content as LIST_SELECT).form = this.formBuilder.group({
-                    'text': ['']
-                });
-            }
-
-            if (parameter.type === 'FIND_BY_TAG') {
-                (parameter.content as LIST_SELECT).form = this.formBuilder.group({
-                    'tags': ['']
-                });
-            }
-
         });
-
-
     }
 
     onHide() {
@@ -166,6 +158,11 @@ export class FilterTableComponent implements OnInit {
             });
         }, 50);
     }
+
+    onEnter() {
+        console.info('Enter Hit');
+        this.onEnterHit.emit();
+    }
 }
 /* tslint:disable */
 
@@ -188,13 +185,15 @@ class CHECKBOX_LIST_Interface {
 class FIND_BY_TEXT {
     key: string;       // Type "HW_ID" "HW_NAME...."
     label: string;
-    form: FormGroup;
+    form: FormGroup;    // you have to set by yourself  <-- Key is used also for find form.component['key'] in form
+    showLabel: boolean;
 }
 
 class FIND_BY_TAG {
     tags: string[];
     label: string;
-    form: FormGroup;
+    key: string;       // Type "HW_ID" "HW_NAME...."
+    form: FormGroup;   // you have to set by yourself  <-- Key is used also for find form.component['key'] in form
 }
 
 class LIST_SELECT {
