@@ -60,7 +60,7 @@ export abstract class _BaseMainComponent {
         }
     }
 
-    protected addFlashMessage(fm: FlashMessage): void {
+    public addFlashMessage(fm: FlashMessage): void {
         this.notificationService.addFlashMessage(fm);
     }
 
@@ -84,11 +84,11 @@ export abstract class _BaseMainComponent {
         return this.beckiImageLinks.getBeckiImage(imageName, folderName);
     }
 
-    protected translate(key: string, ...args: any[]): string {
+    public translate(key: string, ...args: any[]): string {
         return this.translationService.translate(key, this, null, args);
     }
 
-    protected translateTable(key: string, table: string, ...args: any[]): string {
+    public translateTable(key: string, table: string, ...args: any[]): string {
         return this.translationService.translateTable(key, this, table, null, args);
     }
 

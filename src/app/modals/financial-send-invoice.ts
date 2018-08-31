@@ -34,22 +34,14 @@ export class ModalsSendInvoiceComponent implements OnInit {
 
     form: FormGroup;
 
-    differentEmail: boolean= false;
-
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-
         this.form = this.formBuilder.group({
-            'email': [this.modalModel.email,
-            [BeckiValidators.condition(() => this.differentEmail, Validators.required), BeckiValidators.condition(() => this.differentEmail, BeckiValidators.email)]]
+            'email': ['', [Validators.required, BeckiValidators.email]]
         });
     }
 
     ngOnInit() {
         (<FormControl>(this.form.controls['email'])).setValue(this.modalModel.email);
-    }
-
-    checkboxChanged(value: boolean) {
-        this.differentEmail = value;
     }
 
     onSubmitClick(): void {

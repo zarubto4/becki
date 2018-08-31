@@ -1,0 +1,26 @@
+<div class="becki-actions margin-right-10">
+    <button title="{{'label_edit'|bkTranslate:this}}" class="btn btn-icon-only blue right-align"
+            *ngIf="edit && paymentDetails.id"
+            (click)="editPaymentDetails()">
+        <i class="fa fa-cog"></i>
+    </button>
+</div>
+<div class="portlet box blue-dark">
+    <div class="portlet-title">
+        <div class="caption" >
+            <span class="fa fa-fw fa-lg fa-credit-card"></span>
+            <span>{{ title ? title : ('label_title'|bkTranslate:this)}}</span>
+        </div>
+    </div>
+    <div  class="portlet-body">
+        <table *ngIf="!empty" class="table table-hover table-light byzance-table">
+            <tbody>
+            <tr>
+                <td> {{'label_payment_method'|bkTranslate:this}}:</td>
+                <td> {{ paymentDetails ? (paymentDetails.payment_method|bkTranslateTable:this:'payment_method') : ''}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div *ngIf="empty" class="font-grey-mint">{{'label_not_created'|bkTranslate:this}}</div>
+    </div>
+</div>

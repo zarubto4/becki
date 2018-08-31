@@ -73,6 +73,9 @@ export class BreadcrumbsService {
         this.currentParamsService.currentProductName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentProductExtensionName.subscribe(() => {
+            this.refresh();
+        });
         this.currentParamsService.currentInvoiceNumber.subscribe(() => {
             this.refresh();
         });
@@ -111,6 +114,8 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentProjectNameSnapshot;
             case ':product':
                 return this.currentParamsService.currentProductNameSnapshot;
+            case ':productExtension':
+                return this.currentParamsService.currentProductExtensionNameSnapshot;
             case ':invoice':
                 return this.currentParamsService.currentInvoiceNumberSnapshot;
             case ':blocko':

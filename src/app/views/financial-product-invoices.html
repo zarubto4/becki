@@ -3,70 +3,148 @@
  * directory of this distribution.
  */
  -->
-<bk-layout-main [tabMenu]="'tariffs-tariff'" [title]="product?product.name:null">
+<bk-layout-main
+    [tabMenu]="'products-product'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
+
     <div class="portlet portlet light bordered">
 
         <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
-        <bk-portlet-title
-            [title_name]="'title'|bkTranslate:this"
-            [icon]="'fa-dollar'"
-            (onClick)="onAddCreditsClick()"
-            [btns]="[
-                {
-                    condition: (product && product.method == 'CREDIT'),
-                    label: ('btn_add_credits'|bkTranslate:this),
-                    icon: 'fa-plus-circle'
-                }
-            ]"></bk-portlet-title>
+        <bk-portlet-title [title_name]="'title'|bkTranslate:this"
+                          [icon]="'fa-dollar'"
+                          [btns]="[]">
+        </bk-portlet-title>
         <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+        <div class="portlet-body">
 
-        <!-- Page Content -- START -->
-        <div  *ngIf="(invoices && invoices.length)" class="table-scrollable">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>{{'table_invoice_id'|bkTranslate:this}}</th>
-                    <th>{{'table_date_of_pay'|bkTranslate:this}}</th>
-                    <th>{{'table_created'|bkTranslate:this}}</th>
-                    <th>{{'table_paid'|bkTranslate:this}}</th>
-                    <th class="text-right">{{'table_actions'|bkTranslate:this}}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let invoice of invoices">
-                    <td class="vert-align no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
-                    <td class='vert-align'>{{invoice.paid|bkUnixTimeToDate}}</td>
-                    <td class='vert-align'> {{invoice.created|bkUnixTimeToDate}} </td>
-                    <td class='vert-align'><span *ngIf="!invoice.require_payment"><i class="font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">{{'payment_required|bkTranslate:this'}}</a></span></td>
-                    <td class="vert-align no-wrap text-right">
-                        <button *ngIf="invoice.invoice_pdf_link" (click)="onDownloadProFormaPDFClick(invoice)" title="{{'label_downoload_pro_forma_pdf'|bkTranslate:this}}" class="btn btn-icon-only white">
-                            <i class=" fa fa-file-pdf-o"></i>
-                        </button>
-                        <button *ngIf="invoice.proforma_pdf_link" (click)="onDownloadInvoicePDFClick(invoice)" title="{{'label_download_pdf'|bkTranslate:this}}" class="btn btn-icon-only white">
-                            <i class=" fa fa-file-pdf-o"></i>
-                        </button>
-                        <button (click)="onSendClick(invoice)" title="{{'label_send'|bkTranslate:this}}" class="btn btn-icon-only white">
-                            <i class=" fa fa-paper-plane-o"></i>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <!-- Page Content -- START -->
+            <div class="table-scrollable" *ngIf="(invoices && invoices.length)">
+                <table class="table table-hover table-light byzance-table">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_invoice_id'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_issued'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_total'|bkTranslate:this}}</th>
+                        <th class="col col-lg-4">{{'table_paid'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2 text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let invoice of invoices">
+                        <td class="vert-align no-wrap">
+                            <a (click)="onInvoiceClick(invoice)"
+                               *ngIf="invoice.update_permission">
+                                {{invoice.invoice_number ? invoice.invoice_number : 'label_no_invoice_number'|bkTranslate:this}}
+                            </a>
+
+                            <a [href]="invoice.public_html_url"
+                               target="_blank"
+                               *ngIf="!invoice.update_permission && invoice.invoice_number">
+                                {{invoice.invoice_number}}
+                            </a>
+
+                            <span *ngIf="!invoice.update_permission && !invoice.invoice_number">
+                                {{'label_no_invoice_number'|bkTranslate:this}}
+                            </span>
+                        </td>
+                        <td class='vert-align'>
+                            <span *ngIf="invoice.to_confirm">{{'table_to_confirm'|bkTranslate:this}}</span>
+                            <span *ngIf="!invoice.to_confirm && !invoice.issued">{{'table_to_issue'|bkTranslate:this}}</span>
+                            <span *ngIf="invoice.issued">{{invoice.issued|bkUnixTimeToDate}}</span>
+                        </td>
+                        <td class='vert-align'> {{invoice.total_price_with_vat|bkPrice}}</td>
+                        <td class='vert-align'>
+                            <span *ngIf="invoice.paid">
+                                {{invoice.paid|bkUnixTimeToDate}}
+                                <i class="font-green-jungle fa fa-check "></i>
+                            </span>
+                            <a *ngIf="invoice.require_payment"
+                               class="font-red-thunderbird"
+                               [href]="invoice.public_html_url"
+                               target="_blank">
+                                {{'payment_required'|bkTranslate:this}}
+                            </a>
+                            <span *ngIf="!invoice.paid && !invoice.require_payment">
+                                -
+                            </span>
+                        </td>
+                        <td class="action-btn-col text-center">
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_invoice_actions'|bkTranslate:this)"
+                                [btns]="[       {
+                                                    condition: invoice.to_confirm,
+                                                    btn_label_for_person: ('label_confirm_invoice'|bkTranslate:this),
+                                                    btn_tag: 'CONFIRM_INVOICE',
+                                                    icon: 'fa-check',
+                                                    colorType: 'EDIT',
+                                                    permission: invoice.update_permission
+                                                },
+                                                {
+                                                    condition: !invoice.paid && invoice.invoice_number != null,
+                                                    btn_label_for_person: ('label_synchronize_invoice'|bkTranslate:this),
+                                                    btn_tag: 'SYNCHRONIZE_FAKTUROID',
+                                                    icon: 'fa-sync',
+                                                    colorType: 'UPDATE',
+                                                    permission: invoice.update_permission
+                                                },
+                                                {
+                                                    condition: invoice.invoice_number != null,
+                                                    btn_label_for_person: ('label_fakturoid_invoice'|bkTranslate:this),
+                                                    btn_tag: 'OPEN_FAKTUROID_INVOICE',
+                                                    icon: 'fa-clipboard',
+                                                    colorType: 'ACTIVE',
+                                                    permission: invoice.update_permission
+                                                },
+                                                {
+                                                    condition: invoice.invoice_pdf_link != null,
+                                                    btn_label_for_person: ('label_download_pdf'|bkTranslate:this),
+                                                    btn_tag: 'DOWNLOAD_INVOICE_PDF',
+                                                    icon: 'fa-file-pdf-o',
+                                                    colorType: 'CREATE',
+                                                    permission: true
+                                                },
+                                                {
+                                                    condition: invoice.invoice_pdf_link == null && invoice.proforma_pdf_link != null,
+                                                    btn_label_for_person: ('label_download_pro_forma_pdf'|bkTranslate:this),
+                                                    btn_tag: 'DOWNLOAD_PROFORMA_PDF',
+                                                    icon: 'fa-file-pdf-o',
+                                                    colorType: 'CREATE',
+                                                    permission: true
+                                                },
+                                                {
+                                                    condition: invoice.invoice_pdf_link != null || invoice.proforma_pdf_link != null,
+                                                    btn_label_for_person: ('label_send'|bkTranslate:this),
+                                                    btn_tag: 'SEND_INVOICE',
+                                                    icon: 'fa-envelope-o',
+                                                    colorType: 'UPDATE',
+                                                    permission: true
+                                                }
+                                            ]"
+                                (onValueChanged)="onDropDownEmiter($event, invoice)"
+                            >
+                            </bk-drob-down-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Page Content -- END -->
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(invoices == null)"
+                                [condition_empty]="(invoices != null && invoices.length == 0)"
+                                [main_message_link]="'no_invoice'|bkTranslate:this"
+                                [main_message_comment_link]="'no_invoice_comment'|bkTranslate:this"
+                                [show_button]="false">
+                <!-- Not Supported now
+                [btn_label]="'btn_new_subscription'|bkTranslate:this"
+                (onButtonClick)="onAddProductClick()">
+                !-->
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
         </div>
-        <!-- Page Content -- END -->
-
-        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-        <bk-nothing-to-show [condition_loading]="(invoices == null)"
-                            [condition_empty]="(invoices != null && invoices.length == 0)"
-                            [main_message_link]="'no_invoice'|bkTranslate:this"
-                            [main_message_comment_link]="'no_invoice_comment'|bkTranslate:this"
-                            [show_button]="false">
-            <!-- Not Supported now
-            [btn_label]="'btn_new_subscription'|bkTranslate:this"
-            (onButtonClick)="onAddProductClick()">
-            !-->
-        </bk-nothing-to-show>
-        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
-
     </div>
 </bk-layout-main>

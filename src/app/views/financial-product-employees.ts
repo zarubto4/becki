@@ -50,7 +50,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
                     this.blockUI();
                     this.tyrionBackendService.employeeAdd({
                         mails: m.emails,
-                        customer_id: this.product.customer.id
+                        customer_id: this.product.owner.id
                     })
                         .then(() => {
 
@@ -91,7 +91,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
         this.blockUI();
         this.tyrionBackendService.employeeAdd({
             mails: [member.person.email],
-            customer_id: this.product.customer.id
+            customer_id: this.product.owner.id
         })
             .then(() => {
                 this.unblockUI();

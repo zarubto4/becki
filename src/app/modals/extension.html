@@ -16,7 +16,11 @@
             </div>
 
             <div>
-                <bk-form-nice-json [description]="'Config Json'" [control]="form.controls['config']" [cols]="75" [content]="modalModel.config" [readonly]="false"></bk-form-nice-json>
+                <bk-form-nice-json [description]="'Config Json'" [control]="form.controls['config']" [cols]="65" [content]="modalModel.config" [readonly]="false"></bk-form-nice-json>
+            </div>
+
+            <div>
+                <bk-form-nice-json [description]="'Consumption Json (Expected usage of resources per month, just to get the expected price price for presenting the tariff.)'" [control]="form.controls['consumption']" [cols]="65" [content]="modalModel.consumption" [readonly]="false"></bk-form-nice-json>
             </div>
         </form>
     </div>

@@ -1,14 +1,18 @@
 /*
- * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * © 2016-2008 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IProduct, IInvoice } from '../backend/TyrionAPI';
+import { IProduct, IInvoice, IInvoiceFullDetails } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsSendInvoiceModel } from './../modals/financial-send-invoice';
-import { GoPayLoaderService } from '../services/GoPayLoaderService';
+import { Http, ResponseContentType } from '@angular/http';
+import { Headers } from '@angular/http/src/headers';
+import { TyrionApiBackend } from '../backend/BeckiBackend';
+import { ModalService } from '../services/ModalService';
+import { TyrionBackendService } from '../services/BackendService';
 
 @Component({
     selector: 'bk-view-financial-product-invoices',
@@ -16,72 +20,25 @@ import { GoPayLoaderService } from '../services/GoPayLoaderService';
 })
 export class FinancialProductInvoicesComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
+    private routeParamsSubscription: Subscription;
 
-    routeParamsSubscription: Subscription;
+    private id: string;
 
     product: IProduct = null;
 
     invoices: IInvoice[] = null;
 
-    goPayLoaderService: GoPayLoaderService;
-    goPayLoaderServiceSubscription: Subscription;
+    // private goPayLoaderService: GoPayLoaderService;
+    //
+    // private goPayLoaderServiceSubscription: Subscription;
 
-    constructor(injector: Injector) {
+    private actions: FinancialProductInvoiceActions;
+
+    constructor(injector: Injector, http: Http) {
         super(injector);
-        this.goPayLoaderService = injector.get(GoPayLoaderService);
+        this.actions = new FinancialProductInvoiceActions(this, injector, http);
+        // this.goPayLoaderService = injector.get(GoPayLoaderService);
     };
-
-    onAddCreditsClick(): void {
-
-    }
-
-    onInvoiceClick(invoice: IInvoice): void {
-        this.router.navigate(['financial', this.id, 'invoices', invoice.id]);
-    }
-
-    onPayClick(invoice: IInvoice): void {
-        this.tyrionBackendService.invoiceSendReimbursement(invoice.id).then(gopay => {
-
-            let gwUrl = gopay.gw_url;
-
-            this.goPayLoaderServiceSubscription = this.goPayLoaderService.goPay.subscribe((goPay) => {
-                goPay.checkout({
-                    gatewayUrl: gwUrl,
-                    inline: true
-                }, (checkoutResult) => {
-                    this.router.navigate(['/financial']);
-                });
-            });
-
-        });
-    }
-
-    onDownloadInvoicePDFClick(invoice: IInvoice): void {
-        window.open(invoice.invoice_pdf_link, 'download');
-    }
-
-    onDownloadProFormaPDFClick(invoice: IInvoice): void {
-        window.open(invoice.proforma_pdf_link, 'download');
-    }
-
-    onSendClick(invoice: IInvoice): void {
-
-        let model = new ModalsSendInvoiceModel('Send invoice', invoice.id, this.product.payment_details.invoice_email);
-        this.modalService.showModal(model).then((success) => {
-            this.tyrionBackendService.invoiceResend(invoice.id, {}).then(response => {
-                // this.unblockUI();
-                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_invoice_been_resend')));
-            }).catch(() => {
-                // this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_invoice_cant_be_resend')));
-            });
-        });
-    }
-
-    onPrintClick(): void {
-
-    }
 
     ngOnInit(): void {
         this.blockUI();
@@ -96,21 +53,156 @@ export class FinancialProductInvoicesComponent extends _BaseMainComponent implem
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
-        if (this.goPayLoaderServiceSubscription) {
-            this.goPayLoaderServiceSubscription.unsubscribe();
-        }
+        // if (this.goPayLoaderServiceSubscription) {
+        //     this.goPayLoaderServiceSubscription.unsubscribe();
+        // }
     }
-
 
     refresh(): void {
         this.blockUI();
-        this.tyrionBackendService.productGet(this.id).then(product =>  {
-            this.product = product;
-            this.invoices = this.product.invoices;
-            this.unblockUI();
-        }).catch(error => {
-            this.unblockUI();
-        });
 
+        Promise.all<any>([this.tyrionBackendService.productGet(this.id), this.tyrionBackendService.productGetInvoices(this.id)])
+            .then((values: [IProduct, IInvoice[]]) => {
+                this.product =  values[0];
+                this.invoices =  values[1];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Data cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onInvoiceClick(invoice: IInvoice): void {
+        this.router.navigate(['financial', this.id, 'invoices', invoice.id]);
+    }
+
+    onDropDownEmiter(action: string, invoice: IInvoice): void {
+        this.actions.doAction(action, invoice, this.product).then(result => this.refresh());
+    }
+}
+
+export class FinancialProductInvoiceActions {
+    protected tyrionBackendService: TyrionBackendService = null;
+    protected modalService: ModalService = null;
+
+    constructor(private page: _BaseMainComponent, private injector: Injector, private http: Http) {
+        this.tyrionBackendService = injector.get(TyrionBackendService);
+        this.modalService = injector.get(ModalService);
+    }
+
+    doAction(action: string, invoice: IInvoice, product: IProduct): Promise<IInvoice> {
+        if (action === 'DOWNLOAD_INVOICE_PDF') {
+            return this.onDownloadInvoicePDFClick(invoice);
+        }
+
+        if (action === 'DOWNLOAD_PROFORMA_PDF') {
+            return this.onDownloadProFormaPDFClick(invoice);
+        }
+
+        if (action === 'SEND_INVOICE') {
+            return this.onSendInvoice(invoice, product);
+        }
+
+        if (action === 'CONFIRM_INVOICE') {
+            return this.onConfirmInvoice(invoice);
+        }
+
+        if (action === 'SYNCHRONIZE_FAKTUROID') {
+            return this.onSynchronizeFakturoid(invoice);
+        }
+
+        if (action === 'OPEN_FAKTUROID_INVOICE') {
+            return this.onOpenFakturoidInvoice(invoice);
+        }
+    }
+
+    private onDownloadInvoicePDFClick(invoice: IInvoice): Promise<IInvoice> {
+        return this.downloadFile(invoice, 'invoice');
+    }
+
+    private onDownloadProFormaPDFClick(invoice: IInvoice): Promise<IInvoice> {
+        return this.downloadFile(invoice, 'proforma');
+    }
+
+    private downloadFile(invoice: IInvoice, type: string): Promise<IInvoice> {
+        return new Promise<IInvoice>((resolve, reject) => {
+            this.page.blockUI();
+            this.http
+                .get(invoice.proforma_pdf_link, {
+                    responseType: ResponseContentType.Blob,
+                    headers: new Headers({'X-Auth-Token': TyrionApiBackend.getToken()})
+                })
+                .subscribe(res => {
+                    let url = window.URL.createObjectURL(res.blob());
+                    window.open(url, '_blank');
+                }, error => {
+                    this.page.unblockUI();
+                    this.page.addFlashMessage(new FlashMessageError(this.page.translate('flash_invoice_cant_be_downloaded')));
+                    resolve(invoice);
+                }, () => {
+                    this.page.unblockUI();
+                    reject();
+                });
+        });
+    }
+
+    private onSendInvoice(invoice: IInvoice, product: IProduct): Promise<IInvoice> {
+        return new Promise<IInvoice>((resolve, reject) => {
+            this.page.blockUI();
+            let model = new ModalsSendInvoiceModel('Send invoice', invoice.id, product.owner.contact.invoice_email);
+            this.modalService.showModal(model).then((success) => {
+                if (!success) {
+                    return;
+                }
+                const email = model.email;
+                this.tyrionBackendService.invoiceResend(invoice.id, {email}).then(response => {
+                    this.page.unblockUI();
+                    this.page.addFlashMessage(new FlashMessageSuccess(this.page.translate('flash_invoice_been_resend')));
+                    resolve(invoice);
+                }).catch(() => {
+                    this.page.unblockUI();
+                    this.page.addFlashMessage(new FlashMessageError(this.page.translate('flash_invoice_cant_be_resend')));
+                    reject();
+                });
+            });
+        });
+    }
+
+    private onConfirmInvoice(invoice: IInvoice): Promise<IInvoice> {
+        return new Promise<IInvoice>((resolve, reject) => {
+            this.page.blockUI();
+            this.tyrionBackendService.invoiceConfirm(invoice.id).then(response => {
+                this.page.unblockUI();
+                this.page.addFlashMessage(new FlashMessageSuccess(this.page.translate('flash_invoice_been_confirmed')));
+                resolve(response);
+            }).catch(() => {
+                this.page.unblockUI();
+                this.page.addFlashMessage(new FlashMessageError(this.page.translate('flash_invoice_cant_be_confirmed')));
+                reject();
+            });
+        });
+    }
+
+    private onSynchronizeFakturoid(invoice: IInvoice): Promise<IInvoice> {
+        return new Promise<IInvoice>((resolve, reject) => {
+            this.page.blockUI();
+            this.tyrionBackendService.invoiceSynchronizeWithFakturoid(invoice.id).then(response => {
+                this.page.unblockUI();
+                this.page.addFlashMessage(new FlashMessageSuccess(this.page.translate('flash_invoice_been_synchronized')));
+                resolve(response);
+            }).catch(() => {
+                this.page.unblockUI();
+                this.page.addFlashMessage(new FlashMessageError(this.page.translate('flash_invoice_cant_be_synchronized')));
+                reject();
+            });
+        });
+    }
+
+    private onOpenFakturoidInvoice(invoice: IInvoice): Promise<IInvoice> {
+        return new Promise<IInvoice>((resolve, reject) => {
+            window.open(invoice.public_html_url);
+            resolve(invoice);
+        });
     }
 }

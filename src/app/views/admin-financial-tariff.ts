@@ -69,8 +69,6 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
             return this.translate('label_free');
         }
 
-        price = price / 1000;
-
         if (Math.floor(price) === price) {
             return price.toFixed(2) + '$';
         } else {
@@ -107,14 +105,13 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
     onTariffEditClick(tariff: ITariff): void {
         let model = new ModalsTariffModel(
             true,
-            tariff.company_details_required,
+            tariff.owner_details_required,
             tariff.color,
             tariff.awesome_icon,
             tariff.credit_for_beginning,
             tariff.description,
             tariff.name,
             tariff.identifier,
-            tariff.payment_method_required,
             tariff.payment_details_required,
             tariff.labels
         );
@@ -124,12 +121,11 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.tyrionBackendService.tariffEdit(tariff.id, {
                     color: model.color,
                     awesome_icon: model.awesome_icon,
-                    company_details_required: model.company_details_required,
+                    owner_details_required: model.owner_details_required,
                     credit_for_beginning: model.credit_for_beginning,
                     description: model.description,
                     identifier: model.identifier,
                     name: model.name,
-                    payment_method_required: model.payment_method_required,
                     payment_details_required: model.payment_details_required,
                     labels: JSON.parse(model.labelsInString)
                 })

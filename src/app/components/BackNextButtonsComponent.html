@@ -1,0 +1,21 @@
+<div class="row margin-bottom-15 margin-top-15" *ngIf="visibleBack || visibleNext">
+    <div class="col-md-12 text-center">
+        <div class="btn-group btn-group-solid">
+            <button type="button"
+                    class="btn grey-salsa btn-lg btn-outline"
+                    (click)="backClicked()"
+                    *ngIf="visibleBack"
+                    [disabled]="disableBack">
+                {{backText ? backText : 'btn_back'|bkTranslate:this}}
+            </button>
+
+            <button type="button"
+                    class="btn blue btn-lg"
+                    (click)="nextClicked()"
+                    *ngIf="visibleNext"
+                    [disabled]="disableNext">
+                {{nextText ? nextText : 'btn_continue'|bkTranslate:this}}
+            </button>
+        </div>
+    </div>
+</div>
