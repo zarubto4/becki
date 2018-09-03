@@ -70,6 +70,7 @@
        </script>
      -->
 
+
 </head>
 
 <body>
@@ -84,5 +85,4 @@
     <% for (key in htmlWebpackPlugin.files.js) { %> <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>" id="<%= '_script'+key %>"></script> <% } %>
 
 </body>
-
 </html>

@@ -107,7 +107,7 @@ export class ModalsPictureUploadComponent implements OnInit {
                     }
 
                 });
-                image.src = myReader.result;
+                image.src = <string>myReader.result;
 
             }, false);
             myReader.readAsDataURL(file);
