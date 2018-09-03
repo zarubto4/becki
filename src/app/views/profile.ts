@@ -12,7 +12,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import { IAuthorizationToken, IPerson, IRole } from '../backend/TyrionAPI';
+import { IAuthorizationToken, ILoginToken, IPerson, IRole } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-profile',
@@ -31,6 +31,7 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
 
     email: string;
     login_tokens: IAuthorizationToken[] = null;
+    permanent_tokens: Array<IAuthorizationToken>;
 
     countryList: FormSelectComponentOption[] = StaticOptionLists.countryList;
     genderList: FormSelectComponentOption[] = StaticOptionLists.genderList;
@@ -63,14 +64,6 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
 
     };
 
-    onTabClick(tabName: string) {
-        this.tab = tabName;
-
-        if (tabName === 'logins' && this.login_tokens == null) {
-            this.refresh_login_tokens();
-        }
-    }
-
     ngOnInit(): void {
 
         let personObject = this.backendService.personInfoSnapshot;
@@ -84,8 +77,17 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
 
     onToggleTab(tab: string) {
         this.tab = tab;
+
+        if (tab === 'logins' && !this.login_tokens) {
+            this.refresh_login_tokens();
+        }
     }
 
+    onPortletClick(btn: string) {
+        if (btn === 'add_apikey') {
+            this.addApiKey();
+        }
+    }
 
     refresh(): void {
         this.blockUI();
@@ -117,15 +119,30 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
         this.blockUI();
         this.backendService.personGetLoggedConnections()
             .then((tokens) => {
-                this.login_tokens = tokens;
+
+                this.login_tokens = tokens.filter(t => !!t.access_age);
+                this.permanent_tokens = tokens.filter(t => !t.access_age);
                 this.unblockUI();
             })
             .catch((reason) => {
-                this.fmError(this.translate('label_cant_load_device'));
+                this.fmError(this.translate('label_cannot_load_tokens'));
                 this.unblockUI();
             });
     }
 
+    addApiKey() {
+        this.blockUI();
+        this.tyrionBackendService.apikeyAdd()
+            .then((token: ILoginToken) => {
+                this.refresh_login_tokens();
+                this.unblockUI();
+                this.fmSuccess(this.translate('flash_token_added'));
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('flash_cannot_add_token'), reason);
+                this.unblockUI();
+            });
+    }
 
     changePassword(): void {
         this.blockUI();

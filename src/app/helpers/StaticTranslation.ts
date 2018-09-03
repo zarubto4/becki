@@ -1174,15 +1174,22 @@ export class StaticTranslation {
                 'label_current_email': 'Current E-mail',
                 'label_new_email': 'New E-mail',
                 'label_new_email_again': 'Re-enter new E-mail',
+                'label_forever': 'Unlimited',
+                'label_login_tokens': 'Logins',
+                'label_apikeys': 'ApiKeys',
+                'label_token_remove': 'Remove token',
 
                 'btn_change_password': 'Change password',
                 'btn_change_email': 'Change E-mail',
+                'btn_add_apikey': 'Add ApiKey',
+
                 'label_set_own_picture': 'Set profile picture',
                 'table_system_component': 'System Component',
                 'table_user_agent': 'User Agent',
                 'table_created': 'Created',
                 'table_access_age': 'Expiration',
                 'table_actions': 'Actions',
+                'table_value': 'Value',
 
                 'flash_cant_change_password': 'Could not change password, ',
                 'flash_email_was_send': 'E-mail with instructions was sent.',
@@ -1192,6 +1199,9 @@ export class StaticTranslation {
                 'flash_new_avatar_saved': 'New avatar saved successfully.',
                 'flash_cant_save_avatar': 'Could not save new avatar, ',
                 'flash_information_updated': 'Your information was updated.',
+                'flash_cannot_add_token': 'Unable to add ApiKey',
+                'flash_token_added': 'New ApiKey added',
+                'flash_cannot_load_tokens': 'Unable to load ApiKeys'
 
             }, 'ProjectsProjectBlockoBlockoComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - PROGRAM <strong>{0}</strong>',

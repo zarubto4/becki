@@ -10,6 +10,7 @@
     <bk-portlet-title
         [title_name]="'title'|bkTranslate:this"
         [icon]="'fa-user'"
+        (onClick)="onPortletClick($event)"
         (onTabClick)="onToggleTab($event)"
         [tab_selected_name]="tab"
         [tabBtns]="[
@@ -44,6 +45,16 @@
                             tab_label: ('nav_logins'|bkTranslate:this)
                         }
                     ]"
+        [btns]="[
+                    {
+                        condition: (tab === 'logins'),
+                        btn_label_for_person: ('btn_add_apikey'|bkTranslate:this),
+                        icon: 'fa-plus-circle',
+                        colorType: 'ADD',
+                        permission: true,
+                        btn_tag: 'add_apikey'
+                    }
+                ]"
     >
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
@@ -127,31 +138,37 @@
             <!-- END EMAIL TAB -->
 
             <div class="tab-pane" [class.active]="tab === 'logins'">
-                <div *ngIf="login_tokens && login_tokens.length" class="table-scrollable">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th class="center-align">{{'table_system_component'|bkTranslate:this}}</th>
-                            <th class="center-align">{{'table_user_agent'|bkTranslate:this}}</th>
-                            <th class="center-align">{{'table_created'|bkTranslate:this}}</th>
-                            <th class="center-align">{{'table_access_age'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
-                        </tr>
-                        </thead>
-                        <tbody class="hide-bk-drob-down-button">
-                        <tr *ngFor="let login_token of login_tokens">
-                            <td class="vert-align">
-                                <span *ngIf="login_token.where_logged == 'BECKI_WEBSITE'">Byzance Portal</span>
-                            </td>
-                            <td class="vert-align">{{login_token.user_agent}}</td>
-                            <td class="vert-align no-wrap">{{login_token.created|bkUnixTimeToDate}}</td>
-                            <td class="vert-align no-wrap">{{login_token.access_age|bkUnixTimeToDate}}</td>
+                <div *ngIf="login_tokens && login_tokens.length">
+                    <bk-portlet-title [title_name]="'label_login_tokens'|bkTranslate:this"
+                                      [icon]="'fa-sitemap fa-rotate-90'">
+                    </bk-portlet-title>
 
-                            <td class="action-btn-col">
+                    <div class="portlet-body">
+                        <div class="table-scrollable">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="center-align">{{'table_system_component'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_user_agent'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_created'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_access_age'|bkTranslate:this}}</th>
+                                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                                </tr>
+                                </thead>
+                                <tbody class="hide-bk-drob-down-button">
+                                <tr *ngFor="let login_token of login_tokens">
+                                    <td class="vert-align">
+                                        <span *ngIf="login_token.where_logged == 'BECKI_WEBSITE'">Byzance Portal</span>
+                                    </td>
+                                    <td class="vert-align">{{login_token.user_agent}}</td>
+                                    <td class="vert-align no-wrap">{{login_token.created|bkUnixTimeToDate}}</td>
+                                    <td class="vert-align no-wrap">{{login_token.access_age|bkUnixTimeToDate}}</td>
 
-                                <bk-drob-down-button
-                                    [btns_group_name]="('label_token_remove'|bkTranslate:this)"
-                                    [btns]="[
+                                    <td class="action-btn-col">
+
+                                        <bk-drob-down-button
+                                            [btns_group_name]="('label_token_remove'|bkTranslate:this)"
+                                            [btns]="[
                                         {
                                             condition: login_token.delete_permission,
                                             btn_label_for_person: ('label_token_remove'|bkTranslate:this),
@@ -161,14 +178,70 @@
                                             permission: (login_token.delete_permission)
                                         }
                                         ]"
-                                    (onValueChanged)="onDrobDownEmiter($event, login_token)"
-                                >
-                                </bk-drob-down-button>
+                                            (onValueChanged)="onDrobDownEmiter($event, login_token)"
+                                        >
+                                        </bk-drob-down-button>
 
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="permanent_tokens && permanent_tokens.length">
+                    <bk-portlet-title [title_name]="'label_apikeys'|bkTranslate:this"
+                                      [icon]="'fa-sitemap fa-rotate-90'">
+                    </bk-portlet-title>
+
+                    <div class="portlet-body">
+                        <div class="table-scrollable">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="center-align">{{'table_system_component'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_value'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_user_agent'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_created'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_access_age'|bkTranslate:this}}</th>
+                                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                                </tr>
+                                </thead>
+                                <tbody class="hide-bk-drob-down-button">
+                                <tr *ngFor="let login_token of permanent_tokens">
+                                    <td class="vert-align">
+                                        <span *ngIf="login_token.where_logged == 'BECKI_WEBSITE'">Byzance Portal</span>
+                                    </td>
+                                    <td class="vert-align">{{login_token.token}}</td>
+                                    <td class="vert-align">{{login_token.user_agent}}</td>
+                                    <td class="vert-align no-wrap">{{login_token.created|bkUnixTimeToDate}}</td>
+                                    <td class="vert-align no-wrap">{{'label_forever'|bkTranslate:this}}</td>
+
+                                    <td class="action-btn-col">
+
+                                        <bk-drob-down-button
+                                            [btns_group_name]="('label_token_remove'|bkTranslate:this)"
+                                            [btns]="[
+                                        {
+                                            condition: login_token.delete_permission,
+                                            btn_label_for_person: ('label_token_remove'|bkTranslate:this),
+                                            btn_tag: 'login_token_delete',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (login_token.delete_permission)
+                                        }
+                                        ]"
+                                            (onValueChanged)="onDrobDownEmiter($event, login_token)"
+                                        >
+                                        </bk-drob-down-button>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <h3 *ngIf="!login_tokens" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
             </div>

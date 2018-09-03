@@ -387,7 +387,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.garfieldEdit(this.garfieldId, {
+                this.tyrionBackendService.andEditSaveGarfield(this.garfieldId, {
                     description: model.description,
                     name: model.name,
                     print_label_id_1: model.print_label_id_1,

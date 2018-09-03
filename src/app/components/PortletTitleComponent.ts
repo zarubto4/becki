@@ -77,6 +77,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                         </template>
                     </ul>
                 </div>
+                <div class="clearfix"></div>
             </div>
     `,
     encapsulation: ViewEncapsulation.None
