@@ -50,12 +50,8 @@
     <!-- https://app.inlinemanual.com/ - its used for Guidelines - also very important is User tracking data sets in backend - like user id..etc  - You can find this comment on another places-->
     <script>!function(){var e=document.createElement("script"),t=document.getElementsByTagName("script")[0];e.async=1,e.src="https://inlinemanual.com/embed/player.9fe45fcc7ebdaf659d92242171a8885c.js",e.charset="UTF-8",t.parentNode.insertBefore(e,t)}();</script>
 
-
-
-
     <!--  InterCom -->
     <script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/cnrrdzsk';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>
-
 
     <!-- Hotjar Tracking Code for www.byzance.cz
        <script>
@@ -70,10 +66,30 @@
        </script>
      -->
 
+    <style>
+        #Progress_Status {
+            width: 100%;
+            background-color: #ddd;
+        }
+
+        #myprogressBar {
+            width: 2%;
+            height: 10px;
+            background-color: #4CAF50;
+            -webkit-transition: width 1s;
+            -moz-transition: width 1s;
+            -o-transition: width 1s;
+            transition: width 1s;
+        }
+    </style>
+
 
 </head>
 
 <body>
+    <div id="Progress_Status">
+        <div id="myprogressBar"></div>
+    </div>
     <bk-app>
         <div class="byzance-page-center">
             <div class="byzance-logo-spinner-white"></div>
@@ -82,7 +98,34 @@
 
     <noscript>Failed! Scripting has to be enabled.</noscript>
 
-    <% for (key in htmlWebpackPlugin.files.js) { %> <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>" id="<%= '_script'+key %>"></script> <% } %>
+    <!--<script>-->
+        <!--function setProgress() {-->
+            <!--let element = document.getElementById("myprogressBar");-->
+            <!--let width = 2;-->
+            <!--let progress = setInterval(increaseProgress, 10);-->
+            <!--function increaseProgress() {-->
+                <!--if(width >= 100) {-->
+                    <!--clearInterval(progress);-->
+                <!--} else {-->
+                    <!--width++;-->
+                    <!--element.style.width = width + '%';-->
+                <!--}-->
+            <!--}-->
+        <!--}-->
+        <!--setProgress();-->
+    <!--</script>-->
 
+    <script>
+
+        let element = document.getElementById("myprogressBar");
+        let progress = element.style.width;
+
+        function setProgress() {
+            progress = progress + 33;
+            element.style.width = progress + '%';
+        }
+    </script>
+
+    <% for (key in htmlWebpackPlugin.files.js) { %> <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>" onload="setProgress()"></script> <% } %>
 </body>
 </html>
