@@ -18,12 +18,36 @@ import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-serve
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { ModalsSelectCodeModel } from '../modals/code-select';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { FormGroup, Validators } from '@angular/forms';
 
 export interface ConfigParameters {
     key: string;
     value: any;
     type: any;
     pending: boolean;
+}
+
+export class FilterStatesValues {
+    public COMPLETE: boolean = true;
+    public CANCELED: boolean = true;
+    public BIN_FILE_MISSING: boolean = false;
+    public NOT_YET_STARTED: boolean = true;
+    public IN_PROGRESS: boolean = true;
+    public OBSOLETE: boolean = false;
+    public NOT_UPDATED: boolean = true;
+    public WAITING_FOR_DEVICE: boolean = true;
+    public INSTANCE_INACCESSIBLE: boolean = false;
+    public HOMER_SERVER_IS_OFFLINE: boolean = true;
+    public HOMER_SERVER_NEVER_CONNECTED: boolean = true;
+    public CRITICAL_ERROR: boolean = true;
+}
+
+export class FilterTypesValues {
+    public MANUALLY_BY_USER_INDIVIDUAL:  boolean = true;
+    public MANUALLY_BY_USER_BLOCKO_GROUP: boolean = true;
+    public MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME:  boolean = true;
+    public AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE:  boolean = true;
+    public AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE: boolean = true;
 }
 
 
@@ -46,11 +70,22 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
     tab: string = 'overview';
 
+    filterStatesValues = new FilterStatesValues();
+    filterTypesValues = new FilterTypesValues();
+
+    formFilterGroup: FormGroup;
+
     // Config Parameters
     configParameters: ConfigParameters[] = null;
 
     constructor(injector: Injector) {
         super(injector);
+
+        // Filter Helper
+        this.formFilterGroup = this.formBuilder.group({
+            'orderBy': ['DATE', []],
+            'order_schema': ['ASC', []],
+        });
     };
 
 
@@ -493,16 +528,50 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             });
     }
 
-    /* tslint:disable:max-line-length ter-indent */
-    onFilterActualizationProcedureTask(pageNumber: number = 0,
-        states: ('COMPLETE' | 'CANCELED'|'BIN_FILE_MISSING' | 'NOT_YET_STARTED' | 'IN_PROGRESS' | 'OBSOLETE' | 'NOT_UPDATED' | 'WAITING_FOR_DEVICE' | 'INSTANCE_INACCESSIBLE' | 'HOMER_SERVER_IS_OFFLINE' | 'HOMER_SERVER_NEVER_CONNECTED' | 'CRITICAL_ERROR')[] = ['COMPLETE', 'CANCELED', 'BIN_FILE_MISSING', 'NOT_YET_STARTED', 'IN_PROGRESS', 'OBSOLETE', 'NOT_UPDATED', 'WAITING_FOR_DEVICE', 'INSTANCE_INACCESSIBLE', 'HOMER_SERVER_IS_OFFLINE', 'HOMER_SERVER_NEVER_CONNECTED', 'CRITICAL_ERROR'],
-        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL', 'MANUALLY_BY_USER_BLOCKO_GROUP', 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME', 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE', 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
+
+
+    onFilterChange(filter: {key: string, value: boolean}) {
+        console.info('onFilterChange: Key', filter.key, 'value', filter.value);
+
+
+        if (this.filterStatesValues.hasOwnProperty(filter.key)) {
+            this.filterStatesValues[filter.key] = filter.value;
+        }
+
+        if (this.filterTypesValues.hasOwnProperty(filter.key)) {
+            this.filterTypesValues[filter.key] = filter.value;
+        }
+
+        this.onFilterActualizationProcedureTask();
+    }
+
+    onFilterActualizationProcedureTask(pageNumber: number = 0) {
         this.blockUI();
+
+        let state_list: string[] = [];
+        for (let k in this.filterStatesValues) {
+            if (this.filterStatesValues.hasOwnProperty(k)) {
+                if (this.filterStatesValues[k] === true) {
+                    state_list.push(k);
+                }
+            }
+        }
+
+
+        let type_list: string[] = [];
+        Object.keys(this.filterTypesValues).forEach((propKey) => {
+
+            if (this.filterTypesValues[propKey].value === true) {
+                type_list.push(propKey);
+            }
+        });
+
+
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
             hardware_ids: [this.hardwareId],
-            update_states: states,
-            type_of_updates: type_of_updates
+            update_states:  <any>state_list,
+            type_of_updates: <any>type_list,
         })
             .then((values) => {
                 this.actualizationTaskFilter = values;
@@ -529,7 +598,6 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
-    /* tslint:disable:max-line-length ter-indent*/
 
     onAutobackupSwitchClick(backup_mode: string): void {
 

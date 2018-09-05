@@ -37,7 +37,7 @@ if (!program['className']) {
 
 let DEBUG = false;
 if (program['debug'] === true) {
-    console.error("DEBUG VALUE:  DEBUG IS ACTIVE");
+    console.error("EBUG VALUE:  DEBUG IS ACTIVE");
     DEBUG = true;
 }else {
     console.error("DEBUG VALUE:  DEBUG IS NOT ACTIVE. For activation add '-d' parameter");

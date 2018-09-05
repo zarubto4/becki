@@ -2168,6 +2168,7 @@ export class StaticTranslation {
                 'flash_cant_save_version': 'Unable to save version <b>{0}</b>, {1}.',
                 'flash_version_save': 'Version <b> {0} </b> saved successfully.',
                 'flash_block_code_empty': 'Block code cannot be empty! Block error, {0}.',
+                '!!!flash_blocko_removed': 'Blocko program has been successfully deleted',
                 'flash_cant_load_block': 'Unable to load block, ',
                 'flash_blocko_edit': 'Block has been edited.',
                 'flash_cant_edit_block': 'Unable to edit block, ',
@@ -3018,6 +3019,7 @@ export class StaticTranslation {
                 'COMPLETE_WITH_ERROR': 'Complete with error',
                 'SUCCESSFULLY_COMPLETE': 'Successfully completed',
                 'PROHIBITED_BY_CONFIG': 'Prohibited by config',
+                'NOT_START_YET': 'Not start yet',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu
