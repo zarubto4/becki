@@ -56,10 +56,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     deviceGroupFilter: IHardwareGroupList = null;
 
     bindings: BlockoCore.BoundInterface[] = [];
+    webHooks: Array<BlockoCore.BlockClass>;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     currentHistoricInstance: IInstanceSnapshot = null;
-
 
     @ViewChildren(BlockoViewComponent)
     blockoViews: QueryList<BlockoViewComponent>;
@@ -117,14 +117,22 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.editorView.registerBindInterfaceCallback(this.onSetHardwareByInterfaceClick.bind(this));
 
                 if (this.instance && this.instance.current_snapshot) {
-                    this.editorView.setDataJson(this.instance.current_snapshot.program.snapshot);
+                    this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                        .then((program) => {
+                            this.setSnapshotProgram(JSON.parse(program).snapshot);
+                        })
+                        .catch((reason) => {
+                            this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        });
                 } else if (this.bProgramVersion) {
-                    this.editorView.setDataJson(this.bProgramVersion.program);
+                    this.fileDownloaderService.download(this.bProgramVersion.program)
+                        .then((program) => {
+                            this.setSnapshotProgram(program);
+                        })
+                        .catch((reason) => {
+                            this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        });
                 }
-
-                setTimeout(() => { // Must load bindings with little delay
-                    this.bindings = this.editorView.getBindings();
-                }, 100);
             }
 
             this.liveView = views.find((view) => {
@@ -266,8 +274,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             setImmediate(() => {
                 if (this.instance.current_snapshot) {
-                    this.editorView.setDataJson(this.instance.current_snapshot.program.snapshot);
-                    this.bindings = this.editorView.getBindings();
+                    this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                        .then((program) => {
+                            this.setSnapshotProgram(JSON.parse(program).snapshot);
+                        })
+                        .catch((reason) => {
+                            this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        });
 
                     let version = this.bProgram.program_versions.find( vrs => vrs.id === this.instance.current_snapshot.b_program_version.id);
 
@@ -284,6 +297,17 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 }
             });
         }
+    }
+
+    setSnapshotProgram(program: string) {
+        if (this.editorView) {
+            this.editorView.setDataJson(program);
+            setImmediate(() => { // Must load bindings with little delay
+                this.bindings = this.editorView.getBindings();
+            });
+        }
+
+        this.getWebHooks(program);
     }
 
     onCreateNewSnapshotSelectBProgramVersion() {
@@ -505,11 +529,12 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    getWebHooks(): Array<BlockoCore.BlockClass> {
+    getWebHooks(program: string) {
 
         console.warn('getWebHooks() ');
         console.warn('getWebHooks(): ',  this.instance.current_snapshot.program);
-        let blocko_program  = JSON.parse(this.instance.current_snapshot.program.snapshot);
+
+        let blocko_program = JSON.parse(program);
 
         console.warn('blocko_program::', blocko_program);
         let blocks = blocko_program['blocks'];
@@ -529,7 +554,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
         }
 
-        return filteredList;
+        this.webHooks = filteredList;
     }
 
     selectedHistoryItem(event: { index: number, item: IInstanceSnapshot }) {
@@ -770,20 +795,28 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     loadBlockoLiveView() {
         this.zone.runOutsideAngular(() => {
             if (this.liveView && this.instance.current_snapshot) {
-                this.liveView.setDataJson(this.instance.current_snapshot.program.snapshot);
 
-                if (this.instance.instance_remote_url) {
-                    this.tyrionBackendService.getWebsocketService().connectBlockoInstanceWebSocket(this.instance.instance_remote_url, this.instanceId, (socket: WebSocketClientBlocko, error: any) => {
+                this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                    .then((program) => {
 
-                        if (socket) {
-                            this.homerDao = socket;
-                            this.homerDao.messages.subscribe((m: IWebSocketMessage) => this.onMessage(m));
+                        this.liveView.setDataJson(JSON.parse(program).snapshot);
 
-                        } else {
-                            console.error('ProjectsProjectInstancesInstanceComponent:connectBlockoInstanceWebSocket:: ', error);
+                        if (this.instance.instance_remote_url) {
+                            this.tyrionBackendService.getWebsocketService().connectBlockoInstanceWebSocket(this.instance.instance_remote_url, this.instanceId, (socket: WebSocketClientBlocko, error: any) => {
+
+                                if (socket) {
+                                    this.homerDao = socket;
+                                    this.homerDao.messages.subscribe((m: IWebSocketMessage) => this.onMessage(m));
+
+                                } else {
+                                    console.error('ProjectsProjectInstancesInstanceComponent:connectBlockoInstanceWebSocket:: ', error);
+                                }
+                            });
                         }
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_cannot_download_file'), reason);
                     });
-                }
             }
         });
     }

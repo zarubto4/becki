@@ -229,6 +229,7 @@ import { ChartsModule } from 'ng2-charts';
 import { ChartBarComponent } from './components/ChartBarComponent';
 import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
 import { ModalsInstanceApiPropertiesComponent } from './modals/instance-api-properties';
+import { FileDownloaderService } from './services/FileDownloaderService';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -497,6 +498,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ExitConfirmationService,
         GoPayLoaderService,
         TranslationService,
+        FileDownloaderService,
         { provide: 'routes', useValue: routes },
         { provide: 'navigation', useValue: navigation },
         { provide: 'tabMenus', useValue: tabMenus },

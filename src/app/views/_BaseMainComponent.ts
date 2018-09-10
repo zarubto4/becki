@@ -21,6 +21,7 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
 import { IError } from '../services/_backend_class/Responses';
+import { FileDownloaderService } from '../services/FileDownloaderService';
 
 /* tslint:disable:class-name  */
 export abstract class _BaseMainComponent {
@@ -37,6 +38,7 @@ export abstract class _BaseMainComponent {
     protected currentParamsService: CurrentParamsService = null;
     protected blockUIService: BlockUIService = null;
     protected translationService: TranslationService = null;
+    protected fileDownloaderService: FileDownloaderService = null;
     protected zone: NgZone = null;
 
     constructor(protected injector: Injector) {
@@ -52,6 +54,7 @@ export abstract class _BaseMainComponent {
             this.currentParamsService = injector.get(CurrentParamsService);
             this.blockUIService = injector.get(BlockUIService);
             this.translationService = injector.get(TranslationService);
+            this.fileDownloaderService = injector.get(FileDownloaderService);
             this.zone = injector.get(NgZone);
             this.beckiImageLinks = injector.get(BeckiImageLinks);
             injector.get(MonacoEditorLoaderService); // only for preload monaco scripts

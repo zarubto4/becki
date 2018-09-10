@@ -22,6 +22,7 @@ import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
 import { ModalsSelectGridProjectModel } from '../modals/grid-project-select';
 import { ModalsSelectBlockModel } from '../modals/block-select';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
+import { FileDownloaderService } from '../services/FileDownloaderService';
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -65,6 +66,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     tab: string = 'ide';
     tab_under_ide: string = 'console';
 
+    protected fileDownloaderService: FileDownloaderService = null
     private monacoEditorLoaderService: MonacoEditorLoaderService = null;
     protected afterLoadSelectedVersionId: string = null;
 
@@ -74,6 +76,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
         this.monacoEditorLoaderService = injector.get(MonacoEditorLoaderService);
         this.exitConfirmationService = injector.get(ExitConfirmationService);
+        this.fileDownloaderService = injector.get(FileDownloaderService);
 
         this.exitConfirmationService.setConfirmationEnabled(false);
     };
@@ -563,29 +566,39 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 this.selectedProgramVersion = programVersionFull;
                 this.selectedGrid = {};
 
-                this.blockoView.setDataJson(this.selectedProgramVersion.program);
                 if (this.consoleLog) {
                     this.consoleLog.clear();
                 }
 
-                // Must be done after data json setting!!!
-                programVersionFull.grid_project_snapshots.forEach((pps: IBProgramVersionSnapGridProject) => {
-                    this.selectedGrid[pps.grid_project.id] = {};
-                    if (pps.grid_programs) {
-                        pps.grid_programs.forEach((ps: IBProgramVersionSnapGridProjectProgram) => {
-                            if (ps.grid_program_version) {
-                                this.selectedGrid[pps.grid_project.id][ps.grid_program.id] = ps.grid_program_version.id;
-                            } else {
-                                this.fmError(this.translate('flash_broken_grid_missing_version'));
+                this.fileDownloaderService.download(this.selectedProgramVersion.program)
+                    .then((program) => {
+                        this.blockoView.setDataJson(program);
+
+                        // Must be done after data json setting!!!
+                        programVersionFull.grid_project_snapshots.forEach((pps: IBProgramVersionSnapGridProject) => {
+                            this.selectedGrid[pps.grid_project.id] = {};
+                            if (pps.grid_programs) {
+                                pps.grid_programs.forEach((ps: IBProgramVersionSnapGridProjectProgram) => {
+                                    if (ps.grid_program_version) {
+                                        this.selectedGrid[pps.grid_project.id][ps.grid_program.id] = ps.grid_program_version.id;
+                                    } else {
+                                        this.fmError(this.translate('flash_broken_grid_missing_version'));
+                                    }
+                                });
                             }
                         });
-                    }
-                });
 
-                this.unsavedChanges = false;
-                this.exitConfirmationService.setConfirmationEnabled(false);
-
-                this.unblockUI();
+                        this.unsavedChanges = false;
+                        this.exitConfirmationService.setConfirmationEnabled(false);
+                        this.unblockUI();
+                    })
+                    .catch((reason) => {
+                        console.error(reason);
+                        this.unsavedChanges = false;
+                        this.exitConfirmationService.setConfirmationEnabled(false);
+                        this.unblockUI();
+                        this.fmError(this.translate('flash_cannot_download_file'), reason);
+                    });
             })
             .catch((err) => {
                 this.unblockUI();
@@ -734,8 +747,9 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     this.selectBProgramVersion(version);
                 } else if (this.blockoProgramVersions.length) {
                     this.selectBProgramVersion(this.blockoProgramVersions[0]);
+                } else {
+                    this.unblockUI();
                 }
-                this.unblockUI();
             }).catch(reason => {
                 this.fmError(this.translate('flash_cant_load_blocko'), reason);
                 this.unblockUI();
