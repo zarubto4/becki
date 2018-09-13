@@ -8,7 +8,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 
 /**
  * Env
@@ -23,7 +25,7 @@ module.exports = function makeWebpackConfig() {
     /**
      * Config
      * Reference: http://webpack.github.io/docs/configuration.html
-     * This is the object where all configuration gets set
+     * This is the object where all configuration gets setnom i
      */
     const config = {};
 
@@ -50,28 +52,22 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html#output
      */
     config.output = {
-        path: root('dist'),
-        publicPath: '/',
         filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
     };
 
     if(isProd) {
         config.optimization = {
-            minimize: true,
             minimizer: [
-                new UglifyWebpackPlugin({
-                    cache: true,
-                    parallel: true,
+                new UglifyJsPlugin({
+                    cache: true, // file cahcing for boost perfomance
+                    parallel: true, //multi-process parallel running to improve build time for boost perfomance
+                    sourceMap: true, // map error
                     uglifyOptions: {
-                        compress: true,
-                        ecma: 6,
-                        mangle: true
-                    },
-                    sourceMap: true
+                        ecma: 6
+                    }
                 })
-            ],
-            noEmitOnErrors: true
+            ]
         };
     }
 
@@ -84,7 +80,7 @@ module.exports = function makeWebpackConfig() {
         extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html']
     };
 
-    var atlOptions = '';
+    let atlOptions = '';
     if (isTest && !isTestWatch) {
         // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
         atlOptions = 'inlineSourceMap=true&sourceMap=false';
@@ -102,7 +98,7 @@ module.exports = function makeWebpackConfig() {
             // Support for TS files.
             {
                 test: /\.ts$/,
-                loaders: ['ts-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
+                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
                 exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
@@ -124,7 +120,11 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? [ 'null-loader' ] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader' ]
+                use: isTest ? [ 'null-loader' ] : [ MiniCssExtractPlugin.loader,
+                    { loader: 'css-loader', options: {
+                        minimize: true
+                    }} ,
+                    'postcss-loader' ]
             },
 
             // All CSS files required in src/app files will be merged in JS files.
@@ -177,16 +177,20 @@ module.exports = function makeWebpackConfig() {
      * List: http://webpack.github.io/docs/list-of-plugins.html
      */
     config.plugins = [
+        //
+        // new BundleAnalyzerPlugin({
+        //     analyzerPort:3333
+        // }),
 
         new HardSourceWebpackPlugin(),
         // Define env variables to help with builds
         // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-        new webpack.DefinePlugin({
-            // Environment helpers
-            'process.env': {
-                ENV: JSON.stringify(ENV)
-            }
-        }),
+        // new webpack.DefinePlugin({
+        //     // Environment helpers
+        //     'process.env': {
+        //         ENV: JSON.stringify(ENV)
+        //     }
+        // }),
 
         new webpack.ContextReplacementPlugin( /(.+)?angular([\\\/])core(.+)?/, root('./src'), {} )
     ];
