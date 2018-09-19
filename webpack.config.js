@@ -8,11 +8,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const PurifyCSSPlugin = require('purifycss-webpack');
 const glob = require('glob');
-
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
 
 /**
  * Env
@@ -60,16 +60,6 @@ module.exports = function makeWebpackConfig() {
 
     if (isProd) {
         config.optimization = {
-            minimizer: [
-                new UglifyJsPlugin({
-                    cache: true,
-                    parallel: true,
-                    sourceMap: true, // map error
-                    uglifyOptions: {
-                        ecma: 6
-                    }
-                })
-            ],
             noEmitOnErrors: true
         };
     }
@@ -105,10 +95,23 @@ module.exports = function makeWebpackConfig() {
                 exclude: [/\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
+            {
+                test: /\.(gif|png|jpe?g|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+                use: [
+                    'file-loader?name=assets/[name].[hash].[ext]?',
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            disable: true // webpack@2.x and newer
+                        }
+                    }
+                ],
+            },
+
             // Copy those assets to output.
             {
-                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: 'file-loader?name=assets/[name].[hash].[ext]?'
+                test: /\.(woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: ['file-loader?name=assets/[name].[hash].[ext]?']
             },
 
             // Support for XML files.
@@ -123,7 +126,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
             },
 
             // All CSS files required in src/app files will be merged in JS files.
@@ -209,7 +212,7 @@ module.exports = function makeWebpackConfig() {
                 minimize: true,
                 moduleExtensions: ['.html'],
                 // Give paths to parse for rules. These should be absolute!
-                paths: glob.sync(`**/*.html`, { nodir: true }),
+                paths: glob.sync(`**/*.html`, {nodir: true}),
                 purifyOptions: {
                     whitelist: []
                 }
@@ -223,6 +226,8 @@ module.exports = function makeWebpackConfig() {
             new CopyWebpackPlugin([{
                 from: root('src', 'public')
             }]),
+
+            // new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
 
             // A Webpack plugin to optimize \ minimize CSS assets.
             // It will search for CSS assets during the Webpack build and will optimize \ minimize the CSS.
