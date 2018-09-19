@@ -10,6 +10,8 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const PurifyCSSPlugin = require('purifycss-webpack');
+const glob = require('glob');
 
 
 /**
@@ -41,7 +43,7 @@ module.exports = function makeWebpackConfig() {
      * Entry
      * Reference: http://webpack.github.io/docs/configuration.html#entry
      */
-    config.entry = isTest ? {} : {
+    config.entry = {
         polyfills: './src/polyfills.ts',
         vendor: './src/vendor.ts',
         app: './src/main' // our angular app
@@ -56,18 +58,19 @@ module.exports = function makeWebpackConfig() {
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
     };
 
-    if(isProd) {
+    if (isProd) {
         config.optimization = {
             minimizer: [
                 new UglifyJsPlugin({
-                    cache: true, // file cahcing for boost perfomance
-                    parallel: true, //multi-process parallel running to improve build time for boost perfomance
+                    cache: true,
+                    parallel: true,
                     sourceMap: true, // map error
                     uglifyOptions: {
                         ecma: 6
                     }
                 })
-            ]
+            ],
+            noEmitOnErrors: true
         };
     }
 
@@ -77,7 +80,7 @@ module.exports = function makeWebpackConfig() {
      */
     config.resolve = {
         // only discover files that have those extensions
-        extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html']
+        extensions: ['.ts', '.tsx', '.js', '.json', '.css', '.scss', '.html']
     };
 
     let atlOptions = '';
@@ -97,9 +100,9 @@ module.exports = function makeWebpackConfig() {
 
             // Support for TS files.
             {
-                test: /\.ts$/,
+                test: /\.tsx?$/,
                 loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
-                exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
+                exclude: [/\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
             // Copy those assets to output.
@@ -120,18 +123,14 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? [ 'null-loader' ] : [ MiniCssExtractPlugin.loader,
-                    { loader: 'css-loader', options: {
-                        minimize: true
-                    }} ,
-                    'postcss-loader' ]
+                use: isTest ? ['null-loader'] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
             },
 
             // All CSS files required in src/app files will be merged in JS files.
             {
                 test: /\.css$/,
                 include: root('src', 'app'),
-                loader: 'raw-loader!postcss-loader'
+                loader: 'raw!postcss'
             },
 
             // Support for SCSS files.
@@ -140,14 +139,14 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? [ 'null-loader' ] : [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader' ]
+                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'fast-sass-loader']
             },
 
             // All CSS files required in src/app files will be merged in JS files.
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'style'),
-                loader: 'raw-loader!postcss-loader!sass-loader'
+                loader: 'raw!postcss!fast-sass'
             },
 
             // Support for HTML files as raw text.
@@ -177,22 +176,14 @@ module.exports = function makeWebpackConfig() {
      * List: http://webpack.github.io/docs/list-of-plugins.html
      */
     config.plugins = [
-        //
+
         // new BundleAnalyzerPlugin({
         //     analyzerPort:3333
         // }),
 
         new HardSourceWebpackPlugin(),
-        // Define env variables to help with builds
-        // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-        // new webpack.DefinePlugin({
-        //     // Environment helpers
-        //     'process.env': {
-        //         ENV: JSON.stringify(ENV)
-        //     }
-        // }),
 
-        new webpack.ContextReplacementPlugin( /(.+)?angular([\\\/])core(.+)?/, root('./src'), {} )
+        new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {})
     ];
 
     if (!isTest && !isTestWatch) {
@@ -209,9 +200,19 @@ module.exports = function makeWebpackConfig() {
             // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
             // Disabled when in test mode.
             new MiniCssExtractPlugin({
-                filename: !isProd ? '[name].css' : 'css/[name].[hash].css',
+                filename: !isProd ? '[name].css' : 'css/[name].[contenthash:8].css',
                 chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
                 hash: true
+            }),
+
+            new PurifyCSSPlugin({
+                minimize: true,
+                moduleExtensions: ['.html'],
+                // Give paths to parse for rules. These should be absolute!
+                paths: glob.sync(`**/*.html`, { nodir: true }),
+                purifyOptions: {
+                    whitelist: []
+                }
             })
         );
     }
@@ -219,9 +220,8 @@ module.exports = function makeWebpackConfig() {
     // Add build(production mode) specific plugins.
     if (isProd) {
         config.plugins.push(
-
             new CopyWebpackPlugin([{
-                from: root('src','public')
+                from: root('src', 'public')
             }]),
 
             // A Webpack plugin to optimize \ minimize CSS assets.
@@ -230,13 +230,9 @@ module.exports = function makeWebpackConfig() {
             new OptimizeCssAssetsPlugin({
                 assetNameRegExp: /\.optimize\.css$/g,
                 cssProcessor: require('cssnano'),
-                cssProcessorOptions: { discardComments: { removeAll: true } },
+                cssProcessorOptions: {discardComments: {removeAll: true}},
                 canPrint: true
             })
-
-            // Plugin for webpack to provide an intermediate caching step for modules(to see the result - run webpack twice).
-            // Reference: https://github.com/mzgoddard/hard-source-webpack-plugin
-            // new HardSourceWebpackPlugin()
         );
     }
 
@@ -249,34 +245,20 @@ module.exports = function makeWebpackConfig() {
         ])
     );
 
-    config.plugins.push(
-        new webpack.IgnorePlugin(/mongodb/)
-    );
-
-    if (isProd) {
-        config.optimization = {
-            // Turn off default optimizing by UglifyJSPlugin.
-            minimize: false,
-            noEmitOnErrors: true
-        };
-    }
-
     /**
      * Dev server configuration
      * Reference: http://webpack.github.io/docs/configuration.html#devserver
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
 
-    if(!isProd) {
-        config.devServer = {
-            host: '0.0.0.0',
-            port: 8080,
-            contentBase: './src/public',
-            historyApiFallback: true,
-            quiet: true,
-            stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
-        };
-    }
+    config.devServer = {
+        host: '0.0.0.0',
+        port: 8080,
+        contentBase: './src/public',
+        historyApiFallback: true,
+        quiet: true,
+        stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
+    };
 
     return config;
 
@@ -287,3 +269,4 @@ function root(args) {
     args = Array.prototype.slice.call(arguments, 0);
     return path.join.apply(path, [__dirname].concat(args));
 }
+
