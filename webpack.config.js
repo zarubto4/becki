@@ -1,6 +1,6 @@
 // Helper: root() is defined at the bottom
 const path = require('path');
-const glob = require("glob");
+const glob = require('glob');
 const webpack = require('webpack');
 
 // Webpack Plugins
@@ -9,11 +9,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const PurifyCSSPlugin = require('purifycss-webpack');
-const glob = require('glob');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
+
 
 /**
  * Env
@@ -59,13 +57,11 @@ module.exports = function makeWebpackConfig() {
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
     };
 
-<<<<<<< Updated upstream
     if (isProd) {
         config.optimization = {
             noEmitOnErrors: true
         };
     }
-=======
 
     config.optimization = {
         // minimizer: [ new UglifyJsPlugin({
@@ -83,7 +79,6 @@ module.exports = function makeWebpackConfig() {
         // })],
         noEmitOnErrors: true
     };
->>>>>>> Stashed changes
 
     /**
      * Resolve
@@ -116,22 +111,9 @@ module.exports = function makeWebpackConfig() {
                 exclude: [/\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
-            {
-                test: /\.(gif|png|jpe?g|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
-                use: [
-                    'file-loader?name=assets/[name].[hash].[ext]?',
-                    {
-                        loader: 'image-webpack-loader',
-                        options: {
-                            disable: true // webpack@2.x and newer
-                        }
-                    }
-                ],
-            },
-
             // Copy those assets to output.
             {
-                test: /\.(woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                test: /\.(gif|png|jpe?g|svg|woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 use: ['file-loader?name=assets/[name].[hash].[ext]?']
             },
 
@@ -147,7 +129,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+                use: isTest ? ['null-loader'] : [ MiniCssExtractPlugin.loader,'css-loader','postcss-loader']
             },
 
             // All CSS files required in src/app files will be merged in JS files.
@@ -163,18 +145,14 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'fast-sass-loader']
+                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader,'css-loader', 'postcss-loader', 'fast-sass-loader']
             },
 
             // All CSS files required in src/app files will be merged in JS files.
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'style'),
-<<<<<<< Updated upstream
                 loader: 'raw!postcss!fast-sass'
-=======
-                loader: 'raw-loader!postcss-loader!fast-sass-loader'
->>>>>>> Stashed changes
             },
 
             // Support for HTML files as raw text.
@@ -199,7 +177,6 @@ module.exports = function makeWebpackConfig() {
     }
 
 
-
     /**
      * Plugins
      * Reference: http://webpack.github.io/docs/configuration.html#plugins
@@ -207,7 +184,7 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
-<<<<<<< Updated upstream
+
         // new BundleAnalyzerPlugin({
         //     analyzerPort:3333
         // }),
@@ -215,16 +192,7 @@ module.exports = function makeWebpackConfig() {
         new HardSourceWebpackPlugin(),
 
         new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {})
-=======
-        new BundleAnalyzerPlugin({
-            analyzerPort:3333
-        }),
 
-        new HardSourceWebpackPlugin(),
-
-        new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {}),
-
->>>>>>> Stashed changes
     ];
 
     if (!isTest && !isTestWatch) {
@@ -247,13 +215,16 @@ module.exports = function makeWebpackConfig() {
             }),
 
             new PurifyCSSPlugin({
-                minimize: true,
+                styleExtensions: ['.css', '.scss', '.min.css'],
                 moduleExtensions: ['.html'],
+                minimize: true,
                 // Give paths to parse for rules. These should be absolute!
-                paths: glob.sync(`**/*.html`, {nodir: true}),
+                paths: glob.sync(path.join(__dirname, 'app/*.html')),
                 purifyOptions: {
-                    whitelist: []
-                }
+                    whitelist: [],
+                    rejected: true
+                },
+                verbose: true
             })
         );
     }
@@ -264,11 +235,6 @@ module.exports = function makeWebpackConfig() {
             new CopyWebpackPlugin([{
                 from: root('src', 'public')
             }]),
-
-<<<<<<< Updated upstream
-            // new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
-=======
->>>>>>> Stashed changes
 
             // A Webpack plugin to optimize \ minimize CSS assets.
             // It will search for CSS assets during the Webpack build and will optimize \ minimize the CSS.
@@ -291,20 +257,16 @@ module.exports = function makeWebpackConfig() {
         ])
     );
 
-<<<<<<< Updated upstream
-=======
     config.plugins.push(
         new webpack.IgnorePlugin(/mongodb/)
     );
 
->>>>>>> Stashed changes
     /**
      * Dev server configuration
      * Reference: http://webpack.github.io/docs/configuration.html#devserver
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
 
-<<<<<<< Updated upstream
     config.devServer = {
         host: '0.0.0.0',
         port: 8080,
@@ -313,22 +275,11 @@ module.exports = function makeWebpackConfig() {
         quiet: true,
         stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
     };
-=======
-    if (!isProd) {
-        config.devServer = {
-            host: '0.0.0.0',
-            port: 8080,
-            contentBase: './src/public',
-            historyApiFallback: true,
-            quiet: true,
-            stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
-        };
-    }
->>>>>>> Stashed changes
 
     return config;
 
-}();
+}
+();
 
 // Helper function
 function root(args) {
