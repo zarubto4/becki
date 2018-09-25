@@ -1,5 +1,6 @@
 // Helper: root() is defined at the bottom
 const path = require('path');
+const glob = require("glob");
 const webpack = require('webpack');
 
 // Webpack Plugins
@@ -58,11 +59,31 @@ module.exports = function makeWebpackConfig() {
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
     };
 
+<<<<<<< Updated upstream
     if (isProd) {
         config.optimization = {
             noEmitOnErrors: true
         };
     }
+=======
+
+    config.optimization = {
+        // minimizer: [ new UglifyJsPlugin({
+        //     parallel: true,
+        //     uglifyOptions: {
+        //         ie8: false,
+        //         ecma: 6,
+        //         warnings: true,
+        //         mangle: true,
+        //         output: {
+        //             comments: false,
+        //             beautify: false
+        //         }
+        //     },
+        // })],
+        noEmitOnErrors: true
+    };
+>>>>>>> Stashed changes
 
     /**
      * Resolve
@@ -149,7 +170,11 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'style'),
+<<<<<<< Updated upstream
                 loader: 'raw!postcss!fast-sass'
+=======
+                loader: 'raw-loader!postcss-loader!fast-sass-loader'
+>>>>>>> Stashed changes
             },
 
             // Support for HTML files as raw text.
@@ -173,6 +198,8 @@ module.exports = function makeWebpackConfig() {
         });
     }
 
+
+
     /**
      * Plugins
      * Reference: http://webpack.github.io/docs/configuration.html#plugins
@@ -180,6 +207,7 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
+<<<<<<< Updated upstream
         // new BundleAnalyzerPlugin({
         //     analyzerPort:3333
         // }),
@@ -187,6 +215,16 @@ module.exports = function makeWebpackConfig() {
         new HardSourceWebpackPlugin(),
 
         new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {})
+=======
+        new BundleAnalyzerPlugin({
+            analyzerPort:3333
+        }),
+
+        new HardSourceWebpackPlugin(),
+
+        new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {}),
+
+>>>>>>> Stashed changes
     ];
 
     if (!isTest && !isTestWatch) {
@@ -227,7 +265,10 @@ module.exports = function makeWebpackConfig() {
                 from: root('src', 'public')
             }]),
 
+<<<<<<< Updated upstream
             // new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
+=======
+>>>>>>> Stashed changes
 
             // A Webpack plugin to optimize \ minimize CSS assets.
             // It will search for CSS assets during the Webpack build and will optimize \ minimize the CSS.
@@ -250,12 +291,20 @@ module.exports = function makeWebpackConfig() {
         ])
     );
 
+<<<<<<< Updated upstream
+=======
+    config.plugins.push(
+        new webpack.IgnorePlugin(/mongodb/)
+    );
+
+>>>>>>> Stashed changes
     /**
      * Dev server configuration
      * Reference: http://webpack.github.io/docs/configuration.html#devserver
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
 
+<<<<<<< Updated upstream
     config.devServer = {
         host: '0.0.0.0',
         port: 8080,
@@ -264,6 +313,18 @@ module.exports = function makeWebpackConfig() {
         quiet: true,
         stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
     };
+=======
+    if (!isProd) {
+        config.devServer = {
+            host: '0.0.0.0',
+            port: 8080,
+            contentBase: './src/public',
+            historyApiFallback: true,
+            quiet: true,
+            stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
+        };
+    }
+>>>>>>> Stashed changes
 
     return config;
 

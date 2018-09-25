@@ -61,6 +61,8 @@
         "zone.js": "^0.8.26"
     },
     "devDependencies": {
+        "@babel/core": "^7.1.0",
+        "@babel/preset-env": "^7.1.0",
         "@types/chalk": "^2.2.0",
         "@types/core-js": "^0.9.46",
         "@types/handlebars": "^4.0.39",
@@ -72,6 +74,7 @@
         "angular2-template-loader": "^0.6.2",
         "autoprefixer": "^8.6.5",
         "awesome-typescript-loader": "^5.2.1",
+        "babel-loader": "^8.0.2",
         "chalk": "^2.4.1",
         "codelyzer": "^4.4.3",
         "commander": "^2.18.0",
@@ -95,7 +98,6 @@
         "purifycss-webpack": "^0.7.0",
         "raw-loader": "0.5.1",
         "rimraf": "^2.5.1",
-        "sass-loader": "^7.1.0",
         "shared-git-hooks": "^1.2.1",
         "speed-measure-webpack-plugin": "^1.2.2",
         "style-loader": "^0.23.0",
@@ -105,6 +107,7 @@
         "tslint-loader": "^3.6.0",
         "typedoc": "^0.11.1",
         "typescript": "^2.9.2",
+        "uglifyjs-webpack-plugin": "^2.0.1",
         "url-loader": "^1.0.1",
         "webpack": "^4.19.0",
         "webpack-bundle-analyzer": "^2.13.1",
