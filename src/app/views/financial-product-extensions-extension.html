@@ -1,0 +1,52 @@
+<!-- /*
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
+ */
+ -->
+
+<bk-layout-main
+    [tabMenu]="'products-product'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
+
+    <div class="portlet portlet light bordered">
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title *ngIf="extension"
+                          [title_name]="'title'|bkTranslate:this:extension.name"
+                          [icon]="'fa-database'"
+                          (onClick)="onPortletClick($event)"
+                          [btns]="[
+                               {
+                                    condition: (extension.active),
+                                    btn_label_for_person: ('label_deactivate_extension'|bkTranslate:this),
+                                    btn_tag: 'deactivate_extension',
+                                    icon: 'fa-power-off',
+                                    colorType: 'DEACTIVE',
+                                    permission: (extension.update_permission)
+                                },
+                                {
+                                    condition: (!extension.active),
+                                    btn_label_for_person: ('label_activate_extension'|bkTranslate:this),
+                                    btn_tag: 'activate_extension',
+                                    icon: 'fa-power-off',
+                                    colorType: 'ACTIVE',
+                                    permission: (extension.update_permission)
+                                }
+                        ]">
+        </bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+        <!-- Page Content -- START -->
+        <div *ngIf="extension" class="portlet-body">
+
+            <p class="list-no-items__main-label font-blue">
+               No info!
+            </p>
+            <p class="list-no-items__sub-label">
+                Well, so far no real extension was implemented so you won't find <strong class="font-blue">anything</strong> here!
+            </p>
+
+        </div>
+    </div>
+</bk-layout-main>

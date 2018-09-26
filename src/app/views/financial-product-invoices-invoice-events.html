@@ -1,0 +1,45 @@
+<!-- /*
+ * © 2018 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
+ */
+ -->
+
+<bk-layout-main
+    [tabMenu]="'products-product'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
+
+    <div class="portlet portlet light bordered">
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title *ngIf="invoice"
+                          [title_name]="'title'|bkTranslate:this:(invoice.invoice_number?invoice.invoice_number:'')"
+                          [icon]="'fa-dollar'"
+                          (onClick)="onPortletClick($event)"
+                          [btns]="[]">
+        </bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+        <!-- Page Content -- START -->
+        <div *ngIf="financialEvents?.length > 0" class="portlet-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>{{'table_from'|bkTranslate:this}}</th>
+                    <th>{{'table_to'|bkTranslate:this}}</th>
+                    <th>{{'table_extension'|bkTranslate:this}}</th>
+                    <th>{{'table_resource_consumption'|bkTranslate:this}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let e of financialEvents">
+                    <td>{{e.event_start|bkUnixTimeToDate}}</td>
+                    <td>{{e.event_end|bkUnixTimeToDate}}</td>
+                    <td>{{e.product_extension.name}}</td>
+                    <td>{{e.resource_consumption}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</bk-layout-main>

@@ -44,11 +44,8 @@
             <template [ngSwitchCase]="'ModalsPublicShareRequestModel'">
                 <bk-modals-public-share-request [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-public-share-request>
             </template>
-            <template [ngSwitchCase]="'ModalsCompanyInformationModel'">
-                <bk-modals-company-information [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-company-information>
-            </template>
-            <template [ngSwitchCase]="'ModalsBillingInformationModel'">
-                <bk-modals-billing-information [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-billing-information>
+            <template [ngSwitchCase]="'ModalsContactModel'">
+                <bk-modals-contact [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-contact>
             </template>
             <template [ngSwitchCase]="'ModalsFinancialProductModel'">
                 <bk-modals-financial-product [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-financial-product>
@@ -79,6 +76,9 @@
             </template>
             <template [ngSwitchCase]="'ModalsPermissionGroupModel'">
                 <bk-modals-permission-group [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-group>
+            </template>
+            <template [ngSwitchCase]="'ModalsPaymentDetailsModel'">
+                <bk-modals-payment-details [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-payment-details>
             </template>
             <template [ngSwitchCase]="'ModalsRemovalModel'">
                 <bk-modals-removal [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-removal>

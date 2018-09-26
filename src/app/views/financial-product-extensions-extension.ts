@@ -1,60 +1,56 @@
 /*
- * © 2016-2018 Becki Authors. See the AUTHORS file found in the top-level
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
-
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IProductExtension } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError } from '../services/NotificationService';
 
-
 @Component({
-    selector: 'bk-view-financial-product-extensions',
-    templateUrl: './financial-product-extensions.html'
+    selector: 'bk-view-financial-product-extensions-extension',
+    templateUrl: './financial-product-extensions-extension.html'
 })
-export class FinancialProductExtensionsComponent extends _BaseMainComponent implements OnInit, OnDestroy {
-
-    id: string;
+export class FinancialProductExtensionsExtensionComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     routeParamsSubscription: Subscription;
 
-    product: IProduct = null;
+    idExtension: string;
 
-    extensions: IProductExtension[] = [];
+    idProduct: string;
+
+    extension: IProductExtension = null;
+
+    product: IProduct = null;
 
     constructor(injector: Injector) {
         super(injector);
     };
 
-
     ngOnInit(): void {
         this.blockUI();
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['product'];
+            this.idExtension = params['productExtension'];
+            this.idProduct = params['product'];
             this.refresh();
             this.unblockUI();
         });
 
     }
 
-    ngOnDestroy(): void {
-        this.routeParamsSubscription.unsubscribe();
-    }
-
-    onDrobDownEmiter (action: string, extension: IProductExtension): void {
+    onPortletClick(action: string): void {
         if (action === 'deactivate_extension') {
-            this.onExtensionDeactivate(extension);
+            this.onExtensionDeactivate();
         }
 
         if (action === 'activate_extension') {
-            this.onExtensionActivate(extension);
+            this.onExtensionActivate();
         }
     }
 
-    onExtensionActivate(extension: IProductExtension): void {
-        this.tyrionBackendService.productExtensionActivate(extension.id)
+    onExtensionActivate(): void {
+        this.tyrionBackendService.productExtensionActivate(this.extension.id)
             .then(() => {
                 this.refresh();
             })
@@ -64,8 +60,8 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
             });
     }
 
-    onExtensionDeactivate(extension: IProductExtension): void {
-        this.tyrionBackendService.productExtensionDeactivate(extension.id)
+    onExtensionDeactivate(): void {
+        this.tyrionBackendService.productExtensionDeactivate(this.extension.id)
             .then(() => {
                 this.refresh();
             })
@@ -75,21 +71,21 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
             });
     }
 
-    onExtensionClick(extension: IProductExtension) {
-        this.router.navigate(['financial', this.id, 'extensions', extension.id]);
+    ngOnDestroy(): void {
+        this.routeParamsSubscription.unsubscribe();
     }
 
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.tyrionBackendService.productGet(this.id), this.tyrionBackendService.productExtensionGetListProduct(this.id)])
-            .then((values: [IProduct, IProductExtension[]]) => {
-                this.product = values[0];
-                this.extensions = values[1];
+        Promise.all<any>([this.tyrionBackendService.productExtensionGet(this.idExtension), this.tyrionBackendService.productGet(this.idProduct)])
+            .then((values: [IProductExtension, IProduct]) => {
+                this.extension =  values[0];
+                this.product =  values[1];
                 this.unblockUI();
             })
             .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Product cannot be loaded.', reason));
+                this.addFlashMessage(new FlashMessageError('Data cannot be loaded.', reason));
                 this.unblockUI();
             });
     }

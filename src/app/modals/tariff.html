@@ -18,19 +18,14 @@
             <bk-form-input [label]="'label_credit_for_beginning'|bkTranslate:this" [placeholder]="'green-dark'" [control]="form.controls['credit_for_beginning']"></bk-form-input>
             <br>
             <div>
-                <label>{{'label_company_details_required'|bkTranslate:this}}</label>
-                <i *ngIf="modalModel.company_details_required" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Company_details(!modalModel.company_details_required)"></i>
-                <i *ngIf="!modalModel.company_details_required"  style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBoolean_Company_details(!modalModel.company_details_required)"></i>
+                <label>{{'label_owner_details_required'|bkTranslate:this}}</label>
+                <i *ngIf="modalModel.owner_details_required" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Owner_details(!modalModel.owner_details_required)"></i>
+                <i *ngIf="!modalModel.owner_details_required" style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand" (click)="onBoolean_Owner_details(!modalModel.owner_details_required)"></i>
             </div>
-            <div>
+            <div *ngIf="modalModel.owner_details_required">
                 <label>{{'label_payment_details_required'|bkTranslate:this}}</label>
                 <i *ngIf="modalModel.payment_details_required" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Payment_details(!modalModel.payment_details_required)"></i>
                 <i *ngIf="!modalModel.payment_details_required"  style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBoolean_Payment_details(!modalModel.payment_details_required)"></i>
-            </div>
-            <div>
-                <label>{{'label_payment_method_required'|bkTranslate:this}}</label>
-                <i *ngIf="modalModel.payment_method_required" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Payment_method(!modalModel.payment_method_required)"></i>
-                <i *ngIf="!modalModel.payment_method_required"  style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBoolean_Payment_method(!modalModel.payment_method_required)"></i>
             </div>
             <div>
                 <bk-form-nice-json [row]="8" [description]="'Config Labels (The order counts)'" [control]="form.controls['labelsInString']" [cols]="75" [content]="modalModel.labelsInString" [readonly]="false"></bk-form-nice-json>

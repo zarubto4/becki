@@ -56,6 +56,10 @@ export class CurrentParamsService {
     protected currentProductNameSubject: Subject<string> = null;
     public currentProductNameSnapshot: string = null;
 
+    public currentProductExtensionName: Observable<string> = null;
+    protected currentProductExtensionNameSubject: Subject<string> = null;
+    public currentProductExtensionNameSnapshot: string = null;
+
     public currentInvoiceNumber: Observable<string> = null;
     protected currentInvoiceNumberSubject: Subject<string> = null;
     public currentInvoiceNumberSnapshot: string = null;
@@ -120,6 +124,7 @@ export class CurrentParamsService {
         this.currentGridName = this.currentGridNameSubject = new Subject<string>();
         this.currentInstanceId = this.currentInstanceIdSubject = new Subject<string>();
         this.currentProductName = this.currentProductNameSubject = new Subject<string>();
+        this.currentProductExtensionName = this.currentProductExtensionNameSubject = new Subject<string>();
         this.currentInvoiceNumber = this.currentInvoiceNumberSubject = new Subject<string>();
         this.currentLibraryName = this.currentLibraryNameSubject = new Subject<string>();
         this.currentGroupName = this.currentGroupNameSubject = new Subject<string>();
@@ -210,6 +215,20 @@ export class CurrentParamsService {
                         ;
                         this.currentProductNameSubject.next(this.currentProductNameSnapshot);
                     }
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot['productExtension'] !== params['productExtension']) {
+
+            if (!params['productExtension']) {
+                this.currentProductExtensionNameSnapshot = null;
+                this.currentProductExtensionNameSubject.next(this.currentProductExtensionNameSnapshot);
+            } else {
+                this.backendService.productExtensionGet(params['productExtension']).then((extension) => { // TODO [permission]: ProductExtension.read_permission
+                    this.currentProductExtensionNameSnapshot = extension.name;
+                    this.currentProductExtensionNameSubject.next(this.currentProductExtensionNameSnapshot);
                 });
             }
 
