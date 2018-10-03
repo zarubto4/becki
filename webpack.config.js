@@ -11,6 +11,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const PurifyCSSPlugin = require('purifycss-webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 
 /**
@@ -57,25 +58,22 @@ module.exports = function makeWebpackConfig() {
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
     };
 
-    if (isProd) {
-        config.optimization = {
-            noEmitOnErrors: true
-        };
-    }
-
     config.optimization = {
+        minimize: false,
         // minimizer: [ new UglifyJsPlugin({
+        //     // exclude: /node_modules\/(?!(blocko)\/).*/,
         //     parallel: true,
-        //     uglifyOptions: {
-        //         ie8: false,
-        //         ecma: 6,
-        //         warnings: true,
-        //         mangle: true,
-        //         output: {
-        //             comments: false,
-        //             beautify: false
-        //         }
-        //     },
+        //     cache: true,
+        //     sourceMap: true
+        // }) ],
+
+        // minimizer: [ new ClosurePlugin({mode: 'STANDARD'}, {
+        //     // compiler flags here
+        //     //
+        //     // for debuging help, try these:
+        //     //
+        //     // formatting: 'PRETTY_PRINT'
+        //     // debug: true
         // })],
         noEmitOnErrors: true
     };
@@ -104,12 +102,25 @@ module.exports = function makeWebpackConfig() {
     config.module = {
         rules: [
 
-            // Support for TS files.
+            // Support for TS files
             {
                 test: /\.tsx?$/,
-                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
+                loaders: ['babel-loader', 'awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
                 exclude: [/\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
+
+            // {
+            //     test: /\.js$/,
+            //     // exclude: /node_modules/,
+            //     loader: "babel-loader"
+            // },
+
+            // {
+            //     test: root("node_modules", "blocko", "dist", "editor"),
+            //     enforce: "pre",
+            //     loader: 'babel-loader'
+            // },
+
 
             // Copy those assets to output.
             {
@@ -166,6 +177,8 @@ module.exports = function makeWebpackConfig() {
         ]
     };
 
+    console.log(UglifyJsPlugin.exclude);
+
     if (!isTest || !isTestWatch) {
         // Supprt for tslint.
         config.module.rules.push({
@@ -175,7 +188,6 @@ module.exports = function makeWebpackConfig() {
             loader: 'tslint-loader'
         });
     }
-
 
     /**
      * Plugins
@@ -191,7 +203,7 @@ module.exports = function makeWebpackConfig() {
 
         new HardSourceWebpackPlugin(),
 
-        new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {})
+        new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {}),
 
     ];
 
@@ -214,18 +226,18 @@ module.exports = function makeWebpackConfig() {
                 hash: true
             }),
 
-            new PurifyCSSPlugin({
-                styleExtensions: ['.css', '.scss', '.min.css'],
-                moduleExtensions: ['.html'],
-                minimize: true,
-                // Give paths to parse for rules. These should be absolute!
-                paths: glob.sync(path.join(__dirname, 'app/*.html')),
-                purifyOptions: {
-                    whitelist: [],
-                    rejected: true
-                },
-                verbose: true
-            })
+            // new PurifyCSSPlugin({
+            //     styleExtensions: ['.css', '.scss', '.min.css'],
+            //     moduleExtensions: ['.html'],
+            //     minimize: true,
+            //     // Give paths to parse for rules. These should be absolute!
+            //     paths: glob.sync(path.join(__dirname, 'src/app/**/*.html')),
+            //     purifyOptions: {
+            //         whitelist: [],
+            //         // rejected: true
+            //     },
+            //     verbose: true
+            // })
         );
     }
 
@@ -278,8 +290,7 @@ module.exports = function makeWebpackConfig() {
 
     return config;
 
-}
-();
+}();
 
 // Helper function
 function root(args) {
