@@ -12,6 +12,8 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const PurifyCSSPlugin = require('purifycss-webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const FontminPlugin = require('fontmin-webpack');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
 
 
 /**
@@ -59,22 +61,48 @@ module.exports = function makeWebpackConfig() {
     };
 
     config.optimization = {
-        minimize: false,
-        // minimizer: [ new UglifyJsPlugin({
-        //     // exclude: /node_modules\/(?!(blocko)\/).*/,
-        //     parallel: true,
-        //     cache: true,
-        //     sourceMap: true
-        // }) ],
+        // minimize: false,
+        minimizer: [
 
-        // minimizer: [ new ClosurePlugin({mode: 'STANDARD'}, {
-        //     // compiler flags here
-        //     //
-        //     // for debuging help, try these:
-        //     //
-        //     // formatting: 'PRETTY_PRINT'
-        //     // debug: true
-        // })],
+            new PurifyCSSPlugin({
+                styleExtensions: ['.css', '.scss', '.min.css'],
+                moduleExtensions: ['.html'],
+                minimize: true,
+                // Give paths to parse for rules. These should be absolute!
+                paths: glob.sync(path.join(__dirname, 'src/app/**/*.html')),
+                purifyOptions: {
+                    whitelist: [],
+                    // rejected: true
+                },
+                verbose: true
+            }),
+
+            // A Webpack plugin to optimize \ minimize CSS assets.
+            // It will search for CSS assets during the Webpack build and will optimize \ minimize the CSS.
+            // Reference: https://github.com/NMFR/optimize-css-assets-webpack-plugin
+            new OptimizeCssAssetsPlugin({
+                assetNameRegExp: /\.(scss|sass|css)$/g,
+                cssProcessor: require('cssnano'),
+                cssProcessorOptions: {discardComments: {removeAll: true}},
+                canPrint: true
+            }),
+
+            new FontminPlugin({
+                autodetect: true, // automatically pull unicode characters from CSS
+            }),
+
+            new UglifyJsPlugin({
+                parallel: true,
+                cache: true,
+                sourceMap: true,
+                uglifyOptions: {
+                    mangle: false
+                    // reserved: ['environment', 'env', 'translationService', 'TranslationService', 'translate', 'tableOrEnv', 'translationTables', 'translation','lang', 'tableOrEnv',
+                    // 'keyOrTable', 'key', 'StaticTranslation', 'translateTables']
+                }
+            }),
+
+        ],
         noEmitOnErrors: true
     };
 
@@ -105,27 +133,60 @@ module.exports = function makeWebpackConfig() {
             // Support for TS files
             {
                 test: /\.tsx?$/,
-                loaders: ['babel-loader', 'awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
+                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
                 exclude: [/\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
-            // {
-            //     test: /\.js$/,
-            //     // exclude: /node_modules/,
-            //     loader: "babel-loader"
-            // },
+            {
+                test: /\.m?js$/,
+                include: [
+                    path.resolve(__dirname, "node_modules/blocko")
+                ],
+                use: ['babel-loader']
+            },
 
-            // {
-            //     test: root("node_modules", "blocko", "dist", "editor"),
-            //     enforce: "pre",
-            //     loader: 'babel-loader'
-            // },
-
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'pictures/',
+                            limit: 1000
+                        }
+                    },
+                    {
+                        loader: 'img-loader',
+                        options: {
+                            plugins: [
+                                require('imagemin-gifsicle')({
+                                    interlaced: false
+                                }),
+                                require('imagemin-mozjpeg')({
+                                    progressive: true,
+                                    arithmetic: false
+                                }),
+                                require('imagemin-pngquant')({
+                                    floyd: 0.5,
+                                    speed: 2
+                                }),
+                                require('imagemin-svgo')({
+                                    plugins: [
+                                        {removeTitle: true},
+                                        {convertPathData: false}
+                                    ]
+                                })
+                            ]
+                        }
+                    }
+                ]
+            },
 
             // Copy those assets to output.
             {
-                test: /\.(gif|png|jpe?g|svg|woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                use: ['file-loader?name=assets/[name].[hash].[ext]?']
+                test: /\.(woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: ['file-loader?name=assets/fonts/[name].[hash].[ext]?']
             },
 
             // Support for XML files.
@@ -140,7 +201,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [ MiniCssExtractPlugin.loader,'css-loader','postcss-loader']
+                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
             },
 
             // All CSS files required in src/app files will be merged in JS files.
@@ -156,7 +217,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader,'css-loader', 'postcss-loader', 'fast-sass-loader']
+                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'fast-sass-loader']
             },
 
             // All CSS files required in src/app files will be merged in JS files.
@@ -176,8 +237,6 @@ module.exports = function makeWebpackConfig() {
             }
         ]
     };
-
-    console.log(UglifyJsPlugin.exclude);
 
     if (!isTest || !isTestWatch) {
         // Supprt for tslint.
@@ -225,19 +284,6 @@ module.exports = function makeWebpackConfig() {
                 chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
                 hash: true
             }),
-
-            // new PurifyCSSPlugin({
-            //     styleExtensions: ['.css', '.scss', '.min.css'],
-            //     moduleExtensions: ['.html'],
-            //     minimize: true,
-            //     // Give paths to parse for rules. These should be absolute!
-            //     paths: glob.sync(path.join(__dirname, 'src/app/**/*.html')),
-            //     purifyOptions: {
-            //         whitelist: [],
-            //         // rejected: true
-            //     },
-            //     verbose: true
-            // })
         );
     }
 
@@ -248,15 +294,14 @@ module.exports = function makeWebpackConfig() {
                 from: root('src', 'public')
             }]),
 
-            // A Webpack plugin to optimize \ minimize CSS assets.
-            // It will search for CSS assets during the Webpack build and will optimize \ minimize the CSS.
-            // Reference: https://github.com/NMFR/optimize-css-assets-webpack-plugin
-            new OptimizeCssAssetsPlugin({
-                assetNameRegExp: /\.optimize\.css$/g,
-                cssProcessor: require('cssnano'),
-                cssProcessorOptions: {discardComments: {removeAll: true}},
-                canPrint: true
-            })
+            //
+            new FontminPlugin({
+                autodetect: true, // automatically pull unicode characters from CSS
+                glyphs: ['\uf0c8' /* extra glyphs to include */],
+            }),
+
+            // new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i })
+
         );
     }
 
