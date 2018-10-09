@@ -114,7 +114,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
         return 'Unknown';
     }
 
-    onDrobDownEmiter(action: string, member: IProjectParticipant): void {
+    onDrobDownEmiter(action: string, member: IEmployee): void {
 
         if (action === 'send_invitation') {
             this.onMemberSendAgainClick(member);

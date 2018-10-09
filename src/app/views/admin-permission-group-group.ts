@@ -188,30 +188,11 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
             });
     }
 
-    onPermissionEditClick(permission: IPermission) {
-        let model = new ModalsPermissionPermissionPropertyModel(permission.description);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.permissionEdit(permission.name, {
-                    description: model.description,
-                })
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_edit')));
-                        this.refresh();
-                    }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                        this.refresh();
-                    });
-            }
-        });
-    }
-
     onPermissionDeleteClick(permission: IPermission) {
-        this.modalService.showModal(new ModalsRemovalModel(permission.name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(permission.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.roleRemovePermission(this.id, permission.name)
+                this.tyrionBackendService.roleRemovePermission(this.id, permission.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
@@ -228,9 +209,6 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
 
         if (action === 'remove_person') {
             this.onMemberDeleteClick(object);
-        }
-        if (action === 'edit_permission') {
-            this.onPermissionEditClick(object);
         }
         if (action === 'remove_permission') {
             this.onPermissionDeleteClick(object);
