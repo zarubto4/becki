@@ -12,10 +12,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const PurifyCSSPlugin = require('purifycss-webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const FontminPlugin = require('fontmin-webpack');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
-
-
 /**
  * Env
  * Get npm lifecycle event to identify the environment
@@ -61,9 +58,7 @@ module.exports = function makeWebpackConfig() {
     };
 
     config.optimization = {
-        // minimize: false,
         minimizer: [
-
             new PurifyCSSPlugin({
                 styleExtensions: ['.css', '.scss', '.min.css'],
                 moduleExtensions: ['.html'],
@@ -74,7 +69,7 @@ module.exports = function makeWebpackConfig() {
                     whitelist: [],
                     // rejected: true
                 },
-                verbose: true
+                // verbose: true
             }),
 
             // A Webpack plugin to optimize \ minimize CSS assets.
@@ -87,20 +82,16 @@ module.exports = function makeWebpackConfig() {
                 canPrint: true
             }),
 
-            new FontminPlugin({
-                autodetect: true, // automatically pull unicode characters from CSS
-            }),
+            new ImageminPlugin({test: /\.(jpe?g|png|gif|svg)$/i}),
 
             new UglifyJsPlugin({
                 parallel: true,
                 cache: true,
                 sourceMap: true,
                 uglifyOptions: {
-                    mangle: false
-                    // reserved: ['environment', 'env', 'translationService', 'TranslationService', 'translate', 'tableOrEnv', 'translationTables', 'translation','lang', 'tableOrEnv',
-                    // 'keyOrTable', 'key', 'StaticTranslation', 'translateTables']
+                    keep_fnames: true // Don't mangle function names
                 }
-            }),
+            })
 
         ],
         noEmitOnErrors: true
@@ -129,70 +120,29 @@ module.exports = function makeWebpackConfig() {
      */
     config.module = {
         rules: [
-
             // Support for TS files
             {
                 test: /\.tsx?$/,
-                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
+                use: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
                 exclude: [/\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
             {
                 test: /\.m?js$/,
-                include: [
-                    path.resolve(__dirname, "node_modules/blocko")
-                ],
-                use: ['babel-loader']
-            },
-
-            {
-                test: /\.(jpe?g|png|gif|svg)$/i,
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            name: '[name].[ext]',
-                            outputPath: 'pictures/',
-                            limit: 1000
-                        }
-                    },
-                    {
-                        loader: 'img-loader',
-                        options: {
-                            plugins: [
-                                require('imagemin-gifsicle')({
-                                    interlaced: false
-                                }),
-                                require('imagemin-mozjpeg')({
-                                    progressive: true,
-                                    arithmetic: false
-                                }),
-                                require('imagemin-pngquant')({
-                                    floyd: 0.5,
-                                    speed: 2
-                                }),
-                                require('imagemin-svgo')({
-                                    plugins: [
-                                        {removeTitle: true},
-                                        {convertPathData: false}
-                                    ]
-                                })
-                            ]
-                        }
-                    }
-                ]
+                include: root('node_modules', 'blocko'),
+                use: 'babel-loader'
             },
 
             // Copy those assets to output.
             {
-                test: /\.(woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                use: ['file-loader?name=assets/fonts/[name].[hash].[ext]?']
+                test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: 'file-loader?name=assets/[name].[hash].[ext]?'
             },
 
             // Support for XML files.
             {
                 test: /\.xml$/,
-                loader: 'xml-loader'
+                use: 'xml-loader'
             },
 
             // Support for CSS as raw text.
@@ -201,14 +151,18 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+                use: isTest ? ['null-loader'] : [
+                    MiniCssExtractPlugin.loader,
+                    {loader: 'css-loader', options: {minimize: true}},
+                    'postcss-loader'
+                ]
             },
 
             // All CSS files required in src/app files will be merged in JS files.
             {
                 test: /\.css$/,
                 include: root('src', 'app'),
-                loader: 'raw!postcss'
+                use: 'raw!postcss'
             },
 
             // Support for SCSS files.
@@ -217,14 +171,18 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'fast-sass-loader']
+                use: isTest ? ['null-loader'] : [
+                    MiniCssExtractPlugin.loader,
+                    {loader: 'css-loader', options: {minimize: true}},
+                    'postcss-loader',
+                    'fast-sass-loader']
             },
 
             // All CSS files required in src/app files will be merged in JS files.
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'style'),
-                loader: 'raw!postcss!fast-sass'
+                use: 'raw!postcss!fast-sass'
             },
 
             // Support for HTML files as raw text.
@@ -232,7 +190,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.html$/,
                 exclude: root('src', 'public'),
-                loader: 'raw-loader'
+                use: 'raw-loader'
 
             }
         ]
@@ -276,6 +234,7 @@ module.exports = function makeWebpackConfig() {
                 chunksSortMode: 'dependency',
             }),
 
+
             // This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS.
             // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
             // Disabled when in test mode.
@@ -291,17 +250,9 @@ module.exports = function makeWebpackConfig() {
     if (isProd) {
         config.plugins.push(
             new CopyWebpackPlugin([{
-                from: root('src', 'public')
-            }]),
-
-            //
-            new FontminPlugin({
-                autodetect: true, // automatically pull unicode characters from CSS
-                glyphs: ['\uf0c8' /* extra glyphs to include */],
-            }),
-
-            // new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i })
-
+                from: root('src', 'public'),
+                ignore: ['*.svg', '*.png', '*.ico', '*.xml', 'manifest.json']
+            }])
         );
     }
 
