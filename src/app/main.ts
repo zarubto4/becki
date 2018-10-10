@@ -78,6 +78,7 @@ import { FinancialProductComponent } from './views/financial-product';
 import { HardwareComponent } from './views/hardware';
 import { HardwareHardwareTypeComponent } from './views/hardware-hardware_type';
 import { ProjectsProjectMembersComponent } from './views/projects-project-members';
+import { ProjectsProjectRolesComponent} from './views/projects-project-roles';
 import { ModalsMembersAddComponent } from './modals/members-add';
 import { FinancialProductExtensionsComponent } from './views/financial-product-extensions';
 import { FinancialProductExtensionsExtensionComponent } from './views/financial-product-extensions-extension';
@@ -318,7 +319,7 @@ let routes: Routes = [
     { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
 
     { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
-
+    { path: 'projects/:project/roles', data: { breadName: 'Roles' }, component: ProjectsProjectRolesComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/widgets', data: { breadName: 'GRID widgets' }, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/widgets/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
@@ -397,6 +398,7 @@ let tabMenus = {
     'projects-project': [
         new LabeledLink('Dashboard', ['/', 'projects', ':project'], null, { linkActiveExact: true }),
         new LabeledLink('Members', ['/', 'projects', ':project', 'members'], null),
+        new LabeledLink('Roles', ['/', 'projects', ':project', 'roles'], null),
         new LabeledLink(null, null),
         new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', null, null, {
             styleClass: 'color-hardware', items: [
@@ -739,6 +741,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsAddGSMComponent,
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
+        ProjectsProjectRolesComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

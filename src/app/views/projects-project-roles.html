@@ -1,0 +1,27 @@
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot"
+    [show_title]="false">
+
+      <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-users'"
+        (onClick)="onRoleAddClick()"
+        [btns]="[
+            {
+                condition: (project && project.participants.length > 1),
+                btn_label_for_person: ('btn_add_role'|bkTranslate:this),
+                colorType: 'ADD',
+                icon: 'fa-plus-circle',
+                btn_tag: 'add'
+            }
+        ]">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+    <!-- Page Content -- START -->
+    <div class="portlet-body">
+    </div>
+</bk-layout-main>
