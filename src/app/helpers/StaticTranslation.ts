@@ -2885,6 +2885,10 @@ export class StaticTranslation {
                 'btn_immediately': 'Immediately',
                 'btn_stop': 'Remove Action!',
                 'flash_successfully_scheduled': 'Successfully Scheduled!',
+            }, 'ProjectsProjectRolesComponent': {
+                'title': 'Roles',
+                'label_name': 'Name',
+                'btn_add_role': 'Add role'
             },
 
 
