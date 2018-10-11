@@ -1,7 +1,7 @@
 // Helper: root() is defined at the bottom
 const path = require('path');
-const glob = require('glob');
 const webpack = require('webpack');
+const glob = require('glob');
 
 // Webpack Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -9,10 +9,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
 const PurifyCSSPlugin = require('purifycss-webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+
 /**
  * Env
  * Get npm lifecycle event to identify the environment
@@ -26,7 +27,7 @@ module.exports = function makeWebpackConfig() {
     /**
      * Config
      * Reference: http://webpack.github.io/docs/configuration.html
-     * This is the object where all configuration gets setnom i
+     * This is the object where all configuration gets set
      */
     const config = {};
 
@@ -42,7 +43,7 @@ module.exports = function makeWebpackConfig() {
      * Entry
      * Reference: http://webpack.github.io/docs/configuration.html#entry
      */
-    config.entry = {
+    config.entry = isTest ? {} : {
         polyfills: './src/polyfills.ts',
         vendor: './src/vendor.ts',
         app: './src/main' // our angular app
@@ -53,22 +54,29 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html#output
      */
     config.output = {
+        path: root('dist'),
+        publicPath: '/',
         filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
     };
 
+
+    /**
+     * Optimization
+     * Reference: https://webpack.js.org/configuration/optimization/
+     */
     config.optimization = {
+        // minimize: false,          // Uncomment it to disable optimizations and speed up building.
         minimizer: [
+            // A Webpack plugin to cut unused CSS selectors.
             new PurifyCSSPlugin({
                 styleExtensions: ['.css', '.scss', '.min.css'],
                 moduleExtensions: ['.html'],
                 minimize: true,
-                // Give paths to parse for rules. These should be absolute!
-                paths: glob.sync(path.join(__dirname, 'src/app/**/*.html')),
-                purifyOptions: {
-                    whitelist: [],
-                    // rejected: true
-                },
+                paths: glob.sync(root('src', 'app', '**', '*.html')),
+                // purifyOptions: {
+                //     rejected: true
+                // },
                 // verbose: true
             }),
 
@@ -76,23 +84,19 @@ module.exports = function makeWebpackConfig() {
             // It will search for CSS assets during the Webpack build and will optimize \ minimize the CSS.
             // Reference: https://github.com/NMFR/optimize-css-assets-webpack-plugin
             new OptimizeCssAssetsPlugin({
-                assetNameRegExp: /\.(scss|sass|css)$/g,
+                assetNameRegExp: /\.(css|sass|scss)$/g,
                 cssProcessor: require('cssnano'),
                 cssProcessorOptions: {discardComments: {removeAll: true}},
-                canPrint: true
             }),
 
-            new ImageminPlugin({test: /\.(jpe?g|png|gif|svg)$/i}),
-
-            new UglifyJsPlugin({
+            new UglifyWebpackPlugin({
                 parallel: true,
                 cache: true,
                 sourceMap: true,
                 uglifyOptions: {
-                    keep_fnames: true // Don't mangle function names
+                    keep_fnames: true
                 }
             })
-
         ],
         noEmitOnErrors: true
     };
@@ -103,7 +107,7 @@ module.exports = function makeWebpackConfig() {
      */
     config.resolve = {
         // only discover files that have those extensions
-        extensions: ['.ts', '.tsx', '.js', '.json', '.css', '.scss', '.html']
+        extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html']
     };
 
     let atlOptions = '';
@@ -120,29 +124,38 @@ module.exports = function makeWebpackConfig() {
      */
     config.module = {
         rules: [
-            // Support for TS files
+
+            // Support for TS files.
             {
-                test: /\.tsx?$/,
-                use: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
-                exclude: [/\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
+                test: /\.ts$/,
+                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
+                exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
+            // Transpile module 'blocko' to es5.
             {
                 test: /\.m?js$/,
                 include: root('node_modules', 'blocko'),
-                use: 'babel-loader'
+                use: 'babel-loader',
+            },
+
+            // Minimize images.
+            {
+                test: /\.(jpg|png|gif|svg)$/,
+                loader: 'image-webpack-loader',
+                enforce: 'pre'
             },
 
             // Copy those assets to output.
             {
-                test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                use: 'file-loader?name=assets/[name].[hash].[ext]?'
+                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'file-loader?name=assets/[name].[hash].[ext]?'
             },
 
             // Support for XML files.
             {
                 test: /\.xml$/,
-                use: 'xml-loader'
+                loader: 'xml-loader'
             },
 
             // Support for CSS as raw text.
@@ -151,7 +164,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [
+                use: isTest ? 'null-loader' : [
                     MiniCssExtractPlugin.loader,
                     {loader: 'css-loader', options: {minimize: true}},
                     'postcss-loader'
@@ -162,7 +175,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.css$/,
                 include: root('src', 'app'),
-                use: 'raw!postcss'
+                loader: 'raw-loader!postcss-loader'
             },
 
             // Support for SCSS files.
@@ -171,18 +184,19 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? ['null-loader'] : [
+                use: isTest ? 'null-loader' : [
                     MiniCssExtractPlugin.loader,
                     {loader: 'css-loader', options: {minimize: true}},
                     'postcss-loader',
-                    'fast-sass-loader']
+                    'fast-sass-loader'
+                ]
             },
 
             // All CSS files required in src/app files will be merged in JS files.
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'style'),
-                use: 'raw!postcss!fast-sass'
+                loader: 'raw-loader!postcss-loader!fast-sass-loader'
             },
 
             // Support for HTML files as raw text.
@@ -190,7 +204,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.html$/,
                 exclude: root('src', 'public'),
-                use: 'raw-loader'
+                loader: 'raw-loader'
 
             }
         ]
@@ -213,19 +227,21 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
-
         // new BundleAnalyzerPlugin({
-        //     analyzerPort:3333
+        //     analyzerPort: 444
         // }),
 
+        // HardSourceWebpackPlugin is a plugin for Webpack
+        // to provide an intermediate caching step for modules.
+        // Reference: https://github.com/mzgoddard/hard-source-webpack-plugin
         new HardSourceWebpackPlugin(),
 
-        new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {}),
-
+        new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {})
     ];
 
     if (!isTest && !isTestWatch) {
         config.plugins.push(
+
             // Inject script and link tags into html files.
             // Reference: https://github.com/ampedandwired/html-webpack-plugin
             new HtmlWebpackPlugin({
@@ -234,15 +250,14 @@ module.exports = function makeWebpackConfig() {
                 chunksSortMode: 'dependency',
             }),
 
-
             // This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS.
             // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
             // Disabled when in test mode.
             new MiniCssExtractPlugin({
-                filename: !isProd ? '[name].css' : 'css/[name].[contenthash:8].css',
+                filename: !isProd ? '[name].css' : 'css/[name].[hash].css',
                 chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
                 hash: true
-            }),
+            })
         );
     }
 
@@ -251,8 +266,10 @@ module.exports = function makeWebpackConfig() {
         config.plugins.push(
             new CopyWebpackPlugin([{
                 from: root('src', 'public'),
-                ignore: ['*.svg', '*.png', '*.ico', '*.xml', 'manifest.json']
-            }])
+                // To avoid duplicity.
+                ignore: ['*.svg', '*.png', '*.json', '*.xml', '*.ico']
+            }]),
+
         );
     }
 
@@ -269,20 +286,23 @@ module.exports = function makeWebpackConfig() {
         new webpack.IgnorePlugin(/mongodb/)
     );
 
+
     /**
      * Dev server configuration
      * Reference: http://webpack.github.io/docs/configuration.html#devserver
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
 
-    config.devServer = {
-        host: '0.0.0.0',
-        port: 8080,
-        contentBase: './src/public',
-        historyApiFallback: true,
-        quiet: true,
-        stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
-    };
+    if (!isProd) {
+        config.devServer = {
+            host: '0.0.0.0',
+            port: 8080,
+            contentBase: './src/public',
+            historyApiFallback: true,
+            quiet: true,
+            stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
+        };
+    }
 
     return config;
 
@@ -293,4 +313,3 @@ function root(args) {
     args = Array.prototype.slice.call(arguments, 0);
     return path.join.apply(path, [__dirname].concat(args));
 }
-
