@@ -107,7 +107,11 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
                 this.tyrionBackendService.roleDelete(this.securityRole.id)
                     .then(() => {
                         this.unblockUI();
-                        this.navigate(['/admin/permission-group']);
+                        if (this.project_id ) {
+                            this.navigate(['/projects', this.project_id, 'roles']);
+                        } else {
+                            this.navigate(['/admin/permission-group']);
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
