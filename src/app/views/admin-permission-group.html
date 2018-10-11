@@ -21,57 +21,60 @@
 
     <div class="portlet-body">
 
-        <div *ngIf="(securityRole && securityRole.length)" class="table-scrollable table-scrollable-borderless">
-            <table class="table table-hover table-light byzance-table">
-                <thead>
-                <tr>
-                    <th>{{'label_name'|bkTranslate:this}}</th>
-                    <th>{{'label_description'|bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
-                </tr>
-                </thead>
-                <tbody class="hide-bk-drob-down-button">
-                <tr *ngFor="let role of securityRole">
-
-                    <td class="vert-align no-wrap">
-                        <a (click)="onRoleClick(role.id)" class="no-wrap"><strong>{{role.name}}</strong></a>
-                    </td>
-
-                    <td class="vert-align no-wrap">
-                        {{role.description}}
-                    </td>
-
-                    <td class="action-btn-col">
-
-                        <bk-drob-down-button
-                            [btns_group_name]="('label_role_properties'|bkTranslate:this)"
-                            [btns] = "[
-                                {
-                                    condition: true,
-                                    btn_label_for_person: ('label_role_properties'|bkTranslate:this),
-                                    btn_tag: 'edit_role',
-                                    icon: 'fa-cog',
-                                    colorType: 'EDIT',
-                                    permission: (role.update_permission)
-                                },
-                                {
-                                    condition: true,
-                                    btn_label_for_person: ('label_role_remove'|bkTranslate:this),
-                                    btn_tag: 'remove_role',
-                                    icon: 'fa-trash',
-                                    colorType: 'REMOVE',
-                                    permission: (role.update_permission)
-                                }
-                            ]"
-                            (onValueChanged)="onDrobDownEmiter($event, role)"
-                        >
-                        </bk-drob-down-button>
-
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+            <div *ngIf="(securityRoleList && securityRoleList.content.length)" class="table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light byzance-table">
+                        <thead>
+                        <tr>
+                            <th>{{'label_name'|bkTranslate:this}}</th>
+                            <th>{{'label_description'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                        </tr>
+                        </thead>
+                        <tbody class="hide-bk-drob-down-button">
+                        <tr *ngFor="let role of securityRoleList.content">
+        
+                            <td class="vert-align no-wrap">
+                                <a (click)="onRoleClick(role.id)" class="no-wrap"><strong>{{role.name}}</strong></a>
+                            </td>
+        
+                            <td class="vert-align no-wrap">
+                                {{role.description}}
+                            </td>
+        
+                            <td class="action-btn-col">
+        
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_role_properties'|bkTranslate:this)"
+                                    [btns] = "[
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_role_properties'|bkTranslate:this),
+                                            btn_tag: 'edit_role',
+                                            icon: 'fa-cog',
+                                            colorType: 'EDIT',
+                                            permission: (role.update_permission)
+                                        },
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_role_remove'|bkTranslate:this),
+                                            btn_tag: 'remove_role',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (role.delete_permission)
+                                        }
+                                    ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, role)"
+                                >
+                                </bk-drob-down-button>
+        
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <bk-filter-page-component [from]="securityRoleList.from" [to]="securityRoleList.to"
+                    [total]="securityRoleList.total" [totalPages]="securityRoleList.pages"
+                    (onSelect)="onFilterRole($event)"></bk-filter-page-component>
+                </div>
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(securityRole == null)"
