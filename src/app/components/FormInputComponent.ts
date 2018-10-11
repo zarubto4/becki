@@ -139,6 +139,32 @@ export class FormInputComponent implements OnInit {
 
             this.control = form.controls['value'];
         }
+
+        if (this.type === 'password') {
+            this.showButton = {
+                btn_label_for_person: '',
+                colorType: 'ACTIVE',
+                btn_icon: 'fa-eye'
+            };
+
+            this.onBtnClickEvent.subscribe(() => {
+                if (this.type === 'password') {
+                    this.showButton = {
+                        btn_label_for_person: '',
+                        colorType: 'DEACTIVE',
+                        btn_icon: 'fa-eye-slash'
+                    };
+                    this.type = 'text';
+                } else {
+                    this.showButton = {
+                        btn_label_for_person: '',
+                        colorType: 'DEACTIVE',
+                        btn_icon: 'fa-eye'
+                    };
+                    this.type = 'password';
+                }
+            });
+        }
     }
 
     onEnter(event: any) {
