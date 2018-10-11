@@ -78,7 +78,6 @@ import { FinancialProductComponent } from './views/financial-product';
 import { HardwareComponent } from './views/hardware';
 import { HardwareHardwareTypeComponent } from './views/hardware-hardware_type';
 import { ProjectsProjectMembersComponent } from './views/projects-project-members';
-import { ProjectsProjectRolesComponent} from './views/projects-project-roles';
 import { ModalsMembersAddComponent } from './modals/members-add';
 import { FinancialProductExtensionsComponent } from './views/financial-product-extensions';
 import { FinancialProductExtensionsExtensionComponent } from './views/financial-product-extensions-extension';
@@ -742,7 +741,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsAddGSMComponent,
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
-        ProjectsProjectRolesComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

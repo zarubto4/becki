@@ -1,7 +1,8 @@
 <bk-layout-main
     [tabMenu]="'byzance-admin'"
     [title]="'main_title'|bkTranslate:this"
-    [subtitle]="'main_subtitle'|bkTranslate:this">
+    [subtitle]="'main_subtitle'|bkTranslate:this"
+    [show_title]="!project_id">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title [title_name]="'title'|bkTranslate:this"
@@ -13,6 +14,7 @@
                               btn_label_for_person: ('label_create_role'|bkTranslate:this),
                               icon: 'fa-plus-circle',
                               colorType: 'EDIT',
+                              permission: true,
                               btn_tag: 'create_role'
                         }
                       ]">

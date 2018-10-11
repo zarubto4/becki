@@ -1,7 +1,8 @@
 <bk-layout-main [tabMenu]="'byzance-admin'"
                 [title]="'main_title'|bkTranslate:this"
                 [subtitle]="'main_subtitle'|bkTranslate:this"
-                [lastBreadName]="securityRole?securityRole.name:''">
+                [lastBreadName]="securityRole?securityRole.name:''"
+                [show_title]="!project_id">
 
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title *ngIf="securityRole"
@@ -136,12 +137,12 @@
                                 [btns_group_name]="('label_type_of_board_properties'|bkTranslate:this)"
                                 [btns] = "[
                                 {
-                                    condition: true,
+                                    condition: permission.delete_permission,
                                     btn_label_for_person: ('label_person_remove'|bkTranslate:this),
                                     btn_tag: 'remove_permission',
                                     icon: 'fa-trash',
                                     colorType: 'REMOVE',
-                                    permission: (permission.delete_permission)
+                                    permission: permission.delete_permission
                                 }
                             ]"
                                 (onValueChanged)="onDrobDownEmiter($event, permission)"
