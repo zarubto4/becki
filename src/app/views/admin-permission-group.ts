@@ -46,7 +46,6 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
             });
     }
 
-
     onRoleClick(role_id: string): void {
         this.navigate(['admin/permission-group', role_id]);
     }

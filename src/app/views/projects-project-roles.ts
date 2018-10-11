@@ -49,7 +49,7 @@ export class ProjectsProjectRolesComponent extends _BaseMainComponent implements
             this.refresh()
         });
         this.selfId = this.tyrionBackendService.personInfoSnapshot.id;
-        this.refresh()
+        this.refresh();
     }
 
     ngOnDestroy(): void {
@@ -97,6 +97,11 @@ export class ProjectsProjectRolesComponent extends _BaseMainComponent implements
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
+    }
+
+    onRoleClick(role_id: string): void {
+        this.addFlashMessage(new FlashMessageError(role_id, null));
+        this.navigate(['projects', this.project_id, 'roles', role_id]);
     }
 }
 

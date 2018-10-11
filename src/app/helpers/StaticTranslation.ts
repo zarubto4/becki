@@ -2487,7 +2487,8 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_actions': 'Actions',
                 'label_person_remove': 'Remove Person from Role',
-
+                'label_action': 'Action',
+                'label_target': 'Target',
                 'btn_add_person': 'Add Person',
                 'btn_add_permission': 'Add Permission',
             },

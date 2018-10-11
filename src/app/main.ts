@@ -320,6 +320,7 @@ let routes: Routes = [
 
     { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/roles', data: { breadName: 'Roles' }, component: ProjectsProjectRolesComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/roles/:group', data: {breadName: ':group'}, component: RoleGroupGroupComponent, canActivate: [AuthGuard]},
     { path: 'projects/:project/widgets', data: { breadName: 'GRID widgets' }, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/widgets/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 

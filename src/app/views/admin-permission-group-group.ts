@@ -22,7 +22,7 @@ import { ModalsPermissionPermissionPropertyModel } from '../modals/permission-pe
 export class RoleGroupGroupComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
-
+    project_id: string = null;
     securityRole: IRole = null;
 
     routeParamsSubscription: Subscription;
@@ -37,6 +37,7 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
         this.blockUI();
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params['group'];
+            this.project_id = params['project'];
             this.refresh();
         });
     }
@@ -63,9 +64,9 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
 
     refresh(): void {
         this.blockUI();
-        Promise.all<any>([this.tyrionBackendService.roleGet(this.id)])
-            .then((values: [IRole]) => {
-                this.securityRole = values[0];
+        this.tyrionBackendService.roleGet(this.id)
+            .then((values: IRole) => {
+                this.securityRole = values;
                 this.unblockUI();
             })
             .catch((reason) => {
