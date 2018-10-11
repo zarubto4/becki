@@ -46,6 +46,11 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
             });
     }
 
+
+    onRoleClick(role_id: string): void {
+        this.navigate(['admin/permission-group', role_id]);
+    }
+
     onRoleCreateClick(): void {
         let model = new ModalsPermissionGroupModel();
         this.modalService.showModal(model).then((success) => {
