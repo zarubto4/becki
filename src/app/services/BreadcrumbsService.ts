@@ -97,6 +97,9 @@ export class BreadcrumbsService {
         this.currentParamsService.currentHardwareName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentGroupName.subscribe(() => {
+            this.refresh();
+        });
     }
 
     protected findRouteByPath(path: string): Route {
