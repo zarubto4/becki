@@ -14,6 +14,7 @@
                 condition: true,
                 btn_label_for_person: ('btn_add_role'|bkTranslate:this),
                 colorType: 'ADD',
+                permission: true,
                 icon: 'fa-plus-circle',
                 btn_tag: 'add'
             }
@@ -24,7 +25,7 @@
 
     <!-- Page Content -- START -->
     <div class="portlet-body">
-            <div *ngIf="(securityRole && securityRole.length)" class="table-scrollable table-scrollable-borderless">
+            <div *ngIf="(securityRoleList && securityRoleList.content.length)" class="table-scrollable table-scrollable-borderless">
                     <table class="table table-hover table-light byzance-table">
                         <thead>
                         <tr>
@@ -34,7 +35,7 @@
                         </tr>
                         </thead>
                         <tbody class="hide-bk-drob-down-button">
-                        <tr *ngFor="let role of securityRole">
+                        <tr *ngFor="let role of securityRoleList.content">
         
                             <td class="vert-align no-wrap">
                                 <a (click)="onRoleClick(role.id)" class="no-wrap"><strong>{{role.name}}</strong></a>
@@ -74,9 +75,12 @@
                         </tr>
                         </tbody>
                     </table>
+                    <bk-filter-page-component [from]="securityRoleList.from" [to]="securityRoleList.to"
+                    [total]="securityRoleList.total" [totalPages]="securityRoleList.pages"
+                    (onSelect)="onFilterRole($event)"></bk-filter-page-component>
                 </div>
-                <bk-nothing-to-show [condition_loading]="(securityRole == null)"
-                [condition_empty]="(securityRole != null && securityRole.length == 0)"
+                <bk-nothing-to-show [condition_loading]="(securityRoleList == null)"
+                [condition_empty]="(securityRoleList != null && securityRoleList.content.length == 0)"
                 [main_message_link]="'label_no_role'|bkTranslate:this"
                 [main_message_comment_link]="'label_no_role_comment'|bkTranslate:this"
                 [btn_label]="'btn_create'|bkTranslate:this"

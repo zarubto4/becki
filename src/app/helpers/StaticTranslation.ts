@@ -2888,7 +2888,8 @@ export class StaticTranslation {
             }, 'ProjectsProjectRolesComponent': {
                 'title': 'Roles',
                 'label_name': 'Name',
-                'btn_add_role': 'Add role'
+                'btn_add_role': 'Add role',
+                'role_create_fail': 'Role creation failed',
             },
 
 

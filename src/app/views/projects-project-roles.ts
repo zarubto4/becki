@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnInit, OnDestroy} from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 
 import { Subscription } from 'rxjs/Rx';
@@ -32,7 +32,7 @@ export class ProjectsProjectRolesComponent extends _BaseMainComponent implements
 
     selfId: string = '';
 
-    securityRole: IRole[] = null;
+    securityRoleList: IRoleList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
@@ -59,34 +59,12 @@ export class ProjectsProjectRolesComponent extends _BaseMainComponent implements
         }
     }
 
-    onRoleAddClick(): void {
-
-    }
-
     refresh(): void {
-        this.blockUI();
-
-        const filter: IRoleFilter = {
-            project_id: this.project_id
-        }
-        this.tyrionBackendService.roleGetListByFilter(1, filter)
-            .then((values: IRoleList) => {
-                this.securityRole = values.content;
-                if (!this.securityRole || !this.securityRole.length) {
-                    this.addFlashMessage(new FlashMessageError('Roles are Empty.', null));
-                } else {
-                    this.addFlashMessage(new FlashMessageSuccess('Roles are fetched', null));
-                } 
-                this.unblockUI();
-            })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Roles cannot be loaded.', reason));
-                this.unblockUI();
-            });
+        this.onFilterRole();
     }
 
 
-    onRoleCreateClick(): void {
+    onRoleAddClick(): void {
         let model = new ModalsPermissionGroupModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -99,11 +77,26 @@ export class ProjectsProjectRolesComponent extends _BaseMainComponent implements
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('role_create_fail'), reason));
                         this.refresh();
                     });
             }
         });
+    }
+
+    onFilterRole(pageNumber: number = 0): void {
+        this.blockUI();
+        this.tyrionBackendService.roleGetListByFilter(pageNumber, {
+            project_id: this.project_id
+        })
+            .then((values) => {
+                this.unblockUI();
+                this.securityRoleList = values;
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
     }
 }
 
