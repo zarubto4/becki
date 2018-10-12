@@ -11,8 +11,6 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
 const PurifyCSSPlugin = require('purifycss-webpack');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 
 /**
  * Env
@@ -54,7 +52,6 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html#output
      */
     config.output = {
-        path: root('dist'),
         publicPath: '/',
         filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
@@ -73,11 +70,7 @@ module.exports = function makeWebpackConfig() {
                 styleExtensions: ['.css', '.scss', '.min.css'],
                 moduleExtensions: ['.html'],
                 minimize: true,
-                paths: glob.sync(root('src', 'app', '**', '*.html')),
-                // purifyOptions: {
-                //     rejected: true
-                // },
-                // verbose: true
+                paths: glob.sync(root('src', 'app', '**', '*.html'))
             }),
 
             // A Webpack plugin to optimize \ minimize CSS assets.
@@ -136,7 +129,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.m?js$/,
                 include: root('node_modules', 'blocko'),
-                use: 'babel-loader',
+                use: 'babel-loader?cacheDirectory',
             },
 
             // Minimize images.
@@ -227,10 +220,6 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
-        // new BundleAnalyzerPlugin({
-        //     analyzerPort: 444
-        // }),
-
         // HardSourceWebpackPlugin is a plugin for Webpack
         // to provide an intermediate caching step for modules.
         // Reference: https://github.com/mzgoddard/hard-source-webpack-plugin
@@ -266,7 +255,7 @@ module.exports = function makeWebpackConfig() {
         config.plugins.push(
             new CopyWebpackPlugin([{
                 from: root('src', 'public'),
-                // To avoid duplicity.
+                // To avoid duplicity of pictures.
                 ignore: ['*.svg', '*.png', '*.json', '*.xml', '*.ico']
             }]),
 
