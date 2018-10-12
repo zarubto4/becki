@@ -155,11 +155,6 @@ export abstract class _BaseMainComponent {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'gsm', gsm_id]);
     }
 
-
-    public onRoleClick(role_id: string): void {
-        this.navigate(['admin/permission-group', role_id]);
-    }
-
     public onProjectClick(project_id: string): void {
         this.navigate(['/projects', project_id]);
     }
