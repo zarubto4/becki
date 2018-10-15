@@ -39,10 +39,10 @@ export abstract class WebSocketClient {
         }
 
         if (this.webSocket) {
-            this.webSocket.removeEventListener('open');
-            this.webSocket.removeEventListener('close');
-            this.webSocket.removeEventListener('error');
-            this.webSocket.removeEventListener('message');
+            this.webSocket.removeEventListener('open', (e) => this.onOpen(e));
+            this.webSocket.removeEventListener('close', (e) => this.onClose(e));
+            this.webSocket.removeEventListener('error', (e) => this.onError(e));
+            this.webSocket.removeEventListener('message', (e) => this.dispatch(e));
 
             this.webSocket.close();
         }

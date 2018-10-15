@@ -11,7 +11,7 @@ import { TranslationService } from '../services/TranslationService';
 /* tslint:disable:max-line-length */
     template: `
 <div class="form-group icon-select-group" [class.has-success]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid))" [class.has-error]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))" [class.has-warning]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending))">
-    
+
 
     <!-- Write manually -->
     <bk-form-input [control]="control"
@@ -26,16 +26,16 @@ import { TranslationService } from '../services/TranslationService';
                    [placeholder]="'Write Manually or Select'"
                    [waitForTouch]="false">
     </bk-form-input>
-    
+
     <!-- Select it -->
     <div class="form-control icon-select-table" [class.open]="iconSelectOpen">
-        <div *ngFor="let icon of iconSelectOptions;" class="fa icon-select-block" 
-             [class.selected]="icon.name == value" 
+        <div *ngFor="let icon of iconSelectOptions;" class="fa icon-select-block"
+             [class.selected]="icon.name == value"
              (click)="onIconSelectBlockClick(icon.name)">{{icon.icon}}</div>
         <div class="clearfix"></div>
     </div>
 
-    
+
     <span class="help-block" *ngIf="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))">
         {{validatorErrorsService.getMessageForErrors(control.errors)}}
     </span>

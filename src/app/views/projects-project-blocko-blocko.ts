@@ -3,7 +3,7 @@ declare let $: JQueryStatic;
 import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import {
     IProject, IBProgram, IBlockVersion, IBProgramVersion, IGridProject, IMProgramSnapShot, IMProjectSnapShot,
     IGridProgramVersion, IGridProgram, IBProgramVersionSnapGridProject, IBProgramVersionSnapGridProjectProgram
@@ -26,7 +26,7 @@ import { FileDownloaderService } from '../services/FileDownloaderService';
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
-    templateUrl: './projects-project-blocko-blocko.html',
+    templateUrl: './projects-project-blocko-blocko.html'
 })
 export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -99,7 +99,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     onToggleIDETab(tab: string): void {
         if (this.tab_under_ide === tab) {
             this.tab_under_ide = ''; // Hide tab
-        }else {
+        } else {
             this.tab_under_ide = tab;
         }
     }
@@ -465,6 +465,9 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
             return;
         }
 
+        // console.log('iface.code.programId', iface.code.programId);
+        // console.log('iface.code.versionId', iface.code.versionId);
+
         let model = new ModalsSelectCodeModel(this.projectId, null, {
             c_program_id: iface.code.programId,
             c_program_version_id: iface.code.versionId
@@ -673,8 +676,10 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
         }
 
         if (!validGrid) {
+            /*tslint:disable:no-shadowed-variable*/
             let m = new ModalsConfirmModel(this.translate('label_modal_error'), this.translate('label_modal_cant_save_grid_hw_without_version'), true, this.translate('label_modal_ok'), null);
             this.modalService.showModal(m);
+            /*tslint:enable:no-shadowed-variable*/
             return;
         }
 

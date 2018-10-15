@@ -11,7 +11,7 @@ import { TranslationService } from './services/TranslationService';
 
 @Component({
     selector: 'bk-app',
-    template: '<bk-block-ui></bk-block-ui><bk-modal></bk-modal><router-outlet></router-outlet>'
+    template: `<bk-block-ui></bk-block-ui><bk-modal></bk-modal><router-outlet></router-outlet>`
 })
 export class AppComponent implements DoCheck {
 
@@ -37,7 +37,7 @@ export class AppComponent implements DoCheck {
                 this.doCheckCounterCount++;
             };
 
-            setInterval(() => {
+            setInterval( () => {
                 if (this.doCheckCounterCount > treshhold) {
                     console.warn(`To many change detection cycles (over ${treshhold}) in last second!`);
                 }

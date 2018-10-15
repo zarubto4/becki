@@ -104,7 +104,7 @@
                 w1, w2;
 
             outer.append(inner);
-            $('body').append(outer);
+            $(' body').append(outer);
 
             w1 = inner[0].offsetWidth;
             outer.css('overflow', 'scroll');

@@ -6,7 +6,7 @@
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
 import { FlashMessage, FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalModel } from '../services/ModalService';
-import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
+import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { TranslationService } from '../services/TranslationService';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
@@ -107,7 +107,7 @@ export class ModalsPictureUploadComponent implements OnInit {
                     }
 
                 });
-                image.src = myReader.result;
+                image.src = <string>myReader.result;
 
             }, false);
             myReader.readAsDataURL(file);

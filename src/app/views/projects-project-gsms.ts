@@ -6,12 +6,10 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsCodePropertiesModel } from '../modals/code-properties';
-import { IProject, IHardwareType, ICProgram, ICProgramList, IGSMList, IGSM } from '../backend/TyrionAPI';
+import { IProject, IGSMList, IGSM } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsAddGSMModel } from '../modals/add-gsm';
 import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 

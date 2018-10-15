@@ -15,7 +15,7 @@
             </div>
             <hr />
         </div>
-        <template [ngIf]="configProperties.length">
+        <ng-template [ngIf]="configProperties.length">
             <h4>{{'label_configuration'|bkTranslate:this}}</h4>
             <div *ngFor="let configProperty of configProperties;">
                 <div *ngIf="configProperty.type == configPropertyType['Float']" class="input-row">
@@ -54,7 +54,7 @@
                 </div>
 
             </div>
-        </template>
+        </ng-template>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}} </button>

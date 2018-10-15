@@ -1,9 +1,7 @@
 <bk-layout-main
     [title]="'main_title'|bkTranslate:this">
-
     <div class="portlet-body">
         <div class="row">
-
             <!--- Welcome Row Part -->
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="portlet">
@@ -159,73 +157,71 @@
                     <div *ngIf="articles" class="portlet-body" >
 
                         <div *ngIf="tab == 'general' && articles.general" class="timeline">
-                            <template ngFor let-article="$implicit" [ngForOf]="articles.general.content">
+                            <ng-template ngFor let-article="$implicit" [ngForOf]="articles.general.content">
                                 <bk-article-time-line
                                     [article]="article"
                                     [icon]="'fa-info'"
                                     (onBtnClick)="onPortletClick($event, article)"
                                     [article_head_color]="'BYZANCE'">
                                 </bk-article-time-line>
-                            </template>
+                            </ng-template>
                         </div>
                         <div *ngIf="tab == 'hardware' && articles.hardware" class="timeline">
-                            <template ngFor let-article="$implicit" [ngForOf]="articles.hardware.content">
+                            <ng-template ngFor let-article="$implicit" [ngForOf]="articles.hardware.content">
                                 <bk-article-time-line
                                     [article]="article"
                                     [icon]="'fa-microchip'"
                                     (onBtnClick)="onPortletClick($event, article)"
                                     [article_head_color]="'HARDWARE'">
                                 </bk-article-time-line>
-                            </template>
+                            </ng-template>
                         </div>
                         <div *ngIf="tab == 'code' && articles.code" class="timeline">
-                            <template ngFor let-article="$implicit" [ngForOf]="articles.code.content">
+                            <ng-template ngFor let-article="$implicit" [ngForOf]="articles.code.content">
                                 <bk-article-time-line
                                     [article]="article"
                                     [icon]="'fa-code'"
                                     (onBtnClick)="onPortletClick($event, article)"
                                     [article_head_color]="'CODE'">
                                 </bk-article-time-line>
-                            </template>
+                            </ng-template>
                         </div>
                         <div *ngIf="tab == 'blocko' && articles.blocko" class="timeline">
-                            <template ngFor let-article="$implicit" [ngForOf]="articles.blocko.content">
+                            <ng-template ngFor let-article="$implicit" [ngForOf]="articles.blocko.content">
                                 <bk-article-time-line
                                     [article]="article"
                                     (onBtnClick)="onPortletClick($event, article)"
                                     [icon]="'fa-sitemap fa-rotate-90'"
                                     [article_head_color]="'BLOCKO'">
                                 </bk-article-time-line>
-                            </template>
+                            </ng-template>
                         </div>
                         <div *ngIf="tab == 'grid' && articles.grid" class="timeline">
-                            <template ngFor let-article="$implicit" [ngForOf]="articles.grid.content">
+                            <ng-template ngFor let-article="$implicit" [ngForOf]="articles.grid.content">
                                 <bk-article-time-line
                                     [article]="article"
                                     [icon]="'fa-desktop'"
                                     (onBtnClick)="onPortletClick($event, article)"
                                     [article_head_color]="'GRID'">
                                 </bk-article-time-line>
-                            </template>
+                            </ng-template>
                         </div>
                         <div *ngIf="tab == 'cloud' && articles.cloud" class="timeline">
-                            <template ngFor let-article="$implicit" [ngForOf]="articles.grid.content">
+                            <ng-template ngFor let-article="$implicit" [ngForOf]="articles.grid.content">
                                 <bk-article-time-line
                                     [article]="article"
                                     [icon]="'fa-cloud'"
                                     (onBtnClick)="onPortletClick($event, article)"
                                     [article_head_color]="'CLOUD'">
                                 </bk-article-time-line>
-                            </template>
+                            </ng-template>
                         </div>
                     </div>
                 </div>
                 <div *ngIf="!articles" class="portlet-body" >
                     Loading!!!!!!! TODO
                 </div>
-
             </div>
-
         </div>
     </div>
 

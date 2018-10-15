@@ -45,13 +45,13 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn' | 'deb
                         <span *ngIf="log.type == 'log'"   class="font-grey-salsae">[Info]</span>
                     </div>
                     <div class="console-log-message">
-                        
-                        <template [ngIf]="log.source || log.alias">
+
+                        <ng-template [ngIf]="log.source || log.alias">
                             <span [style.color]="sourceColor[log.source] ? sourceColor[log.source].color : ''" class="bold">{{log.alias?log.alias:log.source}}</span>
                             <i class="fa fa-fw fa-angle-right"></i>
-                        </template>
-                        
-                        <span 
+                        </ng-template>
+
+                        <span
                             [class.font-red]="log.type == 'error'"
                             [class.font-yellow]="log.type == 'warn'"
                             [class.font-grey-salsa]="log.type == 'debug'"
@@ -180,7 +180,7 @@ export class ConsoleLogComponent {
         }
         if (error instanceof SafeMachineError) {
             let msg = '<strong>' + error.message + '</strong>';
-            if (typeof error.original === 'object' && error.original instanceof Error) {
+            if (typeof error.original === 'object') {
                 msg = '<strong>' + (<Error>error.original).name + '</strong>: ' + (<Error>error.original).message;
             }
 

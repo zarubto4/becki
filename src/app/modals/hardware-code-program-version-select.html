@@ -13,29 +13,29 @@
         <h4 class="text-center" *ngIf="!codePrograms">
              {{'loading'|bkTranslate:this}}
         </h4>
-        <template [ngIf]="codePrograms && !programVersions">
+        <ng-template [ngIf]="codePrograms && !programVersions">
             <h4 class="text-center" *ngIf="!(codePrograms && codePrograms.content)">
                  {{'label_no_program'|bkTranslate:this}}
             </h4>
-            <template [ngIf]="codePrograms && codePrograms.length">
+            <ng-template [ngIf]="codePrograms && codePrograms.length">
                 <div *ngFor="let codeProgram of codePrograms" class="cursor-pointer bg-grey-steel" style="padding: 2px 10px;margin-bottom: 10px;" (click)="onProgramClick(codeProgram)">
                     <h4><strong>{{codeProgram.name}}</strong></h4>
                     <h5>{{codeProgram.description}}</h5>
                 </div>
-            </template>
-        </template>
-        <template [ngIf]="programVersions">
+            </ng-template>
+        </ng-template>
+        <ng-template [ngIf]="programVersions">
             <h4 class="text-center" *ngIf="!(programVersions && programVersions.length)">
                  {{'label_no_version'|bkTranslate:this}}
             </h4>
-            <template [ngIf]="programVersions && programVersions.length">
+            <ng-template [ngIf]="programVersions && programVersions.length">
                 <div *ngFor="let programVersion of programVersions" [class.cursor-pointer]="programVersion.status === 'successfully_compiled_and_restored'" [class.font-grey-cascade]="programVersion.status !== 'successfully_compiled_and_restored'" [class.bg-grey-steel]="programVersion != selectedProgramVersion" [class.bg-green-turquoise]="programVersion == selectedProgramVersion" style="position: relative; padding: 2px 10px;margin-bottom: 10px;" (click)="onProgramVersionClick(programVersion)">
                     <h4><strong>{{programVersion.version_name}}</strong></h4>
                     <h5>{{programVersion.version_description}}</h5>
                     <h5 *ngIf="programVersion.status !== 'successfully_compiled_and_restored'" style="position: absolute; top: 4px; right: 12px;"><i class="fa fa-exclamation-triangle"></i> {{'label_not_compiled'|bkTranslate:this}}</h5>
                 </div>
-            </template>
-        </template>
+            </ng-template>
+        </ng-template>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>

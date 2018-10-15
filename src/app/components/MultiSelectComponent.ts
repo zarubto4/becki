@@ -9,23 +9,23 @@ import { FormSelectComponentOption } from './FormSelectComponent';
         <div class="bk-table-scrollable" [style.max-height]="tabHeight" *ngIf="items">
             <label *ngIf="labelComment" [innerHTML]="label"></label>
             <table  class="table" style="border-collapse: separate;">
-                <thead> 
+                <thead>
                     <tr>
-                        <th class="col col-lg-1" *ngFor="let field of additionalFields">{{field}}</th> 
-                    </tr> 
-                </thead> 
-                <tbody *ngFor="let item of items"> 
+                        <th class="col col-lg-1" *ngFor="let field of additionalFields">{{field}}</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let item of items">
                     <tr class="bk-hover-pick" [class.bg-green-meadow]="selectedItems.indexOf(item) > -1" (click)="itemSelected(item)">
-                        <td class="vert-align no-wrap"> 
+                        <td class="vert-align no-wrap">
                            {{item.label}}
                         </td>
                         <td class="vert-align" *ngFor="let field of additionalFields">
                             {{item[field]}}
-                        </td> 
-                    </tr> 
-                </tbody> 
-            </table> 
-        </div> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     `
 })
 /* tslint:enable */

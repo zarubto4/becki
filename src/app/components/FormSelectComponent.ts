@@ -57,9 +57,9 @@ export interface FormSelectComponentOption {
 <div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label *ngIf="labelComment" [innerHTML]="label"></label>
     <select *ngIf="!readonly" class="form-control" [formControl]="control" [ngModel]="selectedValue" (ngModelChange)="onSelectedChange($event)">
-      <template [ngIf]="_options">
+      <ng-template [ngIf]="_options">
          <option *ngFor="let option of _options" [value]="option.value">{{option.label}}</option>
-      </template>
+      </ng-template>
     </select>
     <input  *ngIf="readonly" 
             class="form-control"

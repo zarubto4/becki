@@ -1,5 +1,3 @@
-
-
 // INTERFACES - Compiler
 
 import { IWebSocketMessage } from '../websocket/WebSocketMessage';
@@ -236,7 +234,7 @@ export class InternalServerError extends IError {
         this.name = 'Response_CriticalError';
         if ( response.body['message']) {
             this.message = response.body['message'];
-        }else {
+        } else {
             this.message = 'Critical Server Side Error!';
         }
     }

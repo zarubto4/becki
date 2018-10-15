@@ -104,14 +104,14 @@
                             (onButtonClick)="onRedirectClick()"></bk-nothing-to-show>
 
 
-        <template [ngIf]="products != null && products.length > 0">
+        <ng-template [ngIf]="products != null && products.length > 0">
             <bk-nothing-to-show [condition_loading]="(projects == null)"
                                 [condition_empty]="(projects != null && projects.length == 0)"
                                 [main_message_link]="'label_no_projects'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_projects_comment'|bkTranslate:this"
                                 [btn_label]="'btn_add_project'|bkTranslate:this"
                                 (onButtonClick)="onAddClick()"></bk-nothing-to-show>
-        </template>
+        </ng-template>
         <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
     </div>

@@ -49,6 +49,8 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
     productInfoFormGroup: FormGroup;
 
 
+    alreadyCreatedProducts: IProduct[] = null;
+
     constructor(injector: Injector) {
         super(injector);
 
@@ -285,7 +287,13 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
                 } else if ((<any>response)._code_ === 201) {
                     this.fmSuccess(this.translate('flash_product_created'));
                     this.unblockUI();
-                    this.onFinanceClick();
+
+                    // This is a first Product - redirect to dashboard
+                    if (this.alreadyCreatedProducts === null || this.alreadyCreatedProducts.length === 0) {
+                        this.onDashboardClick();
+                    } else {
+                        this.onFinanceClick();
+                    }
                 }
             })
             .catch(reason => {

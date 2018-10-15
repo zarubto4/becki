@@ -5,9 +5,8 @@
 
 
 import { FormControl, AsyncValidatorFn, AbstractControl } from '@angular/forms';
-import { Observable, Observer } from 'rxjs/Rx';
+import { Observable, Observer } from 'rxjs';
 import { TyrionBackendService } from '../services/BackendService';
-import { IBProgram } from '../backend/TyrionAPI';
 
 export class AsyncValidatorDebounce {
     _validate: (x: any) => any;
@@ -140,16 +139,22 @@ export class BeckiAsyncValidators {
         return (control: AbstractControl) => {
             return new Promise<any>((resolve, reject) => {
                 if (conditionCallback(control.value)) {
-                    validator(control) // do validation
-                        .then((out: any) => {
-                            resolve(out);
-                        })
-                        .catch((out: any) => {
-                            reject(out);
-                        });
+
+                    let validation = validator(control);
+
+                    if (validation instanceof Promise) {
+                        validation
+                            .then((out: any) => {
+                                resolve(out);
+                            })
+                            .catch((out: any) => {
+                                reject(out);
+                            });
+                    }
                 } else {
                     resolve(null); // valid
                 }
+
             });
         };
     }

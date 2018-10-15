@@ -50,9 +50,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     readonly: boolean = false;
 
     @Input()
-    showBlockNames: boolean = true;
-
-    @Input()
     safeRun: boolean = false;
 
     @Input()
@@ -93,28 +90,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return this.translationService.translate(key, this, null, args);
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        /*this.zone.runOutsideAngular(() => {
-
-            let canConfig = changes['canConfig'];
-            if (canConfig) {
-                if (!canConfig.isFirstChange()) {
-                    throw new Error(this.translate('error_configuration_cant_change'));
-                }
-                this.blocko.canConfigInReadonly = canConfig.currentValue;
-            }
-
-            let showBlockNames = changes['showBlockNames'];
-            if (showBlockNames) {
-                this.blocko.showBlockNames = showBlockNames.currentValue;
-            }
-
-            let safeRun = changes['safeRun'];
-            if (safeRun) {
-                this.blockoController.safeRun = safeRun.currentValue;
-            }
-        });*/
-    }
+    ngOnChanges(changes: SimpleChanges): void {}
 
     onFullscreenClick(): void {
         this.fullScreen = !this.fullScreen;
