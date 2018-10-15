@@ -117,10 +117,10 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                             hardware_type_id: model.hardware_type_id,
                             tags: model.tags
                         })
-                            .then(() => {
+                            .then(cProgram => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
                                 this.unblockUI();
-                                this.onFilterPrivatePrograms();
+                                this.onCProgramClick(cProgram.id);
                             })
                             .catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.name, reason)));

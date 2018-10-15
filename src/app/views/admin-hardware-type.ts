@@ -98,8 +98,8 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     processor_id: model.processor,
                     producer_id: model.producer,
                 })
-                    .then(() => {
-                        this.refresh();
+                    .then(hardwareType => {
+                        this.onHardwareTypeClick(hardwareType.id);
                     }).catch(reason => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
@@ -233,8 +233,8 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     description: model.description,
                     name: model.name
                 })
-                    .then(() => {
-                        this.refresh();
+                    .then(producer => {
+                        this.onProducerClick(producer.id);
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.unblockUI();

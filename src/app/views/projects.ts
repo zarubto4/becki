@@ -83,9 +83,10 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
                     description: model.description,
                     product_id: model.product
                 }) // TODO: add tarrif nebo produkt či jak se to bude jmenovat
-                    .then(() => {
+                    .then(project => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.name)));
-                        this.refresh(); // also unblockUI
+                        this.unblockUI();
+                        this.onProjectClick(project.id);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.name, reason.message)));

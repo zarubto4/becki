@@ -99,9 +99,10 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                     name: model.name,
                     description: model.description
                 })
-                    .then(() => {
+                    .then(library => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_add_success')));
-                        this.onFilterPrivateLibraries();
+                        this.unblockUI();
+                        this.onLibraryClick(library.id);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_add_fail', model.name, reason)));
