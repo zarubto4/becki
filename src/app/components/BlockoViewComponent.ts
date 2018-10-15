@@ -5,8 +5,10 @@
 
 
 import { BlockoCore, Blocko, BlockoBasicBlocks, Blocks } from 'blocko';
-import { Component, AfterViewInit, OnChanges, OnDestroy, Input, ViewChild, ElementRef,
-    SimpleChanges, Output, EventEmitter, NgZone } from '@angular/core';
+import {
+    Component, AfterViewInit, OnChanges, OnDestroy, Input, ViewChild, ElementRef,
+    SimpleChanges, Output, EventEmitter, NgZone
+} from '@angular/core';
 import { ModalService } from '../services/ModalService';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
@@ -77,7 +79,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @ViewChild('field')
     field: ElementRef;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, protected translationService: TranslationService, protected notificationService: NotificationService,  ) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, protected translationService: TranslationService, protected notificationService: NotificationService,) {
     }
 
     public get serviceHandler(): Blocks.ServicesHandler {
@@ -90,7 +92,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return this.translationService.translate(key, this, null, args);
     }
 
-    ngOnChanges(changes: SimpleChanges): void {}
+    ngOnChanges(changes: SimpleChanges): void {
+    }
 
     onFullscreenClick(): void {
         this.fullScreen = !this.fullScreen;
@@ -112,7 +115,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                             .then((b: IBlock) => {
                                 this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block, b.versions, this.blockChangeVersion));
                             })
-                            .catch((error) => {
+                            .catch(reason => {
                                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this)));
                             });
                     } else {
@@ -171,12 +174,12 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
              });*/
             this.blocko.core.registerErrorCallback((block: BlockoCore.Block, error: any) => {
                 this.zone.run(() => {
-                    this.onError.emit({ block: block, error: error });
+                    this.onError.emit({block: block, error: error});
                 });
             });
             this.blocko.core.registerLogCallback((block: BlockoCore.Block, type: string, message: string) => {
                 this.zone.run(() => {
-                    this.onLog.emit({ block: block, type: type, message: message });
+                    this.onLog.emit({block: block, type: type, message: message});
                 });
             });
             this.blocko.core.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
@@ -196,7 +199,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
     }
 
-    getCoreBlock(version: IBlockVersion|string, block?: IBlock): BlockoCore.Block {
+    getCoreBlock(version: IBlockVersion | string, block?: IBlock): BlockoCore.Block {
         if (typeof version === 'string') {
             return this.getStaticBlock(version);
         } else {
@@ -329,10 +332,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             .then((versionObject) => {
                 block.versionId = version_id;
                 block.setCode(versionObject.logic_json);
+            })
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
             });
-        /*.catch((reason) => {
-            console.log("fail loading blocko version", reason);
-        });*/
     }
 
     registerBlockRemovedCallback(callback: (block: BlockoCore.Block) => void): void {

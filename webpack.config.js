@@ -63,7 +63,7 @@ module.exports = function makeWebpackConfig() {
      * Reference: https://webpack.js.org/configuration/optimization/
      */
     config.optimization = {
-        // minimize: false,          // Uncomment it to disable optimizations and speed up building.
+        minimize: false,          // Uncomment it to disable optimizations and speed up building.
         minimizer: [
             // A Webpack plugin to cut unused CSS selectors.
             new PurifyCSSPlugin({

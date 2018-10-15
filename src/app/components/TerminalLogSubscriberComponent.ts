@@ -16,6 +16,7 @@ import { FormSelectComponentOption } from './FormSelectComponent';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { WebSocketClientHardware } from '../services/websocket/WebSocketClientHardware';
 import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 @Component({
     selector: 'bk-terminal-log-component',
@@ -211,7 +212,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
         { value: 'error', label: 'error' }
     ];
 
-    constructor(public modalService: ModalService, public tyrionBackendService: TyrionBackendService, public validatorErrorsService: ValidatorErrorsService, public formBuilder: FormBuilder, public translationService: TranslationService) {
+    constructor(public modalService: ModalService, public tyrionBackendService: TyrionBackendService, public validatorErrorsService: ValidatorErrorsService, public formBuilder: FormBuilder, public translationService: TranslationService, protected notificationService: NotificationService,) {
     }
 
     ngOnInit() {
@@ -289,6 +290,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
                     }
                 })
                 .catch((reason) => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     console.error('onUserChangeLogLevelClick:', reason);
                 });
         }
@@ -310,6 +312,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
                 }
             })
             .catch((reason) => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 console.error('onUserChangeLogLevelClick:', reason);
             });
     }
@@ -341,6 +344,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
                 }
             })
             .catch((reason) => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 console.error('onUserChangeLogLevelClick:', reason);
             });
 
