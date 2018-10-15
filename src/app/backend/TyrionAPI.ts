@@ -3650,7 +3650,7 @@ export interface IGSM {
      * @example 1466163478925
      * @format int32
      * @readonly
-     * @required
+     * @requiredprojects-project-actualization-procedures-procedure
      */
     created: number;
     /**

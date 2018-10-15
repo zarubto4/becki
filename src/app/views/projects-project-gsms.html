@@ -42,7 +42,11 @@
                         <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
                         <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'table_msi_number'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_msi_iccid'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'table_msi_status'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_msi_country'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_daily_traffic'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_available_data_traffic'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                     </tr>
                     </thead>
@@ -51,7 +55,11 @@
                         <td class="vert-align no-wrap"><a (click)="onGSMClick(gsm.id)">{{gsm.name ? gsm.name : gsm.id}}</a></td>
                         <td class="vert-align">{{gsm.description}}</td>
                         <td class="vert-align text-center no-wrap">{{gsm.msi_number}}</td>
-                        <td class="vert-align">{{gsm.blocked}}</td>
+                        <td class="vert-align text-center no-wrap">TODO</td>
+                        <td class="vert-align text-center no-wrap"><bk-gsm-status-component [status]="gsm.blocked ? 'deactivated' : 'active'"></bk-gsm-status-component></td>
+                        <td class="vert-align text-center no-wrap">TODO</td>
+                        <td class="vert-align text-center no-wrap">TODO</td>
+                        <td class="vert-align text-center no-wrap">TODO</td>
                         <td class="action-btn-col">
                             <bk-drob-down-button
                                 [btns_group_name]="('label_gsm_properties'|bkTranslate:this)"
@@ -81,7 +89,23 @@
                                                 permission: (gsm.un_registration_permission)
                                             },
                                             {
-                                                condition: (gsm.delete_permission),
+                                                condition: (gsm.blocked == true),
+                                                btn_label_for_person: ('label_active'|bkTranslate:this),
+                                                btn_tag: 'gsm_active',
+                                                icon: 'fa-smile-beam',
+                                                colorType: 'ACTIVE',
+                                                permission: (gsm.update_permission)
+                                            },
+                                             {
+                                                condition: (gsm.blocked == false),
+                                                btn_label_for_person: ('label_deactive'|bkTranslate:this),
+                                                btn_tag: 'gsm_deactive',
+                                                icon: 'fa-power-off',
+                                                colorType: 'REMOVE',
+                                                permission: (gsm.update_permission)
+                                            },
+                                            {
+                                                condition: true,
                                                 btn_label_for_person: ('label_gsm_print_sticker'|bkTranslate:this),
                                                 btn_tag: 'gsm_print_sticker',
                                                 icon: 'fa-print',

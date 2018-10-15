@@ -170,6 +170,7 @@ import { TyrionComponent } from './views/admin-tyrion';
 import { LogLevelComponent, OnlineStateComponent, PublicStateComponent } from './components/OnlineStateComponent';
 import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
 import { CompilationStatusComponent } from './components/CompilationStatusComponent';
+import { GSMStatusComponent } from './components/GSMStatusComponent';
 import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
@@ -632,6 +633,7 @@ class BeckiErrorHandler implements ErrorHandler {
         MobileAddHardwareComponent,
         SupportComponent,
         CompilationStatusComponent,
+        GSMStatusComponent,
         ProjectsProjectActualizationProceduresComponent,
         ProjectsProjectActualizationProceduresProcedureComponent,
         FirmwareTypeComponent,

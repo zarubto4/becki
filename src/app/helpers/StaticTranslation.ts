@@ -1630,9 +1630,13 @@ export class StaticTranslation {
                 'label_no_gsm_comment': 'You have not registered any CELLULAR modules yet. It\'s time to pull out a credit card and buy some.',
                 'btn_add_gsm': 'Register New Module',
                 'table_msi_number': 'MSI Number',
+                'table_msi_iccid': 'ICCID',
                 'table_id': 'ID',
                 'table_name': 'Name',
-                'table_msi_status': 'CELLULAR status',
+                'table_msi_status': 'Status',
+                'table_msi_country': 'Country',
+                'table_available_data_traffic': 'Available data traffic',
+                'table_daily_traffic': 'Daily data traffic',
                 'table_description': 'Description',
                 'table_status': 'Status',
                 'table_actions': 'Actions',
@@ -1640,6 +1644,8 @@ export class StaticTranslation {
                 'label_gsm_edit': 'Edit',
                 'label_gsm_remove': 'Remove',
                 'label_gsm_un_register': 'Un Register',
+                'label_deactive': 'Deactivate',
+                'label_active': 'Activate',
                 'label_gsm_print_sticker': 'Print Sticker',
 
             }, 'ProjectsProjectGSMSGSMComponent': {
@@ -3001,6 +3007,11 @@ export class StaticTranslation {
             },
             'error_code': {
                 '1': 'Missing Label in update procedure - probably incompatible previous firmware'
+
+            },
+            'gsm_status': {
+                'active': 'Active',
+                'deactivated': 'Deactivated'
 
             },
             'update_state': {

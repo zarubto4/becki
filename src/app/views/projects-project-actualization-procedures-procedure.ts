@@ -5,8 +5,8 @@ import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { IActualizationProcedureTaskList, IProject, IUpdateProcedure } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import {FilterStatesValues, FilterTypesValues} from "./projects-project-hardware-hardware";
-import {FormGroup} from "@angular/forms";
+import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
+import { FormGroup } from '@angular/forms';
 @Component({
     selector: 'bk-view-projects-project-actualization-procedures-procedure',
     templateUrl: './projects-project-actualization-procedures-procedure.html',

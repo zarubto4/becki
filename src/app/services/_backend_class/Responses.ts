@@ -50,10 +50,12 @@ export class RestResponse {
 
     status: number;
     body: Object;
+    state: string;
 
     constructor(status: number, body: Object) {
         this.status = status;
         this.body = body;
+        this.state = body['state'];
     }
 }
 
@@ -108,6 +110,7 @@ export abstract class IError extends Error {
     name: string = null;
     message: string = null;
     exception: any = null;
+    state: string = null;
 
     public get status(): number {
         return this.code;
@@ -139,6 +142,7 @@ export class BadRequest extends IError {
         super(response.body['message']);
         this.code = 400;
         this.name = 'Response_BadRequest';
+        this.state = response.state;
         this.message = response.body['message'];
     }
 }
@@ -154,6 +158,7 @@ export class InvalidBody extends IError {
         super(response.body['message']);
         this.code = 400;
         this.name = 'Response_InvalidBody';
+        this.state = response.state;
         this.message = response.body['message'];
         this.exception = response.body['exception'];
     }
@@ -171,6 +176,7 @@ export class UnsupportedException extends IError {
         super(response.body['message']);
         this.code = 400;
         this.name = 'Unsupported_exception';
+        this.state = response.state;
         this.message = response.body['message'];
     }
 }
@@ -187,6 +193,7 @@ export class UnauthorizedError extends IError {
         super(response.body['message']);
         this.code = 401;
         this.name = 'Response_Unauthorized';
+        this.state = response.state;
         this.message = response.body['message'];
     }
 }
@@ -219,6 +226,7 @@ export class ObjectNotFound extends IError {
         super(response.body['message']);
         this.code = 400;
         this.name = 'Response_NotFound';
+        this.state = response.state;
         this.message = response.body['message'];
     }
 }
@@ -234,6 +242,7 @@ export class InternalServerError extends IError {
         super('Critical Server Side Error!');
         this.code = 500;
         this.name = 'Response_CriticalError';
+        this.state = response.state;
         if ( response.body['message']) {
             this.message = response.body['message'];
         }else {
@@ -254,6 +263,7 @@ export class UserNotValidatedError extends IError {
         super('Email Validation is Required');
         this.message = 'Email Validation is Required';
         this.code = 705;
+        this.state = response.state;
         this.name = 'Response_ValidationRequired';
     }
 }
