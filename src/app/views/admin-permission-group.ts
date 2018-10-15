@@ -51,7 +51,7 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
             this.projectSubscription = this.storageService.project(this.project_id).subscribe((project) => {
                 this.project = project;
             });
-            this.refresh()
+            this.refresh();
         });
         this.selfId = this.tyrionBackendService.personInfoSnapshot.id;
         this.refresh();
@@ -68,27 +68,6 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.onFilterRole();
-    }
-
-
-    onRoleAddClick(): void {
-        let model = new ModalsPermissionGroupModel();
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.tyrionBackendService.roleCreate({
-                    description: model.description,
-                    name: model.name,
-                    project_id: this.project_id
-                })
-                    .then(() => {
-                        this.refresh();
-                    }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('role_create_fail'), reason));
-                        this.refresh();
-                    });
-            }
-        });
     }
 
     onFilterRole(pageNumber: number = 0): void {
@@ -123,8 +102,8 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
                     description: model.description,
                     name: model.name
                 })
-                    .then(() => {
-                        this.refresh();
+                    .then(role => {
+                        this.onRoleClick(role.id);
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();

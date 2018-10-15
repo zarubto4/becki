@@ -95,9 +95,9 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                     payment_details_required: model.payment_details_required,
                     labels: JSON.parse(model.labelsInString)
                 })
-                    .then(() => {
+                    .then(tarif => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_create_success', model.name)));
-                        this.refresh();
+                        this.onTariffClick(tarif);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_create_error', model.name, reason)));

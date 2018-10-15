@@ -68,8 +68,9 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
                             producer_id: model.producer,
                             hardware_type_id: model.hardwareType,
                         })
-                            .then(() => {
-                                this.refresh();
+                            .then(garfield => {
+                                this.unblockUI();
+                                this.onGarfieldClick(garfield.id);
                             }).catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                                 this.refresh();

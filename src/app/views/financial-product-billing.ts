@@ -31,15 +31,15 @@ export class FinancialProductBillingComponent extends _BaseMainComponent impleme
     };
 
     createContactData(data: ContactFormData) {
-        this.blockUIService.blockUI();
+        this.blockUI();
         this.tyrionBackendService.contactCreateCustomer(this.product.owner.id, data)
             .then((contact) => {
                 this.owner.contact = contact;
-                this.blockUIService.unblockUI();
+                this.unblockUI();
             })
             .catch(reason => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_product_edit_error', this), reason));
-                this.blockUIService.unblockUI();
+                this.unblockUI();
             });
     }
 
