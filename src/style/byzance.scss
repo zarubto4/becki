@@ -338,13 +338,6 @@ span.changes {
     margin-bottom: 0 !important;
 }
 
-
-
-.table-scrollable {
-    overflow-x: visible !important;
-    overflow-y: visible !important;
-}
-
 .blocko-view svg {
     font-size:14px;
 }
@@ -1549,6 +1542,10 @@ table .no-wrap {
 
 .word-wrap {
     word-wrap: break-word;
+}
+
+.word-break {
+    word-break: break-all;
 }
 
 /* TheGrid end */
