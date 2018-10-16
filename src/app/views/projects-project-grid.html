@@ -30,8 +30,8 @@
 
     <div class="portlet-body">
 
-        <div *ngIf="(gridProjects && gridProjects.content.length)" class="table-scrollable table-scrollable-borderless">
-            <table class="table table-hover table-light byzance-table">
+        <div *ngIf="(gridProjects && gridProjects.content.length)">
+            <table class="table table-scrollable table-scrollable-borderless table-hover table-light byzance-tabl">
                 <thead>
                 <tr>
                     <th class="">{{'table_name'|bkTranslate:this}}</th>
@@ -44,7 +44,7 @@
                 <tr *ngFor="let gridProject of gridProjects.content">
                     <td class="vert-align no-wrap bold"><a (click)="onGridProjectClick(gridProject.id)">{{gridProject.name}}</a>
                     </td>
-                    <td class="vert-align">{{gridProject.description}}</td>
+                    <td class="vert-align word-break">{{gridProject.description}}</td>
 
                     <td class="vert-align">
                         <bk-form-tag-input [tags_without_form]="gridProject.tags" [readonly]="true"></bk-form-tag-input>
