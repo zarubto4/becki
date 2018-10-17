@@ -560,11 +560,11 @@
                                     {{getGridConfig(m_project.grid_project.id,
                                     program.grid_program.id).snapshot_settings}}
                                 </td>
-                                <td class="vert-align text-center no-wrap">
+                                <td class="vert-align text-center">
                                     <a target="_blank"
                                        href="{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}">{{getGridConfig(m_project.grid_project.id,
                                         program.grid_program.id).connection_url}}</a>
-                                    <a class="bold margin-left-15" target="_blank"
+                                    <a class="bold margin-left-15 no-wrap" target="_blank" 
                                        (click)="showGrid(m_project.grid_project.id, program.grid_program.id)">(Show
                                         QR)</a>
                                 </td>
