@@ -52,7 +52,6 @@ export class MonacoDiffComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     fullScreen: boolean = false;
 
-   
     @Output('codeChange')
     codeChange = new EventEmitter<string>();
 
@@ -74,7 +73,10 @@ export class MonacoDiffComponent implements AfterViewInit, OnChanges, OnDestroy 
     ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
             this.monacoSubscription = this.monacoEditorLoaderService.monacoLoaded.subscribe(() => {
-                this.diffEditor = monaco.editor.createDiffEditor(this.field.nativeElement, {theme: 'vs-dark'});
+                this.diffEditor = monaco.editor.createDiffEditor(this.field.nativeElement, {
+                    theme: 'vs-dark',
+                    automaticLayout: true,
+                });
 
                 let originalModel = monaco.editor.createModel(this.originalCode, this.language);
                 let modifiedModel = monaco.editor.createModel(this.code, this.language);

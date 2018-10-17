@@ -209,6 +209,8 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
 
     formLibrarySelector: FormGroup = null;
 
+    inEditMode: boolean = true;
+
     @ViewChildren(BlockoViewComponent)
     blockoViews: QueryList<BlockoViewComponent>;
 
@@ -861,6 +863,10 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
     onToolBarBuildClick() {
         console.info('onToolBarBuildClick');
         this.onBuildClick.emit(true);
+    }
+
+    onToolBarChangeMode() {
+        this.inEditMode = !this.inEditMode;
     }
 
     show_files_portlet(show: boolean) {
