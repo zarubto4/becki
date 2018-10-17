@@ -2226,6 +2226,7 @@ export class StaticTranslation {
                 'label_code_description': '<strong class="font-color-code">CODE</strong> Program Description: <strong>{0}</strong>',
                 'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Type',
                 'tab_ide': 'IDE',
+                'tab_diff': 'Diff',
                 'tab_label_version': 'Saved Versions',
                 'tab_error_list': 'Build Errors',
                 'tab_online_terminal': 'Terminal',
