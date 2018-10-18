@@ -9,6 +9,8 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { ILibrary, ILibraryVersion } from '../backend/TyrionAPI';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { TranslationService } from '../services/TranslationService';
 
 
 export class ModalsCodeLibraryVersionModel extends ModalModel {
@@ -35,7 +37,7 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
 
     loading = false;
 
-    constructor(private backendService: TyrionBackendService) {
+    constructor(private backendService: TyrionBackendService, protected notificationService: NotificationService, private translationService: TranslationService) {
     }
 
     onLibraryVersionClick(libraryVersion: ILibraryVersion) {
@@ -57,7 +59,8 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
                         });
                     }
                 })
-                .catch((e) => {
+                .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     this.loading = false;
                 });
         }, 1);

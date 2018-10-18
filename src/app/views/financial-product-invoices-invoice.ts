@@ -61,16 +61,16 @@ export class FinancialProductInvoicesInvoiceComponent extends _BaseMainComponent
             this.fullIvoice = invoice;
             // console.log(invoice);
             this.unblockUI();
-        }).catch(error =>  {
-
+        }).catch(reason =>  {
+            this.fmError(this.translate('flash_fail'), reason);
             this.unblockUI();
         });
 
         this.tyrionBackendService.productsGetUserOwnList().then(products =>  {
             this.product = products.find(product => product.id === this.id);
             this.unblockUI();
-        }).catch(error =>  {
-
+        }).catch(reason =>  {
+            this.fmError(this.translate('flash_fail'), reason);
             this.unblockUI();
         });
 

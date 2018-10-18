@@ -13,6 +13,7 @@ import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
 import { IBlock, IBlockList, IBlockVersion } from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 
 export interface BlockInterface {
@@ -127,7 +128,7 @@ export class ModalsBlockSelectComponent implements OnInit {
     private_block: boolean = true;
     page: number = 0;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService,  protected notificationService: NotificationService, ) {
     }
 
     ngOnInit(): void {
@@ -138,8 +139,9 @@ export class ModalsBlockSelectComponent implements OnInit {
             this.tyrionBackendService.blockGet(this.modalModel.already_selected_code_for_version_change.block_id)
                 .then((block) => {
                     this.onSelectBlockClick(block);
-                }).catch((err) => {
-                    this.errorMessage = err.message;
+                }).catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.errorMessage = reason.message;
                 });
         }
     }
@@ -211,7 +213,7 @@ export class ModalsBlockSelectComponent implements OnInit {
                 this.blocks = list;
             })
             .catch(reason => {
-
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
             });
     }
 

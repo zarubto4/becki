@@ -13,7 +13,8 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHardware, IHardwareNewPassword } from '../backend/TyrionAPI';
-import { FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess, NotificationService } from '../services/NotificationService';
+import { TranslationService } from '../services/TranslationService';
 
 
 export class ModalsHardwareRestartMQTTPassModel extends ModalModel {
@@ -41,7 +42,7 @@ export class ModalsHardwareRestartMQTTPassComponent implements OnInit {
 
     pass: IHardwareNewPassword = null;
 
-    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
         this.form = this.formBuilder.group({});
     }
 
@@ -56,6 +57,7 @@ export class ModalsHardwareRestartMQTTPassComponent implements OnInit {
                 this.pass = pass;
             })
             .catch((reason) => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.error_message = reason.message;
             });
     }

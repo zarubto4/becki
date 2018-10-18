@@ -217,7 +217,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                     }
                 })
                 .catch(reason => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
 
@@ -237,7 +237,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                     }
                 })
                 .catch(reason => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
 
@@ -257,7 +257,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                     }
                 })
                 .catch(reason => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
 
@@ -277,7 +277,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                     }
                 })
                 .catch(reason => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
     }

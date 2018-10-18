@@ -72,8 +72,8 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
         this.tyrionBackendService.productGet(this.id).then(product =>  {
             this.product = product;
             this.unblockUI();
-        }).catch(error =>  {
-
+        }).catch(reason =>  {
+            this.fmError(this.translate('flash_fail'), reason);
             this.unblockUI();
         });
 

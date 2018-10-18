@@ -108,7 +108,8 @@ export class FinancialProductInvoicesComponent extends _BaseMainComponent implem
             this.product = product;
             this.invoices = this.product.invoices;
             this.unblockUI();
-        }).catch(error => {
+        }).catch(reason => {
+            this.fmError(this.translate('flash_fail'), reason);
             this.unblockUI();
         });
 

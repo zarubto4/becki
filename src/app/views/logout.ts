@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 @Component({
     selector: 'bk-view-logout',
@@ -18,7 +19,7 @@ export class LogoutComponent {
 
     logoutInProgress: boolean = false;
 
-    constructor(private backendService: TyrionBackendService, private router: Router, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private router: Router, private translationService: TranslationService, protected notificationService: NotificationService, ) {
 
         this.logout();
 
@@ -32,6 +33,7 @@ export class LogoutComponent {
                 this.router.navigate(['/login']);
             })
             .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('msg_logout_cant_log_out', this), reason));
                 this.logoutInProgress = false;
                 if (reason.userMessage) {
                     this.logoutError = this.translationService.translate('msg_logout_cant_log_out', this, null, reason.userMessage);

@@ -28,7 +28,7 @@ export class ModalsInstanceEditDescriptionComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, ) {
 
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4)]],

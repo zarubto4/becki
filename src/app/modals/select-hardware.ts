@@ -12,6 +12,7 @@ import {
     IHardware, IHardwareGroup, IHardwareGroupList, IHardwareList, IHardwareType,
     IShortReference
 } from '../backend/TyrionAPI';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
@@ -55,7 +56,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     formHardwareFilter: FormGroup;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService,  protected notificationService: NotificationService ) {
         this.formHardwareFilter = this.formBuilder.group({
             'alias': ['', [Validators.maxLength(60)]],
             'id': ['', [Validators.maxLength(60)]],
@@ -126,7 +127,8 @@ export class ModalsSelectHardwareComponent implements OnInit {
                     });
                 }
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.errorMessage = reason.message;
             });
     }
@@ -154,7 +156,8 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
                 }
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.errorMessage = reason.message;
             });
     }

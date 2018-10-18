@@ -61,8 +61,8 @@ export class FinancialProductBillingComponent extends _BaseMainComponent impleme
             this.customerPaymentDetails = this.customer.payment_details;
 
             this.unblockUI();
-        }).catch(error => {
-
+        }).catch(reason => {
+            this.fmError(this.translate('flash_fail'), reason);
             this.unblockUI();
         });
 

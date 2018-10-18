@@ -9,6 +9,7 @@ import { ModalModel } from '../services/ModalService';
 import { IBProgramList, IHomerServerList } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 
 
@@ -38,7 +39,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
     servers_options: FormSelectComponentOption[] = null;
     bProgram_options: FormSelectComponentOption[] = null;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, public translationService: TranslationService) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, public translationService: TranslationService, protected notificationService: NotificationService, ) {
 
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4)]],
@@ -69,7 +70,8 @@ export class ModalsInstanceCreateComponent implements OnInit {
                         };
                     });
                 })
-                .catch((reason) => {
+                .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 });
 
             // Find B_Programs
@@ -85,7 +87,8 @@ export class ModalsInstanceCreateComponent implements OnInit {
                         };
                     });
                 })
-                .catch((reason) => {
+                .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 });
         }, 100);
     }
@@ -104,8 +107,8 @@ export class ModalsInstanceCreateComponent implements OnInit {
             .then((value) => {
                 this.onCloseClick();
             })
-            .catch((reason) => {
-
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
             });
     }
 

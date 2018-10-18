@@ -10,6 +10,8 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { IHardware } from '../backend/TyrionAPI';
+import { TranslationService } from '../services/TranslationService';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 
 export class ModalsDeviceEditDescriptionModel extends ModalModel {
@@ -32,7 +34,7 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService, ) {
 
         this.form = this.formBuilder.group({
             'name': [''],
@@ -50,7 +52,8 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
             .then((values) => {
                 this.onSubmitClick();
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.onSubmitClick();
             });
     }
@@ -60,7 +63,8 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
             .then((values) => {
                 this.onSubmitClick();
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.onSubmitClick();
             });
     }

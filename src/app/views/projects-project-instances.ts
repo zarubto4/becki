@@ -66,7 +66,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
 
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -132,9 +132,9 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onFilterInstances();
                     })
-                    .catch((err) => {
+                    .catch(reason => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', err));
+                        this.fmError(this.translate('label_upload_error', reason));
                     });
             }
         });
@@ -153,9 +153,9 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onFilterInstances();
                     })
-                    .catch((err) => {
+                    .catch(reason => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', err));
+                        this.fmError(this.translate('label_upload_error', reason));
                     });
             }
         });

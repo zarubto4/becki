@@ -192,8 +192,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     });
                 }
             })
-            .catch((err) => {
-
+            .catch(reason => {
             });
     }
 
@@ -208,8 +207,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 // TODO Doplnit do BLOCKA
 
             })
-            .catch((err) => {
-
+            .catch(reason => {
             });
     }
 
@@ -227,8 +225,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 // TODO Doplnit do BLOCKA
 
             })
-            .catch((err) => {
-
+            .catch(reason => {
             });
     }
 
@@ -255,8 +252,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     });
                 }
             })
-            .catch((err) => {
-
+            .catch(reason => {
             });
     }
 
@@ -288,8 +284,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     callback(converted);
                 });
             })
-            .catch((err) => {
-
+            .catch(reason => {
             });
     }
 
@@ -449,8 +444,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     }
                 });
             })
-            .catch((err) => {
-
+            .catch(reason => {
             });
     }
 
@@ -487,7 +481,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     }
                 });
             })
-            .catch((err) => {
+            .catch(reason => {
 
             });
     }

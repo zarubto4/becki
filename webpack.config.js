@@ -37,6 +37,7 @@ module.exports = function makeWebpackConfig() {
     if (isProd) {
         config.devtool = 'cheap-module-source-map';
     }
+
     /**
      * Entry
      * Reference: http://webpack.github.io/docs/configuration.html#entry
@@ -52,6 +53,7 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html#output
      */
     config.output = {
+        path: root('dist'),
         publicPath: '/',
         filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
         chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
@@ -87,7 +89,7 @@ module.exports = function makeWebpackConfig() {
                 cache: true,
                 sourceMap: true,
                 uglifyOptions: {
-                    keep_fnames: true
+                    keep_fnames: true     // Reference: https://github.com/mishoo/UglifyJS2#minify-options
                 }
             })
         ],
@@ -123,20 +125,6 @@ module.exports = function makeWebpackConfig() {
                 test: /\.ts$/,
                 loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
                 exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
-            },
-
-            // Transpile module 'blocko' to es5.
-            {
-                test: /\.m?js$/,
-                include: root('node_modules', 'blocko'),
-                use: 'babel-loader?cacheDirectory',
-            },
-
-            // Minimize images.
-            {
-                test: /\.(jpg|png|gif|svg)$/,
-                loader: 'image-webpack-loader',
-                enforce: 'pre'
             },
 
             // Copy those assets to output.
@@ -202,6 +190,24 @@ module.exports = function makeWebpackConfig() {
             }
         ]
     };
+
+    if (isProd) {
+        config.module.rules.push(
+            // Transpile module 'blocko' to es5.
+            {
+                test: /\.m?js$/,
+                include: root('node_modules', 'blocko'),
+                use: 'babel-loader?cacheDirectory',
+            },
+
+            // Minimize images.
+            {
+                test: /\.(jpg|png|gif|svg)$/,
+                loader: 'image-webpack-loader',
+                enforce: 'pre'
+            }
+        );
+    }
 
     if (!isTest || !isTestWatch) {
         // Supprt for tslint.

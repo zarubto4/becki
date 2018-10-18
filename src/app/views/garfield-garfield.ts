@@ -174,7 +174,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                             this.fmInfo(this.translate('flash_garfield_connected'));
                         }
                     })
-                    .catch((reason) => {
+                    .catch(reason => {
+                        this.fmError(this.translate('flash_garfield_disconnected'), reason);
                         console.error('connectGarfieldWebSocket:', reason);
                     });
 
@@ -193,7 +194,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         throw new Error('Unsubscribe failed');
                     }
                 })
-                .catch((reason) => {
+                .catch(reason => {
                     console.error('ngOnDestroy:', reason);
                 })
                 .then(() => {
@@ -268,14 +269,14 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                             }
                         });
                     })
-                    .catch((reason) => {
+                    .catch(reason => {
                         this.fmError(this.translate('flash_cant_load_homer_servers', reason));
                         this.unblockUI();
                     });
 
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.fmError(this.translate('flash_cant_load', reason));
                 this.unblockUI();
             });
@@ -332,7 +333,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                     this.onConsoleLog(result);
                     this.continueProcess();
                 })
-                .catch((reason) => {
+                .catch(reason => {
+                    this.fmError(this.translate('flash_fail'), reason);
                     action.fail();
                     this.onConsoleError(reason.toString());
                 });
@@ -354,7 +356,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                     this.printer_label_1 = values[1];
                     this.printer_label_2 = values[2];
                 })
-                .catch((reason) => {
+                .catch(reason => {
                     // this.addFlashMessage(new FlashMessageError('Printers cannot be loaded.', reason));
                     // not show error message -it will be showed in template
                 });
@@ -467,7 +469,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         throw new Error('Keep alive unsuccessful');
                     }
                 })
-                .catch((reason) => {
+                .catch(reason => {
+                    this.fmError(this.translate('flash_fail'), reason);
                     console.error('setDetection:', reason);
                 });
 
@@ -487,7 +490,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         this.device = device;
                         resolve(device);
                     })
-                    .catch((reason) => {
+                    .catch(reason => {
+                        this.fmError(this.translate('flash_fail'), reason);
                         reject(reason);
                     });
             } else {
@@ -499,7 +503,8 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         this.device = device;
                         resolve(device);
                     })
-                    .catch((reason) => {
+                    .catch(reason => {
+                        this.fmError(this.translate('flash_fail'), reason);
                         reject(reason);
                     });
             }

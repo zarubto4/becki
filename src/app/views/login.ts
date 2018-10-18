@@ -11,6 +11,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { BlockUIService } from '../services/BlockUIService';
 import { Subscription } from 'rxjs';
 import { TranslationService } from '../services/TranslationService';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 
 const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/login;state=[_status_]`;
@@ -34,7 +35,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private router: Router,
         private blockUIService: BlockUIService,
         private translationService: TranslationService,
-        protected activatedRoute: ActivatedRoute
+        protected activatedRoute: ActivatedRoute,
+        protected notificationService: NotificationService,
     ) {
         this.loginForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email]],
@@ -68,6 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.loginError = this.translationService.translate('msg_login_email_sent', this);
             })
             .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.blockUIService.unblockUI();
                 this.loginError = reason;
             });
@@ -83,6 +86,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/']);
             })
             .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('msg_login_error', this), reason));
                 this.blockUIService.unblockUI();
 
                 console.trace('OnLoginClic Error Code: ', reason);
@@ -113,6 +117,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.redirect(url);
             })
             .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('msg_login_error', this), reason));
                 this.blockUIService.unblockUI();
 
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
@@ -139,6 +144,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.redirect(url);
             })
             .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('msg_login_error', this), reason));
                 this.blockUIService.unblockUI();
 
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"

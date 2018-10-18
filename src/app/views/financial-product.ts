@@ -119,7 +119,8 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
             this.product = product;
             this.unblockUI();
         })
-            .catch(error => {
+            .catch(reason => {
+                this.fmError(this.translate('flash_fail'), reason);
                 this.unblockUI();
             });
 
