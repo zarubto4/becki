@@ -1,0 +1,27 @@
+<div style="max-width:100%; display: flex">
+    <div style="min-width: 250px; width: 250px; flex: 0 0 250px">
+        <div class="portlet-title">
+            <div class="caption font-md">
+                <i class="fa fa-file"></i>
+                <span class="font-sm" [innerHTML]="'label_panel_files'|bkTranslate:this"></span>
+            </div>
+            <div class="actions">
+                <a class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="toolbarAddDirectoryClick($event)">
+                    <i class="icon-folder"></i>
+                </a>
+                <a *ngIf="_show_files_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_files_portlet(false)">
+                    <i class="icon-arrow-up"></i>
+                </a>
+                <a  *ngIf="!_show_files_portlet" class="btn" style="padding-right: 2px; padding-left: 2px;" (click)="show_files_portlet(true)">
+                    <i class="icon-arrow-down"></i>
+                </a>
+
+            </div>
+        </div>
+    </div>
+    <div style="position: relative; height: 85%; min-width: 0px; flex: 1 1 0">
+        <bk-monaco-diff [originalCode] = "openFile.contentOriginal" 
+                                        [code] = "openFile.content" 
+                                        *ngIf="openFile"> </bk-monaco-diff>
+    </div>
+</div>

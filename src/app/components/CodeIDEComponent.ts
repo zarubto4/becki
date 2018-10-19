@@ -574,6 +574,12 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         let model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.AddFile, '', this.directories, selectedDir);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                
+                if (model.selectedDirectory) {
+                    console.log('HAS SELECTED DIRECTORY');
+                } else {
+                    console.log('HASNT SELECTED DIRECTORY');
+                }
 
                 let newFullPath = (model.selectedDirectory ? model.selectedDirectory.objectFullPath + '/' : '') + model.objectName;
 

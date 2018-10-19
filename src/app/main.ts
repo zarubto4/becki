@@ -194,7 +194,6 @@ import { ProjectsProjectActualizationProceduresProcedureComponent } from './view
 import { TagComponent } from './components/TagComponent';
 import { ProjectsProjectCodeCodeComponent } from './views/projects-project-code-code';
 import { BlockoViewComponent } from './components/BlockoViewComponent';
-import { FileTreeLineComponent } from './components/FileTreeLineCompinent';
 import { IconComponent } from './components/FileTreeComponent';
 import { IconFileComponent } from './components/FileTreeComponent';
 import { ServerRegionSelectorComponent, ServerSizeSelectorComponent } from './components/ServerSizeSelectorComponent';
@@ -559,7 +558,6 @@ class BeckiErrorHandler implements ErrorHandler {
         DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
-        FileTreeLineComponent,
         NotificationsOverlayComponent,
         NotificationsListComponent,
         ConsoleLogComponent,
