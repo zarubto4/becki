@@ -5,6 +5,10 @@ interface FileWIthPath {
     path: string;
 }
 
+@Component({
+    selector: 'bk-file-tree-root',
+    template: './FileTreeRootComponent.html'
+})
 
 export class FileTreeRootObject <File extends FileWIthPath > implements OnInit, AfterViewInit, OnChanges {
     
@@ -67,19 +71,3 @@ export class FileTreeRootObject <File extends FileWIthPath > implements OnInit, 
 }
 
 
-class FileTreeNodeObject<File extends FileWIthPath> {
-    name: string;
-    path: string;
-    files: File[];
-    directories: FileTreeNodeObject<File>[];
-
-    @Input()
-    isOpen: boolean = false;
-
-    constructor(name: string, path: string, files: File[], directories: FileTreeNodeObject<File>[]) {
-        this.name = name;
-        this.path = path;
-        this.files = files;
-        this.directories = directories;
-    }
-}

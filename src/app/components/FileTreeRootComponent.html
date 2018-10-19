@@ -14,10 +14,10 @@
         
         <!-- Ikonky vpravo !-->
         <div *ngIf="fileTreeObject && fileTreeObject.show_icons" class="pull-right">
-            <bk-icon-component [condition]="!root" [icon]="'fa-trash'" (onClickEvent)="onRemoveClick(fileTreeObject)"></bk-icon-component>
-            <bk-icon-component [condition]="!root" [icon]="'fa-pencil'" (onClickEvent)="onEditClick(fileTreeObject)"></bk-icon-component>
-            <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="onAddFileClick(fileTreeObject)"></bk-icon-component>
-            <bk-icon-component [condition]="true" [icon]="'fa-folder'" (onClickEvent)="onAddFolderClick(fileTreeObject)"></bk-icon-component>
+            <bk-icon-component [condition]="!root" [icon]="'fa-trash'"  (onClickEvent)="onRemoveClick()"></bk-icon-component>
+            <bk-icon-component [condition]="!root" [icon]="'fa-pencil'" (onClickEvent)="onFolderEditClick()"></bk-icon-component>
+            <bk-icon-component [condition]="true"  [icon]="'fa-file'"   (onClickEvent)="onAddFileClick()"></bk-icon-component>
+            <bk-icon-component [condition]="true"  [icon]="'fa-folder'" (onClickEvent)="onAddFolderClick()"></bk-icon-component>
         </div>
     </div>
 
