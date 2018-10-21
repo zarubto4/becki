@@ -1,0 +1,9 @@
+<form [formGroup]="formGroup">
+
+    <bk-form-select [control]="formGroup.controls['payment_method']"
+                    [label]="'label_payment_method'|bkTranslate:this"
+                    [options]="optionsPaymentMethod"
+                    [readonly]="disabled">
+    </bk-form-select>
+
+</form>

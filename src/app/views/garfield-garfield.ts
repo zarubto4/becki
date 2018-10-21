@@ -215,7 +215,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 this.bootLoader = garfield.hardware_type.main_boot_loader;
 
 
-                this.batchOptions = this.hardwareType.batchs.map((pv) => {
+                this.batchOptions = this.hardwareType.batches.map((pv) => {
                     return {
                         label: pv.revision + ' ' + pv.production_batch + ' (' + pv.date_of_assembly + ')',
                         value: pv.batch_id

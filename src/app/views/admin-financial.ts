@@ -87,18 +87,17 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.tyrionBackendService.tariffCreate({
                     color: model.color,
                     awesome_icon: model.awesome_icon,
-                    company_details_required: model.company_details_required,
+                    owner_details_required: model.owner_details_required,
                     credit_for_beginning: model.credit_for_beginning,
                     description: model.description,
                     identifier: model.identifier,
                     name: model.name,
-                    payment_method_required: model.payment_method_required,
                     payment_details_required: model.payment_details_required,
                     labels: JSON.parse(model.labelsInString)
                 })
-                    .then(() => {
+                    .then(tarif => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_create_success', model.name)));
-                        this.refresh();
+                        this.onTariffClick(tarif);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_create_error', model.name, reason)));
@@ -111,14 +110,13 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
     onTariffEditClick(tariff: ITariff): void {
         let model = new ModalsTariffModel(
             true,
-            tariff.company_details_required,
+            tariff.owner_details_required,
             tariff.color,
             tariff.awesome_icon,
             tariff.credit_for_beginning,
             tariff.description,
             tariff.name,
             tariff.identifier,
-            tariff.payment_method_required,
             tariff.payment_details_required,
             tariff.labels
         );
@@ -128,12 +126,11 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.tyrionBackendService.tariffEdit(tariff.id, {
                     color: model.color,
                     awesome_icon: model.awesome_icon,
-                    company_details_required: model.company_details_required,
+                    owner_details_required: model.owner_details_required,
                     credit_for_beginning: model.credit_for_beginning,
                     description: model.description,
                     identifier: model.identifier,
                     name: model.name,
-                    payment_method_required: model.payment_method_required,
                     payment_details_required: model.payment_details_required,
                     labels: JSON.parse(model.labelsInString)
                 })
@@ -208,6 +205,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                     color: model.color,
                     extension_type: model.extension_type,
                     config: model.config.toString(),
+                    consumption: model.consumption.toString()
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_create_success', model.name)));
@@ -229,7 +227,8 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
             extension.name,
             extension.description,
             extension.type,
-            extension.config
+            extension.config,
+            extension.consumption
         );
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -239,6 +238,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                     description: model.description,
                     color: model.color,
                     config: model.config.toString(),
+                    consumption: model.consumption.toString()
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_edit_success', model.name)));
@@ -327,7 +327,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
         }
     }
 
-    onDrobDownEmiter (action: string, tariff: ITariff): void {
+    onDrobDownTariffEmiter (action: string, tariff: ITariff): void {
 
         if (action === 'edit_tariff') {
             this.onTariffEditClick(tariff);
@@ -350,6 +350,32 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
         }
         if (action === 'remove_tariff') {
             this.onTariffRemoveClick(tariff);
+        }
+    }
+
+    onDrobDownExtensionEmiter (action: string, extension: ITariffExtension): void {
+
+        if (action === 'edit_extension') {
+            this.onExtensionEditClick(extension);
+        }
+
+        if (action === 'shift_up_extension') {
+            this.onExtensionShiftUpClick(extension);
+        }
+
+        if (action === 'shift_down_extension') {
+            this.onExtensionShiftDownClick(extension);
+        }
+
+        if (action === 'active_extension') {
+            this.onExtensionActivateClick(extension);
+        }
+
+        if (action === 'deactive_extension') {
+            this.onExtensionDeactivateClick(extension);
+        }
+        if (action === 'remove_extension') {
+            this.onExtensionRemoveClick(extension);
         }
     }
 }

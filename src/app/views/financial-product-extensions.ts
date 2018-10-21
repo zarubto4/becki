@@ -1,16 +1,13 @@
 /*
- * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * © 2016-2018 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
- */
-
-/**
- * Created by dominik.krisztof on 30.11.16.
  */
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IProductExtension } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
+import { FlashMessageError } from '../services/NotificationService';
 
 
 @Component({
@@ -24,6 +21,8 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
     routeParamsSubscription: Subscription;
 
     product: IProduct = null;
+
+    extensions: IProductExtension[] = [];
 
     constructor(injector: Injector) {
         super(injector);
@@ -40,42 +39,58 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
 
     }
 
-
-
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
-    makePrice(price: number): string {
-        if (price === 0) {
-            return  this.translate('label_free');
+    onDrobDownEmiter (action: string, extension: IProductExtension): void {
+        if (action === 'deactivate_extension') {
+            this.onExtensionDeactivate(extension);
         }
 
-        price = price / 1000;
-
-        if (Math.floor(price) === price) {
-            return price.toFixed(2) + '$';
-        } else {
-            return price.toFixed(2) + '$';
+        if (action === 'activate_extension') {
+            this.onExtensionActivate(extension);
         }
     }
-    editExtension(extension: IProductExtension) {
 
+    onExtensionActivate(extension: IProductExtension): void {
+        this.tyrionBackendService.productExtensionActivate(extension.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.refresh();
+            });
     }
 
-    removeExtension(extension: IProductExtension) {
+    onExtensionDeactivate(extension: IProductExtension): void {
+        this.tyrionBackendService.productExtensionDeactivate(extension.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.refresh();
+            });
+    }
 
+    onExtensionClick(extension: IProductExtension) {
+        this.router.navigate(['financial', this.id, 'extensions', extension.id]);
     }
 
     refresh(): void {
         this.blockUI();
-        this.tyrionBackendService.productGet(this.id).then(product =>  {
-            this.product = product;
-            this.unblockUI();
-        }).catch(error =>  {
 
-            this.unblockUI();
-        });
-
+        Promise.all<any>([this.tyrionBackendService.productGet(this.id), this.tyrionBackendService.productExtensionGetListProduct(this.id)])
+            .then((values: [IProduct, IProductExtension[]]) => {
+                this.product = values[0];
+                this.extensions = values[1];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Product cannot be loaded.', reason));
+                this.unblockUI();
+            });
     }
 }

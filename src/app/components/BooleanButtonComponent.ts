@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 
 
@@ -14,12 +14,14 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 `
     /* tslint:enable */
 })
-export class BeckiBooleanButtonComponent implements OnInit, OnChanges {
+export class BeckiBooleanButtonComponent {
 
     private componentValue: boolean = false;
 
     @Input()
-    baseValue: boolean;
+    set baseValue(value: boolean) {
+        this.componentValue = value;
+    }
 
     @Input()
     verticalAlign: string = 'middle';
@@ -30,21 +32,14 @@ export class BeckiBooleanButtonComponent implements OnInit, OnChanges {
     @Output()
     valueChanged: EventEmitter<{ value: boolean }> = new EventEmitter<{ value: boolean }>();
 
-
-
-    ngOnInit(): void {
-        if (this.baseValue) {
-            this.baseValue = this.componentValue;
-        }
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        this.componentValue = changes.baseValue.currentValue;
-    }
+    @Input()
+    readonly: boolean = false;
 
     switchValue() {
-        this.componentValue = !this.componentValue;
-        this.valueChanged.emit({ value: this.componentValue });
+        if (!this.readonly) {
+            this.componentValue = !this.componentValue;
+            this.valueChanged.emit({value: this.componentValue});
+        }
     }
 
 

@@ -80,8 +80,10 @@ import { HardwareHardwareTypeComponent } from './views/hardware-hardware_type';
 import { ProjectsProjectMembersComponent } from './views/projects-project-members';
 import { ModalsMembersAddComponent } from './modals/members-add';
 import { FinancialProductExtensionsComponent } from './views/financial-product-extensions';
+import { FinancialProductExtensionsExtensionComponent } from './views/financial-product-extensions-extension';
 import { FinancialProductInvoicesComponent } from './views/financial-product-invoices';
 import { FinancialProductInvoicesInvoiceComponent } from './views/financial-product-invoices-invoice';
+import { FinancialProductHistoryComponent } from './views/financial-product-history';
 import { FinancialProductBillingComponent } from './views/financial-product-billing';
 import { StringReplacerPipe } from './pipes/StringReplacerPipe';
 import { StorageService } from './services/StorageService';
@@ -146,8 +148,7 @@ import { ModalsExtensionComponent } from './modals/extension';
 import { FormTextAreaComponent } from './components/FormTextAreaComponent';
 import { FormJsonNiceTextAreaComponent } from './components/FormJsonNiceTextAreaComponent';
 import { ModalsFinancialProductComponent } from './modals/financial-product';
-import { ModalsBillingInformationComponent } from './modals/billing-information';
-import { ModalsCompanyInformationComponent } from './modals/company-information';
+import { ModalsContactComponent } from './modals/contact';
 import { ModalsPublicShareRequestComponent } from './modals/public-share-request';
 import { ModalsPublicShareResponseComponent } from './modals/public-share-response';
 import { FilterPagerComponent } from './components/FilterPagerComponent';
@@ -194,7 +195,6 @@ import { ProjectsProjectActualizationProceduresProcedureComponent } from './view
 import { TagComponent } from './components/TagComponent';
 import { ProjectsProjectCodeCodeComponent } from './views/projects-project-code-code';
 import { BlockoViewComponent } from './components/BlockoViewComponent';
-import { FileTreeLineComponent } from './components/FileTreeLineCompinent';
 import { IconComponent } from './components/FileTreeComponent';
 import { IconFileComponent } from './components/FileTreeComponent';
 import { ServerRegionSelectorComponent, ServerSizeSelectorComponent } from './components/ServerSizeSelectorComponent';
@@ -230,7 +230,16 @@ import { ChartsModule } from 'ng2-charts';
 import { ChartBarComponent } from './components/ChartBarComponent';
 import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
 import { ModalsInstanceApiPropertiesComponent } from './modals/instance-api-properties';
-
+import { PricePipe } from './pipes/PricePipe';
+import { ContactFormComponent } from './components/ContactFormComponent';
+import { BackNextButtonsComponent } from './components/BackNextButtonsComponent';
+import { ContactTableComponent } from './components/ContactTableComponent';
+import { PaymentDetailsFormComponent } from './components/PaymentDetailsFormComponent';
+import { PaymentDetailsTableComponent } from './components/PaymentDetailsTableComponent';
+import { ModalsPaymentDetailsComponent } from './modals/payment-details';
+import { FinancialProductInvoicesInvoiceEventsComponent } from './views/financial-product-invoices-invoice-events';
+import { FileDownloaderService } from './services/FileDownloaderService';
+import { MonacoDiffComponent } from './components/MonacoDiffComponent';
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -261,9 +270,12 @@ let routes: Routes = [
 
     { path: 'financial/:product', data: { breadName: ':product' }, component: FinancialProductComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/extensions', data: { breadName: 'extensions' }, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard] },
+    { path: 'financial/:product/extensions/:productExtension', data: { breadName: ':productExtension' }, component: FinancialProductExtensionsExtensionComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/employees', data: { breadName: 'employees' }, component: FinancialProductEmployeesComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/invoices', data: { breadName: 'invoices' }, component: FinancialProductInvoicesComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/invoices/:invoice', data: { breadName: ':invoice' }, component: FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard] },
+    { path: 'financial/:product/invoices/:invoice/financial-events', data: { breadName: ':invoice' }, component: FinancialProductInvoicesInvoiceEventsComponent, canActivate: [AuthGuard] },
+    { path: 'financial/:product/history', data: { breadName: 'history' }, component: FinancialProductHistoryComponent, canActivate: [AuthGuard] },
     { path: 'financial/:product/billing', data: { breadName: 'billing' }, component: FinancialProductBillingComponent, canActivate: [AuthGuard] },
 
     { path: 'hardware', data: { breadName: 'Hardware types' }, component: HardwareComponent, canActivate: [AuthGuard] },
@@ -306,7 +318,8 @@ let routes: Routes = [
     { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
 
     { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
-
+    { path: 'projects/:project/roles', data: { breadName: 'Roles' }, component: RoleGroupComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/roles/:group', data: {breadName: ':group'}, component: RoleGroupGroupComponent, canActivate: [AuthGuard]},
     { path: 'projects/:project/widgets', data: { breadName: 'GRID widgets' }, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/widgets/:widget', data: { breadName: ':widget' }, component: ProjectsProjectWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
 
@@ -385,6 +398,7 @@ let tabMenus = {
     'projects-project': [
         new LabeledLink('Dashboard', ['/', 'projects', ':project'], null, { linkActiveExact: true }),
         new LabeledLink('Members', ['/', 'projects', ':project', 'members'], null),
+        new LabeledLink('Roles', ['/', 'projects', ':project', 'roles'], null),
         new LabeledLink(null, null),
         new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', null, null, {
             styleClass: 'color-hardware', items: [
@@ -418,11 +432,12 @@ let tabMenus = {
             ]
         }),
     ],
-    'tariffs-tariff': [
+    'products-product': [
         new LabeledLink('Dashboard', ['/', 'financial', ':product'], 'tachometer', { linkActiveExact: true }),
         new LabeledLink('Extension services', ['/', 'financial', ':product', 'extensions'], 'database'),
         new LabeledLink('Employees', ['/', 'financial', ':product', 'employees'], 'users'),
         new LabeledLink('Invoices', ['/', 'financial', ':product', 'invoices'], 'dollar'),
+        new LabeledLink('History', ['/', 'financial', ':product', 'history'], 'list-ul'),
         new LabeledLink('Billing Preferences', ['/', 'financial', ':product', 'billing'], 'bank'),
     ],
     'byzance-admin': [
@@ -498,6 +513,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ExitConfirmationService,
         GoPayLoaderService,
         TranslationService,
+        FileDownloaderService,
         { provide: 'routes', useValue: routes },
         { provide: 'navigation', useValue: navigation },
         { provide: 'tabMenus', useValue: tabMenus },
@@ -516,12 +532,14 @@ class BeckiErrorHandler implements ErrorHandler {
         Md2HtmlPipe,
         Nl2BrPipe,
         UnixTimeFormatPipe,
+        PricePipe,
         StringReplacerPipe,
         TranslatePipe,
         TranslateTablePipe,
         HtmlSanitizeBypassPipe,
         IconFileComponent,
         // Components
+        BackNextButtonsComponent,
         MultiSelectComponent,
         BlockoViewComponent,
         BeckiBooleanButtonComponent,
@@ -541,7 +559,6 @@ class BeckiErrorHandler implements ErrorHandler {
         DraggableDirective,
         BeckiClickOutsideDirective,
         FileTreeComponent,
-        FileTreeLineComponent,
         NotificationsOverlayComponent,
         NotificationsListComponent,
         ConsoleLogComponent,
@@ -584,8 +601,11 @@ class BeckiErrorHandler implements ErrorHandler {
         FinancialComponent,
         FinancialProductComponent,
         FinancialProductExtensionsComponent,
+        FinancialProductExtensionsExtensionComponent,
         FinancialProductInvoicesComponent,
         FinancialProductInvoicesInvoiceComponent,
+        FinancialProductInvoicesInvoiceEventsComponent,
+        FinancialProductHistoryComponent,
         FinancialProductBillingComponent,
         FinancialProductEmployeesComponent,
         ProjectsComponent,
@@ -628,6 +648,10 @@ class BeckiErrorHandler implements ErrorHandler {
         ProducersProducerComponent,
         ProjectsProjectLibrariesComponent,
         ArticleComponent,
+        ContactFormComponent,
+        ContactTableComponent,
+        PaymentDetailsFormComponent,
+        PaymentDetailsTableComponent,
         // ProjectsProjectLibrariesLibraryComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
@@ -640,7 +664,7 @@ class BeckiErrorHandler implements ErrorHandler {
         // Modals components
         ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
-        ModalsBillingInformationComponent,
+        ModalsContactComponent,
         ModalsProjectPropertiesComponent,
         ModalsCreateHomerServerComponent,
         ModalsUpdateHomerServerComponent,
@@ -662,7 +686,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBlockoPropertiesComponent,
         ModalsCodePropertiesComponent,
         ModalsPictureUploadComponent,
-        ModalsCompanyInformationComponent,
         ModalsPublicShareRequestComponent,
         ModalsCodeFileDialogComponent,
         ModalsSetAsMainComponent,
@@ -678,6 +701,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsGridProgramPropertiesComponent,
         ModalsBlockoAddGridComponent,
         ModalsPermissionGroupComponent,
+        ModalsPaymentDetailsComponent,
         ModalsRolePermissionAddComponent,
         ModalsBlocksTypePropertiesComponent,
         ModalsPermissionPermissionPropertyComponent,
@@ -717,6 +741,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsAddGSMComponent,
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
+        MonacoDiffComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

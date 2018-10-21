@@ -12,6 +12,7 @@
         [btns]="[
                 {
                     condition: (tab == 'tariffs'),
+                    permission: true,
                     btn_label_for_person: ('label_tariff_create'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-plus-circle',
@@ -19,6 +20,7 @@
                 },
                 {
                     condition: (tab == 'extensions'),
+                    permission: true,
                     btn_label_for_person: ('label_extension_create'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-plus-circle',
@@ -72,7 +74,7 @@
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns_group_name]="('label_tariff_properties'|bkTranslate:this)"
                                 [btns]="[
                                 {
                                     condition: true,
@@ -100,18 +102,18 @@
                                 },
                                 {
                                     condition: !tariff.active,
-                                    btn_label_for_person: ('label_deactive_tariff'|bkTranslate:this),
-                                    btn_tag: 'deactive_tariff',
-                                    icon: 'fa-power-off',
-                                    colorType: 'DEACTIVE',
-                                    permission: (tariff.update_permission)
-                                },
-                                {
-                                    condition: tariff.active,
                                     btn_label_for_person: ('label_active_tariff'|bkTranslate:this),
                                     btn_tag: 'active_tariff',
                                     icon: 'fa-power-off',
                                     colorType: 'ACTIVE',
+                                    permission: (tariff.update_permission)
+                                },
+                                {
+                                    condition: tariff.active,
+                                    btn_label_for_person: ('label_deactive_tariff'|bkTranslate:this),
+                                    btn_tag: 'deactive_tariff',
+                                    icon: 'fa-power-off',
+                                    colorType: 'DEACTIVE',
                                     permission: (tariff.update_permission)
                                 },
                                 {
@@ -123,7 +125,7 @@
                                     permission: (tariff.update_permission)
                                 }
                             ]"
-                                (onValueChanged)="onDrobDownEmiter($event, tariff)"
+                                (onValueChanged)="onDrobDownTariffEmiter($event, tariff)"
                             >
                             </bk-drob-down-button>
                         </td>
@@ -170,12 +172,12 @@
                         <td class="action-btn-col">
 
                             <bk-drob-down-button
-                                [btns_group_name]="('label_Project_Properties'|bkTranslate:this)"
+                                [btns_group_name]="('label_extension_properties'|bkTranslate:this)"
                                 [btns]="[
                                     {
                                         condition: true,
-                                        btn_label_for_person: ('label_tariff_edit_properties'|bkTranslate:this),
-                                        btn_tag: 'edit_tariff',
+                                        btn_label_for_person: ('label_extension_edit_properties'|bkTranslate:this),
+                                        btn_tag: 'edit_extension',
                                         icon: 'fa-cog',
                                         colorType: 'EDIT',
                                         permission: (extension.update_permission)
@@ -183,45 +185,45 @@
                                     {
                                         condition: !(extension.order_position == 1 || extension.order_position == 0),
                                         btn_label_for_person: ('label_change_order'|bkTranslate:this),
-                                        btn_tag: 'shift_up_tariff',
+                                        btn_tag: 'shift_up_extension',
                                         icon: 'fa-chevron-up',
                                         colorType: 'UPDATE',
                                         permission: (extension.update_permission)
                                     },
                                     {
-                                        condition: !(extension.length == extension.order_position),
+                                        condition: !(extensions.length == extension.order_position),
                                         btn_label_for_person: ('label_change_order'|bkTranslate:this),
-                                        btn_tag: 'shift_down_tariff',
+                                        btn_tag: 'shift_down_extension',
                                         icon: 'fa-chevron-down',
                                         colorType: 'UPDATE',
                                         permission: (extension.update_permission)
                                     },
                                     {
                                         condition: !extension.active,
-                                        btn_label_for_person: ('label_active_tariff'|bkTranslate:this),
-                                        btn_tag: 'active_tariff',
+                                        btn_label_for_person: ('label_active_extension'|bkTranslate:this),
+                                        btn_tag: 'active_extension',
                                         icon: 'fa-power-off',
                                         colorType: 'ACTIVE ',
                                         permission: (extension.update_permission)
                                     },
                                     {
                                         condition: extension.active,
-                                        btn_label_for_person: ('label_deactive_tariff'|bkTranslate:this),
-                                        btn_tag: 'deactive_tariff',
+                                        btn_label_for_person: ('label_deactive_extension'|bkTranslate:this),
+                                        btn_tag: 'deactive_extension',
                                         icon: 'fa-power-off',
                                         colorType: 'DEACTIVE',
                                         permission: (extension.update_permission)
                                     },
                                     {
                                         condition: true,
-                                        btn_label_for_person: ('label_delete_tariff'|bkTranslate:this),
-                                        btn_tag: 'remove_tariff',
+                                        btn_label_for_person: ('label_delete_extension'|bkTranslate:this),
+                                        btn_tag: 'remove_extension',
                                         icon: 'fa-trash',
                                         colorType: 'REMOVE',
                                         permission: (extension.update_permission)
                                     }
                                         ]"
-                                        (onValueChanged)="onDrobDownEmiter($event, tariff)"
+                                        (onValueChanged)="onDrobDownExtensionEmiter($event, extension)"
                             >
                             </bk-drob-down-button>
 

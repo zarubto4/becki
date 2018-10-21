@@ -171,8 +171,8 @@
 
                         </td>
                         <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
-                        <td class="vert-align no-wrap">{{device.full_id}}</td>
-                        <td class="vert-align no-wrap">{{device.description}}</td>
+                        <td class="vert-align no-wrap word-break">{{device.full_id}}</td>
+                        <td class="vert-align no-wrap word-break">{{device.description}}</td>
                         <td class="vert-align text-center"><a
                             (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a>
                         </td>

@@ -1,7 +1,7 @@
 <div>
 
-    <div class="table-layout" style="max-width:100%;">
-        <div class="table-cell" style="min-width: 250px; width: 250px">
+    <div style="max-width:100%; display: flex">
+        <div style="min-width: 250px; width: 250px; flex: 0 0 250px">
             <!--- files -->
             <div class="portlet" style="padding: 0 15px 0 0;">
 
@@ -185,7 +185,7 @@
             </div>
         </div>
 
-        <div class="table-cell" style="position: relative; height: 85%">
+        <div style="position: relative; height: 85%; min-width: 0px; flex: 1 1 0">
 
             <div class="tabbable-custom">
 
@@ -208,6 +208,9 @@
                     <button *ngIf="enableSaveButton" type="button" class="btn default blue pull-right" (click)="onToolBarSaveAsClick()" style="margin-right: 3px;">
                         <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
                     </button>
+                    <button type = "button" class="btn default blue pull-right" (click)="onToolBarChangeMode()" style= "margin-right: 3px;" >
+                        {{'btn_diff'|bkTranslate:this}}
+                    </button>
                 </ul>
 
 
@@ -216,7 +219,12 @@
                         [class.active]="i == openFilesTabIndex">
                         <bk-monaco-editor [code]="file.content" (codeChange)="onCodeChange($event, file)"
                                           [language]="langFromFilename(file)"
-                                          [readonly]="file.readonly"></bk-monaco-editor>
+                                          [readonly]="file.readonly"
+                                          *ngIf="inEditMode"></bk-monaco-editor>
+                        <bk-monaco-diff [originalCode] = "file.contentOriginal" 
+                                        [code] = "file.content" 
+                                        *ngIf="!inEditMode"> 
+                        </bk-monaco-diff>
                     </li>
                     <li *ngIf="openFiles.length == 0" class="tab-pane active">
                         <h3 style="margin: 10px 0;">

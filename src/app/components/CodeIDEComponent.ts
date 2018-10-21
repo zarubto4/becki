@@ -209,6 +209,8 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
 
     formLibrarySelector: FormGroup = null;
 
+    inEditMode: boolean = true;
+
     @ViewChildren(BlockoViewComponent)
     blockoViews: QueryList<BlockoViewComponent>;
 
@@ -572,6 +574,12 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         let model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.AddFile, '', this.directories, selectedDir);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                
+                if (model.selectedDirectory) {
+                    console.log('HAS SELECTED DIRECTORY');
+                } else {
+                    console.log('HASNT SELECTED DIRECTORY');
+                }
 
                 let newFullPath = (model.selectedDirectory ? model.selectedDirectory.objectFullPath + '/' : '') + model.objectName;
 
@@ -861,6 +869,10 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
     onToolBarBuildClick() {
         console.info('onToolBarBuildClick');
         this.onBuildClick.emit(true);
+    }
+
+    onToolBarChangeMode() {
+        this.inEditMode = !this.inEditMode;
     }
 
     show_files_portlet(show: boolean) {

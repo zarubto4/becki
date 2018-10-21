@@ -21,6 +21,7 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { TranslationService } from '../services/TranslationService';
 import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
 import { IError } from '../services/_backend_class/Responses';
+import { FileDownloaderService } from '../services/FileDownloaderService';
 
 /* tslint:disable:class-name  */
 export abstract class _BaseMainComponent {
@@ -37,6 +38,7 @@ export abstract class _BaseMainComponent {
     protected currentParamsService: CurrentParamsService = null;
     protected blockUIService: BlockUIService = null;
     protected translationService: TranslationService = null;
+    protected fileDownloaderService: FileDownloaderService = null;
     protected zone: NgZone = null;
 
     constructor(protected injector: Injector) {
@@ -52,6 +54,7 @@ export abstract class _BaseMainComponent {
             this.currentParamsService = injector.get(CurrentParamsService);
             this.blockUIService = injector.get(BlockUIService);
             this.translationService = injector.get(TranslationService);
+            this.fileDownloaderService = injector.get(FileDownloaderService);
             this.zone = injector.get(NgZone);
             this.beckiImageLinks = injector.get(BeckiImageLinks);
             injector.get(MonacoEditorLoaderService); // only for preload monaco scripts
@@ -60,7 +63,7 @@ export abstract class _BaseMainComponent {
         }
     }
 
-    protected addFlashMessage(fm: FlashMessage): void {
+    public addFlashMessage(fm: FlashMessage): void {
         this.notificationService.addFlashMessage(fm);
     }
 
@@ -84,11 +87,11 @@ export abstract class _BaseMainComponent {
         return this.beckiImageLinks.getBeckiImage(imageName, folderName);
     }
 
-    protected translate(key: string, ...args: any[]): string {
+    public translate(key: string, ...args: any[]): string {
         return this.translationService.translate(key, this, null, args);
     }
 
-    protected translateTable(key: string, table: string, ...args: any[]): string {
+    public translateTable(key: string, table: string, ...args: any[]): string {
         return this.translationService.translateTable(key, this, table, null, args);
     }
 
@@ -150,11 +153,6 @@ export abstract class _BaseMainComponent {
 
     public onGSMClick(gsm_id: string): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'gsm', gsm_id]);
-    }
-
-
-    public onRoleClick(role_id: string): void {
-        this.navigate(['admin/permission-group', role_id]);
     }
 
     public onProjectClick(project_id: string): void {

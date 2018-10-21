@@ -50,7 +50,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
                     this.blockUI();
                     this.tyrionBackendService.employeeAdd({
                         mails: m.emails,
-                        customer_id: this.product.customer.id
+                        customer_id: this.product.owner.id
                     })
                         .then(() => {
 
@@ -91,7 +91,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
         this.blockUI();
         this.tyrionBackendService.employeeAdd({
             mails: [member.person.email],
-            customer_id: this.product.customer.id
+            customer_id: this.product.owner.id
         })
             .then(() => {
                 this.unblockUI();
@@ -114,7 +114,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
         return 'Unknown';
     }
 
-    onDrobDownEmiter(action: string, member: IProjectParticipant): void {
+    onDrobDownEmiter(action: string, member: IEmployee): void {
 
         if (action === 'send_invitation') {
             this.onMemberSendAgainClick(member);

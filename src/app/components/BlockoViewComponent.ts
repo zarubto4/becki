@@ -21,8 +21,9 @@ import { BlockRenderer } from 'blocko/dist/editor/block/BlockRenderer';
 @Component({
     selector: 'bk-blocko-view',
     template: `
-        <div [class.blocko-single-view]="singleBlockView">
+        <div [class.blocko-single-view]="singleBlockView" class="blocko-container" [class.blocko-full-screen] = "fullScreen">
             <div #field class="blocko-view"></div>
+            <a class="blocko-toggle-fullscreen" (click)="onFullscreenClick()"></a>
         </div>
     `
 })

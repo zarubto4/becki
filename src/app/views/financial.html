@@ -53,15 +53,15 @@
 
                     </td>
                     <td class="vert-align no-wrap">
-                        <span *ngIf="product.client_billing" class="font-blue-chambray">({{'label_client_billing'|bkTranslate:this}})</span>
-                        <span *ngIf="!product.client_billing" class="font-blue-chambray">({{'label_client_private'|bkTranslate:this}})</span>
+                        <span *ngIf="product.integrator_client" class="font-blue-chambray">({{'label_client_billing'|bkTranslate:this}})</span>
+                        <span *ngIf="!product.integrator_client" class="font-blue-chambray">({{'label_client_private'|bkTranslate:this}})</span>
                     </td>
                     <td class="vert-align">
-                        <span *ngIf="product.client_billing" class="font-blue-chambray bold">{{product.payment_details.company_name}}</span>
+                        <span *ngIf="product.integrator_client" class="font-blue-chambray bold">{{product.integrator_client.contact.name}}</span>
                     </td>
 
                     <td class="vert-align no-wrap ">
-                        <bk-payment-method-component [method]="product.method"></bk-payment-method-component>
+                        <bk-payment-method-component [method]="product.payment_details.payment_method"></bk-payment-method-component>
                     </td>
                     <td class="vert-align">{{product.subscription_id}}</td>
                     <td class="action-btn-col">

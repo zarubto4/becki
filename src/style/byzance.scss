@@ -338,13 +338,6 @@ span.changes {
     margin-bottom: 0 !important;
 }
 
-
-
-.table-scrollable {
-    overflow-x: visible !important;
-    overflow-y: visible !important;
-}
-
 .blocko-view svg {
     font-size:14px;
 }
@@ -1551,6 +1544,10 @@ table .no-wrap {
     word-wrap: break-word;
 }
 
+.word-break {
+    word-break: break-all;
+}
+
 /* TheGrid end */
 
 @media (min-width: 768px) {
@@ -2662,7 +2659,7 @@ textarea.form-control {
         top: 50px;
         bottom: 0;
         right: 0;
-        z-index: 999;
+        z-index: 9999;
 
         .monaco-container {
             height: 100%;
@@ -2700,11 +2697,25 @@ textarea.form-control {
         height: 80vh;
         padding: 0;
     }
+}
+
+.blocko-container {
+    .blocko-view {
+        background-color: #333;
+        padding: 0;
+        min-width: 100%;
+        min-height: inherit;
+        font-size: 0;
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none;          /* Likely future */
+    }
 
     .blocko-toggle-fullscreen {
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: 15px;
+        right: 25px;
         display: block;
         font: normal normal normal 14px/1 FontAwesome;
         opacity: 0.7;
@@ -2716,47 +2727,28 @@ textarea.form-control {
         }
     }
 
-    &.blocko-full-screen {
-        position: fixed;
-        height: auto;
-        width: auto;
-        left: 0;
-        top: 50px;
-        bottom: 0;
-        right: 0;
-        z-index: 999;
-
-        .blocko-container {
-            background-color: #333;
-            padding: 0;
-            min-height: inherit;
-            font-size: 0;
-            -webkit-user-select: none;  /* Chrome all / Safari all */
-            -moz-user-select: none;     /* Firefox all */
-            -ms-user-select: none;      /* IE 10+ */
-            user-select: none;          /* Likely future */
-            height: 100%;
-            width: 100%;
+    &.blocko-full-screen{
+        .blocko-view {
+            position: fixed !important;
+            height: auto;
+            width: auto;
+            left: 0;
+            top: 50px;
+            bottom: 0;
+            right: 0;
+            z-index: 9999;
         }
 
         .blocko-toggle-fullscreen {
+            position: fixed !important;
+            top: 60px;
+            right: 10px;
+            z-index: 10000;
             &:before {
                 content: "\f066";
             }
         }
     }
-}
-
-.blocko-view {
-    background-color: #333;
-    padding: 0;
-    min-width: 100%;
-    min-height: inherit;
-    font-size: 0;
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
 }
 
 .blocko-single-view {

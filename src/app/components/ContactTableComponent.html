@@ -1,0 +1,83 @@
+<div class="becki-actions margin-right-10">
+    <button title="{{'label_edit'|bkTranslate:this}}" class="btn btn-icon-only blue right-align"
+            *ngIf="edit"
+            (click)="editContact()">
+        <i class="fa fa-cog"></i>
+    </button>
+</div>
+<div class="portlet box blue-dark">
+    <div class="portlet-title">
+        <div class="caption" >
+            <span class="fa fa-fw fa-lg fa-address-book-o"></span>
+            <span>{{ title ? title : ('label_title'|bkTranslate:this)}}</span>
+        </div>
+    </div>
+    <div  class="portlet-body">
+        <table *ngIf="contact" class="table table-hover table-light byzance-table">
+            <tbody>
+
+            <tr>
+                <td> {{ (contact.company_account ? 'label_company_name' : 'label_full_name')|bkTranslate:this}}:</td>
+                <td> <strong>{{ contact.name }}</strong> </td>
+            </tr>
+
+            <tr>
+                <td> {{ 'label_street'|bkTranslate:this }}:</td>
+                <td> {{ contact.street }}</td>
+            </tr>
+            <tr>
+                <td> {{ 'label_street_number'|bkTranslate:this }}:</td>
+                <td> {{ contact.street_number }}</td>
+            </tr>
+            <tr>
+                <td> {{ 'label_city'|bkTranslate:this }}:</td>
+                <td> {{ contact.city }}</td>
+            </tr>
+            <tr>
+                <td> {{ 'label_zip_code'|bkTranslate:this }}:</td>
+                <td> {{ contact.zip_code}}</td>
+            </tr>
+            <tr>
+                <td> {{ 'label_country'|bkTranslate:this }}:</td>
+                <td> {{ contact.country }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr *ngIf="contact.company_account && contact.company_registration_no">
+                <td> {{ 'label_registration_number'|bkTranslate:this }}:</td>
+                <td> {{ contact.company_registration_no }}</td>
+            </tr>
+            <tr *ngIf="contact.company_account && contact.company_vat_number">
+                <td> {{ 'label_vat_number'|bkTranslate:this }}:</td>
+                <td> {{ contact.company_vat_number }}</td>
+            </tr>
+
+            <tr *ngIf="contact.company_account">
+                <td> {{ 'label_company_web'|bkTranslate:this }}:</td>
+                <td> {{contact.company_web }}</td>
+            </tr>
+            <tr *ngIf="contact.company_account">
+                <td> {{ 'label_company_email'|bkTranslate:this }}:</td>
+                <td> {{ contact.company_authorized_email }}</td>
+            </tr>
+            <tr *ngIf="contact.company_account">
+                <td> {{ 'label_company_phone'|bkTranslate:this }}:</td>
+                <td> {{ contact.company_authorized_phone }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr>
+                <td> {{'label_invoice_email'|bkTranslate:this}}:</td>
+                <td> {{ contact.invoice_email }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div *ngIf="!contact" class="font-grey-mint">{{'label_not_created'|bkTranslate:this}}</div>
+    </div>
+</div>

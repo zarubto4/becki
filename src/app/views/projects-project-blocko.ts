@@ -80,15 +80,18 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
 
     onAddClick(): void {
         let model = new ModalsBlockoPropertiesModel();
+        this.blockUI();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.bProgramCreate(this.project_id, { name: model.name, description: model.description }) // TODO [permission]: "Project.update_permission"
-                    .then(() => {
+                    .then(program => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_add_to_project', model.name)));
-                        this.onFilterPrivatePrograms();
+                        this.unblockUI();
+                        this.onBProgramClick(program.id);
                     })
                     .catch(reason => {
+                        this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_add_to_project', model.name, reason)));
                         this.onFilterPrivatePrograms();
                     });

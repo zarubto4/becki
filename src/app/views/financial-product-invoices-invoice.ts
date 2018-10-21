@@ -6,6 +6,9 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IInvoiceFullDetails } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
+import { FlashMessageError } from '../services/NotificationService';
+import { FinancialProductInvoiceActions } from './financial-product-invoices';
+import { Http } from '@angular/http';
 
 
 @Component({
@@ -14,65 +17,62 @@ import { Subscription } from 'rxjs';
 })
 export class FinancialProductInvoicesInvoiceComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
-
-    invoiceId: string;
-
-    fullIvoice: IInvoiceFullDetails;
-
     routeParamsSubscription: Subscription;
+
+    idProduct: string;
+
+    idInvoice: string;
+
+    fullInvoice: IInvoiceFullDetails = null;
 
     product: IProduct = null;
 
-    constructor(injector: Injector) {
+    private actions: FinancialProductInvoiceActions;
+
+    constructor(injector: Injector, http: Http) {
         super(injector);
+        this.actions = new FinancialProductInvoiceActions(this, injector, http);
     };
-
-    getWholePrice(): string {
-        let price = 0;
-        this.fullIvoice.invoice_items.map(item => price += item.unit_price);
-
-        return price.toString().substring(0, price.toString().indexOf('.') + 3);
-    }
 
     ngOnInit(): void {
         this.blockUI();
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['product'];
-            this.invoiceId = params['invoice'];
+            this.idProduct = params['product'];
+            this.idInvoice = params['invoice'];
             this.refresh();
             this.unblockUI();
         });
 
     }
 
-
-
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
+    onPortletClick(action: string): void {
+        this.actions.doAction(action, this.fullInvoice.invoice, this.product).then(response => this.refresh());
+    }
 
+    showEvents(): void  {
+        this.router.navigate(['financial', this.idProduct, 'invoices', this.idInvoice, 'financial-events']);
+    }
 
-    refresh(): void {
+    private refresh(): void {
         this.blockUI();
 
-        this.tyrionBackendService.invoiceGet(this.invoiceId).then(invoice =>  {
-            this.fullIvoice = invoice;
-            // console.log(invoice);
-            this.unblockUI();
-        }).catch(error =>  {
+        Promise.all<any>([this.tyrionBackendService.invoiceGet(this.idInvoice), this.tyrionBackendService.productGet(this.idProduct)])
+            .then((values: [IInvoiceFullDetails, IProduct]) => {
+                this.fullInvoice =  values[0];
+                this.product =  values[1];
+                this.unblockUI();
 
-            this.unblockUI();
-        });
-
-        this.tyrionBackendService.productsGetUserOwnList().then(products =>  {
-            this.product = products.find(product => product.id === this.id);
-            this.unblockUI();
-        }).catch(error =>  {
-
-            this.unblockUI();
-        });
-
+                if (!this.fullInvoice.invoice.update_permission) {
+                    this.router.navigate(['financial', this.idProduct, 'invoices']);
+                }
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Data cannot be loaded.', reason));
+                this.unblockUI();
+            });
     }
 }

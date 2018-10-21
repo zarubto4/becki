@@ -11,15 +11,13 @@
                     <thead>
                     <tr>
                         <th>{{'label_name'|bkTranslate:this}}</th>
-                        <th>{{'label_description'|bkTranslate:this}}</th>
                         <th>{{'label_action'|bkTranslate:this}}</th>
                     </thead>
                     <tbody>
                     <tr *ngFor="let formPermission of formPermissions">
-                        <td class="vert-align no-wrap"> {{formPermission.permission_key}}</td>
-                        <td class="vert-align no-wrap"> {{formPermission.description}}</td>
+                        <td class="vert-align no-wrap"> {{formPermission.entity_type + ' - ' + formPermission.action}}</td>
                         <td>
-                            <button title="{{'label_key_remove'|bkTranslate:this}}" (click)="onRemoveClick(formPermission.permission_key)" class="btn btn-icon-only red">
+                            <button title="{{'label_key_remove'|bkTranslate:this}}" (click)="onRemoveClick(formPermission.id)" class="btn btn-icon-only red">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </td>
