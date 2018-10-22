@@ -288,20 +288,6 @@
 
      <div *ngIf="tab == 'traffic_details'">
 
-         <!-- Graph Filter
-         <div>
-             <h3>Filter</h3>
-
-             <button class="btn blue btn-sm" (click)="onToggleTab('fdassdfsdf')">
-                 <i class="fa fa-rocket"></i>  fasdfsdflkdjshfsdf
-                 <strong>asdasdfsdf</strong>
-             </button>
-             <button class="btn blue btn-sm" (click)="onToggleTab('fdassdfsdf')">
-                 <i class="fa fa-rocket"></i>
-                 <strong>asdasdfsdf</strong>
-             </button>
-         </div>
-          -->
          <bk-filter-component [closed]="false"
                               [showFilterHead]="true"
                               (onChange)="onFilterChange($event)"
@@ -312,7 +298,7 @@
                                                 key: 'PERIOD',
                                                 first_value: 'LAST_30_DAYS',
                                                 label: 'Period',
-                                                options: periodOption
+                                                options: periodOption.option
                                             }
                                         },
                                         {
@@ -321,7 +307,7 @@
                                                 key: 'DIVIDE_OPTION',
                                                 first_value: 'DAY',
                                                 label: 'Partitioned',
-                                                options: divideOption
+                                                options: divideOption.option
                                             }
                                         }
                                 ]"

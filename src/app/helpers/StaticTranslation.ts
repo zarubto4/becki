@@ -1647,6 +1647,9 @@ export class StaticTranslation {
                 'label_deactive': 'Deactivate',
                 'label_active': 'Activate',
                 'label_gsm_print_sticker': 'Print Sticker',
+                'tab_overview': 'Cellular Modules',
+                'tab_traffic_details': 'Data Traffic Details',
+                'label_gsm_traffic': 'Cellular Modules Aggregated Traffic',
 
             }, 'ProjectsProjectGSMSGSMComponent': {
 

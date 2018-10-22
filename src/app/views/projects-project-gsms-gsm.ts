@@ -20,36 +20,8 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 
 import * as moment from 'moment';
 
-@Component({
-    selector: 'bk-view-projects-project-gsms-gsm',
-    templateUrl: './projects-project-gsms-gsm.html',
-})
-export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implements OnInit, OnDestroy {
-
-    project_id: string;
-
-    routeParamsSubscription: Subscription;
-    projectSubscription: Subscription;
-
-    project: IProject = null;
-    sim_id: string = null;
-
-    tab: string = 'overview';
-    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
-
-
-    @ViewChild(ChartBarComponent)
-    graphView: ChartBarComponent;
-
-    gsm: IGSM = null;
-    form: FormGroup;
-
-    chart_data_component: DataCharInterface = null;
-
-    date: Date = new Date();
-
-    // For Filter parameters
-    periodOption: {
+export class DataChar {
+    option: {
         label: string,
         value: string
     }[] = [
@@ -90,8 +62,10 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             value: 'PERSONALIZED'
         }
     ];
+}
 
-    divideOption: {
+export class DivideOption {
+    option: {
         label: string,
         value: string
     }[] = [
@@ -112,6 +86,39 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             value: 'HOUR'
         }
     ];
+}
+
+@Component({
+    selector: 'bk-view-projects-project-gsms-gsm',
+    templateUrl: './projects-project-gsms-gsm.html',
+})
+export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implements OnInit, OnDestroy {
+
+    project_id: string;
+
+    routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
+
+    project: IProject = null;
+    sim_id: string = null;
+
+    tab: string = 'overview';
+    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+
+
+    @ViewChild(ChartBarComponent)
+    graphView: ChartBarComponent;
+
+    gsm: IGSM = null;
+    form: FormGroup;
+
+
+
+    date: Date = new Date();
+
+    // For Filter parameters
+    periodOption: DataChar = new DataChar();
+    divideOption: DivideOption = new DivideOption();
 
     from: number = 0;
     to: number = 0;
@@ -333,9 +340,8 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 };
 
                 console.info('ProjectsProjectGSMSGSMComponent::DATA:: ', chartData);
-                this.chart_data_component = chartData;
 
-                this.graphView.setData(this.chart_data_component);
+                this.graphView.setData(chartData);
 
             }).catch(reason => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
@@ -349,15 +355,15 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             .then((success) => {
                 this.blockUI();
                 this.tyrionBackendService.simUpdate(gsm.id, {
-                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold  * 1024,
+                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold  * 1024 * 1024,
                     block_sim_daily: model.gsm.sim_tm_status.block_sim_daily,
                     daily_traffic_threshold_notify_type: model.gsm.daily_traffic_threshold_notify_type,
 
-                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold  * 1024,
+                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold  * 1024 * 1024,
                     block_sim_monthly: model.gsm.sim_tm_status.block_sim_monthly,
                     monthly_traffic_threshold_notify_type: model.gsm.monthly_traffic_threshold_notify_type,
 
-                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold  * 1024,
+                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold  * 1024 * 1024,
                     block_sim_total: model.gsm.sim_tm_status.block_sim_total,
                     total_traffic_threshold_notify_type: model.gsm.total_traffic_threshold_notify_type,
 
@@ -382,9 +388,9 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     onUpdateClick(): void {
         this.blockUI();
 
-        console.log('vdaily_traffic_threshold' +  this.form.controls['daily_traffic_threshold'].value);
-        console.log('monthly_traffic_threshold' +  this.form.controls['monthly_traffic_threshold'].value);
-        console.log('total_traffic_threshold' +  this.form.controls['total_traffic_threshold'].value);
+        // console.log('vdaily_traffic_threshold' +  this.form.controls['daily_traffic_threshold'].value);
+        // console.log('monthly_traffic_threshold' +  this.form.controls['monthly_traffic_threshold'].value);
+        // console.log('total_traffic_threshold' +  this.form.controls['total_traffic_threshold'].value);
 
         this.tyrionBackendService.simUpdate(this.gsm.id, {
 

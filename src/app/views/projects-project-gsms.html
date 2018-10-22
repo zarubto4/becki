@@ -27,13 +27,29 @@
                     ]"
         (onTabClick)="onToggleTab($event)"
         [tab_selected_name]="tab"
+        [tabBtns]="[
+                        {
+                            tab_name: 'overview',
+                            condition: (true),
+                            permission: (true),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_overview'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'traffic_details',
+                            condition: (true),
+                            permission: (true),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_traffic_details'|bkTranslate:this)
+                        }
+                    ]"
     >
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
     <div class="portlet-body">
 
-        <div *ngIf="tab == 'my_gsm'">
+        <div *ngIf="tab == 'overview'">
             <div *ngIf="(gsmList != null && gsmList.content.length)"
                  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
@@ -141,6 +157,43 @@
                                 (onButtonClick)="onAddClick()">
             </bk-nothing-to-show>
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+        </div>
+
+
+        <div *ngIf="tab == 'traffic_details'">
+
+            <bk-filter-component [closed]="false"
+                                 [showFilterHead]="true"
+                                 (onChange)="onFilterChange($event)"
+                                 [filter_parameters]="[
+                                        {
+                                            type: 'LIST_SELECT',
+                                            content: {
+                                                key: 'PERIOD',
+                                                first_value: 'LAST_30_DAYS',
+                                                label: 'Period',
+                                                options: periodOption.option
+                                            }
+                                        },
+                                        {
+                                            type: 'LIST_SELECT',
+                                            content: {
+                                                key: 'DIVIDE_OPTION',
+                                                first_value: 'DAY',
+                                                label: 'Partitioned',
+                                                options: divideOption.option
+                                            }
+                                        }
+                                ]"
+            ></bk-filter-component>
+
+
+            <bk-form-chart-bar
+                [title]="'label_gsm_traffic'|bkTranslate:this"
+                [btns_group_name]="'label_filter'|bkTranslate:this"
+                [show_legend]="false">
+            </bk-form-chart-bar>
 
         </div>
 
