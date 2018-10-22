@@ -33,6 +33,95 @@
     <!-- Page Content -- START -->
     <div class="portlet-body">
 
+        <bk-filter-component *ngIf="formFilterGroup"
+                             [closed]="true"
+                             [showFilterHead]="true"
+                             (onChange)="onFilterChange($event)"
+                             [filter_parameters]="[
+                                        {
+                                            type: 'CHECKBOX_LIST',
+                                            content: {
+                                                options: [
+                                                    {
+                                                        key: 'SUCCESSFULLY_COMPLETE',
+                                                        label: ('SUCCESSFULLY_COMPLETE'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterUpdateValues['SUCCESSFULLY_COMPLETE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'COMPLETE',
+                                                        label: ('COMPLETE'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterUpdateValues['COMPLETE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'COMPLETE_WITH_ERROR',
+                                                        label: ('COMPLETE_WITH_ERROR'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterUpdateValues['COMPLETE_WITH_ERROR'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'CANCELED',
+                                                        label: ('CANCELED'|bkTranslateTable:this:'update_state'),
+                                                         selected: filterUpdateValues['CANCELED'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'IN_PROGRESS',
+                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterUpdateValues['IN_PROGRESS'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'NOT_START_YET',
+                                                        label: ('NOT_START_YET'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterUpdateValues['NOT_START_YET'],
+                                                        color: 'info'
+                                                    }
+                                                ]
+                                            },
+                                            horizontal: true
+                                        },
+                                        {
+                                            type: 'CHECKBOX_LIST',
+                                            content: {
+                                                options: [
+                                                    {
+                                                        key: 'MANUALLY_BY_USER_INDIVIDUAL',
+                                                        label: ('MANUALLY_BY_USER_INDIVIDUAL'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_BY_USER_INDIVIDUAL'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP',
+                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME',
+                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE',
+                                                        label: ('AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE',
+                                                        label: ('AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE'],
+                                                        color: 'info'
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]"
+        ></bk-filter-component>
+
         <div *ngIf="tab == 'updates'">
             <div *ngIf="(actualizationFilter && actualizationFilter.content.length > 0)"
                  class="table-scrollable table-scrollable-borderless">
