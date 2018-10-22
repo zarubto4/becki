@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
     template: `
         
         <span *ngIf="status == 'active'" class="font-green-jungle bold"  [innerHTML]="status|bkTranslateTable:this:'gsm_status'"></span>
-        <span *ngIf="status == 'deactivated'" class="font-red-flamingo bold" [innerHTML]="status|bkTranslateTable:this:'gsm_status'"></span>
+        <span *ngIf="status == 'not active'" class="font-red-flamingo bold" [innerHTML]="status|bkTranslateTable:this:'gsm_status'"></span>
        
     `
 })

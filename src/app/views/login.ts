@@ -131,6 +131,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             });
     }
 
+    /**
     onGitHubLoginInClick(): void {
         this.blockUIService.blockUI();
         this.backendService.loginGitHub(REDIRECT_URL)
@@ -156,6 +157,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason['message']);
             });
     }
+     */
 
     onCloseAlertClick(): void {
         this.loginError = null;

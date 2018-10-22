@@ -1634,7 +1634,9 @@ export class StaticTranslation {
                 'table_msi_status': 'Status',
                 'table_msi_country': 'Country',
                 'table_available_data_traffic': 'Available data traffic',
+                'table_total_data_traffic': 'Total traffic',
                 'table_daily_traffic': 'Daily data traffic',
+                'table_monthly_traffic': 'Monthly data traffic',
                 'table_description': 'Description',
                 'table_status': 'Status',
                 'table_actions': 'Actions',
@@ -1662,6 +1664,21 @@ export class StaticTranslation {
                 'label_gsm_un_register': 'Un Register',
                 'label_gsm_print_sticker': 'Print Sticker',
                 'label_gsm_traffic': 'Cellular Module Traffic',
+                'tab_overview': 'Cellular Module Traffic',
+                'tab_traffic_details': 'Data Traffic Details',
+                'tab_cdr_details': 'Charging data records (CDR)',
+                'tab_country_details': 'Country Settings',
+                'table_maximum_threshold': 'Maximum data traffic threshold',
+                'table_notify_me': 'Send Email',
+                'table_block_sim': 'Block Sim',
+                'table_daily_threshold': 'Daily Limit (MB)',
+                'table_monthly_threshold': 'Monthly Limit (MB)',
+                'table_total_threshold': 'Total Limit (MB)',
+                'table_daily_report': 'Daily Report',
+                'table_month_report': 'Monthly Report',
+                'label_weekly_report': 'Weekly Report',
+                'table_report_type': 'Report Period',
+                'table_report_sate': 'State',
 
             }, 'ProjectsProjectInstancesComponent': {
 
@@ -3059,7 +3076,7 @@ export class StaticTranslation {
             },
             'gsm_status': {
                 'active': 'Active',
-                'deactivated': 'Deactivated'
+                'not active': 'Not Active'
 
             },
             'update_state': {

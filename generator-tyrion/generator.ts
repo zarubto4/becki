@@ -7,7 +7,6 @@ import * as program from 'commander';
 import { readFileSync, writeFileSync } from 'fs';
 import * as moment from 'moment';
 import * as chalk from 'chalk';
-import {config} from "shelljs";
 
 let request = require('sync-request');
 /* tslint:disable:no-console max-line-length */
@@ -37,10 +36,10 @@ if (!program['className']) {
 
 let DEBUG = false;
 if (program['debug'] === true) {
-    console.error("EBUG VALUE:  DEBUG IS ACTIVE");
+    console.error('DEBUG VALUE:  DEBUG IS ACTIVE');
     DEBUG = true;
 }else {
-    console.error("DEBUG VALUE:  DEBUG IS NOT ACTIVE. For activation add '-d' parameter");
+    console.error('DEBUG VALUE:  DEBUG IS NOT ACTIVE. For activation add \'-d\' parameter');
 }
 
 // CONFIG
@@ -280,6 +279,7 @@ definitionsKeys.forEach((defName) => {
 
             if (!type) {
                 number_of_bugs++;
+                console.log( chalk.red('Missing type for key:: ' + JSON.stringify(definitions[defName], null, 2) ));
                 throwError('Missing type for key ' + propKey + ' in definition (' + defName + ')');
             }
 
@@ -294,7 +294,7 @@ definitionsKeys.forEach((defName) => {
 
             if (!propKey.match(/^([a-z0-9_])+$/g)) {
 
-                if(CONFIG.allowedDefinitions.indexOf(propKey) < 0) {
+                if (CONFIG.allowedDefinitions.indexOf(propKey) < 0) {
                     number_of_bugs++;
 
                     console.log(chalk.yellow('Something is wrong with property name \"')
@@ -302,9 +302,9 @@ definitionsKeys.forEach((defName) => {
                         + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s BiG size Latter?')
                     );
 
-                    console.log('Definitions: ', definitions[defName])
+                    console.log('Definitions: ', definitions[defName]);
                 } else {
-                    console.log(chalk.yellow('Definitions: property name ' + propKey + ' is ignored and allowed by config CONFIG.allowedDefinitions'))
+                    console.log(chalk.yellow('Definitions: property name ' + propKey + ' is ignored and allowed by config CONFIG.allowedDefinitions'));
                 }
             }
 
@@ -358,7 +358,7 @@ let makeReadableMethodName = (method: string, url: string, pathObj: string) => {
         console.log('method:: ', method);
     }
 
-    if(pathObj['summary'] == null) {
+    if (pathObj['summary'] == null) {
         console.error('method:: ', url, ' NOT CONTAINS SUMMARY!!! SOMETHING IS WRONG!');
         console.error('method:: ', url, ' NOT CONTAINS SUMMARY!!! \n', pathObj);
         return null;

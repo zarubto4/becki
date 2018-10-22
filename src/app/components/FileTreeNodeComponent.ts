@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 
 
-class FileTreeNodeObject<File> {
+export class FileTreeNodeObject<File> {
     name: string;
     path: string[];
     files: File[];
@@ -58,7 +58,7 @@ class FileTreeNodeObject<File> {
 
 }
 
-class FileTreeFileComponent<File> {
+export class FileTreeFileComponent<File> {
     file: File;
     folderPath: string[];
 

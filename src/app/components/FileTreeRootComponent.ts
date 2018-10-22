@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { FileTreeNodeObject } from './FileTreeNodeComponent';
 
 
 interface FileWIthPath {
@@ -10,8 +11,8 @@ interface FileWIthPath {
     template: './FileTreeRootComponent.html'
 })
 
-export class FileTreeRootObject <File extends FileWIthPath > implements OnInit, AfterViewInit, OnChanges {
-    
+export class FileTreeRootObjectComponent <File extends FileWIthPath > implements OnInit, OnChanges {
+
     @Input()
     files: File[];
 
@@ -40,7 +41,7 @@ export class FileTreeRootObject <File extends FileWIthPath > implements OnInit, 
     }
 
     createNodeHierarchy() {
-        this.rootNode = new FileTreeNodeObject<File>('', '/', [], []);
+        this.rootNode = new FileTreeNodeObject<File>('', [], [], []);
         this.files.forEach((file) => {
             this.putFileIntoHierarchy(file, file.path.split('/'), this.rootNode);
         });
@@ -53,7 +54,7 @@ export class FileTreeRootObject <File extends FileWIthPath > implements OnInit, 
             if (foundDirectory) {
                 this.putFileIntoHierarchy(file, remainingPath.slice(1), foundDirectory);
             } else {
-                let newDirectory = new FileTreeNodeObject(nextDirectory, directory.path + '/' + nextDirectory, [], []);
+                let newDirectory = new FileTreeNodeObject(nextDirectory, [directory.path.toString() , nextDirectory.toString()], [], []);
                 directory.directories.push(newDirectory);
                 this.putFileIntoHierarchy(file, remainingPath.slice(1), newDirectory);
             }

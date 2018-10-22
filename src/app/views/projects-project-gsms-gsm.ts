@@ -8,16 +8,17 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import {
-    IProject, IHardwareType, ICProgram, ICProgramList, IGSMList, IGSM,
+    IProject, IGSM,
     IDataSimOverview
 } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalsAddHardwareModel } from '../modals/add-hardware';
-import { ModalsAddGSMModel } from '../modals/add-gsm';
 import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 import { DataCharInterface } from '../components/ChartBarComponent';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BeckiValidators } from '../helpers/BeckiValidators';
+
+import * as moment from 'moment';
 
 @Component({
     selector: 'bk-view-projects-project-gsms-gsm',
@@ -33,11 +34,84 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     project: IProject = null;
     sim_id: string = null;
 
-    tab: string = 'my_gsm';
+    tab: string = 'traffic_details';
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     gsm: IGSM = null;
-    chart_data: DataCharInterface = null;
+    chart_data_component: DataCharInterface = null;
+    form: FormGroup;
+
+    date: Date = new Date();
+
+    // For Filter parameters
+    periodOption: {
+        label: string,
+        value: string
+    }[] = [
+        {
+            label: 'Last 30 Days',
+            value: 'LAST_30_DAYS'
+        },
+        {
+            label: 'This Month',
+            value: 'MONTH'
+        },
+        {
+            label: 'Last Month',
+            value: 'LAST_MONTH'
+        },
+        {
+            label: 'This Week',
+            value: 'WEEK'
+        },
+        {
+            label: 'Last 7 Days',
+            value: 'LAST_7_DAYS'
+        },
+        {
+            label: 'Yesterday',
+            value: 'YESTERDAY'
+        },
+        {
+            label: 'Today',
+            value: 'TODAY'
+        },
+        {
+            label: 'From Beginning',
+            value: 'FROM_BEGINNING'
+        },
+        {
+            label: 'Personalized',
+            value: 'PERSONALIZED'
+        }
+    ];
+
+    divideOption: {
+        label: string,
+        value: string
+    }[] = [
+        {
+            label: 'Per Months',
+            value: 'MONTH'
+        },
+        {
+            label: 'Per Weeks',
+            value: 'WEEK'
+        },
+        {
+            label: 'Per Days',
+            value: 'DAY'
+        },
+        {
+            label: 'Per Hours',
+            value: 'HOUR'
+        }
+    ];
+
+    from: number = 0;
+    to: number = 0;
+    PERIOD: string = 'LAST_30_DAYS';
+    DIVIDE_OPTION: string = 'DAY';
 
     constructor(injector: Injector) {
         super(injector);
@@ -76,14 +150,12 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
         this.tab = tab;
     }
 
-
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
     }
-
 
     onRemoveClick(gsm: IGSM): void {
         this.modalService.showModal(new ModalsRemovalModel(gsm.msi_number ?  gsm.msi_number  + '' : 'unknown')).then((success) => {
@@ -136,9 +208,91 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             });
     }
 
-    onGetValues(gsm: IGSM, type: ('year' | 'current_moth' | 'last_month' | 'last_30_days' | 'curent_week' | 'last_7_days') = 'year' ): void {
-        console.info('ProjectsProjectGSMSGSMComponent::onGetValues');
-        this.tyrionBackendService.simGetCreditUsage(gsm.id)
+    onFilterChange(filter: {key: string, value: any}) {
+        console.info('onFilterChange: Key', filter.key, 'value', filter.value);
+
+        if (filter.key === 'PERIOD') {
+            this.PERIOD = filter.value;
+        }
+
+        if (filter.key === 'DIVIDE_OPTION') {
+            this.DIVIDE_OPTION = filter.value;
+        }
+
+        this.onFilterData();
+    }
+
+    onFilterData(): void {
+
+        console.info('onFilterData::onGetValues');
+        console.info('onFilterData::this.PERIOD: ', this.PERIOD);
+        console.info('onFilterData::this.DIVIDE_OPTION: ', this.DIVIDE_OPTION);
+
+        switch (this.PERIOD) {
+
+            case 'MONTH': {
+
+                this.from = moment().startOf('month').valueOf();
+                this.to   = moment().endOf('month').valueOf();
+                break;
+            }
+            case 'LAST_MONTH': {
+
+                this.from = moment().subtract(1, 'month').startOf('month').valueOf();
+                this.to   = moment().subtract(1, 'month').endOf('month').valueOf();
+
+                break;
+            }
+            case 'WEEK': {
+
+                this.from = moment().startOf('week').valueOf();
+                this.to   = moment().endOf('week').valueOf();
+                break;
+            }
+            case 'LAST_7_DAYS': {
+                this.from = moment().subtract(7, 'days').startOf('day').valueOf();
+                this.to   = moment().endOf('day').valueOf();
+                break;
+            }
+            case 'LAST_30_DAYS': {
+
+                this.from = moment().subtract(30, 'days').startOf('day').valueOf();
+                this.to   = moment().endOf(  'day').valueOf();
+                break;
+            }
+            case 'YESTERDAY': {
+
+                this.from = moment().subtract(1, 'days').startOf('day').valueOf();
+                this.to   = moment().subtract(1, 'days').endOf('day').valueOf();
+                break;
+            }
+            case 'TODAY': {
+                this.from = moment().startOf('day').valueOf();
+                this.to   = moment().endOf('day').valueOf();
+                break;
+            }
+            case 'FROM_BEGINNING': {
+
+                this.from = this.gsm.sim_tm_status.activation_date_in_millis;
+                this.to = moment().endOf('day').valueOf();
+                break;
+            }
+            case 'PERSONALIZED': {
+
+                break;
+            }
+
+        }
+
+        this.tyrionBackendService.simGetDataUsage({
+            project_id: this.project_id,
+            sim_id_list: [this.gsm.id],
+            from: this.from,
+            to:   this.to,
+            country_code: null,
+            blocked: false,
+            time_period: <any> this.DIVIDE_OPTION
+        })
             .then((overview: IDataSimOverview) => {
 
                 let numberData: number[] = [];
@@ -149,20 +303,20 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                         continue;
                     }
                     numberData.push(overview.datagram[k].data_consumption);
-                    chartLabels.push(overview.datagram[k].period_name);
+                    chartLabels.push(overview.datagram[k].date_from + ' - ' + overview.datagram[k].date_to);
                 }
 
                 let chartData: DataCharInterface = {
                     chart_data: [{
                         data: numberData,
-                        label: 'Month'
+                        label: 'Consumption in KB'
                     }],
                     bar_chart_labels: chartLabels,
                     x_chart_label: 'Consumption in KB'
                 };
 
                 console.info('ProjectsProjectGSMSGSMComponent::DATA:: ', chartData);
-                this.chart_data = chartData;
+                this.chart_data_component = chartData;
 
             }).catch(reason => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
@@ -175,15 +329,18 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
         this.modalService.showModal(model)
             .then((success) => {
                 this.tyrionBackendService.simUpdate(gsm.id, {
-                    daily_traffic_threshold: model.gsm.daily_traffic_threshold,
-                    daily_traffic_threshold_exceeded_limit: model.gsm.daily_traffic_threshold_exceeded_limit,
+                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold,
+                    block_sim_daily: model.gsm.sim_tm_status.block_sim_daily,
                     daily_traffic_threshold_notify_type: model.gsm.daily_traffic_threshold_notify_type,
-                    monthly_traffic_threshold: model.gsm.monthly_traffic_threshold,
-                    monthly_traffic_threshold_exceeded_limit: model.gsm.monthly_traffic_threshold_exceeded_limit,
+
+                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold,
+                    block_sim_monthly: model.gsm.sim_tm_status.block_sim_monthly,
                     monthly_traffic_threshold_notify_type: model.gsm.monthly_traffic_threshold_notify_type,
-                    total_traffic_threshold: model.gsm.total_traffic_threshold,
-                    total_traffic_threshold_exceeded_limit: model.gsm.total_traffic_threshold_exceeded_limit,
+
+                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold,
+                    block_sim_total: model.gsm.sim_tm_status.block_sim_total,
                     total_traffic_threshold_notify_type: model.gsm.total_traffic_threshold_notify_type,
+
                     name: model.gsm.name,
                     description: model.gsm.description,
                     tags: model.gsm.tags,
@@ -204,12 +361,33 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             .then((gsm: IGSM) => {
                 this.gsm = gsm;
                 this.unblockUI();
-                this.onGetValues(gsm);
+                this.onFilterData();
+
+
+                /* tslint:disable:max-line-length */
+                let input: { [key: string]: any } = {
+                    'total_traffic_threshold': [this.gsm.sim_tm_status.total_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.total_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+                    'monthly_traffic_threshold': [this.gsm.sim_tm_status.monthly_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.monthly_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+                    'daily_traffic_threshold': [this.gsm.sim_tm_status.daily_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.daily_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+                };
+                /* tslint:enable:max-line-length */
+
+                this.form = this.formBuilder.group(input);
+
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_get_gsm'), reason));
                 this.unblockUI();
             });
+    }
+
+    onMathRound(num: number): string {
+
+        if (num === 0) {
+            return '0';
+        }
+
+        return '' + Math.round((num / 1024 / 1024) * 100) / 100;
     }
 
     onDrobDownEmiter(action: string, object: any): void {

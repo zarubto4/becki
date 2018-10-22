@@ -131,15 +131,18 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
         this.modalService.showModal(model)
             .then((success) => {
                 this.tyrionBackendService.simUpdate(gsm.id, {
-                    daily_traffic_threshold: model.gsm.daily_traffic_threshold,
-                    daily_traffic_threshold_exceeded_limit: model.gsm.daily_traffic_threshold_exceeded_limit,
+                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold,
+                    block_sim_daily: model.gsm.sim_tm_status.block_sim_daily,
                     daily_traffic_threshold_notify_type: model.gsm.daily_traffic_threshold_notify_type,
-                    monthly_traffic_threshold: model.gsm.monthly_traffic_threshold,
-                    monthly_traffic_threshold_exceeded_limit: model.gsm.monthly_traffic_threshold_exceeded_limit,
+
+                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold,
+                    block_sim_monthly: model.gsm.sim_tm_status.block_sim_monthly,
                     monthly_traffic_threshold_notify_type: model.gsm.monthly_traffic_threshold_notify_type,
-                    total_traffic_threshold: model.gsm.total_traffic_threshold,
-                    total_traffic_threshold_exceeded_limit: model.gsm.total_traffic_threshold_exceeded_limit,
+
+                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold,
+                    block_sim_total: model.gsm.sim_tm_status.block_sim_total,
                     total_traffic_threshold_notify_type: model.gsm.total_traffic_threshold_notify_type,
+
                     name: model.gsm.name,
                     description: model.gsm.description,
                     tags: model.gsm.tags,
@@ -152,6 +155,15 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                     this.onFilter();
                 });
             });
+    }
+
+    onMathRound(num: number): string {
+
+        if (num === 0) {
+            return '0';
+        }
+
+        return '' + Math.round((num / 1024 / 1024) * 100) / 100;
     }
 
     onFilter(page: number = 0): void {
@@ -176,7 +188,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
             });
     }
 
-    onDrobDownEmiter(action: string, object: any): void {
+    onDropDownEmitter(action: string, object: any): void {
 
         if (action === 'gsm_edit') {
             this.onEditClick(object);

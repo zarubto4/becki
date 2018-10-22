@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { TyrionAPI, IPerson, ILoginResult, ISocialNetworkLogin } from './TyrionAPI';
+import { TyrionAPI, IPerson, ILoginResult, IFacebookLoginRedirect } from './TyrionAPI';
 import * as Rx from 'rxjs';
 import {
     BadRequest, BugFoundError, CodeCompileError,
@@ -255,15 +255,16 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     public loginFacebook(redirectUrl: string): Promise<string> {
-        return this.facebookLogin(<ISocialNetworkLogin>{
-            redirect_url: redirectUrl
+        return this.fBGetLoginURL({
+            redirect_link: redirectUrl
         })
             .then(body => {
                 this.setToken(body.auth_token);
-                return body.redirect_url;
+                return body.link;
             });
     }
 
+    /*
     public loginGitHub(redirectUrl: string): Promise<string> {
         return this.gitHubLogin(<ISocialNetworkLogin>{
             redirect_url: redirectUrl
@@ -273,6 +274,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                 return body.redirect_url;
             });
     }
+    */
 
     public logout(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
