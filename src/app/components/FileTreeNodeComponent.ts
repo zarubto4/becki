@@ -7,6 +7,8 @@ class FileTreeNodeObject<File> {
     files: File[];
     directories: FileTreeNodeObject<File>[];
     isRoot: boolean = false;
+    isSelected: boolean;
+    style: Style = new Style();
 
     @Input()
     isOpen: boolean = false;
@@ -34,6 +36,16 @@ class FileTreeNodeObject<File> {
         this.path = path;
         this.files = files;
         this.directories = directories;
+    }
+
+    onOpenClicked() {
+        this.isOpen = !this.isOpen;
+        this.style.icon = this.isOpen ? 'folder-open' : 'folder' ;
+    }
+
+    onSelected() {
+        this.isSelected = !this.isSelected;
+        this.style.backgroungColor = this.isSelected ? 'blue' : 'white';
     }
 
     onFileCreateClick() {
@@ -83,4 +95,21 @@ class FileTreeFileComponent<File> {
     onFileRenameClicked() {
         this.fileRenameClicked.emit(this.file);
     }
+}
+
+class StyledFile<File> {
+    file: File;
+}
+
+class Style {
+    textColor: string = 'grey';
+    backgroungColor: string = 'white';
+    isOpen: boolean = false;
+    isSelected: boolean = false;
+    icon: string = '';
+    bold: boolean = false;
+}
+class FolderStyle extends Style {
+    icon = 'folder';
+
 }
