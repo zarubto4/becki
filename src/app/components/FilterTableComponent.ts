@@ -47,6 +47,7 @@ import { TyrionBackendService } from '../services/BackendService';
                             <bk-form-select [control]="component.content.form.controls.list"
                                             [label]="component.content.label"
                                             [options]="component.content.optionForm"
+                                            [regexFirstOption]="component.content.first_value"
                                             (valueChanged)="onSELECTLISTCHANGEClick($event, component.content.key)"></bk-form-select>
 
                         </div>
@@ -204,6 +205,7 @@ class LIST_SELECT {
         label: string,
         value: string
     }[] = [];
+    first_value: string;
     label: string;
     key: string;       // List Type "HW_LIST" "CODE_LIST"
     form: FormGroup;

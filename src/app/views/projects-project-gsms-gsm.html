@@ -180,60 +180,60 @@
                         <tr>
                             <td class="vert-align" [innerHTML]="'table_daily_threshold'|bkTranslate:this"></td>
                             <td class="vert-align">
-                                 <bk-form-input [widthSize]="'small'" [control]="form.controls['daily_traffic_threshold']" [showLabel]="false"></bk-form-input> MB
+                                 <bk-form-input [widthSize]="'small'" [control]="form.controls['daily_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input> MB
                           </td>
                           <td class="vert-align text-center">
                               <i [class.fa-toggle-on]="gsm.daily_traffic_threshold_notify_type"
                                  [class.fa-toggle-off]="!gsm.daily_traffic_threshold_notify_type"
                                  style="font-size: 1.8em;"
                                  class="fa font-green-jungle cursor-hand"
-                                 (click)="gsm.daily_traffic_threshold_notify_type = !gsm.daily_traffic_threshold_notify_type"></i>
+                                 (click)="gsm.daily_traffic_threshold_notify_type = !gsm.daily_traffic_threshold_notify_type; onUpdateClick()"></i>
                           </td>
                           <td class="vert-align text-center">
                               <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_daily"
                                  [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_daily"
                                  style="font-size: 1.8em;"
                                  class="fa font-green-jungle cursor-hand"
-                                 (click)="gsm.sim_tm_status.block_sim_daily = !gsm.sim_tm_status.block_sim_daily"></i>
+                                 (click)="gsm.sim_tm_status.block_sim_daily = !gsm.sim_tm_status.block_sim_daily; onUpdateClick()"></i>
                       </tr>
                       <tr>
                           <td class="vert-align" [innerHTML]="'table_monthly_threshold'|bkTranslate:this"></td>
                           <td class="vert-align">
-                               <bk-form-input [widthSize]="'small'" [control]="form.controls['monthly_traffic_threshold']" [showLabel]="false"></bk-form-input> MB
+                               <bk-form-input [widthSize]="'small'" [control]="form.controls['monthly_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input> MB
                          </td>
                          <td class="vert-align text-center">
                              <i [class.fa-toggle-on]="gsm.monthly_traffic_threshold_notify_type"
                                 [class.fa-toggle-off]="!gsm.monthly_traffic_threshold_notify_type"
                                 style="font-size: 1.8em;"
                                 class="fa font-green-jungle cursor-hand"
-                                (click)="gsm.monthly_traffic_threshold_notify_type = !gsm.monthly_traffic_threshold_notify_type"></i>
+                                (click)="gsm.monthly_traffic_threshold_notify_type = !gsm.monthly_traffic_threshold_notify_type; onUpdateClick()"></i>
                          </td>
                          <td class="vert-align text-center">
                              <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_monthly"
                                 [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_monthly"
                                 style="font-size: 1.8em;"
                                 class="fa font-green-jungle cursor-hand"
-                                (click)="gsm.sim_tm_status.block_sim_monthly = !gsm.sim_tm_status.block_sim_monthly"></i>
+                                (click)="gsm.sim_tm_status.block_sim_monthly = !gsm.sim_tm_status.block_sim_monthly; onUpdateClick()"></i>
                          </td>
                      </tr>
                      <tr>
                          <td class="vert-align" [innerHTML]="'table_total_threshold'|bkTranslate:this"></td>
                          <td class="vert-align">
-                             <bk-form-input [widthSize]="'small'" [control]="form.controls['total_traffic_threshold']" [showLabel]="false"></bk-form-input> MB
+                             <bk-form-input [widthSize]="'small'" [control]="form.controls['total_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input> MB
                          </td>
                          <td class="vert-align text-center">
                              <i [class.fa-toggle-on]="gsm.total_traffic_threshold_notify_type"
                                 [class.fa-toggle-off]="!gsm.total_traffic_threshold_notify_type"
                                 style="font-size: 1.8em;"
                                 class="fa font-green-jungle cursor-hand"
-                                (click)="gsm.total_traffic_threshold_notify_type = !gsm.total_traffic_threshold_notify_type"></i>
+                                (click)="gsm.total_traffic_threshold_notify_type = !gsm.total_traffic_threshold_notify_type; onUpdateClick()"></i>
                          </td>
                          <td class="vert-align text-center">
                              <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_total"
                                 [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_total"
                                 style="font-size: 1.8em;"
                                 class="fa font-green-jungle cursor-hand"
-                                (click)="gsm.sim_tm_status.block_sim_total = !gsm.sim_tm_status.block_sim_total"></i>
+                                (click)="gsm.sim_tm_status.block_sim_total = !gsm.sim_tm_status.block_sim_total; onUpdateClick()"></i>
                          </td>
                      </tr>
                      </tbody>
@@ -257,7 +257,7 @@
                                     [class.fa-toggle-off]="!gsm.daily_statistic"
                                     style="font-size: 1.8em;"
                                     class="fa font-green-jungle cursor-hand"
-                                    (click)="gsm.daily_statistic = !gsm.daily_statistic"></i>
+                                    (click)="gsm.daily_statistic = !gsm.daily_statistic; onUpdateClick()"></i>
                              </td>
                          </tr>
                          <tr>
@@ -267,7 +267,7 @@
                                     [class.fa-toggle-off]="!gsm.weekly_statistic"
                                     style="font-size: 1.8em;"
                                     class="fa font-green-jungle cursor-hand"
-                                    (click)="gsm.weekly_statistic = !gsm.weekly_statistic"></i>
+                                    (click)="gsm.weekly_statistic = !gsm.weekly_statistic; onUpdateClick()"></i>
                              </td>
                          </tr>
                          <tr>
@@ -277,7 +277,7 @@
                                     [class.fa-toggle-off]="!gsm.monthly_statistic"
                                     style="font-size: 1.8em;"
                                     class="fa font-green-jungle cursor-hand"
-                                    (click)="gsm.monthly_statistic = !gsm.monthly_statistic"></i>
+                                    (click)="gsm.monthly_statistic = !gsm.monthly_statistic; onUpdateClick()"></i>
                              </td>
                          </tr>
                      </tbody>
@@ -310,6 +310,7 @@
                                             type: 'LIST_SELECT',
                                             content: {
                                                 key: 'PERIOD',
+                                                first_value: 'LAST_30_DAYS',
                                                 label: 'Period',
                                                 options: periodOption
                                             }
@@ -318,6 +319,7 @@
                                             type: 'LIST_SELECT',
                                             content: {
                                                 key: 'DIVIDE_OPTION',
+                                                first_value: 'DAY',
                                                 label: 'Partitioned',
                                                 options: divideOption
                                             }
@@ -329,8 +331,7 @@
          <bk-form-chart-bar
              [title]="'label_gsm_traffic'|bkTranslate:this"
              [btns_group_name]="'label_filter'|bkTranslate:this"
-             [show_legend]="false"
-             [values]="chart_data_component">
+             [show_legend]="false">
          </bk-form-chart-bar>
 
 

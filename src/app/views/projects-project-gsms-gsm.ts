@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
@@ -14,7 +14,7 @@ import {
 } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
-import { DataCharInterface } from '../components/ChartBarComponent';
+import { ChartBarComponent, DataCharInterface } from '../components/ChartBarComponent';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 
@@ -34,12 +34,17 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     project: IProject = null;
     sim_id: string = null;
 
-    tab: string = 'traffic_details';
+    tab: string = 'overview';
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
+
+    @ViewChild(ChartBarComponent)
+    graphView: ChartBarComponent;
+
     gsm: IGSM = null;
-    chart_data_component: DataCharInterface = null;
     form: FormGroup;
+
+    chart_data_component: DataCharInterface = null;
 
     date: Date = new Date();
 
@@ -49,16 +54,16 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
         value: string
     }[] = [
         {
-            label: 'Last 30 Days',
-            value: 'LAST_30_DAYS'
-        },
-        {
             label: 'This Month',
             value: 'MONTH'
         },
         {
             label: 'Last Month',
             value: 'LAST_MONTH'
+        },
+        {
+            label: 'Last 30 Days',
+            value: 'LAST_30_DAYS'
         },
         {
             label: 'This Week',
@@ -148,6 +153,10 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
 
     onToggleTab(tab: string) {
         this.tab = tab;
+
+        if (tab === 'traffic_details') {
+            this.onFilterData();
+        }
     }
 
     ngOnDestroy(): void {
@@ -303,7 +312,15 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                         continue;
                     }
                     numberData.push(overview.datagram[k].data_consumption);
-                    chartLabels.push(overview.datagram[k].date_from + ' - ' + overview.datagram[k].date_to);
+
+                    let from = moment.unix(overview.datagram[k].long_from / 1000);
+                    let to = moment.unix(overview.datagram[k].long_to / 1000);
+
+                    if (this.DIVIDE_OPTION !== 'HOUR') {
+                        chartLabels.push(from.format('DD.MM') + '-' + to.format('DD.MM') );
+                    } else {
+                        chartLabels.push(from.format('HH') + ' - ' +  to.format('HH'));
+                    }
                 }
 
                 let chartData: DataCharInterface = {
@@ -318,6 +335,8 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 console.info('ProjectsProjectGSMSGSMComponent::DATA:: ', chartData);
                 this.chart_data_component = chartData;
 
+                this.graphView.setData(this.chart_data_component);
+
             }).catch(reason => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
                 return null;
@@ -328,18 +347,23 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
         let model = new ModalsGsmPropertiesModel(gsm);
         this.modalService.showModal(model)
             .then((success) => {
+                this.blockUI();
                 this.tyrionBackendService.simUpdate(gsm.id, {
-                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold,
+                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold  * 1024,
                     block_sim_daily: model.gsm.sim_tm_status.block_sim_daily,
                     daily_traffic_threshold_notify_type: model.gsm.daily_traffic_threshold_notify_type,
 
-                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold,
+                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold  * 1024,
                     block_sim_monthly: model.gsm.sim_tm_status.block_sim_monthly,
                     monthly_traffic_threshold_notify_type: model.gsm.monthly_traffic_threshold_notify_type,
 
-                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold,
+                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold  * 1024,
                     block_sim_total: model.gsm.sim_tm_status.block_sim_total,
                     total_traffic_threshold_notify_type: model.gsm.total_traffic_threshold_notify_type,
+
+                    daily_statistic: model.gsm.daily_statistic,
+                    weekly_statistic: model.gsm.weekly_statistic,
+                    monthly_statistic: model.gsm.monthly_statistic,
 
                     name: model.gsm.name,
                     description: model.gsm.description,
@@ -355,14 +379,51 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             });
     }
 
+    onUpdateClick(): void {
+        this.blockUI();
+
+        console.log('vdaily_traffic_threshold' +  this.form.controls['daily_traffic_threshold'].value);
+        console.log('monthly_traffic_threshold' +  this.form.controls['monthly_traffic_threshold'].value);
+        console.log('total_traffic_threshold' +  this.form.controls['total_traffic_threshold'].value);
+
+        this.tyrionBackendService.simUpdate(this.gsm.id, {
+
+            daily_traffic_threshold:                this.form.controls['daily_traffic_threshold'].value * 1024 * 1024,
+            block_sim_daily:                        this.gsm.sim_tm_status.block_sim_daily,
+            daily_traffic_threshold_notify_type:    this.gsm.daily_traffic_threshold_notify_type,
+
+            monthly_traffic_threshold:              this.form.controls['monthly_traffic_threshold'].value * 1024 * 1024,
+            block_sim_monthly:                      this.gsm.sim_tm_status.block_sim_monthly,
+            monthly_traffic_threshold_notify_type:  this.gsm.monthly_traffic_threshold_notify_type,
+
+            total_traffic_threshold:                this.form.controls['total_traffic_threshold'].value * 1024 * 1024,
+            block_sim_total:                        this.gsm.sim_tm_status.block_sim_total,
+            total_traffic_threshold_notify_type:    this.gsm.total_traffic_threshold_notify_type,
+
+            daily_statistic: this.gsm.daily_statistic,
+            weekly_statistic: this.gsm.weekly_statistic,
+            monthly_statistic: this.gsm.monthly_statistic,
+
+            name: this.gsm.name,
+            description: this.gsm.description,
+            tags: this.gsm.tags
+        }).then(() => {
+            this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_cellular_update_success')));
+            this.unblockUI();
+            this.refresh();
+        }).catch(reason => {
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+            this.refresh();
+        });
+    }
+
+
     refresh(): void {
         console.info('ProjectsProjectGSMSGSMComponent::Refresh');
         this.tyrionBackendService.simGet(this.sim_id)
             .then((gsm: IGSM) => {
                 this.gsm = gsm;
                 this.unblockUI();
-                this.onFilterData();
-
 
                 /* tslint:disable:max-line-length */
                 let input: { [key: string]: any } = {

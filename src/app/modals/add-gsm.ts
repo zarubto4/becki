@@ -7,8 +7,7 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import {IGSM, IHardware, IHardwareGroupList, IResultBadRequest, IResultInvalidBody} from '../backend/TyrionAPI';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { IGSM, IResultBadRequest, IResultInvalidBody } from '../backend/TyrionAPI';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessage } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
