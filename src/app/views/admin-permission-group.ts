@@ -23,8 +23,6 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
 
     routeParamsSubscription: Subscription;
 
-    securityRole: IRoleList = null;
-
     projectSubscription: Subscription;
 
     project: IProject = null;
