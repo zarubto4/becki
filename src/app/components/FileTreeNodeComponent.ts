@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 
 
-class FileTreeNodeObject<File> {
+class FileTreeNodeComponent<File> {
     name: string;
     path: string[];
     files: File[];
-    directories: FileTreeNodeObject<File>[];
+    directories: FileTreeNodeComponent<File>[];
     isRoot: boolean = false;
     isSelected: boolean;
     style: Style = new Style();
@@ -31,11 +31,13 @@ class FileTreeNodeObject<File> {
     @Output()
     folderEditClick = new EventEmitter<string>();
 
-    constructor(name: string, path: string[], files: File[], directories: FileTreeNodeObject<File>[]) {
+    constructor(name: string, path: string[], files: File[], directories: FileTreeNodeComponent<File>[]) {
         this.name = name;
         this.path = path;
         this.files = files;
         this.directories = directories;
+        this.style.icon = 'folder';
+        this.style.iconColor = '#ffc50d';
     }
 
     onOpenClicked() {
@@ -70,10 +72,13 @@ class FileTreeNodeObject<File> {
 
 }
 
-class FileTreeFileComponent<File> {
+export class FileTreeFileComponent<File> {
     file: File;
+    name: string;
     folderPath: string[];
-
+    isOpen: boolean;
+    isSelected: boolean;
+    style = new Style();
     @Output()
     fileRemoveClicked = new EventEmitter<File>();
 
@@ -83,9 +88,32 @@ class FileTreeFileComponent<File> {
     @Output()
     fileCreateClicked = new EventEmitter<string>();
 
-    constructor(file: File, folderPath: string[]) {
+    constructor(file: File, name: string, folderPath: string[]) {
         this.file = file;
         this.folderPath = folderPath;
+        this.name = name;
+        this.style.icon = 'file-text';
+
+        let separatedName = name.split('.');
+        let extension = separatedName[separatedName.length - 1];
+        switch (extension) {
+            case 'cpp': {
+                this.style.iconColor = '#067084';
+                break;
+            }
+            case 'c': {
+                this.style.iconColor = '#782c1f';
+                break;
+            }
+            case 'h': {
+                this.style.iconColor = '#013284';
+                break;
+            }
+            default: {
+                this.style.iconColor = 'silver';
+                break;
+            }
+        }
     }
 
     onFileRemoveClicked() {
@@ -97,19 +125,10 @@ class FileTreeFileComponent<File> {
     }
 }
 
-class StyledFile<File> {
-    file: File;
-}
-
-class Style {
+export class Style {
     textColor: string = 'grey';
     backgroungColor: string = 'white';
-    isOpen: boolean = false;
-    isSelected: boolean = false;
     icon: string = '';
+    iconColor = 'silver';
     bold: boolean = false;
-}
-class FolderStyle extends Style {
-    icon = 'folder';
-
 }
