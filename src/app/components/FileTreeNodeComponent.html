@@ -1,21 +1,21 @@
 <div>
     <div tabindex="-1"
-          (click)="onCloseList()"
-          [style.font-weight]="fileTreeObject.bold?'800':'normal'"
+          (click)="onOpenClicked()"
+          [style.font-weight]="style.isBold ? '800' : 'normal'"
           (mouseover)="hoover(fileTreeObject, true)" (mouseleave)="hoover(fileTreeObject, false)">
        
         <!-- Ikonka složky -->
-        <bk-icon-file-component [icon]="isOpen?'fa-folder':'fa-folder-open'" [color]="fileTreeObject.color"></bk-icon-file-component>
+        <bk-icon-file-component [icon]="style.icon" [color]="style.iconColor"></bk-icon-file-component>
         
         <!-- Název ikonky -->
         {{fileTreeObject.name}}
         
         <!-- Ikonky vpravo !-->
         <div *ngIf="fileTreeObject && fileTreeObject.show_icons" class="pull-right">
-            <bk-icon-component [condition]="!root" [icon]="'fa-trash'" (onClickEvent)="onRemoveClick(fileTreeObject)"></bk-icon-component>
-            <bk-icon-component [condition]="!root" [icon]="'fa-pencil'" (onClickEvent)="onEditClick(fileTreeObject)"></bk-icon-component>
-            <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="onFileCreateClick(fileTreeObject)"></bk-icon-component>
-            <bk-icon-component [condition]="true" [icon]="'fa-folder'" (onClickEvent)="onFolderAddClick(fileTreeObject)"></bk-icon-component>
+            <bk-icon-component [condition]="!root" [icon]="'fa-trash'" (onClickEvent)="onFolderRemoveClick()"></bk-icon-component>
+            <bk-icon-component [condition]="!root" [icon]="'fa-pencil'" (onClickEvent)="onFolderEditClick()"></bk-icon-component>
+            <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="onFileCreateClick()"></bk-icon-component>
+            <bk-icon-component [condition]="true" [icon]="'fa-folder'" (onClickEvent)="onFolderCreateClick()"></bk-icon-component>
         </div>
     </div>
 </div>
