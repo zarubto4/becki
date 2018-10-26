@@ -2,20 +2,30 @@
     <div tabindex="-1"
           (click)="onOpenClicked()"
           [style.font-weight]="style.isBold ? '800' : 'normal'"
-          (mouseover)="hoover(fileTreeObject, true)" (mouseleave)="hoover(fileTreeObject, false)">
+          (mouseover)="onHover(true)" (mouseleave)="onHover(false)">
        
         <!-- Ikonka složky -->
         <bk-icon-file-component [icon]="style.icon" [color]="style.iconColor"></bk-icon-file-component>
         
         <!-- Název ikonky -->
-        {{fileTreeObject.name}}
+        {{folder.name}}
         
         <!-- Ikonky vpravo !-->
-        <div *ngIf="fileTreeObject && fileTreeObject.show_icons" class="pull-right">
+        <div *ngIf="style.show_icons" class="pull-right">
             <bk-icon-component [condition]="!root" [icon]="'fa-trash'" (onClickEvent)="onFolderRemoveClick()"></bk-icon-component>
             <bk-icon-component [condition]="!root" [icon]="'fa-pencil'" (onClickEvent)="onFolderEditClick()"></bk-icon-component>
             <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="onFileCreateClick()"></bk-icon-component>
             <bk-icon-component [condition]="true" [icon]="'fa-folder'" (onClickEvent)="onFolderCreateClick()"></bk-icon-component>
+        </div>
+    </div>
+    <div *ngIf="isOpen">
+        <div style="padding-left: 20px; list-style-type: none;">
+                <div *ngFor="let subFolder of folder.folders">
+                        <bk-file-tree-node [folder] = "rootNode"></bk-file-tree-node>
+                </div>
+                <div *ngFor="let file of folder.files">
+                    
+                </div>
         </div>
     </div>
 </div>

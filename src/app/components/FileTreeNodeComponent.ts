@@ -1,38 +1,54 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CodeFile, CodeDirectory } from './CodeIDEComponent';
 
+export class FileTreeNodeObject {
+    path: string;
+    files: CodeFile[] = [];
+    directories: FileTreeNodeObject[] = [];
+
+    name: string;
+
+    constructor(path: string, files: CodeFile[] = [], directories: FileTreeNodeObject[] = []) {
+        this.path = path;
+        this.files = files;
+        this.directories = directories;
+        let slicedPath = this.path.split('/');
+        this.name = slicedPath[slicedPath.length - 1];
+    }
+}
+
+
 @Component({
     selector: 'bk-file-tree-node',
     template: './FileTreeNodeComponent.html'
 })
-
-
 export class FileTreeNodeComponent  extends Component implements OnInit {
     @Input()
-    folder: CodeDirectory;
-    
+    folder: FileTreeNodeObject;
+
     isRoot: boolean = false;
     isSelected: boolean = false;
     style: Style = new Style();
-    isOpen: boolean = false;
+    isOpen: boolean = true;
+   // selectedPath: string;
 
     @Output()
-    fileCreateClicked = new EventEmitter<string>();
+    fileCreateClicked = new EventEmitter<FileTreeNodeComponent>();
 
     @Output()
-    fileRemoveClicked = new EventEmitter<File>();
+    fileRemoveClicked = new EventEmitter<FileTreeFileComponent>();
 
     @Output()
-    fileEditClick = new EventEmitter<File>();
+    fileEditClick = new EventEmitter<FileTreeFileComponent>();
 
     @Output()
-    folderCreateClicked = new EventEmitter<string>();
+    folderCreateClicked = new EventEmitter<FileTreeNodeComponent>();
 
     @Output()
-    folderRemoveClick = new EventEmitter<string>();
+    folderRemoveClick = new EventEmitter<FileTreeNodeComponent>();
 
     @Output()
-    folderEditClick = new EventEmitter<string>();
+    folderEditClick = new EventEmitter<FileTreeNodeComponent>();
 
 
     ngOnInit(): void {
@@ -51,27 +67,31 @@ export class FileTreeNodeComponent  extends Component implements OnInit {
     }
 
     onFileCreateClick() {
-        this.fileCreateClicked.emit(this.path.join('/'));
+        this.fileCreateClicked.emit(this);
     }
 
-    onFileRemoveClick(file: File) {
-        this.fileRemoveClicked.emit(file);
+    onFileRemoveClick(component: FileTreeFileComponent) {
+        this.fileRemoveClicked.emit(component);
     }
 
-    onFileEditClick(file: File) {
-        this.fileEditClick.emit(file);
+    onFileEditClick(component: FileTreeFileComponent) {
+        this.fileEditClick.emit(component);
     }
 
     onFolderAddClick() {
-        this.folderCreateClicked.emit(this.path.join('/'));
+        this.folderCreateClicked.emit(this);
     }
 
     onFolderEditClick() {
-        this.folderEditClick.emit(this.path.join('/'));
+        this.folderEditClick.emit(this);
     }
 
     onFolderRemoveClick(){
-        this.folderRemoveClick.emit(this.path.join('/'));
+        this.folderRemoveClick.emit(this);
+    }
+
+    onHover(hover: boolean) {
+        this.style.showSideIcons = hover;
     }
 
     refresh() {
@@ -100,32 +120,26 @@ export class FileTreeNodeComponent  extends Component implements OnInit {
     </div>
     `
 })
+export class FileTreeFileComponent extends Comment implements OnInit {
 
+    @Input()
+    file: CodeFile;
 
-export class FileTreeFileComponent<File> extends Comment implements OnInit {
-    
-    @Input()
-    file: File;
-    
-    @Input()
     name: string;
-    
-    @Input()
-    folderPath: string[];
-    
+
     isOpen: boolean = false;
     isSelected: boolean = false;
     style = new Style();
 
     @Output()
-    fileRemoveClicked = new EventEmitter<FileTreeFileComponent<File>>();
+    fileRemoveClicked = new EventEmitter<FileTreeFileComponent>();
 
     @Output()
-    fileRenameClicked = new EventEmitter<FileTreeFileComponent<File>>();
+    fileRenameClicked = new EventEmitter<FileTreeFileComponent>();
 
     ngOnInit(): void {
         this.style.icon = 'file-text';
-
+        this.name = this.file.objectName;
         let separatedName = this.name.split('.');
         let extension = separatedName[separatedName.length - 1];
         switch (extension) {
@@ -148,14 +162,16 @@ export class FileTreeFileComponent<File> extends Comment implements OnInit {
         }
     }
 
-
-
     onFileRemoveClicked() {
         this.fileRemoveClicked.emit(this);
     }
 
     onFileRenameClicked() {
         this.fileRenameClicked.emit(this);
+    }
+
+    onHover(hover: boolean) {
+        this.style.showSideIcons = hover;
     }
 }
 
@@ -165,4 +181,5 @@ export class Style {
     icon: string = '';
     iconColor = 'silver';
     bold: boolean = false;
+    showSideIcons: boolean = false;
 }

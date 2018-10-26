@@ -1,33 +1,31 @@
+import { CodeFile } from './CodeIDEComponent';
+import { FileTreeNodeObject } from './FileTreeNodeComponent';
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-
-
-interface FileWIthPath {
-    path: string;
-}
 
 @Component({
     selector: 'bk-file-tree-root',
-    template: './FileTreeRootComponent.html'
+    template: `
+        <div>
+            <bk-file-tree-node [folder] = "rootNode">
+            </bk-file-tree-node>
+        </div>
+    `
 })
 
-export class FileTreeRootObject <File extends FileWIthPath > implements OnInit, AfterViewInit, OnChanges {
+export class FileTreeRootObject implements OnInit, OnChanges {
     
     @Input()
-    files: File[];
-
-    @Output()
-    selectedDirectoryPath: string = null;
-
-    @Output()
-    selectedFile: File = null;
+    files: CodeFile[];
 
     @Output()
     newPathSelected: EventEmitter<string>;
 
     @Output()
-    newFileSelected: EventEmitter<File>;
+    newFileSelected: EventEmitter<CodeFile>;
 
-    rootNode: FileTreeNodeObject<File> = null;
+    selectedPath: string;
+
+    rootNode: FileTreeNodeObject = new FileTreeNodeObject('', [], []);
 
     ngOnInit(): void {
 
@@ -40,20 +38,20 @@ export class FileTreeRootObject <File extends FileWIthPath > implements OnInit, 
     }
 
     createNodeHierarchy() {
-        this.rootNode = new FileTreeNodeObject<File>('', '/', [], []);
+        this.rootNode = new FileTreeNodeObject('', [], []);
         this.files.forEach((file) => {
-            this.putFileIntoHierarchy(file, file.path.split('/'), this.rootNode);
+            this.putFileIntoHierarchy(file, file.objectFullPath.split('/'), this.rootNode);
         });
     }
 
-    putFileIntoHierarchy(file: File, remainingPath: string[], directory: FileTreeNodeObject<File>) {
+    putFileIntoHierarchy(file: CodeFile, remainingPath: string[], directory: FileTreeNodeObject) {
         if (remainingPath.length > 1) {
             let nextDirectory = remainingPath[0];
             let foundDirectory = directory.directories.find((node) => { return node.name === nextDirectory; } );
             if (foundDirectory) {
                 this.putFileIntoHierarchy(file, remainingPath.slice(1), foundDirectory);
             } else {
-                let newDirectory = new FileTreeNodeObject(nextDirectory, directory.path + '/' + nextDirectory, [], []);
+                let newDirectory = new FileTreeNodeObject(directory.path + '/' + nextDirectory, [], []);
                 directory.directories.push(newDirectory);
                 this.putFileIntoHierarchy(file, remainingPath.slice(1), newDirectory);
             }
@@ -62,9 +60,9 @@ export class FileTreeRootObject <File extends FileWIthPath > implements OnInit, 
         }
     }
 
-    onSelectedFile(file: File) {
-        this.selectedFile = file;
-        this.newFileSelected.emit(file);
+    onSelectedPath(path: string) {
+        this.selectedPath = path;
+        this.newPathSelected.emit(path);
     }
 
 
