@@ -137,6 +137,9 @@ export class FileTreeFileComponent extends Comment implements OnInit {
     @Output()
     fileRenameClicked = new EventEmitter<FileTreeFileComponent>();
 
+    @Output() 
+    fileSelected = new EventEmitter<FileTreeFileComponent>();
+    
     ngOnInit(): void {
         this.style.icon = 'file-text';
         this.name = this.file.objectName;
@@ -160,6 +163,10 @@ export class FileTreeFileComponent extends Comment implements OnInit {
                 break;
             }
         }
+    }
+
+    onSelected(){
+
     }
 
     onFileRemoveClicked() {

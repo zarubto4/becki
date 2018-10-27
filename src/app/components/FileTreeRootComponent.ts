@@ -64,8 +64,6 @@ export class FileTreeRootObject implements OnInit, OnChanges {
         this.selectedPath = path;
         this.newPathSelected.emit(path);
     }
-
-
 }
 
 
