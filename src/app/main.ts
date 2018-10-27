@@ -239,6 +239,9 @@ import { ModalsPaymentDetailsComponent } from './modals/payment-details';
 import { FinancialProductInvoicesInvoiceEventsComponent } from './views/financial-product-invoices-invoice-events';
 import { FileDownloaderService } from './services/FileDownloaderService';
 import { MonacoDiffComponent } from './components/MonacoDiffComponent';
+import { FileTreeRootComponent } from './components/FileTreeRootComponent';
+import { FileTreeNodeComponent, FileTreeFileComponent } from './components/FileTreeNodeComponent';
+
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -740,6 +743,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
         MonacoDiffComponent,
+        FileTreeRootComponent,
+        FileTreeFileComponent,
+        FileTreeNodeComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

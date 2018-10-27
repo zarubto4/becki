@@ -1,6 +1,21 @@
 import { CodeFile } from './CodeIDEComponent';
-import { FileTreeNodeObject } from './FileTreeNodeComponent';
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+
+export class FileTreeNodeObject {
+    path: string;
+    files: CodeFile[] = [];
+    directories: FileTreeNodeObject[] = [];
+
+    name: string;
+
+    constructor(path: string, files: CodeFile[] = [], directories: FileTreeNodeObject[] = []) {
+        this.path = path;
+        this.files = files;
+        this.directories = directories;
+        let slicedPath = this.path.split('/');
+        this.name = slicedPath[slicedPath.length - 1];
+    }
+}
 
 @Component({
     selector: 'bk-file-tree-root',
@@ -12,8 +27,8 @@ import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChange
     `
 })
 
-export class FileTreeRootObject implements OnInit, OnChanges {
-    
+export class FileTreeRootComponent implements OnInit, OnChanges {
+
     @Input()
     files: CodeFile[];
 
@@ -27,6 +42,8 @@ export class FileTreeRootObject implements OnInit, OnChanges {
 
     rootNode: FileTreeNodeObject = new FileTreeNodeObject('', [], []);
 
+
+
     ngOnInit(): void {
 
     }
@@ -38,7 +55,7 @@ export class FileTreeRootObject implements OnInit, OnChanges {
     }
 
     createNodeHierarchy() {
-        this.rootNode = new FileTreeNodeObject('', [], []);
+        this.rootNode = new FileTreeNodeObject('root', [], []);
         this.files.forEach((file) => {
             this.putFileIntoHierarchy(file, file.objectFullPath.split('/'), this.rootNode);
         });

@@ -21,10 +21,11 @@
     <div *ngIf="isOpen">
         <div style="padding-left: 20px; list-style-type: none;">
                 <div *ngFor="let subFolder of folder.folders">
-                        <bk-file-tree-node [folder] = "rootNode"></bk-file-tree-node>
+                        <bk-file-tree-node [folder] = "subFolder"></bk-file-tree-node>
                 </div>
                 <div *ngFor="let file of folder.files">
-                    
+                    <bk-file-tree-file [file] = "file">
+                    </bk-file-tree-file>
                 </div>
         </div>
     </div>

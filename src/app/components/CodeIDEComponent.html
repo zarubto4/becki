@@ -25,13 +25,8 @@
                 </div>
 
                 <div [hidden]="!_show_files_portlet">
-                    <bk-file-tree [fileTreeObject]="rootFileTreeObject"
-                                  (newSelected)="selectFto($event)"
-                                  (newFolderNewClick)="toolbarAddDirectoryClick($event)"
-                                  (newFileNewClick)="toolbarAddFileClick($event)"
-                                  (removeClick)="toolbarRemoveClick($event)"
-                                  (editClick)="toolbarRenameClick($event)">
-                    </bk-file-tree>
+                    <bk-file-tree-root [files]="files">
+                    </bk-file-tree-root>
                 </div>
             </div>
 

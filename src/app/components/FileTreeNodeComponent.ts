@@ -1,26 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CodeFile, CodeDirectory } from './CodeIDEComponent';
-
-export class FileTreeNodeObject {
-    path: string;
-    files: CodeFile[] = [];
-    directories: FileTreeNodeObject[] = [];
-
-    name: string;
-
-    constructor(path: string, files: CodeFile[] = [], directories: FileTreeNodeObject[] = []) {
-        this.path = path;
-        this.files = files;
-        this.directories = directories;
-        let slicedPath = this.path.split('/');
-        this.name = slicedPath[slicedPath.length - 1];
-    }
-}
-
+import { FileTreeNodeObject } from './FileTreeRootComponent';
 
 @Component({
     selector: 'bk-file-tree-node',
-    template: './FileTreeNodeComponent.html'
+    templateUrl: './FileTreeNodeComponent.html'
 })
 export class FileTreeNodeComponent  extends Component implements OnInit {
     @Input()
@@ -104,18 +88,17 @@ export class FileTreeNodeComponent  extends Component implements OnInit {
 @Component({
     selector: 'bk-file-tree-file',
     template: `
-    <div *ngIf="!child.directory" (mouseover)="hoover(child, true)" (mouseleave)="hoover(child, false)">
-        <i class=""></i>
+    <div  (mouseover)="onHover(true)" (mouseleave)="onHover(false)">
         <span tabindex="-1"
-            (click)="internalObjClick(child)"
+            (click)="onSelected()"
             role="button"
-            [style.font-weight]="child.bold?'800':'normal'">
-            <bk-icon-file-component [name]="child.name" [icon]="child.icon" [color]="child.color"></bk-icon-file-component>
-            {{child.name}}
+            [style.font-weight]="style.bold?'800':'normal'">
+            <bk-icon-file-component [name]="name" [icon]="style.icon" [color]="style.iconColor"></bk-icon-file-component>
+            {{name}}
         </span>
         <div class="pull-right">
-            <bk-icon-component [condition]="child && child.show_icons" [icon]="'fa-trash'" (onClickEvent)="onRemoveClick(child)"></bk-icon-component>
-            <bk-icon-component [condition]="child && child.show_icons" [icon]="'fa-pencil'" (onClickEvent)="onEditClick(child)"></bk-icon-component>
+            <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-trash'" (onClickEvent)="onFileRemoveClicked()"></bk-icon-component>
+            <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-pencil'" (onClickEvent)="onFileRenameClicked()"></bk-icon-component>
         </div>
     </div>
     `
@@ -139,7 +122,7 @@ export class FileTreeFileComponent extends Comment implements OnInit {
 
     @Output() 
     fileSelected = new EventEmitter<FileTreeFileComponent>();
-    
+
     ngOnInit(): void {
         this.style.icon = 'file-text';
         this.name = this.file.objectName;
@@ -165,8 +148,12 @@ export class FileTreeFileComponent extends Comment implements OnInit {
         }
     }
 
-    onSelected(){
+    onHoover(hover: boolean) {
+        this.style.showSideIcons = hover;
+    }
 
+    onSelected() {
+        this.fileSelected.emit(this);
     }
 
     onFileRemoveClicked() {
