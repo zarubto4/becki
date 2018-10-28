@@ -240,7 +240,8 @@ import { FinancialProductInvoicesInvoiceEventsComponent } from './views/financia
 import { FileDownloaderService } from './services/FileDownloaderService';
 import { MonacoDiffComponent } from './components/MonacoDiffComponent';
 import { FileTreeRootComponent } from './components/FileTreeRootComponent';
-import { FileTreeNodeComponent, FileTreeFileComponent } from './components/FileTreeNodeComponent';
+import { FileTreeNodeComponent } from './components/FileTreeNodeComponent';
+import { FileTreeFileComponent } from './components/FileTreeFileComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!

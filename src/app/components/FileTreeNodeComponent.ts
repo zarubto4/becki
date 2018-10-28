@@ -1,20 +1,61 @@
+import { FileTreeComponent } from './FileTreeComponent';
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CodeFile, CodeDirectory } from './CodeIDEComponent';
-import { FileTreeNodeObject } from './FileTreeRootComponent';
+import { FileTreeNodeObject, FileTreeElement } from './FileTreeRootComponent';
+import { FileTreeFileComponent } from './FileTreeFileComponent';
 
 @Component({
     selector: 'bk-file-tree-node',
-    templateUrl: './FileTreeNodeComponent.html'
+    template: `<div>
+    <div tabindex = "-1"
+          (click) = "onClicked()"
+          [style.background-color] = "style.selected ? 'lightblue' : '' "
+          [style.font-weight] = "style.bold ? '800' : 'normal'"
+          (mouseover) = "onHover(true)"
+          (mouseleave) = "onHover(false)">
+
+        <!-- Ikonka složky -->
+        <bk-icon-file-component [icon]="style.icon" [color]="style.iconColor"></bk-icon-file-component>
+
+        <!-- Název ikonky -->
+        {{folder.name}}
+
+        <!-- Ikonky vpravo !-->
+        <div *ngIf="style.showSideIcons" class="pull-right">
+            <bk-icon-component [condition]="!root" [icon]="'fa-trash'" (onClickEvent)="onFolderRemoveClick()"></bk-icon-component>
+            <bk-icon-component [condition]="!root" [icon]="'fa-pencil'" (onClickEvent)="onFolderEditClick()"></bk-icon-component>
+            <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="onFileCreateClick()"></bk-icon-component>
+            <bk-icon-component [condition]="true" [icon]="'fa-folder'" (onClickEvent)="onFolderAddClick()"></bk-icon-component>
+        </div>
+    </div>
+    <div *ngIf="open">
+        <div style="padding-left: 20px; list-style-type: none;">
+                <div *ngFor="let subFolder of folder.directories">
+                        <bk-file-tree-node
+                        [folder] = "subFolder">
+                        (elementSelected) = "elementSelected.emit($event)"
+                        </bk-file-tree-node>
+                </div>
+                <div *ngFor="let file of folder.files">
+                    <bk-file-tree-file
+                    [file] = "file"
+                    (fileSelected) = "onFileSelectClick($event)">
+                    </bk-file-tree-file>
+                </div>
+        </div>
+    </div>
+</div>`
 })
-export class FileTreeNodeComponent  extends Component implements OnInit {
+
+export class FileTreeNodeComponent  extends Component implements OnInit, FileTreeElement {
     @Input()
     folder: FileTreeNodeObject;
 
-    isRoot: boolean = false;
-    isSelected: boolean = false;
+    root: boolean = false;
+    selected: boolean = false;
     style: Style = new Style();
-    isOpen: boolean = true;
-   // selectedPath: string;
+    open: boolean = true;
+    path: string = '';
 
     @Output()
     fileCreateClicked = new EventEmitter<FileTreeNodeComponent>();
@@ -34,19 +75,17 @@ export class FileTreeNodeComponent  extends Component implements OnInit {
     @Output()
     folderEditClick = new EventEmitter<FileTreeNodeComponent>();
 
+    @Output()
+    elementSelected = new EventEmitter<FileTreeElement>();
 
     ngOnInit(): void {
         this.style.iconColor = '#ffc50d';
         this.refresh();
     }
 
-    onOpenClicked() {
-        this.isOpen = !this.isOpen;
-        this.refresh();
-    }
-
-    onSelected() {
-        this.isSelected = !this.isSelected;
+    onClicked() {
+        this.open = !this.open;
+        this.elementSelected.emit(this);
         this.refresh();
     }
 
@@ -78,94 +117,13 @@ export class FileTreeNodeComponent  extends Component implements OnInit {
         this.style.showSideIcons = hover;
     }
 
+    onFileSelectClick(file: FileTreeFileComponent) {
+        this.elementSelected.emit({style: file.style, path: file.file.objectFullPath});
+    }
+
     refresh() {
-        this.style.icon = this.isOpen ? 'folder-open' : 'folder' ;
-        this.style.backgroungColor = this.isSelected ? 'blue' : 'white';
-    }
-}
-
-
-@Component({
-    selector: 'bk-file-tree-file',
-    template: `
-    <div  (mouseover)="onHover(true)" (mouseleave)="onHover(false)">
-        <span tabindex="-1"
-            (click)="onSelected()"
-            role="button"
-            [style.font-weight]="style.bold?'800':'normal'">
-            <bk-icon-file-component [name]="name" [icon]="style.icon" [color]="style.iconColor"></bk-icon-file-component>
-            {{name}}
-        </span>
-        <div class="pull-right">
-            <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-trash'" (onClickEvent)="onFileRemoveClicked()"></bk-icon-component>
-            <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-pencil'" (onClickEvent)="onFileRenameClicked()"></bk-icon-component>
-        </div>
-    </div>
-    `
-})
-export class FileTreeFileComponent extends Comment implements OnInit {
-
-    @Input()
-    file: CodeFile;
-
-    name: string;
-
-    isOpen: boolean = false;
-    isSelected: boolean = false;
-    style = new Style();
-
-    @Output()
-    fileRemoveClicked = new EventEmitter<FileTreeFileComponent>();
-
-    @Output()
-    fileRenameClicked = new EventEmitter<FileTreeFileComponent>();
-
-    @Output() 
-    fileSelected = new EventEmitter<FileTreeFileComponent>();
-
-    ngOnInit(): void {
-        this.style.icon = 'file-text';
-        this.name = this.file.objectName;
-        let separatedName = this.name.split('.');
-        let extension = separatedName[separatedName.length - 1];
-        switch (extension) {
-            case 'cpp': {
-                this.style.iconColor = '#067084';
-                break;
-            }
-            case 'c': {
-                this.style.iconColor = '#782c1f';
-                break;
-            }
-            case 'h': {
-                this.style.iconColor = '#013284';
-                break;
-            }
-            default: {
-                this.style.iconColor = 'silver';
-                break;
-            }
-        }
-    }
-
-    onHoover(hover: boolean) {
-        this.style.showSideIcons = hover;
-    }
-
-    onSelected() {
-        this.fileSelected.emit(this);
-    }
-
-    onFileRemoveClicked() {
-        this.fileRemoveClicked.emit(this);
-    }
-
-    onFileRenameClicked() {
-        this.fileRenameClicked.emit(this);
-    }
-
-    onHover(hover: boolean) {
-        this.style.showSideIcons = hover;
+        this.style.icon = this.open ? 'fa-folder-open' : 'fa-folder' ;
+        this.style.backgroungColor = this.selected ? 'blue' : 'white';
     }
 }
 
@@ -176,4 +134,5 @@ export class Style {
     iconColor = 'silver';
     bold: boolean = false;
     showSideIcons: boolean = false;
+    selected: boolean = false;
 }

@@ -1,5 +1,6 @@
 import { CodeFile } from './CodeIDEComponent';
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Style } from './FileTreeNodeComponent';
 
 export class FileTreeNodeObject {
     path: string;
@@ -17,11 +18,18 @@ export class FileTreeNodeObject {
     }
 }
 
+export interface FileTreeElement {
+    style: Style;
+    path: string;
+}
+
 @Component({
     selector: 'bk-file-tree-root',
     template: `
         <div>
-            <bk-file-tree-node [folder] = "rootNode">
+            <bk-file-tree-node
+            [folder] = "rootNode"
+            (elementSelected) = "onElementSelected($event)" >
             </bk-file-tree-node>
         </div>
     `
@@ -33,17 +41,17 @@ export class FileTreeRootComponent implements OnInit, OnChanges {
     files: CodeFile[];
 
     @Output()
-    newPathSelected: EventEmitter<string>;
+    newPathSelected = new EventEmitter<string>();
 
     @Output()
-    newFileSelected: EventEmitter<CodeFile>;
+    newFileSelected = new EventEmitter<CodeFile>();
 
     selectedPath: string;
 
     rootNode: FileTreeNodeObject = new FileTreeNodeObject('', [], []);
 
-
-
+    private selectedElement: FileTreeElement;
+    justRoot: FileTreeNodeObject;
     ngOnInit(): void {
 
     }
@@ -55,9 +63,11 @@ export class FileTreeRootComponent implements OnInit, OnChanges {
     }
 
     createNodeHierarchy() {
-        this.rootNode = new FileTreeNodeObject('root', [], []);
+        this.rootNode = new FileTreeNodeObject('extraRoot', [], []);
+        this.justRoot = new FileTreeNodeObject('root', [], []);
+        this.rootNode.directories.push(this.justRoot);
         this.files.forEach((file) => {
-            this.putFileIntoHierarchy(file, file.objectFullPath.split('/'), this.rootNode);
+            this.putFileIntoHierarchy(file, file.objectFullPath.split('/'), this.justRoot);
         });
     }
 
@@ -75,6 +85,15 @@ export class FileTreeRootComponent implements OnInit, OnChanges {
         } else {
             directory.files.push(file);
         }
+    }
+
+    onElementSelected(element: FileTreeElement) {
+        if (this.selectedElement) {
+            this.selectedElement.style.selected = false;
+        }
+        this.selectedElement = element;
+        this.selectedElement.style.selected = true;
+        this.newPathSelected.emit(element.path);
     }
 
     onSelectedPath(path: string) {
