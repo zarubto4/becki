@@ -25,7 +25,9 @@
                 </div>
 
                 <div [hidden]="!_show_files_portlet">
-                    <bk-file-tree-root [files]="files">
+                    <bk-file-tree-root
+                    [files] = "files"
+                    (fileEdit) = "toolbarFileRenameClick($event)" >
                     </bk-file-tree-root>
                 </div>
             </div>
@@ -216,9 +218,9 @@
                                           [language]="langFromFilename(file)"
                                           [readonly]="file.readonly"
                                           *ngIf="inEditMode"></bk-monaco-editor>
-                        <bk-monaco-diff [originalCode] = "file.contentOriginal" 
-                                        [code] = "file.content" 
-                                        *ngIf="!inEditMode"> 
+                        <bk-monaco-diff [originalCode] = "file.contentOriginal"
+                                        [code] = "file.content"
+                                        *ngIf="!inEditMode">
                         </bk-monaco-diff>
                     </li>
                     <li *ngIf="openFiles.length == 0" class="tab-pane active">

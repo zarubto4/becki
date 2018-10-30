@@ -6,13 +6,13 @@ export class FileTreeNodeObject {
     path: string;
     files: CodeFile[] = [];
     directories: FileTreeNodeObject[] = [];
+    root: boolean;
 
     name: string;
 
-    constructor(path: string, files: CodeFile[] = [], directories: FileTreeNodeObject[] = []) {
+    constructor(path: string, root = false) {
         this.path = path;
-        this.files = files;
-        this.directories = directories;
+        this.root = root;
         let slicedPath = this.path.split('/');
         this.name = slicedPath[slicedPath.length - 1];
     }
@@ -46,9 +46,27 @@ export class FileTreeRootComponent implements OnInit, OnChanges {
     @Output()
     newFileSelected = new EventEmitter<CodeFile>();
 
+    @Output()
+    fileAddAtPath = new EventEmitter<string>();
+
+    @Output()
+    folderRemoveAtPath = new EventEmitter<string>();
+
+    @Output()
+    folderAddAtPath = new EventEmitter<string>();
+
+    @Output()
+    folderEditAtPath = new EventEmitter<string>();
+
+    @Output()
+    fileEdit = new EventEmitter<CodeFile>();
+
+    @Output()
+    fileRemove = new EventEmitter<CodeFile>();
+
     selectedPath: string;
 
-    rootNode: FileTreeNodeObject = new FileTreeNodeObject('', [], []);
+    rootNode: FileTreeNodeObject = new FileTreeNodeObject('');
 
     private selectedElement: FileTreeElement;
     justRoot: FileTreeNodeObject;
@@ -63,8 +81,8 @@ export class FileTreeRootComponent implements OnInit, OnChanges {
     }
 
     createNodeHierarchy() {
-        this.rootNode = new FileTreeNodeObject('extraRoot', [], []);
-        this.justRoot = new FileTreeNodeObject('root', [], []);
+        this.rootNode = new FileTreeNodeObject('extraRoot', true);
+        this.justRoot = new FileTreeNodeObject('root');
         this.rootNode.directories.push(this.justRoot);
         this.files.forEach((file) => {
             this.putFileIntoHierarchy(file, file.objectFullPath.split('/'), this.justRoot);
@@ -78,7 +96,7 @@ export class FileTreeRootComponent implements OnInit, OnChanges {
             if (foundDirectory) {
                 this.putFileIntoHierarchy(file, remainingPath.slice(1), foundDirectory);
             } else {
-                let newDirectory = new FileTreeNodeObject(directory.path + '/' + nextDirectory, [], []);
+                let newDirectory = new FileTreeNodeObject(directory.path + '/' + nextDirectory);
                 directory.directories.push(newDirectory);
                 this.putFileIntoHierarchy(file, remainingPath.slice(1), newDirectory);
             }

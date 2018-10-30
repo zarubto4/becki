@@ -22,18 +22,18 @@ import { FileTreeFileComponent } from './FileTreeFileComponent';
 
         <!-- Ikonky vpravo !-->
         <div *ngIf="style.showSideIcons" class="pull-right">
-            <bk-icon-component [condition]="!root" [icon]="'fa-trash'" (onClickEvent)="onFolderRemoveClick()"></bk-icon-component>
-            <bk-icon-component [condition]="!root" [icon]="'fa-pencil'" (onClickEvent)="onFolderEditClick()"></bk-icon-component>
-            <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="onFileCreateClick()"></bk-icon-component>
-            <bk-icon-component [condition]="true" [icon]="'fa-folder'" (onClickEvent)="onFolderAddClick()"></bk-icon-component>
+            <bk-icon-component [condition]="!folder.root" [icon]="'fa-trash'" (onClickEvent)="folderRemoveClick.emit(this)"></bk-icon-component>
+            <bk-icon-component [condition]="!folder.root" [icon]="'fa-pencil'" (onClickEvent)="folderEditClick.emit(this)"></bk-icon-component>
+            <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="fileCreateClicked.emit(this)"></bk-icon-component>
+            <bk-icon-component [condition]="true" [icon]="'fa-folder'" (onClickEvent)="folderCreateClicked.emit(this)"></bk-icon-component>
         </div>
     </div>
     <div *ngIf="open">
         <div style="padding-left: 20px; list-style-type: none;">
                 <div *ngFor="let subFolder of folder.directories">
                         <bk-file-tree-node
-                        [folder] = "subFolder">
-                        (elementSelected) = "elementSelected.emit($event)"
+                        [folder] = "subFolder"
+                        (elementSelected) = "elementSelected.emit($event)">
                         </bk-file-tree-node>
                 </div>
                 <div *ngFor="let file of folder.files">
@@ -89,28 +89,12 @@ export class FileTreeNodeComponent  extends Component implements OnInit, FileTre
         this.refresh();
     }
 
-    onFileCreateClick() {
-        this.fileCreateClicked.emit(this);
-    }
-
     onFileRemoveClick(component: FileTreeFileComponent) {
         this.fileRemoveClicked.emit(component);
     }
 
     onFileEditClick(component: FileTreeFileComponent) {
         this.fileEditClick.emit(component);
-    }
-
-    onFolderAddClick() {
-        this.folderCreateClicked.emit(this);
-    }
-
-    onFolderEditClick() {
-        this.folderEditClick.emit(this);
-    }
-
-    onFolderRemoveClick(){
-        this.folderRemoveClick.emit(this);
     }
 
     onHover(hover: boolean) {
@@ -123,13 +107,13 @@ export class FileTreeNodeComponent  extends Component implements OnInit, FileTre
 
     refresh() {
         this.style.icon = this.open ? 'fa-folder-open' : 'fa-folder' ;
-        this.style.backgroungColor = this.selected ? 'blue' : 'white';
+        this.style.backgroungColor = this.selected ? 'blue' : '';
     }
 }
 
 export class Style {
     textColor: string = 'grey';
-    backgroungColor: string = 'white';
+    backgroungColor: string = '';
     icon: string = '';
     iconColor = 'silver';
     bold: boolean = false;

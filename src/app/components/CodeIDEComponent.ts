@@ -574,7 +574,7 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         let model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.AddFile, '', this.directories, selectedDir);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                
+
                 if (model.selectedDirectory) {
                     console.log('HAS SELECTED DIRECTORY');
                 } else {
@@ -701,6 +701,33 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         }
     }
 
+    toolbarFileRenameClick(file: CodeFile) {
+        if (file.fixedPath) {
+            this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename', file.objectFullPath) + (file.library ? this.translate('label_library') : this.translate('label_file')));
+            return;
+        }
+
+        let model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RenameFile, file.objectName, null, null, '/' + file.objectFullPath);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+
+                if (model.objectName === file.objectName) {
+                    return;
+                }
+
+                let newFullPath = (file.objectPath !== '' ? file.objectPath + '/' : '') + model.objectName;
+
+                if (this.isFileExist(newFullPath)) {
+                    this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename_file_already_exist', newFullPath ));
+                } else {
+                    file.objectFullPath = newFullPath;
+                    this.refreshRootFileTree();
+                }
+
+            }
+        });
+    }
+
     toolbarRenameClick(fto: FileTreeObject<any>) {
 
         if (!fto.data) {
@@ -711,30 +738,6 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         let selData = fto.data;
         if (selData instanceof CodeFile) {
 
-            if (selData.fixedPath) {
-                this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename', selData.objectFullPath) + (selData.library ? this.translate('label_library') : this.translate('label_file')));
-                return;
-            }
-
-            let model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RenameFile, selData.objectName, null, null, '/' + selData.objectFullPath);
-            this.modalService.showModal(model).then((success) => {
-                if (success) {
-
-                    if (model.objectName === selData.objectName) {
-                        return;
-                    }
-
-                    let newFullPath = (selData.objectPath !== '' ? selData.objectPath + '/' : '') + model.objectName;
-
-                    if (this.isFileExist(newFullPath)) {
-                        this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename_file_already_exist', newFullPath ));
-                    } else {
-                        selData.objectFullPath = newFullPath;
-                        this.refreshRootFileTree();
-                    }
-
-                }
-            });
         } else if (selData instanceof CodeDirectory) {
 
             let model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RenameDirectory, selData.objectName, null, null, '/' + selData.objectFullPath);
