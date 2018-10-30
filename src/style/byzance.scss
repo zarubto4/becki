@@ -542,7 +542,9 @@ span.changes {
     left: 1px !important;
 }
 
-
+.block-tester {
+    word-break: break-all;
+}
 
 .block-tester, .widget-tester {
     line-height: 26px;
