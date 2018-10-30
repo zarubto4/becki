@@ -144,9 +144,6 @@ import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
 import { ModalsVersionSelectComponent } from './modals/version-select';
 // Common dependencies
 import { SharedModule } from '../shared';
-import { ChartsModule } from 'ng2-charts';
-import { ChartBarComponent } from './components/ChartBarComponent';
-import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
 import { ModalsInstanceApiPropertiesComponent } from './modals/instance-api-properties';
 
 // @formatter:off
@@ -357,7 +354,7 @@ class BeckiErrorHandler implements ErrorHandler {
         // Components
         MultiSelectComponent,
         BeckiBooleanButtonComponent,
-        IconComponent,
+        // IconComponent,
         FormTextAreaComponent,
         TableListComponent,
         ProgramVersionSelectorComponent,
@@ -373,7 +370,6 @@ class BeckiErrorHandler implements ErrorHandler {
         TagComponent,
         PortletPanelMenuComponent,
         LogLevelComponent,
-        FilterTableComponent,
         PublicStateComponent,
         Error404Component,
         LoginComponent,

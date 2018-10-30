@@ -46,6 +46,8 @@ import { DatePickerComponent } from './app/components/datePickerComponent';
 import { Nl2BrPipe } from './app/pipes/Nl2BrPipe';
 import { FormJsonNiceTextAreaComponent } from './app/components/FormJsonNiceTextAreaComponent';
 import { ProducersProducerComponent } from './app/views/producers-producer';
+import { FilterTableComponent } from './app/components/FilterTableComponent';
+import { IconComponent } from './app/components/FileTreeComponent';
 
 @NgModule({
     imports: [
@@ -100,7 +102,9 @@ import { ProducersProducerComponent } from './app/views/producers-producer';
         TimePickerComponent,
         Nl2BrPipe,
         FormJsonNiceTextAreaComponent,
-        ProducersProducerComponent
+        ProducersProducerComponent,
+        FilterTableComponent,
+        IconComponent,
     ],
     exports:      [
         AppComponent,
@@ -149,7 +153,9 @@ import { ProducersProducerComponent } from './app/views/producers-producer';
         TimePickerComponent,
         Nl2BrPipe,
         FormJsonNiceTextAreaComponent,
-        ProducersProducerComponent
+        ProducersProducerComponent,
+        FilterTableComponent,
+        IconComponent,
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

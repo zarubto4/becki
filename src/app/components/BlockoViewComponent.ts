@@ -52,6 +52,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     readonly: boolean = false;
 
     @Input()
+    showBlockNames: boolean = true;
+
+    @Input()
     safeRun: boolean = false;
 
     @Input()
@@ -132,6 +135,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             this.blocko.registerAnyChangeCallback(() => {
                 this.onChange.emit({});
             });
+
+            // this.blocko.showBlockNames = this.showBlockNames;
 
             if (this.disableExecution) {
                 this.blocko.core.configuration.asyncEventsEnabled = false;
