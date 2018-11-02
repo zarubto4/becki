@@ -7,11 +7,17 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { IDatabase } from '../backend/TyrionAPI';
+import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalModel } from '../services/ModalService';
 
-
+export class ModalsDatabaseModel extends ModalModel {
+    constructor(public name: string = '', public description: string = '', public firstCollection: string = '') {
+        super();
+    }
+}
 
 @Component({
-    selector: `bk-view-projects-project-servers`,
+    selector: `bk-view-projects-project-databases`,
     templateUrl: './projects-project-databases.html'
 })
 export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implements OnInit, OnDestroy {
@@ -19,8 +25,14 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     productId: string;
     databases: IDatabase[];
 
+    currentParamsService: CurrentParamsService;
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
+
+
+    constructor(injector: Injector) {
+        super(injector);
+    };
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -52,4 +64,23 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
         });
     }
 
+    onCreateDatabaseClick(): void {
+        let model = new ModalsDatabaseModel();
+        this.modalService.showModal(model).then((success) => {
+            if(success) {
+                this.blockUI();
+                this.tyrionBackendService.databaseCreate({
+                    name: model.name,
+                    description: model.description,
+                }).then (() => {
+                    this.unblockUI();
+                    this.refresh();
+                }).catch((reason) => {
+                    this.unblockUI();
+                    this.fmError('', reason);
+                    this.refresh();
+                });
+            }
+        });
+    }
 }

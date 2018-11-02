@@ -2919,6 +2919,13 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'btn_add_role': 'Add role',
                 'role_create_fail': 'Role creation failed',
+            }, 'ProjectsProjectDatabasesComponent': {
+                'btn_create_database': 'Create Database',
+                'table_database_name': 'Name',
+                'table_database_description': 'Description',
+                'table_id': 'table_id',
+                'label_delete_database': 'Drop',
+                'title': 'Databases',
             },
 
 

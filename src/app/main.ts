@@ -240,6 +240,7 @@ import { ModalsPaymentDetailsComponent } from './modals/payment-details';
 import { FinancialProductInvoicesInvoiceEventsComponent } from './views/financial-product-invoices-invoice-events';
 import { FileDownloaderService } from './services/FileDownloaderService';
 import { MonacoDiffComponent } from './components/MonacoDiffComponent';
+import { ProjectsProjectDatabasesComponent } from './views/projects-project-databases';
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -315,6 +316,7 @@ let routes: Routes = [
 
     { path: 'projects/:project/servers', data: { breadName: 'CLOUD servers' }, component: ProjectsProjectServersComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/instances', data: { breadName: 'CLOUD instances' }, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/databases', data: { breadName: 'CLOUD databases' }, component: ProjectsProjectDatabasesComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/instances/:instance', data: { breadName: ':instance' }, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard] },
 
     { path: 'projects/:project/members', data: { breadName: 'Members' }, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard] },
@@ -402,33 +404,34 @@ let tabMenus = {
         new LabeledLink(null, null),
         new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', null, null, {
             styleClass: 'color-hardware', items: [
-                new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong> list', ['/', 'projects', ':project', 'hardware'], null),
+                new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong> list',    ['/', 'projects', ':project', 'hardware'], null),
                 new LabeledLink('<strong class="font-color-hardware">RELEASES</strong> updates', ['/', 'projects', ':project', 'actualization-procedures'], null),
                 new LabeledLink('<strong class="font-color-hardware">CELLULAR</strong> modules', ['/', 'projects', ':project', 'gsm'], null),
             ]
         }),
         new LabeledLink('<strong class="font-color-code">CODE</strong>', null, null, {
             styleClass: 'color-code', items: [
-                new LabeledLink('<strong class="font-color-code">CODE</strong> programs', ['/', 'projects', ':project', 'code'], null),
+                new LabeledLink('<strong class="font-color-code">CODE</strong> programs',  ['/', 'projects', ':project', 'code'],      null),
                 new LabeledLink('<strong class="font-color-code">CODE</strong> libraries', ['/', 'projects', ':project', 'libraries'], null),
             ]
         }),
         new LabeledLink('<strong class="font-color-grid">GRID</strong>', null, null, {
             styleClass: 'color-grid font-color-grid-dark', items: [
-                new LabeledLink('<strong class="font-color-grid">GRID</strong> projects', ['/', 'projects', ':project', 'grid'], null),
-                new LabeledLink('<strong class="font-color-grid">GRID</strong> widgets', ['/', 'projects', ':project', 'widgets'], null),
+                new LabeledLink('<strong class="font-color-grid">GRID</strong> projects', ['/', 'projects', ':project', 'grid'],    null),
+                new LabeledLink('<strong class="font-color-grid">GRID</strong> widgets',  ['/', 'projects', ':project', 'widgets'], null),
             ]
         }),
         new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong>', null, null, {
             styleClass: 'color-blocko', items: [
                 new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> programs', ['/', 'projects', ':project', 'blocko'], null),
-                new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> blocks', ['/', 'projects', ':project', 'blocks'], null),
+                new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> blocks',   ['/', 'projects', ':project', 'blocks'], null),
             ]
         }),
         new LabeledLink('<strong class="font-color-cloud">CLOUD</strong>', null, null, {
             styleClass: 'color-cloud', items: [
                 new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> instances', ['/', 'projects', ':project', 'instances'], null, { styleClass: 'color-cloud font-color-cloud-dark' }),
-                new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> servers', ['/', 'projects', ':project', 'servers'], null, { styleClass: 'color-cloud font-color-cloud-dark' }),
+                new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> servers',   ['/', 'projects', ':project', 'servers'],   null, { styleClass: 'color-cloud font-color-cloud-dark' }),
+                new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> databases', ['/', 'projects', ':project', 'databases'], null, { styleClass: 'color-cloud font-color-cloud-dark' })
             ]
         }),
     ],
@@ -742,6 +745,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
         MonacoDiffComponent,
+        ProjectsProjectDatabasesComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

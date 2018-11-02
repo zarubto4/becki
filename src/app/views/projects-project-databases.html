@@ -7,18 +7,18 @@
     <bk-portlet-title
         [title_name]="'title'|bkTranslate:this"
         [icon]="'fa-server'"
-        (onClick)="onPortletClick($event)"
+        (onClick)="onCreateDatabaseClick()"
         [btns]="[
                   {
-                    condition: (homer_servers && homer_servers.content.length > 0),
-                    btn_label_for_person: ('btn_create_server'|bkTranslate:this),
+                    condition: true,
+                    btn_label_for_person: ('btn_create_database'|bkTranslate:this),
                     icon: 'fa-plus-circle',
                     colorType: 'CREATE',
                     permission: true,
-                    btn_tag: 'homer_server_add'
+                    btn_tag: 'database_add'
                   }
                 ]">
-        </bk-portlet-title>
+    </bk-portlet-title>
             <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
             <div class="portlet-body">
                     <table class="table table-hover table-light byzance-table">
@@ -35,7 +35,6 @@
                                     <td class="vert-align no-wrap"> {{database.description}} </td>
                                     <td class="action-btn-col">
                                         <bk-drob-down-button
-                                            [btns_group_name]="('label_server_properties'|bkTranslate:this)"
                                             [btns] = "[
                                                 {
                                                     condition: true,
@@ -46,7 +45,6 @@
                                                     permission: (true)
                                                 }
                                             ]"
-                                                (onValueChanged)="onDrobDownEmiter($event, homer_server)"
                                             >
                                         </bk-drob-down-button>
                                     </td>
