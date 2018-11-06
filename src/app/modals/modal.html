@@ -245,6 +245,9 @@
             <template [ngSwitchCase]="'ModalsInstanceApiPropertiesModel'">
                 <bk-modals-instance-api-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-api-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsDatabaseModel'">
+                <bk-modals-database-new [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-database-new>
+            </template>
         </div>
     </div>
 </div>

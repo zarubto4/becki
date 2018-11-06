@@ -8,13 +8,8 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { IDatabase } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalModel } from '../services/ModalService';
+import { ModalsDatabaseModel } from '../modals/database-new';
 
-export class ModalsDatabaseModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public firstCollection: string = '') {
-        super();
-    }
-}
 
 @Component({
     selector: `bk-view-projects-project-databases`,
@@ -51,7 +46,8 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     refresh(): void {
         this.blockUI();
         this.tyrionBackendService.projectGet(this.projectId).then((project) => {
-            this.tyrionBackendService.databasesGet(project.product.id).then((databases) => {
+            this.productId = project.product.id;
+            this.tyrionBackendService.databasesGet(this.productId).then((databases) => {
                 this.databases = databases;
                 this.unblockUI();
             }).catch((reason) => {
@@ -67,11 +63,13 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     onCreateDatabaseClick(): void {
         let model = new ModalsDatabaseModel();
         this.modalService.showModal(model).then((success) => {
-            if(success) {
+            if (success) {
                 this.blockUI();
                 this.tyrionBackendService.databaseCreate({
                     name: model.name,
                     description: model.description,
+                    collection_name: model.firstCollection,
+                    product_id: this.productId
                 }).then (() => {
                     this.unblockUI();
                     this.refresh();
