@@ -33,21 +33,7 @@
                                 <tr *ngFor="let database of databases">
                                     <td class="vert-align no-wrap"> {{database.name}} </td>
                                     <td class="vert-align no-wrap"> {{database.description}} </td>
-                                    <td class="action-btn-col">
-                                        <bk-drob-down-button
-                                            [btns] = "[
-                                                {
-                                                    condition: true,
-                                                    btn_label_for_person: ('label_delete_database'|bkTranslate:this),
-                                                    btn_tag: 'remove_database',
-                                                    icon: 'fa-trash',
-                                                    colorType: 'REMOVE',
-                                                    permission: (true)
-                                                }
-                                            ]"
-                                            >
-                                        </bk-drob-down-button>
-                                    </td>
+                                    <td class="vert-align no-wrap"> {{database.id}} </td>
                                 </tr>
                             </tbody>
                     </table>

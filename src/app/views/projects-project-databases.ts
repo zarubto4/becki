@@ -19,6 +19,7 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     projectId: string;
     productId: string;
     databases: IDatabase[];
+    connectionString: String;
 
     currentParamsService: CurrentParamsService;
     routeParamsSubscription: Subscription;
@@ -47,8 +48,9 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
         this.blockUI();
         this.tyrionBackendService.projectGet(this.projectId).then((project) => {
             this.productId = project.product.id;
-            this.tyrionBackendService.databasesGet(this.productId).then((databases) => {
-                this.databases = databases;
+            this.tyrionBackendService.databasesGet(this.productId).then((databaseList) => {
+                this.databases = databaseList.databases;
+                this.connectionString = databaseList.connection_string;
                 this.unblockUI();
             }).catch((reason) => {
                 this.unblockUI();
