@@ -325,12 +325,14 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     onMakeListOfCompilationVersion() {
-        this.libraryCompilationVersionOptions = this.hardwareType.supported_libraries.map((pv) => {
-            return {
-                label: pv.tag_name,
-                value: pv.tag_name
-            };
-        });
+        if (this.hardwareType.supported_libraries) {
+            this.libraryCompilationVersionOptions = this.hardwareType.supported_libraries.map((pv) => {
+                return {
+                    label: pv.tag_name,
+                    value: pv.tag_name
+                };
+            });
+        }
     }
 
     onAddLibraryClick() {

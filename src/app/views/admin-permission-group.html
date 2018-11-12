@@ -1,6 +1,6 @@
 <bk-layout-main
-    [tabMenu]="'byzance-admin'"
-    [title]="'main_title'|bkTranslate:this"
+    [tabMenu]="project_id? 'projects-project' : 'byzance-admin'"
+    [title]=" 'main_title'|bkTranslate:this"
     [subtitle]="'main_subtitle'|bkTranslate:this"
     [show_title]="!project_id">
 
@@ -79,8 +79,8 @@
                 </div>
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-        <bk-nothing-to-show [condition_loading]="(securityRole == null)"
-                            [condition_empty]="(securityRole != null && securityRole.length == 0)"
+        <bk-nothing-to-show [condition_loading]="(securityRoleList == null)"
+                            [condition_empty]="(securityRoleList != null && securityRoleList.length == 0)"
                             [main_message_link]="'label_no_role'|bkTranslate:this"
                             [main_message_comment_link]="'label_no_role_comment'|bkTranslate:this"
                             [btn_label]="'btn_create'|bkTranslate:this"
