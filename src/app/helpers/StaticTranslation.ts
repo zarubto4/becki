@@ -499,6 +499,19 @@ export class StaticTranslation {
                 'btn_confirm_scan': 'Confirm Scan',
             },
 
+            'ModalsDatabaseNewComponent': {
+                'title': '<strong> Create database </strong>  ',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_first_collection_name': 'First collection name',
+                'btn_confirm_scan': 'Confirm Scan',
+            },
+
+            'ModalsDatabaseRemoveComponent': {
+                'title': '<strong> Remove database </strong>  ',
+                'label_database_id': 'Database id',
+                'btn_remove': 'remove',
+            },
             'MobileAddHardwareComponent': {
                 'main_title': 'QR Hardware registration',
                 'btn_add_hardware_qrcode': 'Insert Hardware ID by QR',
@@ -2921,11 +2934,13 @@ export class StaticTranslation {
                 'role_create_fail': 'Role creation failed',
             }, 'ProjectsProjectDatabasesComponent': {
                 'btn_create_database': 'Create Database',
+                'btn_remove_database': 'Remove Database',
                 'table_database_name': 'Name',
                 'table_database_description': 'Description',
-                'table_id': 'table_id',
+                'table_id': 'Database id',
                 'label_delete_database': 'Drop',
                 'title': 'Databases',
+                'label_connection_string': 'Connection String',
             },
 
 

@@ -1,14 +1,14 @@
-import { OnDestroy } from '@angular/core';
 /**
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { IDatabase } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsDatabaseModel } from '../modals/database-new';
+import { ModalsDatabaseRemoveModel } from '../modals/database-remove';
 
 
 @Component({
@@ -62,6 +62,15 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
         });
     }
 
+    onPortletClick(action: string): void {
+        if (action === 'database_add') {
+            this.onCreateDatabaseClick();
+        }
+        if (action === 'database_remove') {
+            this.onRemoveDatabaseClick();
+        }
+    }
+
     onCreateDatabaseClick(): void {
         let model = new ModalsDatabaseModel();
         this.modalService.showModal(model).then((success) => {
@@ -82,5 +91,23 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
                 });
             }
         });
+    }
+
+    onRemoveDatabaseClick(): void {
+        let model = new ModalsDatabaseRemoveModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.databaseDelete(model.id).then(() => {
+                    this.unblockUI();
+                    this.refresh();
+                }).catch((reason) => {
+                    this.unblockUI();
+                    this.fmError('', reason);
+                    this.refresh();
+                });
+            }
+        });
+
     }
 }

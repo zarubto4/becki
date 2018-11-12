@@ -242,6 +242,8 @@ import { FileDownloaderService } from './services/FileDownloaderService';
 import { MonacoDiffComponent } from './components/MonacoDiffComponent';
 import { ProjectsProjectDatabasesComponent } from './views/projects-project-databases';
 import { ModalsDatabaseNewComponent } from './modals/database-new';
+import { ModalsDatabaseRemoveComponent } from './modals/database-remove';
+
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -748,6 +750,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsDatabaseNewComponent,
         MonacoDiffComponent,
         ProjectsProjectDatabasesComponent,
+        ModalsDatabaseRemoveComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

@@ -248,6 +248,9 @@
             <template [ngSwitchCase]="'ModalsDatabaseModel'">
                 <bk-modals-database-new [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-database-new>
             </template>
+            <template [ngSwitchCase]="'ModalsDatabaseRemoveModel'">
+                    <bk-modals-database-remove [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-database-remove>
+                </template>
         </div>
     </div>
 </div>
