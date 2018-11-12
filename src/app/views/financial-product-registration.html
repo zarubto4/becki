@@ -343,7 +343,7 @@
                 <div class="col-md-5">
                     <h3 class="text-center" *ngIf="!noCustomer">{{'label_owner_details'|bkTranslate:this}}</h3>
 
-                        <bk-contact-form [(contactData)]="contact"
+                        <bk-contact-form [contactData]="contact"
                                          [allowTypeSelection]="true"
                                          [disabled]="selectedCustomer || noCustomer"
                                          *ngIf="!noCustomer"

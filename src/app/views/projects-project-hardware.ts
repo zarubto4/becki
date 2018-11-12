@@ -131,7 +131,8 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.unblockUI();
                 this.onFilterHardware();
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.fmError(this.translate('flash_fail'), reason);
                 this.unblockUI();
                 this.onFilterHardware();
             });
@@ -144,7 +145,8 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.unblockUI();
                 this.onFilterHardware();
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.fmError(this.translate('flash_fail'), reason);
                 this.unblockUI();
                 this.onFilterHardware();
             });
@@ -179,7 +181,8 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     this.deviceGroup = values;
                     this.onHardwareAddClick();
                 })
-                .catch((reason) => {
+                .catch(reason => {
+                    this.fmError(this.translate('flash_add_device_fail'), reason);
                     this.unblockUI();
                 });
         } else {
@@ -205,7 +208,8 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     this.deviceGroup = values;
                     this.onDeviceEditGroupClick(device);
                 })
-                .catch((reason) => {
+                .catch(reason => {
+                    this.fmError(this.translate('flash_edit_device_fail'), reason);
                     this.unblockUI();
                 });
 
@@ -355,7 +359,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     });
                 });
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -370,7 +374,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.deviceGroup = values;
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -393,7 +397,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     this.onProcedureCreateClick();
                     return;
                 })
-                .catch((reason) => {
+                .catch(reason => {
                     this.unblockUI();
                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                 });
@@ -433,7 +437,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_success')));
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.fmError(this.translate('flash_device_restart_success_fail', reason));
                 this.unblockUI();
             });

@@ -1,7 +1,7 @@
 
 
 import { Component, Injector, OnInit } from '@angular/core';
-import {  _BaseMainComponent } from './_BaseMainComponent';
+import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProductExtensionType, ITariff, ITariffExtension } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';

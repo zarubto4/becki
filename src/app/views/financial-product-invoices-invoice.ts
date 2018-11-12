@@ -8,7 +8,7 @@ import { IProduct, IInvoiceFullDetails } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError } from '../services/NotificationService';
 import { FinancialProductInvoiceActions } from './financial-product-invoices';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -29,7 +29,7 @@ export class FinancialProductInvoicesInvoiceComponent extends _BaseMainComponent
 
     private actions: FinancialProductInvoiceActions;
 
-    constructor(injector: Injector, http: Http) {
+    constructor(injector: Injector, http: HttpClient) {
         super(injector);
         this.actions = new FinancialProductInvoiceActions(this, injector, http);
     };

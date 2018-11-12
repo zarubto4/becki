@@ -59,9 +59,9 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                         .then(() => {
                             this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                         })
-                        .catch((err) => {
+                        .catch(reason => {
                             this.unblockUI();
-                            this.fmError(this.translate('label_cannot_delete_person', err));
+                            this.fmError(this.translate('label_cannot_delete_person', reason));
                         });
                 }
             });
@@ -83,9 +83,9 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                     .then(() => {
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
-                    .catch((err) => {
+                    .catch(reason => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_cannot_delete_person', err));
+                        this.fmError(this.translate('label_cannot_delete_person', reason));
                     });
             }
         });
@@ -99,9 +99,9 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                 let m = new ModalsConfirmModel(this.translate('modal_label_invitation'), this.translate('modal_label_invitation_send', member.email), true, null, null, [this.translate('btn_ok')]);
                 this.modalService.showModal(m);
             })
-            .catch((err) => {
+            .catch(reason => {
                 this.unblockUI();
-                this.fmError(this.translate('label_cannot_resend_invitation', err));
+                this.fmError(this.translate('label_cannot_resend_invitation', reason));
             });
     }
 

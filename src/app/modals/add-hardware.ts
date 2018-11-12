@@ -10,7 +10,7 @@ import { ModalModel } from '../services/ModalService';
 import { IHardware, IHardwareGroupList, IResultBadRequest } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
-import { FlashMessage } from '../services/NotificationService';
+import { FlashMessage, FlashMessageError, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
 
 
@@ -64,7 +64,7 @@ export class ModalsAddHardwareComponent  implements OnInit {
     devicesForRegistration: string[] = null;
     inprogress: boolean = false;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
         this.form = this.formBuilder.group({
             'id' : ['', [Validators.required]]
         });
@@ -113,8 +113,8 @@ export class ModalsAddHardwareComponent  implements OnInit {
                 // CAN_REGISTER, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE
                 this.single_error_status = result.status;
             })
-            .catch(() => {
-
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
             });
     }
 
@@ -177,6 +177,7 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
             })
             .catch((reason: IResultBadRequest) => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cant_add_hardware', this), reason));
                 console.error('Nepodařilo se pro ', this.devicesForRegistration[pointer], ' důvod?', reason.message);
 
                 this.failedDevices.push(this.devicesForRegistration[pointer] + ': ' + reason.message);
@@ -208,8 +209,8 @@ export class ModalsAddHardwareComponent  implements OnInit {
                 this.modalClose.emit(true);
             })
             .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('label_failed_to_register', this), reason));
                 this.single_error_message = reason.body.message;
-
             });
     }
 

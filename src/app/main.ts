@@ -4,9 +4,8 @@
  */
 
 // Imports
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgModule, ErrorHandler } from '@angular/core';
-import { HttpModule, JsonpModule } from '@angular/http';
+import { JsonpModule } from '@angular/http';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app';
@@ -100,8 +99,6 @@ import { ModalsCreateHardwareTypeBatchComponent } from './modals/type-of-board-b
 import { ModalsTariffComponent } from './modals/tariff';
 import { ModalsExtensionComponent } from './modals/extension';
 import { FormTextAreaComponent } from './components/FormTextAreaComponent';
-import { ModalsBillingInformationComponent } from './modals/billing-information';
-import { ModalsCompanyInformationComponent } from './modals/company-information';
 import { ModalsPublicShareRequestComponent } from './modals/public-share-request';
 import { ModalsPublicShareResponseComponent } from './modals/public-share-response';
 import { ReaderQrComponent } from './views/qr-reader';
@@ -144,19 +141,14 @@ import { ModalsGsmPropertiesComponent } from './modals/gsm-properties';
 import { ModalsVersionSelectComponent } from './modals/version-select';
 // Common dependencies
 import { SharedModule } from '../shared';
-import { ChartsModule } from 'ng2-charts';
-import { ChartBarComponent } from './components/ChartBarComponent';
-import { ProjectsProjectGSMSGSMComponent } from './views/projects-project-gsms-gsm';
 import { ModalsInstanceApiPropertiesComponent } from './modals/instance-api-properties';
-import { PricePipe } from './pipes/PricePipe';
-import { ContactFormComponent } from './components/ContactFormComponent';
 import { BackNextButtonsComponent } from './components/BackNextButtonsComponent';
-import { ContactTableComponent } from './components/ContactTableComponent';
-import { PaymentDetailsFormComponent } from './components/PaymentDetailsFormComponent';
-import { PaymentDetailsTableComponent } from './components/PaymentDetailsTableComponent';
 import { ModalsPaymentDetailsComponent } from './modals/payment-details';
-import { FinancialProductInvoicesInvoiceEventsComponent } from './views/financial-product-invoices-invoice-events';
 import { FileDownloaderService } from './services/FileDownloaderService';
+import { ModalsContactComponent } from './modals/contact';
+import { ContactFormComponent } from './components/ContactFormComponent';
+import { PaymentDetailsFormComponent } from './components/PaymentDetailsFormComponent';
+import { HttpClientModule } from '@angular/common/http';
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -328,7 +320,7 @@ class BeckiErrorHandler implements ErrorHandler {
         SharedModule,
         BrowserModule,
         RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
-        HttpModule,
+        HttpClientModule,
         JsonpModule,
         MyDatePickerModule
     ],
@@ -478,6 +470,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsAddGSMComponent,
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
+        ContactFormComponent,
+        PaymentDetailsFormComponent
     ],
     bootstrap: [AppComponent]
 })

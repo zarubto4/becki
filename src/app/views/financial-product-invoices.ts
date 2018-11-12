@@ -4,15 +4,14 @@
  */
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IProduct, IInvoice, IInvoiceFullDetails } from '../backend/TyrionAPI';
+import { IProduct, IInvoice } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsSendInvoiceModel } from './../modals/financial-send-invoice';
-import { Http, ResponseContentType } from '@angular/http';
-import { Headers } from '@angular/http/src/headers';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
 import { ModalService } from '../services/ModalService';
 import { TyrionBackendService } from '../services/BackendService';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
     selector: 'bk-view-financial-product-invoices',
@@ -34,7 +33,7 @@ export class FinancialProductInvoicesComponent extends _BaseMainComponent implem
 
     private actions: FinancialProductInvoiceActions;
 
-    constructor(injector: Injector, http: Http) {
+    constructor(injector: Injector, http: HttpClient) {
         super(injector);
         this.actions = new FinancialProductInvoiceActions(this, injector, http);
         // this.goPayLoaderService = injector.get(GoPayLoaderService);
@@ -86,7 +85,7 @@ export class FinancialProductInvoiceActions {
     protected tyrionBackendService: TyrionBackendService = null;
     protected modalService: ModalService = null;
 
-    constructor(private page: _BaseMainComponent, private injector: Injector, private http: Http) {
+    constructor(private page: _BaseMainComponent, private injector: Injector, private http: HttpClient) {
         this.tyrionBackendService = injector.get(TyrionBackendService);
         this.modalService = injector.get(ModalService);
     }
@@ -130,11 +129,11 @@ export class FinancialProductInvoiceActions {
             this.page.blockUI();
             this.http
                 .get(invoice.proforma_pdf_link, {
-                    responseType: ResponseContentType.Blob,
-                    headers: new Headers({'X-Auth-Token': TyrionApiBackend.getToken()})
+                    responseType: 'blob',
+                    headers: new HttpHeaders({'X-Auth-Token': TyrionApiBackend.getToken()})
                 })
                 .subscribe(res => {
-                    let url = window.URL.createObjectURL(res.blob());
+                    let url = window.URL.createObjectURL(res);
                     window.open(url, '_blank');
                 }, error => {
                     this.page.unblockUI();

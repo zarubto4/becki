@@ -687,7 +687,11 @@
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
+<<<<<<< HEAD
                     <tr *ngFor="let hook of webHooks">
+=======
+                    <tr *ngFor="let hook of getWebHooks()">
+>>>>>>> origin/Liza_LazyLoading
                         <td class="vert-align">{{hook['name']}}</td>
                         <td class="vert-align">{{hook['description']}}</td>
                         <td class="vert-align" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>

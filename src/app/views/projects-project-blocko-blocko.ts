@@ -452,8 +452,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     }
                 });
             })
-            .catch((err) => {
-
+            .catch(reason => {
             });
     }
 
@@ -490,7 +489,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     }
                 });
             })
-            .catch((err) => {
+            .catch(reason => {
 
             });
     }

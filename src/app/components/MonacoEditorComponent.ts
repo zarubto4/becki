@@ -54,7 +54,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestro
 
     fullScreen: boolean = false;
 
-    @Output('codeChange')
+    @Output()
     codeChange = new EventEmitter<string>();
 
     monacoSubscription: Subscription = null;

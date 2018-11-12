@@ -504,8 +504,8 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
-                    .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', m.name, err)));
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', m.name, reason)));
                         this.unblockUI();
                     });
             }

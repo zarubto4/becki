@@ -4,7 +4,7 @@
  */
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { ICustomer, IProductNew, ITariff, ITariffExtension } from '../backend/TyrionAPI';
+import { ICustomer, IProduct, IProductNew, ITariff, ITariffExtension } from '../backend/TyrionAPI';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { Subscription } from 'rxjs';

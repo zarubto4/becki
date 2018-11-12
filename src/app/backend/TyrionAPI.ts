@@ -13877,29 +13877,6 @@ export abstract class TyrionAPI extends HomerAPI {
     }
 
     /**
-     * @name cProgramVersionWorkingcopysave
-     * @summary working_copy_save C_Program_Version
-     * @operationId c_program_version_working_copy
-     * @tags C_Program
-     *
-     * @description Just override last version
-     *
-     * @param {string} c_program_id - version_id String query
-     * @param {ICProgramVersionRefresh} body - Contains Json with values
-     *
-     * @returns {ICProgramVersion} [code 201] Successfully created
-     *
-     * @throws {IResultBadRequest} [code 400] Something is wrong
-     * @throws {IUnauthorized} [code 401] Unauthorized request
-     * @throws {IResultForbidden} [code 403] Need required permission
-     * @throws {IResultFound} [code 404] Object not found
-     * @throws {IResultInternalServerError} [code 500] Server side Error
-     */
-    public cProgramVersionWorkingcopysave(c_program_id:string, body:ICProgramVersionRefresh):Promise<ICProgramVersion> {
-        return this.requestRestPath("POST", `/c_program/version/working_copy/${c_program_id}`, body, [201]);
-    }
-
-    /**
      * @name compilationServerCreate
      * @summary create Compilation_Server
      * @operationId compilation_server_create

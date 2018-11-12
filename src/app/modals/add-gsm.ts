@@ -10,7 +10,7 @@ import { ModalModel } from '../services/ModalService';
 import { IGSM, IHardware, IHardwareGroupList, IResultBadRequest } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
-import { FlashMessage } from '../services/NotificationService';
+import { FlashMessage, FlashMessageError, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
 
 
@@ -60,7 +60,8 @@ export class ModalsAddGSMComponent  implements OnInit {
     GSMsForRegistration: string[] = null;
     inprogress: boolean = false;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService
+    ) {
         this.form = this.formBuilder.group({
             'id' : ['', [Validators.required]]
         });
@@ -103,7 +104,7 @@ export class ModalsAddGSMComponent  implements OnInit {
                 this.single_error_status = result.status;
             })
             .catch(() => {
-
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cant_change_hash', this)));
             });
     }
 
@@ -159,6 +160,7 @@ export class ModalsAddGSMComponent  implements OnInit {
 
             })
             .catch((reason: IResultBadRequest) => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 console.error('Nepodařilo se pro ', this.GSMsForRegistration[pointer], ' důvod?', reason.message);
 
                 this.failedGSMs.push(this.GSMsForRegistration[pointer] + ': ' + reason.message);
@@ -181,6 +183,7 @@ export class ModalsAddGSMComponent  implements OnInit {
                 this.modalClose.emit(true);
             })
             .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.single_error_message = reason.body.message;
 
             });

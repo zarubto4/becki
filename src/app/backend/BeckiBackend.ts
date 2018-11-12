@@ -13,6 +13,7 @@ import {
 } from '../services/_backend_class/Responses';
 import { WebsocketService } from '../services/websocket/WebsocketService';
 import { IWebSocketNotification } from '../services/websocket/WebSocketClientTyrion';
+import { HttpResponse } from '@angular/common/http';
 
 declare const BECKI_VERSION: string;
 // INTERFACES
@@ -33,10 +34,8 @@ export interface ModelChangeStatus {
 
 export abstract class TyrionApiBackend extends TyrionAPI {
 
-    public static host = 'tyrion.stage.byzance.cz';
-    public static protocol = 'https';
-
-    public wsProtocol: string = 'ws';
+    public static host = 'localhost:9000';
+    public static protocol = 'http';
 
     public wsProtocol: string = 'ws';
 
@@ -70,7 +69,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     public constructor() {
         super();
 
-        /*
         if (location && location.hostname) {
             if (location.hostname.indexOf('portal.') === 0) {
                 TyrionApiBackend.host = location.hostname.replace('portal.', 'tyrion.');
@@ -94,7 +92,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         if (location && location.hostname.indexOf('test.byzance.dev') > -1) {
             this.requestProxyServerUrl = 'http://test.byzance.dev:4000/fetch/';
         }
-        */
 
         // Create WebSocket Connection
         this.websocketService = new WebsocketService(this);
@@ -112,7 +109,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
      *
      * - Also support Homer Api
      */
-    protected abstract requestRestGeneral(request: RestRequest): Promise<RestResponse>;
+    protected abstract requestRestGeneral<T>(request: RestRequest): Promise<RestResponse>;
 
     public requestRestPath<T>(method: string, path: string, body: Object, success: number[]): Promise<T> {
         // console.info('requestRestPath:: method', method, 'path: ', path);

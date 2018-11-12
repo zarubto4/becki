@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,7 +11,7 @@ import { FormSelectComponentOption } from './FormSelectComponent';
     selector: 'bk-contact-form',
     templateUrl: './ContactFormComponent.html'
 })
-export class ContactFormComponent implements OnInit {
+export class ContactFormComponent implements OnInit, OnChanges {
 
     @Input() allowTypeSelection = true;
 
@@ -19,29 +19,7 @@ export class ContactFormComponent implements OnInit {
 
     @Output() valid = new EventEmitter<boolean>();
 
-    private _contactData: ContactFormData;
-
-    @Input()
-    set contactData(data: ContactFormData) {
-        if (data !== this.contactData) {
-            if (data) {
-                this._contactData = data;
-                this.companyAccount = data.company_account;
-                Object.keys(data)
-                    .filter(key => data[key] && this.formGroup.controls[key])
-                    .forEach(key => this.formGroup.controls[key].setValue( data[key]));
-            } else {
-                Object.keys(this.formGroup.controls)
-                    .filter(k => k !== 'country')
-                    .forEach(key => this.formGroup.controls[key].setValue(''));
-                this.formGroup.controls['country'].setValue(this.optionsCountryList[0].value);
-            }
-        }
-    }
-
-    get contactData(): ContactFormData {
-        return this._contactData;
-    }
+    @Input() contactData: ContactFormData = null;
 
     @Output() contactDataChange = new EventEmitter<ContactFormData>();
 
@@ -93,8 +71,8 @@ export class ContactFormComponent implements OnInit {
         // listen for form changed
         this.formGroup.valueChanges.subscribe(val => {
             setTimeout(() => {
-                this._contactData = {'company_account': this.companyAccount, ...val};
-                this.contactDataChange.emit(this._contactData);
+                this.contactData = {'company_account': this.companyAccount, ...val};
+                this.contactDataChange.emit(this.contactData);
                 this.valid.emit(this.formGroup.valid);
             });
         });
@@ -105,6 +83,26 @@ export class ContactFormComponent implements OnInit {
             this.formGroup.updateValueAndValidity();
             this.valid.emit(this.formGroup.valid);
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['contactData']) {
+            let data: ContactFormData = <ContactFormData><any>changes['contactData'];
+            if (data !== this.contactData) {
+                if (data) {
+                    this.contactData = data;
+                    this.companyAccount = data.company_account;
+                    Object.keys(data)
+                        .filter(key => data[key] && this.formGroup.controls[key])
+                        .forEach(key => this.formGroup.controls[key].setValue( data[key]));
+                } else {
+                    Object.keys(this.formGroup.controls)
+                        .filter(k => k !== 'country')
+                        .forEach(key => this.formGroup.controls[key].setValue(''));
+                    this.formGroup.controls['country'].setValue(this.optionsCountryList[0].value);
+                }
+            }
+        }
     }
 
     countryChanged(): void {

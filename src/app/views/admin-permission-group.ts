@@ -3,22 +3,22 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IProject, IProjectParticipant, IRoleFilter, INameAndDescProjectIdOptional, IRoleList, IRole } from '../backend/TyrionAPI';
+import { IProject, IRoleList, IRole } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPermissionGroupModel } from '../modals/permission-group';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 
 
 @Component({
     selector: 'bk-view-permission-group',
     templateUrl: './admin-permission-group.html'
 })
-export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
+export class RoleGroupComponent extends _BaseMainComponent implements OnInit, OnDestroy {
     project_id: string;
 
     routeParamsSubscription: Subscription;

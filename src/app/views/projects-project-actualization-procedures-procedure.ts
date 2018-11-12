@@ -53,7 +53,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
 
                 this.unblockUI();
 
-            }).catch((reason) => {
+            }).catch(reason => {
                 this.fmError(this.translate('label_cant_load_actualization_procedure'));
                 this.unblockUI();
             });
@@ -86,7 +86,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
                                     task.state = value.state;
                                     task.date_of_finish = value.date_of_finish;
                                 })
-                                .catch((reason) => {
+                                .catch(reason => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                                 });
 
@@ -96,7 +96,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
 
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });

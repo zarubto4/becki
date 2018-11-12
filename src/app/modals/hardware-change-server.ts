@@ -13,7 +13,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHardware, IHomerServer, IHomerServerList } from '../backend/TyrionAPI';
-import { FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess, NotificationService } from '../services/NotificationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
 
@@ -45,7 +45,7 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
     servers: IHomerServer[] = null;
     servers_options: FormSelectComponentOption[] = null;
 
-    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder, public translationService: TranslationService) {
+    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder, public translationService: TranslationService, protected notificationService: NotificationService) {
         this.form = this.formBuilder.group({
             'serverSelector': ['', [BeckiValidators.condition(() => (this.tab === 'selector'), Validators.required)]],
             'serverUrl': ['', [BeckiValidators.condition(() => (this.tab === 'manual'), Validators.required), Validators.maxLength(31), Validators.minLength(8)]],      // TODO Valid URL alpha.homer.stage.byzance.cz
@@ -92,7 +92,8 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
                     };
                 });
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.error_message = reason;
             });
     }
@@ -105,7 +106,8 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
             server_url: this.tab === 'manual' ? this.form.controls['serverUrl'].value : null,
         }).then(() => {
             this.onSubmitClick();
-        }).catch((reason) => {
+        }).catch(reason => {
+            this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
             this.error_message = reason;
         });
     }

@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class FileDownloaderService {
 
     fileCache: { [url: string]: string } = {};
 
-    constructor(protected http: Http) {}
+    constructor(protected http: HttpClient) {}
 
     public download(url: string): Promise<string> {
 
         if (this.fileCache[url]) {
             return Promise.resolve(this.fileCache[url]);
         } else {
-            return this.http.get(url, {}).toPromise()
+            return this.http.get(url, {
+                responseType: 'text'
+            }).toPromise()
                 .then((result) => {
-                    let file: string = result.text();
+                    let file: string = result;
                     this.fileCache[url] = file;
                     return file;
                 });

@@ -61,7 +61,7 @@ export interface FormSelectComponentOption {
          <option *ngFor="let option of _options" [value]="option.value">{{option.label}}</option>
       </ng-template>
     </select>
-    <input  *ngIf="readonly" 
+    <input  *ngIf="readonly"
             class="form-control"
             [attr.type]="text"
             [readonly]="readonly"

@@ -32,8 +32,8 @@ export class NotificationsComponent extends _BaseMainComponent implements OnInit
                 }, 1);
                 this.loading = false;
             })
-            .catch((err) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load'), err));
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load'), reason));
                 this.loading = false;
             });
     }
@@ -55,8 +55,8 @@ export class NotificationsComponent extends _BaseMainComponent implements OnInit
                     }, 1);
                     this.loading = false;
                 })
-                .catch((err) => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load'), err));
+                .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load'), reason));
                     this.loading = false;
                 });
         }

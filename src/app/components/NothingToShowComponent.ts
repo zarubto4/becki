@@ -75,7 +75,7 @@ export class NothingToShowComponent {
     @Input()
     show_button: boolean = true;
 
-    @Output('onButtonClick')
+    @Output()
     onButtonClick: EventEmitter<any> = new EventEmitter<any>();
 
     constructor() {}

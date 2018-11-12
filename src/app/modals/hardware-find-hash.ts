@@ -10,6 +10,8 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IHardwareRegistrationHash } from '../backend/TyrionAPI';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { TranslationService } from '../services/TranslationService';
 
 
 export class ModalsHardwareFindHash extends ModalModel {
@@ -35,7 +37,7 @@ export class ModalsHardwareFindHashComponent implements OnInit {
     hash: string = null;
     error_message: string = null;
 
-    constructor(public tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(public tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService, ) {
         this.form = this.formBuilder.group({
             'full_id': ['', [Validators.required, Validators.minLength(24), Validators.maxLength(24)]],
         });
@@ -54,7 +56,8 @@ export class ModalsHardwareFindHashComponent implements OnInit {
             .then((result: IHardwareRegistrationHash) => {
                 this.hash = result.hash;
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.error_message = reason.message;
             });
     }

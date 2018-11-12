@@ -1199,6 +1199,7 @@ body {
     filter: grayscale(0);
     -webkit-transition: filter 0.2s;
     transition: filter 0.2s;
+    height: 100vh;
 }
 
 body.block-ui-blur {

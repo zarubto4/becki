@@ -292,7 +292,7 @@ module.exports = function makeWebpackConfig() {
 
     if (!isProd) {
         config.devServer = {
-            host: '0.0.0.0',
+            host: 'localhost',
             port: 8080,
             contentBase: './src/public',
             historyApiFallback: true,

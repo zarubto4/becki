@@ -12,6 +12,8 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHomerServer } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IAvailableVersion, IVersionOverview } from '../backend/HomerAPI';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { TranslationService } from '../services/TranslationService';
 
 
 export class ModalsUpdateHomerServerModel extends ModalModel {
@@ -37,7 +39,7 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
     options_available_version: FormSelectComponentOption[] = null;
     form: FormGroup;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
 
         this.form = this.formBuilder.group({
             'selected_version': ['', [Validators.required]],
@@ -63,6 +65,7 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
                     });
                 })
                 .catch((reason) => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     console.error(reason);
                     this.onCancelClick();
                 });
@@ -79,7 +82,8 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
             .then(() => {
                 this.onCloseClick();
             })
-            .catch((reason) => {
+            .catch(reason => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 console.error(reason);
                 this.onCancelClick();
             });

@@ -13,6 +13,7 @@ import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
 import { ICProgram, ICProgramList, ICProgramVersion, IHardwareType } from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 export class ModalsSelectCodeModel extends ModalModel {
     public selected_c_program_version: ICProgramVersion = null;
@@ -58,7 +59,7 @@ export class ModalsCodeSelectComponent implements OnInit {
     public_programs: boolean = false;
     private_programs: boolean = true;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
     }
 
     ngOnInit(): void {
@@ -90,8 +91,9 @@ export class ModalsCodeSelectComponent implements OnInit {
                 .then((program) => {
                     this.onSelectProgramClick(program);
                 })
-                .catch((err) => {
-                    this.errorMessage = err.message;
+                .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.errorMessage = reason.message;
                 });
         }
     }
@@ -158,7 +160,7 @@ export class ModalsCodeSelectComponent implements OnInit {
                 this.programs = iCProgramList;
             })
             .catch(reason => {
-
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
             });
     }
 

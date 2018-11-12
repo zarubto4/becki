@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel, ModalService } from '../services/ModalService';
 import {
-    IHardwareGroup, IBootLoader, IActualizationProcedureMakeHardwareType, ICProgramList, IHardwareType,
+    IHardwareGroup, IActualizationProcedureMakeHardwareType, IHardwareType,
     IHardwareGroupList, IShortReference, ICProgramVersion, ICProgram
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
@@ -19,6 +19,8 @@ import { IMyDpOptions } from 'mydatepicker';
 import * as moment from 'moment';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { ModalsSelectCodeModel } from './code-select';
+import { TranslationService } from '../services/TranslationService';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
@@ -93,7 +95,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
         }
     }
 
-    constructor(public backendService: TyrionBackendService, private modalService: ModalService, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef) {
+    constructor(public backendService: TyrionBackendService, private modalService: ModalService, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,
+        private translationService: TranslationService, protected notificationService: NotificationService, ) {
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]],
             'firmwareType': ['', [Validators.required]],
@@ -148,6 +151,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
                                 });
 
                             }).catch(reason => {
+                                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                                 console.error('hardwareTypeGet:cProgramGetListByFilter', reason);
                             });
 

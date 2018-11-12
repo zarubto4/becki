@@ -38,7 +38,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
                 this.bugs = bugs;
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.fmError( this.translate('flash_cant_load', reason));
                 this.unblockUI();
             });
@@ -49,7 +49,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
         this.tyrionBackendService.deleteBugAll()
             .then(() => {
                 this.refresh();
-            }).catch((reason) => {
+            }).catch(reason => {
                 this.fmError( this.translate('flash_cant_remove', reason));
                 this.refresh();
             });

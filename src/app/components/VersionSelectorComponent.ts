@@ -1,4 +1,4 @@
- /**
+/**
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
@@ -12,42 +12,43 @@ import { _BaseMainComponent } from '../views/_BaseMainComponent';
 import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 import { ModalService } from '../services/ModalService';
+import { FlashMessageError, NotificationService } from '../services/NotificationService';
 
 @Component({
     selector: 'bk-program-version-selector',
-/* tslint:disable:max-line-length */
+    /* tslint:disable:max-line-length */
     template: `
-<div>
-    <div class="form-group" [class.col-md-6]="align_horizontal && show_program_selector" [class.has-error]="!selectedProgramId">
-        <label *ngIf="show_program_selector && show_labels_selector">Program</label>
-        <select *ngIf="show_program_selector" class="form-control" [ngModel]="selectedProgramId" (ngModelChange)="onSelectedProgramIdChange($event)">
-            <option [value]="null" disabled>Select program</option>
-            <option *ngFor="let program of programs" [value]="program.id">{{program.name}}</option>
-        </select>
-    </div>
-    <div class="form-group" [class.col-md-6]="align_horizontal && show_program_selector"  [class.has-error]="selectedProgramId && !selectedProgramVersionId">
-        <label *ngIf="show_labels_selector"> Program version</label>
-        <select class="form-control" *ngIf="selectedProgram && !(selectedVersions && selectedVersions.length)" disabled>
-            <option [value]="null" disabled>No program versions</option>
-        </select>
-        <select *ngIf="!selectedProgram" class="form-control" disabled>
-            <option [value]="null" disabled>&lt; Select program first</option>
-        </select>
-        <select *ngIf="selectedProgram && (selectedVersions && selectedVersions.length)" class="form-control" [ngModel]="selectedProgramVersionId" (ngModelChange)="onSelectedProgramVersionIdChange($event)">
-            <option [value]="null" disabled>Select version</option>
-            <option *ngFor="let programVersion of selectedVersions" [value]="programVersion.id">{{programVersion.name}}{{programVersion.description?" - " + programVersion.description:""}}</option>
-        </select>
-    </div>
-    <div class="clearfix"></div>
-</div>
-`
-/* tslint:enable */
+        <div>
+            <div class="form-group" [class.col-md-6]="align_horizontal && show_program_selector" [class.has-error]="!selectedProgramId">
+                <label *ngIf="show_program_selector && show_labels_selector">Program</label>
+                <select *ngIf="show_program_selector" class="form-control" [ngModel]="selectedProgramId" (ngModelChange)="onSelectedProgramIdChange($event)">
+                    <option [value]="null" disabled>Select program</option>
+                    <option *ngFor="let program of programs" [value]="program.id">{{program.name}}</option>
+                </select>
+            </div>
+            <div class="form-group" [class.col-md-6]="align_horizontal && show_program_selector" [class.has-error]="selectedProgramId && !selectedProgramVersionId">
+                <label *ngIf="show_labels_selector"> Program version</label>
+                <select class="form-control" *ngIf="selectedProgram && !(selectedVersions && selectedVersions.length)" disabled>
+                    <option [value]="null" disabled>No program versions</option>
+                </select>
+                <select *ngIf="!selectedProgram" class="form-control" disabled>
+                    <option [value]="null" disabled>&lt; Select program first</option>
+                </select>
+                <select *ngIf="selectedProgram && (selectedVersions && selectedVersions.length)" class="form-control" [ngModel]="selectedProgramVersionId" (ngModelChange)="onSelectedProgramVersionIdChange($event)">
+                    <option [value]="null" disabled>Select version</option>
+                    <option *ngFor="let programVersion of selectedVersions" [value]="programVersion.id">{{programVersion.name}}{{programVersion.description ? " - " + programVersion.description : ""}}</option>
+                </select>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    `
+    /* tslint:enable */
 })
 
 export class ProgramVersionSelectorComponent implements OnInit {
 
-    @Input() programs: (ICProgram|IGridProgram|IBlock|IWidget)[] = null;
-    @Input() type: 'ICProgram'|'IGridProgram'|'IBlock'|'IWidget' = 'ICProgram';
+    @Input() programs: (ICProgram | IGridProgram | IBlock | IWidget)[] = null;
+    @Input() type: 'ICProgram' | 'IGridProgram' | 'IBlock' | 'IWidget' = 'ICProgram';
 
     @Input()
     show_program_selector: boolean = true;
@@ -56,7 +57,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
     show_labels_selector: boolean = true;
 
     // Fill after select Program
-    selectedVersions: (ICProgramVersion|IGridProgramVersion|IBlockVersion|IWidgetVersion)[] = null;
+    selectedVersions: (ICProgramVersion | IGridProgramVersion | IBlockVersion | IWidgetVersion)[] = null;
 
     @Input()
     already_selected_program_id: string = null;
@@ -70,12 +71,12 @@ export class ProgramVersionSelectorComponent implements OnInit {
     @Output()
     valueChanged: EventEmitter<any> = new EventEmitter<any>();
 
-    selectedProgram: ICProgram|IGridProgram|IBlock|IWidget = null;
-    selectedVersion: ICProgramVersion|IGridProgramVersion|IBlockVersion|IWidgetVersion = null;
+    selectedProgram: ICProgram | IGridProgram | IBlock | IWidget = null;
+    selectedVersion: ICProgramVersion | IGridProgramVersion | IBlockVersion | IWidgetVersion = null;
     selectedProgramId: string = null;
     selectedProgramVersionId: string = null;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, private translationService: TranslationService) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, private translationService: TranslationService, protected notificationService: NotificationService) {
 
     }
 
@@ -114,6 +115,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                     }
                                 })
                                 .catch(reason => {
+                                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this)));
                                 });
                         }
 
@@ -133,6 +135,8 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                     }
                                 })
                                 .catch(reason => {
+                                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
+
                                 });
                         }
 
@@ -152,6 +156,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                     }
                                 })
                                 .catch(reason => {
+                                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                                 });
                         }
 
@@ -171,6 +176,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                     }
                                 })
                                 .catch(reason => {
+                                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                                 });
                         }
 
@@ -211,6 +217,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                     }
                 })
                 .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
 
@@ -230,6 +237,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                     }
                 })
                 .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
 
@@ -249,6 +257,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                     }
                 })
                 .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
 
@@ -268,6 +277,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                     }
                 })
                 .catch(reason => {
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
     }

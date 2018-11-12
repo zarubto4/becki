@@ -107,7 +107,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                 });
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
