@@ -295,7 +295,7 @@ module.exports = function makeWebpackConfig() {
             contentBase: './src/public',
             historyApiFallback: true,
             quiet: true,
-            open, true
+            open: true,
             stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
         };
     }
