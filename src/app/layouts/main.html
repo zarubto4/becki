@@ -95,11 +95,11 @@
 
                     <li routerLinkActive="active" *ngFor="let page of navigation" [class.heading]="!page.link" [class.nav-item]="page.link" [class.hide]="page.options['adminNavigation']">
 
-                        <template [ngIf]="!page.link">
+                        <ng-template [ngIf]="!page.link">
                             <h3 class="uppercase">{{page.label}}</h3>
-                        </template>
+                        </ng-template>
 
-                        <template [ngIf]="page.link && page.label">
+                        <ng-template [ngIf]="page.link && page.label">
 
                             <!-- For link in our platform -->
                             <a *ngIf="!page.options['outsideLink'] && page.link" [routerLink]="page.link">
@@ -114,7 +114,7 @@
                                 <span class="title">{{page.label}}</span>
                                 <span class="selected"></span>
                             </a>
-                        </template>
+                        </ng-template>
 
                     </li>
 
@@ -125,11 +125,11 @@
                         <li *ngFor="let page of navigation" [class.heading]="!page.link" [class.nav-item]="page.link" [class.hide]="!page.options['adminNavigation']">
 
                             <!-- Menu Header !-->
-                            <template [ngIf]="!page.link">
+                            <ng-template [ngIf]="!page.link">
                                 <h3 class="uppercase">{{page.label}}</h3>
-                            </template>
+                            </ng-template>
 
-                            <template [ngIf]="page.link">
+                            <ng-template [ngIf]="page.link">
 
                                 <!-- For link in our platform -->
                                 <a *ngIf="!page.options['items'] && !page.options['outsideLink']" [routerLink]="page.link">
@@ -145,7 +145,7 @@
                                     <span class="selected"></span>
                                 </a>
 
-                            </template>
+                            </ng-template>
 
                         </li>
                     </ng-container>

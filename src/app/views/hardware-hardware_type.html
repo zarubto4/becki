@@ -525,9 +525,9 @@
                         </td>
 
                         <td class="vert-align">
-                            <template [ngIf]="batch.latest_used_mac_address">
+                            <ng-template [ngIf]="batch.latest_used_mac_address">
                                 {{onConvertToMacAddress(batch.latest_used_mac_address)}}
-                            </template>
+                            </ng-template>
                         </td>
 
                         <td class="vert-align">

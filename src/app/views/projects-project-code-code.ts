@@ -5,8 +5,8 @@
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { Subscription } from 'rxjs/Rx';
+import { FlashMessageError, FlashMessageSuccess, FlashMessage } from '../services/NotificationService';
+import { Subscription } from 'rxjs';
 import { CodeFile, CodeIDEComponent } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
@@ -125,7 +125,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     onToggleIDETab(tab: string) {
         if (this.tab_under_ide === tab) {
             this.tab_under_ide = ''; // Hide tab
-        }else {
+        } else {
             this.tab_under_ide = tab;
         }
     }

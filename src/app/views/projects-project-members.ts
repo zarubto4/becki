@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { IProject, IProjectParticipant } from '../backend/TyrionAPI';
 import { ModalsMembersAddModel } from '../modals/members-add';
 import { CurrentParamsService } from '../services/CurrentParamsService';

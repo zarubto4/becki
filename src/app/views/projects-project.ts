@@ -5,14 +5,13 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { ModalsRemovalModel } from '../modals/removal';
-import { FormGroup, Validators } from '@angular/forms';
-import { FileTreeObject } from '../components/FileTreeComponent';
-import { CodeFileSystemObject } from '../components/CodeIDEComponent';
+import { FormGroup } from '@angular/forms';
+
 
 @Component({
     selector: 'bk-view-projects-project',

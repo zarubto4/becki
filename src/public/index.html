@@ -16,11 +16,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="/">
-
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/brands.css" integrity="sha384-Pln/erVatVEIIVh7sfyudOXs5oajCSHg7l5e2Me02e3TklmDuKEhQ8resTIwyI+w" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/fontawesome.css" integrity="sha384-rnr8fdrJ6oj4zli02To2U/e6t1qG8dvJ8yNZZPsKHcU7wFK3MGilejY5R/cUc5kf" crossorigin="anonymous">
 
     <!-- Generated icon from  -->
+
     <link rel="apple-touch-icon" sizes="57x57" href="/assets/images/icons/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/assets/images/icons/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/assets/images/icons/apple-icon-72x72.png">
@@ -44,17 +44,17 @@
     <meta name="msapplication-TileImage" content="/assets/images/icons/ms-icon-310x310.png">
     <meta name="theme-color" content="#ffffff">
 
+    <% for (key in htmlWebpackPlugin.files.css) { %> <link href="<%= htmlWebpackPlugin.files.css[key] %>" rel="stylesheet"> <% } %>
 
     <!-- https://app.inlinemanual.com/ - its used for Guidelines - also very important is User tracking data sets in backend - like user id..etc  - You can find this comment on another places-->
     <script>!function(){var e=document.createElement("script"),t=document.getElementsByTagName("script")[0];e.async=1,e.src="https://inlinemanual.com/embed/player.9fe45fcc7ebdaf659d92242171a8885c.js",e.charset="UTF-8",t.parentNode.insertBefore(e,t)}();</script>
 
-
-
-
     <!--  InterCom -->
     <script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/cnrrdzsk';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>
 
-
+    <!--MProgress.js-->
+    <link rel='stylesheet' href='https://cdn.rawgit.com/lightningtgc/MProgress.js/master/mprogress.min.css'/>
+    <script src="https://cdn.rawgit.com/lightningtgc/MProgress.js/master/mprogress.min.js"></script>
     <!-- Hotjar Tracking Code for www.byzance.cz
        <script>
            (function (h, o, t, j, a, r) {
@@ -67,7 +67,28 @@
            })(window, document, '//static.hotjar.com/c/hotjar-', '.js?sv=');
        </script>
      -->
+    <script>
+        let progressBar = new Mprogress({
+            start: true,
+            easing: true
+        });
 
+        let bundleNumber = 0;
+        function increasingProgress() {
+            bundleNumber++;
+            switch (bundleNumber) {
+                case 1:
+                    progressBar.inc(0.05);
+                case 2:
+                    progressBar.inc(0.1);
+                case 3:
+                    progressBar.inc(0.15);
+            }
+        }
+        window.onload = function() {
+            progressBar.end();
+        };
+    </script>
 </head>
 
 <body>
@@ -76,7 +97,12 @@
             <div class="byzance-logo-spinner-white"></div>
         </div>
     </bk-app>
-    <noscript>Failed! Scripting has to be enabled.</noscript>
-</body>
 
+    <noscript>Failed! Scripting has to be enabled.</noscript>
+
+
+    <% for (key in htmlWebpackPlugin.files.js) { %>
+        <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>" onload="increasingProgress()"></script>
+    <% } %>
+</body>
 </html>

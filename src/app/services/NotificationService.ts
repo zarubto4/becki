@@ -36,7 +36,7 @@ export abstract class Notification {
     buttons: INotificationButton[] = null;
 
 
-
+    /*tslint:disable:no-use-before-declare*/
     public static fromINotification(n: INotification): Notification {
 
         // console.log('fromINotification notificaton:', n);
@@ -57,6 +57,8 @@ export abstract class Notification {
                 out = new NotificationError(n.id, n.notification_body, n.created);
                 break;
         }
+
+        /*tslint:enable:no-use-before-declare*/
 
         if (out) {
             if (n.notification_importance === 'HIGH') {

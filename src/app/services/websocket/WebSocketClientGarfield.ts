@@ -1,5 +1,6 @@
 import { WebSocketClientTyrion } from './WebSocketClientTyrion';
 import * as Rx from 'rxjs';
+import { filter } from  'rxjs/operators';
 import { IWebSocketMessage, WebSocketMessage } from './WebSocketMessage';
 import { WebSocketRequestOptions } from './WebSocketRequest';
 import { IHardwareNewSettingsResultConfiguration } from '../../backend/TyrionAPI';
@@ -18,7 +19,7 @@ export class WebSocketClientGarfield {
         this.tyrion = tyrion;
         this.messages = new Rx.Subject<IWebSocketMessage>();
         this.subscription = this.tyrion.messages
-            .filter(m => m.message_channel === WebSocketClientGarfield.CHANNEL)
+            .pipe(filter(m => m.message_channel === WebSocketClientGarfield.CHANNEL))
             .subscribe(this.messages);
     }
 

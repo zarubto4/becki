@@ -104,7 +104,7 @@
                             <div class="block-tester no-select">
                                 <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
 
-                                    <template [ngIf]="connector.type == connectorTypes.DigitalInput">
+                                    <ng-template [ngIf]="connector.type == connectorTypes.DigitalInput">
                                         <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                         <div class="col-md-8">
                                             <div class="block-tester-message-input-label"><strong>{{'label_value'|bkTranslate:this}}</strong>:
@@ -114,9 +114,9 @@
                                                [class.fa-toggle-off]="!connector.value"
                                                (click)="onDigitalInputClick(connector)"></i>
                                         </div>
-                                    </template>
+                                    </ng-template>
 
-                                    <template [ngIf]="connector.type == connectorTypes.AnalogInput">
+                                    <ng-template [ngIf]="connector.type == connectorTypes.AnalogInput">
                                         <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                         <div class="col-md-8">
                                             <div class="block-tester-message-input-label"><strong>{{'label_value'|bkTranslate:this}}</strong>:
@@ -124,15 +124,15 @@
                                             <input type="number" class="form-control" step="0.1" [value]="connector.value"
                                                    (input)="onAnalogInputChange($event, connector)">
                                         </div>
-                                    </template>
+                                    </ng-template>
 
-                                    <template [ngIf]="connector.type == connectorTypes.MessageInput">
+                                    <ng-template [ngIf]="connector.type == connectorTypes.MessageInput">
                                         <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                         <div *ngFor="let argType of connector.argTypes; let index = index">
 
                                             <div *ngIf="index" class="col-md-4"></div>
 
-                                            <template [ngIf]="argType == argTypes.Boolean">
+                                            <ng-template [ngIf]="argType == argTypes.Boolean">
                                                 <div class="col-md-8">
                                                     <div class="block-tester-message-input-label"><span
                                                         [innerHTML]="'label_datatype_boolean'|bkTranslate:this:index"></span>:
@@ -143,8 +143,8 @@
                                                        [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType+index]"
                                                        (click)="messageInputsValueCache[connector.name+argType+index] = !messageInputsValueCache[connector.name+argType+index]"></i>
                                                 </div>
-                                            </template>
-                                            <template [ngIf]="argType == argTypes.Float">
+                                            </ng-template>
+                                            <ng-template [ngIf]="argType == argTypes.Float">
                                                 <div class="col-md-8">
                                                     <div class="block-tester-message-input-label"><span
                                                         [innerHTML]="'label_datatype_float'|bkTranslate:this:index"></span>:
@@ -152,8 +152,8 @@
                                                     <input type="number" class="form-control" step="0.1" value="0"
                                                            (input)="messageInputsValueCache[connector.name+argType+index] = $event.target['value']">
                                                 </div>
-                                            </template>
-                                            <template [ngIf]="argType == argTypes.Integer">
+                                            </ng-template>
+                                            <ng-template [ngIf]="argType == argTypes.Integer">
                                                 <div class="col-md-8">
                                                     <div class="block-tester-message-input-label"><span
                                                         [innerHTML]="'label_datatype_integer'|bkTranslate:this:index"></span>:
@@ -161,8 +161,8 @@
                                                     <input type="number" class="form-control" step="1" value="0"
                                                            (input)="messageInputsValueCache[connector.name+argType+index] = $event.target['value']">
                                                 </div>
-                                            </template>
-                                            <template [ngIf]="argType == argTypes.String">
+                                            </ng-template>
+                                            <ng-template [ngIf]="argType == argTypes.String">
                                                 <div class="col-md-8">
                                                     <div class="block-tester-message-input-label"><span
                                                         [innerHTML]="'label_datatype_string'|bkTranslate:this:index"></span>:
@@ -170,7 +170,7 @@
                                                     <input type="text" class="form-control"
                                                            (input)="messageInputsValueCache[connector.name+argType+index] = $event.target['value']">
                                                 </div>
-                                            </template>
+                                            </ng-template>
 
                                         </div>
 
@@ -181,7 +181,7 @@
                                                 <i class="fa fa-paper-plane"></i> {{'btn_send'|bkTranslate:this}}
                                             </button>
                                         </div>
-                                    </template>
+                                    </ng-template>
                                 </div>
                             </div>
                         </div>

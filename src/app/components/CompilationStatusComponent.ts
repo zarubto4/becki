@@ -62,7 +62,7 @@ import { Component, Input } from '@angular/core';
                                            style="font-size: 1.6em; margin-left: 5px;"></i>
                                         <span class="hint" [innerHTML]="status|bkTranslateTable:this:'publish_status'"></span>
                                     </span>
-       
+
     `
 })
 

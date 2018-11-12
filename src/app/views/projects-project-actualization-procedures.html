@@ -68,14 +68,14 @@
                             <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
                         </td>
                         <td class="vert-align text-center">
-                            <template [ngIf]="procedure.program">
+                            <ng-template [ngIf]="procedure.program">
                                 <a *ngIf="procedure.program" class="bold" (click)="onCProgramClick(procedure.program.c_program_id)">{{procedure.program.c_program_program_name}}</a>
                                 -
                                 <a *ngIf="procedure.program" class="bold" (click)="onCProgramClick(procedure.program.c_program_id, procedure.program.c_program_version_id)">{{procedure.program.c_program_version_name}}</a>
-                            </template>
-                            <template [ngIf]="procedure.bootloader">
+                            </ng-template>
+                            <ng-template [ngIf]="procedure.bootloader">
                                 <span class="bold">{{procedure.bootloader.bootloader_name}}</span>
-                            </template>
+                            </ng-template>
                         </td>
 
                         <td class="vert-align text-center">

@@ -11,9 +11,9 @@ import { TranslationService } from '../services/TranslationService';
 @Component({
     selector: 'bk-single-tag-template-component',
 /* tslint:disable:max-line-length */
-    template: `        
-        <span class="tag label" 
-              (mouseover)="hoover(true)" 
+    template: `
+        <span class="tag label"
+              (mouseover)="hoover(true)"
               (mouseleave)="hoover(false)"
               [class.label-info]="tag_color == 'label-info' && !tag_popup_color"
               [class.label-danger]="tag_color == 'label-danger' || tag_popup_color"

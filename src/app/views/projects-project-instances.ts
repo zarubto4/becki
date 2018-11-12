@@ -4,7 +4,7 @@
  */
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { IInstance, IInstanceList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';

@@ -1,25 +1,27 @@
 // Helper: root() is defined at the bottom
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
+const glob = require('glob');
 
 // Webpack Plugins
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-var autoprefixer = require('autoprefixer');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var browserConfig = require('web-app-browserconfig-loader');
-var xmlConfig = require('xml-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
+const PurifyCSSPlugin = require('purifycss-webpack');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 /**
  * Env
  * Get npm lifecycle event to identify the environment
  */
-var ENV = process.env.npm_lifecycle_event;
-var isTestWatch = ENV === 'test-watch';
-var isTest = ENV === 'test' || isTestWatch;
-var isProd = ENV === 'build';
+const ENV = process.env.npm_lifecycle_event;
+const isTestWatch = ENV === 'test-watch';
+const isTest = ENV === 'test' || isTestWatch;
+const isProd = ENV === 'build';
 
 module.exports = function makeWebpackConfig() {
     /**
@@ -27,7 +29,7 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/configuration.html
      * This is the object where all configuration gets set
      */
-    var config = {};
+    const config = {};
 
     /**
      * Devtool
@@ -35,31 +37,68 @@ module.exports = function makeWebpackConfig() {
      * Type of sourcemap to use per build type
      */
     if (isProd) {
-        config.devtool = 'source-map';
+        config.devtool = 'cheap-module-source-map';
     }
-    else {
-        config.devtool = 'eval';
-    }
-
     /**
      * Entry
      * Reference: http://webpack.github.io/docs/configuration.html#entry
      */
     config.entry = isTest ? {} : {
-        'polyfills': './src/polyfills.ts',
-        'vendor': './src/vendor.ts',
-        'app': './src/main.ts' // our angular app
+        polyfills: './src/polyfills.ts',
+        vendor: './src/vendor.ts',
+        app: './src/main' // our angular app
     };
 
     /**
      * Output
      * Reference: http://webpack.github.io/docs/configuration.html#output
      */
-    config.output = isTest ? {} : {
+    config.output = {
         path: root('dist'),
         publicPath: '/',
-        filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
-        chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
+        filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
+        chunkFilename: isProd ? '[id].[chunkhash].chunk.js' : '[id].chunk.js'
+    };
+
+
+    /**
+     * Optimization
+     * Reference: https://webpack.js.org/configuration/optimization/
+     */
+    config.optimization = {
+        // minimize: false,          // Uncomment it to disable optimizations and speed up building.
+        minimizer: [
+            // A Webpack plugin to cut unused CSS selectors.
+            new PurifyCSSPlugin({
+                styleExtensions: ['.css', '.scss', '.min.css'],
+                moduleExtensions: ['.html'],
+                minimize: true,
+                paths: glob.sync(root('src', 'app', '**', '*.html')),
+                // purifyOptions: {
+                //     rejected: true
+                // },
+                // verbose: true
+            }),
+
+            // A Webpack plugin to optimize \ minimize CSS assets.
+            // It will search for CSS assets during the Webpack build and will optimize \ minimize the CSS.
+            // Reference: https://github.com/NMFR/optimize-css-assets-webpack-plugin
+            new OptimizeCssAssetsPlugin({
+                assetNameRegExp: /\.(css|sass|scss)$/g,
+                cssProcessor: require('cssnano'),
+                cssProcessorOptions: {discardComments: {removeAll: true}},
+            }),
+
+            new UglifyWebpackPlugin({
+                parallel: true,
+                cache: true,
+                sourceMap: true,
+                uglifyOptions: {
+                    keep_fnames: true
+                }
+            })
+        ],
+        noEmitOnErrors: true
     };
 
     /**
@@ -68,10 +107,10 @@ module.exports = function makeWebpackConfig() {
      */
     config.resolve = {
         // only discover files that have those extensions
-        extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html'],
+        extensions: ['.ts', '.js', '.json', '.css', '.scss', '.html']
     };
 
-    var atlOptions = '';
+    let atlOptions = '';
     if (isTest && !isTestWatch) {
         // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
         atlOptions = 'inlineSourceMap=true&sourceMap=false';
@@ -84,78 +123,96 @@ module.exports = function makeWebpackConfig() {
      * This handles most of the magic responsible for converting modules
      */
     config.module = {
-        loaders: [
+        rules: [
 
-            // Support for .ts files.
+            // Support for TS files.
             {
                 test: /\.ts$/,
-                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular2-template-loader'],
-                exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/],
+                loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
+                exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
             },
 
-            // copy those assets to output
+            // Transpile module 'blocko' to es5.
+            {
+                test: /\.m?js$/,
+                include: root('node_modules', 'blocko'),
+                use: 'babel-loader',
+            },
+
+            // Minimize images.
+            {
+                test: /\.(jpg|png|gif|svg)$/,
+                loader: 'image-webpack-loader',
+                enforce: 'pre'
+            },
+
+            // Copy those assets to output.
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: 'file-loader?name=assets/[name].[hash].[ext]?'
             },
 
-            { test: /\.xml$/, loader: 'xml-loader' }, // support for .xml files
-
-
-            // Support for *.json files.
+            // Support for XML files.
             {
-                test: /\.json$/,
-                loader: 'json-loader'
+                test: /\.xml$/,
+                loader: 'xml-loader'
             },
 
-            // Support for CSS as raw text
-            // use 'null' loader in test mode (https://github.com/webpack/null-loader)
-            // all css in src/style will be bundled in an external css file
+            // Support for CSS as raw text.
+            // Use 'null' loader in test mode. Reference: https://github.com/webpack/null-loader
+            // All CSS files in src/style  will be bundled in an external CSS file.
             {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' : ExtractTextPlugin.extract(
-                    {
-                        fallback: 'style-loader',
-                        use: ['css-loader', 'postcss-loader']
-                    }
-                )
+                use: isTest ? 'null-loader' : [
+                    MiniCssExtractPlugin.loader,
+                    {loader: 'css-loader', options: {minimize: true}},
+                    'postcss-loader'
+                ]
             },
-            // all css required in src/app files will be merged in js files
+
+            // All CSS files required in src/app files will be merged in JS files.
             {
                 test: /\.css$/,
                 include: root('src', 'app'),
                 loader: 'raw-loader!postcss-loader'
             },
 
-            // support for .scss files
-            // use 'null' loader in test mode (https://github.com/webpack/null-loader)
-            // all css in src/style will be bundled in an external css file
+            // Support for SCSS files.
+            // Use 'null' loader in test mode. Reference: https://github.com/webpack/null-loader
+            // All CSS files in src/style will be bundled in an external CSS file.
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' : ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'postcss-loader', 'sass-loader'] })
+                use: isTest ? 'null-loader' : [
+                    MiniCssExtractPlugin.loader,
+                    {loader: 'css-loader', options: {minimize: true}},
+                    'postcss-loader',
+                    'fast-sass-loader'
+                ]
             },
-            // all css required in src/app files will be merged in js files
+
+            // All CSS files required in src/app files will be merged in JS files.
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'style'),
-                loader: 'raw-loader!postcss-loader!sass-loader'
+                loader: 'raw-loader!postcss-loader!fast-sass-loader'
             },
 
-            // support for .html as raw text
-            // todo: change the loader to something that adds a hash to images
+            // Support for HTML files as raw text.
+            // TODO: change the loader to something that adds a hash to images.
             {
                 test: /\.html$/,
-                loader: 'raw-loader',
-                exclude: root('src', 'public')
-            },
+                exclude: root('src', 'public'),
+                loader: 'raw-loader'
+
+            }
         ]
     };
 
     if (!isTest || !isTestWatch) {
-        // tslint support
-        config.module.loaders.push({
+        // Supprt for tslint.
+        config.module.rules.push({
             test: /\.ts$/,
             exclude: /node_modules/,
             enforce: 'pre',
@@ -169,107 +226,46 @@ module.exports = function makeWebpackConfig() {
      * List: http://webpack.github.io/docs/list-of-plugins.html
      */
     config.plugins = [
-        // Define env variables to help with builds
-        // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-        new webpack.DefinePlugin({
-            // Environment helpers
-            'process.env': {
-                ENV: JSON.stringify(ENV)
-            }
-        }),
 
-        // Workaround needed for angular 2 angular/angular#11580
-        new webpack.ContextReplacementPlugin(
-            // The (\\|\/) piece accounts for path separators in *nix and Windows
-            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            root('./src') // location of your src
-        ),
+        // new BundleAnalyzerPlugin({
+        //     analyzerPort: 444
+        // }),
 
-        // Tslint configuration for webpack 2
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                /**
-                 * Apply the tslint loader as pre/postLoader
-                 * Reference: https://github.com/wbuchwalter/tslint-loader
-                 */
-                tslint: {
-                    emitErrors: false,
-                    failOnHint: false
-                },
-                /**
-                 * Sass
-                 * Reference: https://github.com/jtangelder/sass-loader
-                 * Transforms .scss files to .css
-                 */
-                sassLoader: {
-                    //includePaths: [path.resolve(__dirname, "node_modules/foundation-sites/scss")]
-                },
-                /**
-                 * PostCSS
-                 * Reference: https://github.com/postcss/autoprefixer-core
-                 * Add vendor prefixes to your css
-                 */
-                postcss: [
-                    autoprefixer({
-                        browsers: ['last 2 version']
-                    })
-                ]
-            }
-        })
+        // HardSourceWebpackPlugin is a plugin for Webpack
+        // to provide an intermediate caching step for modules.
+        // Reference: https://github.com/mzgoddard/hard-source-webpack-plugin
+        new HardSourceWebpackPlugin(),
+
+        new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {})
     ];
 
-    if (!isTest && !isTestWatch) {
-        config.plugins.push(
-            // Generate common chunks if necessary
-            // Reference: https://webpack.github.io/docs/code-splitting.html
-            // Reference: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-            new CommonsChunkPlugin({
-                name: ['vendor', 'polyfills']
-            }),
+    config.plugins.push(
 
-            // Inject script and link tags into html files
-            // Reference: https://github.com/ampedandwired/html-webpack-plugin
-            new HtmlWebpackPlugin({
-                template: './src/public/index.html',
-                chunksSortMode: 'dependency'
-            }),
+        // Inject script and link tags into html files.
+        // Reference: https://github.com/ampedandwired/html-webpack-plugin
+        new HtmlWebpackPlugin({
+            inject: false,
+            template: root('src', 'public', 'index.html'),
+            chunksSortMode: 'dependency',
+        }),
 
-            // Extract css files
-            // Reference: https://github.com/webpack/extract-text-webpack-plugin
-            // Disabled when in test mode or not in build mode
-            new ExtractTextPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
-        );
-    }
+        // This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS.
+        // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
+        // Disabled when in test mode.
+        new MiniCssExtractPlugin({
+            filename: !isProd ? '[name].css' : 'css/[name].[hash].css',
+            chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
+            hash: true
+        })
+    );
 
-    // Add build specific plugins
+    // Add build(production mode) specific plugins.
     if (isProd) {
         config.plugins.push(
-            // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
-            // Only emit files when there are no errors
-            new webpack.NoEmitOnErrorsPlugin(),
-
-            // // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
-            // // Dedupe modules in the output
-            // new webpack.optimize.DedupePlugin(),
-
-            // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-            // Minify all javascript, switch loaders to minimizing mode
-            /**
-            new webpack.optimize.UglifyJsPlugin( {
-                    uglifyOptions: {
-                        sourceMap: true,
-                        mangle: {
-                            keep_fnames: true
-                        }
-                    }
-                }
-            ),
-            */
-
-            // Copy assets from the public folder
-            // Reference: https://github.com/kevlened/copy-webpack-plugin
             new CopyWebpackPlugin([{
-                from: root('src/public')
+                from: root('src', 'public'),
+                // To avoid duplicity.
+                ignore: ['*.svg', '*.png', '*.json', '*.xml', '*.ico']
             }])
         );
     }
@@ -281,30 +277,35 @@ module.exports = function makeWebpackConfig() {
                 to: 'libs/monaco-editor/vs'
             }
         ])
-    )
+    );
 
     config.plugins.push(
         new webpack.IgnorePlugin(/mongodb/)
-    )
+    );
+
 
     /**
      * Dev server configuration
      * Reference: http://webpack.github.io/docs/configuration.html#devserver
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
-    config.devServer = {
-        host: '0.0.0.0',
-        port: 8080,
-        contentBase: './src/public',
-        historyApiFallback: true,
-        quiet: true,
-        stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
-    };
+
+    if (!isProd) {
+        config.devServer = {
+            host: '0.0.0.0',
+            port: 8080,
+            contentBase: './src/public',
+            historyApiFallback: true,
+            stats: true, // none (or false), errors-only, minimal, normal (or true) and verbose
+            open: true
+        };
+    }
 
     return config;
+
 }();
 
-// Helper functions
+// Helper function
 function root(args) {
     args = Array.prototype.slice.call(arguments, 0);
     return path.join.apply(path, [__dirname].concat(args));

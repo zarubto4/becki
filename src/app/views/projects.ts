@@ -5,14 +5,11 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {
-    FlashMessageError, FlashMessageSuccess,
-    FlashMessageInfo, FlashMessageWarning, FlashMessage
-} from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 
 
 @Component({

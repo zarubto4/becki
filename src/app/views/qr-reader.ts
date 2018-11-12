@@ -1,7 +1,6 @@
-
+import { interval as observableInterval } from 'rxjs';
 import { Component, Injector, OnInit, ViewChild, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { Observable } from 'rxjs/Rx';
 const jsQR = require('jsqr');
 
 @Component({
@@ -25,10 +24,9 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
     constructor(injector: Injector) {
         super(injector);
 
-        this.scanLoop = Observable.interval(100).subscribe(() => {
+        this.scanLoop = observableInterval(100).subscribe(() => {
             this.onCapture();
         });
-
     };
 
     ngOnInit(): void {

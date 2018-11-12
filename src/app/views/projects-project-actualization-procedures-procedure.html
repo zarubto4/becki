@@ -34,22 +34,22 @@
 
                 </div>
                 <div class="col-md-4">
-                    <template [ngIf]="procedure.program">
-                        <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
+                    <ng-template [ngIf]="procedure.program">
+                        <ng-template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
                             <h4><span [innerHTML]="'label_update_type'|bkTranslate:this"></span> <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type></h4>
 
                             <span [innerHTML]="'label_code_program'|bkTranslate:this"></span>
-                            <a class="bold" (click)="onCProgramClick(procedure.program.c_program_id)">{{procedure.program.c_program_program_name}}</a>
+                            <a class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
                             <br>
                             <span [innerHTML]="'label_code_version'|bkTranslate:this"></span>
                             <a class="bold" (click)="onCProgramClick(procedure.program.c_program_id, procedure.program.c_program_version_id)">{{procedure.program.c_program_version_name}}</a>
-                        </template>
-                        <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
+                        </ng-template>
+                        <ng-template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
                             <h4 [innerHTML]="'label_update_type'|bkTranslate:this"><bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type></h4>
                             <span [innerHTML]="'label_bootloader_version'|bkTranslate:this"></span>
                             <a class="bold" (click)="onHardwareTypeClick(procedure.bootloader.hardware_type_id)">{{procedure.bootloader.bootloader_name}}</a>
-                        </template>
-                    </template>
+                        </ng-template>
+                    </ng-template>
                 </div>
                 <div class="col-md-4" style="text-align: center">
                     <h1> Progress:
@@ -105,7 +105,7 @@
                         </td>
 
                         <!-- Firmware -->
-                        <template [ngIf]="procedure.firmware_type== 'FIRMWARE' || procedure.firmware_type == 'BACKUP'">
+                        <ng-template [ngIf]="procedure.firmware_type== 'FIRMWARE' || procedure.firmware_type == 'BACKUP'">
                             <td class="vert-align font-grey-mint text-center">
                                 <a *ngIf="update.c_program_detail" class="bold"
                                    (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_program_name}}</a>
@@ -116,14 +116,14 @@
                                    (click)="onCProgramClick(update.c_program_detail.c_program_id, update.c_program_detail.c_program_version_id)">{{update.c_program_detail.c_program_version_name}}</a>
                                 <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                             </td>
-                        </template>
+                        </ng-template>
 
                         <!-- BootLoader -->
-                        <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
+                        <ng-template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
                             <td class="vert-align font-grey-mint text-center">
                                 <span *ngIf="update.bootloader_detail" class="font-grey-mint bold"> {{update.bootloader_detail.version_identificator}}</span>
                             </td>
-                        </template>
+                        </ng-template>
 
                         <!-- Update State -->
                         <td class="vert-align text-center">

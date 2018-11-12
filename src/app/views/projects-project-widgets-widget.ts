@@ -6,7 +6,7 @@
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { IWidget, IWidgetVersion, IProject }  from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';

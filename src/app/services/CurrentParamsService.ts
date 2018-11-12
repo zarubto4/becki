@@ -6,9 +6,7 @@
 import { Injectable } from '@angular/core';
 import { Router, RoutesRecognized, ActivatedRouteSnapshot, Params, NavigationCancel, NavigationEnd } from '@angular/router';
 import { TyrionBackendService } from './BackendService';
-import { Observable, Subject } from 'rxjs/Rx';
-import { IProject, IBProgram, ICProgram } from '../backend/TyrionAPI';
-
+import { Observable, Subject } from 'rxjs';
 @Injectable()
 export class CurrentParamsService {
 

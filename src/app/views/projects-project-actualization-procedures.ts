@@ -6,14 +6,14 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError } from '../services/NotificationService';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { IProject, IActualizationProcedureList, IUpdateProcedure, IHardwareGroupList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
 
 @Component({
     selector: 'bk-view-projects-project-actualization-procedures',
-    templateUrl: './projects-project-actualization-procedures.html',
+    templateUrl: './projects-project-actualization-procedures.html'
 })
 export class ProjectsProjectActualizationProceduresComponent extends _BaseMainComponent implements OnInit, OnDestroy {
 
