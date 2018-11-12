@@ -320,7 +320,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.bProgramVersion = bpv;
                             this.tab = 'editor';
                             if (this.editorView) {
-                                this.editorView.setDataJson(this.bProgramVersion.program);
+                                this.fileDownloaderService.download(this.bProgramVersion.program)
+                                    .then((program) => {
+                                        this.setSnapshotProgram(program);
+                                    })
+                                    .catch((reason) => {
+                                        this.fmError(this.translate('flash_cannot_download_file'), reason);
+                                    });
                             }
                         })
                         .catch((reason) => {
@@ -490,8 +496,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                 this.bProgramVersion = bpv;
                                 this.tab = 'editor';
                                 if (this.editorView) {
-                                    this.editorView.setDataJson(this.bProgramVersion.program);
-                                    this.bindings = this.editorView.getBindings();
+                                    this.fileDownloaderService.download(this.bProgramVersion.program)
+                                        .then((program) => {
+                                            this.setSnapshotProgram(program);
+                                        })
+                                        .catch((reason) => {
+                                            this.fmError(this.translate('flash_cannot_download_file'), reason);
+                                        });
                                 }
                             })
                             .catch((reason) => {
@@ -501,8 +512,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 });
         } else {
             this.bProgramVersion = version;
-            this.editorView.setDataJson(this.bProgramVersion.program);
-            this.bindings = this.editorView.getBindings();
+            this.fileDownloaderService.download(this.bProgramVersion.program)
+                .then((program) => {
+                    this.setSnapshotProgram(program);
+                })
+                .catch((reason) => {
+                    this.fmError(this.translate('flash_cannot_download_file'), reason);
+                });
         }
     }
 

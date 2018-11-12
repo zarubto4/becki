@@ -5,16 +5,16 @@
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess, FlashMessage } from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { CodeFile, CodeIDEComponent } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import { IProject, ICProgram, ILibraryRecord, ICProgramVersion, IHardwareType, IHardware } from '../backend/TyrionAPI';
+import { ICProgram, ILibraryRecord, ICProgramVersion, IHardwareType, IHardware } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { NullSafe } from '../helpers/NullSafe';
-import { ModalsSelectHardwareComponent, ModalsSelectHardwareModel } from '../modals/select-hardware';
-import { getAllInputOutputs, getInputsOutputs } from '../helpers/CodeInterfaceHelpers';
+import { ModalsSelectHardwareModel } from '../modals/select-hardware';
+import { getAllInputOutputs } from '../helpers/CodeInterfaceHelpers';
 import { ModalsCodeAddLibraryModel } from '../modals/code-add-library';
 import moment = require('moment/moment');
 import { ModalsCodeLibraryVersionModel } from '../modals/code-library-version';
@@ -25,9 +25,7 @@ import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { FormGroup, Validators } from '@angular/forms';
 import { CodeCompileError, ICodeCompileErrorMessage } from '../services/_backend_class/Responses';
-import { BlockoViewComponent } from '../components/BlockoViewComponent';
 
 @Component({
     selector: 'bk-view-projects-project-code-code',

@@ -139,9 +139,9 @@
                                                     </div>
                                                     <i class="fa cursor-hand"
                                                        style="vertical-align: middle; font-size: 1.5em;"
-                                                       [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]"
-                                                       [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]"
-                                                       (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
+                                                       [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType+index]"
+                                                       [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType+index]"
+                                                       (click)="messageInputsValueCache[connector.name+argType+index] = !messageInputsValueCache[connector.name+argType+index]"></i>
                                                 </div>
                                             </template>
                                             <template [ngIf]="argType == argTypes.Float">
@@ -150,7 +150,7 @@
                                                         [innerHTML]="'label_datatype_float'|bkTranslate:this:index"></span>:
                                                     </div>
                                                     <input type="number" class="form-control" step="0.1" value="0"
-                                                           (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                           (input)="messageInputsValueCache[connector.name+argType+index] = $event.target['value']">
                                                 </div>
                                             </template>
                                             <template [ngIf]="argType == argTypes.Integer">
@@ -159,7 +159,7 @@
                                                         [innerHTML]="'label_datatype_integer'|bkTranslate:this:index"></span>:
                                                     </div>
                                                     <input type="number" class="form-control" step="1" value="0"
-                                                           (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                           (input)="messageInputsValueCache[connector.name+argType+index] = $event.target['value']">
                                                 </div>
                                             </template>
                                             <template [ngIf]="argType == argTypes.String">
@@ -168,7 +168,7 @@
                                                         [innerHTML]="'label_datatype_string'|bkTranslate:this:index"></span>:
                                                     </div>
                                                     <input type="text" class="form-control"
-                                                           (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                           (input)="messageInputsValueCache[connector.name+argType+index] = $event.target['value']">
                                                 </div>
                                             </template>
 
