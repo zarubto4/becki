@@ -248,6 +248,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.onAddMeshNetworkKey();
                 break;
             }
+            case 'add_api_key': {
+                this.onAddApiKey();
+                break;
+            }
+            case 'add_mesh_key': {
+                this.onAddMeshNetworkKey();
+                break;
+            }
             default: {
                 console.warn('TODO action for:', action);
             }
@@ -307,7 +315,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
         }
 
-        this.getWebHooks(program);
+            this.getWebHooks(program);
     }
 
     onCreateNewSnapshotSelectBProgramVersion() {
@@ -625,9 +633,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then(() => {
                         this.unblockUI();
                         this.refresh();
-                    }).catch((err) => {
+                    }).catch(reason => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', err));
+                        this.fmError(this.translate('label_upload_error', reason));
                     });
             }
         });
@@ -643,9 +651,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.unblockUI();
                         this.refresh();
                     })
-                    .catch((err) => {
+                    .catch(reason => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', err));
+                        this.fmError(this.translate('label_upload_error', reason));
                     });
             }
         });
@@ -666,9 +674,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.unblockUI();
                             this.refresh();
                         })
-                        .catch((err) => {
+                        .catch(reason => {
                             this.unblockUI();
-                            this.fmError(this.translate('label_upload_error', err));
+                            this.fmError(this.translate('label_upload_error', reason));
                         });
                 }
             });
@@ -681,9 +689,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     this.unblockUI();
                     this.refresh();
                 })
-                .catch((err) => {
+                .catch(reason => {
                     this.unblockUI();
-                    this.fmError(this.translate('label_upload_error', err));
+                    this.fmError(this.translate('label_upload_error', reason));
                 });
         }
     }
@@ -730,7 +738,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.fmError('Cannot be loaded.', reason);
             });
@@ -762,7 +770,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.fmError('Cannot be loaded.', reason);
             });
@@ -802,7 +810,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 });
 
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.fmError('Cannot be loaded.', reason);
             });
@@ -1003,7 +1011,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.unblockUI();
                 this.refresh();
             })
-            .catch((reason) => {
+            .catch(reason => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });

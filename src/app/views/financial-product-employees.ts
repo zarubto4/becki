@@ -55,9 +55,9 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
                         .then(() => {
 
                         })
-                        .catch((err) => {
+                        .catch(reason => {
                             this.unblockUI();
-                            this.fmError(this.translate('label_cannot_add_new_employees', err));
+                            this.fmError(this.translate('label_cannot_add_new_employees', reason));
                         });
                 }
             });
@@ -130,8 +130,8 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
         this.tyrionBackendService.productGet(this.id).then(product =>  {
             this.product = product;
             this.unblockUI();
-        }).catch(error =>  {
-
+        }).catch(reason =>  {
+            this.fmError(this.translate('flash_fail'), reason);
             this.unblockUI();
         });
 

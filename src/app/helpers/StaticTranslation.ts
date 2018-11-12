@@ -2945,8 +2945,8 @@ export class StaticTranslation {
             'flash_successfully_remove': 'Successfully removed',
             'flash_cant_add': 'Cannot Add. Reason:',
             'flash_cant_remove': 'Cannot removed. Reason:',
+            'flash_cant_change_hash': 'Hash value could not be changed.',
             'label_free': 'Free',
-
             'hello_world': 'Hello {0}! {1}?',
         },
         'cz': {

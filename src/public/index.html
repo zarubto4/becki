@@ -44,7 +44,7 @@
     <meta name="msapplication-TileImage" content="/assets/images/icons/ms-icon-310x310.png">
     <meta name="theme-color" content="#ffffff">
 
-    <% for (key in htmlWebpackPlugin.files.css) { %> <link href="<%= htmlWebpackPlugin.files.css[key] %>" rel="stylesheet"> <% } %>
+    <% for (key in htmlWebpackPlugin.files.css) { %> <link href="<%= htmlWebpackPlugin.files.css[key] %>"  rel="stylesheet"> <% } %>
 
     <!-- https://app.inlinemanual.com/ - its used for Guidelines - also very important is User tracking data sets in backend - like user id..etc  - You can find this comment on another places-->
     <script>!function(){var e=document.createElement("script"),t=document.getElementsByTagName("script")[0];e.async=1,e.src="https://inlinemanual.com/embed/player.9fe45fcc7ebdaf659d92242171a8885c.js",e.charset="UTF-8",t.parentNode.insertBefore(e,t)}();</script>
@@ -67,6 +67,28 @@
            })(window, document, '//static.hotjar.com/c/hotjar-', '.js?sv=');
        </script>
      -->
+    <!--<script>-->
+        <!--let progressBar = new Mprogress({-->
+            <!--start: true,-->
+            <!--easing: true-->
+        <!--});-->
+
+        <!--let bundleNumber = 0;-->
+        <!--function increasingProgress() {-->
+            <!--bundleNumber++;-->
+            <!--switch (bundleNumber) {-->
+                <!--case 1:-->
+                    <!--progressBar.inc(0.05);-->
+                <!--case 2:-->
+                    <!--progressBar.inc(0.1);-->
+                <!--case 3:-->
+                    <!--progressBar.inc(0.15);-->
+            <!--}-->
+        <!--}-->
+        <!--window.onload = function() {-->
+            <!--progressBar.end();-->
+        <!--};-->
+    <!--</script>-->
 </head>
 
 <body>
@@ -78,9 +100,6 @@
 
     <noscript>Failed! Scripting has to be enabled.</noscript>
 
-
-    <% for (key in htmlWebpackPlugin.files.js) { %>
-        <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>"></script>
-    <% } %>
+    <% for (key in htmlWebpackPlugin.files.js) { %> <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>"></script> <% } %>
 </body>
 </html>

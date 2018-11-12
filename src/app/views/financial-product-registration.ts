@@ -51,6 +51,8 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
 
     alreadyCreatedProducts: IProduct[] = null;
 
+    alreadyCreatedProducts: IProduct[] = null;
+
     constructor(injector: Injector) {
         super(injector);
 

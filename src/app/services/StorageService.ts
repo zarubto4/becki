@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IProject, IHardwareType } from '../backend/TyrionAPI';
 import { TyrionBackendService } from './BackendService';
+import { TranslationService } from './TranslationService';
+import { FlashMessageError, NotificationService } from './NotificationService';
 
 @Injectable()
 export class StorageService {
@@ -23,7 +25,7 @@ export class StorageService {
     protected hardwareTypesLastTouch: number = 0;
     protected hardwareTypesInProgress: boolean = false;
 
-    constructor(protected backendService: TyrionBackendService, protected router: Router) {
+    constructor(protected backendService: TyrionBackendService, protected router: Router, private translationService: TranslationService, protected notificationService: NotificationService, ) {
         // console.info('StorageService init');
     }
 
@@ -66,8 +68,9 @@ export class StorageService {
                     }
                     resolve(true);
                 })
-                .catch((err) => {
+                .catch(reason => {
                     // TODO: error
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     this.projectsInProgress[id] = false;
                     resolve(false);
                 });
@@ -113,8 +116,9 @@ export class StorageService {
                     }
                     resolve(true);
                 })
-                .catch((err) => {
+                .catch(reason => {
                     // TODO: error
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     this.hardwareTypesInProgress = false;
                     resolve(false);
                 });

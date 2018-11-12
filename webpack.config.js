@@ -11,8 +11,6 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
 const PurifyCSSPlugin = require('purifycss-webpack');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 
 /**
  * Env
@@ -39,6 +37,7 @@ module.exports = function makeWebpackConfig() {
     if (isProd) {
         config.devtool = 'cheap-module-source-map';
     }
+
     /**
      * Entry
      * Reference: http://webpack.github.io/docs/configuration.html#entry
@@ -66,18 +65,14 @@ module.exports = function makeWebpackConfig() {
      * Reference: https://webpack.js.org/configuration/optimization/
      */
     config.optimization = {
-        // minimize: false,          // Uncomment it to disable optimizations and speed up building.
+        minimize: false,          // Uncomment it to disable optimizations and speed up building.
         minimizer: [
             // A Webpack plugin to cut unused CSS selectors.
             new PurifyCSSPlugin({
                 styleExtensions: ['.css', '.scss', '.min.css'],
                 moduleExtensions: ['.html'],
                 minimize: true,
-                paths: glob.sync(root('src', 'app', '**', '*.html')),
-                // purifyOptions: {
-                //     rejected: true
-                // },
-                // verbose: true
+                paths: glob.sync(root('src', 'app', '**', '*.html'))
             }),
 
             // A Webpack plugin to optimize \ minimize CSS assets.
@@ -94,7 +89,7 @@ module.exports = function makeWebpackConfig() {
                 cache: true,
                 sourceMap: true,
                 uglifyOptions: {
-                    keep_fnames: true
+                    keep_fnames: true     // Reference: https://github.com/mishoo/UglifyJS2#minify-options
                 }
             })
         ],
@@ -130,20 +125,6 @@ module.exports = function makeWebpackConfig() {
                 test: /\.ts$/,
                 loaders: ['awesome-typescript-loader?' + atlOptions, 'angular-router-loader', 'angular2-template-loader'],
                 exclude: [isTest ? /\.(e2e)\.ts$/ : /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/, /node_modules/]
-            },
-
-            // Transpile module 'blocko' to es5.
-            {
-                test: /\.m?js$/,
-                include: root('node_modules', 'blocko'),
-                use: 'babel-loader',
-            },
-
-            // Minimize images.
-            {
-                test: /\.(jpg|png|gif|svg)$/,
-                loader: 'image-webpack-loader',
-                enforce: 'pre'
             },
 
             // Copy those assets to output.
@@ -210,6 +191,24 @@ module.exports = function makeWebpackConfig() {
         ]
     };
 
+    if (isProd) {
+        config.module.rules.push(
+            // Transpile module 'blocko' to es5.
+            {
+                test: /\.m?js$/,
+                include: root('node_modules', 'blocko'),
+                use: 'babel-loader?cacheDirectory',
+            },
+
+            // Minimize images.
+            {
+                test: /\.(jpg|png|gif|svg)$/,
+                loader: 'image-webpack-loader',
+                enforce: 'pre'
+            }
+        );
+    }
+
     if (!isTest || !isTestWatch) {
         // Supprt for tslint.
         config.module.rules.push({
@@ -227,10 +226,6 @@ module.exports = function makeWebpackConfig() {
      */
     config.plugins = [
 
-        // new BundleAnalyzerPlugin({
-        //     analyzerPort: 444
-        // }),
-
         // HardSourceWebpackPlugin is a plugin for Webpack
         // to provide an intermediate caching step for modules.
         // Reference: https://github.com/mzgoddard/hard-source-webpack-plugin
@@ -239,34 +234,37 @@ module.exports = function makeWebpackConfig() {
         new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {})
     ];
 
-    config.plugins.push(
+    if (!isTest && !isTestWatch) {
+        config.plugins.push(
 
-        // Inject script and link tags into html files.
-        // Reference: https://github.com/ampedandwired/html-webpack-plugin
-        new HtmlWebpackPlugin({
-            inject: false,
-            template: root('src', 'public', 'index.html'),
-            chunksSortMode: 'dependency',
-        }),
+            // Inject script and link tags into html files.
+            // Reference: https://github.com/ampedandwired/html-webpack-plugin
+            new HtmlWebpackPlugin({
+                inject: false,
+                template: './src/public/index.html',
+                chunksSortMode: 'dependency',
+            }),
 
-        // This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS.
-        // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
-        // Disabled when in test mode.
-        new MiniCssExtractPlugin({
-            filename: !isProd ? '[name].css' : 'css/[name].[hash].css',
-            chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
-            hash: true
-        })
-    );
+            // This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS.
+            // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
+            // Disabled when in test mode.
+            new MiniCssExtractPlugin({
+                filename: !isProd ? '[name].css' : 'css/[name].[hash].css',
+                chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
+                hash: true
+            })
+        );
+    }
 
     // Add build(production mode) specific plugins.
     if (isProd) {
         config.plugins.push(
             new CopyWebpackPlugin([{
                 from: root('src', 'public'),
-                // To avoid duplicity.
+                // To avoid duplicity of pictures.
                 ignore: ['*.svg', '*.png', '*.json', '*.xml', '*.ico']
-            }])
+            }]),
+
         );
     }
 
@@ -296,8 +294,9 @@ module.exports = function makeWebpackConfig() {
             port: 8080,
             contentBase: './src/public',
             historyApiFallback: true,
-            stats: true, // none (or false), errors-only, minimal, normal (or true) and verbose
-            open: true
+            quiet: true,
+            open, true
+            stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
         };
     }
 
