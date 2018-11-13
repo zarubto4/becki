@@ -9,7 +9,7 @@ import { ProjectsComponent } from './projects';
 import { ProjectsProjectComponent } from './projects-project';
 import { ProjectsProjectMembersComponent } from './projects-project-members';
 import { ProjectsProjectLibrariesComponent } from './projects-project-libraries';
-
+import { ProjectsProjectDatabasesComponent } from './projects-project-databases';
 
 // routes
 export const PROJECTS_ROUTES: Routes = [
@@ -52,6 +52,8 @@ export const PROJECTS_ROUTES: Routes = [
 
     // Project CLOUD - INSTANCES
     { path: ':project/instances', data: { breadName: 'CLOUD instances' }, loadChildren: './project-instances-module#ProjectInstancesModule'},
+
+    { path: ':project/databases', data: { breadName: 'CLOUD databases' }, component: ProjectsProjectDatabasesComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
@@ -64,7 +66,8 @@ export const PROJECTS_ROUTES: Routes = [
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectMembersComponent,
-        ProjectsProjectLibrariesComponent
+        ProjectsProjectLibrariesComponent,
+        ProjectsProjectDatabasesComponent
     ],
     exports: [ RouterModule ]
 })

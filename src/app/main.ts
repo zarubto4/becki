@@ -111,12 +111,8 @@ import { ModalsHardwareGroupPropertiesComponent } from './modals/hardware-group-
 import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoListSelectComponent';
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
-import { TyrionComponent } from './views/admin-tyrion';
-import { LogLevelComponent, OnlineStateComponent, PublicStateComponent } from './components/OnlineStateComponent';
-import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
-import { CompilationStatusComponent } from './components/CompilationStatusComponent';
+import { LogLevelComponent, PublicStateComponent } from './components/OnlineStateComponent';
 import { GSMStatusComponent } from './components/GSMStatusComponent';
-import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerComponent } from './modals/hardware-change-server';
@@ -128,9 +124,6 @@ import { PortletPanelMenuComponent } from './components/PortletPanelMenu';
 import { ModalsHardwareFindHashComponent } from './modals/hardware-find-hash';
 import { ModalsInstanceCreateComponent } from './modals/instance-create';
 import { TagComponent } from './components/TagComponent';
-import { FileTreeLineComponent } from './components/FileTreeLineCompinent';
-import { ProjectsProjectCodeCodeComponent } from './views/projects-project-code-code';
-import { BlockoViewComponent } from './components/BlockoViewComponent';
 import { IconComponent } from './components/FileTreeComponent';
 import { IconFileComponent } from './components/FileTreeComponent';
 import { ModalsProgramVersionSelectComponent } from './modals/program-version-select';
@@ -157,7 +150,6 @@ import { ContactFormComponent } from './components/ContactFormComponent';
 import { PaymentDetailsFormComponent } from './components/PaymentDetailsFormComponent';
 import { HttpClientModule } from '@angular/common/http';
 import { MonacoDiffComponent } from './components/MonacoDiffComponent';
-import { ProjectsProjectDatabasesComponent } from './views/projects-project-databases';
 import { ModalsDatabaseNewComponent } from './modals/database-new';
 import { ModalsDatabaseRemoveComponent } from './modals/database-remove';
 
@@ -485,10 +477,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
         ContactFormComponent,
-        PaymentDetailsFormComponent
+        PaymentDetailsFormComponent,
         ModalsDatabaseNewComponent,
         MonacoDiffComponent,
-        ProjectsProjectDatabasesComponent,
         ModalsDatabaseRemoveComponent,
     ],
     bootstrap: [AppComponent]
