@@ -215,6 +215,10 @@ export abstract class _BaseMainComponent {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'instances', instance_id]);
     }
 
+    public onCellularClick(cellular_id: string) {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'gsm', cellular_id]);
+    }
+
     public onGridProjectClick(grid_project_id: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', grid_project_id]);
     }
