@@ -120,7 +120,7 @@
 
                     <!-- BEGIN SIDEBAR MENU Admin Part-->
                     <!-- DOC: Filter all navigations with admin parameter on option -->
-                    <ng-container>
+                    <ng-container *ngIf="backendService.personInfoSnapshot && backendService.personInfoSnapshot.byzance_admin == true">
 
                         <li *ngFor="let page of navigation" [class.heading]="!page.link" [class.nav-item]="page.link" [class.hide]="!page.options['adminNavigation']">
 

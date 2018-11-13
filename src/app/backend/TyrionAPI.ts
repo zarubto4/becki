@@ -1784,6 +1784,7 @@ export interface IBoardFilter {
      * @name id
      * @type string
      * @description Hardware ID or part of ID (not necessary to send UUID)
+     * @format uuid
      */
     id?: string;
     /**
@@ -3439,6 +3440,13 @@ export interface IDMBoardBootloaderDefaultConfig {
      * @required
      */
     blreport: boolean;
+    /**
+     * @name lowpan_credentials
+     * @type string
+     * @readonly
+     * @required
+     */
+    lowpan_credentials: string;
     /**
      * @name lowpanbr
      * @type boolean
@@ -5681,7 +5689,7 @@ export interface IHardwareBackupSettings {
 
 /**
  * @name IHardwareBatch
- * @description: Model of Production Batch
+ * @description: Interface IHardwareBatch definition
  */
 export interface IHardwareBatch {
     /**
@@ -5697,17 +5705,21 @@ export interface IHardwareBatch {
      */
     assembly_manufacture_name: string;
     /**
-     * @name batch_id
-     * @type string
-     * @required
-     */
-    batch_id: string;
-    /**
      * @name compiler_target_name
      * @type string
      * @required
      */
     compiler_target_name: string;
+    /**
+     * @name created
+     * @type number
+     * @description unixTime
+     * @example 1536424319
+     * @format int32
+     * @readonly
+     * @required
+     */
+    created: number;
     /**
      * @name customer_company_made_description
      * @type string
@@ -5728,16 +5740,18 @@ export interface IHardwareBatch {
     customer_product_name: string;
     /**
      * @name date_of_assembly
-     * @type string
+     * @type number
+     * @format int64
      * @required
      */
-    date_of_assembly: string;
+    date_of_assembly: number;
     /**
-     * @name deleted
+     * @name delete_permission
      * @type boolean
-     * @required
+     * @description True if user can delete this object.
+     * @readonly
      */
-    deleted: boolean;
+    delete_permission?: boolean;
     /**
      * @name description
      * @type string
@@ -5751,11 +5765,14 @@ export interface IHardwareBatch {
      */
     ean_number: string;
     /**
-     * @name get_collection_name
+     * @name id
      * @type string
+     * @description  ID
+     * @example 5b508290-a026-410c-bdbc-6cdf99f48043
+     * @readonly
      * @required
      */
-    get_collection_name: string;
+    id: string;
     /**
      * @name latest_used_mac_address
      * @type string
@@ -5798,6 +5815,23 @@ export interface IHardwareBatch {
      * @required
      */
     revision: string;
+    /**
+     * @name update_permission
+     * @type boolean
+     * @description True if user can update this object.
+     * @readonly
+     */
+    update_permission?: boolean;
+    /**
+     * @name updated
+     * @type number
+     * @description unixTime
+     * @example 1536424319
+     * @format int32
+     * @readonly
+     * @required
+     */
+    updated: number;
 }
 
 
@@ -8229,13 +8263,6 @@ export interface ILoginResult {
      */
     hmac?: string;
     /**
-     * @name permissions
-     * @type string[]
-     * @description List of all person permission (private and all collections from Person Roles ("SecurityRole")
-     * @readonly
-     */
-    permissions?: string[];
-    /**
      * @name person
      * @type IPerson
      * @readonly
@@ -9174,6 +9201,12 @@ export interface IPermission {
  * @description: Interface IPerson definition
  */
 export interface IPerson {
+    /**
+     * @name byzance_admin
+     * @type boolean
+     * @readonly
+     */
+    byzance_admin?: boolean;
     /**
      * @name country
      * @type string

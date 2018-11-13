@@ -438,6 +438,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
             return;
         }
 
+        // Nejdříve je nutné připojit se k serveru
         this.tyrionBackendService.getWebsocketService().connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString(),(socket: WebSocketClientHardware, error: any) => {
             if (socket) {
 
