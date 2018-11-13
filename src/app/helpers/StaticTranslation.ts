@@ -499,6 +499,19 @@ export class StaticTranslation {
                 'btn_confirm_scan': 'Confirm Scan',
             },
 
+            'ModalsDatabaseNewComponent': {
+                'title': '<strong> Create database </strong>  ',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_first_collection_name': 'First collection name',
+                'btn_confirm_scan': 'Confirm Scan',
+            },
+
+            'ModalsDatabaseRemoveComponent': {
+                'title': '<strong> Remove database </strong>  ',
+                'label_database_id': 'Database id',
+                'btn_remove': 'remove',
+            },
             'MobileAddHardwareComponent': {
                 'main_title': 'QR Hardware registration',
                 'btn_add_hardware_qrcode': 'Insert Hardware ID by QR',
@@ -1628,9 +1641,15 @@ export class StaticTranslation {
                 'label_no_gsm_comment': 'You have not registered any CELLULAR modules yet. It\'s time to pull out a credit card and buy some.',
                 'btn_add_gsm': 'Register New Module',
                 'table_msi_number': 'MSI Number',
+                'table_msi_iccid': 'ICCID',
                 'table_id': 'ID',
                 'table_name': 'Name',
-                'table_msi_status': 'CELLULAR status',
+                'table_msi_status': 'Status',
+                'table_msi_country': 'Country',
+                'table_available_data_traffic': 'Available data traffic',
+                'table_total_data_traffic': 'Total traffic',
+                'table_daily_traffic': 'Daily data traffic',
+                'table_monthly_traffic': 'Monthly data traffic',
                 'table_description': 'Description',
                 'table_status': 'Status',
                 'table_actions': 'Actions',
@@ -1638,7 +1657,12 @@ export class StaticTranslation {
                 'label_gsm_edit': 'Edit',
                 'label_gsm_remove': 'Remove',
                 'label_gsm_un_register': 'Un Register',
+                'label_deactive': 'Deactivate',
+                'label_active': 'Activate',
                 'label_gsm_print_sticker': 'Print Sticker',
+                'tab_overview': 'Cellular Modules',
+                'tab_traffic_details': 'Data Traffic Details',
+                'label_gsm_traffic': 'Cellular Modules Aggregated Traffic',
 
             }, 'ProjectsProjectGSMSGSMComponent': {
 
@@ -1656,6 +1680,21 @@ export class StaticTranslation {
                 'label_gsm_un_register': 'Un Register',
                 'label_gsm_print_sticker': 'Print Sticker',
                 'label_gsm_traffic': 'Cellular Module Traffic',
+                'tab_overview': 'Cellular Module Traffic',
+                'tab_traffic_details': 'Data Traffic Details',
+                'tab_cdr_details': 'Charging data records (CDR)',
+                'tab_country_details': 'Country Settings',
+                'table_maximum_threshold': 'Maximum data traffic threshold',
+                'table_notify_me': 'Send Email',
+                'table_block_sim': 'Block Sim',
+                'table_daily_threshold': 'Daily Limit (MB)',
+                'table_monthly_threshold': 'Monthly Limit (MB)',
+                'table_total_threshold': 'Total Limit (MB)',
+                'table_daily_report': 'Daily Report',
+                'table_month_report': 'Monthly Report',
+                'label_weekly_report': 'Weekly Report',
+                'table_report_type': 'Report Period',
+                'table_report_sate': 'State',
 
             }, 'ProjectsProjectInstancesComponent': {
 
@@ -2166,6 +2205,7 @@ export class StaticTranslation {
                 'flash_cant_save_version': 'Unable to save version <b>{0}</b>, {1}.',
                 'flash_version_save': 'Version <b> {0} </b> saved successfully.',
                 'flash_block_code_empty': 'Block code cannot be empty! Block error, {0}.',
+                '!!!flash_blocko_removed': 'Blocko program has been successfully deleted',
                 'flash_cant_load_block': 'Unable to load block, ',
                 'flash_blocko_edit': 'Block has been edited.',
                 'flash_cant_edit_block': 'Unable to edit block, ',
@@ -2226,6 +2266,7 @@ export class StaticTranslation {
                 'label_code_description': '<strong class="font-color-code">CODE</strong> Program Description: <strong>{0}</strong>',
                 'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Type',
                 'tab_ide': 'IDE',
+                'tab_diff': 'Diff',
                 'tab_label_version': 'Saved Versions',
                 'tab_error_list': 'Build Errors',
                 'tab_online_terminal': 'Terminal',
@@ -2891,6 +2932,15 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'btn_add_role': 'Add role',
                 'role_create_fail': 'Role creation failed',
+            }, 'ProjectsProjectDatabasesComponent': {
+                'btn_create_database': 'Create Database',
+                'btn_remove_database': 'Remove Database',
+                'table_database_name': 'Name',
+                'table_database_description': 'Description',
+                'table_id': 'Database id',
+                'label_delete_database': 'Drop',
+                'title': 'Databases',
+                'label_connection_string': 'Connection String',
             },
 
 
@@ -3049,6 +3099,11 @@ export class StaticTranslation {
                 '1': 'Missing Label in update procedure - probably incompatible previous firmware'
 
             },
+            'gsm_status': {
+                'active': 'Active',
+                'not active': 'Not Active'
+
+            },
             'update_state': {
                 'COMPLETE': 'Completed',
                 'CANCELED': 'Cancelled',
@@ -3065,6 +3120,7 @@ export class StaticTranslation {
                 'COMPLETE_WITH_ERROR': 'Complete with error',
                 'SUCCESSFULLY_COMPLETE': 'Successfully completed',
                 'PROHIBITED_BY_CONFIG': 'Prohibited by config',
+                'NOT_START_YET': 'Not start yet',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu

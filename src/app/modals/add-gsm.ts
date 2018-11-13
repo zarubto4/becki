@@ -7,8 +7,7 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IGSM, IHardware, IHardwareGroupList, IResultBadRequest } from '../backend/TyrionAPI';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { IGSM, IResultBadRequest, IResultInvalidBody } from '../backend/TyrionAPI';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessage, FlashMessageError, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
@@ -59,6 +58,7 @@ export class ModalsAddGSMComponent  implements OnInit {
 
     GSMsForRegistration: string[] = null;
     inprogress: boolean = false;
+    list_finish: boolean = false;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService
     ) {
@@ -129,7 +129,8 @@ export class ModalsAddGSMComponent  implements OnInit {
         let GSMsForRegistration: string[] = data.split(';');
 
         console.info('Result list:', GSMsForRegistration);
-        this.GSMsForRegistration = GSMsForRegistration.filter(device => device.length > 20);
+
+        this.GSMsForRegistration = GSMsForRegistration;
         console.info('Result list:',  this.GSMsForRegistration);
 
 
@@ -141,7 +142,9 @@ export class ModalsAddGSMComponent  implements OnInit {
     sequenceRegistrationPromise(pointer: number) {
 
         if (pointer >= this.GSMsForRegistration.length) {
+            console.info('GSMsForRegistration už je empty');
             this.inprogress = false;
+            this.list_finish = true;
             return;
         }
 
@@ -159,12 +162,18 @@ export class ModalsAddGSMComponent  implements OnInit {
                 this.sequenceRegistrationPromise(++pointer);
 
             })
-            .catch((reason: IResultBadRequest) => {
+            .catch((reason: IResultBadRequest|IResultInvalidBody) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 console.error('Nepodařilo se pro ', this.GSMsForRegistration[pointer], ' důvod?', reason.message);
+                console.error('Nepodařilo se pro ', this.GSMsForRegistration[pointer], ' důvod?', reason.state);
 
-                this.failedGSMs.push(this.GSMsForRegistration[pointer] + ': ' + reason.message);
-                this.deviceInfoTextForm.controls['failedGSMs'].setValue(this.failedGSMs.join(',  \n'));
+                if (reason.state === 'invalid_body') {
+                    this.failedGSMs.push(this.GSMsForRegistration[pointer] + ': ' + 'Invalid Hash');
+                    this.deviceInfoTextForm.controls['failedGSMs'].setValue(this.failedGSMs.join(',  \n'));
+                } else {
+                    this.failedGSMs.push(this.GSMsForRegistration[pointer] + ': ' + reason.message);
+                    this.deviceInfoTextForm.controls['failedGSMs'].setValue(this.failedGSMs.join(',  \n'));
+                }
 
                 this.sequenceRegistrationPromise(++pointer);
             });
@@ -173,6 +182,7 @@ export class ModalsAddGSMComponent  implements OnInit {
 
 
     singleRegistration() {
+
         this.single_error_message = null;
 
         this.backendService.simRegister({
@@ -185,7 +195,6 @@ export class ModalsAddGSMComponent  implements OnInit {
             .catch(reason => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.single_error_message = reason.body.message;
-
             });
     }
 

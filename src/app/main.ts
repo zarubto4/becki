@@ -111,7 +111,12 @@ import { ModalsHardwareGroupPropertiesComponent } from './modals/hardware-group-
 import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoListSelectComponent';
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
-import { LogLevelComponent, PublicStateComponent } from './components/OnlineStateComponent';
+import { TyrionComponent } from './views/admin-tyrion';
+import { LogLevelComponent, OnlineStateComponent, PublicStateComponent } from './components/OnlineStateComponent';
+import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
+import { CompilationStatusComponent } from './components/CompilationStatusComponent';
+import { GSMStatusComponent } from './components/GSMStatusComponent';
+import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerComponent } from './modals/hardware-change-server';
@@ -124,6 +129,8 @@ import { ModalsHardwareFindHashComponent } from './modals/hardware-find-hash';
 import { ModalsInstanceCreateComponent } from './modals/instance-create';
 import { TagComponent } from './components/TagComponent';
 import { FileTreeLineComponent } from './components/FileTreeLineCompinent';
+import { ProjectsProjectCodeCodeComponent } from './views/projects-project-code-code';
+import { BlockoViewComponent } from './components/BlockoViewComponent';
 import { IconComponent } from './components/FileTreeComponent';
 import { IconFileComponent } from './components/FileTreeComponent';
 import { ModalsProgramVersionSelectComponent } from './modals/program-version-select';
@@ -149,6 +156,11 @@ import { ModalsContactComponent } from './modals/contact';
 import { ContactFormComponent } from './components/ContactFormComponent';
 import { PaymentDetailsFormComponent } from './components/PaymentDetailsFormComponent';
 import { HttpClientModule } from '@angular/common/http';
+import { MonacoDiffComponent } from './components/MonacoDiffComponent';
+import { ProjectsProjectDatabasesComponent } from './views/projects-project-databases';
+import { ModalsDatabaseNewComponent } from './modals/database-new';
+import { ModalsDatabaseRemoveComponent } from './modals/database-remove';
+
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
 /* tslint:disable:max-line-length */
@@ -235,33 +247,34 @@ let tabMenus = {
         new LabeledLink(null, null),
         new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', null, null, {
             styleClass: 'color-hardware', items: [
-                new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong> list', ['/', 'projects', ':project', 'hardware'], null),
+                new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong> list',    ['/', 'projects', ':project', 'hardware'], null),
                 new LabeledLink('<strong class="font-color-hardware">RELEASES</strong> updates', ['/', 'projects', ':project', 'actualization-procedures'], null),
                 new LabeledLink('<strong class="font-color-hardware">CELLULAR</strong> modules', ['/', 'projects', ':project', 'gsm'], null),
             ]
         }),
         new LabeledLink('<strong class="font-color-code">CODE</strong>', null, null, {
             styleClass: 'color-code', items: [
-                new LabeledLink('<strong class="font-color-code">CODE</strong> programs', ['/', 'projects', ':project', 'code'], null),
+                new LabeledLink('<strong class="font-color-code">CODE</strong> programs',  ['/', 'projects', ':project', 'code'],      null),
                 new LabeledLink('<strong class="font-color-code">CODE</strong> libraries', ['/', 'projects', ':project', 'libraries'], null),
             ]
         }),
         new LabeledLink('<strong class="font-color-grid">GRID</strong>', null, null, {
             styleClass: 'color-grid font-color-grid-dark', items: [
-                new LabeledLink('<strong class="font-color-grid">GRID</strong> projects', ['/', 'projects', ':project', 'grid'], null),
-                new LabeledLink('<strong class="font-color-grid">GRID</strong> widgets', ['/', 'projects', ':project', 'widgets'], null),
+                new LabeledLink('<strong class="font-color-grid">GRID</strong> projects', ['/', 'projects', ':project', 'grid'],    null),
+                new LabeledLink('<strong class="font-color-grid">GRID</strong> widgets',  ['/', 'projects', ':project', 'widgets'], null),
             ]
         }),
         new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong>', null, null, {
             styleClass: 'color-blocko', items: [
                 new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> programs', ['/', 'projects', ':project', 'blocko'], null),
-                new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> blocks', ['/', 'projects', ':project', 'blocks'], null),
+                new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> blocks',   ['/', 'projects', ':project', 'blocks'], null),
             ]
         }),
         new LabeledLink('<strong class="font-color-cloud">CLOUD</strong>', null, null, {
             styleClass: 'color-cloud', items: [
                 new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> instances', ['/', 'projects', ':project', 'instances'], null, { styleClass: 'color-cloud font-color-cloud-dark' }),
-                new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> servers', ['/', 'projects', ':project', 'servers'], null, { styleClass: 'color-cloud font-color-cloud-dark' }),
+                new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> servers',   ['/', 'projects', ':project', 'servers'],   null, { styleClass: 'color-cloud font-color-cloud-dark' }),
+                new LabeledLink('<strong class="font-color-cloud">CLOUD</strong> databases', ['/', 'projects', ':project', 'databases'], null, { styleClass: 'color-cloud font-color-cloud-dark' })
             ]
         }),
     ],
@@ -367,7 +380,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ProgramVersionSelectorComponent,
         BeckiClickOutsideDirective,
         FileTreeComponent,
-        FileTreeLineComponent,
         NotificationsOverlayComponent,
         NotificationsListComponent,
         InstanceHistoryTimeLineComponent,
@@ -392,6 +404,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ArticleComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
+        GSMStatusComponent,
+        // Modals components
         ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
         ModalsContactComponent,
@@ -472,6 +486,10 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsInstanceApiPropertiesComponent,
         ContactFormComponent,
         PaymentDetailsFormComponent
+        ModalsDatabaseNewComponent,
+        MonacoDiffComponent,
+        ProjectsProjectDatabasesComponent,
+        ModalsDatabaseRemoveComponent,
     ],
     bootstrap: [AppComponent]
 })

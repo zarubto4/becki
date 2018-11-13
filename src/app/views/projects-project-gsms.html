@@ -27,13 +27,29 @@
                     ]"
         (onTabClick)="onToggleTab($event)"
         [tab_selected_name]="tab"
+        [tabBtns]="[
+                        {
+                            tab_name: 'overview',
+                            condition: (true),
+                            permission: (true),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_overview'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'traffic_details',
+                            condition: (true),
+                            permission: (true),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_traffic_details'|bkTranslate:this)
+                        }
+                    ]"
     >
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
     <div class="portlet-body">
 
-        <div *ngIf="tab == 'my_gsm'">
+        <div *ngIf="tab == 'overview'">
             <div *ngIf="(gsmList != null && gsmList.content.length)"
                  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
@@ -43,15 +59,30 @@
                         <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'table_msi_number'|bkTranslate:this"></th>
                         <th class="text-center" [innerHTML]="'table_msi_status'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_msi_country'|bkTranslate:this"></th>
+
+
+                        <th class="text-center" [innerHTML]="'table_monthly_traffic'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_daily_traffic'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_available_data_traffic'|bkTranslate:this"></th>
+                        <th class="text-center" [innerHTML]="'table_total_data_traffic'|bkTranslate:this"></th>
+
                         <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let gsm of gsmList.content">
-                        <td class="vert-align no-wrap"><a (click)="onGSMClick(gsm.id)">{{gsm.name ? gsm.name : gsm.id}}</a></td>
+                        <td class="vert-align no-wrap"><a (click)="onGSMClick(gsm.id)">{{gsm.name ? gsm.name : gsm.id.substr(0,8)}}</a></td>
                         <td class="vert-align">{{gsm.description}}</td>
                         <td class="vert-align text-center no-wrap">{{gsm.msi_number}}</td>
-                        <td class="vert-align">{{gsm.blocked}}</td>
+                        <td class="vert-align text-center no-wrap"><bk-gsm-status-component [status]="gsm.sim_tm_status.status"></bk-gsm-status-component></td>
+                        <td class="vert-align text-center no-wrap">{{gsm.sim_tm_status.country}}</td>
+
+                        <td class="vert-align text-center no-wrap">{{ onMathRound(gsm.sim_tm_status.monthly_traffic)}} MB</td>
+                        <td class="vert-align text-center no-wrap">{{ onMathRound(gsm.sim_tm_status.daily_traffic)}} MB</td>
+                        <td class="vert-align text-center no-wrap">{{ onMathRound(gsm.sim_tm_status.balance)}} MB</td>
+                        <td class="vert-align text-center no-wrap">{{ onMathRound(gsm.sim_tm_status.total_traffic)}} MB</td>
+
                         <td class="action-btn-col">
                             <bk-drob-down-button
                                 [btns_group_name]="('label_gsm_properties'|bkTranslate:this)"
@@ -81,7 +112,23 @@
                                                 permission: (gsm.un_registration_permission)
                                             },
                                             {
-                                                condition: (gsm.delete_permission),
+                                                condition: (gsm.blocked == true),
+                                                btn_label_for_person: ('label_active'|bkTranslate:this),
+                                                btn_tag: 'gsm_active',
+                                                icon: 'fa-smile-beam',
+                                                colorType: 'ACTIVE',
+                                                permission: (gsm.update_permission)
+                                            },
+                                             {
+                                                condition: (gsm.blocked == false),
+                                                btn_label_for_person: ('label_deactive'|bkTranslate:this),
+                                                btn_tag: 'gsm_deactive',
+                                                icon: 'fa-power-off',
+                                                colorType: 'REMOVE',
+                                                permission: (gsm.update_permission)
+                                            },
+                                            {
+                                                condition: true,
                                                 btn_label_for_person: ('label_gsm_print_sticker'|bkTranslate:this),
                                                 btn_tag: 'gsm_print_sticker',
                                                 icon: 'fa-print',
@@ -89,7 +136,7 @@
                                                 permission: (gsm.delete_permission)
                                             }
                                     ]"
-                                (onValueChanged)="onDrobDownEmiter($event, gsm)">
+                                (onValueChanged)="onDropDownEmitter($event, gsm)">
                             </bk-drob-down-button>
                         </td>
                     </tr>
@@ -110,6 +157,43 @@
                                 (onButtonClick)="onAddClick()">
             </bk-nothing-to-show>
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+        </div>
+
+
+        <div *ngIf="tab == 'traffic_details'">
+
+            <bk-filter-component [closed]="false"
+                                 [showFilterHead]="true"
+                                 (onChange)="onFilterChange($event)"
+                                 [filter_parameters]="[
+                                        {
+                                            type: 'LIST_SELECT',
+                                            content: {
+                                                key: 'PERIOD',
+                                                first_value: 'LAST_30_DAYS',
+                                                label: 'Period',
+                                                options: periodOption.option
+                                            }
+                                        },
+                                        {
+                                            type: 'LIST_SELECT',
+                                            content: {
+                                                key: 'DIVIDE_OPTION',
+                                                first_value: 'DAY',
+                                                label: 'Partitioned',
+                                                options: divideOption.option
+                                            }
+                                        }
+                                ]"
+            ></bk-filter-component>
+
+
+            <bk-form-chart-bar
+                [title]="'label_gsm_traffic'|bkTranslate:this"
+                [btns_group_name]="'label_filter'|bkTranslate:this"
+                [show_legend]="false">
+            </bk-form-chart-bar>
 
         </div>
 

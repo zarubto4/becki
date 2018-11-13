@@ -1,0 +1,55 @@
+<bk-layout-main
+    [tabMenu]="'projects-project'"
+    [show_title]="false">
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+    <bk-portlet-title
+        [title_name]="'title'|bkTranslate:this"
+        [icon]="'fa-database'"
+        (onClick)="onPortletClick($event)"
+        [btns]="[
+                  {
+                    condition: true,
+                    btn_label_for_person: ('btn_create_database'|bkTranslate:this),
+                    icon: 'fa-plus-circle',
+                    colorType: 'CREATE',
+                    permission: true,
+                    btn_tag: 'database_add'
+                  },
+                  {
+                    condition: true,
+                    btn_label_for_person: ('btn_remove_database'|bkTranslate:this),
+                    icon: 'fa-plus-circle',
+                    colorType: 'REMOVE',
+                    permission: true,
+                    btn_tag: 'database_remove'
+                  }
+                ]">
+    </bk-portlet-title>
+            <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+            <div class="portlet-body">
+                    <div class="portlet portlet light bordered">
+                        <div *ngIf="connectionString" >
+                            <span [innerHTML]="'label_connection_string'|bkTranslate:this"></span>: <strong>{{connectionString}}</strong>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <table class="table table-hover table-light byzance-table">
+                            <thead>
+                                <tr>
+                                    <th class="">{{'table_database_name'|bkTranslate:this}}</th>
+                                    <th class="">{{'table_database_description'|bkTranslate:this}}</th>
+                                    <th class="">{{'table_id'|bkTranslate:this}}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hide-bk-drob-down-button">
+                                <tr *ngFor="let database of databases">
+                                    <td class="vert-align no-wrap"> {{database.name}} </td>
+                                    <td class="vert-align no-wrap"> {{database.description}} </td>
+                                    <td class="vert-align no-wrap"> {{database.id}} </td>
+                                </tr>
+                            </tbody>
+                    </table>
+                </div>
+</bk-layout-main>
+

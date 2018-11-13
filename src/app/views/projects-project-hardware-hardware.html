@@ -109,7 +109,7 @@
                 <div class="row">
 
                     <!-- Basic Overview -->
-                    <div class="col-lg-4 ">
+                    <div class="col-lg-4">
                         <div class="portlet portlet light">
 
                             <bk-portlet-title
@@ -585,6 +585,133 @@
 
         <div *ngIf="tab == 'updates'">
 
+
+            <bk-filter-component *ngIf="formFilterGroup"
+                                 [closed]="true"
+                                 [showFilterHead]="true"
+                                 (onChange)="onFilterChange($event)"
+                                 [filter_parameters]="[
+                                        {
+                                            type: 'CHECKBOX_LIST',
+                                            content: {
+                                                options: [
+                                                    {
+                                                        key: 'COMPLETE',
+                                                        label: ('COMPLETE'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['COMPLETE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'CANCELED',
+                                                        label: ('CANCELED'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['CANCELED'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'BIN_FILE_MISSING',
+                                                        label: ('BIN_FILE_MISSING'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['BIN_FILE_MISSING'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'NOT_YET_STARTED',
+                                                        label: ('NOT_YET_STARTED'|bkTranslateTable:this:'update_state'),
+                                                         selected: filterStatesValues['NOT_YET_STARTED'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'IN_PROGRESS',
+                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['IN_PROGRESS'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'OBSOLETE',
+                                                        label: ('OBSOLETE'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['BIN_FILE_MISSING'],
+                                                        color: 'info'
+                                                    }
+                                                ]
+                                            },
+                                            horizontal: true
+                                        },
+                                          {
+                                            type: 'CHECKBOX_LIST',
+                                            content: {
+                                                options: [
+                                                    {
+                                                        key: 'WAITING_FOR_DEVICE',
+                                                        label: ('NOT_UPDATED'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['WAITING_FOR_DEVICE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'WAITING_FOR_DEVICE',
+                                                        label: ('WAITING_FOR_DEVICE'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['WAITING_FOR_DEVICE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'INSTANCE_INACCESSIBLE',
+                                                        label: ('INSTANCE_INACCESSIBLE'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['INSTANCE_INACCESSIBLE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'HOMER_SERVER_IS_OFFLINE',
+                                                        label: ('HOMER_SERVER_IS_OFFLINE'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['HOMER_SERVER_IS_OFFLINE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'CRITICAL_ERROR',
+                                                        label: ('CRITICAL_ERROR'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['CRITICAL_ERROR'],
+                                                        color: 'info'
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            type: 'CHECKBOX_LIST',
+                                            content: {
+                                                options: [
+                                                    {
+                                                        key: 'MANUALLY_BY_USER_INDIVIDUAL',
+                                                        label: ('MANUALLY_BY_USER_INDIVIDUAL'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_BY_USER_INDIVIDUAL'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP',
+                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME',
+                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE',
+                                                        label: ('AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE',
+                                                        label: ('AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE'],
+                                                        color: 'info'
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]"
+            ></bk-filter-component>
+
             <div *ngIf="actualizationTaskFilter && actualizationTaskFilter.content.length > 0" class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
@@ -625,11 +752,11 @@
                             <ng-template [ngIf]="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'">
                                 <td class="vert-align font-grey-mint">
                                     <a *ngIf="update.c_program_detail" class="bold" (click)="onCProgramClick(update.c_program_detail.c_program_id, update.c_program_detail.c_program_version_id)">{{update.c_program_detail.c_program_program_name}}</a>
-                                    <span *ngIf="!update.c_program_detail.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                    <span *ngIf="!update.c_program_detail" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                 </td>
                                 <td class="vert-align font-grey-mint">
                                     <a *ngIf="update.c_program_detail" class="bold" (click)="onCProgramClick(update.c_program_detail.c_program_id, update.c_program_detail.c_program_version_id)">{{update.c_program_detail.c_program_version_name}}</a>
-                                    <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                    <span *ngIf="!update.c_program_detail" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                 </td>
                             </ng-template>
 

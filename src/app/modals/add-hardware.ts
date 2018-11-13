@@ -63,6 +63,7 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
     devicesForRegistration: string[] = null;
     inprogress: boolean = false;
+    list_finish: boolean = false;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
         this.form = this.formBuilder.group({
@@ -156,6 +157,7 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
         if (pointer >= this.devicesForRegistration.length) {
             this.inprogress = false;
+            this.list_finish = true;
             return;
         }
 

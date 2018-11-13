@@ -66,7 +66,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     tab: string = 'ide';
     tab_under_ide: string = 'console';
 
-    protected fileDownloaderService: FileDownloaderService = null
+    protected fileDownloaderService: FileDownloaderService = null;
     private monacoEditorLoaderService: MonacoEditorLoaderService = null;
     protected afterLoadSelectedVersionId: string = null;
 

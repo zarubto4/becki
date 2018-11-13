@@ -83,7 +83,7 @@
     <div *ngIf="step=='multipleRegistration'" style="width: auto !important; margin-left: 10px !important; margin-right: 10px !important; margin-top: 20px !important;">
         <div class="modal-body">
             <form [formGroup]="multiForm">
-                <bk-form-text-area [control]="multiForm.controls.listOfIds" [row]="6" [cols]="250" [placeholder]="'xxxxxxx; yyyyyyyy; ... '"
+                <bk-form-text-area [control]="multiForm.controls.listOfIds" [row]="6" [cols]="250" [placeholder]="'xxxxxxx; yyyyyyyy; ... '" (valueChange)="list_finish = false"
                     [label]="'label_hash_tokens'|bkTranslate:this"></bk-form-text-area>
                 <br>
                 <bk-multi-select *ngIf="!afterFirstConfirm && group_options_available && group_options_available.length > 0" [items]="group_options_available"
@@ -126,7 +126,15 @@
 
 
     <div *ngIf="step" class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" [disabled]="!((multiForm.valid)||(form.valid)) || inprogress" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
+        <button *ngIf="step=='singleRegistration' || (step=='multipleRegistration' && list_finish == false)"  type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+
+        <button *ngIf="step=='singleRegistration' || ( step=='multipleRegistration' && list_finish == false)" type="button"
+                [disabled]=" (step =='singleRegistration' && !form.valid) || (inprogress) || (step=='singleRegistration' && single_error_status != 'CAN_REGISTER') || (step=='multipleRegistration' && !multiForm.valid)"
+                class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
+
+
+        <button *ngIf="(step=='multipleRegistration' && list_finish == true)" type="button" class="btn green" (click)="onCloseClick()">{{'btn_close'|bkTranslate:this}}</button>
+
+
     </div>
 </div>

@@ -9,7 +9,6 @@
     [title]="currentParamsService.currentProjectNameSnapshot"
     [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
-
     <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title *ngIf="gsm"
         [title_name]="'title'|bkTranslate:this"
@@ -51,21 +50,281 @@
         ]"
         (onTabClick)="onToggleTab($event)"
         [tab_selected_name]="tab"
+        [tabBtns]="[
+                        {
+                            tab_name: 'overview',
+                            condition: (true),
+                            permission: (true),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_overview'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'traffic_details',
+                            condition: (true),
+                            permission: (true),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_traffic_details'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'cdr_details',
+                            condition: (true),
+                            permission: (true),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_cdr_details'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'country_details',
+                            condition: (true),
+                            permission: (true),
+                            tab_color: 'HARDWARE',
+                            tab_label: ('tab_country_details'|bkTranslate:this)
+                        }
+                    ]"
     >
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
-    <div class="portlet-body">
 
-        <div *ngIf="tab == 'my_gsm'">
-            <bk-form-chart-bar
-                [title]="'label_gsm_traffic'|bkTranslate:this"
-                [btns_group_name]="'label_filter'|bkTranslate:this"
-                [show_legend]="false"
-                [values]="chart_data"
-            >
-            </bk-form-chart-bar>
-        </div>
-    </div>
+
+
+    <div class="portlet-body"  *ngIf="gsm">
+
+
+        <div *ngIf="tab == 'overview'">
+
+            <div class="row margin-top-40">
+                <div class="col-xs-6 col-sm-3 text-center">
+                    <div class="simItem big ">
+                    </div>
+                    <h2>SIM ON CHIP</h2>
+                    <h3>
+                       <bk-gsm-status-component [status]="gsm.sim_tm_status.status"></bk-gsm-status-component>
+                    </h3>
+                </div>
+                <div class="col-xs-6 col-sm-3">
+
+                    <p>IMSI: <strong>{{gsm.msi_number}}</strong></p>
+                    <p>SIM Card identifier (ICCID): <strong>8944500707174109005</strong></p>
+                    <p>Name:
+                        <strong>{{gsm.name ? gsm.name : "Not set yet"}}</strong>
+                    </p>
+                    <p>ID:
+                        <strong>{{gsm.id}}</strong>
+                    </p>
+                    <p>Tags:
+                        <strong><bk-form-tag-input [tags_without_form]="gsm.tags" [readonly]="true"></bk-form-tag-input></strong>
+                    </p>
+                    <p>APN: <strong>Byzance-EU-Network</strong></p>
+                    <p>Support Call N: <strong>+420720192964</strong></p>
+
+                </div>
+                <div class="col-xs-6  col-sm-3">
+
+                    <p>Activation date:
+                        <strong>{{gsm.sim_tm_status.activation_date}}</strong>
+                    </p>
+
+                    <p>Residual data traffic:
+                        <strong>8.83 MB</strong>
+                    </p>
+
+                    <p>Days from activation:
+                        <strong>{{gsm.sim_tm_status.days_from_activation}}</strong>
+                    </p>
+
+                    <p>Days of use:
+                        <strong>TODO</strong>
+                    </p>
+
+                    <p>Operator Code (PLMN): <strong>23450</strong></p>
+                    <p>Mobile Country Code (MCC): <strong>234</strong></p>
+                    <p>Mobile Network Code (MNC): <strong>50</strong></p>
+
+                </div>
+                <div class="col-xs-6  col-sm-3">
+
+                    <p>Outgoing SMS service:
+                        <strong>Disable</strong>
+                    </p>
+                    <p>Included in the daily report:
+                        <strong>{{gsm.daily_statistic ? "Yes" : "No"}}</strong>
+                    </p>
+                    <p>Included in the weekly report:
+                        <strong>{{gsm.weekly_statistic ? "Yes" : "No"}}</strong>
+                    </p>
+                    <p>Included in the weekly report:
+                        <strong>{{gsm.monthly_statistic ? "Yes" : "No"}}</strong>
+                    </p>
+                    <p>Automation:
+                        <strong>TODO </strong>
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="row margin-top-40">
+
+             <div class="col-sm-12 col-md-6">
+
+                    <H2 class="margin-bottom-20">Thresholds Setting</H2>
+                    <table class="table table-hover table-light" *ngIf="form != null">
+                        <thead>
+                        <tr>
+                            <th class=""></th>
+                            <th class="text-center" [innerHTML]="'table_maximum_threshold'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_notify_me'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_block_sim'|bkTranslate:this"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="hide-bk-drob-down-button">
+                        <tr>
+                            <td class="vert-align" [innerHTML]="'table_daily_threshold'|bkTranslate:this"></td>
+                            <td class="vert-align">
+                                 <bk-form-input [widthSize]="'small'" [control]="form.controls['daily_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input> MB
+                          </td>
+                          <td class="vert-align text-center">
+                              <i [class.fa-toggle-on]="gsm.daily_traffic_threshold_notify_type"
+                                 [class.fa-toggle-off]="!gsm.daily_traffic_threshold_notify_type"
+                                 style="font-size: 1.8em;"
+                                 class="fa font-green-jungle cursor-hand"
+                                 (click)="gsm.daily_traffic_threshold_notify_type = !gsm.daily_traffic_threshold_notify_type; onUpdateClick()"></i>
+                          </td>
+                          <td class="vert-align text-center">
+                              <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_daily"
+                                 [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_daily"
+                                 style="font-size: 1.8em;"
+                                 class="fa font-green-jungle cursor-hand"
+                                 (click)="gsm.sim_tm_status.block_sim_daily = !gsm.sim_tm_status.block_sim_daily; onUpdateClick()"></i>
+                      </tr>
+                      <tr>
+                          <td class="vert-align" [innerHTML]="'table_monthly_threshold'|bkTranslate:this"></td>
+                          <td class="vert-align">
+                               <bk-form-input [widthSize]="'small'" [control]="form.controls['monthly_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input> MB
+                         </td>
+                         <td class="vert-align text-center">
+                             <i [class.fa-toggle-on]="gsm.monthly_traffic_threshold_notify_type"
+                                [class.fa-toggle-off]="!gsm.monthly_traffic_threshold_notify_type"
+                                style="font-size: 1.8em;"
+                                class="fa font-green-jungle cursor-hand"
+                                (click)="gsm.monthly_traffic_threshold_notify_type = !gsm.monthly_traffic_threshold_notify_type; onUpdateClick()"></i>
+                         </td>
+                         <td class="vert-align text-center">
+                             <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_monthly"
+                                [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_monthly"
+                                style="font-size: 1.8em;"
+                                class="fa font-green-jungle cursor-hand"
+                                (click)="gsm.sim_tm_status.block_sim_monthly = !gsm.sim_tm_status.block_sim_monthly; onUpdateClick()"></i>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td class="vert-align" [innerHTML]="'table_total_threshold'|bkTranslate:this"></td>
+                         <td class="vert-align">
+                             <bk-form-input [widthSize]="'small'" [control]="form.controls['total_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input> MB
+                         </td>
+                         <td class="vert-align text-center">
+                             <i [class.fa-toggle-on]="gsm.total_traffic_threshold_notify_type"
+                                [class.fa-toggle-off]="!gsm.total_traffic_threshold_notify_type"
+                                style="font-size: 1.8em;"
+                                class="fa font-green-jungle cursor-hand"
+                                (click)="gsm.total_traffic_threshold_notify_type = !gsm.total_traffic_threshold_notify_type; onUpdateClick()"></i>
+                         </td>
+                         <td class="vert-align text-center">
+                             <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_total"
+                                [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_total"
+                                style="font-size: 1.8em;"
+                                class="fa font-green-jungle cursor-hand"
+                                (click)="gsm.sim_tm_status.block_sim_total = !gsm.sim_tm_status.block_sim_total; onUpdateClick()"></i>
+                         </td>
+                     </tr>
+                     </tbody>
+                 </table>
+             </div>
+             <div class="col-sm-12 col-md-6">
+
+                 <H2 class="margin-bottom-20">Reporting Settings</H2>
+                 <table class="table table-hover table-light margin-left-15 margin-right-15" *ngIf="form != null">
+                     <thead>
+                     <tr>
+                         <th class="text-center" [innerHTML]="'table_report_type'|bkTranslate:this"></th>
+                         <th class="text-center" [innerHTML]="'table_report_sate'|bkTranslate:this"></th>
+                     </tr>
+                     </thead>
+                     <tbody class="hide-bk-drob-down-button">
+                         <tr>
+                             <td class="vert-align" [innerHTML]="'table_daily_report'|bkTranslate:this"></td>
+                             <td class="vert-align text-center">
+                                 <i [class.fa-toggle-on]="gsm.daily_statistic"
+                                    [class.fa-toggle-off]="!gsm.daily_statistic"
+                                    style="font-size: 1.8em;"
+                                    class="fa font-green-jungle cursor-hand"
+                                    (click)="gsm.daily_statistic = !gsm.daily_statistic; onUpdateClick()"></i>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td class="vert-align" [innerHTML]="'label_weekly_report'|bkTranslate:this"></td>
+                             <td class="vert-align text-center">
+                                 <i [class.fa-toggle-on]="gsm.weekly_statistic"
+                                    [class.fa-toggle-off]="!gsm.weekly_statistic"
+                                    style="font-size: 1.8em;"
+                                    class="fa font-green-jungle cursor-hand"
+                                    (click)="gsm.weekly_statistic = !gsm.weekly_statistic; onUpdateClick()"></i>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td class="vert-align" [innerHTML]="'table_month_report'|bkTranslate:this"></td>
+                             <td class="vert-align text-center">
+                                 <i [class.fa-toggle-on]="gsm.monthly_statistic"
+                                    [class.fa-toggle-off]="!gsm.monthly_statistic"
+                                    style="font-size: 1.8em;"
+                                    class="fa font-green-jungle cursor-hand"
+                                    (click)="gsm.monthly_statistic = !gsm.monthly_statistic; onUpdateClick()"></i>
+                             </td>
+                         </tr>
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+     </div>
+
+     <div *ngIf="tab == 'traffic_details'">
+
+         <bk-filter-component [closed]="false"
+                              [showFilterHead]="true"
+                              (onChange)="onFilterChange($event)"
+                              [filter_parameters]="[
+                                        {
+                                            type: 'LIST_SELECT',
+                                            content: {
+                                                key: 'PERIOD',
+                                                first_value: 'LAST_30_DAYS',
+                                                label: 'Period',
+                                                options: periodOption.option
+                                            }
+                                        },
+                                        {
+                                            type: 'LIST_SELECT',
+                                            content: {
+                                                key: 'DIVIDE_OPTION',
+                                                first_value: 'DAY',
+                                                label: 'Partitioned',
+                                                options: divideOption.option
+                                            }
+                                        }
+                                ]"
+         ></bk-filter-component>
+
+
+         <bk-form-chart-bar
+             [title]="'label_gsm_traffic'|bkTranslate:this"
+             [btns_group_name]="'label_filter'|bkTranslate:this"
+             [show_legend]="false">
+         </bk-form-chart-bar>
+
+
+     </div>
+
+
+
+ </div>
 
 </bk-layout-main>

@@ -281,6 +281,7 @@ definitionsKeys.forEach((defName) => {
 
             if (!type) {
                 number_of_bugs++;
+                console.log( chalk.red('Missing type for key:: ' + JSON.stringify(definitions[defName], null, 2) ));
                 throwError('Missing type for key ' + propKey + ' in definition (' + defName + ')');
             }
 
@@ -303,9 +304,9 @@ definitionsKeys.forEach((defName) => {
                         + chalk.yellow('\" .. property name don\'t contains only a-z 0-9 and _ characters. Maybe there is s BiG size Latter?')
                     );
 
-                    console.log('Definitions: ', definitions[defName])
+                    console.log('Definitions: ', definitions[defName]);
                 } else {
-                    console.log(chalk.yellow('Definitions: property name ' + propKey + ' is ignored and allowed by config CONFIG.allowedDefinitions'))
+                    console.log(chalk.yellow('Definitions: property name ' + propKey + ' is ignored and allowed by config CONFIG.allowedDefinitions'));
                 }
             }
 

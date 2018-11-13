@@ -64,6 +64,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     // Properties for test view:
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
+
     renderer: BlockRenderer;
     tsBlock: Blocks.TSBlock;
     testInputConnectors: Core.Connector<boolean | number | object | Core.Message>[];
