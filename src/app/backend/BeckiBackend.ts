@@ -54,7 +54,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     protected personInfoSnapshotDirty: boolean = true;
     public personInfoSnapshot: IPerson = null;
-    public personPermissions: string[] = null;
     public personInfo: Rx.Subject<IPerson> = new Rx.Subject<IPerson>();
 
     protected websocketService: WebsocketService = null;
@@ -297,7 +296,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         if (TyrionApiBackend.tokenExist()) {
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
-                    this.personPermissions = lr.permissions;
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;
                     this.personInfo.next(this.personInfoSnapshot);

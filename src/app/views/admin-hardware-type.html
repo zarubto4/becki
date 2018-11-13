@@ -96,7 +96,51 @@
         <!-- Device List -->
         <div *ngIf="tab == 'hardware_list'">
 
-            <div *ngIf="(boardsFiler && boardsFiler.content.length)"
+            <bk-filter-component *ngIf="formFilterGroup"
+                                 [closed]="false"
+                                 [showFilterHead]="true"
+                                 (onEnterHit)="onFilterHardware()"
+                                 [filter_parameters]="[
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'alias',
+                                                label: 'Alias',
+                                                form: formFilterGroup,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'id',
+                                                label: 'Device ID (Part\'s not supported)',
+                                                form: formFilterGroup,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'full_id',
+                                                label: 'Full ID',
+                                                form: formFilterGroup,
+                                                showLabel: true
+                                            }
+                                        },
+                                        {
+                                            type: 'FIND_BY_TEXT',
+                                            content: {
+                                                key: 'description',
+                                                label: 'Something in Description',
+                                                form: formFilterGroup,
+                                                showLabel: true
+                                            }
+                                        }
+                                    ]"
+            ></bk-filter-component>
+
+            <div *ngIf="(devicesFilter && devicesFilter.content.length)"
                  class="table-scrollable table-scrollable-borderless">
                 <table class="table table-hover table-light byzance-table">
                     <thead>
@@ -111,7 +155,7 @@
                         </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                        <tr *ngFor="let device of boardsFiler.content">
+                        <tr *ngFor="let device of devicesFilter.content">
                             <template [ngIf]="device">
                                 <td class="vert-align no-wrap">
                                             <span class="icon-hint-wraper red"
@@ -131,7 +175,8 @@
                                     <a *ngIf="device.project" (click)="onProjectClick(device.project.id)">{{device.project.name}}</a>
                                     <span *ngIf="!device.project">Not in Project</span>
                                 </td>
-                                <td class="vert-align no-wrap"><a (click)="onHardwareTypeClick(device.hardware_type_id)">{{device.hardware_type_name}}</a>
+                                <td class="vert-align no-wrap">
+                                    <a (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a>
                                 </td>
                                 <td class="vert-align no-wrap">
                                     <bk-online-state [online_state]="device.online_state"></bk-online-state>
@@ -174,14 +219,14 @@
                         </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="boardsFiler.from" [to]="boardsFiler.to" [total]="boardsFiler.total"
-                                          [totalPages]="boardsFiler.pages"
+                <bk-filter-page-component [from]="devicesFilter.from" [to]="devicesFilter.to" [total]="devicesFilter.total"
+                                          [totalPages]="devicesFilter.pages"
                                           (onSelect)="onFilterHardware($event)"></bk-filter-page-component>
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-            <bk-nothing-to-show [condition_loading]="(boardsFiler == null)"
-                                [condition_empty]="(boardsFiler != null && boardsFiler.content.length == 0)"
+            <bk-nothing-to-show [condition_loading]="(devicesFilter == null)"
+                                [condition_empty]="(devicesFilter != null && devicesFilter.content.length == 0)"
                                 [main_message_link]="'label_no_boards'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_boards_comment'|bkTranslate:this"
                                 [show_button]="false">
