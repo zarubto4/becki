@@ -1537,6 +1537,7 @@ export class StaticTranslation {
                 'label_no_running_update_on_hardware_comment': 'There is no update for this device yet. Create new <strong class="font-color-code">Code</strong> program or set new release',
                 'label_main_server': '<strong class="font-color-cloud">CLOUD</strong> Server',
                 'label_instance': '<strong class="font-color-instance">INSTANCE</strong> Name',
+                'label_cellular': '<strong class="font-color-hardware">CELLULAR</strong> integration',
                 'label_instance_description': 'Description',
                 'label_main_server_not_found': 'Device is not connected to Server yet',
                 'label_not_in_instance': 'Device is not connected to an instance',

@@ -450,8 +450,15 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="!hardware.actual_instance">
-                                    <span [innerHTML]="'label_not_in_instance'|bkTranslate:this"></span>
+                                <hr>
+
+                                <div *ngIf="hardware.cellular">
+
+                                    <div>
+                                        <span [innerHTML]="'label_cellular'|bkTranslate:this"></span>:
+                                        <a *ngIf="hardware.cellular.id" (click)="onCellularClick(hardware.cellular.id)" class="bold">{{hardware.cellular.name}}</a>
+                                    </div>
+
                                 </div>
 
                             </div>
