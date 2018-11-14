@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 
 import { AuthGuard } from '../services/AuthGuard';
-import { ProjectsProjectGridComponent } from './projects-project-grid';
-import { ProjectsProjectGridGridsComponent } from './projects-project-grid-grids';
-import { ProjectsProjectGridGridsGridComponent } from './projects-project-grid-grids-grid';
+import { ProjectsProjectGridComponent } from '../views/projects-project-grid';
+import { ProjectsProjectGridGridsComponent } from '../views/projects-project-grid-grids';
+import { ProjectsProjectGridGridsGridComponent } from '../views/projects-project-grid-grids-grid';
 import { ExitConfirmGuard } from '../services/ExitConfirmGuard';
 
 // routes

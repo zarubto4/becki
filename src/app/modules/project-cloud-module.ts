@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 
 import { AuthGuard } from '../services/AuthGuard';
 
-import { ProjectsProjectServersComponent } from './projects-project-servers';
+import { ProjectsProjectServersComponent } from '../views/projects-project-servers';
 
 // routes
 export const PROJECT_CLOUD_ROUTES: Routes = [

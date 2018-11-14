@@ -4,7 +4,7 @@
  */
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { IDatabase } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsDatabaseModel } from '../modals/database-new';

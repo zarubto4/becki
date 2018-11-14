@@ -45,10 +45,12 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit, On
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.project_id = params['project'];
-            this.projectSubscription = this.storageService.project(this.project_id).subscribe((project) => {
-                this.project = project;
-            });
+            if (params['project']) {
+                this.project_id = params['project'];
+                this.projectSubscription = this.storageService.project(this.project_id).subscribe((project) => {
+                    this.project = project;
+                });
+            }
             this.refresh();
         });
         this.selfId = this.tyrionBackendService.personInfoSnapshot.id;

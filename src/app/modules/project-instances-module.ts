@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 
 import { AuthGuard } from '../services/AuthGuard';
 
-import { ProjectsProjectInstancesComponent } from './projects-project-instances';
-import { ProjectsProjectInstancesInstanceComponent } from './projects-project-instances-instance';
+import { ProjectsProjectInstancesComponent } from '../views/projects-project-instances';
+import { ProjectsProjectInstancesInstanceComponent } from '../views/projects-project-instances-instance';
 
 // routes
 export const PROJECT_INSTANCES_ROUTES: Routes = [

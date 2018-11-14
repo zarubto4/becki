@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-
-import { SharedModule } from '../../shared';
-
+import { SharedModule } from './shared';
 import { AuthGuard } from '../services/AuthGuard';
 import { ExitConfirmGuard } from '../services/ExitConfirmGuard';
-
-import { ProjectsProjectBlockoComponent } from './projects-project-blocko';
-import { ProjectsProjectBlockoBlockoComponent } from './projects-project-blocko-blocko';
+import { ProjectsProjectBlockoComponent } from '../views/projects-project-blocko';
+import { ProjectsProjectBlockoBlockoComponent } from '../views/projects-project-blocko-blocko';
 
 // routes
 export const PROJECT_BLOCKO_ROUTES: Routes = [
@@ -19,7 +15,6 @@ export const PROJECT_BLOCKO_ROUTES: Routes = [
 
 @NgModule({
     imports: [
-        CommonModule,
         SharedModule,
         RouterModule.forChild(PROJECT_BLOCKO_ROUTES)
     ],

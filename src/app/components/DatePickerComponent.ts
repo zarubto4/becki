@@ -1,6 +1,6 @@
-import { IMyDpOptions, IMyDate, IMyDateModel } from 'mydatepicker';
+import { IMyDpOptions, IMyDateModel } from 'mydatepicker';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Validators, FormGroup, FormBuilder, AbstractControl, FormControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 // other imports here...
 
 @Component({

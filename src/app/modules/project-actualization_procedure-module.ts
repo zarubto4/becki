@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 
 import { AuthGuard } from '../services/AuthGuard';
-import { ProjectsProjectActualizationProceduresComponent } from './projects-project-actualization-procedures';
-import { ProjectsProjectActualizationProceduresProcedureComponent } from './projects-project-actualization-procedures-procedure';
+import { ProjectsProjectActualizationProceduresComponent } from '../views/projects-project-actualization-procedures';
+import { ProjectsProjectActualizationProceduresProcedureComponent } from '../views/projects-project-actualization-procedures-procedure';
 
 // routes
 export const PROJECT_ACTUALIZATION_ROUTES: Routes = [

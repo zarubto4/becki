@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 
 import { AuthGuard } from '../services/AuthGuard';
-import { ProjectsProjectGSMSComponent } from './projects-project-gsms';
-import { ProjectsProjectGSMSGSMComponent } from './projects-project-gsms-gsm';
+import { ProjectsProjectGSMSComponent } from '../views/projects-project-gsms';
+import { ProjectsProjectGSMSGSMComponent } from '../views/projects-project-gsms-gsm';
 
 
 

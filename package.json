@@ -1,6 +1,6 @@
 {
     "name": "Becki",
-    "version": "v1.3.28",
+    "version": "v1.4.0",
     "author": "Byzance Becki authors",
     "license": "UNLICENSED",
     "private": true,
@@ -63,7 +63,6 @@
     "devDependencies": {
         "@babel/core": "^7.1.2",
         "@babel/preset-env": "^7.1.0",
-        "@types/chalk": "^2.2.0",
         "@types/core-js": "^0.9.46",
         "@types/handlebars": "^4.0.39",
         "@types/jquery": "^3.3.14",

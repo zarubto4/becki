@@ -2,28 +2,28 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 import { AuthGuard } from '../services/AuthGuard';
 import { ExitConfirmGuard } from '../services/ExitConfirmGuard';
 
-import { AdminDashboardComponent } from './admin';
-import { ProjectsProjectWidgetsWidgetComponent } from './projects-project-widgets-widget';
-import { ProjectsProjectBlocksBlockComponent } from './projects-project-blocks-block';
-import { ServerComponent } from './admin-server';
-import { TyrionComponent } from './admin-tyrion';
-import { CommunityCProgramComponent } from './admin-cprograms';
-import { RoleGroupComponent } from './admin-permission-group';
-import { RoleGroupGroupComponent } from './admin-permission-group-group';
-import { AdminFinancialComponent } from './admin-financial';
-import { AdminFinancialTariffComponent } from './admin-financial-tariff';
-import { GarfieldGarfieldComponent } from './garfield-garfield';
-import { GarfieldComponent } from './garfield';
-import { BugsBugComponent } from './admin-bugs-bug';
-import { BugsComponent } from './admin-bugs';
-import { ProjectsProjectBlocksComponent } from './projects-project-blocks';
-import { ProjectsProjectWidgetsComponent } from './projects-project-widgets';
-import { ProjectsProjectCodeCodeComponent } from './projects-project-code-code';
-import { AdminHardwareComponent } from './admin-hardware-type';
+import { AdminDashboardComponent } from '../views/admin';
+import { ProjectsProjectWidgetsWidgetComponent } from '../views/projects-project-widgets-widget';
+import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-blocks-block';
+import { ServerComponent } from '../views/admin-server';
+import { TyrionComponent } from '../views/admin-tyrion';
+import { CommunityCProgramComponent } from '../views/admin-cprograms';
+import { RoleGroupComponent } from '../views/admin-permission-group';
+import { RoleGroupGroupComponent } from '../views/admin-permission-group-group';
+import { AdminFinancialComponent } from '../views/admin-financial';
+import { AdminFinancialTariffComponent } from '../views/admin-financial-tariff';
+import { GarfieldGarfieldComponent } from '../views/garfield-garfield';
+import { GarfieldComponent } from '../views/garfield';
+import { BugsBugComponent } from '../views/admin-bugs-bug';
+import { BugsComponent } from '../views/admin-bugs';
+import { ProjectsProjectBlocksComponent } from '../views/projects-project-blocks';
+import { ProjectsProjectWidgetsComponent } from '../views/projects-project-widgets';
+import { ProjectsProjectCodeCodeComponent } from '../views/projects-project-code-code';
+import { AdminHardwareComponent } from '../views/admin-hardware-type';
 
 // routes
 export const ADMIN_ROUTES: Routes = [
@@ -80,8 +80,6 @@ export const ADMIN_ROUTES: Routes = [
         GarfieldGarfieldComponent,
         AdminFinancialTariffComponent,
         AdminFinancialComponent,
-        RoleGroupGroupComponent,
-        RoleGroupComponent
 
     ],
     exports: [ RouterModule ]

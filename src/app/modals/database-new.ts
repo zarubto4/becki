@@ -8,8 +8,6 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { ImportResolver } from '@angular/compiler';
 
 export class ModalsDatabaseModel extends ModalModel {
     constructor(public name: string = '', public description: string = '', public firstCollection: string = '') {

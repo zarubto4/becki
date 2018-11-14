@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 import { AuthGuard } from '../services/AuthGuard';
-import { ProducersProducerComponent } from './producers-producer';
-import { ProducersComponent } from './producers';
+import { ProducersProducerComponent } from '../views/producers-producer';
+import { ProducersComponent } from '../views/producers';
 
 // routes
 export const PRODUCERS_ROUTES: Routes = [

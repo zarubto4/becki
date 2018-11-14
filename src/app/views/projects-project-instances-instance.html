@@ -361,8 +361,7 @@
                     <bk-blocko-view [id]="'snapshot_editor'"
                                     [full_page]="true"
                                     [disableExecution]="true"
-                                    [bindInterfaceEnabled]="true"
-                                    [showBlockNames]="true">
+                                    [bindInterfaceEnabled]="true">
                     </bk-blocko-view>
                 </div>
             </div>
@@ -500,7 +499,7 @@
 
             <div *ngIf="instance && instance.online_state === 'ONLINE'">
 
-                <bk-blocko-view [id]="'liveview'" [full_page]="true" [disableExecution]="true" [readonly]="true" [showBlockNames]="true"></bk-blocko-view>
+                <bk-blocko-view [id]="'liveview'" [full_page]="true" [disableExecution]="true" [readonly]="true"></bk-blocko-view>
 
                 <div style="margin-top: 30px">
                     <bk-console-log maxHeight="400px"></bk-console-log>
@@ -687,11 +686,7 @@
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-<<<<<<< HEAD
                     <tr *ngFor="let hook of webHooks">
-=======
-                    <tr *ngFor="let hook of getWebHooks()">
->>>>>>> origin/Liza_LazyLoading
                         <td class="vert-align">{{hook['name']}}</td>
                         <td class="vert-align">{{hook['description']}}</td>
                         <td class="vert-align" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>
@@ -818,7 +813,7 @@
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                    <tr *ngFor="let hook of getWebHooks()">
+                    <tr *ngFor="let hook of webHooks">
                         <td class="vert-align">{{hook['name']}}</td>
                         <td class="vert-align">{{hook['description']}}</td>
                         <td class="vert-align" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>

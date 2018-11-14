@@ -315,7 +315,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
         }
 
-            this.getWebHooks(program);
+        this.getWebHooks(program);
     }
 
     onCreateNewSnapshotSelectBProgramVersion() {
@@ -554,13 +554,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     getWebHooks(program: string) {
-
-        console.warn('getWebHooks() ');
-        console.warn('getWebHooks(): ',  this.instance.current_snapshot.program);
-
         let blocko_program = JSON.parse(program);
-
-        console.warn('blocko_program::', blocko_program);
         let blocks = blocko_program['blocks'];
 
         // create list
@@ -568,11 +562,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
         for (let key in blocks) {
             if (!blocks.hasOwnProperty(key)) { continue; }
-
-            console.warn('Mám bloček : ', blocks[key]);
-
             if (blocks[key]['type'] === 'webHook') {
-                console.warn('Bloček je nwebhook! : ');
                 filteredList.push(blocks[key]);
             }
 

@@ -1,5 +1,4 @@
 import { ModalsSelectCodeModel } from '../modals/code-select';
-declare let $: JQueryStatic;
 import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';

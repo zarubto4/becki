@@ -156,7 +156,7 @@ export class FormSelectComponent {
 
             this._options = option;
         } else {
-            console.error('options is empty');
+            console.warn('options is empty');
         }
     }
 

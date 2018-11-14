@@ -56,7 +56,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     formHardwareFilter: FormGroup;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, private notificationService: NotificationService) {
         this.formHardwareFilter = this.formBuilder.group({
             'alias': ['', [Validators.maxLength(60)]],
             'id': ['', [Validators.maxLength(60)]],

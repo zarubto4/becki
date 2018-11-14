@@ -80,7 +80,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @ViewChild('field')
     field: ElementRef;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, protected translationService: TranslationService, protected notificationService: NotificationService,) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, protected translationService: TranslationService, protected notificationService: NotificationService) {
     }
 
     public get serviceHandler(): Blocks.ServicesHandler {
