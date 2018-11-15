@@ -146,7 +146,7 @@ export class CodeDirectory extends CodeFileSystemObject {
     selector: 'bk-code-ide',
     templateUrl: './CodeIDEComponent.html'
 })
-export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
+export class CodeIDEComponent implements OnChanges, AfterViewInit {
 
     @Input()
     files: CodeFile[] = null;
@@ -264,9 +264,6 @@ export class CodeIDEComponent implements OnChanges, OnInit, AfterViewInit {
         }
     }
 
-    ngOnInit(): void {
-
-    }
 
     ngAfterViewInit(): void {
         this.blockoViews.changes.subscribe((views: QueryList<BlockoViewComponent>) => {
