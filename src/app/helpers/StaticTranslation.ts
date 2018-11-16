@@ -630,6 +630,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_actions': 'Action',
+                'table_actions': 'Action',
                 'label_role_properties': 'Edit Role properties',
                 'label_role_remove': 'Remove Role',
                 'label_no_role': 'No Roles',
@@ -2942,6 +2943,8 @@ export class StaticTranslation {
                 'label_delete_database': 'Drop',
                 'title': 'Databases',
                 'label_connection_string': 'Connection String',
+                'label_no_servers': 'You have no any Database',
+                'label_no_servers_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
             },
 
 

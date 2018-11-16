@@ -46,6 +46,7 @@ export class ModalsProjectPropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
+
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4)], BeckiAsyncValidators.condition((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName === value);
@@ -63,6 +64,7 @@ export class ModalsProjectPropertiesComponent implements OnInit {
                 };
             });
         }
+
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['product'])).setValue(this.modalModel.product);

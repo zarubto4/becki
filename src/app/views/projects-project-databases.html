@@ -26,30 +26,52 @@
                 ]">
     </bk-portlet-title>
             <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
-            <div class="portlet-body">
-                    <div class="portlet portlet light bordered">
-                        <div *ngIf="connectionString" >
-                            <span [innerHTML]="'label_connection_string'|bkTranslate:this"></span>: <strong>{{connectionString}}</strong>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
 
-                    <table class="table table-hover table-light byzance-table">
-                            <thead>
-                                <tr>
-                                    <th class="">{{'table_database_name'|bkTranslate:this}}</th>
-                                    <th class="">{{'table_database_description'|bkTranslate:this}}</th>
-                                    <th class="">{{'table_id'|bkTranslate:this}}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="hide-bk-drob-down-button">
-                                <tr *ngFor="let database of databases">
-                                    <td class="vert-align no-wrap"> {{database.name}} </td>
-                                    <td class="vert-align no-wrap"> {{database.description}} </td>
-                                    <td class="vert-align no-wrap"> {{database.id}} </td>
-                                </tr>
-                            </tbody>
-                    </table>
-                </div>
+    <div class="portlet-body">
+
+
+        <div *ngIf="connectionString" class="portlet portlet light bordered">
+            <div>
+                <span [innerHTML]="'label_connection_string'|bkTranslate:this"></span>: <strong>{{connectionString}}</strong>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="table-scrollable table-scrollable-borderless">
+
+            <table *ngIf="(databases && databases.length > 0)" class="table table-hover table-light byzance-table">
+                <thead>
+                <tr>
+                    <th class="">{{'table_database_name'|bkTranslate:this}}</th>
+                    <th class="">{{'table_database_description'|bkTranslate:this}}</th>
+                    <th class="">{{'table_id'|bkTranslate:this}}</th>
+                </tr>
+                </thead>
+                <tbody class="hide-bk-drob-down-button">
+                <tr *ngFor="let database of databases">
+                    <td class="vert-align no-wrap"> {{database.name}} </td>
+                    <td class="vert-align no-wrap"> {{database.description}} </td>
+                    <td class="vert-align no-wrap"> {{database.id}} </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+        <bk-nothing-to-show [condition_loading]="(databases == null)"
+                            [condition_empty]="(databases != null && databases.length == 0)"
+                            [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59d652ed519b320001863842_cloud%20e3.svg'"
+                            [main_message_link]="'label_no_servers'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_servers_comment'|bkTranslate:this"
+                            [btn_label]="'btn_create_database'|bkTranslate:this"
+                            (onButtonClick)="onPortletClick('database_add')">
+        </bk-nothing-to-show>
+        <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+
+    </div>
+
+
+
 </bk-layout-main>
 
