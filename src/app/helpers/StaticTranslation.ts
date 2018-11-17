@@ -2936,15 +2936,17 @@ export class StaticTranslation {
                 'role_create_fail': 'Role creation failed',
             }, 'ProjectsProjectDatabasesComponent': {
                 'btn_create_database': 'Create Database',
-                'btn_remove_database': 'Remove Database',
+                'label_remove_database': 'Remove Database',
+                'label_edit_database': 'Edit Database',
                 'table_database_name': 'Name',
                 'table_database_description': 'Description',
+                'table_action': 'Action',
                 'table_id': 'Database id',
                 'label_delete_database': 'Drop',
                 'title': 'Databases',
                 'label_connection_string': 'Connection String',
-                'label_no_servers': 'You have no any Database',
-                'label_no_servers_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
+                'label_no_databases': 'You have no any Database',
+                'label_no_databases_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
             },
 
 

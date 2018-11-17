@@ -5,10 +5,13 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
-import { IDatabase } from '../backend/TyrionAPI';
+import { IDatabase, IHomerServer } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsDatabaseModel } from '../modals/database-new';
 import { ModalsDatabaseRemoveModel } from '../modals/database-remove';
+import { ModalsRemovalModel } from '../modals/removal';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 
 
 @Component({
@@ -66,9 +69,6 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
         if (action === 'database_add') {
             this.onCreateDatabaseClick();
         }
-        if (action === 'database_remove') {
-            this.onRemoveDatabaseClick();
-        }
     }
 
     onCreateDatabaseClick(): void {
@@ -93,21 +93,62 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
         });
     }
 
-    onRemoveDatabaseClick(): void {
-        let model = new ModalsDatabaseRemoveModel();
+    onEditDatabaseClick(database: IDatabase): void {
+        let model = new ModalsDeviceEditDescriptionModel(database.id, database.name, database.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.databaseDelete(model.id).then(() => {
-                    this.unblockUI();
-                    this.refresh();
-                }).catch((reason) => {
-                    this.unblockUI();
-                    this.fmError('', reason);
-                    this.refresh();
-                });
+
+                // TODO upravit na nový api point
+                this.tyrionBackendService.boardEditPersonalDescription(database.id, {
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.unblockUI();
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.unblockUI();
+                        this.refresh();
+                    });
+            }
+        }).catch((reason) => {
+            this.unblockUI();
+            this.refresh();
+        });
+    }
+
+    onRemoveDatabaseClick(database: IDatabase): void {
+        // TODO SMAZAT let model = new ModalsDatabaseRemoveModel();
+
+        this.modalService.showModal(new ModalsRemovalModel('[' + database.id + '] ' + (database.name ? database.name : ''))).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.databaseDelete(database.id)
+                    .then(() => {
+                        this.unblockUI();
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.unblockUI();
+                        this.refresh();
+                    });
             }
         });
 
+    }
+
+
+
+    onDrobDownEmiter(action: string, database: IDatabase): void {
+
+        if (action === 'remove_database') {
+            this.onRemoveDatabaseClick(database);
+        }
+
+        if (action === 'update_database') {
+            this.onEditDatabaseClick(database);
+        }
     }
 }

@@ -14,14 +14,6 @@
                     colorType: 'CREATE',
                     permission: true,
                     btn_tag: 'database_add'
-                  },
-                  {
-                    condition: true,
-                    btn_label_for_person: ('btn_remove_database'|bkTranslate:this),
-                    icon: 'fa-plus-circle',
-                    colorType: 'REMOVE',
-                    permission: true,
-                    btn_tag: 'database_remove'
                   }
                 ]">
     </bk-portlet-title>
@@ -39,30 +31,65 @@
 
         <div class="table-scrollable table-scrollable-borderless">
 
+            <table  class="table table-hover table-light byzance-table">
+
+            </table>
+
+            <!-- Every Database with own table Database -->
             <table *ngIf="(databases && databases.length > 0)" class="table table-hover table-light byzance-table">
                 <thead>
                 <tr>
                     <th class="">{{'table_database_name'|bkTranslate:this}}</th>
                     <th class="">{{'table_database_description'|bkTranslate:this}}</th>
-                    <th class="">{{'table_id'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_id'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_action'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody class="hide-bk-drob-down-button">
-                <tr *ngFor="let database of databases">
-                    <td class="vert-align no-wrap"> {{database.name}} </td>
-                    <td class="vert-align no-wrap"> {{database.description}} </td>
-                    <td class="vert-align no-wrap"> {{database.id}} </td>
-                </tr>
+                    <tr *ngFor="let database of databases">
+                        <td class="vert-align no-wrap"> {{database.name}} </td>
+                        <td class="vert-align no-wrap"> {{database.description}} </td>
+                        <td class="vert-align no-wrap"> {{database.id}} </td>
+                        <td class="action-btn-col">
+
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
+                                    {
+                                        condition: true,
+                                        btn_label_for_person: ('label_remove_database'|bkTranslate:this),
+                                        btn_tag: 'remove_database',
+                                        icon: 'fa-trash',
+                                        colorType: 'REMOVE',
+                                        permission: (true)
+                                    },
+                                    {
+                                        condition: true,
+                                        btn_label_for_person: ('label_edit_database'|bkTranslate:this),
+                                        btn_tag: 'update_database',
+                                        icon: 'fa-cog',
+                                        colorType: 'EDIT',
+                                        permission: (true)
+                                    }
+                                ]"
+                                (onValueChanged)="onDrobDownEmiter($event, device)">
+                            </bk-drob-down-button>
+
+
+                        </td>
+                    </tr>
                 </tbody>
             </table>
+
+
         </div>
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(databases == null)"
                             [condition_empty]="(databases != null && databases.length == 0)"
                             [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/59d652ed519b320001863842_cloud%20e3.svg'"
-                            [main_message_link]="'label_no_servers'|bkTranslate:this"
-                            [main_message_comment_link]="'label_no_servers_comment'|bkTranslate:this"
+                            [main_message_link]="'label_no_databases'|bkTranslate:this"
+                            [main_message_comment_link]="'label_no_databases_comment'|bkTranslate:this"
                             [btn_label]="'btn_create_database'|bkTranslate:this"
                             (onButtonClick)="onPortletClick('database_add')">
         </bk-nothing-to-show>
