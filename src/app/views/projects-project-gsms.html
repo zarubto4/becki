@@ -50,9 +50,8 @@
     <div class="portlet-body">
 
         <div *ngIf="tab == 'overview'">
-            <div *ngIf="(gsmList != null && gsmList.content.length)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(gsmList != null && gsmList.content.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>

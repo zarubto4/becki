@@ -29,60 +29,48 @@
             <div class="clearfix"></div>
         </div>
 
-        <div class="table-scrollable table-scrollable-borderless">
-
-            <table  class="table table-hover table-light byzance-table">
-
-            </table>
-
-            <!-- Every Database with own table Database -->
-            <table *ngIf="(databases && databases.length > 0)" class="table table-hover table-light byzance-table">
-                <thead>
-                <tr>
-                    <th class="">{{'table_database_name'|bkTranslate:this}}</th>
-                    <th class="">{{'table_database_description'|bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_id'|bkTranslate:this}}</th>
-                    <th class="text-center">{{'table_action'|bkTranslate:this}}</th>
+         <!-- Every Database with own table Database -->
+        <table *ngIf="(databases && databases.length > 0)" class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+            <thead>
+            <tr>
+                <th class="">{{'table_database_name'|bkTranslate:this}}</th>
+                <th class="">{{'table_database_description'|bkTranslate:this}}</th>
+                <th class="text-center">{{'table_id'|bkTranslate:this}}</th>
+                <th class="text-center">{{'table_action'|bkTranslate:this}}</th>
+            </tr>
+            </thead>
+            <tbody class="hide-bk-drob-down-button">
+                <tr *ngFor="let database of databases">
+                    <td class="vert-align no-wrap"> {{database.name}} </td>
+                    <td class="vert-align no-wrap"> {{database.description}} </td>
+                    <td class="vert-align no-wrap"> {{database.id}} </td>
+                    <td class="action-btn-col">
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_settings'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_database'|bkTranslate:this),
+                                    btn_tag: 'remove_database',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (true)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_edit_database'|bkTranslate:this),
+                                    btn_tag: 'update_database',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (true)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, device)">
+                        </bk-drob-down-button>
+                    </td>
                 </tr>
-                </thead>
-                <tbody class="hide-bk-drob-down-button">
-                    <tr *ngFor="let database of databases">
-                        <td class="vert-align no-wrap"> {{database.name}} </td>
-                        <td class="vert-align no-wrap"> {{database.description}} </td>
-                        <td class="vert-align no-wrap"> {{database.id}} </td>
-                        <td class="action-btn-col">
-
-                            <bk-drob-down-button
-                                [btns_group_name]="('label_settings'|bkTranslate:this)"
-                                [btns]="[
-                                    {
-                                        condition: true,
-                                        btn_label_for_person: ('label_remove_database'|bkTranslate:this),
-                                        btn_tag: 'remove_database',
-                                        icon: 'fa-trash',
-                                        colorType: 'REMOVE',
-                                        permission: (true)
-                                    },
-                                    {
-                                        condition: true,
-                                        btn_label_for_person: ('label_edit_database'|bkTranslate:this),
-                                        btn_tag: 'update_database',
-                                        icon: 'fa-cog',
-                                        colorType: 'EDIT',
-                                        permission: (true)
-                                    }
-                                ]"
-                                (onValueChanged)="onDrobDownEmiter($event, device)">
-                            </bk-drob-down-button>
-
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-
-        </div>
+            </tbody>
+        </table>
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(databases == null)"

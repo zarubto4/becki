@@ -51,8 +51,8 @@
         <!-- Tariffs-->
         <div *ngIf="tab == 'tariffs'">
 
-            <div *ngIf="(tariffs && tariffs.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(tariffs && tariffs.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_icon'|bkTranslate:this}}</th>
@@ -148,8 +148,8 @@
 
         <!-- Tariffs-->
         <div *ngIf="tab == 'extensions'">
-            <div *ngIf="(extensions && extensions.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(extensions && extensions.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                         <tr>
                             <th class="">{{'table_extension_color'|bkTranslate:this}}</th>

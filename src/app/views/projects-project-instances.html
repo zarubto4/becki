@@ -30,9 +30,8 @@
 
     <div class="portlet-body">
 
-        <div *ngIf="(instanceFilter && instanceFilter.content.length)"
-             class="table-scrollable table-scrollable-borderless">
-            <table class="table table-hover table-light byzance-table">
+        <div *ngIf="(instanceFilter && instanceFilter.content.length)">
+            <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'table_name'|bkTranslate:this}}</th>

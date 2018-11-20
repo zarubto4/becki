@@ -25,8 +25,8 @@
 
         <div *ngIf="tab == 'server_list'">
 
-            <div *ngIf="(homer_servers && homer_servers.content.length > 0)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(homer_servers && homer_servers.content.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_server_name'|bkTranslate:this}}</th>

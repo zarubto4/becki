@@ -30,8 +30,8 @@
     <div class="portlet-body">
 
         <!-- Page Content -- START -->
-        <div *ngIf="(project && project.participants.length > 1)" class="table-scrollable table-scrollable-borderless">
-            <table class="table table-hover table-light byzance-table">
+        <div *ngIf="(project && project.participants.length > 1)">
+            <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'label_email'|bkTranslate:this}}</th>
