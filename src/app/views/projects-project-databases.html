@@ -21,14 +21,6 @@
 
     <div class="portlet-body">
 
-
-        <div *ngIf="connectionString" class="portlet portlet light bordered">
-            <div>
-                <span [innerHTML]="'label_connection_string'|bkTranslate:this"></span>: <strong>{{connectionString}}</strong>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-
          <!-- Every Database with own table Database -->
         <table *ngIf="(databases && databases.length > 0)" class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
             <thead>
@@ -36,6 +28,7 @@
                 <th class="">{{'table_database_name'|bkTranslate:this}}</th>
                 <th class="">{{'table_database_description'|bkTranslate:this}}</th>
                 <th class="text-center">{{'table_id'|bkTranslate:this}}</th>
+                <th>{{'table_database_collections'|bkTranslate:this}}</th>
                 <th class="text-center">{{'table_action'|bkTranslate:this}}</th>
             </tr>
             </thead>
@@ -44,10 +37,19 @@
                     <td class="vert-align no-wrap"> {{database.name}} </td>
                     <td class="vert-align no-wrap"> {{database.description}} </td>
                     <td class="vert-align no-wrap"> {{database.id}} </td>
+                    <td class="vert-align no-wrap"> {{database.collections.join('\n')}} </td>
                     <td class="action-btn-col">
                         <bk-drob-down-button
                             [btns_group_name]="('label_settings'|bkTranslate:this)"
                             [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_copy_conection_string_database'|bkTranslate:this),
+                                    btn_tag: 'copy_conection_string',
+                                    icon: 'fa-copy',
+                                    colorType: 'ACTIVE',
+                                    permission: (true)
+                                },
                                 {
                                     condition: true,
                                     btn_label_for_person: ('label_remove_database'|bkTranslate:this),

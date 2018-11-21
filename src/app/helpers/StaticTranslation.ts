@@ -2940,6 +2940,7 @@ export class StaticTranslation {
                 'role_create_fail': 'Role creation failed',
             }, 'ProjectsProjectDatabasesComponent': {
                 'btn_create_database': 'Create Database',
+                'label_copy_conection_string_database': 'Copy Conection',
                 'label_remove_database': 'Remove Database',
                 'label_edit_database': 'Edit Database',
                 'table_database_name': 'Name',
@@ -2947,6 +2948,7 @@ export class StaticTranslation {
                 'table_action': 'Action',
                 'table_id': 'Database id',
                 'label_delete_database': 'Drop',
+                'table_database_collections': 'Collections',
                 'title': 'Databases',
                 'label_connection_string': 'Connection String',
                 'label_no_databases': 'You have no any Database',

@@ -16,7 +16,7 @@ export class ModalsDatabaseModel extends ModalModel {
 }
 
 @Component({
-    selector: 'bk-modals-database-edit',
+    selector: 'bk-modals-database-new',
     templateUrl: './database-new.html'
 })
 export class ModalsDatabaseNewComponent implements OnInit {
