@@ -11,7 +11,7 @@ import { ModalsDatabaseModel } from '../modals/database-new';
 import { ModalsDatabaseRemoveModel } from '../modals/database-remove';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
+import { ModalsDatabaseNameDescriptionModel } from '../modals/database-edit';
 
 
 @Component({
@@ -94,13 +94,14 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     }
 
     onEditDatabaseClick(database: IDatabase): void {
-        let model = new ModalsDeviceEditDescriptionModel(database.id, database.name, database.description);
+        console.log('DATABASE ' + database);
+        let model = new ModalsDatabaseNameDescriptionModel(database.name, database.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
 
                 // TODO upravit na nový api point
-                this.tyrionBackendService.boardEditPersonalDescription(database.id, {
+                this.tyrionBackendService.databaseEdit(database.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -142,7 +143,7 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
 
 
     onDrobDownEmiter(action: string, database: IDatabase): void {
-
+        console.log('fasdasd');
         if (action === 'remove_database') {
             this.onRemoveDatabaseClick(database);
         }

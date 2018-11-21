@@ -9,20 +9,20 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 
-export class ModalsDatabaseModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public firstCollection: string = '') {
+export class ModalsDatabaseNameDescriptionModel extends ModalModel {
+    constructor(public name: string = '', public description: string = '') {
         super();
     }
 }
 
 @Component({
     selector: 'bk-modals-database-edit',
-    templateUrl: './database-new.html'
+    templateUrl: './database-edit.html'
 })
-export class ModalsDatabaseNewComponent implements OnInit {
+export class ModalsDatabaseEditComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsDatabaseModel;
+    modalModel: ModalsDatabaseNameDescriptionModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -34,20 +34,17 @@ export class ModalsDatabaseNewComponent implements OnInit {
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
             'description': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(255)]],
-            'firstCollection': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]]
         });
     }
 
     ngOnInit() {
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['firstCollection'])).setValue(this.modalModel.firstCollection);
     }
 
     onSubmitClick(): void {
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
-        this.modalModel.firstCollection = this.form.controls['firstCollection'].value;
         this.modalClose.emit(true);
     }
 

@@ -506,7 +506,11 @@ export class StaticTranslation {
                 'label_first_collection_name': 'First collection name',
                 'btn_confirm_scan': 'Confirm Scan',
             },
-
+            'ModalsDatabaseEditComponent': {
+                'title': '<strong> Edit database </strong>  ',
+                'label_name': 'Name',
+                'label_description': 'Description',
+            },
             'ModalsDatabaseRemoveComponent': {
                 'title': '<strong> Remove database </strong>  ',
                 'label_database_id': 'Database id',
