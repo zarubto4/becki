@@ -77,8 +77,8 @@
         </div>
         <div *ngIf="tab == 'tickets'">
 
-            <div *ngIf="(tickets && tickets.content.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(tickets && tickets.content.length)">
+                <table class="table table-hover table-scrollable">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>

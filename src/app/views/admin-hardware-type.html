@@ -140,9 +140,8 @@
                                     ]"
             ></bk-filter-component>
 
-            <div *ngIf="(devicesFilter && devicesFilter.content.length)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(devicesFilter && devicesFilter.content.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                         <tr>
                             <th class="" [innerHTML]="'label_name'|bkTranslate:this"></th>
@@ -237,8 +236,8 @@
 
         <!-- Hardware Types -->
         <div *ngIf="tab == 'hardware_type'">
-            <div *ngIf="(hardwareTypes && hardwareTypes.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(hardwareTypes && hardwareTypes.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th>{{'label_name'|bkTranslate:this}}</th>
@@ -327,8 +326,8 @@
 
         <!-- Producers-->
         <div *ngIf="tab == 'producers'">
-            <div *ngIf="(producers && producers.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(producers && producers.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'label_name'|bkTranslate:this}}</th>
@@ -391,8 +390,8 @@
 
         <!-- Processor -->
         <div *ngIf="tab == 'processor'">
-            <div *ngIf="(processors && processors.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table" style="overflow: visible">
+            <div *ngIf="(processors && processors.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless" style="overflow: visible">
                     <thead>
                     <tr>
                         <th class="">{{'label_name'|bkTranslate:this}}</th>

@@ -46,8 +46,8 @@
     <div class="portlet-body">
 
         <div *ngIf="tab == 'my_libraries'">
-            <div *ngIf="(libraries && libraries.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(libraries && libraries.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_name'|bkTranslate:this}}</th>
@@ -114,9 +114,8 @@
 
         <div *ngIf="tab == 'public_libraries'">
 
-            <div *ngIf="(publicLibraries && publicLibraries.content.length)"
-                 class="table-scrollable table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(publicLibraries && publicLibraries.content.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_name'|bkTranslate:this}}</th>

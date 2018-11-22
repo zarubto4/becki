@@ -167,6 +167,7 @@ import { ProjectsProjectWidgetsComponent } from '../views/projects-project-widge
 import { ProjectsProjectWidgetsWidgetComponent } from '../views/projects-project-widgets-widget';
 import { ProjectsProjectBlocksComponent } from '../views/projects-project-blocks';
 import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-blocks-block';
+import { ModalsDatabaseEditComponent } from '../modals/database-edit';
 
 @NgModule({
     imports: [
@@ -352,6 +353,7 @@ import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-b
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
         ModalsDatabaseNewComponent,
+        ModalsDatabaseEditComponent,
         ModalsDatabaseRemoveComponent,
         ModalsFinancialProductComponent,
         ModalComponent
