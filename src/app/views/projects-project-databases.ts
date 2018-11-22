@@ -5,10 +5,13 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
-import { IDatabase } from '../backend/TyrionAPI';
+import { IDatabase, IHomerServer } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsDatabaseModel } from '../modals/database-new';
 import { ModalsDatabaseRemoveModel } from '../modals/database-remove';
+import { ModalsRemovalModel } from '../modals/removal';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsDatabaseNameDescriptionModel } from '../modals/database-edit';
 
 
 @Component({
@@ -49,8 +52,7 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
         this.tyrionBackendService.projectGet(this.projectId).then((project) => {
             this.productId = project.product.id;
             this.tyrionBackendService.databasesGet(this.productId).then((databaseList) => {
-                this.databases = databaseList.databases;
-                this.connectionString = databaseList.connection_string;
+                this.databases = databaseList;
                 this.unblockUI();
             }).catch((reason) => {
                 this.unblockUI();
@@ -65,9 +67,6 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     onPortletClick(action: string): void {
         if (action === 'database_add') {
             this.onCreateDatabaseClick();
-        }
-        if (action === 'database_remove') {
-            this.onRemoveDatabaseClick();
         }
     }
 
@@ -93,21 +92,76 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
         });
     }
 
-    onRemoveDatabaseClick(): void {
-        let model = new ModalsDatabaseRemoveModel();
+    onEditDatabaseClick(database: IDatabase): void {
+        let model = new ModalsDatabaseNameDescriptionModel(database.name, database.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.databaseDelete(model.id).then(() => {
-                    this.unblockUI();
-                    this.refresh();
-                }).catch((reason) => {
-                    this.unblockUI();
-                    this.fmError('', reason);
-                    this.refresh();
-                });
+
+                // TODO upravit na nový api point
+                this.tyrionBackendService.databaseEdit(database.id, {
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.unblockUI();
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.unblockUI();
+                        this.refresh();
+                    });
+            }
+        }).catch((reason) => {
+            this.unblockUI();
+            this.refresh();
+        });
+    }
+
+    onRemoveDatabaseClick(database: IDatabase): void {
+        // TODO SMAZAT let model = new ModalsDatabaseRemoveModel();
+
+        this.modalService.showModal(new ModalsRemovalModel('[' + database.id + '] ' + (database.name ? database.name : ''))).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.databaseDelete(database.id)
+                    .then(() => {
+                        this.unblockUI();
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.unblockUI();
+                        this.refresh();
+                    });
             }
         });
 
+    }
+
+
+
+    onDrobDownEmiter(action: string, database: IDatabase): void {
+        if (action === 'remove_database') {
+            this.onRemoveDatabaseClick(database);
+        }
+
+        if (action === 'update_database') {
+            this.onEditDatabaseClick(database);
+        }
+
+        if (action === 'copy_conection_string') {
+            this.copyMessage(database.connection_string);
+        }
+    }
+
+    copyMessage(val: string) {
+        let selBox = document.createElement('textarea');
+        selBox.style.height = '0';
+        selBox.value = val;
+        document.body.appendChild(selBox);
+        selBox.focus();
+        selBox.select();
+        document.execCommand('copy');
+        document.body.removeChild(selBox);
     }
 }

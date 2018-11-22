@@ -506,7 +506,11 @@ export class StaticTranslation {
                 'label_first_collection_name': 'First collection name',
                 'btn_confirm_scan': 'Confirm Scan',
             },
-
+            'ModalsDatabaseEditComponent': {
+                'title': '<strong> Edit database </strong>  ',
+                'label_name': 'Name',
+                'label_description': 'Description',
+            },
             'ModalsDatabaseRemoveComponent': {
                 'title': '<strong> Remove database </strong>  ',
                 'label_database_id': 'Database id',
@@ -630,6 +634,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_actions': 'Action',
+                'table_actions': 'Action',
                 'label_role_properties': 'Edit Role properties',
                 'label_role_remove': 'Remove Role',
                 'label_no_role': 'No Roles',
@@ -2935,13 +2940,19 @@ export class StaticTranslation {
                 'role_create_fail': 'Role creation failed',
             }, 'ProjectsProjectDatabasesComponent': {
                 'btn_create_database': 'Create Database',
-                'btn_remove_database': 'Remove Database',
+                'label_copy_conection_string_database': 'Copy Conection',
+                'label_remove_database': 'Remove Database',
+                'label_edit_database': 'Edit Database',
                 'table_database_name': 'Name',
                 'table_database_description': 'Description',
+                'table_action': 'Action',
                 'table_id': 'Database id',
                 'label_delete_database': 'Drop',
+                'table_database_collections': 'Collections',
                 'title': 'Databases',
                 'label_connection_string': 'Connection String',
+                'label_no_databases': 'You have no any Database',
+                'label_no_databases_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
             },
 
 

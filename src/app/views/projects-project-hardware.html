@@ -99,9 +99,8 @@
                                     ]"
             ></bk-filter-component>
 
-            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
-
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                         <tr>
                             <th class="">
@@ -293,9 +292,8 @@
 
 
         <div *ngIf="tab == 'hardware_groups'">
-            <div *ngIf="(deviceGroup && deviceGroup.content.length > 0)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(deviceGroup && deviceGroup.content.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">

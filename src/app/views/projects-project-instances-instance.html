@@ -277,9 +277,8 @@
         </div>
 
         <div *ngIf="tab == 'update' && instance && instance.current_snapshot">
-            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)"
-                class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
@@ -373,8 +372,8 @@
                 <!-- List of Integrated HW groups START-->
                 <h4 [innerHTML]="'label_hardware_groups'|bkTranslate:this"></h4>
 
-                <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light byzance-table">
+                <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)">
+                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th class="" [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></th>
@@ -420,9 +419,8 @@
                 <hr>
                 <!-- List of Integrated HW by filter START-->
                 <h4 [innerHTML]="'label_hardware_in_instance'|bkTranslate:this"></h4>
-                <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)"
-                     class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light byzance-table">
+                <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)">
+                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th class="col" [innerHTML]="'table_hardware_name'|bkTranslate:this"></th>
@@ -616,8 +614,8 @@
 
         <div *ngIf="tab == 'api' && instance">
             <div>
-                <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)" class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light byzance-table">
+                <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)">
+                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
@@ -676,8 +674,8 @@
             <br>
             <h3>External API to local instance</h3>
 
-            <div *ngIf="(instance && instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance && instance.current_snapshot)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -698,8 +696,8 @@
         </div>
 
         <div *ngIf="tab == 'mesh' && instance">
-            <div *ngIf="(instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance.current_snapshot)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
@@ -743,8 +741,8 @@
 
         <div *ngIf="tab == 'api' && instance">
             <div>
-                <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)" class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light byzance-table">
+                <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)">
+                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
@@ -803,8 +801,8 @@
             <br>
             <h3>External API to local instance</h3>
 
-            <div *ngIf="(instance && instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance && instance.current_snapshot)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -825,8 +823,8 @@
         </div>
 
         <div *ngIf="tab == 'mesh' && instance">
-            <div *ngIf="(instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance.current_snapshot)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
@@ -870,8 +868,8 @@
 
         <div *ngIf="tab == 'history' && instance">
 
-            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_name'|bkTranslate:this"></th>

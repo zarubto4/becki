@@ -23,8 +23,8 @@
 
     <div class="portlet-body">
 
-            <div *ngIf="(securityRoleList && securityRoleList.content.length)" class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(securityRoleList && securityRoleList.content.length)">
+                    <table class="table-scrollable table-scrollable-borderless table table-hover table-light byzance-table">
                         <thead>
                         <tr>
                             <th>{{'label_name'|bkTranslate:this}}</th>
@@ -34,17 +34,17 @@
                         </thead>
                         <tbody class="hide-bk-drob-down-button">
                         <tr *ngFor="let role of securityRoleList.content">
-        
+
                             <td class="vert-align no-wrap">
                                 <a (click)="onRoleClick(role.id)" class="no-wrap"><strong>{{role.name}}</strong></a>
                             </td>
-        
+
                             <td class="vert-align no-wrap">
                                 {{role.description}}
                             </td>
-        
+
                             <td class="action-btn-col">
-        
+
                                 <bk-drob-down-button
                                     [btns_group_name]="('label_role_properties'|bkTranslate:this)"
                                     [btns] = "[
@@ -68,7 +68,7 @@
                                     (onValueChanged)="onDrobDownEmiter($event, role)"
                                 >
                                 </bk-drob-down-button>
-        
+
                             </td>
                         </tr>
                         </tbody>

@@ -66,8 +66,8 @@
 
         <div *ngIf="tab == 'persons'">
 
-            <div *ngIf="(securityRole && securityRole.persons.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(securityRole && securityRole.persons.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th>{{'label_name'|bkTranslate:this}}</th>
@@ -118,8 +118,8 @@
 
         <div *ngIf="tab == 'permissions'">
 
-            <div *ngIf="(securityRole && securityRole.permissions.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(securityRole && securityRole.permissions.length)">
+                <table class="table table-hover table-scrollable">
                     <thead>
                     <tr>
                         <th>{{'label_action'|bkTranslate:this}}</th>

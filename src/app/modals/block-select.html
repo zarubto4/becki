@@ -64,8 +64,8 @@
 
         <div [hidden]="!(modalModel.selectedBlock == null && tab == 'filter_blocks')">
 
-            <div *ngIf="(blocks && blocks.content.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(blocks && blocks.content.length)">
+                <table class="table-scrollable table-scrollable-borderless table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -127,8 +127,8 @@
         <!-- !-->
 
         <div *ngIf="tab == 'logic_blocks'">
-            <div *ngIf="(logic_blocks && logic_blocks.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(logic_blocks && logic_blocks.length)">
+                <table class="table table-scrollable table-scrollable-borderless table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -164,8 +164,8 @@
         </div>
 
         <div *ngIf="tab == 'debug_blocks'">
-            <div *ngIf="(debug_blocks && debug_blocks.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(debug_blocks && debug_blocks.length)">
+                <table class="table-scrollable table-scrollable-borderless table table-hover table-light byzance-table">
                     <thead>
                     <tr>
                         <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
