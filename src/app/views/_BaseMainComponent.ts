@@ -176,7 +176,7 @@ export abstract class _BaseMainComponent {
     }
 
     public onActualizationProcedureClick(procedure_id?: string): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'actualization_procedures', procedure_id]);
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'actualization-procedures', procedure_id]);
     }
 
     public onLibraryAdminClick(library_id: string): void {

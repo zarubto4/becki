@@ -10,7 +10,7 @@ import { HardwareComponent } from '../views/hardware';
 import { HardwareHardwareTypeComponent } from '../views/hardware-hardware_type';
 
 // routes
-export const PROJECT_HARDWARE_ROUTES: Routes = [
+export const HARDWARE_ROUTES: Routes = [
 
     { path: '', component: HardwareComponent, canActivate: [AuthGuard] },
 
@@ -24,7 +24,7 @@ export const PROJECT_HARDWARE_ROUTES: Routes = [
     imports: [
         CommonModule,
         SharedModule,
-        RouterModule.forChild(PROJECT_HARDWARE_ROUTES)
+        RouterModule.forChild(HARDWARE_ROUTES)
     ],
     declarations: [
         HardwareComponent,

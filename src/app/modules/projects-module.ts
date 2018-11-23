@@ -20,7 +20,7 @@ export const PROJECTS_ROUTES: Routes = [
     { path: ':project/roles/:group', data: { breadName: ':group' }, component: RoleGroupGroupComponent, canActivate: [AuthGuard] },
     { path: ':project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
     { path: ':project/databases', data: { breadName: 'CLOUD databases' }, component: ProjectsProjectDatabasesComponent, canActivate: [AuthGuard] },
-    { path: ':project/actualization_procedures', data: { breadName: ':last' }, loadChildren: './project-actualization_procedure-module#ProjectActulizationProcedureModule' },
+    { path: ':project/actualization-procedures', data: { breadName: 'Actualization Procedures' }, loadChildren: './project-actualization-procedure-module#ProjectActualizationProcedureModule' },
     { path: ':project/gsm', data: { breadName: 'CELLULAR modules' }, loadChildren: './project-gsms-module#ProjectGSMSModule' },
     { path: ':project/hardware', data: { breadName: 'HARDWARE devices' }, loadChildren: './project-hardware-module#ProjectHardwareModule' },
     { path: ':project/code', data: { breadName: 'CODE programs' }, loadChildren: './project-code-module#ProjectCodeModule' },

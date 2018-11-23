@@ -565,7 +565,7 @@ export class NotificationService {
                 this.router.navigate(['projects', e.project_id, 'instances', e.id]);
                 break;
             case 'UpdateProcedure':
-                this.router.navigate(['projects', e.project_id, 'actualization_procedures', e.id]);
+                this.router.navigate(['projects', e.project_id, 'actualization-procedures', e.id]);
                 break;
             case 'HardwareUpdate':
                 this.router.navigate(['projects', e.project_id, 'hardware', e.id,  { tab: 'update'}]);

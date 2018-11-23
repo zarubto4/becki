@@ -565,11 +565,11 @@
                                     <td>
                                         <div *ngIf="conf.type == 'string'">
                                             <span class="font-grey-mint bold">{{conf.value}}</span>
-                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
+                                            <i class="fa fa-cog cursor-hand margin-left-15" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
                                         </div>
                                         <div *ngIf="conf.type == 'number'">
                                             <span class="font-grey-mint bold">{{conf.value}}</span>
-                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Register:', conf.key ,conf.value)"></i>
+                                            <i class="fa fa-cog cursor-hand margin-left-15" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Register:', conf.key ,conf.value)"></i>
                                         </div>
                                         <div *ngIf="conf.type == 'boolean'">
                                             <i *ngIf="conf.value" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"

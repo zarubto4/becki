@@ -261,13 +261,13 @@ export class CurrentParamsService {
 
         }
 
-        if (this.currentParamsSnapshot['actualization_procedures'] !== params['actualization_procedures']) {
+        if (this.currentParamsSnapshot['actualization-procedures'] !== params['actualization-procedures']) {
 
-            if (!params['actualization_procedures']) {
+            if (!params['actualization-procedures']) {
                 this.currentActualizationProcedureSnapShot = null;
                 this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
             } else {
-                this.backendService.actualizationProcedureGet(params['actualization_procedures']).then((procedure) => { // TODO [permission]: Project.read_permission
+                this.backendService.actualizationProcedureGet(params['actualization-procedures']).then((procedure) => { // TODO [permission]: Project.read_permission
                     this.currentActualizationProcedureSnapShot = procedure.id;
                     this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
                 });
