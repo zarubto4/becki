@@ -78,7 +78,7 @@ export abstract class Notification {
             }
         }
 
-        if (n.notification_type === 'CHAIN_START' || n.notification_type === 'CHAIN_UPDATE' || n.notification_type === 'CHAIN_END') {
+        if (n.notification_type === 'CHAIN_START' || n.notification_type === 'CHAIN_UPDATE') {
             out.closeTime = null;
         } else {
             out.closeTime = 5000;
