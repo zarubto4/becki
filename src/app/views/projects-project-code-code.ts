@@ -257,20 +257,21 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     onEditVersionClick(version: ICProgramVersion): void {
-        let model = new ModalsVersionDialogModel(version.name, version.description, true);
+        let model = new ModalsVersionDialogModel(this.codeProgram.id, 'CProgramVersion', version);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.cProgramVersionEditInformation(version.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.object.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.object.name, reason)));
                         this.refresh();
                     });
             }
@@ -608,8 +609,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     saveCode() {
-        let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-        this.modalService.showModal(m).then((success) => {
+        let model = new ModalsVersionDialogModel(this.codeProgram.id, 'CProgramVersion');
+        this.modalService.showModal(model).then((success) => {
             if (success) {
                 let main = '';
 
@@ -633,20 +634,21 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                 this.blockUI();
                 this.tyrionBackendService.cProgramVersionCreateSaveAs(this.codeId, {
                     imported_libraries: libs,
-                    name: m.name,
-                    description: m.description,
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags,
                     main: main,
                     files: userFiles,
                     library_compilation_version: this.codeIDE.formLibrarySelector.controls['compilation_version_library_tag'].value
                 })
                     .then(() => {
-                        this.fmSuccess(this.translate('flash_code_version_save', m.name));
+                        this.fmSuccess(this.translate('flash_code_version_save', model.object.name));
                         this.exitConfirmationService.setConfirmationEnabled(false);
 
                         this.refresh();
                     })
                     .catch((err) => {
-                        this.fmError(this.translate('flash_cant_save_code_version', m.name, err));
+                        this.fmError(this.translate('flash_cant_save_code_version', model.object.name, err));
                         this.unblockUI();
                     });
             }

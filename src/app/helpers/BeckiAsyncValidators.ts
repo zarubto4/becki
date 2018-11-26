@@ -114,7 +114,7 @@ export class BeckiAsyncValidators {
         backEnd: TyrionBackendService,
         type: ('Project'|'BProgram'|'BProgramVersion'|'CProgram'|'CProgramVersion'|
             'GridProgram'|'GridProgramVersion'|'GridProject'|'Hardware'|'HardwareGroup'|
-            'GSM'|'Role'|'Widget'|'Block'|'Instance'|'Snapshot'|'Database'|'CLibrary'|
+            'GSM'|'Role'|'Widget'|'WidgetVersion'|'Block'| 'BlockVersion' |'Instance'|'Snapshot'|'Database'|'CLibrary'|
             'CLibraryVersion'),
         project_id?: string, object_id?: string): AsyncValidatorFn {
 

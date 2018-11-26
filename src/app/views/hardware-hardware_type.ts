@@ -245,20 +245,21 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
     }
 
     onEditVersionClick(version: ICProgramVersion): void {
-        let model = new ModalsVersionDialogModel(version.name, version.description, true);
+        let model = new ModalsVersionDialogModel(this.hardwareType.main_c_program.id , 'CProgramVersion', version);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.cProgramVersionEditInformation(version.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.object.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.object.name, reason)));
                         this.refresh();
                     });
             }
@@ -462,11 +463,9 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
         if (action === 'edit_bootloader') {
             this.onBootloaderEditClick(object);
         }
-
         if (action === 'set_as_main_bootloader') {
             this.onBootloaderSetMainClick(object);
         }
-
         if (action === 'upload_file_bootloader') {
             this.onBootloaderUpdateFile(object);
         }
@@ -482,7 +481,6 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
         if (action === 'remove_version') {
             this.onRemoveVersionClick(object);
         }
-
         if (action === 'edit_batch') {
             this.onEditRevisionClick(object);
         }

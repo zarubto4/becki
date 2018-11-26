@@ -346,8 +346,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onSaveSnapshotClick(deploy_immediately: boolean = false): void {
         if (this.editorView.isDeployable()) {
-            let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-            this.modalService.showModal(m).then((success) => {
+            let model = new ModalsVersionDialogModel(this.instance.id, 'Snapshot');
+            this.modalService.showModal(model).then((success) => {
                 if (success) {
                     this.blockUI();
 
@@ -363,8 +363,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     });
 
                     this.tyrionBackendService.instanceSnapshotCreate(this.instanceId, {
-                        name: m.name,
-                        description: m.description,
+                        name: model.object.name,
+                        description: model.object.description,
+                        tags: model.object.tags,
                         version_id: version_id,
                         interfaces: interfaces,
                         snapshot: this.editorView.getDataJson()
