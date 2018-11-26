@@ -286,14 +286,15 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onProgramEditClick(): void {
-        let model = new ModalsGridProgramPropertiesModel(this.gridProgram.name, this.gridProgram.description, true);
+        let model = new ModalsGridProgramPropertiesModel(this.gridProject.id, this.gridProgram);
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.gridProgramUpdate(this.gridProgram.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_edit')));

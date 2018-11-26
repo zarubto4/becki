@@ -510,11 +510,11 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     onBlockoProgramEditClick(): void {
-        let model = new ModalsBlockoPropertiesModel(this.blockoProgram.name, this.blockoProgram.description, true, this.blockoProgram.name);
+        let model = new ModalsBlockoPropertiesModel(this.projectId, this.blockoProgram);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.bProgramEdit(this.blockoProgram.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.bProgramEdit(this.blockoProgram.id, { name: model.blocko.name, description: model.blocko.description })
                     .then(() => {
                         this.fmSuccess(this.translate('flash_blocko_updated'));
                         this.refresh();

@@ -109,13 +109,13 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onBlockAddClick(): void {
 
-        let model = new ModalsBlocksBlockPropertiesModel();
+        let model = new ModalsBlocksBlockPropertiesModel(this.projectId);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.blockCreate({
-                    name: model.name,
-                    description: model.description,
+                    name: model.block.name,
+                    description: model.block.description,
                     project_id: this.projectId
                 })
                     .then(block => {
@@ -132,13 +132,13 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onBlockEditClick(block: IBlock): void {
 
-        let model = new ModalsBlocksBlockPropertiesModel(block.name, block.description, block.tags, true, block.name);
+        let model = new ModalsBlocksBlockPropertiesModel(this.projectId, block);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.blockEdit(block.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.block.name,
+                    description: model.block.description,
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_edit')));

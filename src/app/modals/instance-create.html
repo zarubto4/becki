@@ -7,7 +7,7 @@
         <button type="button" class="close" (click)="onCloseClick()"></button>
         <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body"  *ngIf="form">
         <form [formGroup]="form">
 
             <bk-form-input [control]="form.controls['name']" [label]="'label_instance_name'|bkTranslate:this"></bk-form-input>
@@ -28,6 +28,8 @@
                 <span [innerHTML]="'loading'|bkTranslate:this"></span>
             </div>
 
+            <!-- Tags -->
+            <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
         </form>
     </div>
     <div class="modal-footer">

@@ -206,13 +206,14 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
     }
 
     onCProgramEditClick(code: ICProgram) {
-        let model = new ModalsCodePropertiesModel(null, code.name, code.description, '', code.tags, true, code.name);
+        let model = new ModalsCodePropertiesModel(null, null, code);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.cProgramEdit(code.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));

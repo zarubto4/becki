@@ -1,9 +1,9 @@
-<div>
+<div *ngIf="form">
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
         <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" *ngIf="form">
         <form [formGroup]="form">
 
             <bk-form-input [control]="form.controls.name" [label]="'label_personal_server_name'|bkTranslate:this"></bk-form-input>

@@ -125,13 +125,13 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     }
 
     onWidgetEditClick(): void {
-        let model = new ModalsWidgetsWidgetPropertiesModel(this.widget.name, this.widget.description, true, this.widget.name);
+        let model = new ModalsWidgetsWidgetPropertiesModel(this.projectId, this.widget);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.widgetEdit(this.widget.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.widget.name,
+                    description: model.widget.description,
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
@@ -567,15 +567,16 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     }
 
     onMakeClone(): void {
-        let model = new ModalsWidgetsWidgetCopyModel(this.widget.name, this.widget.description, this.widget.tags);
+        let model = new ModalsWidgetsWidgetCopyModel(this.projectId, this.widget);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.widgetMakeClone({
                     widget_id: this.widget.id,
                     project_id: this.projectId,
-                    name: model.name,
-                    description: model.description
+                    name: model.widget.name,
+                    description: model.widget.description,
+                    tags: model.widget.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));

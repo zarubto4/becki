@@ -212,13 +212,14 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     onEditClick(): void {
-        let model = new ModalsCodePropertiesModel(null, this.codeProgram.name, this.codeProgram.description, '', this.codeProgram.tags, true, this.codeProgram.name);
+        let model = new ModalsCodePropertiesModel(null, this.project_Id, this.codeProgram);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.cProgramEdit(this.codeProgram.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
@@ -416,15 +417,16 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
     }
 
     onMakeClone(): void {
-        let model = new ModalsCodePropertiesModel(null, this.codeProgram.name, this.codeProgram.description, '', this.codeProgram.tags, true, this.codeProgram.name, true);
+        let model = new ModalsCodePropertiesModel(null, this.project_Id, this.codeProgram, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.cProgramMakeClone({
                     c_program_id: this.codeProgram.id,
                     project_id: this.project_Id,
-                    name: model.name,
-                    description: model.description
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
