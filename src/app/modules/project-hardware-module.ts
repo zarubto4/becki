@@ -15,7 +15,6 @@ export const PROJECT_HARDWARE_ROUTES: Routes = [
     { path: ':hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
 
 ];
-
 @NgModule({
     imports: [
         CommonModule,
@@ -30,3 +29,6 @@ export const PROJECT_HARDWARE_ROUTES: Routes = [
 })
 
 export class ProjectHardwareModule { }
+
+// http://localhost:8080/projects/a3f142a3-91a4-4a6d-b8c1-6771641854ad/actualization_procedures
+// http://localhost:8080/projects/a3f142a3-91a4-4a6d-b8c1-6771641854ad/actualization-procedures

@@ -10,7 +10,7 @@ import { ProjectsProjectActualizationProceduresProcedureComponent } from '../vie
 // routes
 export const PROJECT_ACTUALIZATION_ROUTES: Routes = [
 
-    { path: '', data: { breadName: 'Actualization procedures' }, component: ProjectsProjectActualizationProceduresComponent, canActivate: [AuthGuard] },
+    { path: '', data: { breadName: 'Actualization procedures' }, component: ProjectsProjectActualizationProceduresComponent, canActivate: [AuthGuard]},
     { path: ':procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProceduresProcedureComponent, canActivate: [AuthGuard]},
 
 ];
@@ -28,5 +28,5 @@ export const PROJECT_ACTUALIZATION_ROUTES: Routes = [
     exports: [ RouterModule ]
 })
 
-export class ProjectActulizationProcedureModule { }
+export class ProjectActualizationProcedureModule { }
 
