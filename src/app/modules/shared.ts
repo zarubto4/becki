@@ -80,17 +80,14 @@ import { ModalsBlockoAddGridComponent } from '../modals/blocko-add-grid';
 import { ModalsPermissionGroupComponent } from '../modals/permission-group';
 import { ModalsPaymentDetailsComponent } from '../modals/payment-details';
 import { ModalsRolePermissionAddComponent } from '../modals/role-permission-add';
-import { ModalsBlocksTypePropertiesComponent } from '../modals/blocks-type-properties';
 import { ModalsPermissionPermissionPropertyComponent } from '../modals/permission-permission-properties';
 import { ModalsBlocksBlockPropertiesComponent } from '../modals/blocks-block-properties';
 import { ModalsHighImportanceNotificationComponent } from '../modals/high-importance-notification';
 import { ModalsDeviceEditDescriptionComponent } from '../modals/device-edit-description';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from '../modals/device-edit-developer-parameter-value';
-import { ModalsInstanceEditDescriptionComponent } from '../modals/instance-edit-description';
 import { ModalsInstanceCreateComponent } from '../modals/instance-create';
 import { ModalsBlockoVersionSelectComponent } from '../modals/blocko-version-select';
 import { ModalsMembersAddComponent } from '../modals/members-add';
-import { ModalsWidgetsTypePropertiesComponent } from '../modals/widgets-type-properties';
 import { ModalsWidgetsWidgetPropertiesComponent } from '../modals/widgets-widget-properties';
 import { ModalsSendInvoiceComponent } from '../modals/financial-send-invoice';
 import { ModalsBlockoAddGridEmptyComponent } from '../modals/blocko-add-grid-emtpy';
@@ -315,17 +312,14 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         ModalsPermissionGroupComponent,
         ModalsPaymentDetailsComponent,
         ModalsRolePermissionAddComponent,
-        ModalsBlocksTypePropertiesComponent,
         ModalsPermissionPermissionPropertyComponent,
         ModalsBlocksBlockPropertiesComponent,
         ModalsHighImportanceNotificationComponent,
         ModalsDeviceEditDescriptionComponent,
         ModalsDeviceEditDeveloperParameterValueComponent,
-        ModalsInstanceEditDescriptionComponent,
         ModalsInstanceCreateComponent,
         ModalsBlockoVersionSelectComponent,
         ModalsMembersAddComponent,
-        ModalsWidgetsTypePropertiesComponent,
         ModalsWidgetsWidgetPropertiesComponent,
         ModalsSendInvoiceComponent,
         ModalsBlockoAddGridEmptyComponent,

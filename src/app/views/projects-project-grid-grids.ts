@@ -60,14 +60,15 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
     }
 
     onProgramAddClick(): void {
-        let model = new ModalsGridProgramPropertiesModel();
+        let model = new ModalsGridProgramPropertiesModel(this.gridProject.id);
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.gridProgramCreate(this.gridProject.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(gridProgram => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_add')));
@@ -99,13 +100,14 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
     }
 
     onProjectEditClick(): void {
-        let model = new ModalsGridProjectPropertiesModel(this.gridProject.name, this.gridProject.description, true, this.gridProject.name);
+        let model = new ModalsGridProjectPropertiesModel(this.projectId, this.gridProject);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.gridProjectEdit(this.gridProject.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.project.name,
+                    description: model.project.description,
+                    tags: model.project.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_edit')));
@@ -144,14 +146,15 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
     }
 
     onProgramEditClick(program: IGridProgram): void {
-        let model = new ModalsGridProgramPropertiesModel(program.name, program.description, true);
+        let model = new ModalsGridProgramPropertiesModel(this.gridProject.id, program);
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.gridProgramUpdate(program.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_edit')));

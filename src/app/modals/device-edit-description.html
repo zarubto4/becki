@@ -1,28 +1,28 @@
-<!--
-* Created by DominikKrisztof on 26.10.16.
 
-
-* © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
-* directory of this distribution.
-*-->
 <div>
+
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
         <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
+
+
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name"        [label]="'label_hardware_device'|bkTranslate:this"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" [label]="'label_device_description'|bkTranslate:this" aria-valuetext="Hardware description"></bk-form-input>
+            <bk-form-input [control]="form.controls['name']"        [label]="'label_hardware_device'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['description']" [label]="'label_device_description'|bkTranslate:this" aria-valuetext="Hardware description"></bk-form-input>
+
+            <!-- Tags -->
+            <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
         </form>
     </div>
     <div class="text-center">
-          <small *ngIf="modalModel.dominant == true" class="bold">
+          <small *ngIf="modalModel.hardware.dominant_entity == true" class="bold">
               <a (click)="onHardwareDeactivate()">
                   <span [innerHTML]="'Deactivate in this project'"></span>
               </a>
           </small>
-          <small *ngIf="modalModel.can_be_activated == true" class="bold">
+          <small *ngIf="(modalModel.hardware.dominant_entity && modalModel.hardware.dominant_project_active === null)" class="bold">
               <a (click)="onHardwareActivate()">
                   <span [innerHTML]="'Activate for this project'"></span>
               </a>

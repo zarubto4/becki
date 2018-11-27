@@ -106,24 +106,24 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
         this.tyrionBackendService.hardwareTypesGetAll()
             .then( (types: IHardwareType[]) => {
                 this.unblockUI();
-                let model = new ModalsCodePropertiesModel(types);
+                let model = new ModalsCodePropertiesModel(types, this.project_id);
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.tyrionBackendService.cProgramCreate({ // TODO [permission]: C_program.create_permission (Project.update_permission)
+                        this.tyrionBackendService.cProgramCreate({
                             project_id: this.project_id,
-                            name: model.name,
-                            description: model.description,
                             hardware_type_id: model.hardware_type_id,
-                            tags: model.tags
+                            name: model.program.name,
+                            description: model.program.description,
+                            tags: model.program.tags
                         })
                             .then(cProgram => {
-                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
+                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.program.name)));
                                 this.unblockUI();
                                 this.onCProgramClick(cProgram.id);
                             })
                             .catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.name, reason)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.program.name, reason)));
                                 this.unblockUI();
                                 this.onFilterPrivatePrograms();
                             });
@@ -137,14 +137,14 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
         this.tyrionBackendService.hardwareTypesGetAll()
             .then( (types: IHardwareType[]) => {
                 this.unblockUI();
-                let model = new ModalsCodePropertiesModel(types, code.name, code.description, '', code.tags, true, code.name);
+                let model = new ModalsCodePropertiesModel(types, this.project_id, code);
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
                         this.tyrionBackendService.cProgramEdit(code.id, {
-                            name: model.name,
-                            description: model.description,
-                            tags: model.tags
+                            name: model.program.name,
+                            description: model.program.description,
+                            tags: model.program.tags
                         })
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
@@ -168,15 +168,16 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
     }
 
     onMakeClone(code: ICProgram): void {
-        let model = new ModalsCodePropertiesModel(null, code.name, code.description, '', code.tags, true, code.name, true);
+        let model = new ModalsCodePropertiesModel(null, this.project_id, code);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.cProgramMakeClone({
                     c_program_id: code.id,
                     project_id: this.project_id,
-                    name: model.name,
-                    description: model.description
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));

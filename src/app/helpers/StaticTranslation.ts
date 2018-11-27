@@ -248,12 +248,6 @@ export class StaticTranslation {
                 'label_select_server': 'Select destination <strong class="font-color-cloud">SERVER</strong>',
                 'label_select_b_program': 'Select <strong class="font-color-blocko">BLOCKO</strong> program'
 
-            }, 'ModalsBlocksTypePropertiesComponent': {
-                'title_edit': 'BLOCKs Group Properties',
-                'title_add': 'New Group',
-                'label_blocks_group_name': 'Name',
-                'label_block_description': 'Description',
-
             }, 'ModalsCodeAddLibraryComponent': {
                 'title': 'New <strong class="font-color-code">CODE</strong> Library',
                 'body_text': 'Displaying <b>{}0</b> out of <b>{1}</b> Libraries',
@@ -394,11 +388,6 @@ export class StaticTranslation {
                 'label_not_compiled': 'Compilation failed',
                 'btn_select_version': 'Select',
 
-            }, 'ModalsInstanceEditDescriptionComponent': {
-                'title': '<strong class="font-color-code">CLOUD</strong> Instance Properties',
-                'label_instance_name': 'Instance name',
-                'label_instance_description': 'Instance description',
-
             }, 'ModalsLibraryPropertiesComponent': {
                 'title_edit': '<strong class="font-color-code">CODE</strong> Library Properties',
                 'title_add': 'New Library',
@@ -461,12 +450,6 @@ export class StaticTranslation {
                 'label_version_name': 'Name',
                 'label_version_description': 'Description',
 
-            }, 'ModalsWidgetsTypePropertiesComponent': {
-                'title_add': 'New Group',
-                'title_edit': 'Widget Group Properties',
-                'label_widget_group_name': 'Name ',
-                'label_widget_group_description': 'Description',
-
             }, 'ModalsWidgetsWidgetPropertiesComponent': {
                 'title_edit': 'Widget Properties',
                 'title_add': 'New Widget',
@@ -474,8 +457,8 @@ export class StaticTranslation {
                 'label_widget_description': 'Description'
 
             }, 'ModalsHardwareGroupPropertiesComponent': {
-                'title_edit': 'Hardware Group Properties',
-                'title_add': 'New Group',
+                'title_add': 'New  <strong class="font-color-hardware">Hardware Group</strong>',
+                'title_edit': 'Edit  <strong class="font-color-hardware">Hardware Group</strong>',
                 'label_group_name': 'Name',
                 'label_group_description': 'Description',
 
@@ -563,6 +546,7 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
                 'table_product': 'Product',
+                'table_tags': 'Tags',
                 'label_deactivated_under': 'Deactivated under',
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
@@ -1987,7 +1971,7 @@ export class StaticTranslation {
                 'btn_add_members': 'Invite collaborators',
 
                 'table_name': 'Name',
-                'table_state': 'Description',
+                'table_state': 'State',
                 'table_actions': 'Actions',
 
 
@@ -2001,6 +1985,7 @@ export class StaticTranslation {
 
                 'label_remove_member': 'Remove member',
                 'label_send_invitation': 'Send invitation again',
+                'label_remove_invitation': 'Cancel invitation',
 
                 'label_cannot_remove_yourself': 'You can`t remove yourself from your project.',
                 'label_cannot_add_member': 'Unable to add collaborators. {0}',
@@ -2477,7 +2462,8 @@ export class StaticTranslation {
                 'label_maximal_length': 'Maximal length of this field is {0} characters.',
                 'label_name_taken': 'This name is already in use.',
                 'label_project_name_taken': 'This project name is already in use.',
-                'label_blocko_name_taken': 'This program name is already in use.',
+                'label_hardware_name_taken': 'This Hardware name is already in use.',
+                'label_program_name_taken': 'This Name is already in use.',
                 'label_invalid_email': 'Invalid E-mail address.',
                 'label_invalid_time': 'Invalid Time, please write time in XY:YX format',
                 'label_different_password': 'Passwords do not match.',

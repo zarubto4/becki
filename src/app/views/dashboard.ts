@@ -104,16 +104,17 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.projectCreate({
-                    name: model.name,
-                    description: model.description,
-                    product_id: model.product
-                }) // TODO: add tarrif nebo produkt či jak se to bude jmenovat
+                    name: model.project.name,
+                    description: model.project.description,
+                    product_id: model.product_id,
+                    tags: model.project.tags
+                })
                     .then((project: IProject) => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.project.name)));
                         this.onProjectClick(project.id);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.name, reason.message)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.project.name, reason.message)));
                     });
             }
         });

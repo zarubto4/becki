@@ -79,13 +79,14 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
 
     onEditClick(): void {
 
-        let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, this.project.product ? this.project.product.id : null, true, this.project.name);
+        let model = new ModalsProjectPropertiesModel(null, this.project);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.projectEdit(this.project_id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.project.name,
+                    description: model.project.description,
+                    tags: model.project.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_update')));

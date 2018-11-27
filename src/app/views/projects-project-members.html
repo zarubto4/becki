@@ -16,11 +16,12 @@
         (onClick)="onMembersAddClick()"
         [btns]="[
                 {
-                    condition: (project && project.participants.length > 1),
+                    condition: (project && project.invitations.length > 0),
                     btn_label_for_person: ('btn_add_members'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-plus-circle',
-                    btn_tag: 'add'
+                    btn_tag: 'add',
+                    permission: true
                 }
             ]">
     </bk-portlet-title>
@@ -30,6 +31,7 @@
     <div class="portlet-body">
 
         <!-- Page Content -- START -->
+        <h3 class="margin-top-30" *ngIf="(project && project.participants.length > 1)">Active Users</h3>
         <div *ngIf="(project && project.participants.length > 1)">
             <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                 <thead>
@@ -56,14 +58,6 @@
                                     icon: 'fa fa-trash',
                                     colorType: 'REMOVE',
                                     permission: project.update_permission
-                                },
-                                {
-                                    condition: (member.id != selfId),
-                                    btn_label_for_person: ('label_send_invitation'|bkTranslate:this),
-                                    btn_tag: 'send_invitation',
-                                    icon: 'fa-envelope',
-                                    colorType: 'CREATE',
-                                    permission: project.update_permission
                                 }
                             ]"
                             (onValueChanged)="onDrobDownEmiter($event, member)"
@@ -75,13 +69,59 @@
                 </tbody>
             </table>
         </div>
+
+        <hr class="margin-top-30" *ngIf="(project && project.invitations.length > 0 && project.participants.length > 1)">
+        <h3 *ngIf="(project && project.invitations.length > 0)">Invited Users</h3>
+        <div *ngIf="(project && project.invitations.length > 0)">
+            <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <thead>
+                <tr>
+                    <th class="">{{'label_email'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                </tr>
+                </thead>
+                <tbody class="hide-bk-drob-down-button">
+                <tr *ngFor="let invitation of project.invitations">
+                    <td class="vert-align no-wrap">
+                        {{invitation.email}}
+                        <span *ngIf="invitation.invited_person">{{invitation.invited_person.first_name + ' ' +invitation.invited_person.last_name}}</span>
+                    </td>
+                    <td class="action-btn-col">
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_settings'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: (true),
+                                    btn_label_for_person: ('label_remove_invitation'|bkTranslate:this),
+                                    btn_tag: 'remove_invitation',
+                                    icon: 'fa fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: project.update_permission
+                                },
+                                {
+                                    condition: (true),
+                                    btn_label_for_person: ('label_send_invitation'|bkTranslate:this),
+                                    btn_tag: 'send_invitation',
+                                    icon: 'fa-envelope',
+                                    colorType: 'CREATE',
+                                    permission: project.update_permission
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, invitation)"
+                        >
+                        </bk-drob-down-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <!-- Page Content -- END -->
 
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <!-- Admin is always in Project -->
         <bk-nothing-to-show [condition_loading]="(project == null)"
-                            [condition_empty]="(project != null && project.participants.length < 2)"
+                            [condition_empty]="(project != null && ( project.participants.length < 2 && project.invitations.length == 0))"
                             [main_message_link]="'no_persons_in_this_projects'|bkTranslate:this"
                             [main_message_comment_link]="'no_persons_in_this_projects_comment'|bkTranslate:this"
                             [btn_label]="'btn_add_members'|bkTranslate:this"

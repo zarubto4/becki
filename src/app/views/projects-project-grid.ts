@@ -69,13 +69,14 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
     }
 
     onProjectAddClick(): void {
-        let model = new ModalsGridProjectPropertiesModel();
+        let model = new ModalsGridProjectPropertiesModel(this.projectId);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.gridProjectCreate(this.projectId, {  // TODO [permission]: M_Project.read_permission, M_Project.createPermission
-                    name: model.name,
-                    description: model.description
+                this.tyrionBackendService.gridProjectCreate(this.projectId, {
+                    name: model.project.name,
+                    description: model.project.description,
+                    tags: model.project.tags
                 })
                     .then(gridProject => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_add')));
@@ -90,14 +91,15 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
     }
 
     onProjectEditClick(project: IGridProject): void {
-        let model = new ModalsGridProjectPropertiesModel(project.name, project.description, true, project.name);
+        let model = new ModalsGridProjectPropertiesModel(this.projectId, project);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 // console.log(model);
                 this.blockUI();
                 this.tyrionBackendService.gridProjectEdit(project.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.project.name,
+                    description: model.project.description,
+                    tags: model.project.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_edit')));

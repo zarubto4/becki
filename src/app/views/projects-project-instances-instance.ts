@@ -22,7 +22,6 @@ import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 import { ModalsSelectVersionModel } from '../modals/version-select';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
@@ -36,6 +35,7 @@ import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { ModalsInstanceApiPropertiesModel } from '../modals/instance-api-properties';
 import { WebSocketClientBlocko } from '../services/websocket/WebSocketClientBlocko';
 import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
+import { ModalsInstanceCreateModel } from '../modals/instance-create';
 
 
 @Component({
@@ -346,8 +346,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onSaveSnapshotClick(deploy_immediately: boolean = false): void {
         if (this.editorView.isDeployable()) {
-            let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-            this.modalService.showModal(m).then((success) => {
+            let model = new ModalsVersionDialogModel(this.instance.id, 'Snapshot');
+            this.modalService.showModal(model).then((success) => {
                 if (success) {
                     this.blockUI();
 
@@ -363,8 +363,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     });
 
                     this.tyrionBackendService.instanceSnapshotCreate(this.instanceId, {
-                        name: m.name,
-                        description: m.description,
+                        name: model.object.name,
+                        description: model.object.description,
+                        tags: model.object.tags,
                         version_id: version_id,
                         interfaces: interfaces,
                         snapshot: this.editorView.getDataJson()
@@ -576,13 +577,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onEditClick() {
-        let model = new ModalsInstanceEditDescriptionModel(this.instance.id, this.instance.name, this.instance.description);
+        let model = new ModalsInstanceCreateModel(this.projectId, this.instance);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.instanceEdit(this.instance.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.instance.name,
+                    description: model.instance.description,
+                    tags: model.instance.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
@@ -596,13 +598,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onEditSnapShotClick(snapShot: IInstanceSnapshot) {
-        let model = new ModalsSnapShotInstanceModel(snapShot.name, snapShot.description, snapShot.tags, true);
+        let model = new ModalsSnapShotInstanceModel(this.instanceId, snapShot);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.instanceSnapshotEdit(snapShot.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.snapshot.name,
+                    description: model.snapshot.description,
+                    tags: model.snapshot.tags,
                 })
                     .then((snapShotResponse: IInstanceSnapshot) => {
                         this.unblockUI();

@@ -139,13 +139,14 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
             this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
 
-        let model = new ModalsCodePropertiesModel(this.hardwareTypes, code.name, code.description, '', code.tags, true, code.name);
+        let model = new ModalsCodePropertiesModel(this.hardwareTypes, null, code);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.cProgramEdit(code.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
@@ -159,14 +160,15 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
     }
 
     onLibraryEditClick(library: ILibrary): void {
-        let model = new ModalsLibraryPropertiesModel(library.name, library.description, true, library.name);
+        let model = new ModalsLibraryPropertiesModel(null, library);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.libraryEdit(library.id, {
                     project_id: null,
-                    name: model.name,
-                    description: model.description
+                    name: model.library.name,
+                    description: model.library.description,
+                    tags: model.library.tags
                 })
                     .then((lbr: ILibrary) => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));

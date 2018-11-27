@@ -7,10 +7,12 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { IGridProject } from '../backend/TyrionAPI';
 
 
 export class ModalsGridProjectPropertiesModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public edit: boolean = false, public exceptName: string = null) {
+    constructor(public project_id: string, public project?: IGridProject) {
         super();
     }
 }
@@ -30,21 +32,38 @@ export class ModalsGridProjectPropertiesComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-
-        this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': [''],
-        });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.project != null ? this.modalModel.project.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.project && this.modalModel.project.name.length > 3 && this.modalModel.project.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'GridProject',  this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.project != null ? this.modalModel.project.description : '', [Validators.maxLength(255)]],
+            'tags': [this.modalModel.project != null ? this.modalModel.project.tags : []]
+        });
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
+
+        if (this.modalModel.project == null) {
+            // @ts-ignore
+            this.modalModel.project = {};
+        }
+
+        this.modalModel.project.name = this.form.controls['name'].value;
+        this.modalModel.project.description = this.form.controls['description'].value;
+        this.modalModel.project.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

@@ -76,17 +76,18 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.projectCreate({
-                    name: model.name,
-                    description: model.description,
-                    product_id: model.product
-                }) // TODO: add tarrif nebo produkt či jak se to bude jmenovat
+                    name: model.project.name,
+                    description: model.project.description,
+                    product_id: model.product_id,
+                    tags: model.project.tags
+                })
                     .then(project => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.project.name)));
                         this.unblockUI();
                         this.onProjectClick(project.id);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.name, reason.message)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.project.name, reason.message)));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -108,13 +109,14 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
             this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
         }
 
-        let model = new ModalsProjectPropertiesModel(this.products, project.name, project.description, project.product ? project.product.id : null, true, project.name);
+        let model = new ModalsProjectPropertiesModel(this.products, project);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.projectEdit(project.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.project.name,
+                    description: model.project.description,
+                    tags: model.project.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_update')));

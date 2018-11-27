@@ -7,7 +7,7 @@
 import { Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
-import { IWidget, IWidgetVersion, IProject }  from '../backend/TyrionAPI';
+import { IWidget, IWidgetVersion, IProject, ICProgramVersion } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import moment = require('moment/moment');
@@ -125,13 +125,13 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     }
 
     onWidgetEditClick(): void {
-        let model = new ModalsWidgetsWidgetPropertiesModel(this.widget.name, this.widget.description, true, this.widget.name);
+        let model = new ModalsWidgetsWidgetPropertiesModel(this.projectId, this.widget);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.widgetEdit(this.widget.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.widget.name,
+                    description: model.widget.description,
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
@@ -189,20 +189,21 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     }
 
     onEditVersionClick(version: IWidgetVersion): void {
-        let model = new ModalsVersionDialogModel(version.name, version.description, true);
+        let model = new ModalsVersionDialogModel(this.widget.id,  'WidgetVersion', version);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.widgetVersionEdit(version.id, { // TODO [permission]: version.update_permission
-                    name: model.name,
-                    description: model.description
+                this.tyrionBackendService.widgetVersionEdit(version.id, {
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_changed_success', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_changed_success', model.object.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_changed_success', model.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_changed_success', model.object.name, reason)));
                         this.refresh();
                     });
             }
@@ -485,16 +486,17 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     }
 
     onSaveClick(): void {
-        let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-        this.modalService.showModal(m).then((success) => {
+        let model = new ModalsVersionDialogModel(this.widget.id, 'WidgetVersion');
+        this.modalService.showModal(model).then((success) => {
             if (success) {
 
                 let designJson = JSON.stringify({});
 
                 this.blockUI();
                 this.tyrionBackendService.widgetVersionCreate(this.widgetId, { // TODO [permission]: GridWidgetVersion_create_permission" : "create: If user have GridWidget.update_permission = true,
-                    name: m.name,
-                    description: m.description,
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags,
                     logic_json: this.widgetCode,
                     design_json: designJson
                 })
@@ -505,7 +507,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', m.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', model.object.name, reason)));
                         this.unblockUI();
                     });
             }
@@ -567,15 +569,16 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     }
 
     onMakeClone(): void {
-        let model = new ModalsWidgetsWidgetCopyModel(this.widget.name, this.widget.description, this.widget.tags);
+        let model = new ModalsWidgetsWidgetCopyModel(this.projectId, this.widget);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.widgetMakeClone({
                     widget_id: this.widget.id,
                     project_id: this.projectId,
-                    name: model.name,
-                    description: model.description
+                    name: model.widget.name,
+                    description: model.widget.description,
+                    tags: model.widget.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
