@@ -24,6 +24,7 @@ import { ProjectsProjectBlocksComponent } from '../views/projects-project-blocks
 import { ProjectsProjectWidgetsComponent } from '../views/projects-project-widgets';
 import { ProjectsProjectCodeCodeComponent } from '../views/projects-project-code-code';
 import { AdminHardwareComponent } from '../views/admin-hardware-type';
+import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
 
 // routes
 export const ADMIN_ROUTES: Routes = [
@@ -32,6 +33,7 @@ export const ADMIN_ROUTES: Routes = [
 
     // Admin HARDWARE
     { path: 'hardware', data: { breadName: 'Hardware' }, component: AdminHardwareComponent, canActivate: [AuthGuard] },
+    { path: 'hardware/:hardware', data: { breadName: ':last'}, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
     { path: 'hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     // { path: 'hardware/libraries/:libriary', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
@@ -80,7 +82,6 @@ export const ADMIN_ROUTES: Routes = [
         GarfieldGarfieldComponent,
         AdminFinancialTariffComponent,
         AdminFinancialComponent,
-
     ],
     exports: [ RouterModule ]
 })
