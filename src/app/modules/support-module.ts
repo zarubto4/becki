@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 import { AuthGuard } from '../services/AuthGuard';
-import { SupportComponent } from './support';
-import { ProducersProducerComponent } from './producers-producer';
+import { SupportComponent } from '../views/support';
+import { ProducersProducerComponent } from '../views/producers-producer';
 
 // routes
 export const SUPPORT_ROUTES: Routes = [
 
-    { path: '', data: { breadName: 'Producers' }, component: SupportComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
+    { path: '', component: SupportComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
     { path: ':ticket', data: { breadName: ':ticket' }, component: ProducersProducerComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
 ];
 

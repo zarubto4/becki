@@ -2,22 +2,25 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '../../shared';
+import { SharedModule } from './shared';
 
 import { AuthGuard } from '../services/AuthGuard';
-import { FinancialComponent } from './financial';
-import { ProductRegistrationComponent } from './financial-product-registration';
-import { FinancialProductComponent } from './financial-product';
-import { FinancialProductExtensionsComponent } from './financial-product-extensions';
-import { FinancialProductEmployeesComponent } from './financial-product-employees';
-import { FinancialProductInvoicesComponent } from './financial-product-invoices';
-import { FinancialProductInvoicesInvoiceComponent } from './financial-product-invoices-invoice';
-import { FinancialProductBillingComponent } from './financial-product-billing';
+import { FinancialComponent } from '../views/financial';
+import { ProductRegistrationComponent } from '../views/financial-product-registration';
+import { FinancialProductComponent } from '../views/financial-product';
+import { FinancialProductExtensionsComponent } from '../views/financial-product-extensions';
+import { FinancialProductEmployeesComponent } from '../views/financial-product-employees';
+import { FinancialProductInvoicesComponent } from '../views/financial-product-invoices';
+import { FinancialProductInvoicesInvoiceComponent } from '../views/financial-product-invoices-invoice';
+import { FinancialProductBillingComponent } from '../views/financial-product-billing';
+import { PricePipe } from '../pipes/PricePipe';
+import { ContactTableComponent } from '../components/ContactTableComponent';
+import { PaymentDetailsTableComponent } from '../components/PaymentDetailsTableComponent';
 
 // routes
 export const FINANCIAL_ROUTES: Routes = [
 
-    { path: '', data: { breadName: 'Financial' }, component: FinancialComponent, canActivate: [AuthGuard] },
+    { path: '', component: FinancialComponent, canActivate: [AuthGuard] },
 
     { path: 'product-registration', data: { breadName: 'Product subscription' }, component: ProductRegistrationComponent, canActivate: [AuthGuard] },
 
@@ -38,7 +41,10 @@ export const FINANCIAL_ROUTES: Routes = [
         RouterModule.forChild(FINANCIAL_ROUTES)
     ],
     declarations: [
+        PricePipe,
         FinancialComponent,
+        ContactTableComponent,
+        PaymentDetailsTableComponent,
         ProductRegistrationComponent,
         FinancialProductComponent,
         FinancialProductExtensionsComponent,
