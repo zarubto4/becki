@@ -93,11 +93,12 @@
 
 <body>
     <bk-app>
-        <div class="byzance-page-center">
-            <div class="byzance-logo-spinner-white"></div>
-        </div>
+        <div class="logo-wrapper">
+            <div class="byzance-page-center">
+                <div class="byzance-logo-spinner-white"></div>
+            </div>
+        <div>
     </bk-app>
-
     <noscript>Failed! Scripting has to be enabled.</noscript>
 
     <% for (key in htmlWebpackPlugin.files.js) { %> <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>"></script> <% } %>
