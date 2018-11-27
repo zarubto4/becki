@@ -82,10 +82,10 @@ export class ModalsSnapShotDeployComponent implements OnInit {
 
         (<FormControl>(this.form.controls['selected_snapshot'])).setValue('');
 
-        this.options = this.modalModel.snapshots.map((pv: IInstanceSnapshot) => {
+        this.options = this.modalModel.snapshots.map((pv: IShortReference) => {
             return {
                 label: pv.name + ' - ' + pv.description,
-                value: pv.id,
+                value: pv.id
             };
         });
     }

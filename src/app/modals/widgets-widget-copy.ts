@@ -42,18 +42,16 @@ export class ModalsWidgetsWidgetCopyComponent implements OnInit {
         this.form = this.formBuilder.group({
             'name': [this.modalModel.widget != null ? this.modalModel.widget.name : '',
                 [
-                    [
-                        Validators.required,
-                        Validators.minLength(4),
-                        Validators.maxLength(32)
-                    ],
-                    BeckiAsyncValidators.condition(
-                        (value) => {
-                            return !(this.modalModel && this.modalModel.widget && this.modalModel.widget.name.length > 3 && this.modalModel.widget.name === value);
-                        },
-                        BeckiAsyncValidators.nameTaken(this.backendService, 'Widget', this.modalModel.project_id)
-                    )
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
                 ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.widget && this.modalModel.widget.name.length > 3 && this.modalModel.widget.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Widget', this.modalModel.project_id)
+                )
             ],
             'description': [this.modalModel.widget != null ? this.modalModel.widget.description : '', [Validators.maxLength(255)]],
             'tags': [this.modalModel.widget != null ? this.modalModel.widget.tags : []],

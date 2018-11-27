@@ -1,4 +1,4 @@
-<div *ngIf="modalModel && form">
+<div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
         <h4 *ngIf="modalModel.snapshot"  class="modal-title" [innerHTML]="('title_edit')|bkTranslate:this"></h4>
@@ -6,11 +6,11 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name" [label]="'label_snapshot_name'|bkTranslate:this"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" [label]="'label_snapshot_description'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['name']" [label]="'label_snapshot_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['description']" [label]="'label_snapshot_description'|bkTranslate:this"></bk-form-input>
 
             <!-- Tags -->
-            <bk-form-tag-input [control]="form.controls.tags" [label]="'Optional Tags'"></bk-form-tag-input>
+            <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
         </form>
     </div>
     <div class="modal-footer">
