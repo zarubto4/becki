@@ -208,7 +208,7 @@ export abstract class _BaseMainComponent {
     }
 
     public onDeviceClick_Admin(device_id: string): void {
-        this.navigate(['/device', device_id]);
+        this.navigate(['/admin/hardware/', device_id]);
     }
 
     public onInstanceClick(instance_id: string) {

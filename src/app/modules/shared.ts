@@ -168,7 +168,7 @@ import { ProjectsProjectWidgetsWidgetComponent } from '../views/projects-project
 import { ProjectsProjectBlocksComponent } from '../views/projects-project-blocks';
 import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-blocks-block';
 import { ModalsDatabaseEditComponent } from '../modals/database-edit';
-import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collection-new';
+import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
 
 @NgModule({
     imports: [
@@ -273,7 +273,7 @@ import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collect
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
-
+        ProjectsProjectHardwareHardwareComponent,
         // Modals
         ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
@@ -356,7 +356,6 @@ import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collect
         ModalsDatabaseNewComponent,
         ModalsDatabaseEditComponent,
         ModalsDatabaseRemoveComponent,
-        ModalsDatabaseCollectionNewComponent,
         ModalsFinancialProductComponent,
         ModalComponent
     ],
@@ -451,7 +450,8 @@ import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collect
         ProjectsProjectWidgetsComponent,
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
-        ProjectsProjectBlocksBlockComponent
+        ProjectsProjectBlocksBlockComponent,
+        ProjectsProjectHardwareHardwareComponent
     ]
 })
 export class SharedModule {}
