@@ -116,9 +116,10 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                     name: model.name,
                     description: model.description
                 })
-                    .then(() => {
+                    .then(widget => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_add_success')));
-                        this.onShowProgramPrivateWidgetFilter();
+                        this.unblockUI();
+                        this.onWidgetClick(widget.id);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_add_fail'), reason));

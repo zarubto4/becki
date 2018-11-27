@@ -174,8 +174,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                             this.fmInfo(this.translate('flash_garfield_connected'));
                         }
                     })
-                    .catch(reason => {
-                        this.fmError(this.translate('flash_garfield_disconnected'), reason);
+                    .catch((reason) => {
                         console.error('connectGarfieldWebSocket:', reason);
                     });
 
@@ -194,7 +193,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         throw new Error('Unsubscribe failed');
                     }
                 })
-                .catch(reason => {
+                .catch((reason) => {
                     console.error('ngOnDestroy:', reason);
                 })
                 .then(() => {
@@ -216,10 +215,10 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 this.bootLoader = garfield.hardware_type.main_boot_loader;
 
 
-                this.batchOptions = this.hardwareType.batchs.map((pv) => {
+                this.batchOptions = this.hardwareType.batches.map((pv) => {
                     return {
                         label: pv.revision + ' ' + pv.production_batch + ' (' + pv.date_of_assembly + ')',
-                        value: pv.batch_id
+                        value: pv.id
                     };
                 });
 
@@ -391,7 +390,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.garfieldEdit(this.garfieldId, {
+                this.tyrionBackendService.andEditSaveGarfield(this.garfieldId, {
                     description: model.description,
                     name: model.name,
                     print_label_id_1: model.print_label_id_1,
@@ -469,8 +468,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         throw new Error('Keep alive unsuccessful');
                     }
                 })
-                .catch(reason => {
-                    this.fmError(this.translate('flash_fail'), reason);
+                .catch((reason) => {
                     console.error('setDetection:', reason);
                 });
 

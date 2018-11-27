@@ -3,7 +3,84 @@
     [title]="'main_title'|bkTranslate:this" xmlns="http://www.w3.org/1999/html">
 
 
-    <div *ngIf="step===1" >
+
+    <div *ngIf="true" class="row">
+        <div class="col-md-12">
+            <div class="portlet light portlet-fit">
+                <div class="portlet-body">
+
+                    <div class="mt-element-step">
+
+                        <div class="row step-line">
+                            <div class="col-md-3 mt-step-col first" [class.done]="step != 'tariff' && selectedTariff != null"
+                                 [class.active]="step == 'tariff'" (click)="stepClick('tariff')"
+                                 [class.can-activate]="canActivateStep('tariff')">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-bars"></i>
+                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">
+                                    {{'nav_step_tariff_title'|bkTranslate:this}}
+                                </div>
+                                <div class="mt-step-content font-grey-cascade">
+                                    {{'nav_step_tariff_text'|bkTranslate:this}}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mt-step-col" [class.done]="step != 'extensions' && selectedTariff != null"
+                                 [class.active]="step == 'extensions'" (click)="stepClick('extensions')"
+                                 [class.can-activate]="canActivateStep('extensions')">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-archive"></i>
+                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">
+                                    {{'nav_step_extensions_title'|bkTranslate:this}}
+                                </div>
+                                <div class="mt-step-content font-grey-cascade">
+                                    {{'nav_step_extensions_text'|bkTranslate:this}}
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-3 mt-step-col" [class.done]="step != 'customer' && selectedCustomer != null || contactCustomerValid"
+                                 [class.active]="step == 'customer'" (click)="stepClick('customer')"
+                                 [class.can-activate]="canActivateStep('customer')">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-archive"></i>
+                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">
+                                    {{'nav_step_customer_title'|bkTranslate:this}}
+                                </div>
+                                <div class="mt-step-content font-grey-cascade">
+                                    {{'nav_step_customer_text'|bkTranslate:this}}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mt-step-col last" [class.done]="false"
+                                 [class.active]="step == 'confirmation'" (click)="stepClick('confirmation')"
+                                 [class.can-activate]="canActivateStep('confirmation')">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-flag-checkered"></i>
+                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">
+                                    {{'nav_step_summary_title'|bkTranslate:this}}
+                                </div>
+                                <div class="mt-step-content font-grey-cascade">
+                                    {{'nav_step_summary_text'|bkTranslate:this}}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 'registration_type' integrator not yet implemented, selection is not necessary -->
+    <div *ngIf="false" >
 
         <h2 class="text-center" style="margin-top: 50px; margin-bottom: 30px;">Please Select what you will be</h2>
 
@@ -47,158 +124,8 @@
 
     </div>
 
-    <div *ngIf="step===2">
-            <div class="portlet light portlet-fit bordered">
-                <div class="portlet-body row" style="margin-top: 20px; margin-bottom: 20px">
 
-                    <div class="col-md-3"></div>
-
-                    <div class="col-md-6 text-center">
-
-                        <h3>{{'label_companies'|bkTranslate:this}}</h3>
-                        <bk-form-select (change)="setCompanyOwner()" [control]="formCustomer.controls['company']" [labelComment]="false" [label]="'label_select_company'|bkTranslate:this"
-                                        [options]="optionsCompanies"></bk-form-select>
-
-                        <button *ngIf="selectedCompanies" type="button" class="btn blue btn-lg" (click)="stepClick(4)">
-                            {{'btn_continue'|bkTranslate:this}}
-                        </button>
-
-                        <div class="text-center" style="margin-top: 70px;">
-                            <p>{{'label_create_new_company'|bkTranslate:this}} </p>
-                            <button type="button" class="btn green btn-lg" (click)="stepClick(1)">
-                                {{'btn_create_new_company'|bkTranslate:this}}
-                            </button>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-3"></div>
-                </div>
-            </div>
-    </div>
-
-    <div *ngIf="step===3">
-        <div class="portlet light portlet-fit bordered">
-            <div class="portlet-body row" style="margin-top: 20px; margin-bottom: 20px">
-
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <div>
-                        <h3 class="text-center">Crate own Company Profile First</h3>
-                        <p class="text-center">You will be automatically first owner with highers permissions</p>
-
-                        <form *ngIf="formCustomer" [formGroup]="formCustomer">
-
-                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_name']" [control]="formCustomerRegistration.controls['company_name']" [label]="'label_company_name'|bkTranslate:this"></bk-form-input>
-
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <bk-form-input [control]="formCustomerRegistration.controls['street']" [label]="'label_street'|bkTranslate:this"></bk-form-input>
-                                </div>
-                                <div class="col-md-4">
-                                    <bk-form-input [control]="formCustomerRegistration.controls['street_number']" [label]="'label_street_number'|bkTranslate:this"></bk-form-input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <bk-form-input [control]="formCustomerRegistration.controls['city']" [label]="'label_city'|bkTranslate:this"></bk-form-input>
-                                </div>
-                                <div class="col-md-3">
-                                    <bk-form-input [control]="formCustomerRegistration.controls['zip_code']" [label]="'label_zip_code'|bkTranslate:this"></bk-form-input>
-                                </div>
-                            </div>
-
-
-                            <bk-form-select (change)="checkCustomerInEu()" [control]="formCustomerRegistration.controls['country']" [label]="'label_country'|bkTranslate:this" [options]="optionsCountryList"></bk-form-select>
-
-                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_registration_no'] && !inEu" [control]="formCustomerRegistration.controls['company_registration_no']" [label]="'label_registration_number'|bkTranslate:this"></bk-form-input>
-                            <bk-form-input *ngIf="formCustomerRegistration.controls['company_vat_number'] && inEu" [control]="formCustomerRegistration.controls['company_vat_number']" [label]="'label_vat_number'|bkTranslate:this"></bk-form-input>
-
-                            <hr>
-                            <bk-form-input [control]="formCustomerRegistration.controls['company_web']" type="url" [label]="'label_company_web'|bkTranslate:this"></bk-form-input>
-
-                            <hr>
-                            <bk-form-input [control]="formCustomerRegistration.controls['invoice_email']" [label]="'label_invoice_email'|bkTranslate:this"></bk-form-input>
-                            <bk-form-input [control]="formCustomerRegistration.controls['company_authorized_email']" type="email" [label]="'label_company_email'|bkTranslate:this"></bk-form-input>
-                            <bk-form-input [control]="formCustomerRegistration.controls['company_authorized_phone']" type="tel" [label]="'label_company_phone'|bkTranslate:this"></bk-form-input>
-
-                        </form>
-                    </div>
-                    <div class="row margin-bottom-15 margin-top-15">
-                        <div class="col-md-12 text-center">
-                            <div class="btn-group btn-group-solid">
-
-
-                                <button *ngIf="companies && companies.length > 0" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(2)">
-                                    {{'btn_back'|bkTranslate:this}}
-                                </button>
-                                <button *ngIf="companies && companies.length == 0" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(1)">
-                                    {{'btn_back'|bkTranslate:this}}
-                                </button>
-                                <button type="button" [disabled]="!formCustomerRegistration.valid"  class="btn blue btn-lg" (click)="onCreateCompany()">
-                                    {{'btn_create'|bkTranslate:this}}
-                                </button>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3"></div>
-
-            </div>
-        </div>
-    </div>
-
-    <div *ngIf="step > 3" class="row">
-        <div class="col-md-12">
-            <div class="portlet light portlet-fit">
-                <div class="portlet-body">
-
-                    <div class="mt-element-step">
-
-                        <div class="row step-line">
-                            <div class="col-md-{{totalStep==4?3:4}} mt-step-col first" [class.done]="step > 4" [class.active]="step == 3" (click)="stepClick(4)" [class.can-activate]="canActivateStep(2)">
-                                <div class="mt-step-number bg-white font-grey">
-                                    <i class="fa fa-bars"></i>
-                                </div>
-                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_one_title'|bkTranslate:this}}</div>
-                                <div class="mt-step-content font-grey-cascade">{{'nav_step_one_text'|bkTranslate:this}}</div>
-                            </div>
-                            <div class="col-md-{{totalStep==4?3:4}} mt-step-col" [class.done]="step > 5" [class.active]="step == 5" (click)="stepClick(5)" [class.can-activate]="canActivateStep(3)">
-                                <div class="mt-step-number bg-white font-grey">
-                                    <i class="fa fa-archive"></i>
-                                </div>
-                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_two_title'|bkTranslate:this}}</div>
-                                <div class="mt-step-content font-grey-cascade">{{'nav_step_two_text'|bkTranslate:this}}</div>
-                            </div>
-
-                            <div *ngIf="(totalStep == 4)"
-                                 class="col-md-{{totalStep==4?3:4}} mt-step-col" [class.done]="step > 6" [class.active]="step == 6" (click)="stepClick(6)" [class.can-activate]="canActivateStep(4)">
-                                <div class="mt-step-number bg-white font-grey">
-                                    <i class="fa fa-pencil-square-o"></i>
-                                </div>
-                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_three_title'|bkTranslate:this}}</div>
-                                <div class="mt-step-content font-grey-cascade">{{'nav_step_three_text'|bkTranslate:this}}</div>
-                            </div>
-
-                            <div class="col-md-{{totalStep==4?3:4}} mt-step-col last" [class.done]="step > 6" [class.active]="step == 7" (click)="stepClick(7)" [class.can-activate]="canActivateStep(5)">
-                                <div class="mt-step-number bg-white font-grey">
-                                    <i class="fa fa-flag-checkered"></i>
-                                </div>
-                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_four_title'|bkTranslate:this}}</div>
-                                <div class="mt-step-content font-grey-cascade">{{'nav_step_four_text'|bkTranslate:this}}</div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div *ngIf="step===4">
+    <div *ngIf="step==='tariff'">
 
         <div class="pricing-content-1">
             <div class="row">
@@ -210,12 +137,16 @@
                         <div class="arrow-down border-top-{{tariff.color|lowercase}}"></div>
 
                         <div class="price-table-pricing">
-                            <h3 style="line-height: 50px;" [style.font-size]="makePrice(tariff.price).length>=7?'40px':'50px'">{{makePrice(tariff.price)}}</h3>
+                            <h3 style="line-height: 50px;"
+                                [style.font-size]="(tariff.price|bkPrice:true).length>=7?'40px':'50px'">
+                                {{tariff.price|bkPrice:true}}</h3>
                             <p class="font-grey-salt">{{'average_monthly_cost'|bkTranslate:this}}</p>
-                            <div *ngIf="tariff == selectedTariff" class="price-ribbon">{{'ribbon_selected'|bkTranslate:this}}</div>
+                            <div *ngIf="tariff == selectedTariff" class="price-ribbon">
+                                {{'ribbon_selected'|bkTranslate:this}}
+                            </div>
                         </div>
                         <div class="price-table-content">
-                            <div *ngFor="let label of tariff.labels"  class="row mobile-padding">
+                            <div *ngFor="let label of tariff.labels" class="row mobile-padding">
                                 <div class="col-xs-3 text-right mobile-padding">
                                     <i *ngIf="label.icon.indexOf('fa') !== -1" class="fa {{label.icon}}"></i>
                                     <i *ngIf="label.icon.indexOf('icon') !== -1" class="{{label.icon}}"></i>
@@ -225,7 +156,8 @@
                         </div>
                         <div class="arrow-down arrow-grey"></div>
                         <div class="price-table-footer">
-                            <button type="button" (click)="chooseTariff(tariff)" class="btn uppercase price-button {{tariff.color|lowercase}}">
+                            <button type="button" (click)="chooseTariff(tariff)"
+                                    class="btn uppercase price-button {{tariff.color|lowercase}}">
                                 {{'btn_select'|bkTranslate:this}}
                             </button>
                         </div>
@@ -233,32 +165,14 @@
                 </div>
             </div>
         </div>
-        <div class="row margin-bottom-15 margin-top-15">
-            <div class="col-md-12 text-center">
-                <div class="btn-group btn-group-solid">
 
-                    <button *ngIf="companies && companies.length > 0" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(2)">
-                        {{'btn_back'|bkTranslate:this}}
-                    </button>
-                    <button *ngIf="!companies || companies.length == 0" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(1)">
-                        {{'btn_back'|bkTranslate:this}}
-                    </button>
-
-                    <button *ngIf="selectedTariff" type="button" class="btn blue btn-lg" (click)="stepClick(5)">
-                        {{'btn_continue'|bkTranslate:this}}
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div *ngIf="step===4" class="row">
-        <div class="col-md-12">
-            <div class="portlet light portlet-fit ">
-                <div class="portlet-body">
-                    <div class="caption-desc font-grey-cascade">
-                        <span [innerHTML]="'financial_monologue'|bkTranslate:this"></span>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light portlet-fit ">
+                    <div class="portlet-body">
+                        <div class="caption-desc font-grey-cascade">
+                            <span [innerHTML]="'financial_monologue'|bkTranslate:this"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -266,27 +180,30 @@
     </div>
 
 
-    <div *ngIf="step===5">
+
+    <div *ngIf="step==='extensions'">
 
         <div class="portlet light portlet-fit bordered">
 
             <div class="portlet-title">
                 <div class="becki-caption">
-                    <span class="font-blue-dark uppercase">
-                        <i class="fa fa-fw fa-archive"></i>
-                        {{'step_two_title'|bkTranslate:this}}
-                    </span>
+    <span class="font-blue-dark uppercase">
+    <i class="fa fa-fw fa-archive"></i>
+    {{'step_extensions_title'|bkTranslate:this}}
+    </span>
                 </div>
             </div>
 
             <div class="portlet-title tabbable-line ">
                 <ul class="nav nav-tabs nav-justified">
                     <li [class.active]="extensionTab == 'recommended_extensions'">
-                        <a class="cursor-pointer" (click)="onExtensionToggleTab('recommended_extensions')"><i class="fa fa-usd"></i> {{'tab_extensions_recommended'|bkTranslate:this}}</a>
+                        <a class="cursor-pointer" (click)="onExtensionToggleTab('recommended_extensions')"><i
+                            class="fa fa-usd"></i> {{'tab_extensions_recommended'|bkTranslate:this}}</a>
                     </li>
 
                     <li [class.active]="extensionTab == 'included_extensions'">
-                        <a class="cursor-pointer" (click)="onExtensionToggleTab('included_extensions')"><i class="fa fa-archive"></i> {{'tab_extensions_include'|bkTranslate:this}}</a>
+                        <a class="cursor-pointer" (click)="onExtensionToggleTab('included_extensions')"><i
+                            class="fa fa-archive"></i> {{'tab_extensions_include'|bkTranslate:this}}</a>
                     </li>
                 </ul>
             </div>
@@ -296,34 +213,46 @@
                     <div class="pricing-content-1">
                         <div class="row">
 
-                            <div *ngFor="let extension of selectedTariff.extensions_recommended" class="col-md-3 margin-bottom-15">
+                            <div *ngFor="let extension of selectedTariff.extensions_recommended"
+                                 class="col-md-3 margin-bottom-15">
                                 <div class="price-column-container border-active package">
                                     <div class="price-table-head bg-{{extension.color|lowercase}}">
                                         <h4 class="no-margin">{{extension.name}}</h4>
                                     </div>
                                     <div class="arrow-down border-top-{{extension.color|lowercase}}"></div>
                                     <div class="price-table-pricing">
-                                        <h3 style="line-height: 50px;" [style.font-size]="makePrice(extension.price).length>=7?'40px':'50px'">{{makePrice(extension.price)}}</h3>
+                                        <h3 style="line-height: 50px;"
+                                            [style.font-size]="(extension.price|bkPrice:true).length>=7?'40px':'50px'">
+                                            {{extension.price|bkPrice:true}}</h3>
                                         <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
-                                        <div class="price-ribbon" *ngIf="selectedExtensions.indexOf(extension) > -1">{{'label_included'|bkTranslate:this}}</div>
+                                        <div class="price-ribbon" *ngIf="selectedExtensions.indexOf(extension) > -1">
+                                            {{'label_included'|bkTranslate:this}}
+                                        </div>
                                     </div>
                                     <div class="price-table-content">
                                         <p class="font-grey-salt">{{extension.description}}</p>
                                     </div>
                                     <div class="arrow-down arrow-grey"></div>
                                     <div class="price-table-footer">
-                                        <button type="button" *ngIf="selectedExtensions.indexOf(extension) == -1" class="btn blue uppercase price-button" (click)="addExtension(extension)">
+                                        <button type="button" *ngIf="selectedExtensions.indexOf(extension) == -1"
+                                                class="btn blue uppercase price-button"
+                                                (click)="addExtension(extension)">
                                             {{'btn_add'|bkTranslate:this}}
                                         </button>
-                                        <button type="button" *ngIf="selectedExtensions.indexOf(extension) > -1" class="btn red uppercase price-button" (click)="removeExtension(extension)">
+                                        <button type="button" *ngIf="selectedExtensions.indexOf(extension) > -1"
+                                                class="btn red uppercase price-button"
+                                                (click)="removeExtension(extension)">
                                             {{'btn_remove'|bkTranslate:this}}
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="selectedTariff && selectedTariff.extensions_recommended < 1" class="list-no-items">
-                                <p class="list-no-items__main-label">{{'label_no_recommended_extensions'|bkTranslate:this}}</p>
-                                <p class="list-no-items__sub-label">{{'label_no_recommended_extensions_comment'|bkTranslate:this}} </p>
+                            <div *ngIf="selectedTariff && selectedTariff.extensions_recommended < 1"
+                                 class="list-no-items">
+                                <p class="list-no-items__main-label">
+                                    {{'label_no_recommended_extensions'|bkTranslate:this}}</p>
+                                <p class="list-no-items__sub-label">
+                                    {{'label_no_recommended_extensions_comment'|bkTranslate:this}} </p>
                             </div>
                         </div>
                     </div>
@@ -334,14 +263,17 @@
                     <div class="pricing-content-1">
                         <div class="row">
 
-                            <div *ngFor="let package of selectedTariff.extensions_included" class="col-md-3 margin-bottom-15">
-                                <div [class.border-red-mint]="selectedExtensions.indexOf(package) > -1" class="price-column-container border-active package">
+                            <div *ngFor="let package of selectedTariff.extensions_included"
+                                 class="col-md-3 margin-bottom-15">
+                                <div [class.border-red-mint]="selectedExtensions.indexOf(package) > -1"
+                                     class="price-column-container border-active package">
                                     <div class="price-table-head bg-{{package.color|lowercase}}">
                                         <h4 class="no-margin">{{package.name}}</h4>
                                     </div>
                                     <div class="arrow-down border-top-{{package.color|lowercase}}"></div>
                                     <div class="price-table-pricing">
-                                        <h3 style="font-size: 50px; line-height: 50px;">{{'label_free'|bkTranslate:this}}</h3>
+                                        <h3 style="font-size: 50px; line-height: 50px;">
+                                            {{'label_free'|bkTranslate:this}}</h3>
                                         <p class="font-grey-salt">{{'average_monthly_cost'|bkTranslate:this}}</p>
                                         <div class="price-ribbon">{{'label_included'|bkTranslate:this}}</div>
                                     </div>
@@ -350,7 +282,8 @@
                                     </div>
                                     <div class="arrow-down arrow-grey"></div>
                                     <div class="price-table-footer">
-                                        <button type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
+                                        <button type="button" class="btn grey-salsa btn-outline uppercase price-button"
+                                                disabled="disabled">
                                             {{'btn_included'|bkTranslate:this}}
                                         </button>
                                     </div>
@@ -361,265 +294,93 @@
                 </div>
             </div>
 
-            <div class="row margin-bottom-15 margin-top-15">
-                <div class="col-md-12 text-center">
-                    <div class="btn-group btn-group-solid">
-                        <button type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(4)">
-                            {{'btn_back'|bkTranslate:this}}
-                        </button>
-
-                        <button *ngIf="totalStep==4" type="button" class="btn blue btn-lg" (click)="stepClick(6)">
-                            {{'btn_continue'|bkTranslate:this}}
-                        </button>
-                        <button *ngIf="totalStep==3" type="button" class="btn blue btn-lg" (click)="stepClick(7)">
-                            {{'btn_continue'|bkTranslate:this}}
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <bk-back-next-buttons [backId]="'tariff'"
+                                  [nextId]="'customer'"
+                                  [disableNext]="!canActivateStep('customer')"
+                                  (click)="stepClick($event)">
+            </bk-back-next-buttons>
         </div>
     </div>
 
-    <div *ngIf="step===6">
-        <form *ngIf="formPaymentDetail" [formGroup]="formPaymentDetail">
-            <div class="portlet light portlet-fit bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-pencil-square-o"></i>
-                            {{'step_three_title'|bkTranslate:this}}
-                        </span>
-                    </div>
-                </div>
-                <div class="row portlet-body">
 
 
-                    <div *ngIf="selectedCompanies" class="col-md-12">
+    <div *ngIf="step==='customer'">
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-body row" style="margin-top: 20px; margin-bottom: 20px">
+                <h3 class="text-center">{{'label_customer_information_title'|bkTranslate:this}}</h3>
+                <p class="text-center" *ngIf="registrationType==='integrator'">{{'label_customer_information_subtitle'|bkTranslate:this}}</p>
 
-                        <h4 class="text-center">{{'label_finance_model'|bkTranslate:this}}</h4>
-                        <p class="text-center">(private or Integrator mode)</p>
-                        <br>
-                        <div style="margin-left: 48%">
-                            <span *ngIf="registrationType === 'integrator'">
-                                <i style="font-size: 2.1em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="changeType('do_it_yourself')"></i>
-                                <span> {{'label_finance_model_integrator'|bkTranslate:this}}</span>
-                            </span>
-                            <span *ngIf="registrationType === 'do_it_yourself'">
-                                <i style="font-size: 2.1em;" class="fa fa-toggle-off font-grey-mint cursor-hand" (click)="changeType('integrator')"></i>
-                                 <span> {{'label_finance_model_do_it_yourself'|bkTranslate:this}}</span>
-                            </span>
-                        </div>
-                        <br>
-                        <br>
-                    </div>
+                <div class="col-md-1"></div>
 
-                    <div *ngIf="selectedCompanies" class="row col-md-12">
-                        <div class="col-md-6">
-                            <div class="portlet box red-flamingo">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        <i class="fa fa-fw fa-lg fa-info"></i>{{'step_three_product_info'|bkTranslate:this}}
-                                    </div>
-                                </div>
-                                <div class="portlet-body">
-                                    <bk-form-input [control]="formPaymentDetail.controls['product_individual_name']" [label]="'step_three_label_product_name'|bkTranslate:this"></bk-form-input>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row col-md-12">
+                <div class="col-md-4">
+                    <h3 class="text-center">{{'label_basic_setup'|bkTranslate:this}}</h3>
 
-                        <div class="col-md-6">
+                    <form [formGroup]="productInfoFormGroup">
+                        <bk-form-input [control]="productInfoFormGroup.controls['product_name']"
+                                       [label]="'label_product_name'|bkTranslate:this">
+                        </bk-form-input>
 
+                        <bk-form-select [control]="productInfoFormGroup.controls['customer_id']"
+                                        [label]="'<strong>'+('label_product_owner'|bkTranslate:this)+'</strong>'"
+                                        (change)="setOwner()"
+                                        [options]="optionsCustomers">
+                        </bk-form-select>
 
-                            <div *ngIf="!selectedCompanies"  class="portlet box red-flamingo">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        <i class="fa fa-fw fa-lg fa-info"></i>{{'step_three_product_info'|bkTranslate:this}}
-                                    </div>
-                                </div>
-                                <div class="portlet-body">
-                                    <bk-form-input [control]="formPaymentDetail.controls['product_individual_name']" [label]="'step_three_label_product_name'|bkTranslate:this"></bk-form-input>
-                                </div>
-                            </div>
+                    </form>
+                    <br />
 
-
-                            <div *ngIf="selectedCompanies && selectedCompanies.payment_details" class="portlet box blue-dark">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        <i class="fa fa-fw fa-lg fa-credit-card"></i>{{'step_three_my_company'|bkTranslate:this}}
-                                    </div>
-                                </div>
-                                <div class="portlet-body">
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_name']" [readonly]="true" [label]="'label_company_name'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['street']" [readonly]="true"  [label]="'label_street'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['street_number']" [readonly]="true" [label]="'label_street_number'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['city']" [readonly]="true" [label]="'label_city'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['zip_code']" [readonly]="true" [label]="'label_zip_code'|bkTranslate:this"></bk-form-input>
-
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['country']" [readonly]="true" [label]="'label_country'|bkTranslate:this"></bk-form-input>
-
-                                    <bk-form-input *ngIf="selectedCompanies.payment_details.company_registration_no" [control]="formCustomerSelectedCompany.controls['company_registration_no']" [readonly]="true" [label]="'label_registration_number'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input *ngIf="selectedCompanies.payment_details.company_vat_number" [control]="formCustomerSelectedCompany.controls['company_vat_number']" [readonly]="true" [label]="'label_vat_number'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_web']" type="url" [readonly]="true" [label]="'label_company_web'|bkTranslate:this"></bk-form-input>
-                                    <hr>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_authorized_email']" [readonly]="true" type="email" [label]="'label_company_email'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['company_authorized_phone']" [readonly]="true" type="tel" [label]="'label_company_phone'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formCustomerSelectedCompany.controls['invoice_email']" [readonly]="true" [label]="'label_invoice_email'|bkTranslate:this"></bk-form-input>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <div class="portlet box blue-dark">
-                                <div class="portlet-title">
-                                    <div class="caption" >
-                                        <span *ngIf="registrationType === 'do_it_yourself'"><i  class="fa fa-fw fa-lg fa-building"></i>{{'label_company_info'|bkTranslate:this}}</span>
-                                        <span *ngIf="registrationType === 'integrator'"><i  class="fa fa-fw fa-lg fa-building"></i>{{'label_customer_info'|bkTranslate:this}}</span>
-                                    </div>
-                                </div>
-                                <div class="portlet-body">
-
-                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_name']" [control]="formPaymentDetail.controls['company_name']" [label]="'label_company_name'|bkTranslate:this"></bk-form-input>
-
-                                    <bk-form-input [control]="formPaymentDetail.controls['street']" [label]="'label_street'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['street_number']" [label]="'label_street_number'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['city']" [label]="'label_city'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['zip_code']" [label]="'label_zip_code'|bkTranslate:this"></bk-form-input>
-
-                                    <bk-form-select (change)="checkInEu()" [control]="formPaymentDetail.controls['country']" [label]="'label_country'|bkTranslate:this" [options]="optionsCountryList"></bk-form-select>
-
-                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_registration_no'] && !inEu" [control]="formPaymentDetail.controls['company_registration_no']" [label]="'label_registration_number'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input *ngIf="formPaymentDetail.controls['company_vat_number'] && inEu" [control]="formPaymentDetail.controls['company_vat_number']" [label]="'label_vat_number'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['company_web']" type="url" [label]="'label_company_web'|bkTranslate:this"></bk-form-input>
-                                    <hr>
-                                    <bk-form-input [control]="formPaymentDetail.controls['company_authorized_email']" type="email" [label]="'label_company_email'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['company_authorized_phone']" type="tel" [label]="'label_company_phone'|bkTranslate:this"></bk-form-input>
-                                    <bk-form-input [control]="formPaymentDetail.controls['invoice_email']" type="email" [label]="'label_invoice_email'|bkTranslate:this"></bk-form-input>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <div class="btn-group btn-group-solid">
-                                <button type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(5)">
-                                    {{'btn_back'|bkTranslate:this}}
-                                </button>
-                                <button type="button" [disabled]="!formPaymentDetail.valid" class="btn blue btn-lg" (click)="stepClick(7)">
-                                    {{'btn_continue'|bkTranslate:this}}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="text-center" *ngIf="!noCustomer">{{'label_payment_details'|bkTranslate:this}}</h3>
+                    <bk-payment-details-form *ngIf="!noCustomer"
+                                             [paymentOptions]="paymentOptions"
+                                             [(paymentDetails)]="paymentDetailsData"
+                                             (valid)="paymentDetailsDataValid = $event">
+                    </bk-payment-details-form>
 
                 </div>
+
+                <div class="col-md-1"></div>
+
+                <div class="col-md-5">
+                    <h3 class="text-center" *ngIf="!noCustomer">{{'label_owner_details'|bkTranslate:this}}</h3>
+
+                        <bk-contact-form [contactData]="contact"
+                                         [allowTypeSelection]="true"
+                                         [disabled]="selectedCustomer || noCustomer"
+                                         *ngIf="!noCustomer"
+                                         (valid)="contactCustomerValid = $event">
+                        </bk-contact-form>
+                </div>
+
+                <div class="col-md-1"></div>
             </div>
-        </form>
 
+            <bk-back-next-buttons [backId]="'extensions'"
+                                  [nextId]="(this.registrationType === 'integrator') ? 'integratorClient' : 'confirmation'"
+                                  [disableNext]="!canActivateStep('confirmation')"
+                                  (click)="stepClick($event)">
+            </bk-back-next-buttons>
+
+        </div>
     </div>
 
-    <div *ngIf="step===7">
+
+
+
+
+    <div *ngIf="step==='confirmation'">
 
 
         <div class="portlet light portlet-fit bordered">
             <div class="portlet-title">
                 <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-flag-checkered"></i>
-                            {{'step_four_title'|bkTranslate:this}}
-                        </span>
+    <span class="font-blue-dark uppercase">
+    <i class="fa fa-fw fa-flag-checkered"></i>
+    {{'step_summary_title'|bkTranslate:this}}
+    </span>
                 </div>
             </div>
             <div class="row portlet-body">
 
-                <div class="col-md-6">
-
-                    <div class="portlet box blue-dark">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="fa fa-fw fa-lg fa-pencil-square-o"></i>{{'label_registration_info'|bkTranslate:this}}
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-
-
-                            <table class="table table-hover no-margin">
-                                <tbody>
-
-                                    <tr>
-                                        <td class="no-border-top" colspan="2">
-                                            <strong> {{'label_product_info'|bkTranslate:this}} </strong>
-                                            <span *ngIf="totalStep == 3" (click)="stepClick(6)"><a class="cursor-pointer" >(Optional - You can set it Later)</a></span>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td> {{'label_product_name'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["product_individual_name"].value}} </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td colspan="2"><strong> {{'label_billing_info'|bkTranslate:this}} </strong></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td> {{'label_invoice_email'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["invoice_email"].value}} </td>
-                                    </tr>
-                                    <tr *ngIf="formPaymentDetail.controls['payment_method']">
-                                        <td> {{'label_payment_method'|bkTranslate:this}}: </td><td> {{translatePaymentMethod(formPaymentDetail.controls["payment_method"].value)}} </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td colspan="2"><strong> {{'label_company_info'|bkTranslate:this}} </strong></td>
-                                    </tr>
-
-                                    <tr *ngIf="formPaymentDetail.controls['company_name']">
-                                        <td> {{'label_company_name'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["company_name"].value}} </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td> {{'label_street'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["street"].value}} </td>
-                                    </tr>
-                                    <tr>
-                                        <td> {{'label_street_number'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["street_number"].value}} </td>
-                                    </tr>
-                                    <tr>
-                                        <td> {{'label_city'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["city"].value}} </td>
-                                    </tr>
-                                    <tr>
-                                        <td> {{'label_zip_code'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["zip_code"].value}} </td>
-                                    </tr>
-                                    <tr>
-                                        <td> {{'label_country'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["country"].value}} </td>
-                                    </tr>
-
-                                    <tr *ngIf="formPaymentDetail.controls['company_registration_no'] && !inEu">
-                                        <td> {{'label_registration_number'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["company_registration_no"].value}} </td>
-                                    </tr>
-                                    <tr *ngIf="formPaymentDetail.controls['company_vat_number'] && inEu">
-                                        <td> {{'label_vat_number'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["company_vat_number"].value}} </td>
-                                    </tr>
-
-                                    <tr *ngIf="formPaymentDetail.controls['company_web']">
-                                        <td> {{'label_company_web'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["company_web"].value}} </td>
-                                    </tr>
-                                    <tr *ngIf="formPaymentDetail.controls['company_authorized_email']">
-                                        <td> {{'label_company_email'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["company_authorized_email"].value}} </td>
-                                    </tr>
-                                    <tr *ngIf="formPaymentDetail.controls['company_authorized_phone']">
-                                        <td> {{'label_company_phone'|bkTranslate:this}}: </td><td> {{formPaymentDetail.controls["company_authorized_phone"].value}} </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-
-                </div>
 
                 <div class="col-md-6">
 
@@ -630,41 +391,46 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-
-
                             <table class="table table-hover no-margin">
                                 <tbody>
+                                <tr>
+                                    <td> {{'label_product_name'|bkTranslate:this}}:</td>
+                                    <td> {{ productInfoFormGroup.controls['product_name'].value }} </td>
+                                </tr>
 
-                                    <tr>
-                                        <td class="no-border-top"><strong> {{'table_tarrif'|bkTranslate:this}} </strong></td>
-                                        <td class="no-border-top"><strong> {{'table_description'|bkTranslate:this}} </strong></td>
-                                        <td class="no-border-top text-center"><strong> {{'table_price'|bkTranslate:this}} </strong></td>
-                                    </tr>
+                                <tr>
+                                    <td class="no-border-top"><strong> {{'table_tarrif'|bkTranslate:this}} </strong>
+                                    </td>
+                                    <td class="no-border-top"><strong>
+                                        {{'table_description'|bkTranslate:this}} </strong></td>
+                                    <td class="no-border-top text-center"><strong>
+                                        {{'table_price'|bkTranslate:this}} </strong></td>
+                                </tr>
 
-                                    <tr>
-                                        <td> {{selectedTariff.name}} </td>
-                                        <td> {{selectedTariff.description}} </td>
-                                        <td class="text-center"> {{makePrice(selectedTariff.price)}} </td>
-                                    </tr>
+                                <tr>
+                                    <td> {{selectedTariff.name}}</td>
+                                    <td> {{selectedTariff.description}}</td>
+                                    <td class="text-center"> {{selectedTariff.price|bkPrice:true}}</td>
+                                </tr>
 
-                                    <tr *ngIf="selectedTariff.extensions_included.length || selectedExtensions.length">
-                                        <td colspan="3"><strong> {{'table_packages'|bkTranslate:this}} </strong></td>
-                                    </tr>
-                                    <tr *ngFor="let package of selectedTariff.extensions_included">
-                                        <td> {{package.name}} </td>
-                                        <td> {{package.description}} </td>
-                                        <td class="text-center"> {{'label_free'|bkTranslate:this}} </td>
-                                    </tr>
-                                    <tr *ngFor="let package of selectedExtensions">
-                                        <td> {{package.name}} </td>
-                                        <td> {{package.description}} </td>
-                                        <td class="text-center"> {{makePrice(package.price)}} </td>
-                                    </tr>
+                                <tr *ngIf="selectedTariff.extensions_included.length || selectedExtensions.length">
+                                    <td colspan="3"><strong> {{'table_packages'|bkTranslate:this}} </strong></td>
+                                </tr>
+                                <tr *ngFor="let package of selectedTariff.extensions_included">
+                                    <td> {{package.name}}</td>
+                                    <td> {{package.description}}</td>
+                                    <td class="text-center"> {{'label_free'|bkTranslate:this}}</td>
+                                </tr>
+                                <tr *ngFor="let package of selectedExtensions">
+                                    <td> {{package.name}}</td>
+                                    <td> {{package.description}}</td>
+                                    <td class="text-center"> {{package.price|bkPrice:true}}</td>
+                                </tr>
 
-                                    <tr>
-                                        <td colspan="2"><strong> {{'table_total'|bkTranslate:this}} </strong></td>
-                                        <td class="text-center"><strong> {{makePrice(getTotalPrice())}} </strong></td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="2"><strong> {{'table_total'|bkTranslate:this}} </strong></td>
+                                    <td class="text-center"><strong> {{getTotalPrice()|bkPrice:true}} </strong></td>
+                                </tr>
 
                                 </tbody>
                             </table>
@@ -674,28 +440,24 @@
 
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <div class="btn-group btn-group-solid">
+                <div class="col-md-6">
 
-                            <button *ngIf="totalStep==4" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(6)">
-                                {{'btn_back'|bkTranslate:this}}
-                            </button>
-                            <button *ngIf="totalStep==3" type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(5)">
-                                {{'btn_back'|bkTranslate:this}}
-                            </button>
+                    <bk-contact-table *ngIf="!noCustomer" [contact]="contact">
+                    </bk-contact-table>
 
-                            <button type="button" class="btn blue btn-lg" (click)="onConfirmClick()">
-                                {{'btn_confirm'|bkTranslate:this}}
-                            </button>
-                        </div>
-                    </div>
+                    <bk-payment-details-table *ngIf="!noCustomer" [paymentDetails]="paymentDetailsData">
+                    </bk-payment-details-table>
                 </div>
+
+
+                <bk-back-next-buttons (back)="stepClick((this.registrationType === 'integrator') ? 'integratorClient' : 'customer')"
+                                      [nextText]="'btn_confirm'|bkTranslate:this"
+                                      (next)="onConfirmClick()">
+                </bk-back-next-buttons>
 
             </div>
         </div>
-
-
     </div>
+
 
 </bk-layout-main>

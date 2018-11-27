@@ -168,7 +168,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                     name: model.name,
                     description: model.description
                 })
-                    .then(() => {
+                    .then((lbr: ILibrary) => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));
                         this.onShowPublicLibraryByFilter();
                     })

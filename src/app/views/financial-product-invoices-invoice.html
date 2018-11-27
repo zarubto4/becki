@@ -4,76 +4,154 @@
  */
  -->
 
-<bk-layout-main [tabMenu]="'tariffs-tariff'" [title]="product?product.name:null">
-    <div *ngIf="fullIvoice" class="tabbable-line tabbable-full-width">
-        <h3 class="title center-block"></h3>
-        <div class="portlet light bordered">
-            <div class="portlet-title tab able-line">
-                <div class="becki-caption">
-                    <span class="font-blue-dark uppercase">
-                    <i class="fa fa-fw fa-dollar"></i>
-                    {{'title'|bkTranslate:this:fullIvoice.invoice.invoice_number}}
-                </span>
-                </div>
-                <td class="no-wrap text-right actions">
-                    <button title="{{'label_download_as_pdf'|bkTranslate:this}}" class="btn btn-circle btn-icon-only btn-default">
-                        <i class=" fa  fa-file-pdf-o fa-2x"></i>
-                    </button>
-                    <button title="{{'label_send'|bkTranslate:this}}" class="btn btn-circle btn-icon-only btn-default">
-                        <i class=" fa fa-paper-plane-o fa-2x"></i>
-                    </button>
-                </td>
-            </div>
-            <div class="portlet-body">
-                <div class="tab-content">
-                    <div class="tab-pane active">
-                        <div class="row">
-                            <div class="col-sm-6"><b>{{'label_id_subscription'|bkTranslate:this}}:</b> {{fullIvoice.invoice.id}}</div>
-                            <div class="col-sm-6"><b>{{'label_payment_mode'|bkTranslate:this}}:</b> {{fullIvoice.invoice.payment_method}}</div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-sm-6"><b>{{'label_status'|bkTranslate:this}}:</b> {{fullIvoice.invoice.payment_status}}</div>
-                            <div class="col-sm-6"><b>{{'label_paid_in'|bkTranslate:this}}:</b> {{fullIvoice.invoice.created|bkUnixTimeToDate}}</div>
-                        </div>
-                        <br>
-                        <div>
-                            <div *ngIf="(fullIvoice.invoice_items && fullIvoice.invoice_items.length)" class="table-scrollable">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>{{'table_name'|bkTranslate:this}}</th>
-                                            <th>{{'table_guid'|bkTranslate:this}}</th>
-                                            <th>{{'table_billable_units'|bkTranslate:this}}</th>
-                                            <th>{{'table_unite'|bkTranslate:this}}</th>
-                                            <th>{{'table_total_cost'|bkTranslate:this}}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of fullIvoice.invoice_items">
-                                            <td>{{item.name}}</td>
-                                            <td>{{item.unit_name}}</td>
-                                            <td>{{item.quantity}}x</td>
-                                            <td>{{item.vat_rate}} $ </td>
-                                            <td>{{item.unit_price}} $</td>
+<bk-layout-main
+    [tabMenu]="'products-product'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
 
-                                        </tr>
+    <div class="portlet portlet light bordered">
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title *ngIf="fullInvoice"
+                          [title_name]="'title'|bkTranslate:this:(fullInvoice.invoice.invoice_number?fullInvoice.invoice.invoice_number:'')"
+                          [icon]="'fa-dollar'"
+                          (onClick)="onPortletClick($event)"
+                          [btns]="[
+                                {
+                                    condition: fullInvoice.invoice.to_confirm,
+                                    btn_label_for_person: ('label_confirm_invoice'|bkTranslate:this),
+                                    btn_tag: 'CONFIRM_INVOICE',
+                                    icon: 'fa-check',
+                                    colorType: 'EDIT',
+                                    permission: fullInvoice.invoice.update_permission
+                                },
+                                {
+                                    condition: !fullInvoice.invoice.paid && fullInvoice.invoice.invoice_number != null,
+                                    btn_label_for_person: ('label_synchronize_invoice'|bkTranslate:this),
+                                    btn_tag: 'SYNCHRONIZE_FAKTUROID',
+                                    icon: 'fa-sync',
+                                    colorType: 'UPDATE',
+                                    permission: fullInvoice.invoice.update_permission
+                                },
+                                {
+                                    condition: fullInvoice.invoice.invoice_number != null,
+                                    btn_label_for_person: ('label_fakturoid_invoice'|bkTranslate:this),
+                                    btn_tag: 'OPEN_FAKTUROID_INVOICE',
+                                    icon: 'fa-clipboard',
+                                    colorType: 'ACTIVE',
+                                    permission: fullInvoice.invoice.update_permission
+                                },
+                                {
+                                    condition: fullInvoice.invoice.invoice_pdf_link != null,
+                                    btn_label_for_person: ('label_download_pdf'|bkTranslate:this),
+                                    btn_tag: 'DOWNLOAD_INVOICE_PDF',
+                                    icon: 'fa-file-pdf-o',
+                                    colorType: 'CREATE',
+                                    permission: true
+                                },
+                                {
+                                    condition: fullInvoice.invoice.proforma_pdf_link != null,
+                                    btn_label_for_person: ('label_download_pro_forma_pdf'|bkTranslate:this),
+                                    btn_tag: 'DOWNLOAD_PROFORMA_PDF',
+                                    icon: 'fa-file-pdf-o',
+                                    colorType: 'CREATE',
+                                    permission: true
+                                },
+                                {
+                                    condition: fullInvoice.invoice.invoice_pdf_link != null || fullInvoice.invoice.proforma_pdf_link != null,
+                                    btn_label_for_person: ('label_send'|bkTranslate:this),
+                                    btn_tag: 'SEND_INVOICE',
+                                    icon: 'fa-envelope-o',
+                                    colorType: 'UPDATE',
+                                    permission: true
+                                }
+                        ]">
+        </bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
+        <!-- Page Content -- START -->
+        <div *ngIf="fullInvoice" class="portlet-body">
+            <div>
+                <div class="row" style="height: 30px;">
+                    <div class="col-md-2"><b>{{'label_id_subscription'|bkTranslate:this}}:</b></div>
+                    <div class="col-md-4">{{fullInvoice.invoice.id}}</div>
 
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><strong>{{'label_total'|bkTranslate:this}}</strong></td>
-                                            <td>{{getWholePrice()}} $</td>
-                                            <!--TODO tyrion na Invoices vrací celkovou cenu -->
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="col-md-2"><b>{{'label_id_period'|bkTranslate:this}}:</b></div>
+                    <div class="col-md-4">
+                        <a (click)="showEvents()" *ngIf="fullInvoice.invoice.update_permission">
+                            {{fullInvoice.invoice.from|bkUnixTimeToDate}} - {{fullInvoice.invoice.to|bkUnixTimeToDate}}
+                        </a>
+                        <span *ngIf="!fullInvoice.invoice.update_permission">
+                            {{fullInvoice.invoice.from|bkUnixTimeToDate}} - {{fullInvoice.invoice.to|bkUnixTimeToDate}}
+                        </span>
                     </div>
                 </div>
+
+                <div class="row" style="height: 30px;">
+                    <div class="col-md-2"><b>{{'label_payment_mode'|bkTranslate:this}}:</b></div>
+                    <div class="col-md-4">{{fullInvoice.invoice.method}}</div>
+
+                    <div class="col-md-2"><b>{{'label_id_issued'|bkTranslate:this}}:</b></div>
+                    <div class="col-md-4">{{fullInvoice.invoice.issued|bkUnixTimeToDate}}</div>
+                </div>
+
+                <div class="row" style="height: 30px;">
+                    <div class="col-md-2"><b>{{'label_status'|bkTranslate:this}}:</b></div>
+                    <div class="col-md-4">{{fullInvoice.invoice.payment_status}}</div>
+
+                    <div class="col-md-2"><b>{{'label_paid'|bkTranslate:this}}:</b></div>
+                    <div class="col-md-4">
+                        <span *ngIf="fullInvoice.invoice.paid">
+                            {{fullInvoice.invoice.paid|bkUnixTimeToDate}}
+                        </span>
+                        <span *ngIf="!fullInvoice.invoice.paid">
+                            -
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="(fullInvoice.invoice_items && fullInvoice.invoice_items.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable">
+                    <thead>
+                    <tr>
+                        <th>{{'table_quantity'|bkTranslate:this}}</th>
+                        <th>{{'table_unit'|bkTranslate:this}}</th>
+                        <th>{{'table_name'|bkTranslate:this}}</th>
+                        <th>{{'table_vat'|bkTranslate:this}}</th>
+                        <th>{{'table_unit_price'|bkTranslate:this}}</th>
+                        <th>{{'table_cost_without_vat'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of fullInvoice.invoice_items">
+                        <td>{{item.quantity | number:'1.0-3'}}</td>
+                        <td>{{item.unit_name}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{(item.vat_rate) | number:'1.0'}} %</td>
+                        <td>{{item.unit_price | bkPrice}}</td>
+                        <td>{{item.total_price_without_vat | bkPrice}}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>{{'label_total'|bkTranslate:this}}</strong></td>
+                        <td>{{fullInvoice.invoice.total_price_without_vat | bkPrice}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>{{'label_total_with_vat'|bkTranslate:this}}</strong></td>
+                        <td>{{fullInvoice.invoice.total_price_with_vat | bkPrice}}</td>
+                    </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>

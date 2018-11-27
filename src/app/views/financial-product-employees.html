@@ -4,7 +4,7 @@
  */
  -->
 <bk-layout-main
-    [tabMenu]="'tariffs-tariff'"
+    [tabMenu]="'products-product'"
     [title]="product?product.name:null"
     [subtitle]="product?product.description:null"
     [show_title]="true">
@@ -16,7 +16,7 @@
         (onClick)="onMembersAddClick()"
         [btns]="[
                 {
-                    condition: (product && product.customer.employees.length > 1),
+                    condition: (product && product.owner.employees.length > 1),
                     btn_label_for_person: ('btn_add_members'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-plus-circle',
@@ -30,8 +30,8 @@
     <div class="portlet-body">
 
         <!-- Page Content -- START -->
-        <div *ngIf="(product && product.customer && product.customer.employees.length > 1)" class="table-scrollable table-scrollable-borderless">
-            <table class="table table-hover table-light byzance-table">
+        <div *ngIf="(product && product.owner && product.owner.employees.length > 1)">
+            <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'label_email'|bkTranslate:this}}</th>
@@ -41,7 +41,7 @@
                 </tr>
                 </thead>
                 <tbody class="hide-bk-drob-down-button">
-                <tr *ngFor="let employee of product.customer.employees">
+                <tr *ngFor="let employee of product.owner.employees">
                     <td class="vert-align no-wrap">{{employee.person.email}}</td>
                     <td class="vert-align no-wrap">{{employee.person.first_name + ' ' + employee.person.last_name}}</td>
                     <td class="vert-align no-wrap">{{readableState(employee.state)}}</td>

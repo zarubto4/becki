@@ -69,9 +69,10 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                     name: model.name,
                     description: model.description
                 })
-                    .then(() => {
+                    .then(gridProgram => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_add')));
-                        this.refresh();
+                        this.unblockUI();
+                        this.onGridProgramClick(this.gridProject.id, gridProgram.id);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_program'), reason));

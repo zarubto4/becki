@@ -120,6 +120,12 @@ export class ModalsBlockSelectComponent implements OnInit {
             description: '',
             blockoName: 'webHook',
             backgroundColor: 'rgb(204, 255, 204)'
+        },
+        {
+            name: 'Database',
+            description: '',
+            blockoName: 'databaseBlock',
+            backgroundColor: 'rgb(204, 255, 204)'
         }
     ];
 

@@ -10,7 +10,7 @@ export class BeckiClickOutsideDirective implements OnInit, OnDestroy {
     private listening: boolean;
     private globalClick: any;
 
-    @Output('clickOutside') clickOutside: EventEmitter<Object>;
+    @Output() clickOutside: EventEmitter<Object>;
 
     constructor(private _elRef: ElementRef) {
         this.listening = false;

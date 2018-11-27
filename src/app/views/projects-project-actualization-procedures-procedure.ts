@@ -5,6 +5,8 @@ import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { IActualizationProcedureTaskList, IProject, IUpdateProcedure } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
+import { FormGroup } from '@angular/forms';
 @Component({
     selector: 'bk-view-projects-project-actualization-procedures-procedure',
     templateUrl: './projects-project-actualization-procedures-procedure.html',
@@ -23,8 +25,20 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
+    filterStatesValues = new FilterStatesValues();
+    filterTypesValues = new FilterTypesValues();
+
+    formFilterGroup: FormGroup;
+
+
     constructor(injector: Injector) {
         super(injector);
+
+        // Filter Helper
+        this.formFilterGroup = this.formBuilder.group({
+            'orderBy': ['DATE', []],
+            'order_schema': ['ASC', []],
+        });
     };
 
     ngOnInit(): void {
@@ -60,19 +74,51 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
     }
 
 
-    /* tslint:disable:max-line-length ter-indent */
-    onFilterActualizationProcedureTask(pageNumber: number = 0,
-                                       states: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE' , 'COMPLETE_WITH_ERROR' , 'CANCELED' , 'IN_PROGRESS' , 'NOT_START_YET'],
-                                       type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_RELEASE_MANAGER' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_RELEASE_MANAGER', 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' , 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
+
+    onFilterChange(filter: {key: string, value: boolean}) {
+        console.info('onFilterChange: Key', filter.key, 'value', filter.value);
+
+
+        if (this.filterStatesValues.hasOwnProperty(filter.key)) {
+            this.filterStatesValues[filter.key] = filter.value;
+        }
+
+        if (this.filterTypesValues.hasOwnProperty(filter.key)) {
+            this.filterTypesValues[filter.key] = filter.value;
+        }
+
+        this.onFilterActualizationProcedureTask();
+    }
+
+    onFilterActualizationProcedureTask(pageNumber: number = 0) {
         this.blockUI();
+
+        let state_list: string[] = [];
+        for (let k in this.filterStatesValues) {
+            if (this.filterStatesValues.hasOwnProperty(k)) {
+                if (this.filterStatesValues[k] === true) {
+                    state_list.push(k);
+                }
+            }
+        }
+
+
+        let type_list: string[] = [];
+        Object.keys(this.filterTypesValues).forEach((propKey) => {
+
+            if (this.filterTypesValues[propKey].value === true) {
+                type_list.push(propKey);
+            }
+        });
+
 
         this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
             actualization_procedure_ids: [this.actualization_procedure_id],
             hardware_ids: null,
             instance_ids: null,
-            update_status: states,
-            update_states: [],
-            type_of_updates: type_of_updates
+            update_status: null,
+            update_states: <any> state_list,
+            type_of_updates: <any>  type_list
         })
             .then((values) => {
                 this.actualizationTaskFilter = values;
@@ -101,7 +147,6 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
-    /* tslint:disable:max-line-length ter-indent*/
 
 
 

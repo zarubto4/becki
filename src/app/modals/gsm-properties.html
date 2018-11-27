@@ -27,7 +27,7 @@
                     <tr>
                         <td class="vert-align" [innerHTML]="'table_daily_threshold'|bkTranslate:this"></td>
                         <td class="vert-align">
-                            <bk-form-input [control]="form.controls.daily_traffic_threshold" [showLabel]="false"></bk-form-input>
+                            <bk-form-input [control]="form.controls['daily_traffic_threshold']" [showLabel]="false"></bk-form-input>
                         </td>
                         <td class="vert-align text-center">
                             <i [class.fa-toggle-on]="modalModel.gsm.daily_traffic_threshold_notify_type"
@@ -37,16 +37,16 @@
                                (click)="modalModel.gsm.daily_traffic_threshold_notify_type = !modalModel.gsm.daily_traffic_threshold_notify_type"></i>
                         </td>
                         <td class="vert-align text-center">
-                             <i [class.fa-toggle-on]="modalModel.gsm.daily_traffic_threshold_exceeded_limit"
-                               [class.fa-toggle-off]="!modalModel.gsm.daily_traffic_threshold_exceeded_limit"
+                             <i [class.fa-toggle-on]="modalModel.gsm.sim_tm_status.block_sim_daily"
+                               [class.fa-toggle-off]="!modalModel.gsm.sim_tm_status.block_sim_daily"
                                style="font-size: 1.8em;"
                                class="fa font-green-jungle cursor-hand"
-                               (click)="modalModel.gsm.daily_traffic_threshold_exceeded_limit = !modalModel.gsm.daily_traffic_threshold_exceeded_limit"></i>
+                               (click)="modalModel.gsm.sim_tm_status.block_sim_daily = !modalModel.gsm.sim_tm_status.block_sim_daily"></i>
                     </tr>
                     <tr>
                         <td class="vert-align" [innerHTML]="'table_monthly_threshold'|bkTranslate:this"></td>
                         <td class="vert-align">
-                            <bk-form-input [control]="form.controls.monthly_traffic_threshold" [showLabel]="false"></bk-form-input>
+                            <bk-form-input [control]="form.controls['monthly_traffic_threshold']" [showLabel]="false"></bk-form-input>
                         </td>
                         <td class="vert-align text-center">
                             <i [class.fa-toggle-on]="modalModel.gsm.monthly_traffic_threshold_notify_type"
@@ -56,17 +56,17 @@
                                (click)="modalModel.gsm.monthly_traffic_threshold_notify_type = !modalModel.gsm.monthly_traffic_threshold_notify_type"></i>
                         </td>
                         <td class="vert-align text-center">
-                            <i [class.fa-toggle-on]="modalModel.gsm.monthly_traffic_threshold_exceeded_limit"
-                               [class.fa-toggle-off]="!modalModel.gsm.monthly_traffic_threshold_exceeded_limit"
+                            <i [class.fa-toggle-on]="modalModel.gsm.sim_tm_status.block_sim_monthly"
+                               [class.fa-toggle-off]="!modalModel.gsm.sim_tm_status.block_sim_monthly"
                                style="font-size: 1.8em;"
                                class="fa font-green-jungle cursor-hand"
-                               (click)="modalModel.gsm.monthly_traffic_threshold_exceeded_limit = !modalModel.gsm.monthly_traffic_threshold_exceeded_limit"></i>
+                               (click)="modalModel.gsm.sim_tm_status.block_sim_monthly = !modalModel.gsm.sim_tm_status.block_sim_monthly"></i>
                         </td>
                     </tr>
                     <tr>
                         <td class="vert-align" [innerHTML]="'table_total_threshold'|bkTranslate:this"></td>
                         <td class="vert-align">
-                            <bk-form-input [control]="form.controls.total_traffic_threshold" [showLabel]="false"></bk-form-input>
+                            <bk-form-input [control]="form.controls['total_traffic_threshold']" [showLabel]="false"></bk-form-input>
                         </td>
                         <td class="vert-align text-center">
                             <i [class.fa-toggle-on]="modalModel.gsm.total_traffic_threshold_notify_type"
@@ -76,11 +76,11 @@
                                (click)="modalModel.gsm.total_traffic_threshold_notify_type = !modalModel.gsm.total_traffic_threshold_notify_type"></i>
                         </td>
                         <td class="vert-align text-center">
-                            <i [class.fa-toggle-on]="modalModel.gsm.total_traffic_threshold_exceeded_limit"
-                               [class.fa-toggle-off]="!modalModel.gsm.total_traffic_threshold_exceeded_limit"
+                            <i [class.fa-toggle-on]="modalModel.gsm.sim_tm_status.block_sim_total"
+                               [class.fa-toggle-off]="!modalModel.gsm.sim_tm_status.block_sim_total"
                                style="font-size: 1.8em;"
                                class="fa font-green-jungle cursor-hand"
-                               (click)="modalModel.gsm.total_traffic_threshold_exceeded_limit = !modalModel.gsm.total_traffic_threshold_exceeded_limit"></i>
+                               (click)="modalModel.gsm.sim_tm_status.block_sim_total = !modalModel.gsm.sim_tm_status.block_sim_total"></i>
                         </td>
                     </tr>
                 </tbody>

@@ -1,0 +1,66 @@
+<!-- /*
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
+ */
+ -->
+<bk-layout-main
+    [tabMenu]="'products-product'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
+
+    <div class="portlet portlet light bordered">
+
+        <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
+        <bk-portlet-title
+            [title_name]="'title'|bkTranslate:this"
+            [icon]="'fa-dollar'"
+            [btns]="[]">
+        </bk-portlet-title>
+        <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
+
+        <div class="portlet-body">
+            <!-- Page Content -- START -->
+            <div *ngIf="(productEvents && productEvents.length)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_date'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_type'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_reference'|bkTranslate:this}}</th>
+                        <th class="col col-lg-6">{{'table_details'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let event of productEvents">
+                        <td class="vert-align">{{ event.created|bkUnixTimeToDate }}</td>
+                        <td class="vert-align">{{ event.event_type_name }}</td>
+                        <td class="vert-align">
+                            <a (click)="onReferenceClicked(event)"
+                               *ngIf="event.reference && (event.reference_type === 'INVOICE' || event.reference_type === 'EXTENSION')">
+                                {{ event.reference_name }}
+                            </a>
+                            <span *ngIf="!event.reference || (event.reference_type !== 'INVOICE' && event.reference_type !== 'EXTENSION')">
+                                {{ event.reference_name ? event.reference_name : "-" }}
+                            </span>
+                        </td>
+                        <td class="vert-align">{{ event.details ? event.details : "-" }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Page Content -- END -->
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(productEvents == null)"
+                                [condition_empty]="(productEvents != null && productEvents.length == 0)"
+                                [main_message_link]="'no_product_event'|bkTranslate:this"
+                                [main_message_comment_link]="'no_product_event_comment'|bkTranslate:this"
+                                [show_button]="false">
+
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+        </div>
+    </div>
+</bk-layout-main>

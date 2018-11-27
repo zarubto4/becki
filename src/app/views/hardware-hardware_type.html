@@ -27,7 +27,7 @@
                               btn_tag: 'remove'
                           },
                           {
-                              condition: (tab == 'bootloaders' && hardwareType.bootloader_edit_permission),
+                              condition: (tab == 'bootloaders' && hardwareType.update_permission),
                               btn_label_for_person: ('label_bootloader_create_description'|bkTranslate:this),
                               icon: 'fa-plus',
                               colorType: 'ADD',
@@ -58,7 +58,7 @@
                         },
                         {
                             tab_name: 'admin_c_program',
-                            condition: (hardwareType.update_permission && (hardwareType.default_c_program_edit_permission || hardwareType.test_c_program_edit_permission)),
+                            condition: (hardwareType.update_permission && (hardwareType.update_permission || hardwareType.update_permission)),
                             tab_color: 'CODE',
                             tab_label: ('tab_admin_code'|bkTranslate:this)
                         },
@@ -125,9 +125,8 @@
 
         <div *ngIf="tab == 'bootloaders'">
             <!-- Only with permission -->
-            <div *ngIf="(hardwareType && hardwareType.boot_loaders && hardwareType.boot_loaders.length > 0)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(hardwareType && hardwareType.boot_loaders && hardwareType.boot_loaders.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col col-lg-1 center-align ">{{'table_id'|bkTranslate:this}}</th>
@@ -163,7 +162,7 @@
                                 [btns_group_name]="('label_type_of_board_properties'|bkTranslate:this)"
                                 [btns]="[
                                 {
-                                    condition: hardwareType.bootloader_edit_permission,
+                                    condition: hardwareType.update_permission,
                                     btn_label_for_person: ('label_type_of_board_properties'|bkTranslate:this),
                                     btn_tag: 'edit_bootloader',
                                     icon: 'fa-cog',
@@ -171,7 +170,7 @@
                                     permission: (bootloader.update_permission)
                                 },
                                 {
-                                    condition: hardwareType.bootloader_edit_permission && !bootloader.main_bootloader && bootloader.file_path,
+                                    condition: hardwareType.update_permission && !bootloader.main_bootloader && bootloader.file_path,
                                     btn_label_for_person: ('label_bootloader_set_as_main'|bkTranslate:this),
                                     btn_tag: 'set_as_main_bootloader',
                                     icon: 'fa-flag',
@@ -179,7 +178,7 @@
                                     permission: (bootloader.update_permission)
                                 },
                                 {
-                                    condition: hardwareType.bootloader_edit_permission && !bootloader.file_path,
+                                    condition: hardwareType.update_permission && !bootloader.file_path,
                                     btn_label_for_person: ('label_bootloader_upload_file'|bkTranslate:this),
                                     btn_tag: 'upload_file_bootloader',
                                     icon: 'fa-file-code-o',
@@ -187,7 +186,7 @@
                                     permission: (bootloader.update_permission)
                                 },
                                 {
-                                    condition: hardwareType.bootloader_edit_permission,
+                                    condition: hardwareType.update_permission,
                                     btn_label_for_person: ('label_bootloader_remove'|bkTranslate:this),
                                     btn_tag: 'remove_bootloader',
                                     icon: 'fa-trash',
@@ -228,7 +227,7 @@
 
         <div *ngIf="tab == 'admin_c_program'">
 
-            <div *ngIf="hardwareType && hardwareType.main_c_program && hardwareType.default_c_program_edit_permission"
+            <div *ngIf="hardwareType && hardwareType.main_c_program && hardwareType.update_permission"
                  class="portlet portlet light bordered">
 
                 <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
@@ -259,9 +258,8 @@
 
                 <div class="portlet-body">
 
-                    <div *ngIf="(hardwareType && hardwareType.main_c_program.program_versions.length)"
-                         class="table-scrollable table-scrollable-borderless">
-                        <table class="table table-condensed table-hover">
+                    <div *ngIf="(hardwareType && hardwareType.main_c_program.program_versions.length)">
+                        <table class="table table-condensed table-hover table-scrollable table-scrollable-borderless">
                             <thead>
                             <tr>
                                 <th class="">{{'table_name'|bkTranslate:this}}</th>
@@ -358,7 +356,7 @@
             </div>
 
             <!-- Only with permission Main Test C Program -->
-            <div *ngIf="hardwareType && hardwareType.main_test_c_program && hardwareType.test_c_program_edit_permission"
+            <div *ngIf="hardwareType && hardwareType.main_test_c_program && hardwareType.update_permission"
                  class="portlet portlet light bordered">
 
                 <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
@@ -390,9 +388,8 @@
 
                 <div class="portlet-body">
 
-                    <div *ngIf="(hardwareType && hardwareType.main_test_c_program.program_versions.length)"
-                         class="table-scrollable table-scrollable-borderless">
-                        <table class="table table-condensed table-hover">
+                    <div *ngIf="(hardwareType && hardwareType.main_test_c_program.program_versions.length)">
+                        <table class="table table-condensed table-hover table-scrollable table-scrollable-borderless">
                             <thead>
                             <tr>
                                 <th class="">{{'table_name'|bkTranslate:this}}</th>
@@ -493,9 +490,8 @@
 
             <!-- Only with permission Revision For Burning procedure -->
 
-            <div *ngIf="hardwareType && hardwareType.batchs && hardwareType.batchs.length > 0"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-light byzance-table">
+            <div *ngIf="hardwareType && hardwareType.batches && hardwareType.batches.length > 0">
+                <table class="table table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_revision'|bkTranslate:this}}</th>
@@ -508,7 +504,7 @@
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                    <tr *ngFor="let batch of hardwareType.batchs">
+                    <tr *ngFor="let batch of hardwareType.batches">
 
                         <!-- NAME -->
                         <td class="vert-align">
@@ -571,8 +567,8 @@
             </div>
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-            <bk-nothing-to-show [condition_loading]="(hardwareType.batchs == null)"
-                                [condition_empty]="(hardwareType.batchs != null && hardwareType.batchs.length == 0)"
+            <bk-nothing-to-show [condition_loading]="(hardwareType.batches == null)"
+                                [condition_empty]="(hardwareType.batches != null && hardwareType.batches.length == 0)"
                                 [main_message_link]="'label_no_batch'|bkTranslate:this"
                                 [main_message_comment_link]="'label_no_batch_comment'|bkTranslate:this"
                                 [btn_label]="'label_revision_create_description'|bkTranslate:this"

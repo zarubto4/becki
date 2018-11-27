@@ -5,8 +5,11 @@
  -->
 
 <bk-layout-main
-    [tabMenu]="'tariffs-tariff'"
-    [title]="product?product.name:null">
+    [tabMenu]="'products-product'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
+
     <div class="portlet portlet light bordered">
 
 
@@ -18,34 +21,27 @@
             [btns]="[
                                 {
                                     condition: (true),
-                                    label: ('label_financial_product_properties'|bkTranslate:this),
+                                    btn_label_for_person: ('label_financial_product_properties'|bkTranslate:this),
                                     icon: 'fa-cog',
                                     colorType: 'EDIT',
                                     btn_tag: 'edit_product',
-                                    permission: true
+                                    permission: product.update_permission
                                 },
                                 {
                                     condition: (product.active),
-                                    label: ('label_deactivate_product'|bkTranslate:this),
+                                    btn_label_for_person: ('label_deactivate_product'|bkTranslate:this),
                                     icon: 'fa-stop-circle',
                                     colorType: 'DEACTIVE',
                                     btn_tag: 'deactivate_product',
-                                    permission: true
+                                    permission: product.update_permission
                                 },
                                 {
                                     condition: (!product.active),
-                                    label: ('label_activate_product'|bkTranslate:this),
+                                    btn_label_for_person: ('label_activate_product'|bkTranslate:this),
                                     icon: 'fa-cloud-upload',
                                     colorType: 'ACTIVE',
                                     btn_tag: 'activate_product',
-                                    permission: true
-                                },
-                                {
-                                    condition: (product.method == 'CREDIT'),
-                                    label: ('btn_add_credit'|bkTranslate:this),
-                                    icon: 'fa-plus-circle',
-                                    btn_tag: 'add_credit',
-                                    permission: true
+                                    permission: product.update_permission
                                 }
                         ]">
         </bk-portlet-title>
@@ -66,8 +62,13 @@
                     <span class="font-grey-mint bold">{{product.created|bkUnixTimeToDate}}</span>
                 </div>
                 <div>
-                    {{'label_plan'|bkTranslate:this}}:
-                    <span class="font-grey-mint bold">{{product.method|bkStringReplacer}}</span>
+                    {{'label_payment_method'|bkTranslate:this}}:
+                    <span *ngIf="product.payment_details.payment_method" class="font-grey-mint bold">
+                        {{product.payment_details.payment_method|bkTranslateTable:this:'payment_method'}}
+                    </span>
+                    <span *ngIf="!product.payment_details.payment_method" class="font-red bold">
+                        {{'label_no_payment_method'|bkTranslate:this}}
+                    </span>
                 </div>
                 <div>
                     {{'label_status'|bkTranslate:this}}:
@@ -92,13 +93,13 @@
                 <div>
                     <H4>{{'label_other_details'|bkTranslate:this}}:</H4>
                 </div>
-                <div *ngIf="product.client_billing" >
+                <div *ngIf="product.integrator_client" >
                     {{'label_billing_mode'|bkTranslate:this}}:
-                    <span class="font-grey-mint bold">Client Billing</span> -> <span class="font-red-flamingo bold">{{product.payment_details.company_name}}</span>
+                    <span class="font-grey-mint bold">{{'label_client_billing'|bkTranslate:this}}</span> -> <span class="font-red-flamingo bold">{{product.integrator_client.contact.name}}</span>
                 </div>
-                <div *ngIf="!product.client_billing" >
+                <div *ngIf="!product.integrator_client" >
                     {{'label_billing_mode'|bkTranslate:this}}:
-                    <span class="font-grey-mint bold">Private Billing</span>
+                    <span class="font-grey-mint bold">{{'label_private_billing'|bkTranslate:this}}</span>
                 </div>
                 <br>
                 <br>

@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel, ModalService } from '../services/ModalService';
 import {
-    IHardwareGroup, IBootLoader, IActualizationProcedureMakeHardwareType, ICProgramList, IHardwareType,
+    IHardwareGroup, IActualizationProcedureMakeHardwareType, IHardwareType,
     IHardwareGroupList, IShortReference, ICProgramVersion, ICProgram
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';

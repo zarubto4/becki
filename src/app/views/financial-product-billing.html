@@ -4,8 +4,11 @@
  */
  -->
 
-<bk-layout-main [tabMenu]="'tariffs-tariff'"
-                [title]="product?product.name:null">
+<bk-layout-main
+    [tabMenu]="'products-product'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
 
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
@@ -20,155 +23,22 @@
             </div>
             <div *ngIf="product" class="portlet-body">
                 <div class="row">
-
-                <div class="col-md-6">
-                    <div class="becki-actions margin-right-10">
-                        <button title="{{'label_edit_tariff'|bkTranslate:this}}" class="btn btn-icon-only blue right-align"
-                                [disabled]="false"
-                                (click)="onCompanyEditClick()">
-                            <i class="fa fa-cog"></i>
-                        </button>
+                    <div class="col-md-5">
+                        <bk-contact-table [contact]="owner.contact"
+                                          [title]="'label_owner'|bkTranslate:this"
+                                          [edit]="(owner.contact) ? owner.contact.update_permission : owner.update_permission"
+                                          (onCreate)="createContactData($event)">
+                        </bk-contact-table>
                     </div>
-                    <div class="portlet box blue-dark">
-                        <div class="portlet-title">
-                            <div class="caption" >
-                                <span><i  class="fa fa-fw fa-lg fa-building"></i>{{'label_owner'|bkTranslate:this}}</span>
-                            </div>
-                        </div>
-                        <div *ngIf="customerPaymentDetails"  class="portlet-body">
-
-                            <div>
-                                {{'label_company_name'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.company_name}}</span>
-                            </div>
-                            <div *ngIf="customerPaymentDetails.company_registration_no">
-                                {{'label_registration_number'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.company_registration_no}}</span>
-                            </div>
-                            <div *ngIf="customerPaymentDetails.company_vat_number">
-                                {{'label_vat_number'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.company_vat_number}}</span>
-                            </div>
-                            <hr>
-                            <div>
-                                {{'label_street'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.street}}</span>
-                            </div>
-                            <div>
-                                {{'label_street_number'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.street_number}}</span>
-                            </div>
-                            <div>
-                                {{'label_city'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.city}}</span>
-                            </div>
-                            <div>
-                                {{'label_zip_code'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.zip_code}}</span>
-                            </div>
-                            <div>
-                                {{'label_country'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.country}}</span>
-                            </div>
-                            <hr>
-                            <div>
-                                {{'label_company_web'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.company_web}}</span>
-                            </div>
-                            <hr>
-                            <div>
-                                {{'label_company_phone'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.company_authorized_phone}}</span>
-                            </div>
-                            <div>
-                                {{'label_company_email'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.company_authorized_email}}</span>
-                            </div>
-                            <div>
-                                {{'label_company_email'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{customerPaymentDetails.invoice_email}}</span>
-                            </div>
-
-                        </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <bk-payment-details-table *ngIf="owner.contact"
+                                                  [paymentDetails]="product.payment_details"
+                                                  [edit]="product.payment_details?.update_permission">
+                        </bk-payment-details-table>
                     </div>
-
+                    <div class="col-md-1"></div>
                 </div>
-                <div class="col-md-6">
-                    <div class="becki-actions margin-right-10">
-                        <button title="{{'label_edit_tariff'|bkTranslate:this}}" class="btn btn-icon-only blue right-align"
-                                [disabled]="false"
-                                (click)="onBillingEditClick()">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                    </div>
-
-                    <div class="portlet box blue-dark">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <span><i  class="fa fa-fw fa-lg fa-building"></i>{{'label_billing_info'|bkTranslate:this}}</span>
-                            </div>
-                        </div>
-
-                        <div *ngIf="productPaymentDetails" class="portlet-body">
-
-                            <div>
-                                {{'label_company_name'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.company_name}}</span>
-                            </div>
-                            <div *ngIf="productPaymentDetails.company_registration_no">
-                                {{'label_registration_number'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.company_registration_no}}</span>
-                            </div>
-                            <div *ngIf="productPaymentDetails.company_vat_number">
-                                {{'label_vat_number'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.company_vat_number}}</span>
-                            </div>
-                            <hr>
-                            <div>
-                                {{'label_street'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.street}}</span>
-                            </div>
-                            <div>
-                                {{'label_street_number'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.street_number}}</span>
-                            </div>
-                            <div>
-                                {{'label_city'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.city}}</span>
-                            </div>
-                            <div>
-                                {{'label_zip_code'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.zip_code}}</span>
-                            </div>
-                            <div>
-                                {{'label_country'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.country}}</span>
-                            </div>
-                            <hr>
-                            <div>
-                                {{'label_company_web'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.company_web}}</span>
-                            </div>
-                            <hr>
-                            <div>
-                                {{'label_company_phone'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.company_authorized_phone}}</span>
-                            </div>
-                            <div>
-                                {{'label_company_email'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.company_authorized_email}}</span>
-                            </div>
-                            <div>
-                                {{'label_company_email'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{productPaymentDetails.invoice_email}}</span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
             </div>
         </div>
     </div>

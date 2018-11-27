@@ -4,7 +4,14 @@
  */
 
 import { Injectable, Inject } from '@angular/core';
-import { Route, Routes, Router, ActivatedRouteSnapshot, NavigationEnd, NavigationCancel } from '@angular/router';
+import {
+    Route,
+    Routes,
+    Router,
+    ActivatedRouteSnapshot,
+    NavigationEnd,
+    NavigationCancel
+} from '@angular/router';
 import { TyrionBackendService } from './BackendService';
 import { LabeledLink } from '../helpers/LabeledLink';
 import { CurrentParamsService } from './CurrentParamsService';
@@ -25,7 +32,7 @@ export class BreadcrumbsService {
         protected currentParamsService: CurrentParamsService,
         protected backendService: TyrionBackendService
     ) {
-        // console.info('BreadcrumbsService init');
+        console.info('BreadcrumbsService init');
 
         this.refresh();
 
@@ -73,6 +80,9 @@ export class BreadcrumbsService {
         this.currentParamsService.currentProductName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentProductExtensionName.subscribe(() => {
+            this.refresh();
+        });
         this.currentParamsService.currentInvoiceNumber.subscribe(() => {
             this.refresh();
         });
@@ -94,12 +104,15 @@ export class BreadcrumbsService {
         this.currentParamsService.currentHardwareName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentGroupName.subscribe(() => {
+            this.refresh();
+        });
     }
 
     protected findRouteByPath(path: string): Route {
-        for (let i = 0; i < this.routes.length; i++) {
-            if (this.routes[i].path === path) {
-                return this.routes[i];
+        for (let i = 0; i < this.router.config.length; i++) {
+            if (this.router.config[i].path === path) {
+                return this.router.config[i];
             }
         }
         return null;
@@ -111,6 +124,8 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentProjectNameSnapshot;
             case ':product':
                 return this.currentParamsService.currentProductNameSnapshot;
+            case ':productExtension':
+                return this.currentParamsService.currentProductExtensionNameSnapshot;
             case ':invoice':
                 return this.currentParamsService.currentInvoiceNumberSnapshot;
             case ':blocko':
@@ -182,14 +197,33 @@ export class BreadcrumbsService {
 
     protected refresh() {
 
-        let currentActivatedRoute: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
-
-        while (currentActivatedRoute.firstChild) {
-            currentActivatedRoute = currentActivatedRoute.firstChild;
-        }
+        let current: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
 
         let breadcrumbsArray: LabeledLink[] = [];
+        let routePath: Array<string> = ['/'];
 
+        while (current.firstChild) {
+            let parts: Array<string> = current.firstChild.routeConfig.path.split('/');
+            let path: string = '';
+            parts.forEach((part, index) => {
+                if (index > 0) {
+                    path += '/'
+                }
+                path += part;
+                let config: Routes = current.routeConfig ? current.routeConfig['_loadedConfig'].routes : this.routes;
+                let route: Route = config.find(sibling => {
+                    return sibling.path === path;
+                });
+                routePath.push(part);
+
+                if (route && route.data && route.data['breadName']) {
+                    breadcrumbsArray.push(new LabeledLink(this.resolveBreadName(route.data['breadName']), this.resolveLink(routePath)));
+                }
+            });
+            current = current.firstChild;
+        }
+
+        /*
         let currentRoute = currentActivatedRoute.routeConfig;
         if (!currentRoute || !currentRoute.path) {
             return;
@@ -215,6 +249,7 @@ export class BreadcrumbsService {
             }
             path += '/';
         }
+        */
 
         this.breadcrumbs = breadcrumbsArray;
     }

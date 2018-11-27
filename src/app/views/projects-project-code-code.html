@@ -54,6 +54,13 @@
                                     tab_label: ('tab_ide'|bkTranslate:this)
                                 },
                                 {
+                                    tab_name: 'diff',
+                                    condition: (true),
+                                    tab_color: 'CODE',
+                                    permission: true,
+                                    tab_label: ('tab_diff'|bkTranslate:this)
+                                },
+                                {
                                     tab_name: 'versions',
                                     condition: (true),
                                     tab_color: 'CODE',
@@ -90,8 +97,8 @@
         </div>
 
         <div [hidden]="tab!='versions'">
-            <div *ngIf="codeProgramVersions && codeProgramVersions.length > 0"  class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="codeProgramVersions && codeProgramVersions.length > 0">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_name'|bkTranslate:this}}</th>

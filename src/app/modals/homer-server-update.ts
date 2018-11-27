@@ -39,7 +39,7 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
     options_available_version: FormSelectComponentOption[] = null;
     form: FormGroup;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder,private translationService: TranslationService, protected notificationService: NotificationService, ) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
 
         this.form = this.formBuilder.group({
             'selected_version': ['', [Validators.required]],

@@ -54,6 +54,10 @@ export class CurrentParamsService {
     protected currentProductNameSubject: Subject<string> = null;
     public currentProductNameSnapshot: string = null;
 
+    public currentProductExtensionName: Observable<string> = null;
+    protected currentProductExtensionNameSubject: Subject<string> = null;
+    public currentProductExtensionNameSnapshot: string = null;
+
     public currentInvoiceNumber: Observable<string> = null;
     protected currentInvoiceNumberSubject: Subject<string> = null;
     public currentInvoiceNumberSnapshot: string = null;
@@ -118,6 +122,7 @@ export class CurrentParamsService {
         this.currentGridName = this.currentGridNameSubject = new Subject<string>();
         this.currentInstanceId = this.currentInstanceIdSubject = new Subject<string>();
         this.currentProductName = this.currentProductNameSubject = new Subject<string>();
+        this.currentProductExtensionName = this.currentProductExtensionNameSubject = new Subject<string>();
         this.currentInvoiceNumber = this.currentInvoiceNumberSubject = new Subject<string>();
         this.currentLibraryName = this.currentLibraryNameSubject = new Subject<string>();
         this.currentGroupName = this.currentGroupNameSubject = new Subject<string>();
@@ -213,6 +218,20 @@ export class CurrentParamsService {
 
         }
 
+        if (this.currentParamsSnapshot['productExtension'] !== params['productExtension']) {
+
+            if (!params['productExtension']) {
+                this.currentProductExtensionNameSnapshot = null;
+                this.currentProductExtensionNameSubject.next(this.currentProductExtensionNameSnapshot);
+            } else {
+                this.backendService.productExtensionGet(params['productExtension']).then((extension) => { // TODO [permission]: ProductExtension.read_permission
+                    this.currentProductExtensionNameSnapshot = extension.name;
+                    this.currentProductExtensionNameSubject.next(this.currentProductExtensionNameSnapshot);
+                });
+            }
+
+        }
+
         if (this.currentParamsSnapshot['invoice'] !== params['invoice']) {
 
             if (!params['invoice']) {
@@ -242,13 +261,13 @@ export class CurrentParamsService {
 
         }
 
-        if (this.currentParamsSnapshot['actualization_procedures'] !== params['actualization_procedures']) {
+        if (this.currentParamsSnapshot['actualization-procedures'] !== params['actualization-procedures']) {
 
-            if (!params['actualization_procedures']) {
+            if (!params['actualization-procedures']) {
                 this.currentActualizationProcedureSnapShot = null;
                 this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
             } else {
-                this.backendService.actualizationProcedureGet(params['actualization_procedures']).then((procedure) => { // TODO [permission]: Project.read_permission
+                this.backendService.actualizationProcedureGet(params['actualization-procedures']).then((procedure) => { // TODO [permission]: Project.read_permission
                     this.currentActualizationProcedureSnapShot = procedure.id;
                     this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
                 });

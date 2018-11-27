@@ -78,7 +78,7 @@ export abstract class Notification {
             }
         }
 
-        if (n.notification_type === 'CHAIN_START' || n.notification_type === 'CHAIN_UPDATE' || n.notification_type === 'CHAIN_END') {
+        if (n.notification_type === 'CHAIN_START' || n.notification_type === 'CHAIN_UPDATE') {
             out.closeTime = null;
         } else {
             out.closeTime = 5000;
@@ -565,7 +565,7 @@ export class NotificationService {
                 this.router.navigate(['projects', e.project_id, 'instances', e.id]);
                 break;
             case 'UpdateProcedure':
-                this.router.navigate(['projects', e.project_id, 'actualization_procedures', e.id]);
+                this.router.navigate(['projects', e.project_id, 'actualization-procedures', e.id]);
                 break;
             case 'HardwareUpdate':
                 this.router.navigate(['projects', e.project_id, 'hardware', e.id,  { tab: 'update'}]);

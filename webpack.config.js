@@ -234,27 +234,27 @@ module.exports = function makeWebpackConfig() {
         new webpack.ContextReplacementPlugin(/(.+)?angular([\\\/])core(.+)?/, root('./src'), {})
     ];
 
-    if (!isTest && !isTestWatch) {
-        config.plugins.push(
 
-            // Inject script and link tags into html files.
-            // Reference: https://github.com/ampedandwired/html-webpack-plugin
-            new HtmlWebpackPlugin({
-                inject: false,
-                template: './src/public/index.html',
-                chunksSortMode: 'dependency',
-            }),
+    config.plugins.push(
 
-            // This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS.
-            // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
-            // Disabled when in test mode.
-            new MiniCssExtractPlugin({
-                filename: !isProd ? '[name].css' : 'css/[name].[hash].css',
-                chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
-                hash: true
-            })
-        );
-    }
+        // Inject script and link tags into html files.
+        // Reference: https://github.com/ampedandwired/html-webpack-plugin
+        new HtmlWebpackPlugin({
+            inject: false,
+            template: './src/public/index.html',
+            chunksSortMode: 'dependency',
+        }),
+
+        // This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS.
+        // Reference: https://github.com/webpack-contrib/mini-css-extract-plugin
+        // Disabled when in test mode.
+        new MiniCssExtractPlugin({
+            filename: !isProd ? '[name].css' : 'css/[name].[hash].css',
+            chunkFilename: !isProd ? '[id].css' : 'css/[id].[hash].css',
+            hash: true
+        })
+    );
+
 
     // Add build(production mode) specific plugins.
     if (isProd) {
@@ -290,11 +290,12 @@ module.exports = function makeWebpackConfig() {
 
     if (!isProd) {
         config.devServer = {
-            host: '0.0.0.0',
+            host: 'localhost',
             port: 8080,
             contentBase: './src/public',
             historyApiFallback: true,
             quiet: true,
+            open: true,
             stats: true // none (or false), errors-only, minimal, normal (or true) and verbose
         };
     }

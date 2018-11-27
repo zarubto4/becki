@@ -23,8 +23,8 @@
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
     <div class="portlet-body">
 
-        <div *ngIf="(bugs && bugs.length)" class="table-scrollable">
-            <table class="table table-hover">
+        <div *ngIf="(bugs && bugs.length)">
+            <table class="table table-hover table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'table_summary'|bkTranslate:this}}</th>

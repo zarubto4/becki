@@ -39,7 +39,7 @@ export class ModalsCodeAddLibraryComponent implements OnInit {
 
     loading = false;
 
-    constructor(private backendService: TyrionBackendService, protected notificationService: NotificationService, private translationService: TranslationService,) {
+    constructor(private backendService: TyrionBackendService, protected notificationService: NotificationService, private translationService: TranslationService) {
     }
 
     loadNext() {

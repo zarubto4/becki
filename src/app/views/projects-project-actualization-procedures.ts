@@ -10,6 +10,18 @@ import { Subscription } from 'rxjs';
 import { IProject, IActualizationProcedureList, IUpdateProcedure, IHardwareGroupList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
+import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
+import { FormGroup } from '@angular/forms';
+
+
+export class FilterUpdateStates {
+    public SUCCESSFULLY_COMPLETE: boolean = true;
+    public COMPLETE: boolean = true;
+    public COMPLETE_WITH_ERROR: boolean = true;
+    public CANCELED: boolean = true;
+    public IN_PROGRESS: boolean = true;
+    public NOT_START_YET: boolean = true;
+}
 
 @Component({
     selector: 'bk-view-projects-project-actualization-procedures',
@@ -29,10 +41,22 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
+    formFilterGroup: FormGroup;
+
+    filterUpdateValues = new FilterUpdateStates();
+    filterTypesValues = new FilterTypesValues();
+
     tab: string = 'updates';
 
     constructor(injector: Injector) {
         super(injector);
+
+
+        // Filter Helper
+        this.formFilterGroup = this.formBuilder.group({
+            'orderBy': ['DATE', []],
+            'order_schema': ['ASC', []],
+        });
     };
 
     ngOnInit(): void {
@@ -70,15 +94,46 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
 
     // FILTER ----------------------------------------------------------------------------------------------------------
 
-    /* tslint:disable:max-line-length ter-indent */
-    onFilterActualizationProcedure(pageNumber: number = 0,
-        states: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE' , 'COMPLETE_WITH_ERROR' , 'CANCELED' , 'IN_PROGRESS' , 'NOT_START_YET'],
-        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL' , 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE']): void {
+    onFilterChange(filter: {key: string, value: boolean}) {
+        console.info('onFilterChange: Key', filter.key, 'value', filter.value);
+
+
+        if (this.filterUpdateValues.hasOwnProperty(filter.key)) {
+            this.filterUpdateValues[filter.key] = filter.value;
+        }
+
+        if (this.filterTypesValues.hasOwnProperty(filter.key)) {
+            this.filterTypesValues[filter.key] = filter.value;
+        }
+
+        this.onFilterActualizationProcedure();
+    }
+
+    onFilterActualizationProcedure(pageNumber: number = 0) {
+        this.blockUI();
+
+        let state_list: string[] = [];
+        for (let k in this.filterUpdateValues) {
+            if (this.filterUpdateValues.hasOwnProperty(k)) {
+                if (this.filterUpdateValues[k] === true) {
+                    state_list.push(k);
+                }
+            }
+        }
+
+        let type_list: string[] = [];
+        Object.keys(this.filterTypesValues).forEach((propKey) => {
+
+            if (this.filterTypesValues[propKey].value === true) {
+                type_list.push(propKey);
+            }
+        });
+
         this.blockUI();
         this.tyrionBackendService.actualizationProcedureGetByFilter(pageNumber, {
             project_id: this.projectId,
-            update_states: states,
-            type_of_updates: type_of_updates
+            update_states: <any> state_list,
+            type_of_updates: <any>  type_list
         })
             .then((values) => {
                 this.actualizationFilter = values;
@@ -108,7 +163,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
-    /* tslint:disable:max-line-length ter-indent*/
+
 
     // Actualization Procedure -----------------------------------------------------------------------------------------
 
@@ -135,8 +190,8 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
         if (this.deviceGroup == null) {
             this.blockUI();
             this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
-                    project_id: this.projectId
-                })
+                project_id: this.projectId
+            })
                 .then((values) => {
                     this.unblockUI();
                     this.deviceGroup = values;

@@ -118,8 +118,9 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                     description: model.description,
                     project_id: this.projectId
                 })
-                    .then(() => {
-                        this.onShowProgramPrivateBlocksFilter();
+                    .then(block => {
+                        this.unblockUI();
+                        this.onBlockClick(block.id);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block'), reason));

@@ -19,7 +19,8 @@ export class ModalsExtensionModel extends ModalModel {
         public name: string = '',
         public description: string = '',
         public extension_type: string = '',
-        public config: string = '{}'
+        public config: string = '{}',
+        public consumption: string = '{}'
     ) {
         super();
     }
@@ -49,6 +50,7 @@ export class ModalsExtensionComponent implements OnInit {
             'description': ['', [Validators.maxLength(255)]],
             'extension_type': ['', [ ]],
             'config': ['', [Validators.required]],
+            'consumption': ['', [Validators.required]],
         });
     }
 
@@ -66,6 +68,7 @@ export class ModalsExtensionComponent implements OnInit {
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['extension_type'])).setValue(this.modalModel.extension_type);
         (<FormControl>(this.form.controls['config'])).setValue(this.modalModel.config);
+        (<FormControl>(this.form.controls['consumption'])).setValue(this.modalModel.consumption);
     }
 
     onSubmitClick(): void {
@@ -75,6 +78,7 @@ export class ModalsExtensionComponent implements OnInit {
         this.modalModel.extension_type = this.form.controls['extension_type'].value;
 
         this.modalModel.config = this.form.controls['config'].value;
+        this.modalModel.consumption = this.form.controls['consumption'].value;
         this.modalClose.emit(true);
     }
 

@@ -7,16 +7,13 @@ import {
     Input,
     OnInit,
     ElementRef,
-    ViewChild,
     OnDestroy,
     EventEmitter,
     Output,
     SimpleChanges,
     OnChanges
 } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
-import { Subscription } from 'rxjs';
 import { TranslationService } from '../services/TranslationService';
 
 
@@ -40,13 +37,12 @@ export interface DataCharInterface {
                               [icon]="'fa-chart-bar'"
                               (onClick)="onPortletClick($event)"
                               [btns_group_name]="btns_group_name"
-                              [btns]="btns"
-            >
+                              [btns]="btns">
             </bk-portlet-title>
             <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
             <div class="portlet-body">
-                <div style="display: block" *ngIf="values">
+                <div *ngIf="values != null" style="display: block">
                     <canvas baseChart
                             [datasets]="values.chart_data"
                             [labels]="values.bar_chart_labels"
@@ -70,7 +66,8 @@ export interface DataCharInterface {
                             [legend]="show_legend"
                             [chartType]="'bar'"
                             (chartHover)="chartHovered($event)"
-                            (chartClick)="chartClicked($event)"></canvas>
+                            (chartClick)="chartClicked($event)">
+                    </canvas>
                 </div>
             </div>
 
@@ -92,7 +89,6 @@ export class ChartBarComponent implements OnInit, OnDestroy, OnChanges {
     @Input()
     barChartType: string = 'bar';
 
-    @Input()
     values: DataCharInterface = null;
 
     @Input()
@@ -129,6 +125,18 @@ export class ChartBarComponent implements OnInit, OnDestroy, OnChanges {
     ];
 
     constructor(public validatorErrorsService: ValidatorErrorsService, private translationService: TranslationService) {
+    }
+
+    setData(data: DataCharInterface): void {
+
+
+
+        let val: ChartBarComponent = this;
+        this.values = null;
+
+        setTimeout(function () {
+            val.values = data;
+        }, 200);
     }
 
     // events

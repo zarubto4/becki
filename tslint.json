@@ -7,7 +7,12 @@
     "node_modules"
   ],
   "eslintIgnore": [
-    "generator,generator-homer"
+      "generator",
+      "generator-homer",
+      "generator-tyrion",
+      "node-modules",
+      "hooks",
+      "eshop"
   ],
   "rules": {
     "class-name": true,

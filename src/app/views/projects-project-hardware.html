@@ -73,7 +73,7 @@
                                             type: 'FIND_BY_TEXT',
                                             content: {
                                                 key: 'id',
-                                                label: 'Device ID',
+                                                label: 'Device ID (Part\'s not supported)',
                                                 form: formFilterGroup,
                                                 showLabel: true
                                             }
@@ -99,9 +99,8 @@
                                     ]"
             ></bk-filter-component>
 
-            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
-
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                         <tr>
                             <th class="">
@@ -171,8 +170,8 @@
 
                         </td>
                         <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
-                        <td class="vert-align no-wrap">{{device.full_id}}</td>
-                        <td class="vert-align no-wrap">{{device.description}}</td>
+                        <td class="vert-align no-wrap word-break">{{device.full_id}}</td>
+                        <td class="vert-align no-wrap word-break">{{device.description}}</td>
                         <td class="vert-align text-center"><a
                             (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a>
                         </td>
@@ -293,9 +292,8 @@
 
 
         <div *ngIf="tab == 'hardware_groups'">
-            <div *ngIf="(deviceGroup && deviceGroup.content.length > 0)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(deviceGroup && deviceGroup.content.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">

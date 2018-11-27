@@ -63,6 +63,7 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
     devicesForRegistration: string[] = null;
     inprogress: boolean = false;
+    list_finish: boolean = false;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
         this.form = this.formBuilder.group({
@@ -108,6 +109,9 @@ export class ModalsAddHardwareComponent  implements OnInit {
      */
     onChangeIndividualHashValue(hw_value: string) {
         this.single_error_status = null;
+
+        hw_value =  hw_value.replace(/ /g, '');
+
         this.backendService.boardCheckRegistrationStatus(hw_value, this.modalModel.project_id)
             .then((result) => {
                 // CAN_REGISTER, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE
@@ -156,6 +160,7 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
         if (pointer >= this.devicesForRegistration.length) {
             this.inprogress = false;
+            this.list_finish = true;
             return;
         }
 
@@ -200,9 +205,12 @@ export class ModalsAddHardwareComponent  implements OnInit {
             this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
         }
 
+        let registration_hash: string = this.form.controls['id'].value;
+        registration_hash =  registration_hash.replace(/ /g, '');
+
         this.backendService.projectAddHW({
             group_ids: this.multiSelectedHardwareGroups,
-            registration_hash: this.form.controls['id'].value,
+            registration_hash: registration_hash,
             project_id: this.modalModel.project_id
         })
             .then(() => {

@@ -47,8 +47,8 @@ export class ModalsRolePermissionAddComponent implements OnInit {
 
         this.permission_options = this.modalModel.permissions.map((pv) => {
             return {
-                label: pv.name + ' ' + (pv.description !== 'description' ? pv.description : ''),
-                value: pv.name,
+                label: pv.entity_type + ' - ' + pv.action,
+                value: pv.id,
                 data: pv
             };
         });
@@ -63,7 +63,7 @@ export class ModalsRolePermissionAddComponent implements OnInit {
 
         for (let perm in this.modalModel.permissions) {
             if (this.modalModel.permissions.hasOwnProperty(perm)) {
-                if (this.modalModel.permissions[perm].name === permissionKey) {
+                if (this.modalModel.permissions[perm].id === permissionKey) {
                     this.formPermissions.push(this.modalModel.permissions[perm]);
                 }
             }
@@ -74,7 +74,7 @@ export class ModalsRolePermissionAddComponent implements OnInit {
     onRemoveClick(permissionKey: string) {
         for (let perm in this.formPermissions) {
             if (this.formPermissions.hasOwnProperty(perm)) {
-                if (this.formPermissions[perm].name === permissionKey) {
+                if (this.formPermissions[perm].id === permissionKey) {
                     let index = this.formPermissions.indexOf(this.formPermissions[perm]);
 
                     if (index > -1) {
@@ -94,7 +94,7 @@ export class ModalsRolePermissionAddComponent implements OnInit {
         for (let perm in this.formPermissions) {
             if (this.formPermissions.hasOwnProperty(perm)) {
                 this.modalModel.permissionsForAdd = [];
-                this.modalModel.permissionsForAdd.push(this.formPermissions[perm].name);
+                this.modalModel.permissionsForAdd.push(this.formPermissions[perm].id);
             }
         }
 

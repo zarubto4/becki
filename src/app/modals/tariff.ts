@@ -14,14 +14,13 @@ import { ITariffLabel } from '../backend/TyrionAPI';
 export class ModalsTariffModel extends ModalModel {
     constructor(
         public edit: boolean = false,
-        public company_details_required: boolean = false,
+        public owner_details_required: boolean = false,
         public color: string = '',
         public awesome_icon: string = '',
         public credit_for_beginning: number = 0,
         public description: string = '',
         public name: string = '',
         public identifier: string = '',
-        public payment_method_required: boolean = false,
         public payment_details_required: boolean = false,
         public labels: ITariffLabel[] = [],
         public labelsInString: string = '[{\"icon":\"fa-fire\",\"description\":\"text\"}]'
@@ -57,16 +56,15 @@ export class ModalsTariffComponent implements OnInit {
         });
     }
 
-    onBoolean_Company_details(value: boolean): void {
-        this.modalModel.company_details_required = value;
+    onBoolean_Owner_details(value: boolean): void {
+        this.modalModel.owner_details_required = value;
+        // We cannot have payment details without owner details.
+        // And set when we allow them, set payment details required to true.
+        this.modalModel.payment_details_required = value;
     }
 
     onBoolean_Payment_details(value: boolean): void {
         this.modalModel.payment_details_required = value;
-    }
-
-    onBoolean_Payment_method(value: boolean): void {
-        this.modalModel.payment_method_required = value;
     }
 
     ngOnInit() {

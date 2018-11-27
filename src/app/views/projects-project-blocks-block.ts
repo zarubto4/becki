@@ -64,6 +64,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     // Properties for test view:
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
+
     renderer: BlockRenderer;
     tsBlock: Blocks.TSBlock;
     testInputConnectors: Core.Connector<boolean | number | object | Core.Message>[];
@@ -396,7 +397,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
         connector.argTypes.forEach((argType, index) => {
 
-            let val = this.messageInputsValueCache[connector.name + argType];
+            let val = this.messageInputsValueCache[connector.name + argType + index];
             if (argType === Types.Type.Boolean) {
                 if (!val) {
                     val = false;

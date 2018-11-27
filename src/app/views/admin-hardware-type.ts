@@ -14,6 +14,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsAdminCreateHardwareModel } from '../modals/admin-create-hardware';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsHardwareFindHash, ModalsHardwareFindHashComponent } from '../modals/hardware-find-hash';
+import { FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'bk-view-admin-hardware-type',
@@ -24,12 +25,23 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
     hardwareTypes: IHardwareType[] = null;
     processors: IProcessor[] = null;
     producers: IProducer[] = null;
-    boardsFiler: IHardwareList = null;
+    devicesFilter: IHardwareList = null;
 
     tab: string = 'hardware_list';
 
+    formFilterGroup: FormGroup;
+
     constructor(injector: Injector) {
         super(injector);
+
+        this.formFilterGroup = this.formBuilder.group({
+            'alias': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)]],
+            'full_id': ['', [Validators.maxLength(60)]],
+            'description': ['', [Validators.maxLength(60)]],
+            'orderBy': ['NAME', []],
+            'order_schema': ['ASC', []],
+        });
     };
 
     ngOnInit(): void {
@@ -98,8 +110,8 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     processor_id: model.processor,
                     producer_id: model.producer,
                 })
-                    .then(() => {
-                        this.refresh();
+                    .then(hardwareType => {
+                        this.onHardwareTypeClick(hardwareType.id);
                     }).catch(reason => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
@@ -233,8 +245,8 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     description: model.description,
                     name: model.name
                 })
-                    .then(() => {
-                        this.refresh();
+                    .then(producer => {
+                        this.onProducerClick(producer.id);
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.unblockUI();
@@ -356,15 +368,28 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
 
     // Hardware Filter --------------------------------------------------------------------------------------------------
 
-    onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
-
+    onFilterHardware(pageNumber: number = 0): void {
+        this.blockUI();
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
-            hardware_type_ids: boardTypes
+            hardware_type_ids: [],
+            order_by: this.formFilterGroup.controls['orderBy'].value,
+            order_schema: this.formFilterGroup.controls['order_schema'].value,
+            full_id: this.formFilterGroup.controls['full_id'].value,
+            id: this.formFilterGroup.controls['id'].value,
+            name: this.formFilterGroup.controls['alias'].value,
+            description: this.formFilterGroup.controls['description'].value
         })
             .then((values) => {
-                this.boardsFiler = values;
-
                 this.unblockUI();
+                this.devicesFilter = values;
+
+                this.devicesFilter.content.forEach((device, index, obj) => {
+                    this.tyrionBackendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'Hardware' && device.id === status.model_id) {
+                            device.online_state = status.online_state;
+                        }
+                    });
+                });
             })
             .catch((reason) => {
                 this.unblockUI();

@@ -11,6 +11,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { ModalsArticleModel } from '../modals/article';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
+import { TyrionBackendService } from '../services/BackendService';
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -33,7 +34,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     projectsUpdateSubscription: Subscription;
 
-    constructor(injector: Injector) {
+    constructor(injector: Injector, public backendService: TyrionBackendService) {
         super(injector);
     };
 
@@ -44,10 +45,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     ngOnInit(): void {
 
-        // Allow to create new Article
-        if (this.tyrionBackendService.personPermissions.indexOf('Article_create') >= 0) {
-            this.create_article_permission = true;
-        }
+        this.create_article_permission = this.backendService.personInfoSnapshot.byzance_admin;
 
         this.tyrionBackendService.objectUpdateTyrionEcho.subscribe(status => {
             if (status.model === 'ProjectsRefreshAfterInvite') {

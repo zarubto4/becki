@@ -6,22 +6,26 @@
 
 import { FormControl, AsyncValidatorFn, AbstractControl } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { TyrionBackendService } from '../services/BackendService';
 
 export class AsyncValidatorDebounce {
     _validate: (x: any) => any;
 
-    static debounce(validator: (control: FormControl) => any, debounceTime = 400) {
-        let asyncValidator = new this(validator, debounceTime);
+    static debounce(validator: (control: FormControl) => any, db_time = 400) {
+        let asyncValidator = new this(validator, db_time);
         return asyncValidator._getValidator();
     }
 
-    constructor(validator: (control: FormControl) => any, debounceTime = 1000) {
+    constructor(validator: (control: FormControl) => any, db_time = 1000) {
+
+        /**
+
         let source: any = new Observable((observer: Observer<FormControl>) => {
             this._validate = (control) => observer.next(control);
         });
 
-        source.debounceTime(debounceTime)
+        source.debounceTime(db_time)
             .distinctUntilChanged(null, (x: any) => x.control.value)
             .map((x: any) => {
                 return {promise: validator(x.control), resolver: x.promiseResolver};
@@ -35,6 +39,29 @@ export class AsyncValidatorDebounce {
                         console.error('async validator error: %s', e);
                     });
             });
+        */
+
+        let source: Observable<FormControl> = new Observable((observer: Observer<FormControl>) => {
+            this._validate = (control) => observer.next(control);
+        });
+
+
+        source
+            .pipe( debounceTime(db_time))
+            .pipe( distinctUntilChanged(null, (x: any) => x.control.value))
+            .pipe( map((x: any) => {
+                return {promise: validator(x.control), resolver: x.promiseResolver};
+            }))
+            .subscribe((x: any) => {
+                x.promise
+                    .then((resultValue: any) => {
+                        x.resolver(resultValue);
+                    })
+                    .catch((e: any) => {
+                        console.error('async validator error: %s', e);
+                    });
+            });
+
     }
 
     private _getValidator() {

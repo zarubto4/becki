@@ -3,28 +3,39 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IRole } from '../backend/TyrionAPI';
+import { IProject, IRoleList, IRole } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { CurrentParamsService } from '../services/CurrentParamsService';
+
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPermissionGroupModel } from '../modals/permission-group';
+import { Subscription } from 'rxjs';
+
 
 @Component({
     selector: 'bk-view-permission-group',
     templateUrl: './admin-permission-group.html'
 })
-export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
+export class RoleGroupComponent extends _BaseMainComponent implements OnInit, OnDestroy {
+    project_id: string;
 
-    securityRole: IRole[] = null;
+    routeParamsSubscription: Subscription;
+
+    projectSubscription: Subscription;
+
+    project: IProject = null;
+
+    selfId: string = '';
+
+    securityRoleList: IRoleList = null;
+
+    currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     constructor(injector: Injector) {
         super(injector);
     };
-
-    ngOnInit(): void {
-        this.refresh();
-    }
 
     onPortletClick(action: string): void {
         if (action === 'create_role') {
@@ -32,18 +43,54 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
         }
     }
 
-    refresh(): void {
-        this.blockUI();
+    ngOnInit(): void {
+        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+            if (params['project']) {
+                this.project_id = params['project'];
+                this.projectSubscription = this.storageService.project(this.project_id).subscribe((project) => {
+                    this.project = project;
+                });
+            }
+            this.refresh();
+        });
+        this.selfId = this.tyrionBackendService.personInfoSnapshot.id;
+        this.refresh();
+    }
 
-        Promise.all<any>([this.tyrionBackendService.roleGetAll()])
-            .then((values: [IRole[]]) => {
-                this.securityRole = values[0];
+
+
+    ngOnDestroy(): void {
+        this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) {
+            this.projectSubscription.unsubscribe();
+        }
+    }
+
+    refresh(): void {
+        this.onFilterRole();
+    }
+
+    onFilterRole(pageNumber: number = 0): void {
+        this.blockUI();
+        this.tyrionBackendService.roleGetListByFilter(pageNumber, {
+            project_id: this.project_id
+        })
+            .then((values) => {
                 this.unblockUI();
+                this.securityRoleList = values;
             })
             .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Roles cannot be loaded.', reason));
                 this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
+    }
+
+    onRoleClick(role_id: string): void {
+        if (this.project_id) {
+            this.navigate(['projects', this.project_id, 'roles', role_id]);
+        } else {
+            this.navigate(['admin/permission-group', role_id]);
+        }
     }
 
     onRoleCreateClick(): void {
@@ -55,8 +102,8 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
                     description: model.description,
                     name: model.name
                 })
-                    .then(() => {
-                        this.refresh();
+                    .then(role => {
+                        this.onRoleClick(role.id);
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
@@ -106,7 +153,7 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit {
             this.onRoleEditClick(role);
         }
 
-        if (action === 'remove_prole') {
+        if (action === 'remove_role') {
             this.onRoleRemoveClick(role);
         }
     }

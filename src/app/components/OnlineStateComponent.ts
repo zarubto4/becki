@@ -76,6 +76,9 @@ export class PublicStateComponent {
         <span *ngIf="log_level == 'log'">
             <i class="fa fa-angle-double-right"></i> Log
         </span>
+        <span *ngIf="log_level == 'mqtt'">
+            <i class="fa fa-angle-double-right font-grey-salsa"></i> MQTT
+        </span>
         
     `
     /* tslint:enable */

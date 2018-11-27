@@ -23,7 +23,7 @@ export class ModalsCreateHardwareTypeBatchModel extends ModalModel {
         public mac_address_start: string = '',
         public mac_address_end: string = '',
         public ean_number: string = '',
-        public date_of_assembly: string = '',
+        public date_of_assembly: number = 0,
         public customer_product_name: string = '',
         public customer_company_name: string = '',
         public customer_company_made_description: string = '',

@@ -68,8 +68,9 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
                             producer_id: model.producer,
                             hardware_type_id: model.hardwareType,
                         })
-                            .then(() => {
-                                this.refresh();
+                            .then(garfield => {
+                                this.unblockUI();
+                                this.onGarfieldClick(garfield.id);
                             }).catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                                 this.refresh();
@@ -101,7 +102,7 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.garfieldEdit(garfield.id, {
+                this.tyrionBackendService.andEditSaveGarfield(garfield.id, {
                     description: model.description,
                     name: model.name,
                     print_label_id_1: model.print_label_id_1,

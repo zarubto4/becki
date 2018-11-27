@@ -277,9 +277,8 @@
         </div>
 
         <div *ngIf="tab == 'update' && instance && instance.current_snapshot">
-            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)"
-                class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
@@ -361,8 +360,7 @@
                     <bk-blocko-view [id]="'snapshot_editor'"
                                     [full_page]="true"
                                     [disableExecution]="true"
-                                    [bindInterfaceEnabled]="true"
-                                    [showBlockNames]="true">
+                                    [bindInterfaceEnabled]="true">
                     </bk-blocko-view>
                 </div>
             </div>
@@ -374,8 +372,8 @@
                 <!-- List of Integrated HW groups START-->
                 <h4 [innerHTML]="'label_hardware_groups'|bkTranslate:this"></h4>
 
-                <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)" class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light byzance-table">
+                <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)">
+                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th class="" [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></th>
@@ -421,9 +419,8 @@
                 <hr>
                 <!-- List of Integrated HW by filter START-->
                 <h4 [innerHTML]="'label_hardware_in_instance'|bkTranslate:this"></h4>
-                <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)"
-                     class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light byzance-table">
+                <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)">
+                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th class="col" [innerHTML]="'table_hardware_name'|bkTranslate:this"></th>
@@ -500,7 +497,7 @@
 
             <div *ngIf="instance && instance.online_state === 'ONLINE'">
 
-                <bk-blocko-view [id]="'liveview'" [full_page]="true" [disableExecution]="true" [readonly]="true" [showBlockNames]="true"></bk-blocko-view>
+                <bk-blocko-view [id]="'liveview'" [full_page]="true" [disableExecution]="true" [readonly]="true"></bk-blocko-view>
 
                 <div style="margin-top: 30px">
                     <bk-console-log maxHeight="400px"></bk-console-log>
@@ -560,11 +557,11 @@
                                     {{getGridConfig(m_project.grid_project.id,
                                     program.grid_program.id).snapshot_settings}}
                                 </td>
-                                <td class="vert-align text-center no-wrap">
+                                <td class="vert-align text-center">
                                     <a target="_blank"
                                        href="{{getGridConfig(m_project.grid_project.id, program.grid_program.id).connection_url}}">{{getGridConfig(m_project.grid_project.id,
                                         program.grid_program.id).connection_url}}</a>
-                                    <a class="bold margin-left-15" target="_blank"
+                                    <a class="bold margin-left-15 no-wrap" target="_blank"
                                        (click)="showGrid(m_project.grid_project.id, program.grid_program.id)">(Show
                                         QR)</a>
                                 </td>
@@ -617,8 +614,8 @@
 
         <div *ngIf="tab == 'api' && instance">
             <div>
-                <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)" class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light byzance-table">
+                <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)">
+                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
@@ -677,8 +674,8 @@
             <br>
             <h3>External API to local instance</h3>
 
-            <div *ngIf="(instance && instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance && instance.current_snapshot)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -687,7 +684,7 @@
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                    <tr *ngFor="let hook of getWebHooks()">
+                    <tr *ngFor="let hook of webHooks">
                         <td class="vert-align">{{hook['name']}}</td>
                         <td class="vert-align">{{hook['description']}}</td>
                         <td class="vert-align" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>
@@ -699,8 +696,135 @@
         </div>
 
         <div *ngIf="tab == 'mesh' && instance">
-            <div *ngIf="(instance.current_snapshot)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance.current_snapshot)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <thead>
+                    <tr>
+                        <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
+                        <th [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let key of instance.current_snapshot.settings.mesh_keys">
+                        <td class="vert-align bold">{{key.token}}</td>
+                        <td class="vert-align bold">{{key.description}}</td>
+                        <td class="action-btn-col">
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
+                                           {
+                                               condition: true,
+                                               btn_label_for_person: ('btn_edit_token'|bkTranslate:this),
+                                               btn_tag: 'edit_mesh_network_token',
+                                               icon: 'fa-cog',
+                                               colorType: 'EDIT',
+                                               permission: (instance.update_permission)
+                                           },
+                                           {
+                                               condition: true,
+                                               btn_label_for_person: ('btn_remove_token'|bkTranslate:this),
+                                               btn_tag: 'remove_mesh_network_token',
+                                               icon: 'fa-trash',
+                                               colorType: 'REMOVE',
+                                               permission: (instance.delete_permission)
+                                           }
+                                   ]"
+                                (onValueChanged)="onDrobDownEmiter($event, key)">
+                            </bk-drob-down-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="tab == 'api' && instance">
+            <div>
+                <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)">
+                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                        <thead>
+                        <tr>
+                            <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
+                            <th [innerHTML]="'table_description'|bkTranslate:this"></th>
+                            <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                        </tr>
+                        </thead>
+                        <tbody class="hide-bk-drob-down-button">
+                        <tr *ngFor="let key of instance.current_snapshot.settings.api_keys">
+                            <td class="vert-align bold">{{key.token}}</td>
+                            <td class="vert-align bold">{{key.description}}</td>
+                            <td class="action-btn-col">
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                    [btns]="[
+                                       {
+                                           condition: true,
+                                           btn_label_for_person: ('btn_edit_token'|bkTranslate:this),
+                                           btn_tag: 'edit_api_token',
+                                           icon: 'fa-cog',
+                                           colorType: 'EDIT',
+                                           permission: (instance.update_permission)
+                                       },
+                                       {
+                                           condition: true,
+                                           btn_label_for_person: ('btn_remove_token'|bkTranslate:this),
+                                           btn_tag: 'remove_api_token',
+                                           icon: 'fa-trash',
+                                           colorType: 'REMOVE',
+                                           permission: (instance.delete_permission)
+                                       }
+                                   ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, key)">
+                                </bk-drob-down-button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+                <bk-nothing-to-show [condition_loading]="(instance.current_snapshot == null)"
+                                    [condition_empty]="(instance.current_snapshot.settings != null && instance.current_snapshot.settings.api_keys.length == 0)"
+                                    [main_message_link]="'label_no_api_keys'|bkTranslate:this"
+                                    [main_message_comment_link]="'label_no_api_keys_comment'|bkTranslate:this"
+                                    [btn_label]="'btn_add_key'|bkTranslate:this"
+                                    (onButtonClick)="onPortletClick('add_api_key')">
+                </bk-nothing-to-show>
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+
+            </div>
+            <br>
+            <br>
+            <hr>
+            <br>
+            <br>
+            <h3>External API to local instance</h3>
+
+            <div *ngIf="(instance && instance.current_snapshot)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <thead>
+                    <tr>
+                        <th class="col" [innerHTML]="'table_name'|bkTranslate:this"></th>
+                        <th class="col" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                        <th class="col col-lg-6" [innerHTML]="'table_api_url'|bkTranslate:this"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let hook of webHooks">
+                        <td class="vert-align">{{hook['name']}}</td>
+                        <td class="vert-align">{{hook['description']}}</td>
+                        <td class="vert-align" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div *ngIf="tab == 'mesh' && instance">
+            <div *ngIf="(instance.current_snapshot)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
@@ -744,8 +868,8 @@
 
         <div *ngIf="tab == 'history' && instance">
 
-            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_name'|bkTranslate:this"></th>

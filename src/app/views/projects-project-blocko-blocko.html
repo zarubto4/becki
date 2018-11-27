@@ -70,8 +70,7 @@
                 <div class="col-md-12">
                     <div class="portlet light" style="padding: 0 0 0 0;">
                         <div class="portlet-body">
-                            <bk-blocko-view [showBlockNames]="true"
-                                            [full_page]="true"
+                            <bk-blocko-view [full_page]="true"
                                             [safeRun]="true"
                                             (onError)="onBlockoError($event)"
                                             (onLog)="onBlockoLog($event)"
@@ -121,8 +120,8 @@
         </div>
 
         <div [hidden]="!(tab=='versions')">
-            <div *ngIf="blockoProgramVersions && blockoProgramVersions.length > 0" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light byzance-table">
+            <div *ngIf="blockoProgramVersions && blockoProgramVersions.length > 0">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_name'|bkTranslate:this}}</th>

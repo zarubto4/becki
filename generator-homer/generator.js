@@ -3,11 +3,11 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var program = require("commander");
 var fs_1 = require("fs");
 var moment = require("moment");
-var chalk = require("chalk");
+var chalk = require('chalk');
 var request = require('sync-request');
 /* tslint:disable:no-console max-line-length */
 program
@@ -43,9 +43,9 @@ var CONFIG = {
         // like 'get:/websocket/becki/{secure_token}': '',
         // normal replaces
         'post:/login': '__login',
-        'post:/logout': '__logout'
+        'post:/logout': '__logout',
     },
-    methodsOkCodes: [200, 201, 202]
+    methodsOkCodes: [200, 201, 202],
 };
 var throwError = function (msg) {
     console.log(chalk.red(msg + ''));
@@ -352,7 +352,7 @@ for (var pathUrl in paths) {
             console.log(chalk.green('Adding method \"' + m + '\" to list.', ' path Method:: (' + pathMethod + ':' + pathUrl + ')'));
             methodsParams[m] = {
                 pathUrl: pathUrl,
-                pathMethod: pathMethod
+                pathMethod: pathMethod,
             };
             methodsNames.push(m);
         }
@@ -520,3 +520,4 @@ console.log(chalk.magenta('██████╔╝╚██████╔╝�
 console.log(chalk.magenta('╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝'));
 console.log();
 /* tslint:enable */
+//# sourceMappingURL=generator.js.map

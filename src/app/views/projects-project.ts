@@ -66,6 +66,7 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
 
 
     onPortletClick(action: string): void {
+
         if (action === 'edit_project') {
             this.onEditClick();
         }
@@ -73,6 +74,7 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
         if (action === 'remove_project') {
             this.onRemoveClick();
         }
+
     }
 
     onEditClick(): void {

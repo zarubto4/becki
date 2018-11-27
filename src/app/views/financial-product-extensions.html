@@ -3,49 +3,77 @@
  * directory of this distribution.
  */
  -->
-<bk-layout-main [tabMenu]="'tariffs-tariff'" [title]="product?product.name:null">
+<bk-layout-main
+    [tabMenu]="'products-product'"
+    [title]="product?product.name:null"
+    [subtitle]="product?product.description:null"
+    [show_title]="true">
+
     <div class="portlet portlet light bordered">
 
         <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
         <bk-portlet-title
             [title_name]="'title'|bkTranslate:this"
             [icon]="'fa-database'"
-            [btns]="[]">
+            [btns]="">
         </bk-portlet-title>
         <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
         <!-- Page Content -- START -->
-        <div *ngIf="product != null && product.extensions" class="pricing-content-1">
-            <div *ngFor="let extension of product.extensions" class="col-md-3 margin-bottom-15; text-center">
-                <div class="price-column-container border-active package">
-                    <div class="price-table-head bg-{{extension.color|lowercase}}">
-                        <h4 class="no-margin">{{extension.name}}</h4>
-                    </div>
-                    <div class="arrow-down border-top-{{extension.color|lowercase}}"></div>
-                    <div class="price-table-pricing">
-                        <h3 style="line-height: 50px;" [style.font-size]="makePrice(extension.price).length>=7?'40px':'50px'">{{makePrice(extension.price)}}</h3>
-                        <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
-                    </div>
-                    <div class="price-table-content">
-                        <p class="font-grey-salt">{{extension.description}}</p>
-                    </div>
-                    <div class="arrow-down arrow-grey"></div>
-                    <div class="price-table-footer">
-                        <button type="button" class="btn blue uppercase price-button" (click)="editExtension(extension)">
-                            {{'btn_edit'|bkTranslate:this}}
-                        </button>
-                        <button type="button" class="btn red uppercase price-button" (click)="removeExtension(extension)">
-                            {{'btn_remove'|bkTranslate:this}}
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div *ngIf="(extensions && extensions.length)">
+            <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <thead>
+                <tr>
+                    <th class="col col-lg-3">{{'table_extension_name'|bkTranslate:this}}</th>
+                    <th class="col col-lg-5">{{'table_extension_description'|bkTranslate:this}}</th>
+                    <th class="col col-lg-2">{{'table_extension_created'|bkTranslate:this}}</th>
+                    <th class="col col-lg-2 text-center">{{'table_actions'|bkTranslate:this}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let extension of extensions">
+                    <td class="vert-align no-wrap bold"><a (click)="onExtensionClick(extension)">{{extension.name}}</a>
+                        <span *ngIf="extension.active" class="font-green-jungle bold">(Active)</span>
+                        <span *ngIf="!extension.active" class="font-red-flamingo bold">(Deactivated)</span>
+                    </td>
+                    <td class="vert-align">{{extension.description}}</td>
+                    <td class="vert-align">{{extension.created|bkUnixTimeToDate}}</td>
+                    <td class="action-btn-col text-center">
+                        <bk-drob-down-button
+                            [btns_group_name]="('label_extension_actions'|bkTranslate:this)"
+                            [btns]="[
+                                {
+                                    condition: (extension.active),
+                                    btn_label_for_person: ('label_deactivate_extension'|bkTranslate:this),
+                                    btn_tag: 'deactivate_extension',
+                                    icon: 'fa-power-off',
+                                    colorType: 'DEACTIVE',
+                                    permission: (extension.update_permission)
+                                },
+                                {
+                                    condition: (!extension.active),
+                                    btn_label_for_person: ('label_activate_extension'|bkTranslate:this),
+                                    btn_tag: 'activate_extension',
+                                    icon: 'fa-power-off',
+                                    colorType: 'ACTIVE',
+                                    permission: (extension.update_permission)
+                                }
+                            ]"
+                            (onValueChanged)="onDrobDownEmiter($event, extension)"
+                        >
+                        </bk-drob-down-button>
+
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
         </div>
         <!-- Page Content -- END -->
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <bk-nothing-to-show [condition_loading]="(product == null)"
-                            [condition_empty]="(product != null && product.extensions.length == 0)"
+                            [condition_empty]="(product != null && (!extensions || extensions.length == 0))"
                             [main_message_link]="'no_extension'|bkTranslate:this"
                             [main_message_comment_link]="'no_extension_comment'|bkTranslate:this"
                             [show_button]="false">

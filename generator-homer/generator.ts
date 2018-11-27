@@ -6,7 +6,8 @@
 import * as program from 'commander';
 import { readFileSync, writeFileSync } from 'fs';
 import * as moment from 'moment';
-import * as chalk from 'chalk';
+
+const chalk = require('chalk');
 
 let request = require('sync-request');
 /* tslint:disable:no-console max-line-length */

@@ -77,9 +77,9 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
                     name: model.name,
                     description: model.description
                 })
-                    .then(() => {
+                    .then(gridProject => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_add')));
-                        this.onFilter();
+                        this.onGridProjectClick(gridProject.id);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_project'), reason));

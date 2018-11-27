@@ -362,12 +362,12 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.hardwareBatchCreate(this.hardwareType.id, {
+                    assembly_manufacture_id: model.assembly_manufacture_id,
+                    assembly_manufacture_name: model.assembly_manufacture_name,
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
                     pcb_manufacture_id: model.pcb_manufacture_id,
-                    assembly_manufacture_name: model.assembly_manufacture_name,
-                    assembly_manufacture_id: model.assembly_manufacture_id,
                     mac_address_start: model.mac_address_start,
                     mac_address_end: model.mac_address_end,
                     ean_number: model.ean_number,
@@ -408,7 +408,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.hardwareBatchEdit(batch.batch_id, {
+                this.tyrionBackendService.hardwareBatchEdit(batch.id, {
                     revision: model.revision,
                     production_batch: model.production_batch,
                     pcb_manufacture_name: model.pcb_manufacture_name,
@@ -439,7 +439,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
         this.modalService.showModal(new ModalsRemovalModel(batch.revision + ' ' + batch.production_batch)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.hardwareBatchDelete(batch.batch_id)
+                this.tyrionBackendService.hardwareBatchDelete(batch.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.navigate(['admin/garfield/']);

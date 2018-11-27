@@ -205,6 +205,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
     lastColorInstance: number = 0; // kvůli barvám sledujeme poslední přidanou instanci
 
     logLevelOptions: FormSelectComponentOption[] = [
+        { value: 'mqtt', label: 'MQTT - Everything' },
         { value: 'trace', label: 'trace' },
         { value: 'debug', label: 'debug' },
         { value: 'info', label: 'info' },
@@ -392,7 +393,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
                             }
                     })) {
                         if (this.lastColorInstance < 7) {
-                            this.addNewHardwareToSubscribeList(hw, this.availableColors[this.lastColorInstance++]);
+                            this.addNewHardwareToSubscribeList(hw);
                         } else {
                             this.addNewHardwareToSubscribeList(hw);
                         }
@@ -404,9 +405,10 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
     /**
      * Přidáme Hardware do seznamu a přihlásíme k odběru na default log level
      */
-    public addNewHardwareToSubscribeList(hardware: IHardware, color: string = '#0082c8'): void {
+    public addNewHardwareToSubscribeList(hardware: IHardware): void {
 
         // console.log('addNewHardwareToSubscribeList: hardware:: ', hardware.id, 'color: ', color);
+        let color = this.availableColors[this.lastColorInstance++];
 
         this.colorForm.addControl('color_' + hardware.id, new FormControl('color_' + hardware.id));
         this.colorForm.addControl('log_' + hardware.id, new FormControl('log_' + hardware.id));
@@ -438,6 +440,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
             return;
         }
 
+        // Nejdříve je nutné připojit se k serveru
         this.tyrionBackendService.getWebsocketService().connectDeviceTerminalWebSocket(hardware.server.server_url, hardware.server.hardware_logger_port.toString(),(socket: WebSocketClientHardware, error: any) => {
             if (socket) {
 

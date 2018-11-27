@@ -30,8 +30,6 @@ export class ModalsGsmPropertiesComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    options: FormSelectComponentOption[] = null;
-
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
@@ -39,27 +37,37 @@ export class ModalsGsmPropertiesComponent implements OnInit {
 
     ngOnInit() {
 
+        /* tslint:disable:max-line-length */
         let input: { [key: string]: any } = {
             'name': [this.modalModel.gsm.name, [Validators.maxLength(32)]],
             'description': [this.modalModel.gsm.description, [Validators.maxLength(255)]],
-            'total_traffic_threshold': [this.modalModel.gsm.total_traffic_threshold ? this.modalModel.gsm.total_traffic_threshold : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-            'monthly_traffic_threshold': [this.modalModel.gsm.monthly_traffic_threshold ? this.modalModel.gsm.monthly_traffic_threshold : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-            'daily_traffic_threshold': [this.modalModel.gsm.daily_traffic_threshold ? this.modalModel.gsm.daily_traffic_threshold : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+            'total_traffic_threshold': [this.modalModel.gsm.sim_tm_status.total_traffic_threshold ? this.onMathRound(this.modalModel.gsm.sim_tm_status.total_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+            'monthly_traffic_threshold': [this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold ? this.onMathRound( this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+            'daily_traffic_threshold': [this.modalModel.gsm.sim_tm_status.daily_traffic_threshold ? this.onMathRound(this.modalModel.gsm.sim_tm_status.daily_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
             'tags': [this.modalModel.gsm.tags]
         };
+        /* tslint:enable:max-line-length */
 
         this.form = this.formBuilder.group(input);
     }
 
+    onMathRound(num: number): string {
+
+        if (num === 0) {
+            return '0';
+        }
+
+        return '' + Math.round((num / 1024 / 1024) * 100) / 100;
+    }
 
 
     onSubmitClick(): void {
         this.modalModel.gsm.name = this.form.controls['name'].value;
         this.modalModel.gsm.description = this.form.controls['description'].value;
         this.modalModel.gsm.tags = this.form.controls['tags'].value;
-        this.modalModel.gsm.total_traffic_threshold = this.form.controls['total_traffic_threshold'].value;
-        this.modalModel.gsm.monthly_traffic_threshold = this.form.controls['monthly_traffic_threshold'].value;
-        this.modalModel.gsm.daily_traffic_threshold = this.form.controls['daily_traffic_threshold'].value;
+        this.modalModel.gsm.sim_tm_status.total_traffic_threshold = this.form.controls['total_traffic_threshold'].value;
+        this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold = this.form.controls['monthly_traffic_threshold'].value;
+        this.modalModel.gsm.sim_tm_status.daily_traffic_threshold = this.form.controls['daily_traffic_threshold'].value;
         this.modalClose.emit(true);
     }
 

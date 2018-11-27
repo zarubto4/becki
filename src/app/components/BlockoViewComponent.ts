@@ -23,8 +23,9 @@ import { BlockRenderer } from 'blocko/dist/editor/block/BlockRenderer';
 @Component({
     selector: 'bk-blocko-view',
     template: `
-        <div [class.blocko-single-view]="singleBlockView">
+        <div [class.blocko-single-view]="singleBlockView" class="blocko-container" [class.blocko-full-screen] = "fullScreen">
             <div #field class="blocko-view"></div>
+            <a class="blocko-toggle-fullscreen" (click)="onFullscreenClick()"></a>
         </div>
     `
 })
@@ -82,7 +83,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @ViewChild('field')
     field: ElementRef;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, protected translationService: TranslationService, protected notificationService: NotificationService,) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: TyrionBackendService, protected translationService: TranslationService, protected notificationService: NotificationService) {
     }
 
     public get serviceHandler(): Blocks.ServicesHandler {
@@ -95,8 +96,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return this.translationService.translate(key, this, null, args);
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-    }
+    ngOnChanges(changes: SimpleChanges): void {}
 
     onFullscreenClick(): void {
         this.fullScreen = !this.fullScreen;

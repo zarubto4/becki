@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { TyrionAPI, IPerson, ILoginResult, ISocialNetworkLogin } from './TyrionAPI';
+import { TyrionAPI, IPerson, ILoginResult, IFacebookLoginRedirect } from './TyrionAPI';
 import * as Rx from 'rxjs';
 import {
     BadRequest, BugFoundError, CodeCompileError,
@@ -13,6 +13,7 @@ import {
 } from '../services/_backend_class/Responses';
 import { WebsocketService } from '../services/websocket/WebsocketService';
 import { IWebSocketNotification } from '../services/websocket/WebSocketClientTyrion';
+import { HttpResponse } from '@angular/common/http';
 
 declare const BECKI_VERSION: string;
 // INTERFACES
@@ -54,7 +55,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
 
     protected personInfoSnapshotDirty: boolean = true;
     public personInfoSnapshot: IPerson = null;
-    public personPermissions: string[] = null;
     public personInfo: Rx.Subject<IPerson> = new Rx.Subject<IPerson>();
 
     protected websocketService: WebsocketService = null;
@@ -68,21 +68,20 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     public constructor() {
         super();
 
-        /*
-        if (location && location.hostname) {
-            if (location.hostname.indexOf('portal.') === 0) {
-                TyrionApiBackend.host = location.hostname.replace('portal.', 'tyrion.');
-            } else {
-                TyrionApiBackend.host = location.hostname + ':9000';
-            }
-        }
-
-        if (location && location.protocol) {
-            if (location.protocol === 'https:') {
-                TyrionApiBackend.protocol = 'https';
-                this.wsProtocol = 'wss';
-            }
-        }
+        // if (location && location.hostname) {
+        //     if (location.hostname.indexOf('portal.') === 0) {
+        //         TyrionApiBackend.host = location.hostname.replace('portal.', 'tyrion.');
+        //     } else {
+        //         TyrionApiBackend.host = location.hostname + ':9000';
+        //     }
+        // }
+        //
+        // if (location && location.protocol) {
+        //     if (location.protocol === 'https:') {
+        //         TyrionApiBackend.protocol = 'https';
+        //         this.wsProtocol = 'wss';
+        //     }
+        // }
 
         if (location.hostname.indexOf('portal.stage.') === 0) {
             this.requestProxyServerUrl = 'https://request.stage.byzance.cz/fetch/';
@@ -92,7 +91,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         if (location && location.hostname.indexOf('test.byzance.dev') > -1) {
             this.requestProxyServerUrl = 'http://test.byzance.dev:4000/fetch/';
         }
-        */
 
         // Create WebSocket Connection
         this.websocketService = new WebsocketService(this);
@@ -256,15 +254,16 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     }
 
     public loginFacebook(redirectUrl: string): Promise<string> {
-        return this.facebookLogin(<ISocialNetworkLogin>{
-            redirect_url: redirectUrl
+        return this.fBGetLoginURL({
+            redirect_link: redirectUrl
         })
             .then(body => {
                 this.setToken(body.auth_token);
-                return body.redirect_url;
+                return body.link;
             });
     }
 
+    /*
     public loginGitHub(redirectUrl: string): Promise<string> {
         return this.gitHubLogin(<ISocialNetworkLogin>{
             redirect_url: redirectUrl
@@ -274,6 +273,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                 return body.redirect_url;
             });
     }
+    */
 
     public logout(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
@@ -296,7 +296,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         if (TyrionApiBackend.tokenExist()) {
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
-                    this.personPermissions = lr.permissions;
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;
                     this.personInfo.next(this.personInfoSnapshot);

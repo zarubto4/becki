@@ -44,11 +44,8 @@
             <ng-template [ngSwitchCase]="'ModalsPublicShareRequestModel'">
                 <bk-modals-public-share-request [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-public-share-request>
             </ng-template>
-            <ng-template [ngSwitchCase]="'ModalsCompanyInformationModel'">
-                <bk-modals-company-information [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-company-information>
-            </ng-template>
-            <ng-template [ngSwitchCase]="'ModalsBillingInformationModel'">
-                <bk-modals-billing-information [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-billing-information>
+            <ng-template [ngSwitchCase]="'ModalsContactModel'">
+                <bk-modals-contact [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-contact>
             </ng-template>
             <ng-template [ngSwitchCase]="'ModalsFinancialProductModel'">
                 <bk-modals-financial-product [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-financial-product>
@@ -79,6 +76,9 @@
             </ng-template>
             <ng-template [ngSwitchCase]="'ModalsPermissionGroupModel'">
                 <bk-modals-permission-group [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-group>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsPaymentDetailsModel'">
+                <bk-modals-payment-details [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-payment-details>
             </ng-template>
             <ng-template [ngSwitchCase]="'ModalsRemovalModel'">
                 <bk-modals-removal [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-removal>
@@ -149,7 +149,7 @@
             <ng-template [ngSwitchCase]="'ModalsBlockoAddGridModel'">
                 <bk-modals-blocko-add-grid [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-add-grid>
             </ng-template>
-             <ng-template [ngSwitchCase]="'ModalsBlockoAddGridEmptyModel'">
+            <ng-template [ngSwitchCase]="'ModalsBlockoAddGridEmptyModel'">
                 <bk-modals-blocko-add-grid-empty [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-add-grid-empty>
             </ng-template>
             <ng-template [ngSwitchCase]="'ModalsBlocksTypePropertiesModel'">
@@ -244,6 +244,15 @@
             </ng-template>
             <ng-template [ngSwitchCase]="'ModalsInstanceApiPropertiesModel'">
                 <bk-modals-instance-api-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-api-properties>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsDatabaseModel'">
+                <bk-modals-database-new [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-database-new>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsDatabaseRemoveModel'">
+                <bk-modals-database-remove [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-database-remove>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'ModalsDatabaseNameDescriptionModel'">
+                <bk-modals-database-edit [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-database-edit>
             </ng-template>
         </div>
     </div>

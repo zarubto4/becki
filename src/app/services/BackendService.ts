@@ -3,28 +3,29 @@
  * of this distribution.
  */
 import { EventEmitter, Injectable } from '@angular/core';
-import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
 import { TranslationService } from './TranslationService';
 import { RestRequest, RestResponse } from './_backend_class/Responses';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpObserve } from '@angular/common/http/src/client';
 
 @Injectable()
 export class TyrionBackendService extends TyrionApiBackend {
 
     public changeDetectionEmitter: EventEmitter<{}> = new EventEmitter<{}>();
 
-    constructor(protected http: Http, protected router: Router, private translationService: TranslationService) {
+    constructor(protected http: HttpClient, protected router: Router, private translationService: TranslationService) {
         super();
         // console.info('TyrionBackendService init');
         this.refreshPersonInfo();
     }
 
     protected requestRestGeneral(request: RestRequest): Promise<RestResponse> {
-        let optionsArgs: RequestOptionsArgs = {
-            method: request.method,
-            headers: new Headers(request.headers),
-            body: ''
+        let optionsArgs = {
+            headers: new HttpHeaders(request.headers),
+            body: '',
+            observe: <HttpObserve>'response'
         };
         if (request.body) {
             switch (optionsArgs.headers.get('Content-Type')) {
@@ -37,17 +38,17 @@ export class TyrionBackendService extends TyrionApiBackend {
         }
 
         return new Promise<RestResponse>((resolve, reject) => {
-            this.http.request(request.url, optionsArgs).toPromise()
-                .then((ngResponse: Response) => {
+            this.http.request(request.method, request.url, optionsArgs).toPromise()
+                .then((ngResponse: HttpResponse<Object>) => {
                     if (ngResponse.status === 401) {
                         this.unsetToken();
                         this.router.navigate(['/login']);
                     }
 
-                    resolve(new RestResponse(ngResponse.status, ngResponse.json()));
+                    resolve(new RestResponse(ngResponse.status, ngResponse.body));
                 })
-                .catch((ngResponseOrError: Response|any) => {
-                    if (ngResponseOrError instanceof Response) {
+                .catch((ngResponseOrError: HttpResponse<any>|any) => {
+                    if (ngResponseOrError instanceof HttpResponse) {
 
                         if (ngResponseOrError.status === 401) {
                             this.unsetToken();
@@ -56,7 +57,7 @@ export class TyrionBackendService extends TyrionApiBackend {
 
 
                         console.warn('Error on new Promise<RestResponse>: Error Status:: ', ngResponseOrError.status);
-                        resolve(new RestResponse(ngResponseOrError.status, ngResponseOrError.json()));
+                        resolve(new RestResponse(ngResponseOrError.status, ngResponseOrError.body));
                     } else {
                         reject(ngResponseOrError);
                     }
@@ -77,10 +78,9 @@ export class TyrionBackendService extends TyrionApiBackend {
         });
     }
 
-    public request(request: RestRequest): Promise<Response> {
-        let optionsArgs: RequestOptionsArgs = {
-            method: request.method,
-            headers: new Headers(request.headers),
+    public request(request: RestRequest): Promise<Object> {
+        let optionsArgs = {
+            headers: new HttpHeaders(request.headers),
             body: ''
         };
         if (request.body) {
@@ -93,7 +93,7 @@ export class TyrionBackendService extends TyrionApiBackend {
             }
         }
 
-        return this.http.request(request.url, optionsArgs).toPromise();
+        return this.http.request(request.method, request.url, optionsArgs).toPromise();
     }
 
     public increaseTasks() {

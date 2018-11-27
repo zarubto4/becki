@@ -1,4 +1,3 @@
-
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
 
@@ -10,7 +9,7 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_identifier': 'Unique Identifier',
                 'label_color': 'Color in Template. Please use color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
-                'label_company_details_required': 'Company details required',
+                'label_owner_details_required': 'Customer (owner) details required',
                 'label_payment_details_required': 'Payment details required (Full registration)',
                 'label_payment_method_required': 'Payment mode required (User have to select a mode.)',
                 'label_credit_for_beginning': 'Pre-Paid Credit for user at the beginning 1USD == 1000 !!!!!',
@@ -55,24 +54,8 @@ export class StaticTranslation {
                 'flash_add_device_fail': 'Adding device {0} failed',
                 'flash_add_device_success': 'Device add success',
                 'flash_cant_add_hardware': 'Cant add device, ',
-            }, 'ModalsBillingInformationComponent': {
-                'title': 'Information details',
-                'label_invoice_email': 'Invoice E-mail',
-                'label_payment_method': 'Payment method',
-                'label_personal_info': 'Personal information',
-                'label_company_info': 'Company information',
-                'label_full_name': 'Full name',
-                'label_company_name': 'Company name',
-                'label_street': 'Street name',
-                'label_street_number': 'Street number',
-                'label_city': 'City',
-                'label_zip_code': 'Zip code',
-                'label_country': 'Country',
-                'label_registration_number': 'Registration number',
-                'label_vat_number': 'VAT number (with country code)',
-                'label_company_web': 'Company website',
-                'label_company_email': 'Company authorised contact E-mail',
-                'label_company_phone': 'Company authorised contact Phone number',
+            }, 'ModalsContactComponent': {
+                'title': 'Contact details',
             }, 'ModalsFinancialProductComponent': {
                 'title': 'Change Basic Product information',
                 'label_name': 'Product name',
@@ -120,6 +103,9 @@ export class StaticTranslation {
                 'title': 'Producer',
                 'label_name': 'Name',
                 'label_description': 'Description'
+            }, 'ModalsPaymentDetailsComponent': {
+                'title': 'Payment Details'
+
             }, 'ModalsPermissionGroupComponent': {
                 'title': 'Create new Permission Group',
                 'label_name': 'Group Name',
@@ -372,7 +358,6 @@ export class StaticTranslation {
                 'title': 'Set Developer Properties',
 
             }, 'ModalsSendInvoiceComponent': {
-                'checkbox_email': 'E-mail',
                 'label_email': 'Enter E-mail Address',
 
             }, 'ModalsGridConfigPropertiesComponent': {
@@ -514,6 +499,23 @@ export class StaticTranslation {
                 'btn_confirm_scan': 'Confirm Scan',
             },
 
+            'ModalsDatabaseNewComponent': {
+                'title': '<strong> Create database </strong>  ',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_first_collection_name': 'First collection name',
+                'btn_confirm_scan': 'Confirm Scan',
+            },
+            'ModalsDatabaseEditComponent': {
+                'title': '<strong> Edit database </strong>  ',
+                'label_name': 'Name',
+                'label_description': 'Description',
+            },
+            'ModalsDatabaseRemoveComponent': {
+                'title': '<strong> Remove database </strong>  ',
+                'label_database_id': 'Database id',
+                'btn_remove': 'remove',
+            },
             'MobileAddHardwareComponent': {
                 'main_title': 'QR Hardware registration',
                 'btn_add_hardware_qrcode': 'Insert Hardware ID by QR',
@@ -601,34 +603,27 @@ export class StaticTranslation {
 
             }, 'FinancialProductBillingComponent': {
                 'title': 'Billings',
-                'label_owner': 'Product Owner',
-                'label_billing_info': 'Billing Info',
-                'label_payment_detail_owner': 'Billing Details (Who Manage this Financial Product)',
-                'label_payment_detail_invoice_target': 'Who is being invoiced',
-                'label_invoice_email': 'Invoice E-mail',
-                'label_payment_method': 'Payment method',
-                'label_personal_info': 'Personal information',
-                'label_company_info': 'Company information',
-                'label_full_name': 'Full name',
-                'label_company_name': 'Company name',
-                'label_street': 'Street name',
-                'label_street_number': 'Street number',
-                'label_city': 'City',
-                'label_zip_code': 'Zip code',
-                'label_country': 'Country',
-                'label_registration_number': 'Registration number',
-                'label_vat_number': 'VAT number (with country code)',
-                'label_company_web': 'Company website',
-                'label_company_email': 'Company authorised contact E-mail',
-                'label_company_phone': 'Company authorised contact Phone number',
+                'label_owner': 'Product Owner'
 
             }, 'FinancialProductExtensionsComponent': {
                 'title': 'Extensions',
-                'label_average_monthly_cost': 'Average monthly cost',
+                'table_extension_name': 'Name',
+                'table_extension_description': 'Description',
+                'table_extension_created': 'Created',
+                'table_actions': 'Actions',
+                'label_extension_edit_properties': 'Edit product extension',
                 'label_no_extensions': 'No Extensions found.',
-                'label_free': 'Free',
+                'label_extension_actions': 'Actions',
+                'label_deactivate_extension': 'Deactivate',
+                'label_activate_extension': 'Activate',
+                'label_error': '?',
                 'no_extension': 'No Extensions',
                 'no_extension_comment': '<p>No extensions? No additional tuning? Let\'s just tell us that you\'re not making selfie to the instagram... </p>',
+
+            }, 'FinancialProductExtensionsExtensionComponent': {
+                'title': 'Extension {0}',
+                'label_deactivate_extension': 'Deactivate',
+                'label_activate_extension': 'Activate',
 
             }, 'RoleGroupComponent': {
                 'main_title': 'Platform administration',
@@ -639,6 +634,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_actions': 'Action',
+                'table_actions': 'Action',
                 'label_role_properties': 'Edit Role properties',
                 'label_role_remove': 'Remove Role',
                 'label_no_role': 'No Roles',
@@ -665,35 +661,21 @@ export class StaticTranslation {
                 'label_no_garfield_s': 'No Garfields',
                 'label_no_garfield_s_comment': 'We didn\'t find any gafields. Create new one',
 
-            }, 'FinancialProductInvoicesInvoiceComponent': {
-                'title': 'Invoice {0}',
-                'label_id_subscription': 'Subscription ID',
-                'label_payment_mode': 'Payment Type',
-                'label_status': 'Status',
-                'label_paid_in': 'Paid in',
-                'label_total': 'Total',
-                'label_download_as_pdf': 'Download as PDF',
-                'label_send': 'Send',
-                'table_name': 'Name',
-                'table_guid': 'GUID',
-                'table_billable_units': 'Billable units',
-                'table_unite': 'Unite',
-                'table_total_cost': 'Total cost',
-
             }, 'AdminFinancialComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Financial Management - Tariffs and Extensions',
                 'title': 'Financial Management',
-                'label_tariff_create': 'Create new Tariff',
+                'label_tariff_create': 'Create New Tariff',
                 'table_icon': 'Icon',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
+                'label_tariff_properties': 'Settings',
                 'label_tariff_edit_properties': 'Edit Tariff Properties',
                 'label_change_order': 'Change Order',
-                'label_active_tariff': 'Active tariff for platform',
-                'label_deactive_tariff': 'Deactivate tariff for platform',
-                'label_delete_tariff': 'Permanently remove tariff',
+                'label_active_tariff': 'Active Tariff for Platform',
+                'label_deactive_tariff': 'Deactivate Tariff for Platform',
+                'label_delete_tariff': 'Permanently Remove Tariff',
                 'label_no_tariffs': 'No Tariffs',
                 'label_no_tariffs_comment': 'We didn\'t find any tariffs. Create new one',
 
@@ -706,16 +688,17 @@ export class StaticTranslation {
 
                 'label_no_extensions': 'No Extensions',
                 'label_no_extensions_comment': 'We didn\'t find any extensions. Create new one',
-                'label_extension_create': 'Create new extension',
+                'label_extension_create': 'Create New Extension',
                 'table_extension_icon': 'Icon',
                 'table_extension_name': 'Name',
                 'table_extension_description': 'Description',
                 'table_extension_color': 'Color',
                 'table_extension_price': 'Price (Average per month)',
-                'label_extension_edit_properties': 'Edit extension properties',
-                'label_active_extension': 'Active extension for platform',
-                'label_deactive_extension': 'Deactivate extension for platform',
-                'label_delete_extension': 'Permanently remove extension',
+                'label_extension_edit_properties': 'Edit Extension Properties',
+                'label_extension_properties' : 'Settings',
+                'label_active_extension': 'Active Extension for Platform',
+                'label_deactive_extension': 'Deactivate Extension for Platform',
+                'label_delete_extension': 'Permanently Remove Extension',
 
                 'flash_extension_create_success': 'Extension successfully created',
                 'flash_extension_create_error': 'Extension was not created',
@@ -744,12 +727,10 @@ export class StaticTranslation {
                 'label_edit_tariff': 'Edit Tariff Properties',
                 'label_active_tariff': 'Active tariff for platform',
                 'label_deactive_tariff': 'Deactivate tariff for platform',
-                'label_tariff_no_company_details_required': 'Company Details are NOT required',
-                'label_tariff_company_details_required': 'Company Details are required',
+                'label_tariff_no_owner_details_required': 'Owner Details are NOT required',
+                'label_tariff_owner_details_required': 'Owner Details are required',
                 'label_tariff_no_payment_details_required': 'Payment Details are NOT required',
                 'label_tariff_payment_details_required': 'Payment Details are required',
-                'label_tariff_no_payment_method_required': 'Payment Method are NOT required',
-                'label_tariff_payment_method_required': 'Payment Method are required',
                 'ribbon_selected': 'Selected',
 
                 'flash_tariff_active_success': 'Tariff successfully activated',
@@ -766,7 +747,6 @@ export class StaticTranslation {
                 'table_extension_type': 'Tyrion Extension Type',
                 'table_extension_description': 'Description',
                 'table_extension_name': 'Name',
-                'label_free': 'Free',
                 'label_change_order': 'Change order',
                 'btn_select': 'Select',
 
@@ -803,32 +783,91 @@ export class StaticTranslation {
 
             }, 'FinancialProductInvoicesComponent': {
                 'title': 'Invoice',
-                'label_downoload_pro_forma_pdf': 'Download Pro forma invoice as PDF',
+                'label_invoice_actions': 'Actions',
+                'label_confirm_invoice': 'Confirm invoice',
+                'label_synchronize_invoice': 'Synchronize with Fakturoid',
+                'label_download_pro_forma_pdf': 'Download Pro forma invoice as PDF',
                 'label_download_pdf': 'Download invoice as PDF',
+                'label_fakturoid_invoice': 'Open on Fakturoid',
                 'label_send': 'Send',
                 'btn_add_credits': 'Add credits',
                 'table_invoice_id': 'Invoice ID',
-                'table_date_of_pay': 'Date of payment',
-                'table_created': 'Date of creation',
+                'table_issued': 'Issued',
+                'table_total': 'Total price',
                 'table_paid': 'Paid',
+                'table_to_confirm': 'Invoice not yet confirmed',
+                'table_to_issue': 'Invoice not yet issued',
+                'label_no_invoice_number': 'not set',
                 'table_actions': 'Actions',
                 'no_invoice': 'No invoices',
                 'payment_required': 'Payment required',
                 'no_invoice_comment': ' <p>We did not find any financial records... which means you did not even start to spend money. </p> <p> Maybe Mr.Salieri should send his regards. </p>',
-                'flash_invoice_been_resend': 'The invoice has been resent to your general invoice E-mail.',
+                'flash_invoice_been_resend': 'The invoice has been sent.',
                 'flash_invoice_cant_be_resend': 'The invoice could not be sent!',
+                'flash_invoice_cant_be_downloaded': 'The invoice could not be downloaded!',
+                'flash_invoice_been_confirmed': 'Invoice was conformed and will be visible to the user.',
+                'flash_invoice_cant_be_confirmed': 'Invoice could not be confirmed!',
+                'flash_invoice_been_synchronized': 'Invoice was synchronized with Fakturoid.',
+                'flash_invoice_cant_be_synchronized': 'Invoice could not be synchronized with Fakturoid!'
 
+            }, 'FinancialProductInvoicesInvoiceComponent': {
+                'title': 'Invoice {0}',
+                'label_id_subscription': 'Subscription ID',
+                'label_payment_mode': 'Payment Type',
+                'label_status': 'Status',
+                'label_paid': 'Paid in',
+                'label_id_period': 'Billing period',
+                'label_id_issued': 'Issued',
+                'label_total': 'Total',
+                'label_total_with_vat': 'Total with VAT',
+                'label_invoice_actions': 'Actions',
+                'label_download_pro_forma_pdf': 'Download Pro forma invoice as PDF',
+                'label_download_pdf': 'Download invoice as PDF',
+                'label_fakturoid_invoice': 'Open on Fakturoid',
+                'label_send': 'Send',
+                'label_confirm_invoice': 'Confirm invoice',
+                'label_synchronize_invoice': 'Synchronize with Fakturoid',
+                'table_quantity': 'Quantity',
+                'table_unit': 'Unit',
+                'table_vat': 'VAT',
+                'table_name': 'Name',
+                'table_unit_price': 'Unit price',
+                'table_cost_without_vat': 'Price (without VAT)',
+                'table_total_cost': 'Total cost',
+                'flash_invoice_been_resend': 'The invoice has been sent.',
+                'flash_invoice_cant_be_resend': 'The invoice could not be sent!',
+                'flash_invoice_cant_be_downloaded': 'The invoice could not be downloaded!',
+                'flash_invoice_been_confirmed': 'Invoice was conformed and will be visible to the user.',
+                'flash_invoice_cant_be_confirmed': 'Invoice could not be confirmed!',
+                'flash_invoice_been_synchronized': 'Invoice was synchronized with Fakturoid.',
+                'flash_invoice_cant_be_synchronized': 'Invoice could not be synchronized with Fakturoid!'
+
+            }, 'FinancialProductInvoicesInvoiceEventsComponent': {
+                'title': 'Invoice {0}: financial events',
+                'table_from': 'From',
+                'table_to': 'To',
+                'table_extension': 'Extension',
+                'table_resource_consumption': 'Resource consumption'
+
+            }, 'FinancialProductHistoryComponent': {
+                'title': 'Product history',
+                'table_date': 'Event date',
+                'table_type': 'Type',
+                'table_reference': 'Reference',
+                'table_details': 'Details',
+                'no_product_event': 'No product events',
+                'no_product_event_comment': 'For some reason, we could not get any information about past events.'
 
             }, 'ProductRegistrationComponent': {
                 'main_title': 'Product subscription',
-                'nav_step_one_title': 'Tariff',
-                'nav_step_one_text': 'Select the right tariff for you',
-                'nav_step_two_title': 'Packages',
-                'nav_step_two_text': 'Choose your desired expansion',
-                'nav_step_three_title': 'Information',
-                'nav_step_three_text': 'Fill additional information',
-                'nav_step_four_title': 'Summary',
-                'nav_step_four_text': 'Check your order and confirm',
+                'nav_step_tariff_title': 'Tariff',
+                'nav_step_tariff_text': 'Select the right tariff for you',
+                'nav_step_extensions_title': 'Packages',
+                'nav_step_extensions_text': 'Choose your desired expansion',
+                'nav_step_customer_title': 'Customer Information',
+                'nav_step_customer_text': 'Fill customer information',
+                'nav_step_summary_title': 'Summary',
+                'nav_step_summary_text': 'Check your order and confirm',
                 'financial_monologue': '<p> The financial plan - or the package you can see here is only the starting state at the beginning. ' +
                 'You can see estimated monthly costs and recommended customer type. ' +
                 'Each tariff includes a group of extensions at the beginning, such as number of co-workers, storage size, technical support, etc., but you can remove or add, increase, or change extensions anytime later. ' +
@@ -837,54 +876,23 @@ export class StaticTranslation {
                 '<strong> For each tariff, we give you free credit that should be enough for the first month for free. </strong></p>' +
                 '<p>For <strong>large or individual customers</strong>, we have a special tariff by the business contract with technical support, dedicated developers in your office etc. </p>' +
                 '<p> For more details please visit <a href="http://byzance.cz/financial" target="_blank">Financial Site</a> </p>',
-                'step_one_title': 'Tariff',
-                'step_two_title': 'Packages',
-                'label_companies': 'Which company will be the owner?',
-                'label_select_company': 'Select Company',
+                'step_extensions_title': 'Packages',
                 'tab_extensions_recommended': 'Voluntary enlargement right from the start',
                 'tab_extensions_include': 'Already in the package',
                 'label_no_recommended_extensions': 'Nothing to recommend',
                 'label_no_recommended_extensions_comment': 'It\'s weird, but we have nothing to force you to buy.',
-                'step_two_no_expansions': 'There are no expansions packages, click Continue.',
-                'step_three_title': 'Information',
-                'step_three_product_info': 'Product information',
-                'step_three_billing_info': 'Billing information',
-                'step_three_label_product_name': 'Product name (your unique name for this tariff order)',
+
                 'label_average_monthly_cost': 'Average monthly cost',
-                'label_no_optional_extensions': 'No available optional extensions',
-                'label_no_optional_extensions_comment': 'We did not find the available extensions for this tariff. But do not be afraid -  Everything comes to him who waits... In the future there will surely be an opportunity to spend more money with us :P',
-                'label_create_new_company': 'Or Create new Absolutely independent Account (Company)',
+                'label_product_owner': 'Product owner:',
 
-                'label_invoice_email': 'Invoice E-mail',
-                'label_payment_method': 'Payment method',
-                'label_company_info': 'Billing information',
-                'label_customer_info': 'My Customer Info',
-                'step_three_my_company': 'My Company Info',
-                'label_full_name': 'Full name',
-                'label_company_name': 'Company name',
-                'label_street': 'Street name',
-                'label_street_number': 'Street number',
-
-                'label_city': 'City',
-                'label_zip_code': 'Zip code',
-                'label_country': 'Country',
-                'label_registration_number': 'Registration number',
-                'label_vat_number': 'VAT number (with country code)',
-                'label_company_web': 'Company website',
-                'label_company_email': 'Company authorised contact E-mail',
-                'label_company_phone': 'Company authorised contact Phone number',
                 'label_want_tariff_not_found': 'Wanted tariff not found.',
-                'label_free': 'Free',
                 'label_cant_load_tariff': 'Cannot load tariffs. {0}',
                 'label_finance_model': 'Billing model',
                 'label_finance_model_integrator': 'I am an integrator and I will manage the finances for my customer',
                 'label_finance_model_do_it_yourself': 'Finance will be charged to me',
 
-                'step_four_title': 'Summary',
-                'label_registration_info': 'Registration information',
-                'label_product_info': 'Product information',
+                'step_summary_title': 'Summary',
                 'label_product_name': 'Product name',
-                'label_billing_info': 'Billing information',
                 'label_your_product': 'Your product',
                 'label_included': 'Included',
                 'table_tarrif': 'Tariff',
@@ -903,6 +911,12 @@ export class StaticTranslation {
                 'flash_product_created_prepaid': 'Financial Product was created, you are using your pre-paid credit',
                 'flash_product_created': 'Financial Product was created, now you can create a new project',
 
+                'label_customer_information_title': 'Fill in customer information',
+                'label_customer_information_subtitle': 'You will be automatically first owner with highers permissions',
+                'label_basic_setup': 'Basic information',
+                'label_payment_details': 'Payment details',
+                'label_owner_details': 'Owner Details'
+
             }, 'FinancialProductComponent': {
                 'main_title': 'Financial',
                 'title': 'Dashboard',
@@ -911,7 +925,7 @@ export class StaticTranslation {
                 'label_core_details': 'Core details',
                 'label_id_subscription': 'ID Subscription',
                 'label_country': 'Country',
-                'label_plan': 'Plan',
+                'label_payment_method': 'Payment method',
                 'label_status': 'Status',
                 'option_active': 'active',
                 'option_hibernation': 'hibernation',
@@ -929,6 +943,9 @@ export class StaticTranslation {
                 'flash_product_activated': 'The product has been activated.',
                 'flash_cant_activate_product': 'The product cannot be activated.',
                 'flash_product_deactivated': 'The product has been deactivated.',
+                'label_no_payment_method': 'not set',
+                'label_client_billing': 'Client Billing',
+                'label_private_billing': 'Private Billing'
 
             }, 'FinancialComponent': {
                 'main_title': 'Financial',
@@ -956,7 +973,6 @@ export class StaticTranslation {
                 'label_bank_transfer': 'Bank transfer',
                 'label_credits': 'Credits',
                 'label_credit_card': 'Credit Card',
-                'label_free': 'Free',
                 'label_not_set_yet': 'Not set yet',
                 'label_no_product': 'No product',
                 'label_no_product_comment': 'First create a financial <strong>Tenant</strong> under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, pay invoices and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
@@ -1174,15 +1190,22 @@ export class StaticTranslation {
                 'label_current_email': 'Current E-mail',
                 'label_new_email': 'New E-mail',
                 'label_new_email_again': 'Re-enter new E-mail',
+                'label_forever': 'Unlimited',
+                'label_login_tokens': 'Logins',
+                'label_apikeys': 'ApiKeys',
+                'label_token_remove': 'Remove token',
 
                 'btn_change_password': 'Change password',
                 'btn_change_email': 'Change E-mail',
+                'btn_add_apikey': 'Add ApiKey',
+
                 'label_set_own_picture': 'Set profile picture',
                 'table_system_component': 'System Component',
                 'table_user_agent': 'User Agent',
                 'table_created': 'Created',
                 'table_access_age': 'Expiration',
                 'table_actions': 'Actions',
+                'table_value': 'Value',
 
                 'flash_cant_change_password': 'Could not change password, ',
                 'flash_email_was_send': 'E-mail with instructions was sent.',
@@ -1192,6 +1215,9 @@ export class StaticTranslation {
                 'flash_new_avatar_saved': 'New avatar saved successfully.',
                 'flash_cant_save_avatar': 'Could not save new avatar, ',
                 'flash_information_updated': 'Your information was updated.',
+                'flash_cannot_add_token': 'Unable to add ApiKey',
+                'flash_token_added': 'New ApiKey added',
+                'flash_cannot_load_tokens': 'Unable to load ApiKeys'
 
             }, 'ProjectsProjectBlockoBlockoComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - PROGRAM <strong>{0}</strong>',
@@ -1516,6 +1542,7 @@ export class StaticTranslation {
                 'label_no_running_update_on_hardware_comment': 'There is no update for this device yet. Create new <strong class="font-color-code">Code</strong> program or set new release',
                 'label_main_server': '<strong class="font-color-cloud">CLOUD</strong> Server',
                 'label_instance': '<strong class="font-color-instance">INSTANCE</strong> Name',
+                'label_cellular': '<strong class="font-color-hardware">CELLULAR</strong> integration',
                 'label_instance_description': 'Description',
                 'label_main_server_not_found': 'Device is not connected to Server yet',
                 'label_not_in_instance': 'Device is not connected to an instance',
@@ -1620,9 +1647,15 @@ export class StaticTranslation {
                 'label_no_gsm_comment': 'You have not registered any CELLULAR modules yet. It\'s time to pull out a credit card and buy some.',
                 'btn_add_gsm': 'Register New Module',
                 'table_msi_number': 'MSI Number',
+                'table_msi_iccid': 'ICCID',
                 'table_id': 'ID',
                 'table_name': 'Name',
-                'table_msi_status': 'CELLULAR status',
+                'table_msi_status': 'Status',
+                'table_msi_country': 'Country',
+                'table_available_data_traffic': 'Available data traffic',
+                'table_total_data_traffic': 'Total traffic',
+                'table_daily_traffic': 'Daily data traffic',
+                'table_monthly_traffic': 'Monthly data traffic',
                 'table_description': 'Description',
                 'table_status': 'Status',
                 'table_actions': 'Actions',
@@ -1630,7 +1663,12 @@ export class StaticTranslation {
                 'label_gsm_edit': 'Edit',
                 'label_gsm_remove': 'Remove',
                 'label_gsm_un_register': 'Un Register',
+                'label_deactive': 'Deactivate',
+                'label_active': 'Activate',
                 'label_gsm_print_sticker': 'Print Sticker',
+                'tab_overview': 'Cellular Modules',
+                'tab_traffic_details': 'Data Traffic Details',
+                'label_gsm_traffic': 'Cellular Modules Aggregated Traffic',
 
             }, 'ProjectsProjectGSMSGSMComponent': {
 
@@ -1648,6 +1686,21 @@ export class StaticTranslation {
                 'label_gsm_un_register': 'Un Register',
                 'label_gsm_print_sticker': 'Print Sticker',
                 'label_gsm_traffic': 'Cellular Module Traffic',
+                'tab_overview': 'Cellular Module Traffic',
+                'tab_traffic_details': 'Data Traffic Details',
+                'tab_cdr_details': 'Charging data records (CDR)',
+                'tab_country_details': 'Country Settings',
+                'table_maximum_threshold': 'Maximum data traffic threshold',
+                'table_notify_me': 'Send Email',
+                'table_block_sim': 'Block Sim',
+                'table_daily_threshold': 'Daily Limit (MB)',
+                'table_monthly_threshold': 'Monthly Limit (MB)',
+                'table_total_threshold': 'Total Limit (MB)',
+                'table_daily_report': 'Daily Report',
+                'table_month_report': 'Monthly Report',
+                'label_weekly_report': 'Weekly Report',
+                'table_report_type': 'Report Period',
+                'table_report_sate': 'State',
 
             }, 'ProjectsProjectInstancesComponent': {
 
@@ -2158,6 +2211,7 @@ export class StaticTranslation {
                 'flash_cant_save_version': 'Unable to save version <b>{0}</b>, {1}.',
                 'flash_version_save': 'Version <b> {0} </b> saved successfully.',
                 'flash_block_code_empty': 'Block code cannot be empty! Block error, {0}.',
+                '!!!flash_blocko_removed': 'Blocko program has been successfully deleted',
                 'flash_cant_load_block': 'Unable to load block, ',
                 'flash_blocko_edit': 'Block has been edited.',
                 'flash_cant_edit_block': 'Unable to edit block, ',
@@ -2218,6 +2272,7 @@ export class StaticTranslation {
                 'label_code_description': '<strong class="font-color-code">CODE</strong> Program Description: <strong>{0}</strong>',
                 'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Type',
                 'tab_ide': 'IDE',
+                'tab_diff': 'Diff',
                 'tab_label_version': 'Saved Versions',
                 'tab_error_list': 'Build Errors',
                 'tab_online_terminal': 'Terminal',
@@ -2479,7 +2534,8 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_actions': 'Actions',
                 'label_person_remove': 'Remove Person from Role',
-
+                'label_action': 'Action',
+                'label_target': 'Target',
                 'btn_add_person': 'Add Person',
                 'btn_add_permission': 'Add Permission',
             },
@@ -2502,7 +2558,50 @@ export class StaticTranslation {
             'NothingToShowComponent' : {
                 'loading' : 'Loading'
             },
-            'BlockoViewComponent': {
+            'ContactFormComponent': {
+                'label_company_account': 'Company account',
+                'label_full_name': 'Full name',
+                'label_company_name': 'Company name',
+                'label_street': 'Street name',
+                'label_street_number': 'Street number',
+                'label_city': 'City',
+                'label_zip_code': 'Zip code',
+                'label_country': 'Country',
+                'label_registration_number': 'Registration number',
+                'label_vat_number': 'VAT number (with country code)',
+                'label_company_web': 'Company website',
+                'label_company_email': 'Company authorised contact E-mail',
+                'label_company_phone': 'Company authorised contact Phone number',
+                'label_invoice_email': 'Invoice E-mail'
+
+            }, 'ContactTableComponent': {
+                'label_title': 'Contact',
+                'label_edit': 'Edit Contact',
+                'label_invoice_email': 'Invoice E-mail',
+                'label_full_name': 'Full name',
+                'label_company_name': 'Company name',
+                'label_street': 'Street name',
+                'label_street_number': 'Street number',
+                'label_city': 'City',
+                'label_zip_code': 'Zip code',
+                'label_country': 'Country',
+                'label_registration_number': 'Registration number',
+                'label_vat_number': 'VAT number (with country code)',
+                'label_company_web': 'Company website',
+                'label_company_email': 'Company authorised contact E-mail',
+                'label_company_phone': 'Company authorised contact Phone number',
+                'label_not_created': 'Not yet created'
+
+            }, 'PaymentDetailsFormComponent': {
+                'label_payment_method': 'Payment method'
+
+            }, 'PaymentDetailsTableComponent': {
+                'label_title': 'Payment Details',
+                'label_edit': 'Edit Payment Details',
+                'label_payment_method': 'Payment method',
+                'label_not_created': 'Not yet created'
+
+            }, 'BlockoViewComponent': {
                 'error_execution_cant_change': 'Unable to change execution status.',
                 'error_cant_change_readability': 'Unable to change readability.',
                 'error_configuration_cant_change': 'Unable to change configuration status.',
@@ -2834,6 +2933,26 @@ export class StaticTranslation {
                 'btn_immediately': 'Immediately',
                 'btn_stop': 'Remove Action!',
                 'flash_successfully_scheduled': 'Successfully Scheduled!',
+            }, 'ProjectsProjectRolesComponent': {
+                'title': 'Roles',
+                'label_name': 'Name',
+                'btn_add_role': 'Add role',
+                'role_create_fail': 'Role creation failed',
+            }, 'ProjectsProjectDatabasesComponent': {
+                'btn_create_database': 'Create Database',
+                'label_copy_conection_string_database': 'Copy Conection',
+                'label_remove_database': 'Remove Database',
+                'label_edit_database': 'Edit Database',
+                'table_database_name': 'Name',
+                'table_database_description': 'Description',
+                'table_action': 'Action',
+                'table_id': 'Database id',
+                'label_delete_database': 'Drop',
+                'table_database_collections': 'Collections',
+                'title': 'Databases',
+                'label_connection_string': 'Connection String',
+                'label_no_databases': 'You have no any Database',
+                'label_no_databases_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
             },
 
 
@@ -2889,6 +3008,7 @@ export class StaticTranslation {
             'flash_cant_add': 'Cannot Add. Reason:',
             'flash_cant_remove': 'Cannot removed. Reason:',
             'flash_cant_change_hash': 'Hash value could not be changed.',
+            'label_free': 'Free',
             'hello_world': 'Hello {0}! {1}?',
         },
         'cz': {
@@ -2950,9 +3070,8 @@ export class StaticTranslation {
                 'not_in_instance': 'Not present instance.',
             },
             'payment_method': {
-                'BANK_TRANSFER': 'Bank transfer',
-                'CREDIT_CARD' : 'Credits',
-                'FREE' : 'Free',
+                'INVOICE_BASED': 'Choose later for every invoice',
+                'CREDIT_CARD' : 'Saved credit card (auto-pay)',
                 'NOT_SET' : 'Not yet set'
             },
             'type_of_update': {
@@ -2992,6 +3111,11 @@ export class StaticTranslation {
                 '1': 'Missing Label in update procedure - probably incompatible previous firmware'
 
             },
+            'gsm_status': {
+                'active': 'Active',
+                'not active': 'Not Active'
+
+            },
             'update_state': {
                 'COMPLETE': 'Completed',
                 'CANCELED': 'Cancelled',
@@ -3008,6 +3132,7 @@ export class StaticTranslation {
                 'COMPLETE_WITH_ERROR': 'Complete with error',
                 'SUCCESSFULLY_COMPLETE': 'Successfully completed',
                 'PROHIBITED_BY_CONFIG': 'Prohibited by config',
+                'NOT_START_YET': 'Not start yet',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu

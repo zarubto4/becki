@@ -8,8 +8,10 @@
             <bk-form-input [control]="form.controls.name" [label]="'label_project_name'|bkTranslate:this"></bk-form-input>
             <bk-form-input [control]="form.controls.description" [label]="'label_project_description'|bkTranslate:this"></bk-form-input>
 
-            <bk-form-select *ngIf="modalModel.products && !modalModel.edit" [control]="form.controls.product" [label]="'label_product_type'|bkTranslate:this"
-                [options]="options"></bk-form-select>
+            <bk-form-select *ngIf="modalModel.products && !modalModel.edit"
+                            [control]="form.controls.product"
+                            [label]="'label_product_type'|bkTranslate:this"
+                            [options]="options"></bk-form-select>
 
         </form>
     </div>

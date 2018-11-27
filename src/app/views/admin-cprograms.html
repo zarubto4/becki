@@ -52,8 +52,8 @@
             <div>
             </div>
 
-            <div *ngIf="(cPrograms && cPrograms.content.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-light byzance-table">
+            <div *ngIf="(cPrograms && cPrograms.content.length)">
+                <table class="table table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_name'|bkTranslate:this}}</th>
@@ -118,9 +118,8 @@
             <!-- Filter Parameters -->
             <div>
             </div>
-            <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-light byzance-table">
+            <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)">
+                <table class="table table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
@@ -161,8 +160,8 @@
         <!-- Public Libraries -->
         <div *ngIf="tab == 'public_c_libraries'">
 
-            <div *ngIf="(libraries && libraries.content.length)" class="table-scrollable table-scrollable-borderless">
-                <table class="table table-light byzance-table">
+            <div *ngIf="(libraries && libraries.content.length)">
+                <table class="table table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
@@ -227,9 +226,8 @@
             <!-- Filter Parameters -->
             <div>
             </div>
-            <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-light byzance-table">
+            <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)">
+                <table class="table table-light byzance-table table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
