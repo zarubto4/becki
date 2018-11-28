@@ -25,8 +25,6 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    project: IProject = null;
-
     blockList: IBlockList = null;
     blockPublicList: IBlockList = null;
     blockListNotApproved: IBlockList = null;
@@ -81,7 +79,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
     }
 
     onMakeClone(block: IBlock): void {
-        let model = new ModalsBlockoBlockCopyModel(block.name, block.description, this.project.tags);
+        let model = new ModalsBlockoBlockCopyModel(this.projectId, block);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -89,8 +87,9 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                     block_id: block.id,
                    // tags: model.tags,
                     project_id: this.projectId,
-                    name: model.name,
-                    description: model.description
+                    name: model.block.name,
+                    description: model.block.description,
+                    tags: model.block.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));

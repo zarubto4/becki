@@ -2002,7 +2002,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectWidgetsComponent': {
                 'main_title': 'Platform administration',
-                'main_subtitle': 'Community Widget Group',
+                'main_subtitle': 'Community Widget Administration',
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> widgets',
 
                 'btn_add_widget': 'Create Widget',
@@ -2218,6 +2218,8 @@ export class StaticTranslation {
                 'label_publish_decision': 'Decide of Publish',
 
             }, 'ProjectsProjectBlocksComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Community Blocks Administration',
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> Blocks',
                 'label_block_remove': 'Remove Block',
                 'label_block_make_copy': 'Make Copy',
@@ -2468,9 +2470,25 @@ export class StaticTranslation {
                 'label_minimal_length': 'Minimal length of this field is {0} characters.',
                 'label_maximal_length': 'Maximal length of this field is {0} characters.',
                 'label_name_taken': 'This name is already in use.',
+
                 'label_project_name_taken': 'This project name is already in use.',
                 'label_hardware_name_taken': 'This Hardware name is already in use.',
                 'label_program_name_taken': 'This Name is already in use.',
+
+                'label_bprogram_name_taken': 'Name of Blocko program in this Project is already in use.',
+                'label_cprogram_name_taken': 'Name of Code program in this Project is already in use.',
+                'label_grid_program_name_taken': 'Name of Grid program in this Project is already in use.',
+                'label_gsm_name_taken': 'Name of GSM in this Project must be unique',
+                'label_role_name_taken': 'Name of Role in this Project must be unique',
+                'label_block_name_taken': 'Name of Block in this Project must be unique',
+                'label_widget_name_taken': 'Name of Widget in this Project must be unique',
+                'label_instance_name_taken': 'Name of Instance in this Project must be unique',
+                'label_snapshot_name_taken': 'Name of Snap Shot in this Instance must be unique',
+                'label_grid_project_name_taken': 'Name of Grid Collection in this Project must be unique',
+                'label_grid_program_version_name_taken': 'Version name must be unique for this program',
+                'label_cprogram_version_name_taken': 'Version name must be unique for this program',
+                'label_bprogram_version_name_taken': 'Version name must be unique for this program',
+
                 'label_invalid_email': 'Invalid E-mail address.',
                 'label_invalid_time': 'Invalid Time, please write time in XY:YX format',
                 'label_different_password': 'Passwords do not match.',
