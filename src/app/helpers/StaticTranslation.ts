@@ -1508,7 +1508,7 @@ export class StaticTranslation {
                 'label_server': 'Server Name',
                 'label_device_last_seen': 'Last seen',
                 'label_bootloader_version': 'Version',
-                'label_last_seen_unknow': '(Unknown)',
+                'label_last_seen_un_know': 'Unknown',
                 'label_update_to': 'Update to',
                 'label_full_id': 'Processor ID:',
                 'label_update_in_que': 'Update in Que',

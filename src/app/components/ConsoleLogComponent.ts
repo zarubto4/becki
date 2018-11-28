@@ -24,7 +24,7 @@ export interface ConsoleSourceColor {
     color: string;
 }
 
-export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn' | 'debug' | 'trace';
+export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn' | 'debug' | 'trace' | 'mqtt';
 
 @Component({
     selector: 'bk-console-log',
@@ -37,15 +37,15 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn' | 'deb
                 <td>
                     <div class="console-log-head">
                         <span class="console-log-timestamp">{{log.timestamp}}&nbsp;</span>
-                        <span *ngIf="log.type == 'error'" class="font-red">[Error]</span>
-                        <span *ngIf="log.type == 'warn'"  class="font-yellow">[Warn]</span>
-                        <span *ngIf="log.type == 'debug'" class="font-purple">[Debug]</span>
-                        <span *ngIf="log.type == 'trace'" class="font-grey-salsa">[Trace]</span>
+                        <span *ngIf="log.type == 'error'" class="font-red"               >[Error]</span>
+                        <span *ngIf="log.type == 'warn'"  class="font-yellow"            >[Warn]&nbsp;</span>
+                        <span *ngIf="log.type == 'debug'" class="font-purple"            >[Debug]</span>
+                        <span *ngIf="log.type == 'trace'" class="font-grey-salsa"        >[Trace]</span>
                         <span *ngIf="log.type == 'info'"  class="font-color-byzance-blue">[Info]&nbsp;&nbsp;</span>
-                        <span *ngIf="log.type == 'log'"   class="font-grey-salsae">[Info]</span>
+                        <span *ngIf="log.type == 'log'"   class="font-grey-salsa"        >[Log]&nbsp;&nbsp;&nbsp;</span>
+                        <span *ngIf="log.type == 'mqtt'"  class="font-green-haze"        >[MQTT]</span>
                     </div>
                     <div class="console-log-message">
-
                         <ng-template [ngIf]="log.source || log.alias">
                             <span [style.color]="sourceColor[log.source] ? sourceColor[log.source].color : ''" class="bold">{{log.alias?log.alias:log.source}}</span>
                             <i class="fa fa-fw fa-angle-right"></i>
@@ -58,6 +58,7 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn' | 'deb
                             [class.font-grey-salsa]="log.type == 'trace'"
                             [class.font-grey-salsa]="log.type == 'info'"
                             [class.font-grey-salsa]="log.type == 'log'"
+                            [class.font-grey-salsa]="log.type == 'mqtt'"
                             [innerHTML]="log.message">
                         </span>
                     </div>
