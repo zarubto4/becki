@@ -53,18 +53,16 @@ export class ModalsInstanceCreateComponent implements OnInit {
         this.form = this.formBuilder.group({
             'name': [this.modalModel.instance != null ? this.modalModel.instance.name : '',
                 [
-                    [
-                        Validators.required,
-                        Validators.minLength(4),
-                        Validators.maxLength(32)
-                    ],
-                    BeckiAsyncValidators.condition(
-                        (value) => {
-                            return !(this.modalModel && this.modalModel.instance && this.modalModel.instance.name.length > 3 && this.modalModel.instance.name === value);
-                        },
-                        BeckiAsyncValidators.nameTaken(this.backendService, 'Instance',  this.modalModel.project_id)
-                    )
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
                 ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.instance && this.modalModel.instance.name.length > 3 && this.modalModel.instance.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Instance',  this.modalModel.project_id)
+                )
             ],
             'description': [this.modalModel.instance.description != null ? this.modalModel.instance.description : '', [Validators.maxLength(255)]],
             'tags': [this.modalModel.instance != null ? this.modalModel.instance.tags : []],

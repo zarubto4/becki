@@ -121,7 +121,7 @@
                                 <br>
                                 <div>
                                     {{'label_name'|bkTranslate:this}}:
-                                    <span *ngIf="hardware.name" class="font-grey-mint bold">{{hardware.name}}</span>
+                                    <span *ngIf="hardware.name" class="font-grey-mint bold"> {{hardware.name}}</span>
                                     <span *ngIf="!hardware.name" class="font-grey-mint">{{'label_you_can_set'|bkTranslate:this}}</span>
                                 </div>
                                 <div>
@@ -132,37 +132,37 @@
                                 <br>
                                 <div>
                                     {{'label_type'|bkTranslate:this}}:
-                                    <a (click)="onHardwareTypeClick(hardware.hardware_type.id)" class="bold">{{hardwareType.name}}</a>
+                                    <a (click)="onHardwareTypeClick(hardware.hardware_type.id)" class="bold"> {{hardwareType.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_producer'|bkTranslate:this}}:
-                                    <a *ngIf="hardwareType.producer" (click)="onProducerClick(hardwareType.producer.id)" class="bold">{{hardwareType.producer.name}}</a>
+                                    <a *ngIf="hardwareType.producer" (click)="onProducerClick(hardwareType.producer.id)" class="bold"> {{hardwareType.producer.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_revision'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{hardware.revision}}</span>
+                                    <span class="font-grey-mint bold"> {{hardware.revision}}</span>
                                 </div>
 
                                 <hr style="margin-right: 5%; margin-left: 5%">
 
                                 <div>
                                     {{'label_id'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{hardware.id}}</span>
+                                    <span class="font-grey-mint bold"> {{hardware.id}}</span>
                                 </div>
                                 <div>
                                     {{'label_full_id'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{hardware.full_id}}</span>
+                                    <span class="font-grey-mint bold"> {{hardware.full_id}}</span>
                                 </div>
                                 <br>
                                 <div>
                                     {{'label_ethernet_address'|bkTranslate:this}}:
-                                    <span *ngIf="hardware.mac_address" class="font-grey-mint bold">{{hardware.mac_address}}</span>
-                                    <span *ngIf="!hardware.mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
+                                    <span *ngIf="hardware.mac_address" class="font-grey-mint bold"> {{hardware.mac_address}}</span>
+                                    <span *ngIf="!hardware.mac_address" class="font-grey-mint bold"> {{'label_unknown_value'|bkTranslate:this}}</span>
                                 </div>
                                 <div>
                                     {{'label_wifi_address'|bkTranslate:this}}:
-                                    <span *ngIf="hardware.wifi_mac_address" class="font-grey-mint bold">{{hardware.wifi_mac_address}}</span>
-                                    <span *ngIf="!hardware.wifi_mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
+                                    <span *ngIf="hardware.wifi_mac_address" class="font-grey-mint bold"> {{hardware.wifi_mac_address}}</span>
+                                    <span *ngIf="!hardware.wifi_mac_address" class="font-grey-mint bold"> {{'label_unknown_value'|bkTranslate:this}}</span>
                                 </div>
 
                                 <div *ngIf="!hardware.dominant_entity">
@@ -184,8 +184,8 @@
                                 <div>
                                     <div *ngIf="hardware.online_state == 'OFFLINE' || hardware.online_state == 'FREEZED' || hardware.online_state == 'UNKNOWN_LOST_CONNECTION_WITH_SERVER'">
                                         <span> {{'label_device_last_seen'|bkTranslate:this}}:</span>
-                                        <span *ngIf="hardware.latest_online" class="font-grey-mint bold">{{hardware.latest_online|bkUnixTimeToDate}}</span>
-                                        <span *ngIf="!hardware.latest_online" class="font-grey-mint bold">({{'label_last_seen_unknow'|bkTranslate:this}})</span>
+                                        <span *ngIf="hardware.latest_online !== -1" class="font-grey-mint bold"> {{hardware.latest_online|bkUnixTimeToDate}}</span>
+                                        <span *ngIf="hardware.latest_online === -1" class="font-grey-mint bold"> {{'label_last_seen_un_know'|bkTranslate:this}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -207,8 +207,8 @@
                                 <div class="margin-left-15 margin-top-15">
 
                                     <div class="font-blue-dark">
-                                        <i class="fa fa-lg fa-microchip"></i>
-                                        <span class="margin-left-10" [innerHTML]="'label_bootloader'|bkTranslate:this"></span>
+                                        <i class="fa fa-lg fa-microchip  margin-right-10"></i>
+                                        <span class="margin-left-20" [innerHTML]="'label_bootloader'|bkTranslate:this"></span>
                                     </div>
                                     <div class="margin-left-15 margin-top-10">
                                         <div *ngIf="!hardware.available_latest_bootloader" class="font-red bold">
@@ -254,8 +254,8 @@
                                     <hr style="margin-right: 5%; margin-left: 5%">
 
                                     <div class="font-blue-dark">
-                                        <i class="fa fa-lg fa-link"></i>
-                                        <span class="margin-left-10" [innerHTML]="'label_web_link'|bkTranslate:this"></span>
+                                        <i class="fa fa-lg fa-link margin-right-10"></i>
+                                        <span class="margin-left-20" [innerHTML]="'label_web_link'|bkTranslate:this"></span>
                                     </div>
                                     <div class="font-blue-dark margin-left-15 margin-top-10">
                                         <span class="font-grey-mint">Link: </span>
@@ -274,8 +274,8 @@
                                     <hr style="margin-right: 5%; margin-left: 5%">
 
                                     <div class="font-blue-dark">
-                                        <i class="fa fa-lg fa-link"></i>
-                                        <span class="margin-left-10" [innerHTML]="'label_ipv6_address'|bkTranslate:this"></span>
+                                        <i class="fa fa-lg fa-link  margin-right-10"></i>
+                                        <span class="margin-left-20" [innerHTML]="'label_ipv6_address'|bkTranslate:this"></span>
                                     </div>
                                     <div class="font-blue-dark margin-left-15 margin-top-10">
                                         <span *ngIf="!hardware.ip_address" class="bold">
@@ -292,8 +292,8 @@
 
                                     <hr style="margin-right: 5%; margin-left: 5%">
                                     <div class="font-blue-dark">
-                                        <i class="fa fa-lg fa-exclamation-triangle"></i>
-                                        <span class="margin-left-10" [innerHTML]="'label_alerts'|bkTranslate:this"></span>
+                                        <i class="fa fa-lg fa-exclamation-triangle margin-right-10"></i>
+                                        <span class="margin-left-20" [innerHTML]="'label_alerts'|bkTranslate:this"></span>
                                     </div>
 
                                     <div class="margin-top-10" style="background-color: pink; margin-right: 5%; margin-left: 10%; padding: 1px 8px; margin-top: 20px;">

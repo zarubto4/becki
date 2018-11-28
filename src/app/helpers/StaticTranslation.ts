@@ -25,6 +25,12 @@ export class StaticTranslation {
                 'label_single_registration': 'Single Registration (QR - code)',
                 'label_hash_token_label': 'Hash Token from Label',
 
+            }, 'ModalsSnapShotInstanceComponent': {
+                'title_create': 'Create <strong class="font-color-instance">SnapShot</strong>',
+                'title_edit': 'Edit <strong class="font-color-instance">SnapShot</strong>',
+                'label_snapshot_name': 'Instance Snap shot name',
+                'label_snapshot_description': 'Description'
+
             }, 'ModalsGsmPropertiesComponent': {
                 'title': '<strong class="font-color-hardware">CELLULAR</strong> basic & Threshold settings',
                 'label_personal_server_name': 'Alias',
@@ -1502,7 +1508,7 @@ export class StaticTranslation {
                 'label_server': 'Server Name',
                 'label_device_last_seen': 'Last seen',
                 'label_bootloader_version': 'Version',
-                'label_last_seen_unknow': '(Unknown)',
+                'label_last_seen_un_know': 'Unknown',
                 'label_update_to': 'Update to',
                 'label_full_id': 'Processor ID:',
                 'label_update_in_que': 'Update in Que',
@@ -1702,7 +1708,8 @@ export class StaticTranslation {
 
                 'label_upload_instance_modal': 'Deploy to Cloud',
                 'label_upload_instance_modal_comment': 'The last used <strong class="font-color-blocko">BLOCKO</strong> configuration will be uploaded to the server.',
-                'label_upload_error': 'Unable to shutdown this instance, {0}.',
+                'label_upload_error': 'Error upload this instance to Cloud, {0}.',
+                'label_shut_down_error': 'Error Shutdown this instance to down, {0}.',
                 'label_no_instances': 'No <strong class="font-color-cloud">Instances</strong> found in <strong class="font-color-cloud">CLOUD</strong>',
                 'label_no_instances_comment': 'If You already create <strong class="font-color-blocko">BLOCKO</strong>, you are ready to deploy it!',
                 'label_instance_documentation_description': '<p><strong class="font-color-cloud">INSTANCE</strong>  is a <strong>container</strong> for a running application created in the <strong class="font-color-blocko">BLOCKO</strong> editor.</p><p><strong class="font-color-cloud">CLOUD</strong> Server is a <strong>container manager</strong>.</p><p>The server handles Hardware via MQTT and applications connected via the websocket and passes data safely to the container and from the container to the end devices. Each container (<strong class="font-color-cloud">INSTANCE</strong>) is totally separate from others. The more the instance is computationally more demanding, the fewer the Server can handle.<br>You can have an <strong class="font-color-cloud">INSTANCE</strong> in restricted mode on a public server or <strong>on your own servers.</strong></p>',
@@ -3025,7 +3032,7 @@ export class StaticTranslation {
                 'SYNCHRONIZATION_IN_PROGRESS': 'Synchronizing',
                 'NOT_YET_FIRST_CONNECTED': 'We have no idea <br><small>(never logged before)</small>',
                 'UNKNOWN_LOST_CONNECTION_WITH_SERVER': 'Lost connection with external server',
-                'SHUT_DOWN': 'Shut Downed',
+                'SHUT_DOWN': 'Shut Down',
             },
             'public_state': {
                 'PRIVATE' : 'Private' ,

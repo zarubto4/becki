@@ -5,16 +5,16 @@
 
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { IInstanceSnapshot, IShortReference } from '../backend/TyrionAPI';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { IInstanceSnapshot } from '../backend/TyrionAPI';
 
 export class ModalsSnapShotInstanceModel extends ModalModel {
     constructor(
         public instance_id: string,
-        public snapshot: IInstanceSnapshot
+        public snapshot?: IShortReference
     ) {
         super();
     }
@@ -38,21 +38,22 @@ export class ModalsSnapShotInstanceComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        console.log("ngOnInit ", this.modalModel.snapshot);
+
         this.form = this.formBuilder.group({
             'name': [this.modalModel.snapshot != null ? this.modalModel.snapshot.name : '',
                 [
-                    [
-                        Validators.required,
-                        Validators.minLength(4),
-                        Validators.maxLength(32)
-                    ],
-                    BeckiAsyncValidators.condition(
-                        (value) => {
-                            return !(this.modalModel && this.modalModel.snapshot && this.modalModel.snapshot.name.length > 3 && this.modalModel.snapshot.name === value);
-                        },
-                        BeckiAsyncValidators.nameTaken(this.backendService, 'Snapshot', null, this.modalModel.instance_id)
-                    )
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
                 ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.snapshot && this.modalModel.snapshot.name.length > 3 && this.modalModel.snapshot.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Snapshot', null, this.modalModel.instance_id)
+                )
             ],
             'description': [this.modalModel.snapshot != null ? this.modalModel.snapshot.description : '', [Validators.maxLength(255)]],
             'tags': [this.modalModel.snapshot != null ? this.modalModel.snapshot.tags : []]

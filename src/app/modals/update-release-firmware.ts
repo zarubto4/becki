@@ -135,7 +135,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
 
                     console.info('onGroupChange:: Budu hledat pro každý typ hardware_types');
 
-                    devgroup.hardware_types.forEach((tp: IHardwareType) => {
+                    devgroup.hardware_types.forEach((tp: IShortReference) => {
 
                         console.info('onGroupChange:: Pro každého: ', tp.name);
                         this.form.addControl(tp.id + '_selectedBootloaderId', new FormControl('', []));
@@ -224,7 +224,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
             this.modalModel.firmwareType = this.form.controls['firmwareType'].value;
         }
 
-        this.selectedDeviceGroup.hardware_types.forEach((hardwareType: IHardwareType) => {
+        this.selectedDeviceGroup.hardware_types.forEach((hardwareType: IShortReference) => {
 
             let bootloader_id: string = this.form.controls[hardwareType.id + '_selectedBootloaderId'].value;
             let c_program_version_id: string = this.form.controls[hardwareType.id + '_selectedCProgramVersionId'].value;

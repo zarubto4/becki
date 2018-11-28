@@ -874,7 +874,7 @@
                     <tr>
                         <th [innerHTML]="'table_name'|bkTranslate:this"></th>
                         <th [innerHTML]="'table_description'|bkTranslate:this"></th>
-
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <!-- Chybí API
                         <th [innerHTML]="'table_b_program_version_name'|bkTranslate:this"></th>
                         <th [innerHTML]="'table_b_program_version_description'|bkTranslate:this"></th>
@@ -891,6 +891,9 @@
                         </td>
                         <td class="vert-align">{{snapshot.description}}</td>
 
+                        <td class="vert-align text-center">
+                            <bk-form-tag-input [tags_without_form]="snapshot.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
                         <!-- Chybí API
                            <td class="vert-align no-wrap bold">
                                <a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a>
@@ -904,18 +907,18 @@
                                [btns]="[
                                {
                                    condition: true,
-                                   btn_label_for_person: ('label_deploy_snapshot'|bkTranslate:this),
+                                   btn_label_for_person: ('label_snapshot_settings'|bkTranslate:this),
                                    btn_tag: 'edit_snapshot_instance',
-                                   icon: 'fa-upload',
-                                   colorType: 'CREATE',
+                                   icon: 'fa-cog',
+                                   colorType: 'EDIT',
                                    permission: (instance.update_permission)
                                },
                                {
                                    condition: true,
-                                   btn_label_for_person: ('label_snapshot_settings'|bkTranslate:this),
+                                   btn_label_for_person: ('label_deploy_snapshot'|bkTranslate:this),
                                    btn_tag: 'deploy_selected_snapshot',
-                                   icon: 'fa-cog',
-                                   colorType: 'EDIT',
+                                   icon: 'fa-upload',
+                                   colorType: 'ACTIVE',
                                    permission: (instance.update_permission)
                                },
                                {

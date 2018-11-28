@@ -8,7 +8,7 @@ import {
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
     ISwaggerInstanceSnapShotConfigurationProgram,
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
-    IUpdateProcedure, ISwaggerInstanceSnapShotConfigurationApiKeys
+    IUpdateProcedure, ISwaggerInstanceSnapShotConfigurationApiKeys, IShortReference
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -597,7 +597,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    onEditSnapShotClick(snapShot: IInstanceSnapshot) {
+    onEditSnapShotClick(snapShot: IShortReference) {
+
+        console.log("onEditSnapShotClick ", snapShot);
         let model = new ModalsSnapShotInstanceModel(this.instanceId, snapShot);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -618,7 +620,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    onRemoveSnapShotClick(snapShot: IInstanceSnapshot) {
+    onRemoveSnapShotClick(snapShot: IShortReference) {
         this.modalService.showModal(new ModalsRemovalModel(snapShot.name)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -964,7 +966,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onDrobDownEmiter(action: string, object: any): void {
 
-        if (action === 'edit_snapshot') {
+        if (action === 'edit_snapshot_instance') {
             this.onEditSnapShotClick(object);
         }
 

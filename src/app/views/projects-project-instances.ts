@@ -162,7 +162,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                     })
                     .catch(reason => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', reason));
+                        this.fmError(this.translate('label_shut_down_error', reason));
                     });
             }
         });
@@ -174,7 +174,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.instanceSnapshotDeploy({
-                    snapshot_id: instance.id,
+                    snapshot_id: instance.snapshots[instance.snapshots.length - 1].id,
                     upload_time: 0
                 })
                     .then(() => {
