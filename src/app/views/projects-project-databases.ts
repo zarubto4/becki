@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs';
 import { IDatabase, IHomerServer } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsDatabaseModel } from '../modals/database-new';
-import { ModalsDatabaseRemoveModel } from '../modals/database-remove';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDatabaseNameDescriptionModel } from '../modals/database-edit';
@@ -119,8 +118,6 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     }
 
     onRemoveDatabaseClick(database: IDatabase): void {
-        // TODO SMAZAT let model = new ModalsDatabaseRemoveModel();
-
         this.modalService.showModal(new ModalsRemovalModel('[' + database.id + '] ' + (database.name ? database.name : ''))).then((success) => {
             if (success) {
                 this.blockUI();

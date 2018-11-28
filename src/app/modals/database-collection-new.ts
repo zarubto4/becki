@@ -52,3 +52,5 @@ export class ModalsDatabaseCollectionNewComponent implements OnInit {
     onCancelClick(): void {
         this.modalClose.emit(false);
     }
+
+}
