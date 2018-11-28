@@ -83,7 +83,9 @@ export class ModalService {
             throw new Error(this.translate('error_modal_already_open'));
         }
         wrapper = new ModalWrapper(modalModel);
-        this.modalWrappers.push(wrapper);
+        if (this.modalWrappers.length === 0) {
+            this.modalWrappers.push(wrapper);
+        }
         return wrapper.showModal(this.ngZone);
     }
 
