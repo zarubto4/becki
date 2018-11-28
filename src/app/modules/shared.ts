@@ -116,7 +116,6 @@ import { ModalsAddGSMComponent } from '../modals/add-gsm';
 import { ModalsGsmPropertiesComponent } from '../modals/gsm-properties';
 import { ModalsInstanceApiPropertiesComponent } from '../modals/instance-api-properties';
 import { ModalsDatabaseNewComponent } from '../modals/database-new';
-import { ModalsDatabaseRemoveComponent } from '../modals/database-remove';
 import { NotificationsOverlayComponent } from '../components/NotificationsOverlayComponent';
 import { NotificationsListComponent } from '../components/NotificationsListComponent';
 import { TagComponent } from '../components/TagComponent';
@@ -165,6 +164,7 @@ import { ProjectsProjectWidgetsWidgetComponent } from '../views/projects-project
 import { ProjectsProjectBlocksComponent } from '../views/projects-project-blocks';
 import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-blocks-block';
 import { ModalsDatabaseEditComponent } from '../modals/database-edit';
+import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collection-new';
 import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
 
 @NgModule({
@@ -349,7 +349,7 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         ModalsInstanceApiPropertiesComponent,
         ModalsDatabaseNewComponent,
         ModalsDatabaseEditComponent,
-        ModalsDatabaseRemoveComponent,
+        ModalsDatabaseCollectionNewComponent,
         ModalsFinancialProductComponent,
         ModalComponent
     ],

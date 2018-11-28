@@ -9,20 +9,20 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 
-export class ModalsDatabaseRemoveModel extends ModalModel {
-    constructor(public id: string = '') {
+export class ModalsDatabaseCollectionModel extends ModalModel {
+    constructor(public name: string = '', public description: string = '', public firstCollection: string = '') {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-database-remove',
-    templateUrl: './database-remove.html'
+    selector: 'bk-modals-database-collection-new',
+    templateUrl: './database-collection-new.html'
 })
-export class ModalsDatabaseRemoveComponent implements OnInit {
+export class ModalsDatabaseCollectionNewComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsDatabaseRemoveModel;
+    modalModel: ModalsDatabaseCollectionModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -32,16 +32,16 @@ export class ModalsDatabaseRemoveComponent implements OnInit {
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'id': ['', [Validators.required]],
+            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
         });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['id'])).setValue(this.modalModel.id);
+        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
     }
 
     onSubmitClick(): void {
-        this.modalModel.id = this.form.controls['id'].value;
+        this.modalModel.name = this.form.controls['name'].value;
         this.modalClose.emit(true);
     }
 
