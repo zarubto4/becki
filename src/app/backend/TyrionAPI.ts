@@ -14419,6 +14419,28 @@ export abstract class TyrionAPI extends HomerAPI {
     }
 
     /**
+     * @name collectionCreate
+     * @summary create collection
+     * @operationId create_collection
+     * @tags Database
+     *
+     * @description Create collection in database
+     *
+     * @param {string} db_id
+     * @param {string} collection_name
+     *
+     * @returns {IResult|IResultOk} [code 200|201] successful operation|Ok Result
+     *
+     * @throws {IUnauthorized} [code 401] Unauthorized request
+     * @throws {IResultForbidden} [code 403] Need required permission
+     * @throws {IResultFound} [code 404] Object not found
+     * @throws {IResultInternalServerError} [code 500] Server side Error
+     */
+    public collectionCreate(db_id:string, collection_name:string):Promise<IResult|IResultOk> {
+        return this.requestRestPath("PUT", `/database/${db_id}/${collection_name}`, {}, [200,201]);
+    }
+
+    /**
      * @name collectionsGet
      * @summary get collections
      * @operationId get_colections

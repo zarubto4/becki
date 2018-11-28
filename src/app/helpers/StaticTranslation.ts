@@ -505,6 +505,10 @@ export class StaticTranslation {
                 'label_database_id': 'Database id',
                 'btn_remove': 'remove',
             },
+            'ModalsDatabaseCollectionNewComponent': {
+                'title': '<strong> Create collection </strong>  ',
+                'label_name': 'Collection name',
+            },
             'MobileAddHardwareComponent': {
                 'main_title': 'QR Hardware registration',
                 'btn_add_hardware_qrcode': 'Insert Hardware ID by QR',
@@ -2964,6 +2968,7 @@ export class StaticTranslation {
                 'label_connection_string': 'Connection String',
                 'label_no_databases': 'You have no any Database',
                 'label_no_databases_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
+                'label_create_collection_database':'Create collection',
             },
 
 
