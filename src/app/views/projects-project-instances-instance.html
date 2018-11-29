@@ -278,7 +278,7 @@
 
         <div *ngIf="tab == 'update' && instance && instance.current_snapshot">
             <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
@@ -373,7 +373,7 @@
                 <h4 [innerHTML]="'label_hardware_groups'|bkTranslate:this"></h4>
 
                 <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th class="" [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></th>
@@ -420,7 +420,7 @@
                 <!-- List of Integrated HW by filter START-->
                 <h4 [innerHTML]="'label_hardware_in_instance'|bkTranslate:this"></h4>
                 <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th class="col" [innerHTML]="'table_hardware_name'|bkTranslate:this"></th>
@@ -527,7 +527,7 @@
                     </bk-portlet-title>
 
                     <div class="portlet-body " [class.margin-left-30]="instance.current_snapshot.m_projects.length > 1">
-                        <table class="table table-hover table-light byzance-table">
+                        <table class="table table-hover table-light  ">
                             <thead>
                             <tr>
                                 <th class="" [innerHTML]="'table_grid_program_name'|bkTranslate:this"></th>
@@ -615,7 +615,7 @@
         <div *ngIf="tab == 'api' && instance">
             <div>
                 <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
@@ -675,7 +675,7 @@
             <h3>External API to local instance</h3>
 
             <div *ngIf="(instance && instance.current_snapshot)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -697,7 +697,7 @@
 
         <div *ngIf="tab == 'mesh' && instance">
             <div *ngIf="(instance.current_snapshot)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
@@ -742,7 +742,7 @@
         <div *ngIf="tab == 'api' && instance">
             <div>
                 <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
@@ -802,7 +802,7 @@
             <h3>External API to local instance</h3>
 
             <div *ngIf="(instance && instance.current_snapshot)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -824,7 +824,7 @@
 
         <div *ngIf="tab == 'mesh' && instance">
             <div *ngIf="(instance.current_snapshot)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
@@ -869,7 +869,7 @@
         <div *ngIf="tab == 'history' && instance">
 
             <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_name'|bkTranslate:this"></th>

@@ -34,8 +34,8 @@ export interface ModelChangeStatus {
 
 export abstract class TyrionApiBackend extends TyrionAPI {
 
-    public static host = 'localhost:9000';
-    public static protocol = 'http';
+    public static host = 'tyrion.stage.byzance.cz';
+    public static protocol = 'https';
 
     public wsProtocol: string = 'ws';
 
@@ -68,20 +68,20 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     public constructor() {
         super();
 
-        if (location && location.hostname) {
-            if (location.hostname.indexOf('portal.') === 0) {
-                TyrionApiBackend.host = location.hostname.replace('portal.', 'tyrion.');
-            } else {
-                TyrionApiBackend.host = location.hostname + ':9000';
-            }
-        }
+        // if (location && location.hostname) {
+        //     if (location.hostname.indexOf('portal.') === 0) {
+        //         TyrionApiBackend.host = location.hostname.replace('portal.', 'tyrion.');
+        //     } else {
+        //         TyrionApiBackend.host = location.hostname + ':9000';
+        //     }
+        // }
 
-        if (location && location.protocol) {
-            if (location.protocol === 'https:') {
-                TyrionApiBackend.protocol = 'https';
-                this.wsProtocol = 'wss';
-            }
-        }
+        // if (location && location.protocol) {
+        //     if (location.protocol === 'https:') {
+        //         TyrionApiBackend.protocol = 'https';
+        //         this.wsProtocol = 'wss';
+        //     }
+        // }
 
         if (location.hostname.indexOf('portal.stage.') === 0) {
             this.requestProxyServerUrl = 'https://request.stage.byzance.cz/fetch/';
