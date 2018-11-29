@@ -1542,6 +1542,14 @@ table .no-wrap {
     white-space: nowrap;
 }
 
+table .breakable {
+    word-break: break-all;
+}
+
+table {
+    line-break: loose !important;
+}
+
 .word-wrap {
     word-wrap: break-word;
 }

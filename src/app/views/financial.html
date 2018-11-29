@@ -26,7 +26,7 @@
     <!-- Page Content -- START -->
     <div class="portlet-body">
         <div *ngIf="(products && products.length)">
-            <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th>{{'table_name'|bkTranslate:this}}</th>
@@ -63,7 +63,7 @@
                     <td class="vert-align no-wrap ">
                         <bk-payment-method-component [method]="product.payment_details.payment_method"></bk-payment-method-component>
                     </td>
-                    <td class="vert-align">{{product.subscription_id}}</td>
+                    <td class="vert-align breakable">{{product.subscription_id}}</td>
                     <td class="action-btn-col">
 
                         <bk-drob-down-button

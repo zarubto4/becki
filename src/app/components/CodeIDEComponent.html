@@ -84,10 +84,10 @@
 
                     <!-- Hardware máme - HW nemáme -->
                     <div *ngIf="selectedHardware.length > 0">
-                        <table class="table table-hover table-light byzance-table">
+                        <table class="table table-hover table-light  ">
                             <tbody>
                                 <tr *ngFor="let hardware of selectedHardware">
-                                    <td class="vert-align no-wrap col-lg-4">
+                                    <td class="vert-align col-lg-4">
                                         {{hardware.name ? hardware.name : hardware.id.substr(0,12)}}
                                     </td>
                                     <td class="vert-align no-wrap col-lg-4">
@@ -221,9 +221,9 @@
                                           [language]="langFromFilename(file)"
                                           [readonly]="file.readonly"
                                           *ngIf="inEditMode"></bk-monaco-editor>
-                        <bk-monaco-diff [originalCode] = "file.contentOriginal" 
-                                        [code] = "file.content" 
-                                        *ngIf="!inEditMode"> 
+                        <bk-monaco-diff [originalCode] = "file.contentOriginal"
+                                        [code] = "file.content"
+                                        *ngIf="!inEditMode">
                         </bk-monaco-diff>
                     </li>
                     <li *ngIf="openFiles.length == 0" class="tab-pane active">

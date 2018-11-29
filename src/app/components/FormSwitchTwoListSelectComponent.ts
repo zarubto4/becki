@@ -19,7 +19,7 @@ import { MultiSelectComponent } from './MultiSelectComponent';
         <div class="col-md-6">
             <h4 *ngIf="labelComment" [innerHTML]="left_label"></h4>
             <div class="table-scrollable table-scrollable-borderless">
-                <table  class="table table-hover table-light byzance-table" style="border-collapse: separate;">
+                <table  class="table table-hover table-light  " style="border-collapse: separate;">
                     <thead>
                         <tr>
                             <td class="col col-lg-10"></td>
@@ -49,11 +49,11 @@ import { MultiSelectComponent } from './MultiSelectComponent';
                 </table>
             </div>
         </div>
-        
+
         <div class="col-md-6">
             <h4 *ngIf="labelComment" [innerHTML]="right_label"></h4>
             <div class="table-scrollable table-scrollable-borderless">
-                <table  class="table table-hover table-light byzance-table" style="border-collapse: separate;">
+                <table  class="table table-hover table-light  " style="border-collapse: separate;">
                     <thead>
                     <tr>
                         <td class="col col-lg-2"></td>

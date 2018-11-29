@@ -32,7 +32,7 @@ export class ModalsDatabaseCollectionNewComponent implements OnInit {
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30), Validators.pattern('([A-Z][a-z0-9]*)*')]],
         });
     }
 
@@ -52,3 +52,5 @@ export class ModalsDatabaseCollectionNewComponent implements OnInit {
     onCancelClick(): void {
         this.modalClose.emit(false);
     }
+
+}
