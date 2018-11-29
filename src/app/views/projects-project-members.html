@@ -33,7 +33,7 @@
         <!-- Page Content -- START -->
         <h3 class="margin-top-30" *ngIf="(project && project.participants.length > 1)">Active Users</h3>
         <div *ngIf="(project && project.participants.length > 1)">
-            <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'label_email'|bkTranslate:this}}</th>
@@ -73,7 +73,7 @@
         <hr class="margin-top-30" *ngIf="(project && project.invitations.length > 0 && project.participants.length > 1)">
         <h3 *ngIf="(project && project.invitations.length > 0)">Invited Users</h3>
         <div *ngIf="(project && project.invitations.length > 0)">
-            <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+            <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'label_email'|bkTranslate:this}}</th>

@@ -34,7 +34,7 @@ export interface ModelChangeStatus {
 
 export abstract class TyrionApiBackend extends TyrionAPI {
 
-    public static host = 'localhost:9000';
+    public static host = 'localhost:8080';
     public static protocol = 'http';
 
     public wsProtocol: string = 'ws';

@@ -19,7 +19,7 @@ import { FormSelectComponentOption } from './FormSelectComponent';
                         <td class="vert-align no-wrap">
                            {{item.label}}
                         </td>
-                        <td class="vert-align" *ngFor="let field of additionalFields">
+                        <td class="vert-align no-wrap" *ngFor="let field of additionalFields">
                             {{item[field]}}
                         </td>
                     </tr>

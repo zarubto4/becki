@@ -10,7 +10,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsDatabaseModel } from '../modals/database-new';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsDatabaseNameDescriptionModel } from '../modals/database-edit';
-
+import { ModalsDatabaseCollectionModel } from '../modals/database-collection-new';
 
 @Component({
     selector: `bk-view-projects-project-databases`,
@@ -134,7 +134,22 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
 
     }
 
-
+    onCreateCollectionClick(database: IDatabase): void {
+        let model = new ModalsDatabaseCollectionModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.databaseCollectionCreate(database.id, model.name).then (() => {
+                    this.unblockUI();
+                    this.refresh();
+                }).catch((reason) => {
+                    this.unblockUI();
+                    this.fmError('', reason);
+                    this.refresh();
+                });
+            }
+        });
+    }
 
     onDrobDownEmiter(action: string, database: IDatabase): void {
         if (action === 'remove_database') {
@@ -147,6 +162,10 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
 
         if (action === 'copy_conection_string') {
             this.copyMessage(database.connection_string);
+        }
+
+        if (action === 'create_collection') {
+            this.onCreateCollectionClick(database);
         }
     }
 

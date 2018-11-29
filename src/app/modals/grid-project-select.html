@@ -9,7 +9,7 @@
 
             <div *ngIf="modalModel && modalModel.selected_grid_project == null">
                 <div *ngIf="(projects && projects.content.length)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th class="" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -64,7 +64,7 @@
 
             </div>
             <div *ngIf="modalModel && modalModel.selected_grid_project">
-                <table class="table table-hover table-light byzance-table">
+                <table class="table table-hover table-light  ">
                     <thead>
                     <tr>
                         <th class="" [innerHTML]="'table_program'|bkTranslate:this"></th>

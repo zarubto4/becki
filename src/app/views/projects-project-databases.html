@@ -22,12 +22,12 @@
     <div class="portlet-body">
 
          <!-- Every Database with own table Database -->
-        <table *ngIf="(databases && databases.length > 0)" class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+        <table *ngIf="(databases && databases.length > 0)" class="table table-hover table-light table-scrollable table-scrollable-borderless">
             <thead>
             <tr>
-                <th class="">{{'table_database_name'|bkTranslate:this}}</th>
-                <th class="">{{'table_database_description'|bkTranslate:this}}</th>
-                <th class="text-center">{{'table_id'|bkTranslate:this}}</th>
+                <th>{{'table_database_name'|bkTranslate:this}}</th>
+                <th>{{'table_database_description'|bkTranslate:this}}</th>
+                <th>{{'table_id'|bkTranslate:this}}</th>
                 <th>{{'table_database_collections'|bkTranslate:this}}</th>
                 <th class="text-center">{{'table_action'|bkTranslate:this}}</th>
             </tr>
@@ -36,8 +36,13 @@
                 <tr *ngFor="let database of databases">
                     <td class="vert-align no-wrap"> {{database.name}} </td>
                     <td class="vert-align no-wrap"> {{database.description}} </td>
-                    <td class="vert-align no-wrap"> {{database.id}} </td>
-                    <td class="vert-align no-wrap"> {{database.collections.join('\n')}} </td>
+                    <td class="vert-align breakable"> {{database.id}} </td>
+                    <td class="vert-align no-wrap"> [
+                        <span *ngFor="let collection of database.collections; let last = last">
+                             {{collection}}<span *ngIf="!last">, </span>
+                        </span>
+                    ]
+                    </td>
                     <td class="action-btn-col">
                         <bk-drob-down-button
                             [btns_group_name]="('label_settings'|bkTranslate:this)"
