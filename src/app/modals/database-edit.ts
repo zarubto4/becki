@@ -8,9 +8,13 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { IDatabase } from '../backend/TyrionAPI';
+import { BeckiValidators } from '../helpers/BeckiValidators';
 
 export class ModalsDatabaseNameDescriptionModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '') {
+    public firstCollection: string = null;
+    constructor(public project_id: string, public database?: IDatabase) {
         super();
     }
 }
@@ -30,21 +34,45 @@ export class ModalsDatabaseEditComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-
-        this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
-            'description': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(255)]],
-        });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.database != null ? this.modalModel.database.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.database && this.modalModel.database.name.length > 3 && this.modalModel.database.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Database',  this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.database != null ? this.modalModel.database.description : '', [Validators.maxLength(255)]],
+            'firstCollection': ['',
+                [
+                    BeckiValidators.condition(() => !(this.modalModel && this.modalModel.database), Validators.required),
+                    BeckiValidators.condition(() => !(this.modalModel && this.modalModel.database), Validators.minLength(4)),
+                    BeckiValidators.condition(() => !(this.modalModel && this.modalModel.database), Validators.maxLength(32)),
+                    BeckiValidators.condition(() => !(this.modalModel && this.modalModel.database), Validators.pattern('([a-z0-9_-]*)*'))
+                ]
+            ]
+
+        });
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
+        if (this.modalModel.database == null) {
+            // @ts-ignore
+            this.modalModel.database = {};
+        }
+
+        this.modalModel.database.name = this.form.controls['name'].value;
+        this.modalModel.database.description = this.form.controls['description'].value;
+        this.modalModel.firstCollection = this.form.controls['firstCollection'].value;
         this.modalClose.emit(true);
     }
 

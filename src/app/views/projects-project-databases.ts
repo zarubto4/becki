@@ -7,7 +7,6 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { IDatabase } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalsDatabaseModel } from '../modals/database-new';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsDatabaseNameDescriptionModel } from '../modals/database-edit';
 import { ModalsDatabaseCollectionModel } from '../modals/database-collection-new';
@@ -69,13 +68,13 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     }
 
     onCreateDatabaseClick(): void {
-        let model = new ModalsDatabaseModel();
+        let model = new ModalsDatabaseNameDescriptionModel(this.projectId);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.databaseCreate({
-                    name: model.name,
-                    description: model.description,
+                    name: model.database.name,
+                    description: model.database.description,
                     collection_name: model.firstCollection,
                     product_id: this.productId
                 }).then (() => {
@@ -91,15 +90,15 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     }
 
     onEditDatabaseClick(database: IDatabase): void {
-        let model = new ModalsDatabaseNameDescriptionModel(database.name, database.description);
+        let model = new ModalsDatabaseNameDescriptionModel(this.projectId, database);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
 
                 // TODO upravit na nový api point
                 this.tyrionBackendService.databaseEdit(database.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.database.name,
+                    description: model.database.description
                 })
                     .then(() => {
                         this.unblockUI();
@@ -135,11 +134,11 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     }
 
     onCreateCollectionClick(database: IDatabase): void {
-        let model = new ModalsDatabaseCollectionModel();
+        let model = new ModalsDatabaseCollectionModel(database);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.databaseCollectionCreate(database.id, model.name).then (() => {
+                this.tyrionBackendService.databaseCollectionCreate(database.id, model.collection_name).then (() => {
                     this.unblockUI();
                     this.refresh();
                 }).catch((reason) => {
@@ -160,7 +159,7 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
             this.onEditDatabaseClick(database);
         }
 
-        if (action === 'copy_conection_string') {
+        if (action === 'copy_connection_string') {
             this.copyMessage(database.connection_string);
         }
 
