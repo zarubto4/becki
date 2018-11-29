@@ -8,7 +8,7 @@ import {
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
     ISwaggerInstanceSnapShotConfigurationProgram,
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
-    IUpdateProcedure, ISwaggerInstanceSnapShotConfigurationApiKeys
+    IUpdateProcedure, ISwaggerInstanceSnapShotConfigurationApiKeys, IShortReference
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -22,7 +22,6 @@ import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 import { ModalsSelectVersionModel } from '../modals/version-select';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
@@ -36,6 +35,8 @@ import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { ModalsInstanceApiPropertiesModel } from '../modals/instance-api-properties';
 import { WebSocketClientBlocko } from '../services/websocket/WebSocketClientBlocko';
 import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
+import { ModalsInstanceCreateModel } from '../modals/instance-create';
+import { FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -85,8 +86,22 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     private liveViewLoaded: boolean = false;
 
+
+    // Hardware Filter
+    formFilterGroup: FormGroup;
+
     constructor(injector: Injector) {
         super(injector);
+
+        // Filter Helper
+        this.formFilterGroup = this.formBuilder.group({
+            'alias': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)]],
+            'full_id': ['', [Validators.maxLength(60)]],
+            'description': ['', [Validators.maxLength(60)]],
+            'orderBy': ['NAME', []],
+            'order_schema': ['ASC', []],
+        });
     };
 
     ngOnInit(): void {
@@ -197,6 +212,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.instance.online_state = status.online_state;
                     }
                 });
+
+                this.onFilterHardwareGroup();
 
             })
             .catch(reason => {
@@ -346,8 +363,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onSaveSnapshotClick(deploy_immediately: boolean = false): void {
         if (this.editorView.isDeployable()) {
-            let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-            this.modalService.showModal(m).then((success) => {
+            let model = new ModalsVersionDialogModel(this.instance.id, 'Snapshot');
+            this.modalService.showModal(model).then((success) => {
                 if (success) {
                     this.blockUI();
 
@@ -363,8 +380,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     });
 
                     this.tyrionBackendService.instanceSnapshotCreate(this.instanceId, {
-                        name: m.name,
-                        description: m.description,
+                        name: model.object.name,
+                        description: model.object.description,
+                        tags: model.object.tags,
                         version_id: version_id,
                         interfaces: interfaces,
                         snapshot: this.editorView.getDataJson()
@@ -576,13 +594,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onEditClick() {
-        let model = new ModalsInstanceEditDescriptionModel(this.instance.id, this.instance.name, this.instance.description);
+        let model = new ModalsInstanceCreateModel(this.projectId, this.instance);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.instanceEdit(this.instance.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.instance.name,
+                    description: model.instance.description,
+                    tags: model.instance.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
@@ -595,14 +614,15 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    onEditSnapShotClick(snapShot: IInstanceSnapshot) {
-        let model = new ModalsSnapShotInstanceModel(snapShot.name, snapShot.description, snapShot.tags, true);
+    onEditSnapShotClick(snapShot: IShortReference) {
+        let model = new ModalsSnapShotInstanceModel(this.instanceId, snapShot);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.instanceSnapshotEdit(snapShot.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.snapshot.name,
+                    description: model.snapshot.description,
+                    tags: model.snapshot.tags,
                 })
                     .then((snapShotResponse: IInstanceSnapshot) => {
                         this.unblockUI();
@@ -615,7 +635,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         });
     }
 
-    onRemoveSnapShotClick(snapShot: IInstanceSnapshot) {
+    onRemoveSnapShotClick(snapShot: IShortReference) {
         this.modalService.showModal(new ModalsRemovalModel(snapShot.name)).then((success) => {
             if (success) {
                 this.blockUI();
@@ -719,12 +739,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         })
             .then((values) => {
                 this.deviceGroupFilter = values;
-
-                if (this.deviceGroupFilter.content.length > 0) {
-                    this.onFilterHardware(0, this.deviceGroupFilter.content);
-                } else {
-                    this.onFilterHardware(0, []);
-                }
+                this.onFilterHardware(0);
 
                 this.unblockUI();
             })
@@ -734,8 +749,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
     }
 
-    onFilterHardware(pageNumber: number = 0, groups: IHardwareGroup[] = []): void {
+    onFilterHardware(pageNumber: number = 0): void {
 
+        let groups: IHardwareGroup[] = [];
         // Set groupd if we he it
         if (groups.length > 0 && this.deviceGroupFilter != null) {
             groups = this.deviceGroupFilter.content;
@@ -744,8 +760,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.blockUI();
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId],
-            instance_snapshots: groups.length > 0 ? [] : [this.instance.current_snapshot.id],
-            hardware_groups_id: groups.map(group => group.id)
+            instance_snapshot: groups.length === 0 ? this.instance.current_snapshot.id : null,
+            hardware_groups_id: groups.length === 0 ? null : groups.map(group => group.id),
+            order_by: this.formFilterGroup.controls['orderBy'].value,
+            order_schema: this.formFilterGroup.controls['order_schema'].value,
+            full_id: this.formFilterGroup.controls['full_id'].value,
+            id: this.formFilterGroup.controls['id'].value,
+            name: this.formFilterGroup.controls['alias'].value,
+            description: this.formFilterGroup.controls['description'].value
         })
             .then((values) => {
                 this.devicesFilter = values;
@@ -961,7 +983,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onDrobDownEmiter(action: string, object: any): void {
 
-        if (action === 'edit_snapshot') {
+        if (action === 'edit_snapshot_instance') {
             this.onEditSnapShotClick(object);
         }
 

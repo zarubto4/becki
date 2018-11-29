@@ -25,8 +25,6 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    project: IProject = null;
-
     blockList: IBlockList = null;
     blockPublicList: IBlockList = null;
     blockListNotApproved: IBlockList = null;
@@ -81,7 +79,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
     }
 
     onMakeClone(block: IBlock): void {
-        let model = new ModalsBlockoBlockCopyModel(block.name, block.description, this.project.tags);
+        let model = new ModalsBlockoBlockCopyModel(this.projectId, block);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -89,8 +87,9 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                     block_id: block.id,
                    // tags: model.tags,
                     project_id: this.projectId,
-                    name: model.name,
-                    description: model.description
+                    name: model.block.name,
+                    description: model.block.description,
+                    tags: model.block.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));
@@ -109,13 +108,13 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onBlockAddClick(): void {
 
-        let model = new ModalsBlocksBlockPropertiesModel();
+        let model = new ModalsBlocksBlockPropertiesModel(this.projectId);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.blockCreate({
-                    name: model.name,
-                    description: model.description,
+                    name: model.block.name,
+                    description: model.block.description,
                     project_id: this.projectId
                 })
                     .then(block => {
@@ -132,13 +131,13 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
     onBlockEditClick(block: IBlock): void {
 
-        let model = new ModalsBlocksBlockPropertiesModel(block.name, block.description, block.tags, true, block.name);
+        let model = new ModalsBlocksBlockPropertiesModel(this.projectId, block);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.blockEdit(block.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.block.name,
+                    description: model.block.description,
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_edit')));

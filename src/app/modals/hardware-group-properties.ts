@@ -8,14 +8,14 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { IHardwareGroup } from '../backend/TyrionAPI';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 
 export class ModalsHardwareGroupPropertiesModel extends ModalModel {
     constructor(
-        public name: string = '',
-        public description: string = '',
-        public edit: boolean = false,
-        public exceptName: string = null
+        public project_id: string = '',
+        public group?: IHardwareGroup
     ) {
         super();
     }
@@ -35,21 +35,39 @@ export class ModalsHardwareGroupPropertiesComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-        this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': ['']
-        });
-    }
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {}
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
+
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.group != null ? this.modalModel.group.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.group && this.modalModel.group.name.length > 3 && this.modalModel.group.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'HardwareGroup', this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.group != null ? this.modalModel.group.description : ''],
+            'tags': [this.modalModel.group != null ? this.modalModel.group.tags : []]
+        });
+
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
+
+        if (this.modalModel.group == null) {
+            // @ts-ignore
+            this.modalModel.group = {};
+        }
+
+        this.modalModel.group.name = this.form.controls['name'].value;
+        this.modalModel.group.description = this.form.controls['description'].value;
+        this.modalModel.group.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

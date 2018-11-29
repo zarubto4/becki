@@ -535,7 +535,9 @@ span.changes {
     left: 1px !important;
 }
 
-
+.block-tester {
+    word-break: break-all;
+}
 
 .block-tester, .widget-tester {
     line-height: 26px;
@@ -1199,7 +1201,6 @@ body {
     filter: grayscale(0);
     -webkit-transition: filter 0.2s;
     transition: filter 0.2s;
-    height: 100vh;
 }
 
 body.block-ui-blur {
@@ -2837,4 +2838,8 @@ textarea.form-control {
 .fade_animation {
     opacity: 0;
     transition: opacity 0.05s ease;
+}
+
+.logo-wrapper {
+    height: 100vh;
 }

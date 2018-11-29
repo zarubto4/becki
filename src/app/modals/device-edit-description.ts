@@ -1,21 +1,23 @@
-/**
- * Created by DominikKrisztof on 26.10.16.
- */
 /*
  * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
+
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IHardware } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { IHardware } from '../backend/TyrionAPI';
 
 
 export class ModalsDeviceEditDescriptionModel extends ModalModel {
-    constructor(public id: string = '',  public name: string = '', public description: string = '', public dominant: boolean = false, public can_be_activated: boolean = false) {
+    constructor(
+        public project_id: string,
+        public hardware: IHardware
+    ) {
         super();
     }
 }
@@ -34,21 +36,30 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService, ) {
-
-        this.form = this.formBuilder.group({
-            'name': [''],
-            'description': [''],
-        });
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService, ) {
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.hardware != null ? this.modalModel.hardware.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.hardware && this.modalModel.hardware.name.length > 3 && this.modalModel.hardware.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Hardware', this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.hardware != null ? this.modalModel.hardware.description : '' , [Validators.maxLength(255)]],
+            'tags': [this.modalModel.hardware != null ? this.modalModel.hardware.tags : []]
+        });
     }
 
     onHardwareDeactivate(): void {
-        this.tyrionBackendService.projectDeactiveHW(this.modalModel.id)
+        this.backendService.projectDeactiveHW(this.modalModel.hardware.id)
             .then((values) => {
                 this.onSubmitClick();
             })
@@ -59,7 +70,7 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
     }
 
     onHardwareActivate(): void {
-        this.tyrionBackendService.projectActiveHW(this.modalModel.id)
+        this.backendService.projectActiveHW(this.modalModel.hardware.id)
             .then((values) => {
                 this.onSubmitClick();
             })
@@ -70,8 +81,17 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
+
+
+        if (this.modalModel.hardware == null) {
+            // @ts-ignore
+            this.modalModel.hardware = {};
+        }
+
+        this.modalModel.hardware.name = this.form.controls['name'].value;
+        this.modalModel.hardware.description = this.form.controls['description'].value;
+        this.modalModel.hardware.tags = this.form.controls['tags'].value;
+
         this.modalClose.emit(true);
     }
 

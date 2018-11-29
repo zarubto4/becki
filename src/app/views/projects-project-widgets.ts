@@ -79,15 +79,16 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
     }
 
     onMakeClone(widget: IWidget): void {
-        let model = new ModalsWidgetsWidgetCopyModel(widget.name, widget.description, widget.tags);
+        let model = new ModalsWidgetsWidgetCopyModel(this.projectId, widget);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.widgetMakeClone({
                     widget_id: widget.id,
                     project_id: this.projectId,
-                    name: model.name,
-                    description: model.description
+                    name: model.widget.name,
+                    description: model.widget.description,
+                    tags: model.widget.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));
@@ -107,14 +108,14 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
 
     onWidgetAddClick(): void {
 
-        let model = new ModalsWidgetsWidgetPropertiesModel();
+        let model = new ModalsWidgetsWidgetPropertiesModel(this.projectId);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.widgetCreate({
                     project_id: this.projectId,
-                    name: model.name,
-                    description: model.description
+                    name: model.widget.name,
+                    description: model.widget.description
                 })
                     .then(widget => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_add_success')));
@@ -131,14 +132,13 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
     }
 
     onWidgetEditClick(widget: IWidget): void {
-
-        let model = new ModalsWidgetsWidgetPropertiesModel(widget.name, widget.description, true, widget.name);
+        let model = new ModalsWidgetsWidgetPropertiesModel(this.projectId, widget);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.widgetEdit(widget.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.widget.name,
+                    description: model.widget.description,
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));

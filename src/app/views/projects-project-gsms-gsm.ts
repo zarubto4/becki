@@ -347,7 +347,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     }
 
     onEditClick(gsm: IGSM): void {
-        let model = new ModalsGsmPropertiesModel(gsm);
+        let model = new ModalsGsmPropertiesModel(this.project_id, gsm);
         this.modalService.showModal(model)
             .then((success) => {
                 this.blockUI();

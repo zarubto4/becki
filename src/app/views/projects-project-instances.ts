@@ -9,7 +9,6 @@ import { IInstance, IInstanceList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { ModalsInstanceCreateComponent, ModalsInstanceCreateModel } from '../modals/instance-create';
 import { ModalsRemovalModel } from '../modals/removal';
 
@@ -82,17 +81,46 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
 
     onAddClick() {
         let model = new ModalsInstanceCreateModel(this.project_id);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.instanceCreate({
+                    project_id: this.project_id,
+                    name: model.instance.name,
+                    description: model.instance.description,
+                    tags: model.instance.tags,
+                    b_program_id: model.b_program_id,
+                    main_server_id: model.main_server_id,
+                    backup_server_id: model.backup_server_id
+                })
+                    .then((value) => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_create_success')));
+                        this.unblockUI();
+                        this.onFilterInstances();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_create_fail'), reason));
+                        this.unblockUI();
+                        this.onFilterInstances();
+                    });
+            }
+        });
+
         this.modalService.showModal(model).then(() => {
             this.onFilterInstances();
         });
     }
 
     onInstanceEditClick(instance: IInstance) {
-        let model = new ModalsInstanceEditDescriptionModel(instance.id, instance.name, instance.description);
+        let model = new ModalsInstanceCreateModel(this.project_id, instance);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.instanceEdit(instance.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.instanceEdit(instance.id, {
+                    name: model.instance.name,
+                    description: model.instance.description,
+                    tags: model.instance.tags
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.unblockUI();
@@ -134,7 +162,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                     })
                     .catch(reason => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', reason));
+                        this.fmError(this.translate('label_shut_down_error', reason));
                     });
             }
         });
@@ -146,7 +174,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.instanceSnapshotDeploy({
-                    snapshot_id: instance.id,
+                    snapshot_id: instance.snapshots[instance.snapshots.length - 1].id,
                     upload_time: 0
                 })
                     .then(() => {

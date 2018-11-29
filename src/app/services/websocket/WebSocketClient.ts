@@ -48,6 +48,10 @@ export abstract class WebSocketClient {
         }
     }
 
+    public getUrl(): string {
+        return this.url;
+    }
+
     public ping(channel?: string): void {
         let message: WSMessagePing = new WSMessagePing();
         message.message_channel = channel || this.channel;

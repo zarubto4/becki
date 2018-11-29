@@ -9,21 +9,20 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 
-
-export class ModalsBlocksTypePropertiesModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public edit: boolean = false, public exceptName: string = null) {
+export class ModalsDatabaseCollectionModel extends ModalModel {
+    constructor(public name: string = '', public description: string = '', public firstCollection: string = '') {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-blocks-type-properties',
-    templateUrl: './blocks-type-properties.html'
+    selector: 'bk-modals-database-collection-new',
+    templateUrl: './database-collection-new.html'
 })
-export class ModalsBlocksTypePropertiesComponent implements OnInit {
+export class ModalsDatabaseCollectionNewComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsBlocksTypePropertiesModel;
+    modalModel: ModalsDatabaseCollectionModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -31,20 +30,18 @@ export class ModalsBlocksTypePropertiesComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+
         this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': ['']
+            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
         });
     }
 
     ngOnInit() {
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
     }
 
     onSubmitClick(): void {
         this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
         this.modalClose.emit(true);
     }
 
@@ -55,4 +52,5 @@ export class ModalsBlocksTypePropertiesComponent implements OnInit {
     onCancelClick(): void {
         this.modalClose.emit(false);
     }
+
 }

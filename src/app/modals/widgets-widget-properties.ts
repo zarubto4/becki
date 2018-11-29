@@ -8,10 +8,12 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { IWidget } from '../backend/TyrionAPI';
 
 
 export class ModalsWidgetsWidgetPropertiesModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public edit: boolean = false, public exceptName: string = null) {
+    constructor(public project_id: string, public widget?: IWidget) {
         super();
     }
 }
@@ -31,20 +33,38 @@ export class ModalsWidgetsWidgetPropertiesComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-        this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': ['']
-        });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.widget != null ? this.modalModel.widget.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.widget && this.modalModel.widget.name.length > 3 && this.modalModel.widget.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Widget',  this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.widget != null ? this.modalModel.widget.description : '', [Validators.maxLength(255)]],
+            'tags': [this.modalModel.widget != null ? this.modalModel.widget.tags : []],
+        });
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
+
+        if (this.modalModel.widget == null) {
+            // @ts-ignore
+            this.modalModel.widget = {};
+        }
+
+        this.modalModel.widget.name = this.form.controls['name'].value;
+        this.modalModel.widget.description = this.form.controls['description'].value;
+        this.modalModel.widget.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

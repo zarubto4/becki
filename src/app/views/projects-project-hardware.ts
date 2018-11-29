@@ -100,13 +100,14 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 // Hardware   ----------------------------------------------------------------------------------------------------------
 
     onHardwareEditClick(device: IHardware): void {
-        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description, device.dominant_entity, (!device.dominant_entity && device.dominant_project_active == null));
+        let model = new ModalsDeviceEditDescriptionModel(this.projectId, device);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.boardEditPersonalDescription(device.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.hardware.name,
+                    description: model.hardware.description,
+                    tags: model.hardware.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
@@ -270,13 +271,14 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 // Hardware Group  -----------------------------------------------------------------------------------------------------
 
     onGroupAddClick(): void {
-        let model = new ModalsHardwareGroupPropertiesModel();
+        let model = new ModalsHardwareGroupPropertiesModel(this.projectId);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.hardwareGroupCreate({
-                    name: model.name,
-                    description: model.description,
+                    name: model.group.name,
+                    description: model.group.description,
+                    tags: model.group.tags,
                     project_id: this.projectId
                 })
                     .then(() => {
@@ -292,13 +294,14 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     }
 
     onGroupEditClick(group: IHardwareGroup): void {
-        let model = new ModalsHardwareGroupPropertiesModel(group.name, group.description, true, group.name);
+        let model = new ModalsHardwareGroupPropertiesModel(this.projectId, group);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.hardwareGroupEdit(group.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.group.name,
+                    description: model.group.description,
+                    tags: model.group.tags
                 })
                     .then(() => {
                         this.unblockUI();

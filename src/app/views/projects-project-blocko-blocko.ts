@@ -510,11 +510,11 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     onBlockoProgramEditClick(): void {
-        let model = new ModalsBlockoPropertiesModel(this.blockoProgram.name, this.blockoProgram.description, true, this.blockoProgram.name);
+        let model = new ModalsBlockoPropertiesModel(this.projectId, this.blockoProgram);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.bProgramEdit(this.blockoProgram.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.bProgramEdit(this.blockoProgram.id, { name: model.blocko.name, description: model.blocko.description })
                     .then(() => {
                         this.fmSuccess(this.translate('flash_blocko_updated'));
                         this.refresh();
@@ -621,18 +621,19 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
     }
 
     onEditBProgramVersionClick(version: IBProgramVersion): void {
-        let model = new ModalsVersionDialogModel(version.name, version.description, true);
+        let model = new ModalsVersionDialogModel(this.blockoProgram.id, 'BProgramVersion', version);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.bProgramVersionEdit(version.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags
                 }).then(() => {
-                    this.fmSuccess(this.translate('flash_edit_version_been_changed', model.name));
+                    this.fmSuccess(this.translate('flash_edit_version_been_changed', model.object.name));
                     this.refresh();
                 }).catch(reason => {
-                    this.fmError(this.translate('flash_edit_cant_change_version', model.name, reason));
+                    this.fmError(this.translate('flash_edit_cant_change_version', model.object.name, reason));
                     this.refresh();
                 });
             }
@@ -678,8 +679,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
 
         // save dialog
-        let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-        this.modalService.showModal(m).then((success) => {
+        let model = new ModalsVersionDialogModel(this.blockoProgram.id, 'BProgramVersion');
+        this.modalService.showModal(model).then((success) => {
             if (success) {
 
                 let mProjectSnapshots: IMProjectSnapShot[] = [];
@@ -708,17 +709,18 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 // console.log(mProjectSnapshots);
                 this.blockUI();
                 this.tyrionBackendService.bProgramVersionCreate(this.blockoId, {
-                    name: m.name,
-                    description: m.description,
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags,
                     m_project_snapshots: mProjectSnapshots,
                     program: this.blockoView.getDataJson()
                 }).then(() => {
-                    this.fmSuccess(this.translate('flash_version_saved', m.name));
+                    this.fmSuccess(this.translate('flash_version_saved', model.object.name));
                     this.refresh(); // also unblockUI
                     this.unsavedChanges = false;
                     this.exitConfirmationService.setConfirmationEnabled(false);
                 }).catch((err) => {
-                    this.fmError(this.translate('flash_cant_save_version', m.name, err));
+                    this.fmError(this.translate('flash_cant_save_version', model.object.name, err));
                     this.unblockUI();
                 });
             }

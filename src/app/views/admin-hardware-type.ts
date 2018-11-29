@@ -13,7 +13,7 @@ import { ModalsCreateHardwareTypeModel } from '../modals/type-of-board-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsAdminCreateHardwareModel } from '../modals/admin-create-hardware';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
-import { ModalsHardwareFindHash, ModalsHardwareFindHashComponent } from '../modals/hardware-find-hash';
+import { ModalsHardwareFindHash } from '../modals/hardware-find-hash';
 import { FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -330,11 +330,15 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
     }
 
     onEditHardwareClick(device: IHardware): void {
-        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
+        let model = new ModalsDeviceEditDescriptionModel(null, device);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
+                this.tyrionBackendService.boardEditPersonalDescription(device.id, {
+                    name: model.hardware.name,
+                    description: model.hardware.description,
+                    tags: model.hardware.tags
+                })
                     .then(() => {
                         this.refresh();
                         this.unblockUI();

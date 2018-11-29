@@ -89,7 +89,6 @@ import { TyrionBackendService } from '../services/BackendService';
 })
 /* tslint:enable */
 export class FilterTableComponent implements OnInit {
-
     @Input()
     filter_parameters: Filter_parameter[] = null;
 

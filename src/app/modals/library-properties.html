@@ -1,16 +1,19 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title" [innerHTML]="(modalModel.edit?'title_edit':'title_add')|bkTranslate:this"></h4>
+        <h4 class="modal-title" [innerHTML]="(modalModel.library?'title_edit':'title_add')|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
             <bk-form-input [control]="form.controls.name" [label]="'label_library_name'|bkTranslate:this"></bk-form-input>
             <bk-form-input [control]="form.controls.description" [label]="'label_library_description'|bkTranslate:this"></bk-form-input>
+
+            <!-- Tags -->
+            <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
         </form>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.edit?"btn_edit":"btn_add")|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.library?"btn_edit":"btn_add")|bkTranslate:this}}</button>
     </div>
 </div>

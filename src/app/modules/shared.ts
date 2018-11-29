@@ -80,17 +80,14 @@ import { ModalsBlockoAddGridComponent } from '../modals/blocko-add-grid';
 import { ModalsPermissionGroupComponent } from '../modals/permission-group';
 import { ModalsPaymentDetailsComponent } from '../modals/payment-details';
 import { ModalsRolePermissionAddComponent } from '../modals/role-permission-add';
-import { ModalsBlocksTypePropertiesComponent } from '../modals/blocks-type-properties';
 import { ModalsPermissionPermissionPropertyComponent } from '../modals/permission-permission-properties';
 import { ModalsBlocksBlockPropertiesComponent } from '../modals/blocks-block-properties';
 import { ModalsHighImportanceNotificationComponent } from '../modals/high-importance-notification';
 import { ModalsDeviceEditDescriptionComponent } from '../modals/device-edit-description';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from '../modals/device-edit-developer-parameter-value';
-import { ModalsInstanceEditDescriptionComponent } from '../modals/instance-edit-description';
 import { ModalsInstanceCreateComponent } from '../modals/instance-create';
 import { ModalsBlockoVersionSelectComponent } from '../modals/blocko-version-select';
 import { ModalsMembersAddComponent } from '../modals/members-add';
-import { ModalsWidgetsTypePropertiesComponent } from '../modals/widgets-type-properties';
 import { ModalsWidgetsWidgetPropertiesComponent } from '../modals/widgets-widget-properties';
 import { ModalsSendInvoiceComponent } from '../modals/financial-send-invoice';
 import { ModalsBlockoAddGridEmptyComponent } from '../modals/blocko-add-grid-emtpy';
@@ -119,7 +116,6 @@ import { ModalsAddGSMComponent } from '../modals/add-gsm';
 import { ModalsGsmPropertiesComponent } from '../modals/gsm-properties';
 import { ModalsInstanceApiPropertiesComponent } from '../modals/instance-api-properties';
 import { ModalsDatabaseNewComponent } from '../modals/database-new';
-import { ModalsDatabaseRemoveComponent } from '../modals/database-remove';
 import { NotificationsOverlayComponent } from '../components/NotificationsOverlayComponent';
 import { NotificationsListComponent } from '../components/NotificationsListComponent';
 import { TagComponent } from '../components/TagComponent';
@@ -168,6 +164,8 @@ import { ProjectsProjectWidgetsWidgetComponent } from '../views/projects-project
 import { ProjectsProjectBlocksComponent } from '../views/projects-project-blocks';
 import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-blocks-block';
 import { ModalsDatabaseEditComponent } from '../modals/database-edit';
+import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collection-new';
+import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
 
 @NgModule({
     imports: [
@@ -272,7 +270,7 @@ import { ModalsDatabaseEditComponent } from '../modals/database-edit';
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
-
+        ProjectsProjectHardwareHardwareComponent,
         // Modals
         ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
@@ -314,17 +312,14 @@ import { ModalsDatabaseEditComponent } from '../modals/database-edit';
         ModalsPermissionGroupComponent,
         ModalsPaymentDetailsComponent,
         ModalsRolePermissionAddComponent,
-        ModalsBlocksTypePropertiesComponent,
         ModalsPermissionPermissionPropertyComponent,
         ModalsBlocksBlockPropertiesComponent,
         ModalsHighImportanceNotificationComponent,
         ModalsDeviceEditDescriptionComponent,
         ModalsDeviceEditDeveloperParameterValueComponent,
-        ModalsInstanceEditDescriptionComponent,
         ModalsInstanceCreateComponent,
         ModalsBlockoVersionSelectComponent,
         ModalsMembersAddComponent,
-        ModalsWidgetsTypePropertiesComponent,
         ModalsWidgetsWidgetPropertiesComponent,
         ModalsSendInvoiceComponent,
         ModalsBlockoAddGridEmptyComponent,
@@ -354,7 +349,7 @@ import { ModalsDatabaseEditComponent } from '../modals/database-edit';
         ModalsInstanceApiPropertiesComponent,
         ModalsDatabaseNewComponent,
         ModalsDatabaseEditComponent,
-        ModalsDatabaseRemoveComponent,
+        ModalsDatabaseCollectionNewComponent,
         ModalsFinancialProductComponent,
         ModalComponent
     ],
@@ -449,7 +444,8 @@ import { ModalsDatabaseEditComponent } from '../modals/database-edit';
         ProjectsProjectWidgetsComponent,
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
-        ProjectsProjectBlocksBlockComponent
+        ProjectsProjectBlocksBlockComponent,
+        ProjectsProjectHardwareHardwareComponent
     ]
 })
 export class SharedModule {}
