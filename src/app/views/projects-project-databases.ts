@@ -140,7 +140,7 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.collectionCreate(database.id, model.name).then (() => {
+                this.tyrionBackendService.databaseCollectionCreate(database.id, model.name).then (() => {
                     this.unblockUI();
                     this.refresh();
                 }).catch((reason) => {

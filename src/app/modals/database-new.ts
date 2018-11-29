@@ -34,7 +34,7 @@ export class ModalsDatabaseNewComponent implements OnInit {
         this.form = this.formBuilder.group({
             'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
             'description': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(255)]],
-            'firstCollection': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]]
+            'firstCollection': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30), Validators.pattern('([A-Z][a-z0-9]*)*')]]
         });
     }
 
