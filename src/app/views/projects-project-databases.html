@@ -37,7 +37,12 @@
                     <td class="vert-align no-wrap"> {{database.name}} </td>
                     <td class="vert-align no-wrap"> {{database.description}} </td>
                     <td class="vert-align breakable"> {{database.id}} </td>
-                    <td class="vert-align no-wrap"> {{database.collections.join('\n')}} </td>
+                    <td class="vert-align no-wrap"> [
+                        <span *ngFor="let collection of database.collections; let last = last">
+                             {{collection}}<span *ngIf="!last">, </span>
+                        </span>
+                    ]
+                    </td>
                     <td class="action-btn-col">
                         <bk-drob-down-button
                             [btns_group_name]="('label_settings'|bkTranslate:this)"
