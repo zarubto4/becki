@@ -2071,6 +2071,9 @@ export class StaticTranslation {
                 'flash_widget_edit_success': 'Widget has been edited.',
                 'flash_widget_edit_fail': 'Unable to edit widget, ',
 
+                'tab_ide': 'IDE',
+                'tab_configuration': 'Configuration',
+                'tab_versions': 'Versions',
                 'label_console_cant_crate_widget': '<strong>Cannot create widget:</strong> Make sure, that you specified size profiles for widget',
                 'label_widget_properties': 'GRID widget properties',
                 'label_remove_widget': 'GRID widget properties',
@@ -2092,9 +2095,11 @@ export class StaticTranslation {
                 'label_grid': 'GRID',
 
                 'table_name': 'Name',
+                'table_version_name': 'Name',
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
+                'table_status': 'Status',
 
                 'label_publish': 'Publish',
                 'label_publish_decision': 'Decide of Publish',

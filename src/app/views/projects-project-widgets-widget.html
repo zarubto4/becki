@@ -17,302 +17,342 @@
                       [icon]="'fa-object-group'"
                       (onClick)="onPortletClick($event)"
                       [btns]="[
-                      {
-                          condition: !!widget,
-                          btn_label_for_person: ('label_properties'|bkTranslate:this),
-                          icon: 'fa-cog',
-                          colorType: 'EDIT',
-                          btn_tag: 'edit_widget',
-                          permission: widget.update_permission
-                      },
-                      {
-                          condition: !!widget,
-                          btn_label_for_person: ('label_remove'|bkTranslate:this),
-                          icon: 'fa-trash',
-                          colorType: 'REMOVE',
-                          btn_tag: 'remove_widget',
-                          permission: widget.delete_permission
-                      }
-                 ]"
+                          {
+                              condition: !!widget,
+                              btn_label_for_person: ('label_properties'|bkTranslate:this),
+                              icon: 'fa-cog',
+                              colorType: 'EDIT',
+                              btn_tag: 'edit_widget',
+                              permission: widget.update_permission
+                          },
+                          {
+                              condition: !!widget,
+                              btn_label_for_person: ('label_remove'|bkTranslate:this),
+                              icon: 'fa-trash',
+                              colorType: 'REMOVE',
+                              btn_tag: 'remove_widget',
+                              permission: widget.delete_permission
+                          }
+                      ]"
+                      (onTabClick)="onToggleTab($event)"
+                      [tab_selected_name]="tab"
+                      [tabBtns]="[
+                        {
+                            tab_name: 'ide',
+                            condition: (true),
+                            tab_color: 'WIDGET',
+                            tab_label: ('tab_ide'|bkTranslate:this)
+                        },
+                         {
+                            tab_name: 'configuration',
+                            condition: (true),
+                            tab_color: 'WIDGET',
+                            tab_label: ('tab_configuration'|bkTranslate:this)
+                        },
+                        {
+                            tab_name: 'versions',
+                            condition: (true),
+                            tab_color: 'WIDGET',
+                            tab_label: ('tab_versions'|bkTranslate:this)
+                        }
+                    ]"
+
     >
     </bk-portlet-title>
     <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
+    <div class="portlet-body">
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light bordered padding-20">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-file-code-o"></i>
-                            <span>{{'label_ide'|bkTranslate:this}}</span>
-                        </span>
+        <div [hidden]="!(tab=='ide')">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!--<bk-form-color-picker [label]="Widget color" [control]="widgetForm.controls.color" [waitForTouch]="false"></bk-form-color-picker>
+                    <bk-form-fa-icon-select [label]="Widget icon" [control]="widgetForm.controls.icon" [waitForTouch]="false"></bk-form-fa-icon-select>
+                    <bk-form-input [label]="Widget description" [control]="wifgrtForm.controls.description" [waitForTouch]="false"></bk-form-input>-->
+
+                    <div class="form-group">
+                        <bk-monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)"
+                                          [typings]="['ES5', 'ConsoleLib', 'ContextLib', 'UtilsLib', 'WKLib']"></bk-monaco-editor>
                     </div>
-                    <div *ngIf="selectedWidgetVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span>                        {{selectedWidgetVersion.version_name}}</span>
-                    </div>
-                </div>
 
-                <!--<bk-form-color-picker [label]="Widget color" [control]="widgetForm.controls.color" [waitForTouch]="false"></bk-form-color-picker>
-                <bk-form-fa-icon-select [label]="Widget icon" [control]="widgetForm.controls.icon" [waitForTouch]="false"></bk-form-fa-icon-select>
-                <bk-form-input [label]="Widget description" [control]="wifgrtForm.controls.description" [waitForTouch]="false"></bk-form-input>-->
-
-                <div class="form-group">
-                    <bk-monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" [typings]="['ES5', 'ConsoleLib', 'ContextLib', 'UtilsLib', 'WKLib']"></bk-monaco-editor>
-                </div>
-
-                <div *ngIf="buildErrors" class="spacer30"></div>
-                <div *ngIf="buildErrors" class="portlet light bordered">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <i class="fa fa-play font-red"></i>
-                            <span class="caption-subject bold uppercase font-red">{{'label_build_errors'|bkTranslate:this}}></span>
+                    <div *ngIf="buildErrors" class="spacer30"></div>
+                    <div *ngIf="buildErrors" class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-play font-red"></i>
+                                <span class="caption-subject bold uppercase font-red">{{'label_build_errors'|bkTranslate:this}}></span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div *ngFor="let buildError of buildErrors" class="mt-element-ribbon bg-grey-steel">
+                                <div class="ribbon ribbon-shadow uppercase"
+                                     [class.ribbon-color-danger]="buildError.type=='error'"
+                                     [class.ribbon-color-warning]="buildError.type=='warning'">{{buildError.type}}
+                                </div>
+                                <p class="ribbon-content">
+                                    Line: <b>{{buildError.line}}</b>
+                                    <br>
+                                    <b>{{buildError.text}}</b>
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="portlet-body">
-                        <div *ngFor="let buildError of buildErrors" class="mt-element-ribbon bg-grey-steel">
-                            <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'" [class.ribbon-color-warning]="buildError.type=='warning'">{{buildError.type}}</div>
-                            <p class="ribbon-content">
-                                Line: <b>{{buildError.line}}</b>
-                                <br>
-                                <b>{{buildError.text}}</b>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="pull-right">
-                        <button type="button" class="btn default yellow-gold" (click)="onTestClick()">
-                            <i class="fa fa-play"></i>{{'btn_test'|bkTranslate:this}}
-                        </button>
-                        <button *ngIf=" widget && ( (projectId && widget.update_permission) || (widget.publish_type == 'DEFAULT_MAIN'))" type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="!widgetCode">
-                            <i class="fa fa-floppy-o"></i>{{'btn_save'|bkTranslate:this}}
-                        </button>
-
-                        <button *ngIf="widget && widget.publish_type == 'PUBLIC' && project" type="button" class="btn default blue" (click)="onMakeClone()">
-                            <i class="fa fa-clone"></i> {{'btn_copy'|bkTranslate:this}}
-                        </button>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-
-            </div>
-        </div>
-
-        <div [hidden]="!widgetTestRunning" class="col-md-12">
-            <div class="portlet light bordered padding-20">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-terminal"></i>
-                            {{'btn_test'|bkTranslate:this}}
-                        </span>
-                    </div>
-                </div>
-                <div class="portlet-content">
-                    <button type="button" class="btn default yellow-gold grid-widget-config-button" (click)="onWidgetConfigClick()">
-                        <i class="fa fa-cog"></i> {{'label_configuration'|bkTranslate:this}}
-                    </button>
-                    <div #widgetTestScreen></div>
 
                     <div>
-                        <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
+                        <div class="pull-right">
+                            <button type="button" class="btn default yellow-gold" (click)="onTestClick()">
+                                <i class="fa fa-play"></i>{{'btn_test'|bkTranslate:this}}
+                            </button>
+                            <button
+                                *ngIf=" widget && ( (projectId && widget.update_permission) || (widget.publish_type == 'DEFAULT_MAIN'))"
+                                type="button" class="btn default green-haze" (click)="onSaveClick()"
+                                [disabled]="!widgetCode">
+                                <i class="fa fa-floppy-o"></i>{{'btn_save'|bkTranslate:this}}
+                            </button>
 
-                            <h4 class="text-center">Inputs simulator</h4>
-                            <div class="widget-tester no-select">
-
-                                <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
-
-                                    <ng-template [ngIf]="connector.isDigital() && connector.isInput()">
-                                        <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
-                                        <div class="col-md-8">
-                                            <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
-                                            <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value"
-                                                (click)="onDigitalInputClick(connector)"></i>
-                                        </div>
-                                    </ng-template>
-
-                                    <ng-template [ngIf]="connector.isAnalog() && connector.isInput()">
-                                        <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
-                                        <div class="col-md-8">
-                                            <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
-                                            <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
-                                        </div>
-                                    </ng-template>
-
-                                    <ng-template [ngIf]="connector.isMessage() && connector.isInput()">
-                                        <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
-                                        <div *ngFor="let argType of connector.messageTypes; let index = index">
-
-                                            <div *ngIf="index" class="col-md-4"></div>
-
-                                            <ng-template [ngIf]="argType == 'boolean'">
-                                                <div class="col-md-8">
-                                                    <div class="widget-tester-message-input-label">Bool <strong>Arg #{{index}}</strong>:</div>
-                                                    <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]"
-                                                        [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]"
-                                                        (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template [ngIf]="argType == 'float' ">
-                                                <div class="col-md-8">
-                                                    <div class="widget-tester-message-input-label">Float <strong>Arg #{{index}}</strong>:</div>
-                                                    <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
-                                                </div>
-                                            </ng-template>
-                                            <ng-template [ngIf]="argType == 'integer'">
-                                                <div class="col-md-8">
-                                                    <div class="widget-tester-message-input-label">Int <strong>Arg #{{index}}</strong>:</div>
-                                                    <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
-                                                </div>
-                                            </ng-template>
-                                            <ng-template [ngIf]="argType == 'string'">
-                                                <div class="col-md-8">
-                                                    <div class="widget-tester-message-input-label">String <strong>Arg #{{index}}</strong>:</div>
-                                                    <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
-                                                </div>
-                                            </ng-template>
-
-                                        </div>
-
-                                        <div class="col-md-4"></div>
-                                        <div class="col-md-8">
-                                            <button class="btn btn-sm default green widget-tester-message-input-btn" type="button" (click)="onMessageInputSendClick(connector)">
-                                                <i class="fa fa-paper-plane"></i> Send
-                                            </button>
-                                        </div>
-
-                                    </ng-template>
-
-
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
-                            <h4 class="text-center">{{'label_console'|bkTranslate:this}}</h4>
-                            <bk-console-log maxHeight="400px"></bk-console-log>
+                            <button *ngIf="widget && widget.publish_type == 'PUBLIC' && project" type="button"
+                                    class="btn default blue" (click)="onMakeClone()">
+                                <i class="fa fa-clone"></i> {{'btn_copy'|bkTranslate:this}}
+                            </button>
                         </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
+
+                <div [hidden]="!widgetTestRunning" class="col-md-12">
+                    <div class="portlet light bordered padding-20">
+                        <div class="portlet-title">
+                            <div class="becki-caption">
+                    <span class="font-blue-dark uppercase">
+                        <i class="fa fa-fw fa-terminal"></i>
+                        {{'btn_test'|bkTranslate:this}}
+                    </span>
+                            </div>
+                        </div>
+                        <div class="portlet-content">
+                            <button type="button" class="btn default yellow-gold grid-widget-config-button"
+                                    (click)="onWidgetConfigClick()">
+                                <i class="fa fa-cog"></i> {{'label_configuration'|bkTranslate:this}}
+                            </button>
+                            <div #widgetTestScreen></div>
+
+                            <div>
+                                <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
+
+                                    <h4 class="text-center">Inputs simulator</h4>
+                                    <div class="widget-tester no-select">
+
+                                        <div *ngFor="let connector of testInputConnectors; let iCon = index"
+                                             class="row bg-color" [class.odd]="iCon%2">
+
+                                            <ng-template [ngIf]="connector.isDigital() && connector.isInput()">
+                                                <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">
+                                                    {{connector.name}}
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">
+                                                        <strong>Value</strong>:
+                                                    </div>
+                                                    <i class="fa cursor-hand"
+                                                       style="vertical-align: middle; font-size: 1.5em;"
+                                                       [class.fa-toggle-on]="connector.value"
+                                                       [class.fa-toggle-off]="!connector.value"
+                                                       (click)="onDigitalInputClick(connector)"></i>
+                                                </div>
+                                            </ng-template>
+
+                                            <ng-template [ngIf]="connector.isAnalog() && connector.isInput()">
+                                                <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">
+                                                    {{connector.name}}
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">
+                                                        <strong>Value</strong>:
+                                                    </div>
+                                                    <input type="number" class="form-control" step="0.1"
+                                                           [value]="connector.value"
+                                                           (input)="onAnalogInputChange($event, connector)">
+                                                </div>
+                                            </ng-template>
+
+                                            <ng-template [ngIf]="connector.isMessage() && connector.isInput()">
+                                                <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">
+                                                    {{connector.name}}
+                                                </div>
+                                                <div *ngFor="let argType of connector.messageTypes; let index = index">
+
+                                                    <div *ngIf="index" class="col-md-4"></div>
+
+                                                    <ng-template [ngIf]="argType == 'boolean'">
+                                                        <div class="col-md-8">
+                                                            <div class="widget-tester-message-input-label">Bool <strong>Arg
+                                                                #{{index}}</strong>:
+                                                            </div>
+                                                            <i class="fa cursor-hand"
+                                                               style="vertical-align: middle; font-size: 1.5em;"
+                                                               [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]"
+                                                               [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]"
+                                                               (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template [ngIf]="argType == 'float' ">
+                                                        <div class="col-md-8">
+                                                            <div class="widget-tester-message-input-label">Float
+                                                                <strong>Arg #{{index}}</strong>:
+                                                            </div>
+                                                            <input type="number" class="form-control" step="0.1"
+                                                                   value="0"
+                                                                   (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template [ngIf]="argType == 'integer'">
+                                                        <div class="col-md-8">
+                                                            <div class="widget-tester-message-input-label">Int <strong>Arg
+                                                                #{{index}}</strong>:
+                                                            </div>
+                                                            <input type="number" class="form-control" step="1" value="0"
+                                                                   (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template [ngIf]="argType == 'string'">
+                                                        <div class="col-md-8">
+                                                            <div class="widget-tester-message-input-label">String
+                                                                <strong>Arg #{{index}}</strong>:
+                                                            </div>
+                                                            <input type="text" class="form-control"
+                                                                   (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
+                                                        </div>
+                                                    </ng-template>
+
+                                                </div>
+
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-8">
+                                                    <button
+                                                        class="btn btn-sm default green widget-tester-message-input-btn"
+                                                        type="button" (click)="onMessageInputSendClick(connector)">
+                                                        <i class="fa fa-paper-plane"></i> Send
+                                                    </button>
+                                                </div>
+
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
+                                    <h4 class="text-center">{{'label_console'|bkTranslate:this}}</h4>
+                                    <bk-console-log maxHeight="400px"></bk-console-log>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-code-fork"></i>
-                           {{'label_save'|bkTranslate:this}}
-                        </span>
-                    </div>
-                </div>
-                <div *ngIf="widget && widget.versions.length">
-                    <table class="table table-condensed table-hover">
-                        <thead>
-                            <tr>
-                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                                <th class="col col-lg-8">{{'table_description'|bkTranslate:this}}</th>
-                                <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
-                                <th></th>
-                                <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
-                        </thead>
-                        <tbody class="hide-bk-drob-down-button">
-                            <tr *ngFor="let version of widget.versions">
-                                <td class="vert-align no-wrap" [class.bold]="selectedWidgetVersion && (selectedWidgetVersion.id == version.id)">
-                                    <a (click)="onWidgetVersionClick(version)"> {{version.name}}
-                                    <span *ngIf="version.publish_type == 'DEFAULT_VERSION'" class="font-green-jungle bold">(Default)</span>
-                                </a>
-                                </td>
-                                <td class="vert-align">
-                                    {{version.description}}
-                                </td>
-                                <td class="vert-align">
+        <div [hidden]="!(tab=='versions')">
+
+            <div *ngIf="widget &&  widget.versions.length">
+                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <thead>
+                    <tr>
+                        <th class="">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="">{{'table_author'|bkTranslate:this}}</th>
+                        <th class="">{{'table_status'|bkTranslate:this}}</th>
+                        <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let version of widget.versions">
+                        <td class="vert-align no-wrap"
+                            [class.bold]="selectedWidgetVersion && (selectedWidgetVersion.id == version.id)">
+                            <a (click)="onWidgetVersionClick(version)"> {{version.name}}
+                                <span *ngIf="version.publish_type === 'default_version'"
+                                      class="font-green-jungle bold">(Default)</span>
+                            </a>
+                        </td>
+                        <td class="vert-align">
+                            {{version.description}}
+                        </td>
+                        <td class="vert-align">
                                     <span *ngIf="version.author">
                                         {{version.author.nick_name}}
                                     </span>
-                                </td>
-                                <td class="vert-align no-wrap">
-                                    <span class="icon-hint-wraper red" *ngIf="version.approval_state == 'PENDING'">
-                                        <i class="fa fa-heart font-red-flamingo" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
-                                    </span>
-                                    <span class="icon-hint-wraper green" *ngIf="version.approval_state == 'APPROVED'">
-                                        <i class="fa fa-heart font-green-jungle" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
-                                    </span>
-                                    <span class="icon-hint-wraper gray" *ngIf="version.approval_state == 'DISAPPROVED'">
-                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
-                                    </span>
-                                    <span class="icon-hint-wraper green" *ngIf="version.approval_state == 'EDITED'">
-                                        <i class="fa fa-heart font-blue" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
-                                    </span>
-                                </td>
+                        </td>
+                        <td class="vert-align no-wrap text-center">
+                            <bk-compilation-status-component
+                                [status]="version.status"></bk-compilation-status-component>
+                            <bk-compilation-status-component
+                                [status]="version.approval_state"></bk-compilation-status-component>
+                        </td>
+                        <td class="action-btn-col">
 
-                                <td class="action-btn-col">
 
-                                    <bk-drob-down-button
-                                        [btns_group_name]="('label_properties'|bkTranslate:this)"
-                                        [btns] = "[
-                                            {
-                                                condition: (projectId != null && version.approval_state == null),
-                                                btn_label_for_person: ('label_publish'|bkTranslate:this),
-                                                btn_tag: 'version_publish_community',
-                                                icon: 'fa-heart',
-                                                colorType: 'CREATE',
-                                                permission: (version.update_permission)
-                                            },
-                                            {
-                                                condition: (version.approval_state == 'PENDING'),
-                                                btn_label_for_person: ('label_publish_decision'|bkTranslate:this),
-                                                btn_tag: 'version_publish_admin',
-                                                icon: 'fa-heart',
-                                                colorType: 'CREATE',
-                                                permission: (version.community_publishing_permission)
-                                            },
-                                            {
-                                                condition: (true),
-                                                btn_label_for_person: ('label_version_properties'|bkTranslate:this),
-                                                btn_tag: 'edit_version',
-                                                icon: 'fa-cog',
-                                                colorType: 'EDIT',
-                                                permission: (widget.update_permission)
-                                            },
-                                            {
-                                                condition: (projectId == null && widget.publish_type == 'DEFAULT_MAIN'),
-                                                btn_label_for_person: ('label_version_set_as_main'|bkTranslate:this),
-                                                btn_tag: 'version_set_as_main',
-                                                icon: 'fa-flag',
-                                                colorType: 'UPDATE',
-                                                permission: (version.update_permission)
-                                            },
-                                            {
-                                                condition: (true),
-                                                btn_label_for_person: ('label_remove_version'|bkTranslate:this),
-                                                btn_tag: 'remove_version',
-                                                icon: 'fa-trash',
-                                                colorType: 'REMOVE',
-                                                permission: (version.delete_permission)
-                                            }
-                                        ]"
-                                        (onValueChanged)="onDrobDownEmiter($event, version)"
-                                    >
-                                    </bk-drob-down-button>
-
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
+                                        {
+                                            condition: (projectId != null && version.approval_state == null),
+                                            btn_label_for_person: ('label_publish'|bkTranslate:this),
+                                            btn_tag: 'version_publish_community',
+                                            icon: 'fa-heart',
+                                            colorType: 'CREATE',
+                                            permission: (version.update_permission)
+                                        },
+                                        {
+                                            condition: (version.approval_state == 'PENDING'),
+                                            btn_label_for_person: ('label_publish_decision'|bkTranslate:this),
+                                            btn_tag: 'version_publish_admin',
+                                            icon: 'fa-heart',
+                                            colorType: 'CREATE',
+                                            permission: (version.community_publishing_permission)
+                                        },
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_version_properties'|bkTranslate:this),
+                                            btn_tag: 'version_properties',
+                                            icon: 'fa-cog',
+                                            colorType: 'EDIT',
+                                            permission: (version.update_permission)
+                                        },
+                                        {
+                                            condition: (projectId == null && block.publish_type == 'DEFAULT_MAIN'),
+                                            btn_label_for_person: ('label_version_set_as_main'|bkTranslate:this),
+                                            btn_tag: 'version_set_as_main',
+                                            icon: 'fa-flag',
+                                            colorType: 'UPDATE',
+                                            permission: (version.update_permission)
+                                        },
+                                        {
+                                            condition: true,
+                                            btn_label_for_person: ('label_remove_version'|bkTranslate:this),
+                                            btn_tag: 'remove_version',
+                                            icon: 'fa-trash',
+                                            colorType: 'REMOVE',
+                                            permission: (version.delete_permission)
+                                        }
+                                    ]"
+                                (onValueChanged)="onDropDownEmitter($event, version)"
+                            >
+                            </bk-drob-down-button>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Temporary page content if content is being loaded or if there is no content -- START -->
+            <bk-nothing-to-show [condition_loading]="(widget == null)"
+                                [condition_empty]="(widget != null && widget.versions.length == 0)"
+                                [main_message_link]="'label_program_versions'|bkTranslate:this"
+                                [main_message_comment_link]="'label_program_versions_comment'|bkTranslate:this"
+                                [show_button]="false">
+            </bk-nothing-to-show>
+            <!-- Temporary page content if content is being loaded or if there is no content -- END -->
         </div>
+
     </div>
 
 </bk-layout-main>

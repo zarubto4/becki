@@ -69,6 +69,8 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
 
+    tab: string = 'ide';
+
     constructor(injector: Injector) {
         super(injector);
 
@@ -122,6 +124,10 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
+    }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
     }
 
     onWidgetEditClick(): void {
