@@ -36,6 +36,7 @@ import { ModalsInstanceApiPropertiesModel } from '../modals/instance-api-propert
 import { WebSocketClientBlocko } from '../services/websocket/WebSocketClientBlocko';
 import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
 import { ModalsInstanceCreateModel } from '../modals/instance-create';
+import { FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -85,8 +86,22 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     private liveViewLoaded: boolean = false;
 
+
+    // Hardware Filter
+    formFilterGroup: FormGroup;
+
     constructor(injector: Injector) {
         super(injector);
+
+        // Filter Helper
+        this.formFilterGroup = this.formBuilder.group({
+            'alias': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)]],
+            'full_id': ['', [Validators.maxLength(60)]],
+            'description': ['', [Validators.maxLength(60)]],
+            'orderBy': ['NAME', []],
+            'order_schema': ['ASC', []],
+        });
     };
 
     ngOnInit(): void {
@@ -197,6 +212,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.instance.online_state = status.online_state;
                     }
                 });
+
+                this.onFilterHardwareGroup();
 
             })
             .catch(reason => {
@@ -598,8 +615,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onEditSnapShotClick(snapShot: IShortReference) {
-
-        console.log("onEditSnapShotClick ", snapShot);
         let model = new ModalsSnapShotInstanceModel(this.instanceId, snapShot);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -724,12 +739,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         })
             .then((values) => {
                 this.deviceGroupFilter = values;
-
-                if (this.deviceGroupFilter.content.length > 0) {
-                    this.onFilterHardware(0, this.deviceGroupFilter.content);
-                } else {
-                    this.onFilterHardware(0, []);
-                }
+                this.onFilterHardware(0);
 
                 this.unblockUI();
             })
@@ -739,8 +749,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             });
     }
 
-    onFilterHardware(pageNumber: number = 0, groups: IHardwareGroup[] = []): void {
+    onFilterHardware(pageNumber: number = 0): void {
 
+        let groups: IHardwareGroup[] = [];
         // Set groupd if we he it
         if (groups.length > 0 && this.deviceGroupFilter != null) {
             groups = this.deviceGroupFilter.content;
@@ -749,8 +760,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.blockUI();
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId],
-            instance_snapshots: groups.length > 0 ? [] : [this.instance.current_snapshot.id],
-            hardware_groups_id: groups.map(group => group.id)
+            instance_snapshot: groups.length === 0 ? this.instance.current_snapshot.id : null,
+            hardware_groups_id: groups.length === 0 ? null : groups.map(group => group.id),
+            order_by: this.formFilterGroup.controls['orderBy'].value,
+            order_schema: this.formFilterGroup.controls['order_schema'].value,
+            full_id: this.formFilterGroup.controls['full_id'].value,
+            id: this.formFilterGroup.controls['id'].value,
+            name: this.formFilterGroup.controls['alias'].value,
+            description: this.formFilterGroup.controls['description'].value
         })
             .then((values) => {
                 this.devicesFilter = values;

@@ -1786,11 +1786,12 @@ export interface IBoardFilter {
      */
     id?: string;
     /**
-     * @name instance_snapshots
-     * @type string[]
+     * @name instance_snapshot
+     * @type string
      * @description List of instance_snapshot.id
+     * @format uuid
      */
-    instance_snapshots?: string[];
+    instance_snapshot?: string;
     /**
      * @name name
      * @type string
@@ -6039,12 +6040,6 @@ export interface IHardwareGroupFilter {
      * @description List of instance_snapshot.id
      */
     instance_snapshots?: string[];
-    /**
-     * @name instances
-     * @type string[]
-     * @description List of instance.id
-     */
-    instances?: string[];
     /**
      * @name project_id
      * @type string

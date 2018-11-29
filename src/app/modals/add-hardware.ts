@@ -12,6 +12,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessage, FlashMessageError, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsAddHardwareModel extends ModalModel {
@@ -117,10 +118,18 @@ export class ModalsAddHardwareComponent  implements OnInit {
                 // CAN_REGISTER, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE
                 this.single_error_status = result.status;
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            .catch( (reason: IError) => {
+                // this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.single_error_message = reason.message;
             });
     }
+
+    /*
+
+    HWdde7f9e988a54e7a9398237a, HW9a665d2eab764b35b6fab664, HWefac1814e2ae44128275d95c,
+    HWfa91606175874efab5ffea5d,  HWad617ccd8dc04b2581a0c433,HW5e725a1ba7b8446fbf06c70d
+
+    */
 
     sequenceRegistration() {
 
@@ -138,12 +147,13 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
         let data: string = this.multiForm.controls['listOfIds'].value;
 
-        data = data.replace(',', ';');
+        data = data.replace(/,/g, ';');
+
         data = data.replace(/\s+/g, '');
         data = data.replace(/(\r?\n|\r)*(\s)*/g, '');
 
 
-        console.info('Result P5ed splitem: ', data);
+        console.info('Result Před splitem: ', data);
         let devicesForRegistration: string[] = data.split(';');
 
         console.info('Result list:', devicesForRegistration);
@@ -182,8 +192,9 @@ export class ModalsAddHardwareComponent  implements OnInit {
 
             })
             .catch((reason: IResultBadRequest) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cant_add_hardware', this), reason));
-                console.error('Nepodařilo se pro ', this.devicesForRegistration[pointer], ' důvod?', reason.message);
+
+                // this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cant_add_hardware', this), reason));
+                console.warn('Nepodařilo se pro ', this.devicesForRegistration[pointer], ' důvod?', reason.message);
 
                 this.failedDevices.push(this.devicesForRegistration[pointer] + ': ' + reason.message);
                 this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(',  \n'));
@@ -216,9 +227,8 @@ export class ModalsAddHardwareComponent  implements OnInit {
             .then(() => {
                 this.modalClose.emit(true);
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('label_failed_to_register', this), reason));
-                this.single_error_message = reason.body.message;
+            .catch((reason: IResultBadRequest) => {
+                this.single_error_message = reason.message;
             });
     }
 

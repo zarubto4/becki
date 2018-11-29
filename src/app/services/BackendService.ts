@@ -32,14 +32,16 @@ export class TyrionBackendService extends TyrionApiBackend {
                 case 'application/json':
                     optionsArgs.body = JSON.stringify(request.body);
                     break;
-                default:
+                default: {
                     throw new Error(this.translationService.translate('error_content_not_supported', this, null));
+                }
             }
         }
 
         return new Promise<RestResponse>((resolve, reject) => {
             this.http.request(request.method, request.url, optionsArgs).toPromise()
                 .then((ngResponse: HttpResponse<Object>) => {
+
                     if (ngResponse.status === 401) {
                         this.unsetToken();
                         this.router.navigate(['/login']);
@@ -48,7 +50,20 @@ export class TyrionBackendService extends TyrionApiBackend {
                     resolve(new RestResponse(ngResponse.status, ngResponse.body));
                 })
                 .catch((ngResponseOrError: HttpResponse<any>|any) => {
+
+                    console.warn('TyrionBackendService:catch::Response from Server: ngResponse', ngResponseOrError);
+                    console.warn('TyrionBackendService:catch::Response from Server: status', ngResponseOrError.status);
+                    console.warn('TyrionBackendService:catch::Response from Server: error', ngResponseOrError['error']);
+
+                    if (ngResponseOrError['error']) {
+                        return resolve(new RestResponse(ngResponseOrError.status, ngResponseOrError['error']));
+                    }
+
+                    console.warn('TyrionBackendService:catch::Response not contains Error Json');
+
                     if (ngResponseOrError instanceof HttpResponse) {
+
+                        console.error('TyrionBackendService:catch:: Instance of response is HttpResponse::', ngResponseOrError);
 
                         if (ngResponseOrError.status === 401) {
                             this.unsetToken();
@@ -58,7 +73,10 @@ export class TyrionBackendService extends TyrionApiBackend {
 
                         console.warn('Error on new Promise<RestResponse>: Error Status:: ', ngResponseOrError.status);
                         resolve(new RestResponse(ngResponseOrError.status, ngResponseOrError.body));
+
                     } else {
+
+                        console.error('TyrionBackendService:catch:: its not instance of http response!!! This is a critical Error:: Response::', ngResponseOrError);
                         reject(ngResponseOrError);
                     }
                 });
