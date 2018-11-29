@@ -5,11 +5,10 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
-import { IDatabase, IHomerServer } from '../backend/TyrionAPI';
+import { IDatabase } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsDatabaseModel } from '../modals/database-new';
 import { ModalsRemovalModel } from '../modals/removal';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDatabaseNameDescriptionModel } from '../modals/database-edit';
 
 

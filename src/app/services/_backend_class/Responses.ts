@@ -29,6 +29,7 @@ export class RestRequest {
     body: Object;
 
     constructor(method: string, url: string, headers: { [name: string]: string } = {}, body?: Object) {
+
         this.method = method;
         this.url = url;
         this.headers = {};
@@ -72,6 +73,8 @@ export class BugFoundError extends Error {
     static fromRestResponse(response: RestResponse): BugFoundError {
         let content = response.body;
         let message: string;
+
+        /**
         if (response.status === 400) {
             content = (<{ exception: Object }>response.body).exception;
             message = (<{ message: string }>response.body).message;
@@ -79,6 +82,7 @@ export class BugFoundError extends Error {
                 message = (<{ error: string }>response.body).error;
             }
         }
+        */
         return new BugFoundError(response.body, `response ${response.status}: ${JSON.stringify(content)}`, message);
     }
 
@@ -91,6 +95,7 @@ export class BugFoundError extends Error {
     }
 
     constructor(body: any, adminMessage: string, userMessage?: string) {
+
         super(BugFoundError.composeMessage(adminMessage));
         this.name = 'BugFoundError';
         this.message = BugFoundError.composeMessage(adminMessage);
@@ -103,16 +108,22 @@ export class BugFoundError extends Error {
 }
 
 
-export abstract class IError extends Error {
-    code: number;
-    name: string = null;
-    message: string = null;
-    exception: any = null;
-    state: string = null;
+export abstract class IError {
+    public code: number = null;
+    public state: string = null;
+    public message: string = null;
 
-    public get status(): number {
-        return this.code;
+    constructor(public response: RestResponse, public name: string) {
+
+        if (!response) {
+            return;
+        }
+
+        this.state = response.state;
+        this.code = response.body['code'];
+        this.message = response.body['message'];
     }
+
 }
 
 /**
@@ -122,10 +133,10 @@ export abstract class IError extends Error {
 export class LostConnectionError extends IError {
 
     constructor() {
-        super();
+        super(null, 'Lost_Connection' );
         this.code = 0;
         this.name = 'Response_BadRequest';
-        this. message = 'Request failed, please check your internet connection.';
+        this.message = 'Request failed, please check your internet connection.';
     }
 }
 
@@ -137,11 +148,7 @@ export class BadRequest extends IError {
     }
 
     constructor(response: RestResponse) {
-        super(response.body['message']);
-        this.code = 400;
-        this.name = 'Response_BadRequest';
-        this.state = response.state;
-        this.message = response.body['message'];
+        super(response, 'Response_BadRequest' );
     }
 }
 
@@ -153,12 +160,7 @@ export class InvalidBody extends IError {
     }
 
     constructor(response: RestResponse) {
-        super(response.body['message']);
-        this.code = 400;
-        this.name = 'Response_InvalidBody';
-        this.state = response.state;
-        this.message = response.body['message'];
-        this.exception = response.body['exception'];
+        super(response, 'Response_InvalidBody' );
     }
 }
 
@@ -170,12 +172,7 @@ export class UnsupportedException extends IError {
     }
 
     constructor(response: RestResponse) {
-        super(response.body['message']);
-        super(response.body['message']);
-        this.code = 400;
-        this.name = 'Unsupported_exception';
-        this.state = response.state;
-        this.message = response.body['message'];
+        super(response, 'Unsupported_exception');
     }
 }
 
@@ -188,28 +185,19 @@ export class UnauthorizedError extends IError {
     }
 
     constructor(response: RestResponse) {
-        super(response.body['message']);
-        this.code = 401;
-        this.name = 'Response_Unauthorized';
-        this.state = response.state;
-        this.message = response.body['message'];
+        super(response, 'Response_Unauthorized');
     }
 }
 
 // 403
 export class PermissionMissingError extends IError {
 
-    code: number = 403;
-    name = 'Response_Forbidden';
-    message: string = null;
-
     static fromRestResponse(response: RestResponse): PermissionMissingError {
         return new PermissionMissingError(response);
     }
 
     constructor(response: RestResponse) {
-        super(response.body['message']);
-        this.message = response.body['message'];
+        super(response, 'Response_Forbidden');
     }
 }
 
@@ -221,11 +209,7 @@ export class ObjectNotFound extends IError {
     }
 
     constructor(response: RestResponse) {
-        super(response.body['message']);
-        this.code = 400;
-        this.name = 'Response_NotFound';
-        this.state = response.state;
-        this.message = response.body['message'];
+        super(response, 'Response_NotFound');
     }
 }
 
@@ -237,9 +221,8 @@ export class InternalServerError extends IError {
     }
 
     constructor(response: RestResponse) {
-        super('Critical Server Side Error!');
+        super(response, 'Response_CriticalError');
         this.code = 500;
-        this.name = 'Response_CriticalError';
         this.state = response.state;
         if ( response.body['message']) {
             this.message = response.body['message'];
@@ -258,7 +241,7 @@ export class UserNotValidatedError extends IError {
     }
 
     constructor(response: RestResponse) {
-        super('Email Validation is Required');
+        super(response, 'Response_ValidationRequired');
         this.message = 'Email Validation is Required';
         this.code = 705;
         this.state = response.state;
@@ -288,7 +271,7 @@ export class CodeError extends IError {
     }
 
     constructor(code: number, msg: string) {
-        super(msg);
+        super(null, 'CodeError');
         this.name = 'CodeError';
         this.message = msg;
         this.code = code;
@@ -311,7 +294,7 @@ export class CodeCompileError extends IError {
     }
 
     constructor(msg: string) {
-        super(msg);
+        super(null, 'CodeError');
         this.name = 'CodeCompileError';
         this.message = msg;
         this.code = 478;
