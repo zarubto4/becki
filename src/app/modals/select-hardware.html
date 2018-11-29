@@ -119,7 +119,7 @@
                                             <strong *ngIf="!device.name || device.name == 'null' ">{{device.full_id}}</strong>
                                         </a>
                                     </td>
-                                    <td class="vert-align">{{device.id.substr(0,13)}}</td>
+                                    <td class="vert-align breakable">{{device.id.substr(0,13)}}</td>
                                     <td class="vert-align text-center">
                                         <bk-online-state [online_state]="device.online_state"></bk-online-state>
                                     </td>
