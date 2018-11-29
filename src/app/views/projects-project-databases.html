@@ -36,7 +36,7 @@
                 <tr *ngFor="let database of databases">
                     <td class="vert-align no-wrap"> {{database.name}} </td>
                     <td class="vert-align no-wrap"> {{database.description}} </td>
-                    <td class="vert-align no-wrap"> {{database.id}} </td>
+                    <td class="vert-align breakable"> {{database.id}} </td>
                     <td class="vert-align no-wrap"> {{database.collections.join('\n')}} </td>
                     <td class="action-btn-col">
                         <bk-drob-down-button

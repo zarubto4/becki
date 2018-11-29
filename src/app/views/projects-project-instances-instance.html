@@ -437,7 +437,7 @@
                             <td class="vert-align">
                                 <a (click)="onDeviceClick(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                             </td>
-                            <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
+                            <td class="vert-align breakable">{{device.id.substr(0,13)}}</td>
                             <td class="vert-align no-wrap">{{device.description}}</td>
                             <td class="vert-align text-center no-wrap"><a
                                 (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a>
@@ -687,7 +687,7 @@
                     <tr *ngFor="let hook of webHooks">
                         <td class="vert-align">{{hook['name']}}</td>
                         <td class="vert-align">{{hook['description']}}</td>
-                        <td class="vert-align" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>
+                        <td class="vert-align breakable" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>
                     </tr>
                     </tbody>
                 </table>

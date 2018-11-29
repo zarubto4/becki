@@ -44,7 +44,7 @@
                         <td class="vert-align no-wrap">
                             <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.name?homer_server.name:homer_server.id}}</strong></a>
                         </td>
-                        <td class="vert-align no-wrap">{{homer_server.id}}</td>
+                        <td class="vert-align breakable">{{homer_server.id}}</td>
 
                         <td class="vert-align no-wrap">
                             <a href="http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}" class="no-wrap"><strong>http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}</strong></a>

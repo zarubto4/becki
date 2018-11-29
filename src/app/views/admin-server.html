@@ -67,7 +67,7 @@
                         <td class="vert-align no-wrap">
                             <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.name?homer_server.name:homer_server.id}}</strong></a>
                         </td>
-                        <td class="vert-align no-wrap">{{homer_server.id}}</td>
+                        <td class="vert-align breakable">{{homer_server.id}}</td>
                         <td class="vert-align no-wrap">
                             <span *ngIf="homer_server.server_type == 'MAIN'" class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
                             <span *ngIf="homer_server.server_type == 'BACKUP'" class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
@@ -158,7 +158,7 @@
                             </a>
                         </td>
 
-                        <td class="vert-align no-wrap">{{compilations_server.id}}</td>
+                        <td class="vert-align breakable">{{compilations_server.id}}</td>
 
                         <td class="vert-align no-wrap">
                             <bk-online-state [online_state]="compilations_server.online_state"></bk-online-state>
