@@ -20,7 +20,7 @@ export class ModalsInstanceCreateModel extends ModalModel {
     public b_program_id: string;
     public main_server_id: string;
     public backup_server_id: string;
-    constructor(public project_id: string = '', public instance?: IInstance) {
+    constructor(public project_id: string, public instance?: IInstance) {
         super();
     }
 }
@@ -64,7 +64,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
                     BeckiAsyncValidators.nameTaken(this.backendService, 'Instance',  this.modalModel.project_id)
                 )
             ],
-            'description': [this.modalModel.instance.description != null ? this.modalModel.instance.description : '', [Validators.maxLength(255)]],
+            'description': [this.modalModel.instance != null ? this.modalModel.instance.description : '', [Validators.maxLength(255)]],
             'tags': [this.modalModel.instance != null ? this.modalModel.instance.tags : []],
             'b_program_id': ['',  [BeckiValidators.condition(() => ( !this.modalModel.instance), Validators.required)]],
             'main_server_id': ['',  [BeckiValidators.condition(() => ( !this.modalModel.instance), Validators.required)]],
