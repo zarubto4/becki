@@ -39,7 +39,6 @@ export class ModalsSnapShotInstanceComponent implements OnInit {
 
     ngOnInit() {
 
-        console.log("ngOnInit ", this.modalModel.snapshot);
 
         this.form = this.formBuilder.group({
             'name': [this.modalModel.snapshot != null ? this.modalModel.snapshot.name : '',

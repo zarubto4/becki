@@ -5,11 +5,11 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name" [label]="'label_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['name']" [label]="'label_name'|bkTranslate:this"></bk-form-input>
         </form>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{form.controls.edit?('btn_update'|bkTranslate:this):('btn_add'|bkTranslate:this)}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
     </div>
 </div>

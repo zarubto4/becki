@@ -488,25 +488,16 @@ export class StaticTranslation {
                 'btn_confirm_scan': 'Confirm Scan',
             },
 
-            'ModalsDatabaseNewComponent': {
-                'title': '<strong> Create database </strong>  ',
+            'ModalsDatabaseEditComponent': {
+                'title_add': 'Create <strong class="font-color-cloud">Database</strong>',
+                'title_edit': 'Update <strong class="font-color-cloud">Database</strong>',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_first_collection_name': 'First collection name',
                 'btn_confirm_scan': 'Confirm Scan',
             },
-            'ModalsDatabaseEditComponent': {
-                'title': '<strong> Edit database </strong>  ',
-                'label_name': 'Name',
-                'label_description': 'Description',
-            },
-            'ModalsDatabaseRemoveComponent': {
-                'title': '<strong> Remove database </strong>  ',
-                'label_database_id': 'Database id',
-                'btn_remove': 'remove',
-            },
             'ModalsDatabaseCollectionNewComponent': {
-                'title': '<strong> Create collection </strong>  ',
+                'title': 'Create <strong class="font-color-cloud">Database Collection</strong>',
                 'label_name': 'Collection name',
             },
             'MobileAddHardwareComponent': {
@@ -2475,6 +2466,7 @@ export class StaticTranslation {
                 'label_minimal_length': 'Minimal length of this field is {0} characters.',
                 'label_maximal_length': 'Maximal length of this field is {0} characters.',
                 'label_name_taken': 'This name is already in use.',
+                'label_required_pattern': ' Invalid Patter - Required only Small letters (a-z), number (0-9) or symbols (-_)  (NO SPACE!)',
 
                 'label_project_name_taken': 'This project name is already in use.',
                 'label_hardware_name_taken': 'This Hardware name is already in use.',
@@ -2493,6 +2485,8 @@ export class StaticTranslation {
                 'label_grid_program_version_name_taken': 'Version name must be unique for this program',
                 'label_cprogram_version_name_taken': 'Version name must be unique for this program',
                 'label_bprogram_version_name_taken': 'Version name must be unique for this program',
+                'label_database_collection_name_taken': 'Collection in Database must be unique',
+                'label_database_name_taken': 'Name of Database must be unique',
 
                 'label_invalid_email': 'Invalid E-mail address.',
                 'label_invalid_time': 'Invalid Time, please write time in XY:YX format',
@@ -2969,7 +2963,7 @@ export class StaticTranslation {
                 'label_connection_string': 'Connection String',
                 'label_no_databases': 'You have no any Database',
                 'label_no_databases_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
-                'label_create_collection_database':'Create collection',
+                'label_create_collection_database': 'Create collection',
             },
 
 

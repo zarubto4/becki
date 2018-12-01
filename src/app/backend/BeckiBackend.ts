@@ -151,9 +151,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                     return <T>res;
                 }
 
-                console.log("error:then: Status ", response.status);
-                console.log("error:then: Body", response.body);
-
                 // There is a log, when Errors are under 200 but json contains
                 switch (response.status) {
                     case 400: {
@@ -196,8 +193,6 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                 if (response instanceof IError) {
                     throw response;
                 }
-
-                console.log("error:catch: its not instance of IError!!!", response);
 
                 this.decreaseTasks();
                 throw response;

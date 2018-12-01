@@ -1,7 +1,8 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{(modalModel.widget?"title_edit":"title_add")|bkTranslate:this}}</h4>
+        <h4 *ngIf="!modalModel.widget" class="modal-title" [innerHTML]="('title_add')|bkTranslate:this"></h4>
+        <h4 *ngIf="modalModel.widget"  class="modal-title" [innerHTML]="('title_edit')|bkTranslate:this"></h4>
     </div>
     <div class="modal-body"  >
         <form [formGroup]="form">

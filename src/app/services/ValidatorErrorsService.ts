@@ -21,6 +21,8 @@ export class ValidatorErrorsService {
     }
 
     getMessageForErrors(errors: any) {
+
+        console.log("getMessageForErrors: ", errors);
         if (errors) {
             if (errors['required']) {
                 return this.translate('label_field_required');
@@ -33,6 +35,9 @@ export class ValidatorErrorsService {
             }
             if (errors['nameTaken']) {
                 return this.translate('label_name_taken');
+            }
+            if (errors['pattern']) {
+                return this.translate('label_required_pattern');
             }
 
             // -- Name taken ------------------------------------------------------------------------------------------
@@ -80,6 +85,12 @@ export class ValidatorErrorsService {
             }
             if (errors['SnapShotNameTaken']) {
                 return this.translate('label_snapshot_name_taken');
+            }
+            if (errors['DatabaseNameTaken']) {
+                return this.translate('label_database_name_taken');
+            }
+            if (errors['DatabaseCollectionNameTaken']) {
+                return this.translate('label_database_collection_name_taken');
             }
             // -- Name taken ------------------------------------------------------------------------------------------
 

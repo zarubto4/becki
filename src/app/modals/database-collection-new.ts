@@ -8,9 +8,12 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { IDatabase } from '../backend/TyrionAPI';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 export class ModalsDatabaseCollectionModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '', public firstCollection: string = '') {
+    public collection_name: string;
+    constructor(public database: IDatabase) {
         super();
     }
 }
@@ -29,19 +32,24 @@ export class ModalsDatabaseCollectionNewComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {}
 
+    ngOnInit() {
         this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30), Validators.pattern('([A-Z][a-z0-9]*)*')]],
+            'name': ['',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(30),
+                    Validators.pattern('([a-z0-9_-]*)*')
+                ],
+                BeckiAsyncValidators.nameTaken(this.backendService, 'DatabaseCollection', null,  this.modalModel.database.id)
+            ],
         });
     }
 
-    ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-    }
-
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
+        this.modalModel.collection_name = this.form.controls['name'].value;
         this.modalClose.emit(true);
     }
 

@@ -4,7 +4,7 @@
  */
 
 
-import { FormControl, AsyncValidatorFn, AbstractControl } from '@angular/forms';
+import { FormControl, AsyncValidatorFn, AbstractControl, ValidatorFn } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { TyrionBackendService } from '../services/BackendService';
@@ -114,7 +114,7 @@ export class BeckiAsyncValidators {
         backEnd: TyrionBackendService,
         type: ('Project'|'BProgram'|'BProgramVersion'|'CProgram'|'CProgramVersion'|
             'GridProgram'|'GridProgramVersion'|'GridProject'|'Hardware'|'HardwareGroup'|
-            'GSM'|'Role'|'Widget'|'WidgetVersion'|'Block'| 'BlockVersion' |'Instance'|'Snapshot'|'Database'|'CLibrary'|
+            'GSM'|'Role'|'Widget'|'WidgetVersion'|'Block'| 'BlockVersion' |'Instance'|'Snapshot'|'Database'|'DatabaseCollection'| 'CLibrary'|
             'CLibraryVersion'),
         project_id?: string, object_id?: string): AsyncValidatorFn {
 
@@ -124,7 +124,6 @@ export class BeckiAsyncValidators {
                 if (control == null) {
                     resolve();
                 }
-
                 backEnd.projectValidObjectUniqueName({
                     name:  control.value,
                     project_id: project_id,
@@ -168,6 +167,39 @@ export class BeckiAsyncValidators {
                                 reject(out);
                             });
                     }
+                } else {
+                    resolve(null); // valid
+                }
+
+            });
+        };
+    }
+
+    public static conditions(conditionCallback: (value: string) => boolean, validators: ValidatorFn[]) {
+        return (control: AbstractControl) => {
+            return new Promise<any>((resolve, reject) => {
+
+                if (conditionCallback(control.value)) {
+
+                    for (let key in validators) {
+                        if (!validators.hasOwnProperty(key)) {
+                            continue;
+                        }
+
+                        let validation = validators[key](control);
+                        if (validation instanceof Promise) {
+                            validation
+                                .then((out: any) => {
+                                    resolve(out)
+                                })
+                                .catch((out: any) => {
+                                    reject(out);
+                                });
+                        }
+                    }
+
+                    resolve(null)
+
                 } else {
                     resolve(null); // valid
                 }

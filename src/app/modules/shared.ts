@@ -115,7 +115,6 @@ import { ModalsArticleComponent } from '../modals/article';
 import { ModalsAddGSMComponent } from '../modals/add-gsm';
 import { ModalsGsmPropertiesComponent } from '../modals/gsm-properties';
 import { ModalsInstanceApiPropertiesComponent } from '../modals/instance-api-properties';
-import { ModalsDatabaseNewComponent } from '../modals/database-new';
 import { NotificationsOverlayComponent } from '../components/NotificationsOverlayComponent';
 import { NotificationsListComponent } from '../components/NotificationsListComponent';
 import { TagComponent } from '../components/TagComponent';
@@ -347,7 +346,6 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         ModalsAddGSMComponent,
         ModalsGsmPropertiesComponent,
         ModalsInstanceApiPropertiesComponent,
-        ModalsDatabaseNewComponent,
         ModalsDatabaseEditComponent,
         ModalsDatabaseCollectionNewComponent,
         ModalsFinancialProductComponent,
