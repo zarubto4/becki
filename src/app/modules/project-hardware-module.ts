@@ -7,14 +7,12 @@ import { SharedModule } from './shared';
 import { AuthGuard } from '../services/AuthGuard';
 import { ProjectsProjectHardwareComponent } from '../views/projects-project-hardware';
 import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
-import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-project-hardware-scan';
 
 // routes
 export const PROJECT_HARDWARE_ROUTES: Routes = [
 
     { path: '', data: { breadName: 'HARDWARE devices' }, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard] },
-    { path: ':hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHarrdwareComponent, canActivate: [AuthGuard] },
-    { path: 'scanHardware', data: {breadName: 'Add hardware with QR code', component: ProjectsProjectHardwareAddWithQrComponent, canActivate: [AuthGuard]}}
+    { path: ':hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
 ];
 @NgModule({
     imports: [
@@ -24,7 +22,6 @@ export const PROJECT_HARDWARE_ROUTES: Routes = [
     ],
     declarations: [
         ProjectsProjectHardwareComponent,
-        ProjectsProjectHardwareAddWithQrComponent,
     ],
     exports: [ RouterModule ]
 })

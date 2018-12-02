@@ -240,6 +240,6 @@ export abstract class _BaseMainComponent {
     }
 
     public onSvanHardwareClick(project_id: string): void {
-        this.navigate(['/projects', project_id, 'hardware', 'scanHardware']);
+        this.navigate(['/projects', project_id, 'scanHardware']);
     }
 }

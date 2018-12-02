@@ -37,7 +37,7 @@ export abstract class TyrionApiBackend extends TyrionAPI {
     public static host = 'tyrion.stage.byzance.cz';
     public static protocol = 'https';
 
-    public wsProtocol: string = 'ws';
+    public wsProtocol: string = 'wss';
 
     public requestProxyServerUrl = 'http://127.0.0.1:4000/fetch/';
 
