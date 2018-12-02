@@ -12,12 +12,13 @@
 
                     <!-- There is some projects -->
                     <div *ngIf="projects && projects.length" class="portlet-body" id="list_of_projects">
-                        <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
+                        <table class="table table-hover table-light table-scrollable table-scrollable-borderless">
                             <thead>
                             <tr>
                                 <th class="col">{{'table_name'|bkTranslate:this}}</th>
                                 <th class="col">{{'table_description'|bkTranslate:this}}</th>
                                 <th class="col">{{'table_tags'|bkTranslate:this}}</th>
+                                <th *ngIf="isOnMobile" class="col">{{'table_actions'|bkTranslate:this}}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -31,6 +32,22 @@
                                 <td class="vert-align">{{project.description}}</td>
                                 <td class="vert-align">
                                     <bk-form-tag-input [tags_without_form]="project.tags" [readonly]="true"></bk-form-tag-input>
+                                </td>
+                                <td>
+                                        <bk-drob-down-button
+                                        [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                        [btns]="[
+                                            {
+                                                condition: true,
+                                                btn_label_for_person: ('label_add_hardware'|bkTranslate:this),
+                                                btn_tag: 'add_hardware',
+                                                icon: 'fa-copy',
+                                                colorType: 'ADD',
+                                                permission: (true)
+                                            }
+                                        ]"
+                                        (onValueChanged)="onDrobDownEmiter($event, project)">
+                                    </bk-drob-down-button>
                                 </td>
                             </tr>
                             </tbody>

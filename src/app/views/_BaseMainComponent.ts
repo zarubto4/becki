@@ -238,4 +238,8 @@ export abstract class _BaseMainComponent {
     public onWidgetAdminClick(widget_id: string, version_id: string = null): void {
         this.navigate(['admin/widgets', widget_id, {version: version_id}]);
     }
+
+    public onSvanHardwareClick(project_id: string): void {
+        this.navigate(['/projects', project_id, 'hardware', 'scanHardware']);
+    }
 }
