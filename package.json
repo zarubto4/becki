@@ -13,7 +13,7 @@
         "clean-install": "npm run clean --force && npm install",
         "watch": "webpack --watch --progress --profile",
         "build": "rimraf dist && webpack --config webpack.config.js --mode production --progress --profile --bail",
-        "server": "webpack-dev-server --config webpack.config.js --mode development --inline --hot --progress --port 8080 --host 0.0.0.0 --https --key=../cert/server.key --cert=../cert/server.crt",
+        "server": "webpack-dev-server --config webpack.config.js --mode development --inline --hot --progress  --host 0.0.0.0 --port 8080 --https --key=../cert/server.key --cert=../cert/server.crt",
         "start-https": "webpack-dev-server --inline --progress --port 8181 --https",
         "lint": "tslint --force \"src/**/*.ts\"",
         "docs": "typedoc --options typedoc.json src/app/main.ts",

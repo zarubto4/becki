@@ -1,14 +1,31 @@
-<bk-layout-main [tabMenu]="'projects-project'"
-                [show_title]="false"
-                [title]="currentParamsService.currentProjectNameSnapshot"
-                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [title]="'main_title'|bkTranslate:this">
+
+
+    <!-- Portlet - Basic Title of Panel with Buttons on right side -- START -->
     <bk-portlet-title
         [title_name]="'title'|bkTranslate:this"
-        [icon]="'fa-microchip'"
-    ></bk-portlet-title>
+        [icon]="'fa-flag'">
+    </bk-portlet-title>
+    <!-- Portlet - Basic Title of Panel with Buttons on right side --- END -->
 
     <div class="portlet-body">
+        <div class="clearfix"></div>
+        <bk-view-qr-reader (QrScanClose)="qrCodeSent($event)"></bk-view-qr-reader>
+
+        <table class="table table-hover table-scrollable">
+        <thead>
+        <tr>
+            <th>{{'label_action'|bkTranslate:this}}</th>
+        </tr>
+        </thead>
+        <tbody class="hide-bk-drob-down-button">
+        <tr *ngFor="let code of codes">
+            <td class="vert-align no-wrap"> {{code}}</td>
+        </tr>
+        </tbody>
+    </table>
 
     </div>
+
 
 </bk-layout-main>

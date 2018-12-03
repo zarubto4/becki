@@ -22,6 +22,8 @@ import { PasswordRestartComponent } from './views/login-password-restart';
 import { CreateUserComponent } from './views/create-user';
 import { RedirectOkComponent } from './components/redirect-ok';
 import { MobileAddHardwareComponent } from './views/mobile-add-hardware';
+import { ProjectsProjectHardwareAddWithQrComponent } from './views/projects-project-hardware-scan';
+
 // Common dependencies
 import { SharedModule } from './modules/shared';
 import { HttpClientModule } from '@angular/common/http';
@@ -62,6 +64,8 @@ let routes: Routes = [
     { path: 'notifications', data: { breadName: 'Notifications' }, component: NotificationsComponent, canActivate: [AuthGuard] },
 
     { path: 'qr-reader-hardware', data: { breadName: 'qr-add-hardware' }, component: MobileAddHardwareComponent, canActivate: [AuthGuard] },
+
+    { path: 'projects/:project/scanHardware', data: {breadName: 'Add hardware with QR code'}, component: ProjectsProjectHardwareAddWithQrComponent, canActivate: [AuthGuard]},
 
     { path: 'profile', data: { breadName: 'Profile' }, component: ProfileComponent, canActivate: [AuthGuard] },
 

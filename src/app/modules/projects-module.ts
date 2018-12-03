@@ -9,7 +9,6 @@ import { ProjectsProjectLibrariesComponent } from '../views/projects-project-lib
 import { ProjectsProjectDatabasesComponent } from '../views/projects-project-databases';
 import { RoleGroupComponent } from '../views/admin-permission-group';
 import { RoleGroupGroupComponent } from '../views/admin-permission-group-group';
-import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-project-hardware-scan';
 
 // routes
 export const PROJECTS_ROUTES: Routes = [
@@ -31,7 +30,6 @@ export const PROJECTS_ROUTES: Routes = [
     { path: ':project/blocks', data: { breadName: 'BLOCKO blocks' }, loadChildren: './project-blocko-blocks-module#ProjectBlockoBlocksModule'},
     { path: ':project/servers', data: { breadName: 'CLOUD servers' }, loadChildren: './project-cloud-module#ProjectCloudModule' },
     { path: ':project/instances', data: { breadName: 'CLOUD instances' }, loadChildren: './project-instances-module#ProjectInstancesModule'},
-    { path: ':project/scanHardware', data: {breadName: 'Add hardware with QR code', component: ProjectsProjectHardwareAddWithQrComponent, canActivate: [AuthGuard]}}
 ];
 
 @NgModule({
@@ -45,7 +43,6 @@ export const PROJECTS_ROUTES: Routes = [
         ProjectsProjectMembersComponent,
         ProjectsProjectLibrariesComponent,
         ProjectsProjectDatabasesComponent,
-        ProjectsProjectHardwareAddWithQrComponent,
     ],
     exports: [ RouterModule ]
 })

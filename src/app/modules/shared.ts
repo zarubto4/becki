@@ -165,6 +165,7 @@ import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-b
 import { ModalsDatabaseEditComponent } from '../modals/database-edit';
 import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collection-new';
 import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
+import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-project-hardware-scan';
 
 @NgModule({
     imports: [
@@ -270,6 +271,7 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
         ProjectsProjectHardwareHardwareComponent,
+        ProjectsProjectHardwareAddWithQrComponent,
         // Modals
         ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
@@ -443,7 +445,8 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
-        ProjectsProjectHardwareHardwareComponent
+        ProjectsProjectHardwareHardwareComponent,
+        ProjectsProjectHardwareAddWithQrComponent,
     ]
 })
 export class SharedModule {}

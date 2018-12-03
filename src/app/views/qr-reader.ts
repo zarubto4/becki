@@ -1,6 +1,7 @@
-import { interval as observableInterval } from 'rxjs';
+import { interval, Observable, Subscription } from 'rxjs';
 import { Component, Injector, OnInit, ViewChild, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
+import { Stream } from 'stream';
 const jsQR = require('jsqr');
 
 @Component({
@@ -13,20 +14,17 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
     @ViewChild('video') video: ElementRef;
     @ViewChild('myCanvas') myCanvas: any;
     foundQR: boolean = false;
-    scanLoop: any;
+    scanLoop: Subscription;
     qrcode: string;
     qrStatus: string = 'Scanning QR code';
     frontcamera: false;
-
+    videoStream: MediaStream;
     @Output()
     QrScanClose = new EventEmitter<string>();
-
     constructor(injector: Injector) {
         super(injector);
 
-        this.scanLoop = observableInterval(100).subscribe(() => {
-            this.onCapture();
-        });
+
     };
 
     ngOnInit(): void {
@@ -44,8 +42,12 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: (this.frontcamera ? 'user' : 'environment') } })
                 .then(stream => {
+                    this.videoStream = stream;
                     _video.src = window.URL.createObjectURL(stream);
                     _video.play();
+                    this.scanLoop = interval(500).subscribe(() => {
+                        this.onCapture();
+                    });
                 });
         }
     }
@@ -55,23 +57,19 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
     onCapture() {
         let video = this.video.nativeElement;
         let canvas = this.myCanvas.nativeElement;
-        let context = canvas.getContext('2d');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        if (context.getImageData) {
-            let imageData = context.getImageData(0, 0, 280, 260);
-            let decoded = jsQR.decodeQRFromImage(imageData.data, imageData.width, imageData.height);
-            if (decoded) {
-
-                if (decoded.slice(0, 2) === 'HW') {
-                    this.confirmedCapture(decoded);
-                } else {
-                    this.qrStatus = this.translate('not_valid_byzance_qr_code');
+        if ( video.readyState && video.HAVE_ENOUGH_DATA ) {
+            let context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            if (imageData) {
+                let decoded = jsQR(imageData.data, imageData.width, imageData.height);
+                if (decoded) {
+                    this.QrScanClose.emit(decoded.data)
                 }
             }
         }
-
     }
 
 
