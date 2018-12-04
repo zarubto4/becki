@@ -1,3 +1,4 @@
+import { TyrionBackendService } from './../services/BackendService';
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
@@ -18,8 +19,14 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
-    codes: String[] = [];
+    scanedCodes = new Set<string>();
+    waiting = new Set<string>();
+    added = new Map<string, IHardware>();
+    failed = new Map<string, string>();
+
     groups: IHardwareGroupList = null;
+
+
 
     constructor(injector: Injector) {
         super(injector)
@@ -36,14 +43,32 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
     }
 
     refresh(): void {
-
+        this.scanedCodes = new Set<string>();
+        this.added = new Map<string, IHardware>();
+        this.failed = new Map<string, string>();
     }
+
     qrCodeSent(code: string) {
         this.add(code);
     }
 
     add(code: string) {
-        this.codes.push(code);
+        code =  code.replace(/ /g, '');
+        if (!this.scanedCodes.has(code)) {
+            this.scanedCodes.add(code);
+            this.waiting.add(code);
+
+            // this.tyrionBackendService.projectAddHW({
+            //     registration_hash: code,
+            //     project_id: this.projectId
+            // }).then((iHardware) => {
+            //     this.waiting.delete(code);
+            //     this.added.set(code, iHardware);
+            // }).catch((reason) => {
+            //     this.waiting.delete(code);
+            //     this.failed.set(code, reason.message);
+            // });
+        }
     }
 
 }

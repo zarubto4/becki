@@ -15,13 +15,19 @@
         <table class="table table-hover table-scrollable">
         <thead>
         <tr>
-            <th>{{'label_action'|bkTranslate:this}}</th>
+            <th>{{'label_hw_id'|bkTranslate:this}}</th>
+            <th>{{'label_info'|bkTranslate:this}}</th>
         </tr>
         </thead>
         <tbody class="hide-bk-drob-down-button">
-        <tr *ngFor="let code of codes">
-            <td class="vert-align no-wrap"> {{code}}</td>
+        <tr *ngFor="let code of waiting">
+            <td class="vert-align breakable"> {{code}}</td>
+            <td>"LOADING"</td>
         </tr>
+        <tr *ngFor="let code of waiting">
+                <td class="vert-align breakable"> {{code}}</td>
+                <td>"LOADING"</td>
+            </tr>
         </tbody>
     </table>
 
