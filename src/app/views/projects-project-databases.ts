@@ -5,14 +5,11 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
-import { IDatabase, IHomerServer } from '../backend/TyrionAPI';
+import { IDatabase } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalsDatabaseModel } from '../modals/database-new';
-import { ModalsDatabaseRemoveModel } from '../modals/database-remove';
 import { ModalsRemovalModel } from '../modals/removal';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDatabaseNameDescriptionModel } from '../modals/database-edit';
-
+import { ModalsDatabaseCollectionModel } from '../modals/database-collection-new';
 
 @Component({
     selector: `bk-view-projects-project-databases`,
@@ -71,13 +68,13 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     }
 
     onCreateDatabaseClick(): void {
-        let model = new ModalsDatabaseModel();
+        let model = new ModalsDatabaseNameDescriptionModel(this.projectId);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.databaseCreate({
-                    name: model.name,
-                    description: model.description,
+                    name: model.database.name,
+                    description: model.database.description,
                     collection_name: model.firstCollection,
                     product_id: this.productId
                 }).then (() => {
@@ -93,15 +90,15 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     }
 
     onEditDatabaseClick(database: IDatabase): void {
-        let model = new ModalsDatabaseNameDescriptionModel(database.name, database.description);
+        let model = new ModalsDatabaseNameDescriptionModel(this.projectId, database);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
 
                 // TODO upravit na nový api point
                 this.tyrionBackendService.databaseEdit(database.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.database.name,
+                    description: model.database.description
                 })
                     .then(() => {
                         this.unblockUI();
@@ -119,8 +116,6 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
     }
 
     onRemoveDatabaseClick(database: IDatabase): void {
-        // TODO SMAZAT let model = new ModalsDatabaseRemoveModel();
-
         this.modalService.showModal(new ModalsRemovalModel('[' + database.id + '] ' + (database.name ? database.name : ''))).then((success) => {
             if (success) {
                 this.blockUI();
@@ -138,7 +133,22 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
 
     }
 
-
+    onCreateCollectionClick(database: IDatabase): void {
+        let model = new ModalsDatabaseCollectionModel(database);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.tyrionBackendService.databaseCollectionCreate(database.id, model.collection_name).then (() => {
+                    this.unblockUI();
+                    this.refresh();
+                }).catch((reason) => {
+                    this.unblockUI();
+                    this.fmError('', reason);
+                    this.refresh();
+                });
+            }
+        });
+    }
 
     onDrobDownEmiter(action: string, database: IDatabase): void {
         if (action === 'remove_database') {
@@ -149,8 +159,12 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
             this.onEditDatabaseClick(database);
         }
 
-        if (action === 'copy_conection_string') {
+        if (action === 'copy_connection_string') {
             this.copyMessage(database.connection_string);
+        }
+
+        if (action === 'create_collection') {
+            this.onCreateCollectionClick(database);
         }
     }
 

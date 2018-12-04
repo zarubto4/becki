@@ -132,10 +132,6 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
         this.tab = tab;
     }
 
-    onBlocksGroupClick(groupId: string) {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', groupId]);
-    }
-
     newBlockCode(code: string) {
         if (this.blockCode !== code) {
             this.unsavedChanges = true;
@@ -207,14 +203,13 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     }
 
     onBlockEditClick(): void {
-
-        let model = new ModalsBlocksBlockPropertiesModel(this.block.name, this.block.description, []);
+        let model = new ModalsBlocksBlockPropertiesModel(this.projectId, this.block);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.blockEdit(this.block.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.block.name,
+                    description: model.block.description
                 }).then(() => {
                     this.fmSuccess(this.translate('flash_blocko_edit'));
                     this.refresh();
@@ -264,18 +259,19 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     }
 
     onEditVersionClick(version: IBlockVersion): void {
-        let model = new ModalsVersionDialogModel(version.name, version.description, true);
+        let model = new ModalsVersionDialogModel(this.block.id, 'BlockVersion', version);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.blockVersionEdit(version.id, { // TODO [permission]: version.update_permission
-                    name: model.name,
-                    description: model.description
+                this.tyrionBackendService.blockVersionEdit(version.id, {
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags
                 }).then(() => {
-                    this.fmSuccess(this.translate('flash_version_change', model.name));
+                    this.fmSuccess(this.translate('flash_version_change', model.object.name));
                     this.refresh();
                 }).catch(reason => {
-                    this.fmError(this.translate('flash_cant_change_version', model.name, reason));
+                    this.fmError(this.translate('flash_cant_change_version', model.object.name, reason));
                     this.refresh();
                 });
             }
@@ -344,7 +340,6 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                 this.unblockUI();
             });
     }
-
 
     toReadableValue(value: any): string {
         if (typeof value === 'boolean') {
@@ -549,8 +544,8 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
     onSaveClick(): void {
         if (this.successfullyTested && this.renderer) {
-            let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-            this.modalService.showModal(m).then((success) => {
+            let model = new ModalsVersionDialogModel(this.block.id, 'BlockVersion');
+            this.modalService.showModal(model).then((success) => {
                 if (success) {
 
                     let data: object = {
@@ -569,17 +564,18 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
                     this.blockUI();
                     this.tyrionBackendService.blockVersionCreate(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
-                        name: m.name,
-                        description: m.description,
+                        name: model.object.name,
+                        description: model.object.description,
+                        tags: model.object.tags,
                         logic_json: JSON.stringify(data),
                         design_json: 'empty' // TODO remove in future
                     }).then(() => {
-                        this.fmSuccess(this.translate('flash_version_save', m.name));
+                        this.fmSuccess(this.translate('flash_version_save', model.object.name));
                         this.refresh(); // also unblockUI
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     }).catch((err) => {
-                        this.fmError(this.translate('flash_cant_save_version', m.name, err));
+                        this.fmError(this.translate('flash_cant_save_version', model.object.name, err));
                         this.unblockUI();
                     });
                 }
@@ -640,15 +636,16 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     }
 
     onMakeClone(): void {
-        let model = new ModalsWidgetsWidgetCopyModel(this.block.name, this.block.description);
+        let model = new ModalsWidgetsWidgetCopyModel(this.block.name, this.block);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.blockClone({
                     block_id: this.block.id,
                     project_id: this.projectId,
-                    name: model.name,
-                    description: model.description
+                    name: model.widget.name,
+                    description: model.widget.description,
+                    tags: model.widget.tags
                 }).then(() => {
                     this.fmSuccess(this.translate('flash_code_update'));
                     this.unblockUI();

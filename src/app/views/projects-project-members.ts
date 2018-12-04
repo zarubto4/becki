@@ -61,7 +61,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                         })
                         .catch(reason => {
                             this.unblockUI();
-                            this.fmError(this.translate('label_cannot_delete_person', reason));
+                            this.fmError(this.translate('label_cannot_add_person', reason));
                         });
                 }
             });
@@ -122,6 +122,9 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
         }
 
         if (action === 'remove_member') {
+            this.onMemberDeleteClick(member);
+        }
+        if (action === 'remove_invitation') {
             this.onMemberDeleteClick(member);
         }
     }

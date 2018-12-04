@@ -16,7 +16,7 @@
                         <th class="col col-lg-1">{{'table_description'|bkTranslate:this}}</th>
                         <th class="col col-lg-1">{{'table_product'|bkTranslate:this}}</th>
                         <th class="col col-lg-1" *ngFor="let field of additionalFields">{{field|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1 text-right">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,7 +27,7 @@
                         <td class="vert-align">
                             {{version.description}}
                         </td>
-                        <td class="vert-align">
+                        <td class="vert-align no-wrap">
                             {{version.id}}
                         </td>
                         <td class="vert-align" *ngFor="let field of additionalFields">{{version[field]}}</td>

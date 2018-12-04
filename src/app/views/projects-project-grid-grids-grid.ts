@@ -173,20 +173,21 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onEditVersionClick(version: IGridProgramVersion): void {
-        let model = new ModalsVersionDialogModel(version.name, version.description, true);
+        let model = new ModalsVersionDialogModel(this.gridProgram.id, 'GridProgramVersion', version);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.tyrionBackendService.gridProgramVersionEdit(version.id, { // TODO [permission]: version.update_permission
-                    name: model.name,
-                    description: model.description
+                this.tyrionBackendService.gridProgramVersionEdit(version.id, {
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags,
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_change', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_change', model.object.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_version', model.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_version', model.object.name, reason)));
                         this.refresh();
                     });
             }
@@ -286,14 +287,15 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onProgramEditClick(): void {
-        let model = new ModalsGridProgramPropertiesModel(this.gridProgram.name, this.gridProgram.description, true);
+        let model = new ModalsGridProgramPropertiesModel(this.gridProject.id, this.gridProgram);
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.gridProgramUpdate(this.gridProgram.id, {
-                    name: model.name,
-                    description: model.description,
+                    name: model.program.name,
+                    description: model.program.description,
+                    tags: model.program.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_edit')));
@@ -331,25 +333,26 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onSaveClick(): void {
-        let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
-        this.modalService.showModal(m).then((success) => {
+        let model = new ModalsVersionDialogModel(this.gridProgram.id, 'GridProgramVersion');
+        this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.gridProgramVersionCreate(this.gridProgramId, { // TODO [permission]: M_Program.create_permission
-                    name: m.name,
-                    description: m.description,
+                    name: model.object.name,
+                    description: model.object.description,
+                    tags: model.object.tags,
                     m_code: this.gridView.getDataJson(),
                     virtual_input_output: this.gridView.getInterfaceJson()
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save', m.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save', model.object.name)));
                         this.refresh(); // also unblockUI
 
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name, err)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', model.object.name, err)));
                         this.unblockUI();
                     });
             }

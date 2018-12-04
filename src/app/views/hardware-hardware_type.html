@@ -126,7 +126,7 @@
         <div *ngIf="tab == 'bootloaders'">
             <!-- Only with permission -->
             <div *ngIf="(hardwareType && hardwareType.boot_loaders && hardwareType.boot_loaders.length > 0)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col col-lg-1 center-align ">{{'table_id'|bkTranslate:this}}</th>
@@ -150,7 +150,7 @@
                                  </span>
                         </td>
                         <td class="vert-align no-wrap">{{bootloader.name}}</td>
-                        <td class="vert-align no-wrap">{{bootloader.version_identifier}}</td>
+                        <td class="vert-align breakable">{{bootloader.version_identifier}}</td>
                         <td class="vert-align no-wrap">{{bootloader.description.substr(0, 32)}}<span
                             *ngIf="bootloader.description.length > 32">...</span></td>
                         <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span
@@ -282,7 +282,7 @@
                                 <td class="vert-align">
                                              <span class="icon-hint-wraper green" *ngIf="version.main_mark">
                                                     <i class="fa fa-lg fa-flag font-green-jungle"></i>
-                                                    <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                                                    <span class="hint">{{'MAIN_VERSION'|bkTranslateTable:this:'version_status'}}</span>
                                             </span>
                                 </td>
                                 <!-- Description -->
@@ -491,7 +491,7 @@
             <!-- Only with permission Revision For Burning procedure -->
 
             <div *ngIf="hardwareType && hardwareType.batches && hardwareType.batches.length > 0">
-                <table class="table table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_revision'|bkTranslate:this}}</th>

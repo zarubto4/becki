@@ -9,10 +9,14 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { IBlock, IWidget } from '../backend/TyrionAPI';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 
 export class ModalsBlockoBlockCopyModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '',  public tags: string[] = []) {
+    constructor(
+        public project_id: string,
+        public block?: IBlock) {
         super();
     }
 }
@@ -33,33 +37,38 @@ export class ModalsBlockoBlockCopyComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-
-        this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': [''],
-            'tags': [''],
-        });
-    }
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {}
 
     ngOnInit() {
-
-        this.options = this.modalModel.tags.map((pv) => {
-            return {
-                label: pv,
-                value: pv
-            };
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.block != null ? this.modalModel.block.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.block && this.modalModel.block.name.length > 3 && this.modalModel.block.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Block', this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.block != null ? this.modalModel.block.description : '', [Validators.maxLength(255)]],
+            'tags': [this.modalModel.block != null ? this.modalModel.block.tags : []],
         });
-
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['tags'])).setValue(this.modalModel.tags);
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
-        this.modalModel.tags = this.form.controls['tags'].value;
+
+        if (this.modalModel.block == null) {
+            // @ts-ignore
+            this.modalModel.block = {};
+        }
+
+        this.modalModel.block.name = this.form.controls['name'].value;
+        this.modalModel.block.description = this.form.controls['description'].value;
+        this.modalModel.block.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

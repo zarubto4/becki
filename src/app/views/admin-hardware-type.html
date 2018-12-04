@@ -141,7 +141,7 @@
             ></bk-filter-component>
 
             <div *ngIf="(devicesFilter && devicesFilter.content.length)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light table-scrollable table-scrollable-borderless">
                     <thead>
                         <tr>
                             <th class="" [innerHTML]="'label_name'|bkTranslate:this"></th>
@@ -168,8 +168,8 @@
                                             </span>
                                     <a (click)="onDeviceClick_Admin(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                                 </td>
-                                <td class="vert-align no-wrap">{{device.id}}</td>
-                                <td class="vert-align no-wrap">{{device.full_id}}</td>
+                                <td class="vert-align breakable">{{device.id}}</td>
+                                <td class="vert-align breakable">{{device.full_id}}</td>
                                 <td class="vert-align no-wrap">
                                     <a *ngIf="device.project" (click)="onProjectClick(device.project.id)">{{device.project.name}}</a>
                                     <span *ngIf="!device.project">Not in Project</span>
@@ -237,7 +237,7 @@
         <!-- Hardware Types -->
         <div *ngIf="tab == 'hardware_type'">
             <div *ngIf="(hardwareTypes && hardwareTypes.length)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th>{{'label_name'|bkTranslate:this}}</th>
@@ -327,7 +327,7 @@
         <!-- Producers-->
         <div *ngIf="tab == 'producers'">
             <div *ngIf="(producers && producers.length)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'label_name'|bkTranslate:this}}</th>
@@ -391,7 +391,7 @@
         <!-- Processor -->
         <div *ngIf="tab == 'processor'">
             <div *ngIf="(processors && processors.length)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless" style="overflow: visible">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless" style="overflow: visible">
                     <thead>
                     <tr>
                         <th class="">{{'label_name'|bkTranslate:this}}</th>

@@ -56,7 +56,9 @@ export class ContactFormComponent implements OnInit, OnChanges {
             'zip_code': ['', [Validators.required, Validators.minLength(5)]],
             'country': ['', [Validators.required]],
             'company_registration_no': ['', [BeckiValidators.condition(() => (this.companyAccount && !this.inEu), Validators.required)]],
-            'company_vat_number': ['', [BeckiValidators.condition(() => (this.companyAccount && this.inEu), Validators.required)],
+            'company_vat_number': ['', [
+                BeckiValidators.condition(() => (this.companyAccount && this.inEu), Validators.required)
+            ],
                 [BeckiAsyncValidators.condition(() => (this.companyAccount && this.inEu), BeckiAsyncValidators.validateEntity(this.tyrionBackendService, 'vat_number'))]],
             'company_authorized_email': ['', [BeckiValidators.condition(() => this.companyAccount, Validators.required),
                 BeckiValidators.condition(() => (this.companyAccount), BeckiValidators.email)]],

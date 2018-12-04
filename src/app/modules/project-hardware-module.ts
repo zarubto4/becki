@@ -23,7 +23,6 @@ export const PROJECT_HARDWARE_ROUTES: Routes = [
     ],
     declarations: [
         ProjectsProjectHardwareComponent,
-        ProjectsProjectHardwareHardwareComponent
     ],
     exports: [ RouterModule ]
 })

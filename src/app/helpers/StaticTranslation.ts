@@ -25,6 +25,12 @@ export class StaticTranslation {
                 'label_single_registration': 'Single Registration (QR - code)',
                 'label_hash_token_label': 'Hash Token from Label',
 
+            }, 'ModalsSnapShotInstanceComponent': {
+                'title_create': 'Create <strong class="font-color-instance">SnapShot</strong>',
+                'title_edit': 'Edit <strong class="font-color-instance">SnapShot</strong>',
+                'label_snapshot_name': 'Instance Snap shot name',
+                'label_snapshot_description': 'Description'
+
             }, 'ModalsGsmPropertiesComponent': {
                 'title': '<strong class="font-color-hardware">CELLULAR</strong> basic & Threshold settings',
                 'label_personal_server_name': 'Alias',
@@ -248,12 +254,6 @@ export class StaticTranslation {
                 'label_select_server': 'Select destination <strong class="font-color-cloud">SERVER</strong>',
                 'label_select_b_program': 'Select <strong class="font-color-blocko">BLOCKO</strong> program'
 
-            }, 'ModalsBlocksTypePropertiesComponent': {
-                'title_edit': 'BLOCKs Group Properties',
-                'title_add': 'New Group',
-                'label_blocks_group_name': 'Name',
-                'label_block_description': 'Description',
-
             }, 'ModalsCodeAddLibraryComponent': {
                 'title': 'New <strong class="font-color-code">CODE</strong> Library',
                 'body_text': 'Displaying <b>{}0</b> out of <b>{1}</b> Libraries',
@@ -394,11 +394,6 @@ export class StaticTranslation {
                 'label_not_compiled': 'Compilation failed',
                 'btn_select_version': 'Select',
 
-            }, 'ModalsInstanceEditDescriptionComponent': {
-                'title': '<strong class="font-color-code">CLOUD</strong> Instance Properties',
-                'label_instance_name': 'Instance name',
-                'label_instance_description': 'Instance description',
-
             }, 'ModalsLibraryPropertiesComponent': {
                 'title_edit': '<strong class="font-color-code">CODE</strong> Library Properties',
                 'title_add': 'New Library',
@@ -461,12 +456,6 @@ export class StaticTranslation {
                 'label_version_name': 'Name',
                 'label_version_description': 'Description',
 
-            }, 'ModalsWidgetsTypePropertiesComponent': {
-                'title_add': 'New Group',
-                'title_edit': 'Widget Group Properties',
-                'label_widget_group_name': 'Name ',
-                'label_widget_group_description': 'Description',
-
             }, 'ModalsWidgetsWidgetPropertiesComponent': {
                 'title_edit': 'Widget Properties',
                 'title_add': 'New Widget',
@@ -474,8 +463,8 @@ export class StaticTranslation {
                 'label_widget_description': 'Description'
 
             }, 'ModalsHardwareGroupPropertiesComponent': {
-                'title_edit': 'Hardware Group Properties',
-                'title_add': 'New Group',
+                'title_add': 'New  <strong class="font-color-hardware">Hardware Group</strong>',
+                'title_edit': 'Edit  <strong class="font-color-hardware">Hardware Group</strong>',
                 'label_group_name': 'Name',
                 'label_group_description': 'Description',
 
@@ -499,22 +488,17 @@ export class StaticTranslation {
                 'btn_confirm_scan': 'Confirm Scan',
             },
 
-            'ModalsDatabaseNewComponent': {
-                'title': '<strong> Create database </strong>  ',
+            'ModalsDatabaseEditComponent': {
+                'title_add': 'Create <strong class="font-color-cloud">Database</strong>',
+                'title_edit': 'Update <strong class="font-color-cloud">Database</strong>',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_first_collection_name': 'First collection name',
                 'btn_confirm_scan': 'Confirm Scan',
             },
-            'ModalsDatabaseEditComponent': {
-                'title': '<strong> Edit database </strong>  ',
-                'label_name': 'Name',
-                'label_description': 'Description',
-            },
-            'ModalsDatabaseRemoveComponent': {
-                'title': '<strong> Remove database </strong>  ',
-                'label_database_id': 'Database id',
-                'btn_remove': 'remove',
+            'ModalsDatabaseCollectionNewComponent': {
+                'title': 'Create <strong class="font-color-cloud">Database Collection</strong>',
+                'label_name': 'Collection name',
             },
             'MobileAddHardwareComponent': {
                 'main_title': 'QR Hardware registration',
@@ -563,6 +547,7 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
                 'table_product': 'Product',
+                'table_tags': 'Tags',
                 'label_deactivated_under': 'Deactivated under',
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
@@ -1411,7 +1396,7 @@ export class StaticTranslation {
                 'table_update_progress': 'Progress',
                 'table_update_type': 'Who initiated the update',
                 'table_hardware_id': 'ID',
-                'table_hardware_full_id': 'Full ID',
+                'table_hardware_full_id': 'Processor ID',
                 'table_hardware_name': 'Alias Name',
                 'table_hardware_group_name': 'Group Name',
                 'table_groups': 'Groups',
@@ -1518,7 +1503,7 @@ export class StaticTranslation {
                 'label_server': 'Server Name',
                 'label_device_last_seen': 'Last seen',
                 'label_bootloader_version': 'Version',
-                'label_last_seen_unknow': '(Unknown)',
+                'label_last_seen_un_know': 'Unknown',
                 'label_update_to': 'Update to',
                 'label_full_id': 'Processor ID:',
                 'label_update_in_que': 'Update in Que',
@@ -1718,7 +1703,8 @@ export class StaticTranslation {
 
                 'label_upload_instance_modal': 'Deploy to Cloud',
                 'label_upload_instance_modal_comment': 'The last used <strong class="font-color-blocko">BLOCKO</strong> configuration will be uploaded to the server.',
-                'label_upload_error': 'Unable to shutdown this instance, {0}.',
+                'label_upload_error': 'Error upload this instance to Cloud, {0}.',
+                'label_shut_down_error': 'Error Shutdown this instance to down, {0}.',
                 'label_no_instances': 'No <strong class="font-color-cloud">Instances</strong> found in <strong class="font-color-cloud">CLOUD</strong>',
                 'label_no_instances_comment': 'If You already create <strong class="font-color-blocko">BLOCKO</strong>, you are ready to deploy it!',
                 'label_instance_documentation_description': '<p><strong class="font-color-cloud">INSTANCE</strong>  is a <strong>container</strong> for a running application created in the <strong class="font-color-blocko">BLOCKO</strong> editor.</p><p><strong class="font-color-cloud">CLOUD</strong> Server is a <strong>container manager</strong>.</p><p>The server handles Hardware via MQTT and applications connected via the websocket and passes data safely to the container and from the container to the end devices. Each container (<strong class="font-color-cloud">INSTANCE</strong>) is totally separate from others. The more the instance is computationally more demanding, the fewer the Server can handle.<br>You can have an <strong class="font-color-cloud">INSTANCE</strong> in restricted mode on a public server or <strong>on your own servers.</strong></p>',
@@ -1880,6 +1866,7 @@ export class StaticTranslation {
                 'table_hardware_group_name': 'Group Name',
                 'table_groups': 'Groups',
                 'table_hardware_id': 'ID',
+                'table_hardware_full_id': 'Processor ID',
                 'table_update_state': 'State',
                 'table_hardware_name': 'Alias Name',
                 'table_size': 'Size []',
@@ -1987,7 +1974,7 @@ export class StaticTranslation {
                 'btn_add_members': 'Invite collaborators',
 
                 'table_name': 'Name',
-                'table_state': 'Description',
+                'table_state': 'State',
                 'table_actions': 'Actions',
 
 
@@ -2001,6 +1988,7 @@ export class StaticTranslation {
 
                 'label_remove_member': 'Remove member',
                 'label_send_invitation': 'Send invitation again',
+                'label_remove_invitation': 'Cancel invitation',
 
                 'label_cannot_remove_yourself': 'You can`t remove yourself from your project.',
                 'label_cannot_add_member': 'Unable to add collaborators. {0}',
@@ -2010,7 +1998,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectWidgetsComponent': {
                 'main_title': 'Platform administration',
-                'main_subtitle': 'Community Widget Group',
+                'main_subtitle': 'Community Widget Administration',
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> widgets',
 
                 'btn_add_widget': 'Create Widget',
@@ -2232,6 +2220,8 @@ export class StaticTranslation {
                 'label_publish_decision': 'Decide of Publish',
 
             }, 'ProjectsProjectBlocksComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Community Blocks Administration',
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> Blocks',
                 'label_block_remove': 'Remove Block',
                 'label_block_make_copy': 'Make Copy',
@@ -2482,8 +2472,28 @@ export class StaticTranslation {
                 'label_minimal_length': 'Minimal length of this field is {0} characters.',
                 'label_maximal_length': 'Maximal length of this field is {0} characters.',
                 'label_name_taken': 'This name is already in use.',
+                'label_required_pattern': ' Invalid Patter - Required only Small letters (a-z), number (0-9) or symbols (-_)  (NO SPACE!)',
+
                 'label_project_name_taken': 'This project name is already in use.',
-                'label_blocko_name_taken': 'This program name is already in use.',
+                'label_hardware_name_taken': 'This Hardware name is already in use.',
+                'label_program_name_taken': 'This Name is already in use.',
+
+                'label_bprogram_name_taken': 'Name of Blocko program in this Project is already in use.',
+                'label_cprogram_name_taken': 'Name of Code program in this Project is already in use.',
+                'label_grid_program_name_taken': 'Name of Grid program in this Project is already in use.',
+                'label_gsm_name_taken': 'Name of GSM in this Project must be unique',
+                'label_role_name_taken': 'Name of Role in this Project must be unique',
+                'label_block_name_taken': 'Name of Block in this Project must be unique',
+                'label_widget_name_taken': 'Name of Widget in this Project must be unique',
+                'label_instance_name_taken': 'Name of Instance in this Project must be unique',
+                'label_snapshot_name_taken': 'Name of Snap Shot in this Instance must be unique',
+                'label_grid_project_name_taken': 'Name of Grid Collection in this Project must be unique',
+                'label_grid_program_version_name_taken': 'Version name must be unique for this program',
+                'label_cprogram_version_name_taken': 'Version name must be unique for this program',
+                'label_bprogram_version_name_taken': 'Version name must be unique for this program',
+                'label_database_collection_name_taken': 'Collection in Database must be unique',
+                'label_database_name_taken': 'Name of Database must be unique',
+
                 'label_invalid_email': 'Invalid E-mail address.',
                 'label_invalid_time': 'Invalid Time, please write time in XY:YX format',
                 'label_different_password': 'Passwords do not match.',
@@ -2946,7 +2956,7 @@ export class StaticTranslation {
                 'role_create_fail': 'Role creation failed',
             }, 'ProjectsProjectDatabasesComponent': {
                 'btn_create_database': 'Create Database',
-                'label_copy_conection_string_database': 'Copy Conection',
+                'label_copy_connection_string_database': 'Copy Conection',
                 'label_remove_database': 'Remove Database',
                 'label_edit_database': 'Edit Database',
                 'table_database_name': 'Name',
@@ -2959,6 +2969,7 @@ export class StaticTranslation {
                 'label_connection_string': 'Connection String',
                 'label_no_databases': 'You have no any Database',
                 'label_no_databases_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
+                'label_create_collection_database': 'Create collection',
             },
 
 
@@ -3045,7 +3056,7 @@ export class StaticTranslation {
                 'SYNCHRONIZATION_IN_PROGRESS': 'Synchronizing',
                 'NOT_YET_FIRST_CONNECTED': 'We have no idea <br><small>(never logged before)</small>',
                 'UNKNOWN_LOST_CONNECTION_WITH_SERVER': 'Lost connection with external server',
-                'SHUT_DOWN': 'Shut Downed',
+                'SHUT_DOWN': 'Shut Down',
             },
             'public_state': {
                 'PRIVATE' : 'Private' ,

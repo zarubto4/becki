@@ -278,7 +278,7 @@
 
         <div *ngIf="tab == 'update' && instance && instance.current_snapshot">
             <div *ngIf="(instance.current_snapshot && instance.current_snapshot.updates && instance.current_snapshot.updates.length > 0)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
@@ -369,11 +369,12 @@
         <div *ngIf="tab == 'hardware' && instance && instance.current_snapshot">
 
 
-                <!-- List of Integrated HW groups START-->
+            <!-- List of Integrated HW groups START-->
+            <div>
                 <h4 [innerHTML]="'label_hardware_groups'|bkTranslate:this"></h4>
 
                 <div *ngIf="(deviceGroupFilter && deviceGroupFilter.content.length > 0)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th class="" [innerHTML]="'table_hardware_group_name'|bkTranslate:this"></th>
@@ -415,33 +416,89 @@
                 </bk-nothing-to-show>
                 <!-- Temporary page content if content is being loaded or if there is no content -- END -->
 
-                <!-- List of Integrated HW groups END-->
-                <hr>
-                <!-- List of Integrated HW by filter START-->
+
+            </div>
+            <!-- List of Integrated HW groups END-->
+
+            <hr>
+            <!-- List of Integrated HW by filter START-->
+            <div>
+
+
                 <h4 [innerHTML]="'label_hardware_in_instance'|bkTranslate:this"></h4>
+
                 <div *ngIf="(devicesFilter && devicesFilter.content && devicesFilter.content.length > 0)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
-                            <th class="col" [innerHTML]="'table_hardware_name'|bkTranslate:this"></th>
-                            <th class="col" [innerHTML]="'table_hardware_id'|bkTranslate:this"></th>
-                            <th class="col" [innerHTML]="'table_description'|bkTranslate:this"></th>
-                            <th class="col text-center" [innerHTML]="'label_type'|bkTranslate:this"></th>
-                            <th class="col text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
-                            <th class="col text-center" [innerHTML]="'table_project_status'|bkTranslate:this"></th>
-                            <th class="col text-center" [innerHTML]="'table_status'|bkTranslate:this"></th>
+                            <th class="">
+                                <a [innerHTML]="'table_hardware_name'|bkTranslate:this"
+                                   (click)="formFilterGroup.controls['orderBy'].setValue('NAME'); onFilterHardware()"
+                                   [class.bold]="formFilterGroup.controls['orderBy'].value === 'NAME'"></a>
+                                <bk-icon-component *ngIf="formFilterGroup.controls['orderBy'].value === 'NAME'"
+                                                   [icon]="formFilterGroup.controls['order_schema'].value === 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                                   [color]="'font-silver'"
+                                                   [color_on]="'font-color-byzance-blue'"
+                                                   [condition]="true"
+                                                   (onClickEvent)="formFilterGroup.controls['order_schema'].value === 'ASC' ? formFilterGroup.controls['order_schema'].setValue('DESC') : formFilterGroup.controls['order_schema'].setValue('ASC'); onFilterHardware()">
+                                </bk-icon-component>
+                            </th>
+                            <th class="">
+                                <a [innerHTML]="'table_hardware_id'|bkTranslate:this"
+                                   (click)="formFilterGroup.controls['orderBy'].setValue('ID'); onFilterHardware()"
+                                   [class.bold]="formFilterGroup.controls['orderBy'].value === 'ID'"></a>
+                                <bk-icon-component *ngIf="formFilterGroup.controls['orderBy'].value === 'ID'"
+                                                   [icon]="formFilterGroup.controls['order_schema'].value === 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                                   [color]="'font-silver'"
+                                                   [color_on]="'font-color-byzance-blue'"
+                                                   [condition]="true"
+                                                   (onClickEvent)="formFilterGroup.controls['order_schema'].value === 'ASC' ? formFilterGroup.controls['order_schema'].setValue('DESC') : formFilterGroup.controls['order_schema'].setValue('ASC'); onFilterHardware()">
+                                </bk-icon-component>
+                            </th>
+                            <th class="">
+                                <a [innerHTML]="'table_hardware_full_id'|bkTranslate:this"
+                                   (click)="formFilterGroup.controls['orderBy'].setValue('FULL_ID'); onFilterHardware()"
+                                   [class.bold]="formFilterGroup.controls['orderBy'].value === 'FULL_ID'"></a>
+                                <bk-icon-component *ngIf="formFilterGroup.controls['orderBy'].value === 'FULL_ID'"
+                                                   [icon]="formFilterGroup.controls['order_schema'].value === 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                                   [color]="'font-silver'"
+                                                   [color_on]="'font-color-byzance-blue'"
+                                                   [condition]="true"
+                                                   (onClickEvent)="formFilterGroup.controls['order_schema'].value === 'ASC' ? formFilterGroup.controls['order_schema'].setValue('DESC') : formFilterGroup.controls['order_schema'].setValue('ASC'); onFilterHardware()">
+                                </bk-icon-component>
+                            </th>
+
+                            <th class="" [innerHTML]="'table_description'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_groups'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_project_status'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_status'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_tags'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_actions'|bkTranslate:this"></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr *ngFor="let device of devicesFilter.content">
+
                             <td class="vert-align">
-                                <a (click)="onDeviceClick(device.id)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+
+                                <div class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
+                                    <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
+                                    <div class="hint-fixed">
+                                    <span class="hint right">
+                                         <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
+                                    </span>
+                                    </div>
+                                </div>
+
+                                <a (click)="onDeviceClick(device.id)" class="no-wrap">
+                                    <strong *ngIf="device.name && device.name != 'null'">{{device.name}}</strong>
+                                    <strong *ngIf="!device.name || device.name == 'null'">{{device.full_id}}</strong>
+                                </a>
+
                             </td>
-                            <td class="vert-align no-wrap">{{device.id.substr(0,13)}}</td>
-                            <td class="vert-align no-wrap">{{device.description}}</td>
-                            <td class="vert-align text-center no-wrap"><a
-                                (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a>
-                            </td>
+                            <td class="vert-align breakable">{{device.id.substr(0,13)}}..</td>
+                            <td class="vert-align no-wrap word-break">{{device.full_id}}</td>
+                            <td class="vert-align no-wrap word-break">{{device.description}}</td>
                             <td class="vert-align text-center no-wrap">
 
                                 <div *ngIf="!device.hardware_groups">
@@ -450,29 +507,91 @@
                                 <div *ngIf="device.hardware_groups">
                                     [
                                     <span *ngFor="let group of device.hardware_groups; let last = last">
-                                                {{group.name}}<span *ngIf="!last">, </span>
-                                    </span>
+                                     {{group.name}}<span *ngIf="!last">, </span>
+                                </span>
                                     ]
                                 </div>
 
                             </td>
 
                             <td class="vert-align text-center no-wrap">
-                                <span *ngIf="device.dominant_entity">{{'label_project_active'|bkTranslate:this}}</span>
-                                <span *ngIf="!device.dominant_entity && device.dominant_project_active"
-                                      class="font-red-flamingo">{{'label_project_not_active'|bkTranslate:this}}</span>
+
                                 <div *ngIf="!device.dominant_entity && device.dominant_project_active">
-                                    <span>Active In:</span><br>
-                                    <small><a (click)="onProjectClick(device.dominant_project_active.id)">{{device.dominant_project_active.name}}</a>
-                                    </small>
+                                    <span *ngIf="device.dominant_project_active.id">Active In: <a (click)="onProjectClick(device.dominant_project_active.id)">{{device.dominant_project_active.name}}</a></span>
+                                    <span *ngIf="!device.dominant_project_active.id" [innerHTML]="'label_foreign_project'|bkTranslate:this"></span>
                                 </div>
                                 <div *ngIf="!device.dominant_entity && !device.dominant_project_active">
                                     <span class="font-green-jungle">Can Be Activated</span>
                                 </div>
                             </td>
                             <td class="vert-align text-center no-wrap">
+                                <bk-online-state [online_state]="device.online_state" [latest_online]="device.latest_online"></bk-online-state>
+                            </td>
 
-                                <bk-online-state [online_state]="device.online_state"></bk-online-state>
+                            <td class="vert-align">
+                                <bk-form-tag-input [tags_without_form]="device.tags" [readonly]="true"></bk-form-tag-input>
+                            </td>
+
+                            <td class="action-btn-col">
+
+                                <bk-icon-component [condition]="device.online_state=='ONLINE'" [icon]="'fa-lightbulb-o'" [color]="'font-silver'" [color_on]="'font-color-byzance-blue'" (onClickEvent)="onBlinkDeviceClick(device)">
+                                </bk-icon-component>
+
+                                <bk-drob-down-button
+                                    [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                    [btns]="[
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_set_hardware_group'|bkTranslate:this),
+                                    btn_tag: 'edit_hardware_group_device',
+                                    icon: 'fa-object-group',
+                                    colorType: 'UPDATE',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: (device.online_state === 'ONLINE'),
+                                    btn_label_for_person: ('label_blink_hardware'|bkTranslate:this),
+                                    btn_tag: 'blink_hardware',
+                                    icon: 'fa-lightbulb-o',
+                                    colorType: 'ADD',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_device_properties'|bkTranslate:this),
+                                    btn_tag: 'edit_hardware',
+                                    icon: 'fa-cog',
+                                    colorType: 'EDIT',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: (!device.dominant_entity && !device.dominant_project_active),
+                                    btn_label_for_person: ('label_activate_hardware'|bkTranslate:this),
+                                    btn_tag: 'activate_hardware',
+                                    icon: 'fa-flag',
+                                    colorType: 'ADD',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: (device.dominant_entity),
+                                    btn_label_for_person: ('label_deactivate_hardware'|bkTranslate:this),
+                                    btn_tag: 'deactivate_hardware',
+                                    icon: 'fa-ban',
+                                    colorType: 'ADD',
+                                    permission: (device.update_permission)
+                                },
+                                {
+                                    condition: true,
+                                    btn_label_for_person: ('label_remove_device'|bkTranslate:this),
+                                    btn_tag: 'remove_hardware',
+                                    icon: 'fa-trash',
+                                    colorType: 'REMOVE',
+                                    permission: (device.delete_permission)
+                                }
+                            ]"
+                                    (onValueChanged)="onDrobDownEmiter($event, device)"
+                                >
+                                </bk-drob-down-button>
                             </td>
                         </tr>
                         </tbody>
@@ -489,7 +608,8 @@
                                     [main_message_comment_link]="'label_no_hardware_in_snapshot_comment'|bkTranslate:this"
                                     [show_button]="false">
                 </bk-nothing-to-show>
-                <!-- Temporary page content if content is being loaded or if there is no content -- END -->¨
+                <!-- Temporary page content if content is being loaded or if there is no content -- END -->
+            </div>
 
         </div>
 
@@ -527,7 +647,7 @@
                     </bk-portlet-title>
 
                     <div class="portlet-body " [class.margin-left-30]="instance.current_snapshot.m_projects.length > 1">
-                        <table class="table table-hover table-light byzance-table">
+                        <table class="table table-hover table-light  ">
                             <thead>
                             <tr>
                                 <th class="" [innerHTML]="'table_grid_program_name'|bkTranslate:this"></th>
@@ -615,7 +735,7 @@
         <div *ngIf="tab == 'api' && instance">
             <div>
                 <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
@@ -675,7 +795,7 @@
             <h3>External API to local instance</h3>
 
             <div *ngIf="(instance && instance.current_snapshot)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -687,7 +807,7 @@
                     <tr *ngFor="let hook of webHooks">
                         <td class="vert-align">{{hook['name']}}</td>
                         <td class="vert-align">{{hook['description']}}</td>
-                        <td class="vert-align" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>
+                        <td class="vert-align breakable" [innerHTML]="'POST::' + 'https://' + instance.server.server_url + ':' + instance.server.rest_api_port + '/instance/' + instance.id + '/<strong> {API KEY} </strong>/' +  hook['id']"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -697,7 +817,7 @@
 
         <div *ngIf="tab == 'mesh' && instance">
             <div *ngIf="(instance.current_snapshot)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
@@ -742,7 +862,7 @@
         <div *ngIf="tab == 'api' && instance">
             <div>
                 <div *ngIf="(instance.current_snapshot && instance.current_snapshot.settings.api_keys.length)">
-                    <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                         <thead>
                         <tr>
                             <th [innerHTML]="'table_api_key'|bkTranslate:this"></th>
@@ -802,7 +922,7 @@
             <h3>External API to local instance</h3>
 
             <div *ngIf="(instance && instance.current_snapshot)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="col" [innerHTML]="'table_name'|bkTranslate:this"></th>
@@ -824,7 +944,7 @@
 
         <div *ngIf="tab == 'mesh' && instance">
             <div *ngIf="(instance.current_snapshot)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_mesh_key'|bkTranslate:this"></th>
@@ -869,12 +989,12 @@
         <div *ngIf="tab == 'history' && instance">
 
             <div *ngIf="(instance.snapshots && instance.snapshots.length > 0)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th [innerHTML]="'table_name'|bkTranslate:this"></th>
                         <th [innerHTML]="'table_description'|bkTranslate:this"></th>
-
+                        <th class="text-center">{{'table_tags'|bkTranslate:this}}</th>
                         <!-- Chybí API
                         <th [innerHTML]="'table_b_program_version_name'|bkTranslate:this"></th>
                         <th [innerHTML]="'table_b_program_version_description'|bkTranslate:this"></th>
@@ -891,6 +1011,9 @@
                         </td>
                         <td class="vert-align">{{snapshot.description}}</td>
 
+                        <td class="vert-align text-center">
+                            <bk-form-tag-input [tags_without_form]="snapshot.tags" [readonly]="true"></bk-form-tag-input>
+                        </td>
                         <!-- Chybí API
                            <td class="vert-align no-wrap bold">
                                <a (click)="onBProgramClick(snapshot.b_program.id)">{{snapshot.b_program_version.name}}</a>
@@ -904,18 +1027,18 @@
                                [btns]="[
                                {
                                    condition: true,
-                                   btn_label_for_person: ('label_deploy_snapshot'|bkTranslate:this),
+                                   btn_label_for_person: ('label_snapshot_settings'|bkTranslate:this),
                                    btn_tag: 'edit_snapshot_instance',
-                                   icon: 'fa-upload',
-                                   colorType: 'CREATE',
+                                   icon: 'fa-cog',
+                                   colorType: 'EDIT',
                                    permission: (instance.update_permission)
                                },
                                {
                                    condition: true,
-                                   btn_label_for_person: ('label_snapshot_settings'|bkTranslate:this),
+                                   btn_label_for_person: ('label_deploy_snapshot'|bkTranslate:this),
                                    btn_tag: 'deploy_selected_snapshot',
-                                   icon: 'fa-cog',
-                                   colorType: 'EDIT',
+                                   icon: 'fa-upload',
+                                   colorType: 'ACTIVE',
                                    permission: (instance.update_permission)
                                },
                                {

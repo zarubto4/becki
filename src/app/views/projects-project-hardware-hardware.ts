@@ -233,13 +233,14 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     }
 
     onEditClick(device: IHardware): void {
-        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description, device.dominant_entity, (!device.dominant_entity && device.dominant_project_active === null));
+        let model = new ModalsDeviceEditDescriptionModel(this.projectId, device);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.boardEditPersonalDescription(device.id, {
-                    name: model.name,
-                    description: model.description
+                    name: model.hardware.name,
+                    description: model.hardware.description,
+                    tags: model.hardware.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));

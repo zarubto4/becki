@@ -11,9 +11,10 @@ import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { IGSM } from '../backend/TyrionAPI';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 export class ModalsGsmPropertiesModel extends ModalModel {
-    constructor (public gsm: IGSM) {
+    constructor (public project_id: string, public gsm: IGSM) {
         super();
     }
 }
@@ -36,15 +37,26 @@ export class ModalsGsmPropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-
         /* tslint:disable:max-line-length */
         let input: { [key: string]: any } = {
-            'name': [this.modalModel.gsm.name, [Validators.maxLength(32)]],
-            'description': [this.modalModel.gsm.description, [Validators.maxLength(255)]],
+            'name': [this.modalModel.gsm != null ? this.modalModel.gsm.name : this.modalModel.gsm.id,
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.gsm && this.modalModel.gsm.name.length > 3 && this.modalModel.gsm.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'GSM',  this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.gsm != null ? this.modalModel.gsm.description : '', [Validators.maxLength(255)]],
             'total_traffic_threshold': [this.modalModel.gsm.sim_tm_status.total_traffic_threshold ? this.onMathRound(this.modalModel.gsm.sim_tm_status.total_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
             'monthly_traffic_threshold': [this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold ? this.onMathRound( this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
             'daily_traffic_threshold': [this.modalModel.gsm.sim_tm_status.daily_traffic_threshold ? this.onMathRound(this.modalModel.gsm.sim_tm_status.daily_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-            'tags': [this.modalModel.gsm.tags]
+            'tags': [this.modalModel.gsm != null ? this.modalModel.gsm.tags : ''],
         };
         /* tslint:enable:max-line-length */
 

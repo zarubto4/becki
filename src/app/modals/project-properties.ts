@@ -9,18 +9,15 @@ import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
-import { IApplicableProduct } from '../backend/TyrionAPI';
+import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 
 
 export class ModalsProjectPropertiesModel extends ModalModel {
+    public product_id: string;
     constructor(
         public products: IApplicableProduct[],  // List of Product for Project registration (can be null)
-        public name: string = '',               // Project name
-        public description: string = '',        // Project description
-        public product: string = null,            // duplicated values (can be null)
-        public edit: boolean = false,           // true - its only for project edit. False is project Creation
-        public exceptName: string = null        // user cannot save another project with same name - so we use this value for save control of same project
+        public project?: IProject
     ) {
         super();
     }
@@ -47,16 +44,8 @@ export class ModalsProjectPropertiesComponent implements OnInit {
 
     ngOnInit() {
 
-        this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)], BeckiAsyncValidators.condition((value) => {
-                return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName === value);
-            }, BeckiAsyncValidators.projectNameTaken(this.backendService))],
-            'description': [''],
-            'product': ['', [BeckiValidators.condition(() => !this.modalModel.edit, Validators.required)]]
-        });
 
-        if (!this.modalModel.edit) {
-
+        if (this.modalModel.products) {
             this.options = this.modalModel.products.map((trf) => {
                 return {
                     value: trf.id,
@@ -65,15 +54,35 @@ export class ModalsProjectPropertiesComponent implements OnInit {
             });
         }
 
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['product'])).setValue(this.modalModel.product);
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.project != null ? this.modalModel.project.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.project && this.modalModel.project.name.length > 3 && this.modalModel.project.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Project')
+                )
+            ],
+            'description': [this.modalModel.project != null ? this.modalModel.project.description : ''],
+            'product': [this.modalModel.project ? this.modalModel.project.product.id : '', [BeckiValidators.condition(() => this.modalModel.project == null, Validators.required)]],
+            'tags': [this.modalModel.project != null ? this.modalModel.project.tags : []]
+        });
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
-        this.modalModel.product = this.form.controls['product'].value;
+
+        if (this.modalModel.project == null) {
+            // @ts-ignore
+            this.modalModel.project = {};
+        }
+        this.modalModel.project.name        = this.form.controls['name'].value;
+        this.modalModel.project.description = this.form.controls['description'].value;
+        this.modalModel.product_id          = this.form.controls['product'].value;
+        this.modalModel.project.tags        = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

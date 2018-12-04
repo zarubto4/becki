@@ -5,16 +5,16 @@
 
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { IInstanceSnapshot, IShortReference } from '../backend/TyrionAPI';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 export class ModalsSnapShotInstanceModel extends ModalModel {
     constructor(
-        public name: string = '',
-        public description: string = '',
-        public tags: string[] = [],
-        public edit: boolean = false,
+        public instance_id: string,
+        public snapshot?: IShortReference
     ) {
         super();
     }
@@ -38,20 +38,39 @@ export class ModalsSnapShotInstanceComponent implements OnInit {
     }
 
     ngOnInit() {
-        let input: { [key: string]: any } = {
-            'name': [this.modalModel.name, [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
-            'description': [this.modalModel.description],
-            'tags': [this.modalModel.tags]
-        };
 
-        this.form = this.formBuilder.group(input);
+
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.snapshot != null ? this.modalModel.snapshot.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.snapshot && this.modalModel.snapshot.name.length > 3 && this.modalModel.snapshot.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Snapshot', null, this.modalModel.instance_id)
+                )
+            ],
+            'description': [this.modalModel.snapshot != null ? this.modalModel.snapshot.description : '', [Validators.maxLength(255)]],
+            'tags': [this.modalModel.snapshot != null ? this.modalModel.snapshot.tags : []]
+        });
     }
 
 
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
+        if (this.modalModel.snapshot == null) {
+            // @ts-ignore
+            this.modalModel.snapshot = {};
+        }
+
+        this.modalModel.snapshot.name = this.form.controls['name'].value;
+        this.modalModel.snapshot.description = this.form.controls['description'].value;
+        this.modalModel.snapshot.tags = this.form.controls['tags'].value;
+
         this.modalClose.emit(true);
     }
 

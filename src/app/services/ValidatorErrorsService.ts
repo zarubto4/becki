@@ -21,6 +21,8 @@ export class ValidatorErrorsService {
     }
 
     getMessageForErrors(errors: any) {
+
+        console.log("getMessageForErrors: ", errors);
         if (errors) {
             if (errors['required']) {
                 return this.translate('label_field_required');
@@ -34,12 +36,64 @@ export class ValidatorErrorsService {
             if (errors['nameTaken']) {
                 return this.translate('label_name_taken');
             }
-            if (errors['projectNameTaken']) {
+            if (errors['pattern']) {
+                return this.translate('label_required_pattern');
+            }
+
+            // -- Name taken ------------------------------------------------------------------------------------------
+            if (errors['ProjectNameTaken']) {
                 return this.translate('label_project_name_taken');
             }
-            if (errors['blockoNameTaken']) {
-                return this.translate('label_blocko_name_taken');
+            if (errors['BProgramNameTaken']) {
+                return this.translate('label_bprogram_name_taken');
             }
+            if (errors['BProgramVersionNameTaken']) {
+                return this.translate('label_bprogram_version_name_taken');
+            }
+            if (errors['CProgramNameTaken']) {
+                return this.translate('label_cprogram_name_taken');
+            }
+            if (errors['CProgramVersionNameTaken']) {
+                return this.translate('label_cprogram_version_name_taken');
+            }
+            if (errors['GridProgramNameTaken']) {
+                return this.translate('label_grid_program_name_taken');
+            }
+            if (errors['GridProgramVersionNameTaken']) {
+                return this.translate('label_grid_program_version_name_taken');
+            }
+            if (errors['GridProjectNameTaken']) {
+                return this.translate('label_grid_project_name_taken');
+            }
+            if (errors['HardwareNameTaken']) {
+                return this.translate('label_hardware_name_taken');
+            }
+            if (errors['GSMNameTaken']) {
+                return this.translate('label_gsm_name_taken');
+            }
+            if (errors['RoleNameTaken']) {
+                return this.translate('label_role_name_taken');
+            }
+            if (errors['BlockNameTaken']) {
+                return this.translate('label_block_name_taken');
+            }
+            if (errors['WidgetNameTaken']) {
+                return this.translate('label_widget_name_taken');
+            }
+            if (errors['InstanceNameTaken']) {
+                return this.translate('label_instance_name_taken');
+            }
+            if (errors['SnapShotNameTaken']) {
+                return this.translate('label_snapshot_name_taken');
+            }
+            if (errors['DatabaseNameTaken']) {
+                return this.translate('label_database_name_taken');
+            }
+            if (errors['DatabaseCollectionNameTaken']) {
+                return this.translate('label_database_collection_name_taken');
+            }
+            // -- Name taken ------------------------------------------------------------------------------------------
+
             if (errors['hardwareDeviceId']) {
                 return this.translateTable(errors['hardwareDeviceId'], 'hardware_device_id');
             }

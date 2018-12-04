@@ -26,7 +26,7 @@
         <div *ngIf="tab == 'server_list'">
 
             <div *ngIf="(homer_servers && homer_servers.content.length > 0)">
-                <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'table_server_name'|bkTranslate:this}}</th>
@@ -44,7 +44,7 @@
                         <td class="vert-align no-wrap">
                             <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.name?homer_server.name:homer_server.id}}</strong></a>
                         </td>
-                        <td class="vert-align no-wrap">{{homer_server.id}}</td>
+                        <td class="vert-align breakable">{{homer_server.id}}</td>
 
                         <td class="vert-align no-wrap">
                             <a href="http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}" class="no-wrap"><strong>http://{{homer_server.server_url}}:{{homer_server.rest_api_port}}</strong></a>

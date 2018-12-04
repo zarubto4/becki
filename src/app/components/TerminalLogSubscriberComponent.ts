@@ -286,13 +286,15 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
                 .then((response: IWebSocketMessage) => {
                     if (response.isSuccessful()) {
                         this.logLevel[hardware.id].subscribed = false;
+                        this.consoleLog.add('info', 'Un-Subscription successful.', hardware.id, hardware.name); // přidání zprávy do consoleComponent
                     } else {
+                        this.consoleLog.add('error', 'Un-Subscription un-successful. Result' + response.error, hardware.id, hardware.name); // přidání zprávy do consoleComponent
                         throw new Error('Unable to unsubscribe the logger');
                     }
                 })
                 .catch((reason) => {
                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
-                    console.error('onUserChangeLogLevelClick:', reason);
+                    console.error('onHardwareUnSubscribeClick:', reason);
                 });
         }
     }
@@ -308,13 +310,15 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
             .then((response: IWebSocketMessage) => {
                 if (response.isSuccessful()) {
                     this.logLevel[hardware.id].subscribed = true;
+                    this.consoleLog.add('info', 'Subscription successful. Permission allowed. Log level: ' + logLevel, hardware.id, hardware.name); // přidání zprávy do consoleComponent
                 } else {
+                    this.consoleLog.add('error', 'Subscription un-successful. Result' + response.error, hardware.id, hardware.name); // přidání zprávy do consoleComponent
                     throw new Error('Unable to subscribe new logger');
                 }
             })
             .catch((reason) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
-                console.error('onUserChangeLogLevelClick:', reason);
+                console.error('onHardwareSubscribeClick:', reason);
             });
     }
 
@@ -325,12 +329,13 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
      */
     onUserChangeLogLevelClick(logLevel: ('error' | 'warn' | 'info' | 'debug' | 'trace'), hardware: IHardware): void { // změna log levelu
 
-        // console.log('onUserChangeLogLevelClick:: Hardware', hardware.id, 'LogLevel', logLevel);
-        // console.log('onUserChangeLogLevelClick:: Server URL: ', this.logLevel[hardware.id].socket.url);
-        // console.log('onUserChangeLogLevelClick:: Log on : ', this.logLevel[hardware.id].log);
+        console.log('onUserChangeLogLevelClick:: Hardware', hardware.id, 'LogLevel', logLevel);
+        console.log('onUserChangeLogLevelClick:: Server URL: ', this.logLevel[hardware.id].socket.getUrl());
+        console.log('onUserChangeLogLevelClick:: Log on : ', this.logLevel[hardware.id].log);
 
         if (this.logLevel[hardware.id].log === logLevel) {
-           // console.log('onUserChangeLogLevelClick:: jsou stejné - vracím');
+            // console.log('onUserChangeLogLevelClick:: jsou stejné - vracím');
+            // this.consoleLog.add('info', 'Nothing to change on Log level. Actual level is a same as required' + logLevel, hardware.id, hardware.name); // přidání zprávy do consoleComponent
             return;
         } else {
 
@@ -340,6 +345,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
             .then((response: IWebSocketMessage) => {
                 if (response.isSuccessful()) {
                     this.logLevel[hardware.id].log = logLevel;
+                    this.consoleLog.add('info', 'Log Level change successful to ' + logLevel, hardware.id, hardware.name); // přidání zprávy do consoleComponent
                 } else {
                     throw new Error('Unable to change log level');
                 }
@@ -427,7 +433,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
 
         if (hardware.online_state !== 'ONLINE') {
             this.consoleLog.set_color(hardware.id, color);
-            this.consoleLog.add('output', 'Device is offline. It is not possible to subscribe logs.', hardware.id, hardware.name);
+            this.consoleLog.add('error', 'Device is offline. It is not possible to subscribe logs.', hardware.id, hardware.name);
 
             // Set Default Values
             this.logLevel[hardware.id] = {
@@ -461,7 +467,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
 
                 socket.messages.subscribe(message => this.onMessage(message));
 
-                this.consoleLog.add('output', 'Initializing the device. More information in settings', hardware.id, hardware.name);
+                this.consoleLog.add('info', 'Initializing the device. More information in settings', hardware.id, hardware.name);
                 this.consoleLog.set_color(hardware.id, this.colorForm.controls['color_' + hardware.id].value);
 
             } else {

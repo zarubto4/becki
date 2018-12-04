@@ -12,11 +12,12 @@
 
                     <!-- There is some projects -->
                     <div *ngIf="projects && projects.length" class="portlet-body" id="list_of_projects">
-                        <table class="table table-hover table-light byzance-table table-scrollable table-scrollable-borderless">
+                        <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                             <thead>
                             <tr>
                                 <th class="col">{{'table_name'|bkTranslate:this}}</th>
                                 <th class="col">{{'table_description'|bkTranslate:this}}</th>
+                                <th class="col">{{'table_tags'|bkTranslate:this}}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -28,6 +29,9 @@
                                     <span *ngIf="project.product" class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
                                 </td>
                                 <td class="vert-align">{{project.description}}</td>
+                                <td class="vert-align">
+                                    <bk-form-tag-input [tags_without_form]="project.tags" [readonly]="true"></bk-form-tag-input>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

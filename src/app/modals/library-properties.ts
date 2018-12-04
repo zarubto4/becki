@@ -7,15 +7,14 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IHardwareType } from '../backend/TyrionAPI';
+import { ILibrary } from '../backend/TyrionAPI';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 
 export class ModalsLibraryPropertiesModel extends ModalModel {
     constructor(
-        public name: string = '',
-        public description: string = '',
-        public edit: boolean = false,
-        public exceptName: string = null
+        public project_id: string,
+        public library?: ILibrary
     ) {
         super();
     }
@@ -40,14 +39,36 @@ export class ModalsLibraryPropertiesComponent implements OnInit {
 
     ngOnInit() {
         this.form = this.formBuilder.group({
-            'name': [this.modalModel.name, [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
-            'description': [this.modalModel.description]
+            'name': [this.modalModel.library != null ? this.modalModel.library.name : '',
+                [
+                    [
+                        Validators.required,
+                        Validators.minLength(4),
+                        Validators.maxLength(32)
+                    ],
+                    BeckiAsyncValidators.condition(
+                        (value) => {
+                            return !(this.modalModel && this.modalModel.library && this.modalModel.library.name.length > 3 && this.modalModel.library.name === value);
+                        },
+                        BeckiAsyncValidators.nameTaken(this.backendService, 'CLibrary',  this.modalModel.project_id)
+                    )
+                ],
+            ],
+            'description': [this.modalModel.library.description != null ? this.modalModel.library.description : '', [Validators.maxLength(255)]],
+            'tags': [this.modalModel.library != null ? this.modalModel.library.tags : []]
         });
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
+
+        if (this.modalModel.library == null) {
+            // @ts-ignore
+            this.modalModel.library = {};
+        }
+
+        this.modalModel.library.name = this.form.controls['name'].value;
+        this.modalModel.library.description = this.form.controls['description'].value;
+        this.modalModel.library.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

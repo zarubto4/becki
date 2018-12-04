@@ -90,14 +90,15 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
     }
 
     onAddClick(): void {
-        let model = new ModalsLibraryPropertiesModel();
+        let model = new ModalsLibraryPropertiesModel(this.project_id);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.libraryCreate({
                     project_id: this.project_id,
-                    name: model.name,
-                    description: model.description
+                    name: model.library.name,
+                    description: model.library.description,
+                    tags: model.library.tags
                 })
                     .then(library => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_add_success')));
@@ -105,7 +106,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         this.onLibraryClick(library.id);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_add_fail', model.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_add_fail', model.library.name, reason)));
                         this.onFilterPrivateLibraries();
                     });
             }
@@ -113,15 +114,16 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
     }
 
     onMakeClone(library: ILibrary): void {
-        let model = new ModalsCodePropertiesModel(null, library.name, library.description, '', library.tags, true, library.name, true);
+        let model = new ModalsLibraryPropertiesModel(this.project_id, library);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.libraryMakeClone({
                     library_id: library.id,
                     project_id: this.project_id,
-                    name: model.name,
-                    description: model.description
+                    name: model.library.name,
+                    description: model.library.description,
+                    tags: model.library.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
@@ -138,14 +140,14 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
     }
 
     onEditClick(library: ILibrary): void {
-        let model = new ModalsLibraryPropertiesModel(library.name, library.description, true, library.name);
+        let model = new ModalsLibraryPropertiesModel(this.project_id, library);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.libraryEdit(library.id, {
-                    project_id: this.project_id,
-                    name: model.name,
-                    description: model.description
+                    name: model.library.name,
+                    description: model.library.description,
+                    tags: model.library.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));

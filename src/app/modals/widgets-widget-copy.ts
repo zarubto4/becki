@@ -8,10 +8,14 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { IWidget } from '../backend/TyrionAPI';
 
 
 export class ModalsWidgetsWidgetCopyModel extends ModalModel {
-    constructor(public name: string = '', public description: string = '',  public tags: string[] = []) {
+    constructor(
+        public project_id: string,
+        public widget?: IWidget) {
         super();
     }
 }
@@ -32,25 +36,38 @@ export class ModalsWidgetsWidgetCopyComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {}
 
+    ngOnInit() {
         this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4)]],
-            'description': [''],
-            'tags': [''],
+            'name': [this.modalModel.widget != null ? this.modalModel.widget.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.widget && this.modalModel.widget.name.length > 3 && this.modalModel.widget.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Widget', this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.widget != null ? this.modalModel.widget.description : '', [Validators.maxLength(255)]],
+            'tags': [this.modalModel.widget != null ? this.modalModel.widget.tags : []],
         });
     }
 
-    ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['tags'])).setValue(this.modalModel.tags);
-    }
-
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
-        this.modalModel.tags = this.form.controls['tags'].value;
+
+        if (this.modalModel.widget == null) {
+            // @ts-ignore
+            this.modalModel.widget = {};
+        }
+
+        this.modalModel.widget.name = this.form.controls['name'].value;
+        this.modalModel.widget.description = this.form.controls['description'].value;
+        this.modalModel.widget.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
     }
 

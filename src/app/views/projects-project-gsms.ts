@@ -8,12 +8,8 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import {
     IProject,
-    IHardwareType,
-    ICProgram,
-    ICProgramList,
     IGSMList,
     IGSM,
     IDataSimOverview
@@ -153,7 +149,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
     }
 
     onEditClick(gsm: IGSM): void {
-        let model = new ModalsGsmPropertiesModel(gsm);
+        let model = new ModalsGsmPropertiesModel(this.project_id, gsm);
         this.modalService.showModal(model)
             .then((success) => {
                 this.tyrionBackendService.simUpdate(gsm.id, {
