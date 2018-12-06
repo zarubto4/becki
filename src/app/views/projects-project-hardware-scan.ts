@@ -4,7 +4,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { IProject, IHardware, IHardwareList, IHardwareGroupList, IHardwareGroup } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
 @Component({
     selector: 'bk-view-projects-project-harware-scan',
     templateUrl: './projects-project-hardware-scan.html'
@@ -24,7 +24,7 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
     added = new Map<string, IHardware>();
     failed = new Map<string, string>();
 
-    groups: IHardwareGroupList = null;
+    groups: FormSelectComponentOption[] = [];
 
 
 
@@ -46,6 +46,20 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
         this.scanedCodes = new Set<string>();
         this.added = new Map<string, IHardware>();
         this.failed = new Map<string, string>();
+        this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
+            project_id: this.projectId
+        }).then((hardwareGroups) => {
+            this.groups = hardwareGroups.content.map((group) => {
+                let wrappedGroup: FormSelectComponentOption = {
+                    value: group.name,
+                    label: group.name,
+                    data: group
+                }
+                return wrappedGroup
+            })
+        }).catch(() => {
+
+        })
     }
 
     qrCodeSent(code: string) {

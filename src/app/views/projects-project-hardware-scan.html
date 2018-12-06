@@ -10,6 +10,8 @@
 
     <div class="portlet-body">
         <div class="clearfix"></div>
+        <bk-multi-select *ngIf="groups && groups.length > 0" [items]="groups"
+            [label]="'label_hardware_groups'|bkTranslate:this" #groupList></bk-multi-select>
         <bk-view-qr-reader (QrScanClose)="qrCodeSent($event)"></bk-view-qr-reader>
 
         <table class="table table-hover table-scrollable">
