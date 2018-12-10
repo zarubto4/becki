@@ -12,7 +12,7 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
 
 
     @ViewChild('video') video: ElementRef;
-    @ViewChild('myCanvas') myCanvas: any;
+    @ViewChild('myCanvas') myCanvas: ElementRef;
     foundQR: boolean = false;
     scanLoop: Subscription;
     qrcode: string;
@@ -43,9 +43,9 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
             navigator.mediaDevices.getUserMedia({ video: { facingMode: (this.frontcamera ? 'user' : 'environment') } })
                 .then(stream => {
                     this.videoStream = stream;
-                    _video.src = window.URL.createObjectURL(stream);
+                    _video.srcObject = stream;
                     _video.play();
-                    this.scanLoop = interval(500).subscribe(() => {
+                    this.scanLoop = interval(1000).subscribe(() => {
                         this.onCapture();
                     });
                 });
@@ -82,8 +82,9 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({ video: true })
                     .then(stream => {
-                        let track = stream.getTracks()[0]; // TODO camera is still on, dunno if chrome bug or just bad code [DK]
-                        track.stop();
+                        let tracks = stream.getTracks().forEach((track) => {
+                            track.stop();
+                        }) // TODO camera is still on, dunno if chrome bug or just bad code [DK]
                         _video.src = '';
                         _video.pause();
                     });

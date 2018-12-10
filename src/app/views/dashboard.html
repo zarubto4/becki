@@ -23,7 +23,7 @@
                             </thead>
                             <tbody>
                             <tr *ngFor="let project of projects">
-                                <td *ngIf="project.active" class="no-wrap bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a></td>
+                                <td *ngIf="project.active" class="bold vert-align"><a (click)="onProjectClick(project.id)">{{project.name}}</a></td>
                                 <td class="vert-align" *ngIf="!project.active">
                                     <strong>{{project.name}}</strong>
                                     <br>
@@ -39,9 +39,8 @@
                                         [btns]="[
                                             {
                                                 condition: true,
-                                                btn_label_for_person: ('label_add_hardware'|bkTranslate:this),
                                                 btn_tag: 'add_hardware',
-                                                icon: 'fa-copy',
+                                                icon: 'fa-qrcode',
                                                 colorType: 'ADD',
                                                 permission: (true)
                                             }

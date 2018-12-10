@@ -1,10 +1,12 @@
 import { TyrionBackendService } from './../services/BackendService';
-import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { IProject, IHardware, IHardwareList, IHardwareGroupList, IHardwareGroup } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { MultiSelectComponent } from '../components/MultiSelectComponent';
+
 @Component({
     selector: 'bk-view-projects-project-harware-scan',
     templateUrl: './projects-project-hardware-scan.html'
@@ -26,10 +28,11 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
 
     groups: FormSelectComponentOption[] = [];
 
-
+    @ViewChild('groupList')
+    listGroup: MultiSelectComponent;
 
     constructor(injector: Injector) {
-        super(injector)
+        super(injector);
     };
 
     ngOnInit(): void {
@@ -72,16 +75,21 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
             this.scanedCodes.add(code);
             this.waiting.add(code);
 
-            // this.tyrionBackendService.projectAddHW({
-            //     registration_hash: code,
-            //     project_id: this.projectId
-            // }).then((iHardware) => {
-            //     this.waiting.delete(code);
-            //     this.added.set(code, iHardware);
-            // }).catch((reason) => {
-            //     this.waiting.delete(code);
-            //     this.failed.set(code, reason.message);
-            // });
+            let selectedGroupsIds = this.listGroup.selectedItems.map((item) => {
+                return (item.data as IHardwareGroup).id;
+            })
+
+            this.tyrionBackendService.projectAddHW({
+                registration_hash: code,
+                project_id: this.projectId,
+                group_ids: selectedGroupsIds
+            }).then((iHardware) => {
+                this.waiting.delete(code);
+                this.added.set(code, iHardware);
+            }).catch((reason) => {
+                this.waiting.delete(code);
+                this.failed.set(code, reason.message);
+            });
         }
     }
 
