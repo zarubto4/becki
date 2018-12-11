@@ -1,7 +1,7 @@
 <div class="portlet portlet light bordered">
 
     <div class="row">
-        <video #video style="width:100%" [hidden]="foundQR" autoplay></video>
+        <video #video style="width:100%" [hidden]="foundQR" autoplay playsinline></video>
         <canvas #myCanvas [hidden]="!foundQR" style="background:lightgray; width:100%"></canvas>
     </div>
     <div class="clearfix"></div>
