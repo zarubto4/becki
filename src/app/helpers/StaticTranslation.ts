@@ -537,7 +537,7 @@ export class StaticTranslation {
                 'btn_create_project' : 'Create First Project',
                 'flash_project_create' : 'Project created successfully',
                 'flash_cant_create_project' : 'Can\'t create project. Something is wrong',
-                'table_actions': 'actions',
+                'table_actions': 'Actions',
 
             }, 'ProjectsComponent': {
                 'main_title': 'Projects',
@@ -2456,7 +2456,6 @@ export class StaticTranslation {
             }, 'ProjectsProjectHardwareAddWithQrComponent': {
                 'label_hw_scaned' : 'Loading',
                 'label_hw_added' : 'Added',
-                'label_hw_failed': 'Failed',
                 'label_info' : 'Status',
                 'label_hw_id': 'Code',
                 'label_hardware_groups': 'Hardware group',
