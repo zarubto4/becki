@@ -24,15 +24,15 @@
         <tbody class="hide-bk-drob-down-button">
         <tr *ngFor="let code of waiting">
             <td class="vert-align breakable"> {{code}}</td>
-            <td>"LOADING"</td>
+            <td>"{{'label_hw_scaned'|bkTranslate:this}}"</td>
         </tr>
         <tr *ngFor="let code of added | keyvalue">
                 <td class="vert-align breakable"> {{code.key}}</td>
-                <td>"ADDED"</td>
+                <td>"{{'label_hw_added'|bkTranslate:this}}"</td>
         </tr>
         <tr *ngFor="let code of failed | keyvalue">
             <td class="vert-align breakable"> {{code.key}}</td>
-            <td>"FAILED"</td>
+            <td>{{code.value}}</td>
         </tr>
         </tbody>
     </table>
