@@ -233,6 +233,9 @@
             <!-- Temporary page content if content is being loaded or if there is no content -- END -->
         </div>
 
+        <div [hidden]="tab!='diff'">
+            <bk-program-version-diff [versionList]="codeProgramVersions"></bk-program-version-diff>
+        </div>
     </div>
     <!-- Page Content IDE -- END -->
 

@@ -26,6 +26,7 @@ import { ModalsPublicShareResponseModel } from '../modals/public-share-response'
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { CodeCompileError, ICodeCompileErrorMessage } from '../services/_backend_class/Responses';
+import { ProgramVersionDiffComponent } from '../components/VersionDiffComponent';
 
 @Component({
     selector: 'bk-view-projects-project-code-code',
