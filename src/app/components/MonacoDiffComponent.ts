@@ -76,6 +76,7 @@ export class MonacoDiffComponent implements AfterViewInit, OnChanges, OnDestroy 
                 this.diffEditor = monaco.editor.createDiffEditor(this.field.nativeElement, {
                     theme: 'vs-dark',
                     automaticLayout: true,
+                    originalEditable: false,
                 });
 
                 let originalModel = monaco.editor.createModel(this.originalCode, this.language);
