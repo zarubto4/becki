@@ -40,7 +40,7 @@ export class MonacoDiffComponent implements AfterViewInit, OnChanges, OnDestroy 
     code: string;
 
     @Input()
-    language: string = 'c';
+    language: string = 'cpp';
 
     @ViewChild('field')
     field: ElementRef;
@@ -63,7 +63,11 @@ export class MonacoDiffComponent implements AfterViewInit, OnChanges, OnDestroy 
     ngOnChanges(changes: SimpleChanges): void {
         this.zone.runOutsideAngular(() => {
             let code = changes['code'];
+            let originalCode = changes['originalCode'];
             // TODO: https://github.com/angular/angular/issues/6114
+            if (originalCode && this.diffEditor && originalCode.currentValue !== this.diffEditor.getModel().original.getValue()) {
+                this.diffEditor.getModel().original.setValue(originalCode.currentValue);
+            }
             if (code && this.diffEditor && code.currentValue !== this.diffEditor.getModel().modified.getValue()) {
                 this.diffEditor.getModel().modified.setValue(code.currentValue);
             }
@@ -77,6 +81,7 @@ export class MonacoDiffComponent implements AfterViewInit, OnChanges, OnDestroy 
                     theme: 'vs-dark',
                     automaticLayout: true,
                     originalEditable: false,
+                    readOnly: true,
                 });
 
                 let originalModel = monaco.editor.createModel(this.originalCode, this.language);
