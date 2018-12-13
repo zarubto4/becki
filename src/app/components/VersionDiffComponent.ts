@@ -97,10 +97,10 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
     ngOnChanges(changes: SimpleChanges): void {
         let versions = changes['versionList'];
         if (versions && versions.currentValue) {
-            this.versionsListAsOptions = versions.currentValue.map((version) => {
+            this.versionsListAsOptions = versions.currentValue.map((version: ICProgramVersion) => {
                 const s = {
-                    label: version.id,
-                    value: version.id,
+                    label: version.name,
+                    value: version.name,
                     data: version
                 } as FormSelectComponentOption;
                 return s;
@@ -112,7 +112,7 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
 
     onSourceSelectionChanges(value: String) {
         const selectedVersion =  this.versionList.find((version) => {
-            return version.id === value;
+            return version.name === value;
         })
         let files = selectedVersion.program.files.map((file) => {
             return new CodeFile(file.file_name, file.content)
@@ -126,7 +126,7 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
 
     onTargetSelectionChanges(value: String) {
         const selectedVersion =  this.versionList.find((version) => {
-            return version.id === value;
+            return version.name === value;
         })
         let files = selectedVersion.program.files.map((file) => {
             return new CodeFile(file.file_name, file.content)
