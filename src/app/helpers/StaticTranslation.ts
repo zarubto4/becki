@@ -2251,7 +2251,6 @@ export class StaticTranslation {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Code Editor',
                 'btn_label_option': 'Option',
-
                 'label_library_version': 'Library Version',
                 'label_program_properties': 'Settings',
                 'label_remove_program': 'Remove',
@@ -2663,7 +2662,7 @@ export class StaticTranslation {
                 'btn_add_library': 'New Library',
                 'btn_change_library_version': 'Change Library Version',
                 'btn_move': 'Move',
-
+                'btn_diff': 'Diff',
                 'label_open_file_browser': 'Open file in file browser',
                 'btn_build': 'Build',
 
