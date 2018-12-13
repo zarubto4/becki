@@ -20,29 +20,35 @@ import { MonacoDiffComponent } from './MonacoDiffComponent';
     /* tslint:disable:max-line-length */
     template: `
         <div>
-            <bk-form-select [options]="versionsListAsOptions"
-                            [control]="form.controls['versionSource']"
-                            [label]="'label_source_version'|bkTranslate:this"
-                            (valueChanged)="onSourceSelectionChanges($event)"
-                            #sourceVersion > </bk-form-select>
-            <bk-form-select [options]="versionsListAsOptions"
-                            [control]="form.controls['versionTarget']"
-                            (valueChanged)="onTargetSelectionChanges($event)"
-                            [label]="'label_target_version'|bkTranslate:this"
-                            #targetVersion > </bk-form-select>
-            <div>
-            <bk-file-tree-root *ngIf="codeFilesTarget"
-                              [files]="codeFilesTarget"
-                              (newPathSelected)="onFileSelected($event)" ></bk-file-tree-root>
-            <bk-monaco-diff [originalCode] = "sourceFileContent"
-                            [code] = "targetFileContent"
-            > </bk-monaco-diff>
+            <div style="max-width:100%; display: flex; flex-direction: row; justify-content: space-between;">
+                <bk-form-select style="flex-grow: 1; margin: 10px;"
+                                [options]="versionsListAsOptions"
+                                [control]="form.controls['versionSource']"
+                                [label]="'label_source_version'|bkTranslate:this"
+                                (valueChanged)="onSourceSelectionChanges($event)"
+                                #sourceVersion > </bk-form-select>
+                <bk-form-select style="flex-grow: 1; margin: 10px;"
+                                [options]="versionsListAsOptions"
+                                [control]="form.controls['versionTarget']"
+                                (valueChanged)="onTargetSelectionChanges($event)"
+                                [label]="'label_target_version'|bkTranslate:this"
+                                #targetVersion > </bk-form-select>
+             </div>
+            <div style="max-width:100%; display: flex; flex-direction: row;">
+                <bk-file-tree-root style="min-width: 250px;"
+                                   *ngIf="codeFilesTarget"
+                                   [files]="codeFilesTarget"
+                                   (newPathSelected)="onFileSelected($event)" ></bk-file-tree-root>
+                <bk-monaco-diff style="flex-grow: 1"
+                                *ngIf="selectedFilePath"
+                                [originalCode] = "sourceFileContent"
+                                [code] = "targetFileContent"> </bk-monaco-diff>
             </div>
         </div>
     `
     /* tslint:enable */
 })
-export class ProgramVersionDiffComponent implements OnInit, OnChanges, AfterViewInit {
+export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
 
     @Input()
     versionList: ICProgramVersion[];
@@ -64,15 +70,13 @@ export class ProgramVersionDiffComponent implements OnInit, OnChanges, AfterView
     sourceFileContent: string;
     targetFileContent: string;
 
+    selectedFilePath: string = null;
+
     constructor(private formBuilder: FormBuilder, private translationService: TranslationService) {
         this.form = this.formBuilder.group({
             'versionTarget': ['', [Validators.required]],
             'versionSource': ['', [Validators.required]]
         });
-    }
-
-    ngOnInit() {
-
     }
 
     ngAfterViewInit(): void {
@@ -85,26 +89,14 @@ export class ProgramVersionDiffComponent implements OnInit, OnChanges, AfterView
                 } as FormSelectComponentOption;
                 return s;
             });
-            let selectedSource = this.versionList.find((version) => {
-                return version.id === this.form.controls['versionSource'].value;
-            })
-            let selectedTarget = this.versionList.find((version) => {
-                return version.id === this.form.controls['versionTarget'].value;
-            })
-
-            this.codeFilesSource = selectedSource.program.files.map((file) => {
-                return new CodeFile(file.file_name, file.content)
-            })
-            this.codeFilesTarget = selectedTarget.program.files.map((file) => {
-                return new CodeFile(file.file_name, file.content)
-            })
+            this.onSourceSelectionChanges(this.form.controls['versionSource'].value)
+            this.onTargetSelectionChanges(this.form.controls['versionTarget'].value)
         }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         let versions = changes['versionList'];
         if (versions && versions.currentValue) {
-            console.log(versions.currentValue);
             this.versionsListAsOptions = versions.currentValue.map((version) => {
                 const s = {
                     label: version.id,
@@ -114,6 +106,8 @@ export class ProgramVersionDiffComponent implements OnInit, OnChanges, AfterView
                 return s;
             });
         }
+        this.onSourceSelectionChanges(this.form.controls['versionSource'].value)
+        this.onTargetSelectionChanges(this.form.controls['versionTarget'].value)
     }
 
     onSourceSelectionChanges(value: String) {
@@ -125,6 +119,9 @@ export class ProgramVersionDiffComponent implements OnInit, OnChanges, AfterView
         })
         files.push(new CodeFile('main.cpp', selectedVersion.program.main));
         this.codeFilesSource = files;
+        if (this.selectedFilePath) {
+            this.onFileSelected(this.selectedFilePath);
+        }
     }
 
     onTargetSelectionChanges(value: String) {
@@ -136,14 +133,12 @@ export class ProgramVersionDiffComponent implements OnInit, OnChanges, AfterView
         })
         files.push(new CodeFile('main.cpp', selectedVersion.program.main));
         this.codeFilesTarget = files;
+        if (this.selectedFilePath) {
+            this.onFileSelected(this.selectedFilePath);
+        }
     }
 
     onFileSelected(path: string) {
-        console.log('daasdasdasdasdASDHAKJSFHKLASJFHJKLASFHKLASHFJK')
-        console.log(this.codeFilesSource);
-        console.log(this.codeFilesTarget);
-        console.log(path);
-
         const originalFile = this.codeFilesSource.find((f: CodeFile) => {
             return f.objectFullPath === path;
         })
@@ -163,10 +158,6 @@ export class ProgramVersionDiffComponent implements OnInit, OnChanges, AfterView
             this.targetFileContent = '';
         }
 
-
-        console.log('==============================');
-        console.log(this.sourceFileContent);
-        console.log(this.targetFileContent);
-
+        this.selectedFilePath = path;
     }
 }
