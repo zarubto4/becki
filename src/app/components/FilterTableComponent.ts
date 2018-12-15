@@ -48,6 +48,7 @@ import { TyrionBackendService } from '../services/BackendService';
                                             [label]="component.content.label"
                                             [options]="component.content.optionForm"
                                             [regexFirstOption]="component.content.first_value"
+                                            [waitForTouch]="false"
                                             (valueChanged)="onSELECTLISTCHANGEClick($event, component.content.key)"></bk-form-select>
 
                         </div>
@@ -60,6 +61,7 @@ import { TyrionBackendService } from '../services/BackendService';
                         <div *ngIf="component.type === 'FIND_BY_TAG'">
                             <bk-form-tag-input [control]="component.content.form.controls[component.content.key]"
                                                [label]="'Optional Tags'"
+                                               [waitForTouch]="false"
                                                (valueChange)="onSELECT_TAGS_CHANGEClick($event, component.content.key)">
                             </bk-form-tag-input>
                         </div>
@@ -70,6 +72,7 @@ import { TyrionBackendService } from '../services/BackendService';
                             <bk-form-input
                                 [control]="component.content.form.controls[component.content.key]"
                                 [label]="component.content.label"
+                                [waitForTouch]="false"
                                 [showLabel]="component.content.showLabel"
                                 (valueChange)="onSELECTLISTCHANGEClick($event, component.content.key)"
                                 (onEnterEvent)="onEnter($event)">

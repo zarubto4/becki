@@ -2467,6 +2467,7 @@ export class StaticTranslation {
                 'label_maximal_length': 'Maximal length of this field is {0} characters.',
                 'label_name_taken': 'This name is already in use.',
                 'label_required_pattern': ' Invalid Patter - Required only Small letters (a-z), number (0-9) or symbols (-_)  (NO SPACE!)',
+                'label_invalid_uuid': 'Invalid UUID format. Substring not supported.',
 
                 'label_project_name_taken': 'This project name is already in use.',
                 'label_hardware_name_taken': 'This Hardware name is already in use.',

@@ -18,6 +18,7 @@ import { ModalsHardwareGroupPropertiesModel } from '../modals/hardware-group-pro
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
 import { FormGroup, Validators } from '@angular/forms';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 @Component({
     selector: 'bk-view-projects-project-hardware',
@@ -48,7 +49,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         // Filter Helper
         this.formFilterGroup = this.formBuilder.group({
             'alias': ['', [Validators.maxLength(60)]],
-            'id': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)], [BeckiAsyncValidators.validUUID()]],
             'full_id': ['', [Validators.maxLength(60)]],
             'description': ['', [Validators.maxLength(60)]],
             'orderBy': ['NAME', []],
@@ -339,6 +340,11 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
     // FILTER ----------------------------------------------------------------------------------------------------------
 
     onFilterHardware(pageNumber: number = 0): void {
+
+        if (!this.formFilterGroup.valid && this.formFilterGroup.dirty) {
+            return;
+        }
+
         this.blockUI();
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId],
