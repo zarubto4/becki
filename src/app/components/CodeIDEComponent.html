@@ -220,6 +220,8 @@
                         <bk-monaco-editor [code]="file.content" (codeChange)="onCodeChange($event, file)"
                                           [language]="langFromFilename(file)"
                                           [readonly]="file.readonly"
+                                          (saveRequest)="onToolBarSaveAsClick()"
+                                          (buildRequest)="onToolBarBuildClick()"
                                           *ngIf="inEditMode"></bk-monaco-editor>
                         <bk-monaco-diff [originalCode] = "file.contentOriginal"
                                         [code] = "file.content"

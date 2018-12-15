@@ -2251,7 +2251,6 @@ export class StaticTranslation {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Code Editor',
                 'btn_label_option': 'Option',
-
                 'label_library_version': 'Library Version',
                 'label_program_properties': 'Settings',
                 'label_remove_program': 'Remove',
@@ -2664,7 +2663,7 @@ export class StaticTranslation {
                 'btn_add_library': 'New Library',
                 'btn_change_library_version': 'Change Library Version',
                 'btn_move': 'Move',
-
+                'btn_diff': 'Diff',
                 'label_open_file_browser': 'Open file in file browser',
                 'btn_build': 'Build',
 
@@ -2965,6 +2964,9 @@ export class StaticTranslation {
                 'label_no_databases': 'You have no any Database',
                 'label_no_databases_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
                 'label_create_collection_database': 'Create collection',
+            }, 'ProgramVersionDiffComponent': {
+                'label_source_version': 'Original Library',
+                'label_target_version': 'Modified Library'
             },
 
 
