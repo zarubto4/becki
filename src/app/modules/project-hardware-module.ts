@@ -13,7 +13,6 @@ export const PROJECT_HARDWARE_ROUTES: Routes = [
 
     { path: '', data: { breadName: 'HARDWARE devices' }, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard] },
     { path: ':hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
-
 ];
 @NgModule({
     imports: [

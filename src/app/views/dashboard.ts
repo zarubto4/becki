@@ -34,6 +34,8 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     projectsUpdateSubscription: Subscription;
 
+    isOnMobile: boolean = true;
+
     constructor(injector: Injector, public backendService: TyrionBackendService) {
         super(injector);
     };
@@ -235,8 +237,15 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
         });
     }
 
+    onDrobDownEmiter(action: string, project: IProject): void {
+        if (action === 'add_hardware') {
+            this.onSvanHardwareClick(project.id);
+        }
+    }
 
+    onAddHardware(project: IProject): void {
 
+    }
 }
 
 

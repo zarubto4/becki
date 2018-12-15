@@ -165,11 +165,11 @@ import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-b
 import { ModalsDatabaseEditComponent } from '../modals/database-edit';
 import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collection-new';
 import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
+import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-project-hardware-scan';
 import { ProgramVersionDiffComponent } from '../components/VersionDiffComponent';
 import { FileTreeRootComponent } from '../components/FileTreeRootComponent';
 import { FileTreeNodeComponent } from '../components/FileTreeNodeComponent';
 import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
-
 @NgModule({
     imports: [
         CommonModule,
@@ -278,6 +278,7 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
         ProjectsProjectHardwareHardwareComponent,
+        ProjectsProjectHardwareAddWithQrComponent,
         // Modals
         ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
@@ -455,7 +456,8 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
-        ProjectsProjectHardwareHardwareComponent
+        ProjectsProjectHardwareHardwareComponent,
+        ProjectsProjectHardwareAddWithQrComponent,
     ]
 })
 export class SharedModule {}

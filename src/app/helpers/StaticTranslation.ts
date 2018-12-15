@@ -537,6 +537,7 @@ export class StaticTranslation {
                 'btn_create_project' : 'Create First Project',
                 'flash_project_create' : 'Project created successfully',
                 'flash_cant_create_project' : 'Can\'t create project. Something is wrong',
+                'table_actions': 'Actions',
 
             }, 'ProjectsComponent': {
                 'main_title': 'Projects',
@@ -2450,6 +2451,15 @@ export class StaticTranslation {
                 'flash_cant_edit_grid_project': 'Unable to edit project, .',
                 'flash_grid_project_remove': 'Project has been removed.',
                 'flash_cant_remove_grid_project': 'Unable to remove project.',
+
+            }, 'ProjectsProjectHardwareAddWithQrComponent': {
+                'label_hw_scaned' : 'Loading',
+                'label_hw_added' : 'Added',
+                'label_info' : 'Status',
+                'label_hw_id': 'Code',
+                'label_hardware_groups': 'Hardware group',
+                'main_title': 'Add Hardware',
+                'title': 'Scan QR',
 
             }, 'SupportComponent': {
 
