@@ -239,7 +239,7 @@ export abstract class _BaseMainComponent {
         this.navigate(['admin/widgets', widget_id, {version: version_id}]);
     }
 
-    public onSvanHardwareClick(project_id: string): void {
+    public onScanHardwareClick(project_id: string): void {
         this.navigate(['/projects', project_id, 'scanHardware']);
     }
 }
