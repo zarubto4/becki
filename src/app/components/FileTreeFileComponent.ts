@@ -1,14 +1,13 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CodeFile, CodeDirectory } from './CodeIDEComponent';
 import { Style } from './FileTreeNodeComponent';
-import { FileTreeElement } from './FileTreeRootComponent';
 
 @Component({
     selector: 'bk-file-tree-file',
     template: `
     <div  (mouseover) = "onHover(true)" (mouseleave) = "onHover(false)">
         <span tabindex = "-1"
-            (click) = "onClicked()"
+            (click) = "fileSelected.emit(this)"
             role = "button"
             [style.font-weight] = "style.bold ? '800' : 'normal' "
             [style.background-color] = "style.selected ? 'lightblue' : '' " >
@@ -16,8 +15,8 @@ import { FileTreeElement } from './FileTreeRootComponent';
             {{name}}
         </span>
         <div *ngIf="showControls && style.showSideIcons" class="pull-right">
-            <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-trash'" (onClickEvent)="onFileRemoveClicked()"></bk-icon-component>
-            <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-pencil'" (onClickEvent)="onFileRenameClicked()"></bk-icon-component>
+            <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-trash'" (onClickEvent)="fileRemoveClicked.emit(this)"></bk-icon-component>
+            <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-pencil'" (onClickEvent)="fileEditClicked.emit(this)"></bk-icon-component>
         </div>
     </div>
     `
@@ -41,7 +40,7 @@ export class FileTreeFileComponent implements OnInit {
     fileRemoveClicked = new EventEmitter<FileTreeFileComponent>();
 
     @Output()
-    fileRenameClicked = new EventEmitter<FileTreeFileComponent>();
+    fileEditClicked = new EventEmitter<FileTreeFileComponent>();
 
     @Output()
     fileSelected = new EventEmitter<FileTreeFileComponent>();
@@ -69,18 +68,6 @@ export class FileTreeFileComponent implements OnInit {
                 break;
             }
         }
-    }
-
-    onClicked() {
-        this.fileSelected.emit(this);
-    }
-
-    onFileRemoveClicked() {
-        this.fileRemoveClicked.emit(this);
-    }
-
-    onFileRenameClicked() {
-        this.fileRenameClicked.emit(this);
     }
 
     onHover(hover: boolean) {

@@ -33,13 +33,21 @@ import { FileTreeFileComponent } from './FileTreeFileComponent';
                 <div *ngFor="let subFolder of folder.directories">
                         <bk-file-tree-node
                         [folder] = "subFolder"
-                        (elementSelected) = "elementSelected.emit($event)">
+                        (elementSelected) = "elementSelected.emit($event)"
+                        (fileCreateClicked)="fileCreateClicked.emit($event)"
+                        (fileRemoveClicked)="fileRemoveClicked.emit($event)"
+                        (fileEditClick)="fileEditClick.emit($event)"
+                        (folderCreateClicked)="folderCreateClicked.emit($event)"
+                        (folderEditClick)="folderEditClick.emit($event)"
+                        (folderRemoveClick)="folderRemoveClick.emit($event)">
                         </bk-file-tree-node>
                 </div>
                 <div *ngFor="let file of folder.files">
                     <bk-file-tree-file
                     [file] = "file"
-                    (fileSelected) = "onFileSelectClick($event)">
+                    (fileSelected) = "onFileSelectClick($event)"
+                    (fileRemoveClicked)="fileRemoveClicked.emit($event)"
+                    (fileEditClicked)="fileEditClick.emit($event)">
                     </bk-file-tree-file>
                 </div>
         </div>
@@ -90,14 +98,6 @@ export class FileTreeNodeComponent  extends Component implements OnInit, FileTre
         this.open = !this.open;
         this.elementSelected.emit(this);
         this.refresh();
-    }
-
-    onFileRemoveClick(component: FileTreeFileComponent) {
-        this.fileRemoveClicked.emit(component);
-    }
-
-    onFileEditClick(component: FileTreeFileComponent) {
-        this.fileEditClick.emit(component);
     }
 
     onHover(hover: boolean) {
