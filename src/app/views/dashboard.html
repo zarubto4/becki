@@ -33,7 +33,7 @@
                                 <td class="vert-align">
                                     <bk-form-tag-input [tags_without_form]="project.tags" [readonly]="true"></bk-form-tag-input>
                                 </td>
-                                <td>
+                                <td *ngIf="isOnMobile">
                                         <bk-drob-down-button
                                         [btns_group_name]="('label_settings'|bkTranslate:this)"
                                         [btns]="[
