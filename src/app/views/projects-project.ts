@@ -78,7 +78,6 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
     }
 
     onEditClick(): void {
-
         let model = new ModalsProjectPropertiesModel(null, this.project);
         this.modalService.showModal(model).then((success) => {
             if (success) {
