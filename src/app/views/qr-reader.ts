@@ -42,7 +42,6 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
 
     startCapture() {
         let _video = this.video.nativeElement;
-        let canvas = this.myCanvas.nativeElement;
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: (this.frontcamera ? 'user' : 'environment') } })
@@ -51,7 +50,7 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
                     _video.srcObject = stream;
                     _video.play();
                     this.unblockUI();
-                    this.scanLoop = interval(1000).subscribe(() => {
+                    this.scanLoop = interval(200).subscribe(() => {
                         this.onCapture();
                     });
                 });
