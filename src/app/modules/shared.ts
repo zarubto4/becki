@@ -149,7 +149,6 @@ import { CreateUserComponent } from '../views/create-user';
 import { RedirectOkComponent } from '../components/redirect-ok';
 import { ArticleComponent } from '../components/ArticleComponent';
 import { ReaderQrComponent } from '../views/qr-reader';
-import { MobileAddHardwareComponent } from '../views/mobile-add-hardware';
 import { GSMStatusComponent } from '../components/GSMStatusComponent';
 import { LayoutNotLoggedComponent } from '../layouts/not-logged';
 import { Md2HtmlPipe } from '../pipes/Md2HtmlPipe';
@@ -233,7 +232,6 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         RedirectOkComponent,
         ArticleComponent,
         ReaderQrComponent,
-        MobileAddHardwareComponent,
         GSMStatusComponent,
         LayoutNotLoggedComponent,
         LayoutMainComponent,
@@ -408,7 +406,6 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         RedirectOkComponent,
         ArticleComponent,
         ReaderQrComponent,
-        MobileAddHardwareComponent,
         GSMStatusComponent,
         LayoutNotLoggedComponent,
         ReactiveFormsModule,

@@ -17,7 +17,7 @@
                             <tr>
                                 <th class="col">{{'table_name'|bkTranslate:this}}</th>
                                 <th class="col">{{'table_description'|bkTranslate:this}}</th>
-                                <th class="col">{{'table_tags'|bkTranslate:this}}</th>
+                                <th *ngIf="!isOnMobile" class="col">{{'table_tags'|bkTranslate:this}}</th>
                                 <th *ngIf="isOnMobile" class="col">{{'table_actions'|bkTranslate:this}}</th>
                             </tr>
                             </thead>
@@ -30,10 +30,10 @@
                                     <span *ngIf="project.product" class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product.id)"><span class="font-red-flamingo bold">{{project.product.name}}</span></a>) </span>
                                 </td>
                                 <td class="vert-align">{{project.description}}</td>
-                                <td class="vert-align">
+                                <td *ngIf="!isOnMobile" class="vert-align">
                                     <bk-form-tag-input [tags_without_form]="project.tags" [readonly]="true"></bk-form-tag-input>
                                 </td>
-                                <td>
+                                <td *ngIf="isOnMobile">
                                         <bk-drob-down-button
                                         [btns_group_name]="('label_settings'|bkTranslate:this)"
                                         [btns]="[
