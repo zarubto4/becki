@@ -15,7 +15,7 @@ import { FileTreeElement } from './FileTreeRootComponent';
             <bk-icon-file-component [icon]="style.icon" [color]="style.iconColor"> </bk-icon-file-component>
             {{name}}
         </span>
-        <div class="pull-right">
+        <div *ngIf="showControls && style.showSideIcons" class="pull-right">
             <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-trash'" (onClickEvent)="onFileRemoveClicked()"></bk-icon-component>
             <bk-icon-component [condition]="style.showSideIcons" [icon]="'fa-pencil'" (onClickEvent)="onFileRenameClicked()"></bk-icon-component>
         </div>
@@ -27,6 +27,9 @@ export class FileTreeFileComponent implements OnInit {
 
     @Input()
     file: CodeFile;
+
+    @Input()
+    showControls: boolean = false;
 
     name: string;
 
@@ -66,10 +69,6 @@ export class FileTreeFileComponent implements OnInit {
                 break;
             }
         }
-    }
-
-    onHoover(hover: boolean) {
-        this.style.showSideIcons = hover;
     }
 
     onClicked() {

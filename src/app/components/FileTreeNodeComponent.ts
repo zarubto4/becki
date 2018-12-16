@@ -21,7 +21,7 @@ import { FileTreeFileComponent } from './FileTreeFileComponent';
         {{folder.name}}
 
         <!-- Ikonky vpravo !-->
-        <div *ngIf="style.showSideIcons" class="pull-right">
+        <div *ngIf="showControls && style.showSideIcons" class="pull-right">
             <bk-icon-component [condition]="!folder.root" [icon]="'fa-trash'" (onClickEvent)="folderRemoveClick.emit(this)"></bk-icon-component>
             <bk-icon-component [condition]="!folder.root" [icon]="'fa-pencil'" (onClickEvent)="folderEditClick.emit(this)"></bk-icon-component>
             <bk-icon-component [condition]="true" [icon]="'fa-file'" (onClickEvent)="fileCreateClicked.emit(this)"></bk-icon-component>
@@ -51,11 +51,8 @@ export class FileTreeNodeComponent  extends Component implements OnInit, FileTre
     @Input()
     folder: FileTreeNodeObject;
 
-    root: boolean = false;
-    selected: boolean = false;
-    style: Style = new Style();
-    open: boolean = true;
-    path: string = '';
+    @Input()
+    showControls = false;
 
     @Output()
     fileCreateClicked = new EventEmitter<FileTreeNodeComponent>();
@@ -77,6 +74,12 @@ export class FileTreeNodeComponent  extends Component implements OnInit, FileTre
 
     @Output()
     elementSelected = new EventEmitter<FileTreeElement>();
+
+    root: boolean = false;
+    selected: boolean = false;
+    style: Style = new Style();
+    open: boolean = true;
+    path: string = '';
 
     ngOnInit(): void {
         this.style.iconColor = '#ffc50d';

@@ -1,5 +1,5 @@
 import { CodeFile } from './CodeIDEComponent';
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Style } from './FileTreeNodeComponent';
 
 export class FileTreeNodeObject {
@@ -29,6 +29,7 @@ export interface FileTreeElement {
         <div>
             <bk-file-tree-node
             [folder] = "rootNode"
+            [showControls]="showControls"
             (elementSelected) = "onElementSelected($event)" >
             </bk-file-tree-node>
         </div>
@@ -40,11 +41,11 @@ export class FileTreeRootComponent implements OnInit, OnChanges {
     @Input()
     files: CodeFile[];
 
-    @Output()
-    newPathSelected = new EventEmitter<string>();
+    @Input()
+    showControls = false;
 
     @Output()
-    newFileSelected = new EventEmitter<CodeFile>();
+    newPathSelected = new EventEmitter<string>();
 
     @Output()
     fileAddAtPath = new EventEmitter<string>();
@@ -110,13 +111,9 @@ export class FileTreeRootComponent implements OnInit, OnChanges {
             this.selectedElement.style.selected = false;
         }
         this.selectedElement = element;
+        this.selectedPath = element.path;
         this.selectedElement.style.selected = true;
         this.newPathSelected.emit(element.path);
-    }
-
-    onSelectedPath(path: string) {
-        this.selectedPath = path;
-        this.newPathSelected.emit(path);
     }
 }
 

@@ -60,10 +60,10 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
     targetVersion: FormSelectComponent;
 
 
-    codeFilesSource: CodeFile[];
-    codeFilesTarget: CodeFile[];
+    codeFilesSource: CodeFile[] = [];
+    codeFilesTarget: CodeFile[] = [];
 
-    versionsListAsOptions: FormSelectComponentOption[];
+    versionsListAsOptions: FormSelectComponentOption[] = [];
 
     form: FormGroup;
 
