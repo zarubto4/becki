@@ -114,13 +114,15 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
         const selectedVersion =  this.versionList.find((version) => {
             return version.name === value;
         })
-        let files = selectedVersion.program.files.map((file) => {
-            return new CodeFile(file.file_name, file.content)
-        })
-        files.push(new CodeFile('main.cpp', selectedVersion.program.main));
-        this.codeFilesSource = files;
-        if (this.selectedFilePath) {
-            this.onFileSelected(this.selectedFilePath);
+        if (selectedVersion) {
+            let files = selectedVersion.program.files.map((file) => {
+                return new CodeFile(file.file_name, file.content)
+            })
+            files.push(new CodeFile('main.cpp', selectedVersion.program.main));
+            this.codeFilesSource = files;
+            if (this.selectedFilePath) {
+                this.onFileSelected(this.selectedFilePath);
+            }
         }
     }
 
