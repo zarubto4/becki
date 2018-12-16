@@ -166,7 +166,10 @@ import { ModalsDatabaseEditComponent } from '../modals/database-edit';
 import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collection-new';
 import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
 import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-project-hardware-scan';
-
+import { ProgramVersionDiffComponent } from '../components/VersionDiffComponent';
+import { FileTreeRootComponent } from '../components/FileTreeRootComponent';
+import { FileTreeNodeComponent } from '../components/FileTreeNodeComponent';
+import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
 @NgModule({
     imports: [
         CommonModule,
@@ -249,6 +252,10 @@ import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-pro
         UpdateStateComponent,
         TerminalLogSubscriberComponent,
         CodeIDEComponent,
+        ProgramVersionDiffComponent,
+        FileTreeRootComponent,
+        FileTreeFileComponent,
+        FileTreeNodeComponent,
         CompilationStatusComponent,
         ConsoleLogComponent,
         MonacoEditorComponent,
@@ -366,6 +373,9 @@ import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-pro
         TagComponent,
         LogLevelComponent,
         FileTreeComponent,
+        FileTreeRootComponent,
+        FileTreeFileComponent,
+        FileTreeNodeComponent,
         IconComponent,
         IconFileComponent,
         MonacoDiffComponent,
@@ -423,6 +433,7 @@ import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-pro
         UpdateStateComponent,
         TerminalLogSubscriberComponent,
         CodeIDEComponent,
+        ProgramVersionDiffComponent,
         CompilationStatusComponent,
         ConsoleLogComponent,
         MonacoEditorComponent,

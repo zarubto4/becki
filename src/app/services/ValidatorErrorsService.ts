@@ -22,7 +22,7 @@ export class ValidatorErrorsService {
 
     getMessageForErrors(errors: any) {
 
-        console.log("getMessageForErrors: ", errors);
+
         if (errors) {
             if (errors['required']) {
                 return this.translate('label_field_required');
@@ -38,6 +38,9 @@ export class ValidatorErrorsService {
             }
             if (errors['pattern']) {
                 return this.translate('label_required_pattern');
+            }
+            if (errors['uuidNotValid']) {
+                return this.translate('label_invalid_uuid');
             }
 
             // -- Name taken ------------------------------------------------------------------------------------------

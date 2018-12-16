@@ -14,30 +14,34 @@
                           btn_label_for_person: ('btn_create_server'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'CREATE',
-                          btn_tag: 'homer_server_add'
+                          btn_tag: 'homer_server_add',
+                          permission: true
                       },
                       {
                           condition: (tab == 'compilation_server' && compilations_servers && compilations_servers.length > 0),
                           btn_label_for_person: ('btn_create_server'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'CREATE',
-                          btn_tag: 'compilation_server_add'
+                          btn_tag: 'compilation_server_add',
+                          permission: true
                       }
                     ]"
         (onTabClick)="onToggleTab($event)"
         [tab_selected_name]="tab"
         [tabBtns]="[
                         {
+                            condition: true,
                             tab_name: 'homer_server',
                             tab_color: 'CLOUD',
                             tab_label: ('tab_homer_server'|bkTranslate:this),
-                            condition: true
+                            permission: true
                         },
                         {
+                            condition: true,
                             tab_name: 'compilation_server',
                             tab_color: 'CLOUD',
                             tab_label: ('tab_compilation_server'|bkTranslate:this),
-                            condition: true
+                            permission: true
                         }
 
                     ]">

@@ -13,6 +13,7 @@ import {
     IShortReference
 } from '../backend/TyrionAPI';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
@@ -59,7 +60,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, private notificationService: NotificationService) {
         this.formHardwareFilter = this.formBuilder.group({
             'alias': ['', [Validators.maxLength(60)]],
-            'id': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)], [BeckiAsyncValidators.validUUID()]],
             'full_id': ['', [Validators.maxLength(60)]],
             'description': ['', [Validators.maxLength(60)]],
             'orderBy': ['NAME', []],
@@ -93,6 +94,11 @@ export class ModalsSelectHardwareComponent implements OnInit {
     }
 
     onFilterHardware(pageNumber: number = 0 ): void {
+
+        if (!this.formHardwareFilter.valid && this.formHardwareFilter.dirty) {
+            return;
+        }
+
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.modalModel.project_id],
             hardware_type_ids: [ (this.modalModel.hardware_type != null) ? this.modalModel.hardware_type.id : null],

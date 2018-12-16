@@ -1,35 +1,75 @@
+import { CodeFile } from './CodeIDEComponent';
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { FileTreeNodeObject } from './FileTreeNodeComponent';
+import { Style } from './FileTreeNodeComponent';
 
+export class FileTreeNodeObject {
+    path: string;
+    files: CodeFile[] = [];
+    directories: FileTreeNodeObject[] = [];
+    root: boolean;
 
-interface FileWIthPath {
+    name: string;
+
+    constructor(path: string, root = false) {
+        this.path = path;
+        this.root = root;
+        let slicedPath = this.path.split('/');
+        this.name = slicedPath[slicedPath.length - 1];
+    }
+}
+
+export interface FileTreeElement {
+    style: Style;
     path: string;
 }
 
 @Component({
     selector: 'bk-file-tree-root',
-    template: './FileTreeRootComponent.html'
+    template: `
+        <div>
+            <bk-file-tree-node
+            [folder] = "rootNode"
+            (elementSelected) = "onElementSelected($event)" >
+            </bk-file-tree-node>
+        </div>
+    `
 })
 
-export class FileTreeRootObjectComponent <File extends FileWIthPath > implements OnInit, OnChanges {
+export class FileTreeRootComponent implements OnInit, OnChanges {
 
     @Input()
-    files: File[];
+    files: CodeFile[];
 
     @Output()
-    selectedDirectoryPath: string = null;
+    newPathSelected = new EventEmitter<string>();
 
     @Output()
-    selectedFile: File = null;
+    newFileSelected = new EventEmitter<CodeFile>();
 
     @Output()
-    newPathSelected: EventEmitter<string>;
+    fileAddAtPath = new EventEmitter<string>();
 
     @Output()
-    newFileSelected: EventEmitter<File>;
+    folderRemoveAtPath = new EventEmitter<string>();
 
-    rootNode: FileTreeNodeObject<File> = null;
+    @Output()
+    folderAddAtPath = new EventEmitter<string>();
 
+    @Output()
+    folderEditAtPath = new EventEmitter<string>();
+
+    @Output()
+    fileEdit = new EventEmitter<CodeFile>();
+
+    @Output()
+    fileRemove = new EventEmitter<CodeFile>();
+
+    selectedPath: string;
+
+    rootNode: FileTreeNodeObject = new FileTreeNodeObject('');
+
+    private selectedElement: FileTreeElement;
+    justRoot: FileTreeNodeObject;
     ngOnInit(): void {
 
     }
@@ -41,20 +81,22 @@ export class FileTreeRootObjectComponent <File extends FileWIthPath > implements
     }
 
     createNodeHierarchy() {
-        this.rootNode = new FileTreeNodeObject<File>('', [], [], []);
+        this.rootNode = new FileTreeNodeObject('extraRoot', true);
+        this.justRoot = new FileTreeNodeObject('root');
+        this.rootNode.directories.push(this.justRoot);
         this.files.forEach((file) => {
-            this.putFileIntoHierarchy(file, file.path.split('/'), this.rootNode);
+            this.putFileIntoHierarchy(file, file.objectFullPath.split('/'), this.justRoot);
         });
     }
 
-    putFileIntoHierarchy(file: File, remainingPath: string[], directory: FileTreeNodeObject<File>) {
+    putFileIntoHierarchy(file: CodeFile, remainingPath: string[], directory: FileTreeNodeObject) {
         if (remainingPath.length > 1) {
             let nextDirectory = remainingPath[0];
             let foundDirectory = directory.directories.find((node) => { return node.name === nextDirectory; } );
             if (foundDirectory) {
                 this.putFileIntoHierarchy(file, remainingPath.slice(1), foundDirectory);
             } else {
-                let newDirectory = new FileTreeNodeObject(nextDirectory, [directory.path.toString() , nextDirectory.toString()], [], []);
+                let newDirectory = new FileTreeNodeObject(directory.path + '/' + nextDirectory);
                 directory.directories.push(newDirectory);
                 this.putFileIntoHierarchy(file, remainingPath.slice(1), newDirectory);
             }
@@ -63,12 +105,19 @@ export class FileTreeRootObjectComponent <File extends FileWIthPath > implements
         }
     }
 
-    onSelectedFile(file: File) {
-        this.selectedFile = file;
-        this.newFileSelected.emit(file);
+    onElementSelected(element: FileTreeElement) {
+        if (this.selectedElement) {
+            this.selectedElement.style.selected = false;
+        }
+        this.selectedElement = element;
+        this.selectedElement.style.selected = true;
+        this.newPathSelected.emit(element.path);
     }
 
-
+    onSelectedPath(path: string) {
+        this.selectedPath = path;
+        this.newPathSelected.emit(path);
+    }
 }
 
 
