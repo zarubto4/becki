@@ -23,8 +23,6 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
     QrScanClose = new EventEmitter<string>();
     constructor(injector: Injector) {
         super(injector);
-
-
     };
 
     ngOnInit(): void {
