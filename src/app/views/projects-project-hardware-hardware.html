@@ -613,8 +613,8 @@
                                                     },
                                                     {
                                                         key: 'RUNNING',
-                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['IN_PROGRESS'],
+                                                        label: ('RUNNING'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['RUNNING'],
                                                         color: 'info'
                                                     },
                                                     {
@@ -712,7 +712,16 @@
 
 
                             <td class="vert-align">
-                                <a class="bold" (click)="onActualizationProcedureClick(update.actualization_procedure_id)">{{update.id.substr(0, 12)}}</a>
+
+                                <span *ngIf="update.release_update">
+                                      <i class="fa fa-lg fa-object-group margin-right-10"></i>
+                                      <a  class="bold" (click)="onActualizationProcedureClick(update.release_update.id)">{{update.id.substr(0, 12)}}</a>
+                                </span>
+                                <span *ngIf="!update.release_update">
+                                     {{update.id.substr(0, 12)}}
+                                </span>
+
+
                             </td>
                             <td class="vert-align">{{update.created|bkUnixTimeToDate}}</td>
 

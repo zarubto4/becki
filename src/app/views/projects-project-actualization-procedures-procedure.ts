@@ -116,7 +116,6 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
             release_update_ids: [this.actualization_procedure_id],
             hardware_ids: null,
             instance_ids: null,
-            update_status: null,
             update_states: <any> state_list,
             type_of_updates: <any>  type_list
         })

@@ -800,7 +800,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             instance_snapshot_ids: [this.instance.current_snapshot.id],
             hardware_ids: null,
             instance_ids: null,
-            update_status: status,
             update_states: []
         })
             .then((values) => {

@@ -30,8 +30,8 @@ export class FilterStatesValues {
     public IN_PLAN: boolean = true;
     public PENDING: boolean = true;
     public RUNNING: boolean = true;
-    public COMPLETE: boolean = true;
-    public CANCELED: boolean = true;
+    public COMPLETE: boolean = false;
+    public CANCELED: boolean = false;
     public OBSOLETE: boolean = false;
     public FAILED: boolean = true;
 }
@@ -39,7 +39,7 @@ export class FilterStatesValues {
 export class FilterTypesValues {
     public MANUALLY_BY_USER_INDIVIDUAL:  boolean = true;
     public MANUALLY_RELEASE_MANAGER: boolean = true;
-    public MANUALLY_BY_INSTANCE:  boolean = true;
+    public MANUALLY_BY_INSTANCE:  boolean = false;
     public AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE:  boolean = true;
     public AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE: boolean = true;
 }

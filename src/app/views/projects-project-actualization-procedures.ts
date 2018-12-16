@@ -132,8 +132,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
         this.blockUI();
         this.tyrionBackendService.hardwareReleaseUpdateGetByFilter(pageNumber, {
             project_id: this.projectId,
-            update_states: <any> state_list,
-            type_of_updates: <any>  type_list
+            states: <any> state_list
         })
             .then((values) => {
                 this.actualizationFilter = values;
