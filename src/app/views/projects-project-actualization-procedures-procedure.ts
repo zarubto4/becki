@@ -3,7 +3,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
-import { IHardwareReleaseUpdate, IHardwareReleaseUpdateFilter, IProject } from '../backend/TyrionAPI';
+import { IHardwareReleaseUpdate, IHardwareReleaseUpdateFilter, IHardwareReleaseUpdateList, IHardwareUpdateList, IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
 import { FormGroup } from '@angular/forms';
@@ -18,7 +18,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
     actualization_procedure_id: string;
 
     procedure: IHardwareReleaseUpdate = null;
-    actualizationTaskFilter: IHardwareReleaseUpdateFilter = null;
+    hardwareUpdateList: IHardwareUpdateList = null;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
@@ -51,7 +51,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
 
     refresh(): void {
         this.blockUI();
-        this.tyrionBackendService.actualizationProcedureGet(this.actualization_procedure_id)
+        this.tyrionBackendService.hardwareReleaseUpdateGet(this.actualization_procedure_id)
             .then((procedure) => {
                 this.procedure = procedure;
 
@@ -61,7 +61,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
                     }
                 });
 
-                if (!this.actualizationTaskFilter) {
+                if (!this.hardwareUpdateList) {
                     this.onFilterActualizationProcedureTask();
                 }
 
@@ -112,22 +112,22 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
         });
 
 
-        this.tyrionBackendService.hardwareUpdateTaskGetByFilter(pageNumber, {
-            actualization_procedure_ids: [this.actualization_procedure_id],
+        this.tyrionBackendService.hardwareUpdateGetByFilter(pageNumber, {
+            release_update_ids: [this.actualization_procedure_id],
             hardware_ids: null,
             instance_ids: null,
             update_status: null,
             update_states: <any> state_list,
             type_of_updates: <any>  type_list
         })
-            .then((values) => {
-                this.actualizationTaskFilter = values;
+            .then((values: IHardwareUpdateList) => {
+                this.hardwareUpdateList = values;
 
-                this.actualizationTaskFilter.content.forEach((task, index, obj) => {
+                this.hardwareUpdateList.content.forEach((task, index, obj) => {
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
 
-                            this.tyrionBackendService.actualizationTaskGet(task.id)
+                            this.tyrionBackendService.hardwareReleaseUpdateGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
                                     task.finished = value.finished;

@@ -26,17 +26,17 @@
 
                     {{'label_created'|bkTranslate:this}}:&thinsp; {{procedure.created|bkUnixTimeToDate}}
                     <br>
-                    {{'label_planed'|bkTranslate:this}}:&thinsp; {{procedure.date_of_planing|bkUnixTimeToDate}}
+                    {{'label_planed'|bkTranslate:this}}:&thinsp; {{procedure.planned|bkUnixTimeToDate}}
                     <br>
                     {{'label_finished'|bkTranslate:this}}:&thinsp;&nbsp;
-                    <span *ngIf="!procedure.date_of_finish" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
-                    <span *ngIf="procedure.date_of_finish">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                    <span *ngIf="!procedure.finished" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                    <span *ngIf="procedure.finished">{{procedure.finished|bkUnixTimeToDate}}</span>
 
                 </div>
                 <div class="col-md-4">
                     <ng-template [ngIf]="procedure.program">
-                        <ng-template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
-                            <h4><span [innerHTML]="'label_update_type'|bkTranslate:this"></span> <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type></h4>
+                        <ng-template [ngIf]="procedure.program" >
+                            <h4><span [innerHTML]="'label_update_type'|bkTranslate:this"></span> <bk-firmware-type [firmware_type]="'FIRMWARE'"></bk-firmware-type></h4>
 
                             <span [innerHTML]="'label_code_program'|bkTranslate:this"></span>
                             <a class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
@@ -44,8 +44,8 @@
                             <span [innerHTML]="'label_code_version'|bkTranslate:this"></span>
                             <a class="bold" (click)="onCProgramClick(procedure.program.c_program_id, procedure.program.c_program_version_id)">{{procedure.program.c_program_version_name}}</a>
                         </ng-template>
-                        <ng-template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
-                            <h4 [innerHTML]="'label_update_type'|bkTranslate:this"><bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type></h4>
+                        <ng-template [ngIf]="procedure.bootloader">
+                            <h4 [innerHTML]="'label_update_type'|bkTranslate:this"><bk-firmware-type [firmware_type]="'BOOTLOADER'"></bk-firmware-type></h4>
                             <span [innerHTML]="'label_bootloader_version'|bkTranslate:this"></span>
                             <a class="bold" (click)="onHardwareTypeClick(procedure.bootloader.hardware_type_id)">{{procedure.bootloader.bootloader_name}}</a>
                         </ng-template>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-md-4" style="text-align: center">
                     <h1> Progress:
-                        <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
+                        <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.state_complete}}/{{procedure.procedure_size_all}}</span>
                         <span *ngIf="!procedure.procedure_size_all ||procedure_size_all == 0 " class="bold">-/-</span>
                     </h1>
                     <h4>
@@ -75,6 +75,24 @@
                                             type: 'CHECKBOX_LIST',
                                             content: {
                                                 options: [
+                                                   {
+                                                        key: 'IN_PLAN',
+                                                        label: ('IN_PLAN'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['COMPLETE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'PENDING',
+                                                        label: ('PENDING'|bkTranslateTable:this:'update_state'),
+                                                         selected: filterStatesValues['PENDING'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'RUNNING',
+                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['IN_PROGRESS'],
+                                                        color: 'info'
+                                                    },
                                                     {
                                                         key: 'COMPLETE',
                                                         label: ('COMPLETE'|bkTranslateTable:this:'update_state'),
@@ -88,74 +106,25 @@
                                                         color: 'info'
                                                     },
                                                     {
-                                                        key: 'BIN_FILE_MISSING',
-                                                        label: ('BIN_FILE_MISSING'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['BIN_FILE_MISSING'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'NOT_YET_STARTED',
-                                                        label: ('NOT_YET_STARTED'|bkTranslateTable:this:'update_state'),
-                                                         selected: filterStatesValues['NOT_YET_STARTED'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'IN_PROGRESS',
-                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['IN_PROGRESS'],
-                                                        color: 'info'
-                                                    },
-                                                    {
                                                         key: 'OBSOLETE',
                                                         label: ('OBSOLETE'|bkTranslateTable:this:'update_state'),
                                                         selected: filterStatesValues['BIN_FILE_MISSING'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'FAILED',
+                                                        label: ('FAILED'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['FAILED'],
                                                         color: 'info'
                                                     }
                                                 ]
                                             },
                                             horizontal: true
-                                        },
-                                          {
-                                            type: 'CHECKBOX_LIST',
-                                            content: {
-                                                options: [
-                                                    {
-                                                        key: 'WAITING_FOR_DEVICE',
-                                                        label: ('NOT_UPDATED'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['WAITING_FOR_DEVICE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'WAITING_FOR_DEVICE',
-                                                        label: ('WAITING_FOR_DEVICE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['WAITING_FOR_DEVICE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'INSTANCE_INACCESSIBLE',
-                                                        label: ('INSTANCE_INACCESSIBLE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['INSTANCE_INACCESSIBLE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'HOMER_SERVER_IS_OFFLINE',
-                                                        label: ('HOMER_SERVER_IS_OFFLINE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['HOMER_SERVER_IS_OFFLINE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'CRITICAL_ERROR',
-                                                        label: ('CRITICAL_ERROR'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['CRITICAL_ERROR'],
-                                                        color: 'info'
-                                                    }
-                                                ]
-                                            }
                                         }
                                     ]"
         ></bk-filter-component>
 
-        <div *ngIf="actualizationTaskFilter && actualizationTaskFilter.content.length > 0">
+        <div *ngIf="hardwareUpdateList && hardwareUpdateList.content.length > 0">
             <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
@@ -172,7 +141,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let update of actualizationTaskFilter.content">
+                    <tr *ngFor="let update of hardwareUpdateList.content">
 
                         <!-- Table ID !-->
                         <td class="vert-align breakable">{{update.id.substr(0, 12)}}</td>
@@ -184,8 +153,8 @@
 
                         <!-- Time Finish !-->
                         <td class="vert-align">
-                            <span *ngIf="!update.date_of_finish" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
-                            <span *ngIf="update.date_of_finish">{{update.date_of_finish|bkUnixTimeToDate}}</span>
+                            <span *ngIf="!update.finished" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                            <span *ngIf="update.finished">{{update.finished|bkUnixTimeToDate}}</span>
                         </td>
 
                         <!-- Firmware Type!-->
@@ -194,7 +163,7 @@
                         </td>
 
                         <!-- Firmware -->
-                        <ng-template [ngIf]="procedure.firmware_type== 'FIRMWARE' || procedure.firmware_type == 'BACKUP'">
+                        <ng-template [ngIf]="procedure.program">
                             <td class="vert-align font-grey-mint text-center">
                                 <a *ngIf="update.c_program_detail" class="bold"
                                    (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_program_name}}</a>
@@ -208,7 +177,7 @@
                         </ng-template>
 
                         <!-- BootLoader -->
-                        <ng-template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
+                        <ng-template [ngIf]="procedure.bootloader">
                             <td class="vert-align font-grey-mint text-center">
                                 <span *ngIf="update.bootloader_detail" class="font-grey-mint bold"> {{update.bootloader_detail.version_identificator}}</span>
                             </td>
@@ -222,12 +191,12 @@
                     </tr>
                 </tbody>
             </table>
-            <bk-filter-page-component [from]="actualizationTaskFilter.from" [to]="actualizationTaskFilter.to" [total]="actualizationTaskFilter.total"  [totalPages]="actualizationTaskFilter.pages" (onSelect)="onFilterActualizationProcedureTask($event)"></bk-filter-page-component>
+            <bk-filter-page-component [from]="hardwareUpdateList.from" [to]="hardwareUpdateList.to" [total]="hardwareUpdateList.total"  [totalPages]="hardwareUpdateList.pages" (onSelect)="onFilterActualizationProcedureTask($event)"></bk-filter-page-component>
         </div>
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-        <bk-nothing-to-show [condition_loading]="(actualizationTaskFilter == null)"
-                            [condition_empty]="(actualizationTaskFilter != null && actualizationTaskFilter.content.length == 0)"
+        <bk-nothing-to-show [condition_loading]="(hardwareUpdateList == null)"
+                            [condition_empty]="(hardwareUpdateList != null && hardwareUpdateList.content.length == 0)"
                             [main_message_link]="'label_no_running_update_on_hardware'|bkTranslate:this"
                             [main_message_comment_link]="'label_no_running_update_on_hardware_comment'|bkTranslate:this"
                             [show_button]="false">

@@ -27,24 +27,19 @@ export interface ConfigParameters {
 }
 
 export class FilterStatesValues {
+    public IN_PLAN: boolean = true;
+    public PENDING: boolean = true;
+    public RUNNING: boolean = true;
     public COMPLETE: boolean = true;
     public CANCELED: boolean = true;
-    public BIN_FILE_MISSING: boolean = false;
-    public NOT_YET_STARTED: boolean = true;
-    public IN_PROGRESS: boolean = true;
     public OBSOLETE: boolean = false;
-    public NOT_UPDATED: boolean = true;
-    public WAITING_FOR_DEVICE: boolean = true;
-    public INSTANCE_INACCESSIBLE: boolean = false;
-    public HOMER_SERVER_IS_OFFLINE: boolean = true;
-    public HOMER_SERVER_NEVER_CONNECTED: boolean = true;
-    public CRITICAL_ERROR: boolean = true;
+    public FAILED: boolean = true;
 }
 
 export class FilterTypesValues {
     public MANUALLY_BY_USER_INDIVIDUAL:  boolean = true;
-    public MANUALLY_BY_USER_BLOCKO_GROUP: boolean = true;
-    public MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME:  boolean = true;
+    public MANUALLY_RELEASE_MANAGER: boolean = true;
+    public MANUALLY_BY_INSTANCE:  boolean = true;
     public AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE:  boolean = true;
     public AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE: boolean = true;
 }
@@ -100,9 +95,11 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
             if (status.model === 'Hardware' && this.hardwareId === status.model_id) {
                 this.refresh();
-                this.onFilterActualizationProcedureTask();
+                this.onFilterHardwareUpdates();
             }
         });
+
+
     }
 
     onBlinkDeviceClick(): void {
@@ -170,7 +167,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         this.tab = tab;
 
         if (tab === 'updates' && this.actualizationTaskFilter === null) {
-            this.onFilterActualizationProcedureTask();
+            this.onFilterHardwareUpdates();
         }
 
         if (tab === 'command_center') {
@@ -542,10 +539,10 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             this.filterTypesValues[filter.key] = filter.value;
         }
 
-        this.onFilterActualizationProcedureTask();
+        this.onFilterHardwareUpdates();
     }
 
-    onFilterActualizationProcedureTask(pageNumber: number = 0) {
+    onFilterHardwareUpdates(pageNumber: number = 0) {
         this.blockUI();
 
         let state_list: string[] = [];
@@ -622,7 +619,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         })
                             .then(() => {
                                 this.refresh();
-                                this.onFilterActualizationProcedureTask();
+                                this.onFilterHardwareUpdates();
                             })
                             .catch((reason) => {
                                 this.fmError(this.translate('flash_cant_edit_backup_mode', reason));

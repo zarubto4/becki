@@ -267,7 +267,7 @@ export class CurrentParamsService {
                 this.currentActualizationProcedureSnapShot = null;
                 this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
             } else {
-                this.backendService.hardwareReleseGet(params['release-update']).then((procedure) => {
+                this.backendService.hardwareReleaseUpdateGet(params['release-update']).then((procedure) => {
                     this.currentActualizationProcedureSnapShot = procedure.id;
                     this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
                 });

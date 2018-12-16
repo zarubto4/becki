@@ -1,22 +1,10 @@
 
+<span *ngIf="updateState == 'IN_PLAN'" class="bold font-color-byzance-blue" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
+<span *ngIf="updateState == 'PENDING'" class="bold font-green-soft" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
 <span *ngIf="updateState == 'COMPLETE'" class="bold font-green-jungle" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'SUCCESSFULLY_COMPLETE'" class="bold font-green-jungle" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
 <span *ngIf="updateState == 'CANCELED'" class="bold font-green-jungle" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-
-<span *ngIf="updateState == 'NOT_YET_STARTED'" class="bold font-grey-mint" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'IN_PROGRESS'" class="bold font-yellow-casablanca" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
 <span *ngIf="updateState == 'OBSOLETE'" class="bold font-grey-mint" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'NOT_UPDATED'" class="bold font-yellow-casablanca" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'WAITING_FOR_DEVICE'" class="bold font-yellow-casablanca" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-
-<span *ngIf="updateState == 'BIN_FILE_MISSING'" class="bold font-red-flamingo" [innerHTML]="updateState|bkTranslateTable:'update_state'"></span>
-<span *ngIf="updateState == 'CRITICAL_ERROR'" class="bold font-red-flamingo" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'HOMER_SERVER_IS_OFFLINE'" class="bold font-red-flamingo" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'INSTANCE_INACCESSIBLE'" class="bold font-red-flamingo" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'HOMER_SERVER_NEVER_CONNECTED'" class="bold font-red-flamingo" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'COMPLETE_WITH_ERROR'" class="bold font-yellow-casablanca" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-<span *ngIf="updateState == 'PROHIBITED_BY_CONFIG'" class="bold font-yellow-casablanca" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
-
+<span *ngIf="updateState == 'FAILED'" class="bold font-yellow-casablanca" [innerHTML]="updateState|bkTranslateTable:this:'update_state'"></span>
 <span *ngIf="updateState == 'CRITICAL_ERROR' && error_code" class="icon-hint-wraper red">
     <i class="fa fa-exclamation-triangle font-red-mint"></i>
     <span class="hint">{{error_code.toString() | bkTranslateTable:this:'error_code'}}</span>

@@ -42,40 +42,46 @@
                                             type: 'CHECKBOX_LIST',
                                             content: {
                                                 options: [
+                                                   {
+                                                        key: 'IN_PLAN',
+                                                        label: ('IN_PLAN'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['COMPLETE'],
+                                                        color: 'info'
+                                                    },
                                                     {
-                                                        key: 'SUCCESSFULLY_COMPLETE',
-                                                        label: ('SUCCESSFULLY_COMPLETE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterUpdateValues['SUCCESSFULLY_COMPLETE'],
+                                                        key: 'PENDING',
+                                                        label: ('PENDING'|bkTranslateTable:this:'update_state'),
+                                                         selected: filterStatesValues['PENDING'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'RUNNING',
+                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['IN_PROGRESS'],
                                                         color: 'info'
                                                     },
                                                     {
                                                         key: 'COMPLETE',
                                                         label: ('COMPLETE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterUpdateValues['COMPLETE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'COMPLETE_WITH_ERROR',
-                                                        label: ('COMPLETE_WITH_ERROR'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterUpdateValues['COMPLETE_WITH_ERROR'],
+                                                        selected: filterStatesValues['COMPLETE'],
                                                         color: 'info'
                                                     },
                                                     {
                                                         key: 'CANCELED',
                                                         label: ('CANCELED'|bkTranslateTable:this:'update_state'),
-                                                         selected: filterUpdateValues['CANCELED'],
+                                                        selected: filterStatesValues['CANCELED'],
                                                         color: 'info'
                                                     },
                                                     {
-                                                        key: 'IN_PROGRESS',
-                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterUpdateValues['IN_PROGRESS'],
+                                                        key: 'OBSOLETE',
+                                                        label: ('OBSOLETE'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['BIN_FILE_MISSING'],
                                                         color: 'info'
                                                     },
                                                     {
-                                                        key: 'NOT_START_YET',
-                                                        label: ('NOT_START_YET'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterUpdateValues['NOT_START_YET'],
+                                                        key: 'FAILED',
+                                                        label: ('FAILED'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['FAILED'],
                                                         color: 'info'
                                                     }
                                                 ]
@@ -85,7 +91,7 @@
                                         {
                                             type: 'CHECKBOX_LIST',
                                             content: {
-                                                options: [
+                                               options: [
                                                     {
                                                         key: 'MANUALLY_BY_USER_INDIVIDUAL',
                                                         label: ('MANUALLY_BY_USER_INDIVIDUAL'|bkTranslateTable:this:'type_of_update'),
@@ -93,15 +99,21 @@
                                                         color: 'info'
                                                     },
                                                     {
-                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP',
-                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP'],
+                                                        key: 'MANUALLY_RELEASE_MANAGER',
+                                                        label: ('MANUALLY_RELEASE_MANAGER'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_RELEASE_MANAGER'],
                                                         color: 'info'
                                                     },
                                                     {
-                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME',
-                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'],
+                                                        key: 'MANUALLY_BY_INSTANCE',
+                                                        label: ('MANUALLY_BY_INSTANCE'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_BY_INSTANCE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'AUTOMATICALLY_BY_INSTANCE',
+                                                        label: ('AUTOMATICALLY_BY_INSTANCE'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['AUTOMATICALLY_BY_INSTANCE'],
                                                         color: 'info'
                                                     },
                                                     {
@@ -145,11 +157,11 @@
                             <a class="bold" (click)="onActualizationProcedureClick(procedure.id)">{{procedure.id.substr(0, 12)}}</a>
                         </td>
                         <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
-                        <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                        <td class="vert-align">{{procedure.planned|bkUnixTimeToDate}}</td>
                         <td class="vert-align">
-                            <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                            <span *ngIf="procedure.finished == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
                             <span
-                                *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                                *ngIf="procedure.finished != null">{{procedure.finished|bkUnixTimeToDate}}</span>
                         </td>
 
                         <td class="vert-align text-center">

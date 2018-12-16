@@ -297,14 +297,14 @@
                                 12)}}</a>
                         </td>
                         <td class="vert-align  text-center ">{{procedure.created|bkUnixTimeToDate}}</td>
-                        <td class="vert-align  text-center">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                        <td class="vert-align  text-center">{{procedure.planned|bkUnixTimeToDate}}</td>
                         <td class="vert-align  text-center">
-                            <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                            <span *ngIf="procedure.finished == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
                             <span
-                                *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                                *ngIf="procedure.finished != null">{{procedure.finished|bkUnixTimeToDate}}</span>
                         </td>
                         <td class="vert-align  text-center">
-                            <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
+                            <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.state_complete}}/{{procedure.procedure_size_all}}</span>
                             <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 "
                                   class="bold">-/-</span>
                         </td>

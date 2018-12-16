@@ -3101,8 +3101,8 @@ export class StaticTranslation {
             'type_of_update': {
                 'MANUALLY_BY_USER_INDIVIDUAL': 'Individual Update',
                 'MANUALLY_RELEASE_MANAGER': 'Release Manager',
-                'MANUALLY_BY_USER_BLOCKO_GROUP': 'Manually through <strong class="font-color-blocko">BLOCKO</strong>',
-                'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME': 'Scheduled through <strong class="font-color-blocko">BLOCKO</strong>',
+                'MANUALLY_BY_INSTANCE': 'Manually through <strong class="font-color-blocko">BLOCKO</strong>',
+                'AUTOMATICALLY_BY_INSTANCE': 'Scheduled through <strong class="font-color-blocko">BLOCKO</strong>',
                 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE': 'System up-to-date',
                 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'Critical patch',
             },
@@ -3141,22 +3141,14 @@ export class StaticTranslation {
 
             },
             'update_state': {
+                'IN_PLAN': 'Planed',
+                'PENDING': 'Pending',
+                'IN_PROGRESS': 'In Progress',
                 'COMPLETE': 'Completed',
                 'CANCELED': 'Cancelled',
-                'NOT_YET_STARTED': 'Waiting in que',
-                'IN_PROGRESS': 'Update is in progress',
+                'RUNNING': 'Update is in progress',
                 'OBSOLETE': 'Obsolete',
-                'NOT_UPDATED': 'Updated to wrong version.',
-                'WAITING_FOR_DEVICE': 'Waiting for the device to reconnect.',
-                'BIN_FILE_MISSING': 'Bin file not found.',
-                'CRITICAL_ERROR': 'Critical error',
-                'HOMER_SERVER_IS_OFFLINE': 'Server is offline.',
-                'INSTANCE_INACCESSIBLE': 'Instance is not accessible.',
-                'HOMER_SERVER_NEVER_CONNECTED': 'Never connected',
-                'COMPLETE_WITH_ERROR': 'Complete with error',
-                'SUCCESSFULLY_COMPLETE': 'Successfully completed',
-                'PROHIBITED_BY_CONFIG': 'Prohibited by config',
-                'NOT_START_YET': 'Not start yet',
+                'FAILED': 'Failed',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu
@@ -3164,12 +3156,6 @@ export class StaticTranslation {
                 'not_start_yet_description': 'TODO',
                 'in_progress_description': 'TODO',
                 'overwritten_description': 'TODO',
-                'not_updated_description': 'TODO',
-                'waiting_for_device_description': 'TODO',
-                'bin_file_not_found_description': 'TODO',
-                'critical_error_description': 'TODO',
-                'homer_server_is_offline_description': 'TODO',
-                'instance_inaccessible_description': 'TODO',
 
             }, 'hardware_device_id': {
                 'ALREADY_REGISTERED_IN_YOUR_ACCOUNT': 'Device is already registered with your account.',

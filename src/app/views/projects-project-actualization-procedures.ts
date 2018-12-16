@@ -7,7 +7,7 @@ import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
-import { IProject, IHardwareUpdateList, IHardwareGroupList, IHardwareUpdate, IHardwareReleaseUpdate } from '../backend/TyrionAPI';
+import { IProject, IHardwareUpdateList, IHardwareGroupList, IHardwareUpdate, IHardwareReleaseUpdate, IHardwareReleaseUpdateList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
 import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
@@ -37,7 +37,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
 
 
     deviceGroup: IHardwareGroupList = null;
-    actualizationFilter: IHardwareUpdateList = null;
+    actualizationFilter: IHardwareReleaseUpdateList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
@@ -130,7 +130,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
         });
 
         this.blockUI();
-        this.tyrionBackendService.hardwareUpdateTaskGetByFilter(pageNumber, {
+        this.tyrionBackendService.hardwareReleaseUpdateGetByFilter(pageNumber, {
             project_id: this.projectId,
             update_states: <any> state_list,
             type_of_updates: <any>  type_list
@@ -142,11 +142,11 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'ActualizationProcedure' && procedure.id === status.model_id) {
 
-                            this.tyrionBackendService.actualizationProcedureGet(procedure.id)
-                                .then((value) => {
+                            this.tyrionBackendService.hardwareReleaseUpdateGet(procedure.id)
+                                .then((value: IHardwareReleaseUpdate) => {
                                     procedure.state = value.state;
-                                    procedure.procedure_size_complete = value.procedure_size_complete;
-                                    procedure.finished = value.safdafd;
+                                    procedure.state_complete = value.state_complete;
+                                    procedure.finished = value.finished;
                                 })
                                 .catch((reason) => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
@@ -208,7 +208,8 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
         let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, this.deviceGroup);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.tyrionBackendService.hardwareUpdateProcedureMake({
+                this.tyrionBackendService.hardwareReleaseUpdateMake({
+                    name: 'TODO NAME',
                     firmware_type: model.firmwareType,
                     hardware_group_ids: [ model.deviceGroupStringIdSelected ],
                     hardware_ids: [],

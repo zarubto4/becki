@@ -1021,7 +1021,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onUpdateProcedureCancelClick(procedure: IHardwareReleaseUpdate): void {
         this.blockUI();
-        this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
+        this.tyrionBackendService.hardwareReleaseUpdateCancel(procedure.id)
             .then(() => {
                 this.unblockUI();
                 this.refresh();

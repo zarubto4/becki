@@ -450,10 +450,8 @@
                                     </div>
                                 </div>
 
-                                <hr>
-
+                                <hr *ngIf="hardware.cellular">
                                 <div *ngIf="hardware.cellular">
-
                                     <div>
                                         <span [innerHTML]="'label_cellular'|bkTranslate:this"></span>:
                                         <a *ngIf="hardware.cellular.id" (click)="onCellularClick(hardware.cellular.id)" class="bold">{{hardware.cellular.name}}</a>
@@ -592,9 +590,8 @@
 
         <div *ngIf="tab == 'updates'">
 
-
             <bk-filter-component *ngIf="formFilterGroup"
-                                 [closed]="true"
+                                 [closed]="false"
                                  [showFilterHead]="true"
                                  (onChange)="onFilterChange($event)"
                                  [filter_parameters]="[
@@ -602,6 +599,24 @@
                                             type: 'CHECKBOX_LIST',
                                             content: {
                                                 options: [
+                                                   {
+                                                        key: 'IN_PLAN',
+                                                        label: ('IN_PLAN'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['COMPLETE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'PENDING',
+                                                        label: ('PENDING'|bkTranslateTable:this:'update_state'),
+                                                         selected: filterStatesValues['PENDING'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'RUNNING',
+                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['IN_PROGRESS'],
+                                                        color: 'info'
+                                                    },
                                                     {
                                                         key: 'COMPLETE',
                                                         label: ('COMPLETE'|bkTranslateTable:this:'update_state'),
@@ -615,69 +630,20 @@
                                                         color: 'info'
                                                     },
                                                     {
-                                                        key: 'BIN_FILE_MISSING',
-                                                        label: ('BIN_FILE_MISSING'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['BIN_FILE_MISSING'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'NOT_YET_STARTED',
-                                                        label: ('NOT_YET_STARTED'|bkTranslateTable:this:'update_state'),
-                                                         selected: filterStatesValues['NOT_YET_STARTED'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'IN_PROGRESS',
-                                                        label: ('IN_PROGRESS'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['IN_PROGRESS'],
-                                                        color: 'info'
-                                                    },
-                                                    {
                                                         key: 'OBSOLETE',
                                                         label: ('OBSOLETE'|bkTranslateTable:this:'update_state'),
                                                         selected: filterStatesValues['BIN_FILE_MISSING'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'FAILED',
+                                                        label: ('FAILED'|bkTranslateTable:this:'update_state'),
+                                                        selected: filterStatesValues['FAILED'],
                                                         color: 'info'
                                                     }
                                                 ]
                                             },
                                             horizontal: true
-                                        },
-                                          {
-                                            type: 'CHECKBOX_LIST',
-                                            content: {
-                                                options: [
-                                                    {
-                                                        key: 'WAITING_FOR_DEVICE',
-                                                        label: ('NOT_UPDATED'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['WAITING_FOR_DEVICE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'WAITING_FOR_DEVICE',
-                                                        label: ('WAITING_FOR_DEVICE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['WAITING_FOR_DEVICE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'INSTANCE_INACCESSIBLE',
-                                                        label: ('INSTANCE_INACCESSIBLE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['INSTANCE_INACCESSIBLE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'HOMER_SERVER_IS_OFFLINE',
-                                                        label: ('HOMER_SERVER_IS_OFFLINE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['HOMER_SERVER_IS_OFFLINE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'CRITICAL_ERROR',
-                                                        label: ('CRITICAL_ERROR'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['CRITICAL_ERROR'],
-                                                        color: 'info'
-                                                    }
-                                                ]
-                                            }
                                         },
                                         {
                                             type: 'CHECKBOX_LIST',
@@ -690,15 +656,21 @@
                                                         color: 'info'
                                                     },
                                                     {
-                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP',
-                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP'],
+                                                        key: 'MANUALLY_RELEASE_MANAGER',
+                                                        label: ('MANUALLY_RELEASE_MANAGER'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_RELEASE_MANAGER'],
                                                         color: 'info'
                                                     },
                                                     {
-                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME',
-                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'],
+                                                        key: 'MANUALLY_BY_INSTANCE',
+                                                        label: ('MANUALLY_BY_INSTANCE'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['MANUALLY_BY_INSTANCE'],
+                                                        color: 'info'
+                                                    },
+                                                    {
+                                                        key: 'AUTOMATICALLY_BY_INSTANCE',
+                                                        label: ('AUTOMATICALLY_BY_INSTANCE'|bkTranslateTable:this:'type_of_update'),
+                                                        selected: filterTypesValues['AUTOMATICALLY_BY_INSTANCE'],
                                                         color: 'info'
                                                     },
                                                     {
@@ -744,10 +716,10 @@
                             </td>
                             <td class="vert-align">{{update.created|bkUnixTimeToDate}}</td>
 
-                            <td class="vert-align" *ngIf="update.date_of_finish">
-                                {{update.date_of_finish|bkUnixTimeToDate}}
+                            <td class="vert-align" *ngIf="update.finished">
+                                {{update.finished|bkUnixTimeToDate}}
                             </td>
-                            <td *ngIf="!update.date_of_finish" class="vert-align font-yellow-casablanca">
+                            <td *ngIf="!update.finished" class="vert-align font-yellow-casablanca">
                                 {{'label_time_missing_in_json'|bkTranslate:this}}
                             </td>
 
@@ -788,7 +760,7 @@
                     </tbody>
                 </table>
                 <bk-filter-page-component [from]="actualizationTaskFilter.from" [to]="actualizationTaskFilter.to" [total]="actualizationTaskFilter.total"
-                                          [totalPages]="actualizationTaskFilter.pages" (onSelect)="onFilterActualizationProcedureTask($event)"></bk-filter-page-component>
+                                          [totalPages]="actualizationTaskFilter.pages" (onSelect)="onFilterHardwareUpdates($event)"></bk-filter-page-component>
             </div>
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
             <bk-nothing-to-show [condition_loading]="(actualizationTaskFilter == null)"
