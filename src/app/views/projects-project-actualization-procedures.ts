@@ -37,14 +37,13 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
 
 
     deviceGroup: IHardwareGroupList = null;
-    actualizationFilter: IHardwareReleaseUpdateList = null;
+    releaseList: IHardwareReleaseUpdateList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     formFilterGroup: FormGroup;
 
     filterUpdateValues = new FilterUpdateStates();
-    filterTypesValues = new FilterTypesValues();
 
     tab: string = 'updates';
 
@@ -80,7 +79,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
     onToggleTab(tab: string) {
         this.tab = tab;
 
-        if (tab === 'updates' && this.actualizationFilter == null) {
+        if (tab === 'updates' && this.releaseList == null) {
             this.onFilterActualizationProcedure();
         }
 
@@ -102,10 +101,6 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             this.filterUpdateValues[filter.key] = filter.value;
         }
 
-        if (this.filterTypesValues.hasOwnProperty(filter.key)) {
-            this.filterTypesValues[filter.key] = filter.value;
-        }
-
         this.onFilterActualizationProcedure();
     }
 
@@ -121,23 +116,15 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             }
         }
 
-        let type_list: string[] = [];
-        Object.keys(this.filterTypesValues).forEach((propKey) => {
-
-            if (this.filterTypesValues[propKey].value === true) {
-                type_list.push(propKey);
-            }
-        });
-
         this.blockUI();
         this.tyrionBackendService.hardwareReleaseUpdateGetByFilter(pageNumber, {
             project_id: this.projectId,
             states: <any> state_list
         })
             .then((values) => {
-                this.actualizationFilter = values;
+                this.releaseList = values;
 
-                this.actualizationFilter.content.forEach((procedure, index, obj) => {
+                this.releaseList.content.forEach((procedure, index, obj) => {
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'ActualizationProcedure' && procedure.id === status.model_id) {
 
@@ -204,11 +191,12 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             return;
         }
 
-        let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, this.deviceGroup);
+        let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, '', '', this.deviceGroup);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.tyrionBackendService.hardwareReleaseUpdateMake({
-                    name: 'TODO NAME',
+                    name: model.name,
+                    description: model.description,
                     firmware_type: model.firmwareType,
                     hardware_group_ids: [ model.deviceGroupStringIdSelected ],
                     hardware_ids: [],

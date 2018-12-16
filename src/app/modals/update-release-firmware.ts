@@ -25,6 +25,8 @@ import { FlashMessageError, NotificationService } from '../services/Notification
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
         public project_id: string = null,
+        public name: string = null,
+        public description: string = null,
         public deviceGroup: IHardwareGroupList = null,         // All possible Hardware groups for settings
         public deviceGroupStringIdSelected: string = '',   // List with group ids for hardware update,
         public firmwareType: ('FIRMWARE' | 'BACKUP' | 'BOOTLOADER') = 'FIRMWARE',
@@ -99,6 +101,14 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
         private translationService: TranslationService, protected notificationService: NotificationService, ) {
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]],
+            'name': ['',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ]
+            ],
+            'description': ['', [Validators.maxLength(255)]],
             'firmwareType': ['', [Validators.required]],
             'date': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
             'time': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
@@ -223,6 +233,9 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
         } else {
             this.modalModel.firmwareType = this.form.controls['firmwareType'].value;
         }
+
+        this.modalModel.name = this.form.controls['name'].value;
+        this.modalModel.description = this.form.controls['description'].value;
 
         this.selectedDeviceGroup.hardware_types.forEach((hardwareType: IShortReference) => {
 

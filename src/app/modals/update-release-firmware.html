@@ -7,6 +7,9 @@
 
         <form [formGroup]="form">
 
+            <bk-form-input [control]="form.controls['name']" [label]="'label_name_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['description']" [label]="'label_widget_description'|bkTranslate:this"></bk-form-input>
+
             <!-- Select Hardware Group -->
             <div class="row">
                 <div class="col-md-12">

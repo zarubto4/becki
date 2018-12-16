@@ -347,7 +347,7 @@
                                 (onClick)="onPortletClick($event)"
                                 [btns]="[
                                           {
-                                              condition: (hardware.online_state == 'ONLINE'),
+                                              condition: (hardware.project != null),
                                               btn_label_for_person: ('label_manual_individual_update'|bkTranslate:this),
                                               icon: 'fa-code',
                                               colorType: 'UPDATE',
@@ -602,7 +602,7 @@
                                                    {
                                                         key: 'IN_PLAN',
                                                         label: ('IN_PLAN'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['COMPLETE'],
+                                                        selected: filterStatesValues['IN_PLAN'],
                                                         color: 'info'
                                                     },
                                                     {
