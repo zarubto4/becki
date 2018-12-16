@@ -96,7 +96,8 @@
                 <div class="col-xs-6 col-sm-3 text-center">
                     <div class="simItem big ">
                     </div>
-                    <h2>SIM ON CHIP</h2>
+                    <h2  *ngIf="gsm.sim_type === 'CHIP'">SIM ON CHIP</h2>
+                    <h2  *ngIf="gsm.sim_type === 'CARD'">SIM CARD</h2>
                     <h3>
                        <bk-gsm-status-component [status]="gsm.sim_tm_status.status"></bk-gsm-status-component>
                     </h3>

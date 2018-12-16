@@ -104,6 +104,9 @@ export class BreadcrumbsService {
         this.currentParamsService.currentHardwareName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentGSMName.subscribe(() => {
+            this.refresh();
+        });
         this.currentParamsService.currentGroupName.subscribe(() => {
             this.refresh();
         });
@@ -162,6 +165,8 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentGarfieldNameSnapshot;
             case ':hardware':
                 return this.currentParamsService.currentHardwareNameSnapShot;
+            case ':gsm':
+                return this.currentParamsService.currentGSMNameSnapShot;
             case ':actualization_procedure':
                 return this.currentParamsService.currentActualizationProcedureSnapShot;
             case ':last':

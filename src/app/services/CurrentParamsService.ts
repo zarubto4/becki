@@ -102,6 +102,11 @@ export class CurrentParamsService {
     protected currentHardwareNameSubject: Subject<string> = null;
     public currentHardwareNameSnapShot: string = null;
 
+
+    public currentGSMName: Observable<string> = null;
+    protected currentGSMNameSubject: Subject<string> = null;
+    public currentGSMNameSnapShot: string = null;
+
     public currentActualizationProcedureName: Observable<string> = null;
     protected currentActualizationProcedureSubject: Subject<string> = null;
     public currentActualizationProcedureSnapShot: string = null;
@@ -133,6 +138,7 @@ export class CurrentParamsService {
         this.currentBugSummary = this.currentBugSummarySubject = new Subject<string>();
         this.currentGarfieldName = this.currentGarfieldNameSubject = new Subject<string>();
         this.currentHardwareName = this.currentHardwareNameSubject = new Subject<string>();
+        this.currentGSMName = this.currentGSMNameSubject = new Subject<string>();
         this.currentActualizationProcedureName = this.currentActualizationProcedureSubject = new Subject<string>();
 
         router.events.subscribe(event => {
@@ -195,6 +201,20 @@ export class CurrentParamsService {
                 this.backendService.boardGet(params['hardware']).then((hardware) => {
                     this.currentHardwareNameSnapShot = hardware.name != null ? hardware.name : hardware.id;
                     this.currentHardwareNameSubject.next(this.currentHardwareNameSnapShot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot['gsm'] !== params['gsm']) {
+
+            if (!params['gsm']) {
+                this.currentGSMNameSnapShot = null;
+                this.currentGSMNameSubject.next(this.currentGSMNameSnapShot);
+            } else {
+                this.backendService.simGet(params['gsm']).then((gsm) => {
+                    this.currentGSMNameSnapShot = gsm.name != null ? gsm.name : gsm.id;
+                    this.currentGSMNameSubject.next(this.currentGSMNameSnapShot);
                 });
             }
 

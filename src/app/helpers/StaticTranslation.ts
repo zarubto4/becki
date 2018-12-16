@@ -1128,6 +1128,8 @@ export class StaticTranslation {
                 'title': 'Firmware Release Settings',
                 'label_hw_group_title': '<strong class="font-color-hardware">HARDWARE</strong> Groups',
                 'label_select': 'Select',
+                'label_name': 'Name',
+                'label_description': 'Description',
                 'label_hardware_group': 'Hardware Group',
                 'label_firmware_title': 'FIRMWARE',
                 'label_bootloader_title': 'BOOTLOADER',

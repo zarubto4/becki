@@ -352,15 +352,15 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             .then((success) => {
                 this.blockUI();
                 this.tyrionBackendService.simUpdate(gsm.id, {
-                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold  * 1024 * 1024,
+                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold  * 1000 * 1000,
                     block_sim_daily: model.gsm.sim_tm_status.block_sim_daily,
                     daily_traffic_threshold_notify_type: model.gsm.daily_traffic_threshold_notify_type,
 
-                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold  * 1024 * 1024,
+                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold  * 1000 * 1000,
                     block_sim_monthly: model.gsm.sim_tm_status.block_sim_monthly,
                     monthly_traffic_threshold_notify_type: model.gsm.monthly_traffic_threshold_notify_type,
 
-                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold  * 1024 * 1024,
+                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold  * 1000 * 1000,
                     block_sim_total: model.gsm.sim_tm_status.block_sim_total,
                     total_traffic_threshold_notify_type: model.gsm.total_traffic_threshold_notify_type,
 
@@ -391,15 +391,15 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
 
         this.tyrionBackendService.simUpdate(this.gsm.id, {
 
-            daily_traffic_threshold:                this.form.controls['daily_traffic_threshold'].value * 1024 * 1024,
+            daily_traffic_threshold:                this.form.controls['daily_traffic_threshold'].value * 1000 * 1000,
             block_sim_daily:                        this.gsm.sim_tm_status.block_sim_daily,
             daily_traffic_threshold_notify_type:    this.gsm.daily_traffic_threshold_notify_type,
 
-            monthly_traffic_threshold:              this.form.controls['monthly_traffic_threshold'].value * 1024 * 1024,
+            monthly_traffic_threshold:              this.form.controls['monthly_traffic_threshold'].value * 1000 * 1000,
             block_sim_monthly:                      this.gsm.sim_tm_status.block_sim_monthly,
             monthly_traffic_threshold_notify_type:  this.gsm.monthly_traffic_threshold_notify_type,
 
-            total_traffic_threshold:                this.form.controls['total_traffic_threshold'].value * 1024 * 1024,
+            total_traffic_threshold:                this.form.controls['total_traffic_threshold'].value * 1000 * 1000,
             block_sim_total:                        this.gsm.sim_tm_status.block_sim_total,
             total_traffic_threshold_notify_type:    this.gsm.total_traffic_threshold_notify_type,
 
@@ -451,7 +451,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             return '0';
         }
 
-        return '' + Math.round((num / 1024 / 1024) * 100) / 100;
+        return '' + Math.round((num / 1000 / 1000) * 100) / 100;
     }
 
     onDrobDownEmiter(action: string, object: any): void {

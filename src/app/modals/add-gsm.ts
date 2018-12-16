@@ -120,7 +120,8 @@ export class ModalsAddGSMComponent  implements OnInit {
 
         let data: string = this.multiForm.controls['listOfIds'].value;
 
-        data = data.replace(',', ';');
+        data = data.replace(/,/g, ';');
+
         data = data.replace(/\s+/g, '');
         data = data.replace(/(\r?\n|\r)*(\s)*/g, '');
 
