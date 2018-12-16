@@ -242,12 +242,8 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     onDrobDownEmiter(action: string, project: IProject): void {
         if (action === 'add_hardware') {
-            this.onSvanHardwareClick(project.id);
+            this.onScanHardwareClick(project.id);
         }
-    }
-
-    onAddHardware(project: IProject): void {
-
     }
 }
 
