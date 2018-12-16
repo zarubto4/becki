@@ -2505,6 +2505,7 @@ export class StaticTranslation {
                 'label_different_password': 'Passwords do not match.',
                 'label_invalid_file_name': 'Invalid file/directory name.',
                 'label_field_only_number': 'This field only accepts numbers.',
+                'label_field_only_float_number': 'This field only accepts real numbers.',
                 'label_field_invalid_url': 'Invalid URL.',
                 'label_unknown_error': 'Unknown error.',
 

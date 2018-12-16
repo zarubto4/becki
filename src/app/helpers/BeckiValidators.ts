@@ -4,7 +4,8 @@
  */
 
 
-import { AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
+import { AbstractControl, ValidatorFn, FormGroup, AsyncValidatorFn, FormControl } from '@angular/forms';
+import { AsyncValidatorDebounce } from './BeckiAsyncValidators';
 
 export class BeckiValidators {
 
@@ -90,6 +91,32 @@ export class BeckiValidators {
         }
     }
 
+    public static roundNumber: ValidatorFn = (control: AbstractControl) => {
+        try {
+
+
+            console.log("Validation of number ", control.value);
+            console.log("ITs a number? Int? ", Number.isSafeInteger(control.value));
+            console.log("ITs a number? Number? ", control.value === 'number');
+            console.log("ITs a number? Regex? ", control.value.toString().match(/^[0-9]+(\.[0-9]{1,2})?$/));
+
+            if (typeof control.value === 'number') {
+                return null; // valid
+            }
+
+            if (control.value.toString().match(/^[0-9]+(\.[0-9]{1,2})?$/)) {
+                return null; // valid
+            }
+
+            return {'notRoundNumber': true}; // invalid
+
+
+        } catch (e) {
+            return {'number': true}; // invalid
+        }
+    }
+
+
     public static condition(conditionCallback: (value: string) => boolean, validator: ValidatorFn): ValidatorFn {
         return (a: AbstractControl) => {
             if (conditionCallback) {
@@ -101,6 +128,7 @@ export class BeckiValidators {
             return null; // valid
         };
     }
+
 
     public static passwordSame(form: () => FormGroup, fieldName: string): ValidatorFn {
         return (a: AbstractControl) => {

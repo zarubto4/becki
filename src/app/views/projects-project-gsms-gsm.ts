@@ -385,21 +385,26 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     onUpdateClick(): void {
         this.blockUI();
 
-        // console.log('vdaily_traffic_threshold' +  this.form.controls['daily_traffic_threshold'].value);
-        // console.log('monthly_traffic_threshold' +  this.form.controls['monthly_traffic_threshold'].value);
-        // console.log('total_traffic_threshold' +  this.form.controls['total_traffic_threshold'].value);
+        if (!this.form.valid) {
+            return;
+        }
+
+        console.log('daily_traffic_threshold' +  this.form.controls['daily_traffic_threshold'].value, ' in MB', this.form.controls['daily_traffic_threshold'].value  * 1024 * 1024 );
+        console.log('monthly_traffic_threshold' +  this.form.controls['monthly_traffic_threshold'].value, ' in MB', this.form.controls['monthly_traffic_threshold'].value  * 1024 * 1024 );
+        console.log('total_traffic_threshold' +  this.form.controls['total_traffic_threshold'].value, ' in MB', this.form.controls['total_traffic_threshold'].value  * 1024 * 1024 );
+
 
         this.tyrionBackendService.simUpdate(this.gsm.id, {
 
-            daily_traffic_threshold:                this.form.controls['daily_traffic_threshold'].value * 1000 * 1000,
+            daily_traffic_threshold:                this.onMathRoundToBites( this.form.controls['daily_traffic_threshold'].value),
             block_sim_daily:                        this.gsm.sim_tm_status.block_sim_daily,
             daily_traffic_threshold_notify_type:    this.gsm.daily_traffic_threshold_notify_type,
 
-            monthly_traffic_threshold:              this.form.controls['monthly_traffic_threshold'].value * 1000 * 1000,
+            monthly_traffic_threshold:             this.onMathRoundToBites(  this.form.controls['monthly_traffic_threshold'].value),
             block_sim_monthly:                      this.gsm.sim_tm_status.block_sim_monthly,
             monthly_traffic_threshold_notify_type:  this.gsm.monthly_traffic_threshold_notify_type,
 
-            total_traffic_threshold:                this.form.controls['total_traffic_threshold'].value * 1000 * 1000,
+            total_traffic_threshold:                this.onMathRoundToBites(  this.form.controls['total_traffic_threshold'].value ),
             block_sim_total:                        this.gsm.sim_tm_status.block_sim_total,
             total_traffic_threshold_notify_type:    this.gsm.total_traffic_threshold_notify_type,
 
@@ -430,9 +435,9 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
 
                 /* tslint:disable:max-line-length */
                 let input: { [key: string]: any } = {
-                    'total_traffic_threshold': [this.gsm.sim_tm_status.total_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.total_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-                    'monthly_traffic_threshold': [this.gsm.sim_tm_status.monthly_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.monthly_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-                    'daily_traffic_threshold': [this.gsm.sim_tm_status.daily_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.daily_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+                    'total_traffic_threshold': [this.gsm.sim_tm_status.total_traffic_threshold ?     this.onMathRoundToMB(this.gsm.sim_tm_status.total_traffic_threshold) : 0, [Validators.required, BeckiValidators.roundNumber, Validators.maxLength(12)]],
+                    'monthly_traffic_threshold': [this.gsm.sim_tm_status.monthly_traffic_threshold ? this.onMathRoundToMB(this.gsm.sim_tm_status.monthly_traffic_threshold) : 0, [Validators.required, BeckiValidators.roundNumber, Validators.maxLength(12)]],
+                    'daily_traffic_threshold': [this.gsm.sim_tm_status.daily_traffic_threshold ?     this.onMathRoundToMB(this.gsm.sim_tm_status.daily_traffic_threshold) : 0, [Validators.required, BeckiValidators.roundNumber, Validators.maxLength(12)]],
                 };
                 /* tslint:enable:max-line-length */
 
@@ -445,13 +450,34 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             });
     }
 
-    onMathRound(num: number): string {
+    onMathRoundToBites(num: number): number {
 
         if (num === 0) {
-            return '0';
+            return 0;
         }
 
-        return '' + Math.round((num / 1000 / 1000) * 100) / 100;
+        return num * 1024 * 1024;
+    }
+
+    onMathRoundToMB(num: number): number {
+
+        if (num === 0) {
+            return 0;
+        }
+
+
+        console.log('zaokrouhlování: ', num);
+        console.log('zaokrouhlování výsledek: 1', Math.round((num / 1024 / 1024)));
+        console.log('zaokrouhlování výsledek: 2', Math.round(num / 1024 ) / 100);
+        console.log('zaokrouhlování výsledek: 3', Math.round(( num / 1024 / 1024) * 100) / 100);
+        console.log('zaokrouhlování výsledek: 4', num / 1024 / 1024 / 100);
+        console.log('zaokrouhlování výsledek: 5', Math.round(num / 1024 / 1024) / 100);
+        console.log('zaokrouhlování výsledek: 6', (num / 1024 / 1024));
+
+
+
+        console.log('Vracím:: ', Math.round(( num / 1024 / 1024) * 100) / 100);
+        return  Math.round(( num / 1024 / 1024) * 100) / 100;
     }
 
     onDrobDownEmiter(action: string, object: any): void {

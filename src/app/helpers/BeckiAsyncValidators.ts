@@ -128,40 +128,6 @@ export class BeckiAsyncValidators {
         });
     }
 
-    public static itsNumber(): AsyncValidatorFn {
-        return AsyncValidatorDebounce.debounce((control: FormControl) => {
-            return new Promise<any>((resolve) => {
-
-                if (typeof control.value === 'number') {
-                    return resolve();
-                }
-
-                let error: {} = {};
-                error['notNumber'] = true;
-
-                resolve(error); // invalid
-
-            });
-        });
-    }
-
-    public static roundNumber(): AsyncValidatorFn {
-        return AsyncValidatorDebounce.debounce((control: FormControl) => {
-            return new Promise<any>((resolve) => {
-
-                if (Number.isSafeInteger(control.value)) {
-                    return resolve();
-                }
-
-                let error: {} = {};
-                error['notInteger'] = true;
-
-                resolve(error); // invalid
-
-            });
-        });
-    }
-
     public static nameTaken(
         backEnd: TyrionBackendService,
         type: ('Project'|'BProgram'|'BProgramVersion'|'CProgram'|'CProgramVersion'|

@@ -115,6 +115,9 @@ export class ValidatorErrorsService {
             if (errors['number']) {
                 return this.translate('label_field_only_number');
             }
+            if (errors['notRoundNumber']) {
+                return this.translate('label_field_only_float_number');
+            }
             if (errors['url']) {
                 return this.translate('label_field_invalid_url');
             }

@@ -53,9 +53,9 @@ export class ModalsGsmPropertiesComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.gsm != null ? this.modalModel.gsm.description : '', [Validators.maxLength(255)]],
-            'total_traffic_threshold': [this.modalModel.gsm.sim_tm_status.total_traffic_threshold ? this.onMathRound(this.modalModel.gsm.sim_tm_status.total_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-            'monthly_traffic_threshold': [this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold ? this.onMathRound( this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-            'daily_traffic_threshold': [this.modalModel.gsm.sim_tm_status.daily_traffic_threshold ? this.onMathRound(this.modalModel.gsm.sim_tm_status.daily_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+            'total_traffic_threshold': [this.modalModel.gsm.sim_tm_status.total_traffic_threshold ?     this.onMathRoundToMB(this.modalModel.gsm.sim_tm_status.total_traffic_threshold) : 0, [Validators.required, BeckiValidators.roundNumber, Validators.maxLength(12)]],
+            'monthly_traffic_threshold': [this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold ? this.onMathRoundToMB(this.modalModel.gsm.sim_tm_status.monthly_traffic_threshold) : 0, [Validators.required, BeckiValidators.roundNumber, Validators.maxLength(12)]],
+            'daily_traffic_threshold': [this.modalModel.gsm.sim_tm_status.daily_traffic_threshold ?     this.onMathRoundToMB(this.modalModel.gsm.sim_tm_status.daily_traffic_threshold) : 0, [Validators.required, BeckiValidators.roundNumber, Validators.maxLength(12)]],
             'tags': [this.modalModel.gsm != null ? this.modalModel.gsm.tags : ''],
         };
         /* tslint:enable:max-line-length */
@@ -63,13 +63,13 @@ export class ModalsGsmPropertiesComponent implements OnInit {
         this.form = this.formBuilder.group(input);
     }
 
-    onMathRound(num: number): string {
+    onMathRoundToMB(num: number): number {
 
         if (num === 0) {
-            return '0';
+            return 0;
         }
 
-        return '' + Math.round((num / 1024 / 1024) * 100) / 100;
+        return  Math.round(( num / 1024 / 1024) * 100) / 100;
     }
 
 
