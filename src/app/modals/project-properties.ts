@@ -11,6 +11,7 @@ import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { ModalsRemovalModel } from './removal';
 
 
 export class ModalsProjectPropertiesModel extends ModalModel {
@@ -39,11 +40,12 @@ export class ModalsProjectPropertiesComponent implements OnInit {
 
     form: FormGroup;
 
+    myTags: string[] = [];
+
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
     }
 
     ngOnInit() {
-
 
         if (this.modalModel.products) {
             this.options = this.modalModel.products.map((trf) => {
@@ -71,10 +73,15 @@ export class ModalsProjectPropertiesComponent implements OnInit {
             'product': [this.modalModel.project ? this.modalModel.project.product.id : '', [BeckiValidators.condition(() => this.modalModel.project == null, Validators.required)]],
             'tags': [this.modalModel.project != null ? this.modalModel.project.tags : []]
         });
+
+        if (this.modalModel.project) {
+            this.myTags = this.modalModel.project.tags;
+        }
+
+        console.info('My Tags on init function are     ' + this.myTags.toString() + '\n\n');
     }
 
     onSubmitClick(): void {
-
         if (this.modalModel.project == null) {
             // @ts-ignore
             this.modalModel.project = {};
