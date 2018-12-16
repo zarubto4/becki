@@ -66,6 +66,7 @@ export class WebSocketClientTyrion extends WebSocketClient {
         if (message.message_type === 'ping') {
             message.status = 'success';
             this.send(message);
+            return;
         }
 
         if (message.message_type === 'online_status_change') {
@@ -77,6 +78,7 @@ export class WebSocketClientTyrion extends WebSocketClient {
             };
 
             this.backend.onlineStatus.next(status);
+            return;
         }
 
         if (message.message_type === 'becki_object_update') {
@@ -87,6 +89,7 @@ export class WebSocketClientTyrion extends WebSocketClient {
             };
 
             this.backend.objectUpdateTyrionEcho.next(status);
+            return;
 
         }
 
@@ -94,6 +97,7 @@ export class WebSocketClientTyrion extends WebSocketClient {
 
             let notification: IWebSocketNotification = message.data as IWebSocketNotification;
             this.backend.notificationReceived.next(notification);
+            return;
         }
     }
 

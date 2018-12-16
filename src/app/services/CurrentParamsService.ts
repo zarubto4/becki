@@ -207,7 +207,7 @@ export class CurrentParamsService {
                 this.currentProductNameSubject.next(this.currentProductNameSnapshot);
             } else {
                 this.backendService.productsGetUserOwnList().then((products) => {
-                    let p = products.find(product => params['product'] === '' + product.id); // TODO: make product id string in Tyrion!!! [DH]
+                    let p = products.find(product => params['product'] === '' + product.id);
                     if (p) {
                         this.currentProductNameSnapshot = p.name
                         ;
@@ -224,7 +224,7 @@ export class CurrentParamsService {
                 this.currentProductExtensionNameSnapshot = null;
                 this.currentProductExtensionNameSubject.next(this.currentProductExtensionNameSnapshot);
             } else {
-                this.backendService.productExtensionGet(params['productExtension']).then((extension) => { // TODO [permission]: ProductExtension.read_permission
+                this.backendService.productExtensionGet(params['productExtension']).then((extension) => {
                     this.currentProductExtensionNameSnapshot = extension.name;
                     this.currentProductExtensionNameSubject.next(this.currentProductExtensionNameSnapshot);
                 });
@@ -253,7 +253,7 @@ export class CurrentParamsService {
                 this.currentBlockoNameSnapshot = null;
                 this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
             } else {
-                this.backendService.bProgramGet(params['blocko']).then((blocko) => { // TODO [permission]: Project.read_permission
+                this.backendService.bProgramGet(params['blocko']).then((blocko) => {
                     this.currentBlockoNameSnapshot = blocko.name;
                     this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
                 });
@@ -261,13 +261,13 @@ export class CurrentParamsService {
 
         }
 
-        if (this.currentParamsSnapshot['actualization-procedures'] !== params['actualization-procedures']) {
+        if (this.currentParamsSnapshot['release-update'] !== params['release-update']) {
 
-            if (!params['actualization-procedures']) {
+            if (!params['release-update']) {
                 this.currentActualizationProcedureSnapShot = null;
                 this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
             } else {
-                this.backendService.actualizationProcedureGet(params['actualization-procedures']).then((procedure) => { // TODO [permission]: Project.read_permission
+                this.backendService.hardwareReleseGet(params['release-update']).then((procedure) => {
                     this.currentActualizationProcedureSnapShot = procedure.id;
                     this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
                 });
@@ -281,7 +281,7 @@ export class CurrentParamsService {
                 this.currentCodeNameSnapshot = null;
                 this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
             } else {
-                this.backendService.cProgramGet(params['code']).then((code) => { // TODO [permission]: C_program.read_permission(Project.read_permission)
+                this.backendService.cProgramGet(params['code']).then((code) => {
                     this.currentCodeNameSnapshot = code.name;
                     this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
                 });
@@ -295,7 +295,7 @@ export class CurrentParamsService {
                 this.currentBlockNameSnapshot = null;
                 this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
             } else {
-                this.backendService.blockGet(params['block']).then((block) => {// TODO [permission]: BlockoBlock_read_permission
+                this.backendService.blockGet(params['block']).then((block) => {
                     this.currentBlockNameSnapshot = block.name;
                     this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
                 });

@@ -416,9 +416,10 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
         let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, this.deviceGroup);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.tyrionBackendService.actualizationProcedureMake({
+                this.tyrionBackendService.hardwareReleaseUpdateMake({
+                    name: 'TODO NAME',
                     firmware_type: model.firmwareType,
-                    hardware_group_id: model.deviceGroupStringIdSelected,
+                    hardware_group_ids: [model.deviceGroupStringIdSelected],
                     project_id: this.projectId,
                     time: model.time,
                     hardware_type_settings: model.groups,

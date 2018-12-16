@@ -11,8 +11,8 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel, ModalService } from '../services/ModalService';
 import {
-    IHardwareGroup, IActualizationProcedureMakeHardwareType, IHardwareType,
-    IHardwareGroupList, IShortReference, ICProgramVersion, ICProgram
+    IHardwareGroup, IHardwareType,
+    IHardwareGroupList, IShortReference, ICProgramVersion, ICProgram, IHardwareUpdateMakeHardwareType
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
@@ -27,8 +27,8 @@ export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
         public project_id: string = null,
         public deviceGroup: IHardwareGroupList = null,         // All possible Hardware groups for settings
         public deviceGroupStringIdSelected: string = '',   // List with group ids for hardware update,
-        public firmwareType: string = 'firmware',
-        public groups: IActualizationProcedureMakeHardwareType[] = [],
+        public firmwareType: ('FIRMWARE' | 'BACKUP' | 'BOOTLOADER') = 'FIRMWARE',
+        public groups: IHardwareUpdateMakeHardwareType[] = [],
         public time: number = 0,
         public timeZoneOffset: number = 0,
     ) {
@@ -192,13 +192,13 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
 
         // Set Manual Selector
         this.firmwareTypeSelect.push({
-            value: 'firmware',
+            value: 'FIRMWARE',
             label: 'Firmware - Main'
         });
 
         // Set Manual Selector
         this.firmwareTypeSelect.push({
-            value: 'backup',
+            value: 'BACKUP',
             label: 'Firmware - Backup'
         });
 
@@ -218,8 +218,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
 
         this.modalModel.deviceGroupStringIdSelected = this.formGroupList.selectedValue;
 
-        if (this.type === 'bootloader') {
-            this.modalModel.firmwareType = 'bootloader';
+        if (this.type === 'BOOTLOADER') {
+            this.modalModel.firmwareType = 'BOOTLOADER';
         } else {
             this.modalModel.firmwareType = this.form.controls['firmwareType'].value;
         }
@@ -229,7 +229,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
             let bootloader_id: string = this.form.controls[hardwareType.id + '_selectedBootloaderId'].value;
             let c_program_version_id: string = this.form.controls[hardwareType.id + '_selectedCProgramVersionId'].value;
 
-            let gr: IActualizationProcedureMakeHardwareType = {
+            let gr: IHardwareUpdateMakeHardwareType = {
                 hardware_type_id: hardwareType.id,
                 bootloader_id: bootloader_id,               // TODO check if this contain id too
                 c_program_version_id: c_program_version_id

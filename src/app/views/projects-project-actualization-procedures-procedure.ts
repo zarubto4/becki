@@ -3,7 +3,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
-import { IActualizationProcedureTaskList, IProject, IUpdateProcedure } from '../backend/TyrionAPI';
+import { IHardwareReleaseUpdate, IHardwareReleaseUpdateFilter, IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
 import { FormGroup } from '@angular/forms';
@@ -17,8 +17,8 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
     project: IProject = null;
     actualization_procedure_id: string;
 
-    procedure: IUpdateProcedure = null;
-    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    procedure: IHardwareReleaseUpdate = null;
+    actualizationTaskFilter: IHardwareReleaseUpdateFilter = null;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
@@ -112,7 +112,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
         });
 
 
-        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
+        this.tyrionBackendService.hardwareUpdateTaskGetByFilter(pageNumber, {
             actualization_procedure_ids: [this.actualization_procedure_id],
             hardware_ids: null,
             instance_ids: null,
@@ -130,7 +130,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
                             this.tyrionBackendService.actualizationTaskGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
-                                    task.date_of_finish = value.date_of_finish;
+                                    task.finished = value.finished;
                                 })
                                 .catch(reason => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));

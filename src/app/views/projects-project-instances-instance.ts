@@ -4,11 +4,11 @@
  */
 import {
     IInstanceSnapshot, IInstance, IBProgram,
-    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, IBProgramVersion,
+    IHardwareUpdateList, IHardwareGroupList, IHardwareList, IBProgramVersion,
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
     ISwaggerInstanceSnapShotConfigurationProgram,
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
-    IUpdateProcedure, ISwaggerInstanceSnapShotConfigurationApiKeys, IShortReference
+    ISwaggerInstanceSnapShotConfigurationApiKeys, IShortReference, IHardwareReleaseUpdate
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -52,7 +52,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     instance: IInstance = null;
     bProgram: IBProgram = null;
     bProgramVersion: IBProgramVersion = null;
-    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    actualizationTaskFilter: IHardwareUpdateList = null;
     devicesFilter: IHardwareList = null;
     deviceGroupFilter: IHardwareGroupList = null;
 
@@ -789,11 +789,14 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     // tslint:disable:max-line-length
-    onFilterActualizationProcedureTask(pageNumber: number = 0, status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET']): void {
+    onFilterActualizationProcedureTask(
+        pageNumber: number = 0,
+        status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[]
+            = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET']): void {
+
         this.blockUI();
 
-        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
-            actualization_procedure_ids: null,
+        this.tyrionBackendService.hardwareUpdateGetByFilter(pageNumber, {
             instance_snapshot_ids: [this.instance.current_snapshot.id],
             hardware_ids: null,
             instance_ids: null,
@@ -809,10 +812,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((online_status) => {
                         if (online_status.model === 'CProgramUpdatePlan' && task.id === online_status.model_id) {
 
-                            this.tyrionBackendService.actualizationTaskGet(task.id)
+                            this.tyrionBackendService.hardwareUpdateGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
-                                    task.date_of_finish = value.date_of_finish;
+                                    task.finished = value.finished;
                                 })
                                 .catch((reason) => {
                                     this.fmError('Cannot be loaded.', reason);
@@ -1016,7 +1019,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }
     }
 
-    onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
+    onUpdateProcedureCancelClick(procedure: IHardwareReleaseUpdate): void {
         this.blockUI();
         this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
             .then(() => {

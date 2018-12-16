@@ -130,7 +130,7 @@ let tabMenus = {
         new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', null, null, {
             styleClass: 'color-hardware', items: [
                 new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong> list',    ['/', 'projects', ':project', 'hardware'], null),
-                new LabeledLink('<strong class="font-color-hardware">RELEASES</strong> updates', ['/', 'projects', ':project', 'actualization-procedures'], null),
+                new LabeledLink('<strong class="font-color-hardware">RELEASES</strong> updates', ['/', 'projects', ':project', 'release-update'], null),
                 new LabeledLink('<strong class="font-color-hardware">CELLULAR</strong> modules', ['/', 'projects', ':project', 'gsm'], null),
             ]
         }),

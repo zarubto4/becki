@@ -1,13 +1,12 @@
 
 import { Component, Injector, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import {
-    IActualizationProcedureTaskList, ICProgramList, IHardware,
-    IHardwareType
+    IHardware,
+    IHardwareType, IHardwareUpdateList
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
-import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-code-program-version-select';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -65,7 +64,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     projectId: string;
     hardwareId: string;
     routeParamsSubscription: Subscription;
-    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    actualizationTaskFilter: IHardwareUpdateList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
     tab: string = 'overview';
@@ -515,7 +514,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 if (success) {
 
                     this.tyrionBackendService.cProgramUploadIntoHardware({
-                        hardware_ids: [this.hardware.id],
+                        hardware_id: this.hardware.id,
                         c_program_version_id: model.selected_c_program_version.id
                     })
                         .then(() => {
@@ -569,7 +568,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
 
 
 
-        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
+        this.tyrionBackendService.hardwareUpdateGetByFilter(pageNumber, {
             hardware_ids: [this.hardwareId],
             update_states:  <any>state_list,
             type_of_updates: <any>type_list,
@@ -580,10 +579,10 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.actualizationTaskFilter.content.forEach((task, index, obj) => {
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
-                            this.tyrionBackendService.actualizationTaskGet(task.id)
+                            this.tyrionBackendService.hardwareUpdateGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
-                                    task.date_of_finish = value.date_of_finish;
+                                    task.finished = value.finished;
                                 })
                                 .catch((reason) => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
