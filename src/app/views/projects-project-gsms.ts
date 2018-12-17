@@ -154,18 +154,17 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
             .then((success) => {
                 this.tyrionBackendService.simUpdate(gsm.id, {
 
-                    daily_traffic_threshold:                this.onMathRoundToBites(model.gsm.sim_tm_status.daily_traffic_threshold),
+                    daily_traffic_threshold:                model.gsm.sim_tm_status.daily_traffic_threshold,
                     block_sim_daily:                        model.gsm.sim_tm_status.block_sim_daily,
                     daily_traffic_threshold_notify_type:    model.gsm.daily_traffic_threshold_notify_type,
 
-                    monthly_traffic_threshold:             this.onMathRoundToBites( model.gsm.sim_tm_status.monthly_traffic_threshold),
+                    monthly_traffic_threshold:              model.gsm.sim_tm_status.monthly_traffic_threshold,
                     block_sim_monthly:                      model.gsm.sim_tm_status.block_sim_monthly,
                     monthly_traffic_threshold_notify_type:  model.gsm.monthly_traffic_threshold_notify_type,
 
-                    total_traffic_threshold:                this.onMathRoundToBites(  model.gsm.sim_tm_status.total_traffic_threshold),
+                    total_traffic_threshold:                model.gsm.sim_tm_status.total_traffic_threshold,
                     block_sim_total:                        model.gsm.sim_tm_status.block_sim_total,
                     total_traffic_threshold_notify_type:    model.gsm.total_traffic_threshold_notify_type,
-
 
                     daily_statistic: model.gsm.daily_statistic,
                     weekly_statistic: model.gsm.weekly_statistic,
@@ -307,23 +306,6 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
                 return null;
             });
-    }
-
-    onMathRoundToBites(num: number): number {
-
-        if (num === 0) {
-            return 0;
-        }
-
-        return num * 1024 * 1024;
-    }
-
-    onMathRoundToMB(num: number): number {
-
-        if (num === 0) {
-            return 0;
-        }
-        return  Math.round(( num / 1024 / 1024) * 100) / 100;
     }
 
     onFilter(page: number = 0): void {

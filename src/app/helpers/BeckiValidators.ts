@@ -94,16 +94,11 @@ export class BeckiValidators {
     public static roundNumber: ValidatorFn = (control: AbstractControl) => {
         try {
 
-
-            console.log("Validation of number ", control.value);
-            console.log("ITs a number? Int? ", Number.isSafeInteger(control.value));
-            console.log("ITs a number? Number? ", control.value === 'number');
-            console.log("ITs a number? Regex? ", control.value.toString().match(/^[0-9]+(\.[0-9]{1,2})?$/));
-
             if (typeof control.value === 'number') {
                 return null; // valid
             }
 
+            // Two numbes atew dosts 1231.33 ok, 12312.123 not ok.
             if (control.value.toString().match(/^[0-9]+(\.[0-9]{1,2})?$/)) {
                 return null; // valid
             }
