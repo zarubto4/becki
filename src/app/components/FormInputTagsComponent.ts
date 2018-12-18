@@ -121,7 +121,7 @@ export class FormInputTagsComponent implements OnInit {
         });
 
         if (this.control != null) {
-            this.control.setValue([]);
+            this.tags = this.control.value;
 
         } else if (this.tags != null) {
 
@@ -208,28 +208,10 @@ export class FormInputTagsComponent implements OnInit {
                 break;
             }
         }
-        // // TODO: find more pretty way to implement this.
-        console.info();
-        console.info('onRemoveClick function check my babe girl removing from existingTags ' + '\n\n');
-        console.info('Exsting tags array before removing ' + this.existingTags.toString() + '\n\n');
-        console.info('Tag to delete    ' + tag.toString());
-        for (let j = this.existingTags.length - 1; j >= 0; j--) {
-            if (this.existingTags[j] === tag) {
-                this.existingTags.splice(j, 1);
-                console.info('Existing Tags after removing   ' + this.existingTags.toString() + '\n\n');
-                this.onChangeEx();
-                break;
-            }
-        }
     }
 
     onChange() {
         this.control.setValue(this.tags);
         this.valueChange.emit(this.tags);
-    }
-
-    onChangeEx() {
-        this.valueChange.emit(this.existingTags);
-        console.info('Existing tags in Change function after emitting   ' + this.existingTags.toString() + '\n\n' );
     }
 }
