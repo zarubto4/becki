@@ -112,6 +112,9 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
         let model = new ModalsProjectPropertiesModel(this.products, project);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                console.log('GOT TAGS:');
+                console.log(model.project.tags);
+
                 this.blockUI();
                 this.tyrionBackendService.projectEdit(project.id, {
                     name: model.project.name,
