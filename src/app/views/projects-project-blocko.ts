@@ -109,7 +109,8 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                 this.blockUI();
                 this.tyrionBackendService.bProgramEdit(blocko.id, {
                     name: model.blocko.name,
-                    description: model.blocko.description
+                    description: model.blocko.description,
+                    tags: model.blocko.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_update')));

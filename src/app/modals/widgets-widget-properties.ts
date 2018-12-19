@@ -51,7 +51,7 @@ export class ModalsWidgetsWidgetPropertiesComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.widget != null ? this.modalModel.widget.description : '', [Validators.maxLength(255)]],
-            'tags': [this.modalModel.widget != null ? this.modalModel.widget.tags : []],
+            'tags': [this.modalModel.widget != null ? this.modalModel.widget.tags.slice() : []],
         });
     }
 

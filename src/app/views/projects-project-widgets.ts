@@ -115,7 +115,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 this.tyrionBackendService.widgetCreate({
                     project_id: this.projectId,
                     name: model.widget.name,
-                    description: model.widget.description
+                    description: model.widget.description,
+                    tags: model.widget.tags
                 })
                     .then(widget => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_add_success')));
@@ -139,6 +140,7 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 this.tyrionBackendService.widgetEdit(widget.id, {
                     name: model.widget.name,
                     description: model.widget.description,
+                    tags: model.widget.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));

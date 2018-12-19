@@ -51,7 +51,7 @@ export class ModalsVersionDialogComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.object != null ? this.modalModel.object.description : '', [Validators.maxLength(255)]],
-            'tags': [this.modalModel.object != null ? this.modalModel.object.tags : []],
+            'tags': [this.modalModel.object != null ? this.modalModel.object.tags.slice() : []],
         });
     }
 

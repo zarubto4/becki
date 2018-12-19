@@ -65,7 +65,7 @@ export class ModalsCodePropertiesComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.program != null ? this.modalModel.program.description : '', [Validators.maxLength(255)]],
-            'tags': [this.modalModel.program != null ? this.modalModel.program.tags : []],
+            'tags': [this.modalModel.program != null ? this.modalModel.program.tags.slice() : []],
             'hardware_type_id' : ['',  [BeckiValidators.condition(() => ( !this.modalModel.program), Validators.required)]]
         };
 
@@ -75,13 +75,10 @@ export class ModalsCodePropertiesComponent implements OnInit {
 
 
     onSubmitClick(): void {
-
-
         if (this.modalModel.program == null) {
             // @ts-ignore
             this.modalModel.block = {};
         }
-
         this.modalModel.program.name = this.form.controls['name'].value;
         this.modalModel.program.description = this.form.controls['description'].value;
         this.modalModel.hardware_type_id = this.form.controls['hardware_type_id'].value;

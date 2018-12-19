@@ -50,7 +50,7 @@ export class ModalsGridProjectPropertiesComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.project != null ? this.modalModel.project.description : '', [Validators.maxLength(255)]],
-            'tags': [this.modalModel.project != null ? this.modalModel.project.tags : []]
+            'tags': [this.modalModel.project != null ? this.modalModel.project.tags.slice() : []]
         });
     }
 

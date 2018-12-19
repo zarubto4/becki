@@ -115,7 +115,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.tyrionBackendService.blockCreate({
                     name: model.block.name,
                     description: model.block.description,
-                    project_id: this.projectId
+                    project_id: this.projectId,
+                    tags: model.block.tags
                 })
                     .then(block => {
                         this.unblockUI();
@@ -138,6 +139,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.tyrionBackendService.blockEdit(block.id, {
                     name: model.block.name,
                     description: model.block.description,
+                    tags: model.block.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_edit')));
