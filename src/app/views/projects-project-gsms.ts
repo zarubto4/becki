@@ -38,6 +38,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     gsmList: IGSMList = null;
+    cdrList: IGSMList = null;
 
     @ViewChild(ChartBarComponent)
     graphView: ChartBarComponent;
@@ -280,8 +281,8 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                     }
                     numberData.push(overview.datagram[k].data_consumption);
 
-                    let from = moment.unix(overview.datagram[k].long_from / 1000);
-                    let to = moment.unix(overview.datagram[k].long_to / 1000);
+                    let from = moment.unix(overview.datagram[k].date_from / 1000);
+                    let to = moment.unix(overview.datagram[k].date_to / 1000);
 
                     if (this.DIVIDE_OPTION !== 'HOUR') {
                         chartLabels.push(from.format('DD.MM') + '-' + to.format('DD.MM') );
@@ -307,6 +308,15 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                 return null;
             });
     }
+
+    onMathRoundToMB(num: number): number {
+
+        if (num === 0) {
+            return 0;
+        }
+        return  Math.round(( num / 1024 / 1024) * 100) / 100;
+    }
+
 
     onFilter(page: number = 0): void {
 

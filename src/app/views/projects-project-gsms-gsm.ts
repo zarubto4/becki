@@ -8,7 +8,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IProject, IGSM, IDataSimOverview } from '../backend/TyrionAPI';
+import { IProject, IGSM, IDataSimOverview, IModelMongoThingsMobileCRD, IGSMList, IGSMCDRList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 import { ChartBarComponent, DataCharInterface } from '../components/ChartBarComponent';
@@ -107,6 +107,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     graphView: ChartBarComponent;
 
     gsm: IGSM = null;
+    cdrs: IGSMCDRList = null;
     form: FormGroup;
 
 
@@ -160,6 +161,10 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
 
         if (tab === 'traffic_details') {
             this.onFilterData();
+        }
+
+        if (tab === 'cdr_details') {
+            this.onFilterCDR();
         }
     }
 
@@ -286,7 +291,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             }
             case 'FROM_BEGINNING': {
 
-                this.from = this.gsm.sim_tm_status.activation_date_in_millis;
+                this.from = this.gsm.sim_tm_status.activation_date;
                 this.to = moment().endOf('day').valueOf();
                 break;
             }
@@ -317,8 +322,8 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                     }
                     numberData.push(overview.datagram[k].data_consumption);
 
-                    let from = moment.unix(overview.datagram[k].long_from / 1000);
-                    let to = moment.unix(overview.datagram[k].long_to / 1000);
+                    let from = moment.unix(overview.datagram[k].date_from / 1000);
+                    let to = moment.unix(overview.datagram[k].date_to / 1000);
 
                     if (this.DIVIDE_OPTION !== 'HOUR') {
                         chartLabels.push(from.format('DD.MM') + '-' + to.format('DD.MM') );
@@ -418,6 +423,23 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
             this.refresh();
         });
+    }
+
+
+    onFilterCDR(page: number = 0): void {
+        this.tyrionBackendService.simGetCrdRecords(page, {
+            gsm_ids: [this.gsm.id],
+            project_id: this.project_id,
+            count_on_page: 50
+        })
+            .then((cdrs: IGSMCDRList) => {
+                this.cdrs = cdrs;
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_get_gsm'), reason));
+                this.unblockUI();
+            });
     }
 
 

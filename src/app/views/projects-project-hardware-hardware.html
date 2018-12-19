@@ -28,7 +28,14 @@
                           permission: hardware.update_permission,
                           btn_tag: 'update_hardware'
                       },
-
+                      {
+                         condition: (hardware.project != null),
+                         btn_label_for_person: ('label_manual_individual_update'|bkTranslate:this),
+                         icon: 'fa-code',
+                         colorType: 'UPDATE',
+                         btn_tag: 'hardware_manual_update',
+                         permission: (hardware.update_permission)
+                      },
                       {
                           condition: (hardware.online_state === 'ONLINE'),
                           btn_label_for_person: ('label_blink_hardware'|bkTranslate:this),
@@ -37,7 +44,15 @@
                           colorType: 'ADD',
                           permission: (hardware.update_permission)
                       },
-                        {
+                       {
+                          condition: (hardware.online_state === 'ONLINE'),
+                          btn_label_for_person: ('label_restart_hardware'|bkTranslate:this),
+                          icon: 'fa-heartbeat',
+                          colorType: 'REMOVE',
+                          btn_tag: 'hardware_restart',
+                          permission: (hardware.update_permission)
+                      },
+                      {
                           condition: (tab == 'overview'),
                           btn_label_for_person: ('label_remove_device'|bkTranslate:this),
                           icon: 'fa-trash',
@@ -352,7 +367,7 @@
                                               icon: 'fa-code',
                                               colorType: 'UPDATE',
                                               btn_tag: 'hardware_manual_update',
-                                              permission: (hardware.update_permission && hardware.online_state == 'ONLINE' && hardware.database_synchronize)
+                                              permission: (hardware.update_permission)
                                           }
                                     ]">
                             </bk-portlet-title>

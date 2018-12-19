@@ -1689,6 +1689,12 @@ export class StaticTranslation {
                 'label_weekly_report': 'Weekly Report',
                 'table_report_type': 'Report Period',
                 'table_report_sate': 'State',
+                'table_start_date': 'Start Date',
+                'table_end_date': 'End Date',
+                'table_msi_country': 'Country',
+                'table_operator': 'Operator',
+                'table_data_traffic': 'Traffic',
+                'table_cost': 'Cost',
 
             }, 'ProjectsProjectInstancesComponent': {
 
