@@ -11,8 +11,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN git init
-ARG ssh_prv_key
-ARG ssh_pub_key
+
 
 RUN mkdir -p /root/.ssh && \
     chmod 0700 /root/.ssh && \
