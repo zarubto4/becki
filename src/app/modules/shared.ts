@@ -149,7 +149,6 @@ import { CreateUserComponent } from '../views/create-user';
 import { RedirectOkComponent } from '../components/redirect-ok';
 import { ArticleComponent } from '../components/ArticleComponent';
 import { ReaderQrComponent } from '../views/qr-reader';
-import { MobileAddHardwareComponent } from '../views/mobile-add-hardware';
 import { GSMStatusComponent } from '../components/GSMStatusComponent';
 import { LayoutNotLoggedComponent } from '../layouts/not-logged';
 import { Md2HtmlPipe } from '../pipes/Md2HtmlPipe';
@@ -165,7 +164,11 @@ import { ProjectsProjectBlocksBlockComponent } from '../views/projects-project-b
 import { ModalsDatabaseEditComponent } from '../modals/database-edit';
 import { ModalsDatabaseCollectionNewComponent } from '../modals/database-collection-new';
 import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-project-hardware-hardware';
-
+import { ProjectsProjectHardwareAddWithQrComponent } from '../views/projects-project-hardware-scan';
+import { ProgramVersionDiffComponent } from '../components/VersionDiffComponent';
+import { FileTreeRootComponent } from '../components/FileTreeRootComponent';
+import { FileTreeNodeComponent } from '../components/FileTreeNodeComponent';
+import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
 @NgModule({
     imports: [
         CommonModule,
@@ -229,7 +232,6 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         RedirectOkComponent,
         ArticleComponent,
         ReaderQrComponent,
-        MobileAddHardwareComponent,
         GSMStatusComponent,
         LayoutNotLoggedComponent,
         LayoutMainComponent,
@@ -248,6 +250,10 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         UpdateStateComponent,
         TerminalLogSubscriberComponent,
         CodeIDEComponent,
+        ProgramVersionDiffComponent,
+        FileTreeRootComponent,
+        FileTreeFileComponent,
+        FileTreeNodeComponent,
         CompilationStatusComponent,
         ConsoleLogComponent,
         MonacoEditorComponent,
@@ -270,6 +276,7 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
         ProjectsProjectHardwareHardwareComponent,
+        ProjectsProjectHardwareAddWithQrComponent,
         // Modals
         ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
@@ -364,6 +371,9 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         TagComponent,
         LogLevelComponent,
         FileTreeComponent,
+        FileTreeRootComponent,
+        FileTreeFileComponent,
+        FileTreeNodeComponent,
         IconComponent,
         IconFileComponent,
         MonacoDiffComponent,
@@ -396,7 +406,6 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         RedirectOkComponent,
         ArticleComponent,
         ReaderQrComponent,
-        MobileAddHardwareComponent,
         GSMStatusComponent,
         LayoutNotLoggedComponent,
         ReactiveFormsModule,
@@ -421,6 +430,7 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         UpdateStateComponent,
         TerminalLogSubscriberComponent,
         CodeIDEComponent,
+        ProgramVersionDiffComponent,
         CompilationStatusComponent,
         ConsoleLogComponent,
         MonacoEditorComponent,
@@ -443,7 +453,8 @@ import { ProjectsProjectHardwareHardwareComponent } from '../views/projects-proj
         ProjectsProjectWidgetsWidgetComponent,
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
-        ProjectsProjectHardwareHardwareComponent
+        ProjectsProjectHardwareHardwareComponent,
+        ProjectsProjectHardwareAddWithQrComponent,
     ]
 })
 export class SharedModule {}

@@ -11,6 +11,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { IBProgramFilter, IBProgramList, ICProgramList, IGridProjectList, IHardwareList, IProject } from '../backend/TyrionAPI';
 import { t } from '@angular/core/src/render3';
 import { IResultOK } from '../backend/HomerAPI';
+const uuidValidate = require('uuid-validate');
 
 export class AsyncValidatorDebounce {
     _validate: (x: any) => any;
@@ -108,6 +109,57 @@ export class BeckiAsyncValidators {
             });
         });
 
+    }
+
+    public static validUUID(): AsyncValidatorFn {
+        return AsyncValidatorDebounce.debounce((control: FormControl) => {
+            return new Promise<any>((resolve) => {
+
+                if (uuidValidate(control.value) || control.value === null || control.value === '') {
+                    return resolve();
+                }
+
+                let error: {} = {};
+                error['uuidNotValid'] = true;
+
+                resolve(error); // invalid
+
+            });
+        });
+    }
+
+    public static itsNumber(): AsyncValidatorFn {
+        return AsyncValidatorDebounce.debounce((control: FormControl) => {
+            return new Promise<any>((resolve) => {
+
+                if (typeof control.value === 'number') {
+                    return resolve();
+                }
+
+                let error: {} = {};
+                error['notNumber'] = true;
+
+                resolve(error); // invalid
+
+            });
+        });
+    }
+
+    public static roundNumber(): AsyncValidatorFn {
+        return AsyncValidatorDebounce.debounce((control: FormControl) => {
+            return new Promise<any>((resolve) => {
+
+                if (Number.isSafeInteger(control.value)) {
+                    return resolve();
+                }
+
+                let error: {} = {};
+                error['notInteger'] = true;
+
+                resolve(error); // invalid
+
+            });
+        });
     }
 
     public static nameTaken(

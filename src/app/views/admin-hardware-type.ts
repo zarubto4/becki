@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IHardwareList, IProcessor, IProducer, IHardwareType, IHardware } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -15,6 +15,7 @@ import { ModalsAdminCreateHardwareModel } from '../modals/admin-create-hardware'
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsHardwareFindHash } from '../modals/hardware-find-hash';
 import { FormGroup, Validators } from '@angular/forms';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 @Component({
     selector: 'bk-view-admin-hardware-type',
@@ -33,20 +34,22 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
 
     constructor(injector: Injector) {
         super(injector);
+    };
+
+    ngOnInit(): void {
+        this.refresh();
 
         this.formFilterGroup = this.formBuilder.group({
             'alias': ['', [Validators.maxLength(60)]],
-            'id': ['', [Validators.maxLength(60)]],
+            'id': ['', [Validators.maxLength(60)], [BeckiAsyncValidators.validUUID()]],
             'full_id': ['', [Validators.maxLength(60)]],
             'description': ['', [Validators.maxLength(60)]],
             'orderBy': ['NAME', []],
             'order_schema': ['ASC', []],
         });
-    };
 
-    ngOnInit(): void {
-        this.refresh();
         this.onFilterHardware();
+
     }
 
     refresh(): void {
@@ -373,6 +376,11 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
     // Hardware Filter --------------------------------------------------------------------------------------------------
 
     onFilterHardware(pageNumber: number = 0): void {
+
+        if (!this.formFilterGroup.valid && this.formFilterGroup.dirty) {
+            return;
+        }
+
         this.blockUI();
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             hardware_type_ids: [],

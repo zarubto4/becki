@@ -537,6 +537,7 @@ export class StaticTranslation {
                 'btn_create_project' : 'Create First Project',
                 'flash_project_create' : 'Project created successfully',
                 'flash_cant_create_project' : 'Can\'t create project. Something is wrong',
+                'table_actions': 'Actions',
 
             }, 'ProjectsComponent': {
                 'main_title': 'Projects',
@@ -2257,7 +2258,6 @@ export class StaticTranslation {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Code Editor',
                 'btn_label_option': 'Option',
-
                 'label_library_version': 'Library Version',
                 'label_program_properties': 'Settings',
                 'label_remove_program': 'Remove',
@@ -2458,6 +2458,15 @@ export class StaticTranslation {
                 'flash_grid_project_remove': 'Project has been removed.',
                 'flash_cant_remove_grid_project': 'Unable to remove project.',
 
+            }, 'ProjectsProjectHardwareAddWithQrComponent': {
+                'label_hw_scaned' : 'Loading',
+                'label_hw_added' : 'Added',
+                'label_info' : 'Status',
+                'label_hw_id': 'Code',
+                'label_hardware_groups': 'Hardware group',
+                'main_title': 'Add Hardware',
+                'title': 'Scan QR',
+
             }, 'SupportComponent': {
 
                 'main_title': 'Support',
@@ -2473,6 +2482,7 @@ export class StaticTranslation {
                 'label_maximal_length': 'Maximal length of this field is {0} characters.',
                 'label_name_taken': 'This name is already in use.',
                 'label_required_pattern': ' Invalid Patter - Required only Small letters (a-z), number (0-9) or symbols (-_)  (NO SPACE!)',
+                'label_invalid_uuid': 'Invalid UUID format. Substring not supported.',
 
                 'label_project_name_taken': 'This project name is already in use.',
                 'label_hardware_name_taken': 'This Hardware name is already in use.',
@@ -2669,7 +2679,7 @@ export class StaticTranslation {
                 'btn_add_library': 'New Library',
                 'btn_change_library_version': 'Change Library Version',
                 'btn_move': 'Move',
-
+                'btn_diff': 'Diff',
                 'label_open_file_browser': 'Open file in file browser',
                 'btn_build': 'Build',
 
@@ -2970,6 +2980,9 @@ export class StaticTranslation {
                 'label_no_databases': 'You have no any Database',
                 'label_no_databases_comment': 'Create your first <strong class="font-color-cloud">DATABASE</strong> and save data from your <strong class="font-color-hardware">HARDWARE</strong>. Database in Cluster with worldwide distribution and double backup.',
                 'label_create_collection_database': 'Create collection',
+            }, 'ProgramVersionDiffComponent': {
+                'label_source_version': 'Original Library',
+                'label_target_version': 'Modified Library'
             },
 
 

@@ -57,7 +57,15 @@ export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestro
     @Output()
     codeChange = new EventEmitter<string>();
 
+    @Output()
+    saveRequest = new EventEmitter<boolean>();
+
+    @Output()
+    buildRequest = new EventEmitter<boolean>();
+
     monacoSubscription: Subscription = null;
+
+    monacoTrueCondition: monaco.editor.IContextKey<boolean>;
 
     constructor(protected monacoEditorLoaderService: MonacoEditorLoaderService, protected zone: NgZone, private translationService: TranslationService) {
     }
@@ -111,7 +119,17 @@ export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestro
                         this.codeChange.emit(this.code);
                     });
                 });
+                this.monacoTrueCondition = this.editor.createContextKey('alwaysTrueKey', true);
+                // tslint:disable-next-line
+                this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
+                    this.saveRequest.emit(true);
+                }, 'alwaysTrueKey');
 
+
+                // tslint:disable-next-line
+                this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_B, () => {
+                    this.buildRequest.emit(true);
+                }, 'alwaysTrueKey');
             });
         });
     }

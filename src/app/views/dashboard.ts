@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IApplicableProduct, IArticle, IArticleList, IProduct, IProject, ITariff } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
@@ -17,7 +17,7 @@ import { TyrionBackendService } from '../services/BackendService';
     selector: 'bk-view-dashboard',
     templateUrl: './dashboard.html'
 })
-export class DashboardComponent extends _BaseMainComponent implements OnInit, OnDestroy {
+export class DashboardComponent extends _BaseMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
     tab: string = 'general';
     projects: IProject[] = null;
@@ -34,14 +34,11 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
     projectsUpdateSubscription: Subscription;
 
+    isOnMobile: boolean = false;
+
     constructor(injector: Injector, public backendService: TyrionBackendService) {
         super(injector);
     };
-
-    onQrClick() {
-        this.router.navigate(['/qr-reader-hardware']);
-    }
-
 
     ngOnInit(): void {
 
@@ -55,6 +52,14 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
 
         this.projectRefresh();
         this.onFilterArticle();
+    }
+
+    ngAfterViewInit(): void {
+        const ua = navigator.userAgent;
+
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
+            this.isOnMobile = true;
+        }
     }
 
     ngOnDestroy(): void {
@@ -235,8 +240,11 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
         });
     }
 
-
-
+    onDrobDownEmiter(action: string, project: IProject): void {
+        if (action === 'add_hardware') {
+            this.onScanHardwareClick(project.id);
+        }
+    }
 }
 
 

@@ -1,9 +1,9 @@
 <div *ngIf="allowTypeSelection">
     {{ 'label_company_account'|bkTranslate:this }}&nbsp;
 
-    <bk-bool-button [baseValue]="companyAccount"
-                    (valueChanged)="companyAccountSelected($event)"
-                    [readonly]="disabled">
+    <bk-bool-button
+        [baseValue]="companyAccount"
+        (valueChanged)="companyAccountSelected($event)">
     </bk-bool-button>
     <hr>
 </div>

@@ -42,7 +42,7 @@ export const PROJECTS_ROUTES: Routes = [
         ProjectsProjectComponent,
         ProjectsProjectMembersComponent,
         ProjectsProjectLibrariesComponent,
-        ProjectsProjectDatabasesComponent
+        ProjectsProjectDatabasesComponent,
     ],
     exports: [ RouterModule ]
 })

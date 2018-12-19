@@ -54,7 +54,7 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.hardware != null ? this.modalModel.hardware.description : '' , [Validators.maxLength(255)]],
-            'tags': [this.modalModel.hardware != null ? this.modalModel.hardware.tags : []]
+            'tags': [this.modalModel.hardware != null ? this.modalModel.hardware.tags.slice() : []]
         });
     }
 
