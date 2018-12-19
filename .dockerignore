@@ -1,2 +1,5 @@
+node-modules
+npm-debug.log
 .git
-node_modules
+.gitignore
+hooks
