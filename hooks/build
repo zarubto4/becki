@@ -1,0 +1,1 @@
+docker build --build-arg ssh_prv_key=$ssh_prv_key --build-arg ssh_pub_key=$ssh_pub_key -t becki-image .
