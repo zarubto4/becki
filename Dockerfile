@@ -11,7 +11,6 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN git init
-RUN lsb_release -a
 ARG ssh_prv_key
 ARG ssh_pub_key
 
@@ -26,12 +25,20 @@ RUN echo "$ssh_prv_key" > /root/.ssh/id_rsa && \
 
 RUN npm install
 RUN npm run build
+RUN ls /usr/src/app
 
 FROM nginx
-COPY ngconf /ectc/ngnix/sites-available/default
+
+COPY --from=0 /usr/src/app/dist /usr/src/app/dist
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ngconf /etc/nginx/conf.d/default.conf
+RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get install python-certbot-nginx -t stretch-backports
+
 RUN service nginx start
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
 
