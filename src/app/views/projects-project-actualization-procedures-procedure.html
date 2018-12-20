@@ -179,7 +179,7 @@
 
                         <!-- Update State -->
                         <td class="vert-align text-center">
-                            <bk-update-state [updateState]="update.state" [error_code]="update.error_code"></bk-update-state>
+                            <bk-update-state [updateState]="update.planned ? 'IN_PLAN' : update.state" [error_code]="update.error_code"></bk-update-state>
                         </td>
 
                     </tr>

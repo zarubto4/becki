@@ -10,6 +10,7 @@ import { IGarfield, IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsGarfieldModel } from '../modals/garfield';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-garfield',
@@ -34,7 +35,7 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
                 this.garfield_s = garfield_s;
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.fmError(this.translate('flash_cant_load', reason));
                 this.unblockUI();
             });
@@ -71,7 +72,7 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
                             .then(garfield => {
                                 this.unblockUI();
                                 this.onGarfieldClick(garfield.id);
-                            }).catch(reason => {
+                            }).catch((reason: IError) => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                                 this.refresh();
                             });
@@ -79,7 +80,7 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
                 });
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                 this.unblockUI();
             });
@@ -112,7 +113,7 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
@@ -129,7 +130,7 @@ export class GarfieldComponent extends _BaseMainComponent implements OnInit {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });

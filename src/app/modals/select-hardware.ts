@@ -14,6 +14,7 @@ import {
 } from '../backend/TyrionAPI';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
@@ -133,7 +134,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
                     });
                 }
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.errorMessage = reason.message;
             });
@@ -162,7 +163,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
                 }
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.errorMessage = reason.message;
             });

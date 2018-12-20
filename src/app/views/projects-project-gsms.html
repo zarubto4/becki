@@ -81,10 +81,10 @@
                         <td class="vert-align text-center no-wrap"><bk-gsm-status-component [status]="gsm.sim_tm_status.status"></bk-gsm-status-component></td>
                         <td class="vert-align text-center no-wrap">{{gsm.sim_tm_status.country}}</td>
 
-                        <td class="vert-align text-center no-wrap">{{ onMathRound(gsm.sim_tm_status.monthly_traffic)}} MB</td>
-                        <td class="vert-align text-center no-wrap">{{ onMathRound(gsm.sim_tm_status.daily_traffic)}} MB</td>
-                        <td class="vert-align text-center no-wrap">{{ onMathRound(gsm.sim_tm_status.balance)}} MB</td>
-                        <td class="vert-align text-center no-wrap">{{ onMathRound(gsm.sim_tm_status.total_traffic)}} MB</td>
+                        <td class="vert-align text-center no-wrap">{{ onMathRoundToMB(gsm.sim_tm_status.monthly_traffic)}} MB</td>
+                        <td class="vert-align text-center no-wrap">{{ onMathRoundToMB(gsm.sim_tm_status.daily_traffic)}} MB</td>
+                        <td class="vert-align text-center no-wrap">{{ onMathRoundToMB(gsm.sim_tm_status.balance)}} MB</td>
+                        <td class="vert-align text-center no-wrap">{{ onMathRoundToMB(gsm.sim_tm_status.total_traffic)}} MB</td>
 
                         <td class="action-btn-col">
                             <bk-drob-down-button
@@ -107,7 +107,7 @@
                                                 permission: (gsm.delete_permission)
                                             },
                                             {
-                                                condition: true,
+                                                condition: (gsm.un_registration_permission),
                                                 btn_label_for_person: ('label_gsm_un_register'|bkTranslate:this),
                                                 btn_tag: 'gsm_un_register',
                                                 icon: 'fa-trash',
@@ -166,7 +166,8 @@
 
         <div *ngIf="tab == 'traffic_details'">
 
-            <bk-filter-component [closed]="false"
+            <bk-filter-component
+                                 [closed]="false"
                                  [showFilterHead]="true"
                                  (onChange)="onFilterChange($event)"
                                  [filter_parameters]="[

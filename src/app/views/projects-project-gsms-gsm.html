@@ -32,7 +32,7 @@
                  permission: (gsm.delete_permission)
             },
             {
-                 condition: true,
+                 condition: (gsm.un_registration_permission),
                  btn_label_for_person: ('label_gsm_un_register'|bkTranslate:this),
                  btn_tag: 'gsm_un_register',
                  icon: 'fa-trash',
@@ -74,7 +74,7 @@
                         },
                         {
                             tab_name: 'country_details',
-                            condition: (true),
+                            condition: (false),
                             permission: (true),
                             tab_color: 'HARDWARE',
                             tab_label: ('tab_country_details'|bkTranslate:this)
@@ -99,7 +99,7 @@
                     <h2  *ngIf="gsm.sim_type === 'CHIP'">SIM ON CHIP</h2>
                     <h2  *ngIf="gsm.sim_type === 'CARD'">SIM CARD</h2>
                     <h3>
-                       <bk-gsm-status-component [status]="gsm.sim_tm_status.status"></bk-gsm-status-component>
+                        <bk-gsm-status-component [status]="gsm.sim_tm_status.status"></bk-gsm-status-component>
                     </h3>
                 </div>
                 <div class="col-xs-6 col-sm-3">
@@ -165,7 +165,7 @@
 
             <div class="row margin-top-40">
 
-             <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6">
 
                     <H2 class="margin-bottom-20">Thresholds Setting</H2>
                     <table class="table table-hover table-light" *ngIf="form != null">
@@ -181,118 +181,118 @@
                         <tr>
                             <td class="vert-align" [innerHTML]="'table_daily_threshold'|bkTranslate:this"></td>
                             <td class="vert-align">
-                                 <bk-form-input [widthSize]="'small'" [control]="form.controls['daily_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input>
-                          </td>
-                          <td class="vert-align text-center">
-                              <i [class.fa-toggle-on]="gsm.daily_traffic_threshold_notify_type"
-                                 [class.fa-toggle-off]="!gsm.daily_traffic_threshold_notify_type"
-                                 style="font-size: 1.8em;"
-                                 class="fa font-green-jungle cursor-hand"
-                                 (click)="gsm.daily_traffic_threshold_notify_type = !gsm.daily_traffic_threshold_notify_type; onUpdateClick()"></i>
-                          </td>
-                          <td class="vert-align text-center">
-                              <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_daily"
-                                 [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_daily"
-                                 style="font-size: 1.8em;"
-                                 class="fa font-green-jungle cursor-hand"
-                                 (click)="gsm.sim_tm_status.block_sim_daily = !gsm.sim_tm_status.block_sim_daily; onUpdateClick()"></i>
-                      </tr>
-                      <tr>
-                          <td class="vert-align" [innerHTML]="'table_monthly_threshold'|bkTranslate:this"></td>
-                          <td class="vert-align">
-                               <bk-form-input [widthSize]="'small'" [control]="form.controls['monthly_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input>
-                         </td>
-                         <td class="vert-align text-center">
-                             <i [class.fa-toggle-on]="gsm.monthly_traffic_threshold_notify_type"
-                                [class.fa-toggle-off]="!gsm.monthly_traffic_threshold_notify_type"
-                                style="font-size: 1.8em;"
-                                class="fa font-green-jungle cursor-hand"
-                                (click)="gsm.monthly_traffic_threshold_notify_type = !gsm.monthly_traffic_threshold_notify_type; onUpdateClick()"></i>
-                         </td>
-                         <td class="vert-align text-center">
-                             <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_monthly"
-                                [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_monthly"
-                                style="font-size: 1.8em;"
-                                class="fa font-green-jungle cursor-hand"
-                                (click)="gsm.sim_tm_status.block_sim_monthly = !gsm.sim_tm_status.block_sim_monthly; onUpdateClick()"></i>
-                         </td>
-                     </tr>
-                     <tr>
-                         <td class="vert-align" [innerHTML]="'table_total_threshold'|bkTranslate:this"></td>
-                         <td class="vert-align">
-                             <bk-form-input [widthSize]="'small'" [control]="form.controls['total_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input>
-                         </td>
-                         <td class="vert-align text-center">
-                             <i [class.fa-toggle-on]="gsm.total_traffic_threshold_notify_type"
-                                [class.fa-toggle-off]="!gsm.total_traffic_threshold_notify_type"
-                                style="font-size: 1.8em;"
-                                class="fa font-green-jungle cursor-hand"
-                                (click)="gsm.total_traffic_threshold_notify_type = !gsm.total_traffic_threshold_notify_type; onUpdateClick()"></i>
-                         </td>
-                         <td class="vert-align text-center">
-                             <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_total"
-                                [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_total"
-                                style="font-size: 1.8em;"
-                                class="fa font-green-jungle cursor-hand"
-                                (click)="gsm.sim_tm_status.block_sim_total = !gsm.sim_tm_status.block_sim_total; onUpdateClick()"></i>
-                         </td>
-                     </tr>
-                     </tbody>
-                 </table>
-             </div>
-             <div class="col-sm-12 col-md-6">
+                                <bk-form-input [widthSize]="'small'" [control]="form.controls['daily_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input>
+                            </td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.daily_traffic_threshold_notify_type"
+                                   [class.fa-toggle-off]="!gsm.daily_traffic_threshold_notify_type"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.daily_traffic_threshold_notify_type = !gsm.daily_traffic_threshold_notify_type; onUpdateClick()"></i>
+                            </td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_daily"
+                                   [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_daily"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.sim_tm_status.block_sim_daily = !gsm.sim_tm_status.block_sim_daily; onUpdateClick()"></i>
+                        </tr>
+                        <tr>
+                            <td class="vert-align" [innerHTML]="'table_monthly_threshold'|bkTranslate:this"></td>
+                            <td class="vert-align">
+                                <bk-form-input [widthSize]="'small'" [control]="form.controls['monthly_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input>
+                            </td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.monthly_traffic_threshold_notify_type"
+                                   [class.fa-toggle-off]="!gsm.monthly_traffic_threshold_notify_type"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.monthly_traffic_threshold_notify_type = !gsm.monthly_traffic_threshold_notify_type; onUpdateClick()"></i>
+                            </td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_monthly"
+                                   [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_monthly"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.sim_tm_status.block_sim_monthly = !gsm.sim_tm_status.block_sim_monthly; onUpdateClick()"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vert-align" [innerHTML]="'table_total_threshold'|bkTranslate:this"></td>
+                            <td class="vert-align">
+                                <bk-form-input [widthSize]="'small'" [control]="form.controls['total_traffic_threshold']" (onEnterEvent)="onUpdateClick()" [showLabel]="false"></bk-form-input>
+                            </td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.total_traffic_threshold_notify_type"
+                                   [class.fa-toggle-off]="!gsm.total_traffic_threshold_notify_type"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.total_traffic_threshold_notify_type = !gsm.total_traffic_threshold_notify_type; onUpdateClick()"></i>
+                            </td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.sim_tm_status.block_sim_total"
+                                   [class.fa-toggle-off]="!gsm.sim_tm_status.block_sim_total"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.sim_tm_status.block_sim_total = !gsm.sim_tm_status.block_sim_total; onUpdateClick()"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-12 col-md-6">
 
-                 <H2 class="margin-bottom-20">Reporting Settings</H2>
-                 <table class="table table-hover table-light margin-left-15 margin-right-15" *ngIf="form != null">
-                     <thead>
-                     <tr>
-                         <th class="text-center" [innerHTML]="'table_report_type'|bkTranslate:this"></th>
-                         <th class="text-center" [innerHTML]="'table_report_sate'|bkTranslate:this"></th>
-                     </tr>
-                     </thead>
-                     <tbody class="hide-bk-drob-down-button">
-                         <tr>
-                             <td class="vert-align" [innerHTML]="'table_daily_report'|bkTranslate:this"></td>
-                             <td class="vert-align text-center">
-                                 <i [class.fa-toggle-on]="gsm.daily_statistic"
-                                    [class.fa-toggle-off]="!gsm.daily_statistic"
-                                    style="font-size: 1.8em;"
-                                    class="fa font-green-jungle cursor-hand"
-                                    (click)="gsm.daily_statistic = !gsm.daily_statistic; onUpdateClick()"></i>
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="vert-align" [innerHTML]="'label_weekly_report'|bkTranslate:this"></td>
-                             <td class="vert-align text-center">
-                                 <i [class.fa-toggle-on]="gsm.weekly_statistic"
-                                    [class.fa-toggle-off]="!gsm.weekly_statistic"
-                                    style="font-size: 1.8em;"
-                                    class="fa font-green-jungle cursor-hand"
-                                    (click)="gsm.weekly_statistic = !gsm.weekly_statistic; onUpdateClick()"></i>
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="vert-align" [innerHTML]="'table_month_report'|bkTranslate:this"></td>
-                             <td class="vert-align text-center">
-                                 <i [class.fa-toggle-on]="gsm.monthly_statistic"
-                                    [class.fa-toggle-off]="!gsm.monthly_statistic"
-                                    style="font-size: 1.8em;"
-                                    class="fa font-green-jungle cursor-hand"
-                                    (click)="gsm.monthly_statistic = !gsm.monthly_statistic; onUpdateClick()"></i>
-                             </td>
-                         </tr>
-                     </tbody>
-                 </table>
-             </div>
-         </div>
-     </div>
+                    <H2 class="margin-bottom-20">Reporting Settings</H2>
+                    <table class="table table-hover table-light margin-left-15 margin-right-15" *ngIf="form != null">
+                        <thead>
+                        <tr>
+                            <th class="text-center" [innerHTML]="'table_report_type'|bkTranslate:this"></th>
+                            <th class="text-center" [innerHTML]="'table_report_sate'|bkTranslate:this"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="hide-bk-drob-down-button">
+                        <tr>
+                            <td class="vert-align" [innerHTML]="'table_daily_report'|bkTranslate:this"></td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.daily_statistic"
+                                   [class.fa-toggle-off]="!gsm.daily_statistic"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.daily_statistic = !gsm.daily_statistic; onUpdateClick()"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vert-align" [innerHTML]="'label_weekly_report'|bkTranslate:this"></td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.weekly_statistic"
+                                   [class.fa-toggle-off]="!gsm.weekly_statistic"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.weekly_statistic = !gsm.weekly_statistic; onUpdateClick()"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vert-align" [innerHTML]="'table_month_report'|bkTranslate:this"></td>
+                            <td class="vert-align text-center">
+                                <i [class.fa-toggle-on]="gsm.monthly_statistic"
+                                   [class.fa-toggle-off]="!gsm.monthly_statistic"
+                                   style="font-size: 1.8em;"
+                                   class="fa font-green-jungle cursor-hand"
+                                   (click)="gsm.monthly_statistic = !gsm.monthly_statistic; onUpdateClick()"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-     <div *ngIf="tab == 'traffic_details'">
+        <div *ngIf="tab == 'traffic_details'">
 
-         <bk-filter-component [closed]="false"
-                              [showFilterHead]="true"
-                              (onChange)="onFilterChange($event)"
-                              [filter_parameters]="[
+            <bk-filter-component [closed]="false"
+                                 [showFilterHead]="true"
+                                 (onChange)="onFilterChange($event)"
+                                 [filter_parameters]="[
                                         {
                                             type: 'LIST_SELECT',
                                             content: {
@@ -312,17 +312,55 @@
                                             }
                                         }
                                 ]"
-         ></bk-filter-component>
+            ></bk-filter-component>
 
 
-         <bk-form-chart-bar
-             [title]="'label_gsm_traffic'|bkTranslate:this"
-             [btns_group_name]="'label_filter'|bkTranslate:this"
-             [show_legend]="false">
-         </bk-form-chart-bar>
+            <bk-form-chart-bar
+                [title]="'label_gsm_traffic'|bkTranslate:this"
+                [btns_group_name]="'label_filter'|bkTranslate:this"
+                [show_legend]="false">
+            </bk-form-chart-bar>
 
 
-     </div>
+        </div>
+
+        <div *ngIf="tab == 'cdr_details'">
+            <div *ngIf="(cdrs != null && cdrs.content.length)">
+                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
+                    <thead>
+                    <tr>
+
+                        <th class="" [innerHTML]="'table_start_date'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_end_date'|bkTranslate:this"></th>
+
+                        <th class="" [innerHTML]="'table_msi_country'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_operator'|bkTranslate:this"></th>
+
+                        <th class="" [innerHTML]="'table_data_traffic'|bkTranslate:this"></th>
+                        <th class="" [innerHTML]="'table_cost'|bkTranslate:this"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="hide-bk-drob-down-button">
+                    <tr *ngFor="let cdr of cdrs.content">
+
+                        <td class="vert-align">{{cdr.cdr_date_start|bkUnixTimeToDate}}</td>
+                        <td class="vert-align">{{cdr.cdr_date_stop|bkUnixTimeToDate}}</td>
+
+                        <td class="vert-align">{{cdr.cdr_country}}</td>
+                        <td class="vert-align">{{cdr.cdr_network}}</td>
+
+                        <td class="vert-align">{{ cdr.cdr_traffic }} Bites</td>
+                        <td class="vert-align">€ {{cdr.cost}}</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <bk-filter-page-component [from]="cdrs.from" [to]="cdrs.to"
+                                      [total]="cdrs.total" [totalPages]="cdrs.pages"
+                                      (onSelect)="onFilterCDR($event)"></bk-filter-page-component>
+
+        </div>
 
 
 

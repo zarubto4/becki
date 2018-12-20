@@ -6,6 +6,7 @@ import { IProject, IHardware, IHardwareList, IHardwareGroupList, IHardwareGroup 
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-harware-scan',
@@ -86,7 +87,7 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
             }).then((iHardware) => {
                 this.waiting.delete(code);
                 this.added.set(code, iHardware);
-            }).catch((reason) => {
+            }).catch((reason: IError) => {
                 this.waiting.delete(code);
                 this.failed.set(code, reason.message);
             });

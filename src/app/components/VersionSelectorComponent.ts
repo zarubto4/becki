@@ -13,6 +13,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 import { ModalService } from '../services/ModalService';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-program-version-selector',
@@ -114,7 +115,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                         this.onSelectedProgramVersionIdChange(program.program_versions[0].id);
                                     }
                                 })
-                                .catch(reason => {
+                                .catch((reason: IError) => {
                                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this)));
                                 });
                         }
@@ -134,7 +135,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                         this.onSelectedProgramVersionIdChange(program.program_versions[0].id);
                                     }
                                 })
-                                .catch(reason => {
+                                .catch((reason: IError) => {
                                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
 
                                 });
@@ -155,7 +156,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                         this.onSelectedProgramVersionIdChange(program.versions[0].id);
                                     }
                                 })
-                                .catch(reason => {
+                                .catch((reason: IError) => {
                                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                                 });
                         }
@@ -175,7 +176,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                                         this.onSelectedProgramVersionIdChange(program.versions[0].id);
                                     }
                                 })
-                                .catch(reason => {
+                                .catch((reason: IError) => {
                                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                                 });
                         }
@@ -216,7 +217,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                         console.info('Nevybraná žádná verze - raději vyberu první!');
                     }
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
@@ -236,7 +237,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                         console.info('Nevybraná žádná verze - raději vyberu první!');
                     }
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
@@ -256,7 +257,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                         console.info('Nevybraná žádná verze - raději vyberu první!');
                     }
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }
@@ -276,7 +277,7 @@ export class ProgramVersionSelectorComponent implements OnInit {
                         console.info('Nevybraná žádná verze - raději vyberu první!');
                     }
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
                 });
         }

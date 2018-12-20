@@ -18,6 +18,7 @@ import { TranslationService } from '../services/TranslationService';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
 import { BlockRenderer } from 'blocko/dist/editor/block/BlockRenderer';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -118,9 +119,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                             .then((b: IBlock) => {
                                 this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block, b.versions, this.blockChangeVersion));
                             })
-                            .catch(reason => {
+                            .catch((reason: IError) => {
                                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this)));
                             });
+
                     } else {
                         this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block));
                     }
@@ -338,7 +340,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 block.versionId = version_id;
                 block.setCode(versionObject.logic_json);
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
             });
     }

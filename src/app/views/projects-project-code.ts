@@ -11,6 +11,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { IProject, IHardwareType, ICProgram, ICProgramList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-code',
@@ -89,7 +90,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                             this.onFilterPublicPrograms();
                         }
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
                         if (code.publish_type === 'PRIVATE') {
                             this.onFilterPrivatePrograms();
@@ -122,7 +123,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                                 this.unblockUI();
                                 this.onCProgramClick(cProgram.id);
                             })
-                            .catch(reason => {
+                            .catch((reason: IError) => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.program.name, reason)));
                                 this.unblockUI();
                                 this.onFilterPrivatePrograms();
@@ -154,7 +155,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                                     this.onFilterPublicPrograms();
                                 }
                             })
-                            .catch(reason => {
+                            .catch((reason: IError) => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                                 if (code.publish_type === 'PRIVATE') {
                                     this.onFilterPrivatePrograms();
@@ -184,7 +185,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                         this.onFilterPrivatePrograms();
                         this.tab = 'my_programs';
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.onFilterPrivatePrograms();
                         this.onFilterPublicPrograms();
@@ -208,7 +209,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.privatePrograms = iCProgramList;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });
@@ -230,7 +231,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.publicPrograms = iCProgramList;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });
@@ -252,7 +253,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.publicPrograms = iCProgramList;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });

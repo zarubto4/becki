@@ -8,6 +8,7 @@ import { IProduct, IEmployee, IProductExtension, IProjectParticipant } from '../
 import { Subscription } from 'rxjs';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsMembersAddModel } from '../modals/members-add';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -55,7 +56,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
                         .then(() => {
 
                         })
-                        .catch(reason => {
+                        .catch((reason: IError) => {
                             this.unblockUI();
                             this.fmError(this.translate('label_cannot_add_new_employees', reason));
                         });

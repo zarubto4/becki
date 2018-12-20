@@ -11,6 +11,7 @@ import { INotification, INotificationElement, INotificationButton } from '../bac
 import { NullSafe } from '../helpers/NullSafe';
 import { Router } from '@angular/router';
 import { TranslationService } from './TranslationService';
+import { IError } from './_backend_class/Responses';
 
 
 export abstract class Notification {
@@ -592,7 +593,7 @@ export class NotificationService {
             .then(() => {
                 this.removeNotificationById(n.id);
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_notification', reason)));
 
             });

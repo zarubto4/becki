@@ -21,6 +21,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { ModalsSelectCodeModel } from './code-select';
 import { TranslationService } from '../services/TranslationService';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
@@ -160,7 +161,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
                                     };
                                 });
 
-                            }).catch(reason => {
+                            }).catch((reason: IError) => {
                                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                                 console.error('hardwareTypeGet:cProgramGetListByFilter', reason);
                             });

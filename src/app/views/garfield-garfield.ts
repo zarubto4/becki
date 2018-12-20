@@ -14,6 +14,7 @@ import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { WebSocketClientGarfield } from '../services/websocket/WebSocketClientGarfield';
 import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-garfield-garfield',
@@ -174,7 +175,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                             this.fmInfo(this.translate('flash_garfield_connected'));
                         }
                     })
-                    .catch((reason) => {
+                    .catch((reason: IError) => {
                         console.error('connectGarfieldWebSocket:', reason);
                     });
 
@@ -193,7 +194,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         throw new Error('Unsubscribe failed');
                     }
                 })
-                .catch((reason) => {
+                .catch((reason: IError) => {
                     console.error('ngOnDestroy:', reason);
                 })
                 .then(() => {
@@ -268,14 +269,14 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                             }
                         });
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.fmError(this.translate('flash_cant_load_homer_servers', reason));
                         this.unblockUI();
                     });
 
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.fmError(this.translate('flash_cant_load', reason));
                 this.unblockUI();
             });
@@ -332,7 +333,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                     this.onConsoleLog(result);
                     this.continueProcess();
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     this.fmError(this.translate('flash_fail'), reason);
                     action.fail();
                     this.onConsoleError(reason.toString());
@@ -355,7 +356,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                     this.printer_label_1 = values[1];
                     this.printer_label_2 = values[2];
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     // this.addFlashMessage(new FlashMessageError('Printers cannot be loaded.', reason));
                     // not show error message -it will be showed in template
                 });
@@ -367,7 +368,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
         this.tyrionBackendService.printerTestprinting(this.garfieldId, printerId)
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_test_print_success')));
-            }).catch(reason => {
+            }).catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                 this.refresh();
             });
@@ -400,7 +401,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
@@ -417,7 +418,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.navigate(['admin/garfield/']);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -468,7 +469,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         throw new Error('Keep alive unsuccessful');
                     }
                 })
-                .catch((reason) => {
+                .catch((reason: IError) => {
                     console.error('setDetection:', reason);
                 });
 
@@ -488,7 +489,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         this.device = device;
                         resolve(device);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.fmError(this.translate('flash_fail'), reason);
                         reject(reason);
                     });
@@ -501,7 +502,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         this.device = device;
                         resolve(device);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.fmError(this.translate('flash_fail'), reason);
                         reject(reason);
                     });

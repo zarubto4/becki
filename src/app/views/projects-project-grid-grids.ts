@@ -11,6 +11,7 @@ import { IProject, IGridProject, IGridProgram } from '../backend/TyrionAPI';
 import { ModalsGridProgramPropertiesModel } from '../modals/grid-program-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsGridProjectPropertiesModel } from '../modals/grid-project-properties';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids',
@@ -54,7 +55,7 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                 this.gridProject = project;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project'), reason));
             });
     }
@@ -75,7 +76,7 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onGridProgramClick(this.gridProject.id, gridProgram.id);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_program'), reason));
                         this.refresh();
                     });
@@ -113,7 +114,7 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_edit')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project'), reason));
                         this.refresh();
                     });
@@ -136,7 +137,7 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                             this.router.navigate(['/admin/widgets']);
                         }
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project'), reason));
                         this.refresh();
                     });
@@ -160,7 +161,7 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_edit')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_program'), reason));
                         this.refresh();
                     });
@@ -178,7 +179,7 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_remove')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_program'), reason));
                         this.refresh();
                     });

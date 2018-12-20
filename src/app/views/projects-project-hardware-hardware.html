@@ -28,7 +28,14 @@
                           permission: hardware.update_permission,
                           btn_tag: 'update_hardware'
                       },
-
+                      {
+                         condition: (hardware.project != null),
+                         btn_label_for_person: ('label_manual_individual_update'|bkTranslate:this),
+                         icon: 'fa-code',
+                         colorType: 'UPDATE',
+                         btn_tag: 'hardware_manual_update',
+                         permission: (hardware.update_permission)
+                      },
                       {
                           condition: (hardware.online_state === 'ONLINE'),
                           btn_label_for_person: ('label_blink_hardware'|bkTranslate:this),
@@ -37,7 +44,15 @@
                           colorType: 'ADD',
                           permission: (hardware.update_permission)
                       },
-                        {
+                       {
+                          condition: (hardware.online_state === 'ONLINE'),
+                          btn_label_for_person: ('label_restart_hardware'|bkTranslate:this),
+                          icon: 'fa-heartbeat',
+                          colorType: 'REMOVE',
+                          btn_tag: 'hardware_restart',
+                          permission: (hardware.update_permission)
+                      },
+                      {
                           condition: (tab == 'overview'),
                           btn_label_for_person: ('label_remove_device'|bkTranslate:this),
                           icon: 'fa-trash',
@@ -352,7 +367,7 @@
                                               icon: 'fa-code',
                                               colorType: 'UPDATE',
                                               btn_tag: 'hardware_manual_update',
-                                              permission: (hardware.update_permission && hardware.online_state == 'ONLINE' && hardware.database_synchronize)
+                                              permission: (hardware.update_permission)
                                           }
                                     ]">
                             </bk-portlet-title>
@@ -602,7 +617,7 @@
                                                     {
                                                         key: 'PENDING',
                                                         label: ('PENDING'|bkTranslateTable:this:'update_state'),
-                                                         selected: filterStatesValues['PENDING'],
+                                                        selected: filterStatesValues['PENDING'],
                                                         color: 'info'
                                                     },
                                                     {
@@ -692,6 +707,7 @@
                             <th>{{'table_id'|bkTranslate:this}}</th>
                             <th>{{'table_started'|bkTranslate:this}}</th>
                             <th>{{'table_finished'|bkTranslate:this}}</th>
+                            <th>{{'table_planned'|bkTranslate:this}}</th>
                             <th>{{'table_type'|bkTranslate:this}}</th>
                             <th>
                                 <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}</th>
@@ -719,9 +735,15 @@
                             </td>
                             <td class="vert-align">{{update.created|bkUnixTimeToDate}}</td>
 
-                            <td class="vert-align" *ngIf="update.finished">
-                                {{update.finished|bkUnixTimeToDate}}
+                            <td class="vert-align" *ngIf="update.finished">{{update.finished|bkUnixTimeToDate}}</td>
+                            <td class="vert-align">
+
+                                <span *ngIf="update.planned">{{update.planned|bkUnixTimeToDate}}</span>
+                                <span *ngIf="!update.planned">   </span>
                             </td>
+
+
+
                             <td *ngIf="!update.finished" class="vert-align font-yellow-casablanca">
                                 {{'label_time_missing_in_json'|bkTranslate:this}}
                             </td>
@@ -757,7 +779,7 @@
 
                             <!-- Update State -->
                             <td class="vert-align">
-                                <bk-update-state [updateState]="update.state"></bk-update-state>
+                                <bk-update-state [updateState]="update.planned ? 'IN_PLAN' : update.state"></bk-update-state>
                             </td>
                         </tr>
                     </tbody>

@@ -10,6 +10,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -86,7 +87,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
                         this.unblockUI();
                         this.onProjectClick(project.id);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.project.name, reason.message)));
                         this.refresh(); // also unblockUI
                     });
@@ -122,7 +123,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_update')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -139,7 +140,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project'), reason));
                         this.refresh(); // also unblockUI
                     });
