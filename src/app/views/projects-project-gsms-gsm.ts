@@ -16,6 +16,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 
 import * as moment from 'moment';
+import { IError } from '../services/_backend_class/Responses';
 
 export class DataChar {
     option: {
@@ -185,7 +186,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                         this.unblockUI();
                         this.onGSMListClick();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_gsm'), reason));
                         this.unblockUI();
                         this.onGSMListClick();
@@ -204,7 +205,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                         this.unblockUI();
                         this.onGSMListClick();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_success'), reason));
                         this.unblockUI();
                         this.onGSMListClick();
@@ -220,7 +221,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 this.unblockUI();
                 this.refresh();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_error'), reason));
                 this.refresh();
             });
@@ -345,7 +346,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
 
                 this.graphView.setData(chartData);
 
-            }).catch(reason => {
+            }).catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
                 return null;
             });
@@ -380,7 +381,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                     this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_cellular_update_success')));
                     this.unblockUI();
                     this.refresh();
-                }).catch(reason => {
+                }).catch((reason: IError) => {
                     this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
                     this.refresh();
                 });
@@ -419,7 +420,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_cellular_update_success')));
             this.unblockUI();
             this.refresh();
-        }).catch(reason => {
+        }).catch((reason: IError) => {
             this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
             this.refresh();
         });
@@ -436,7 +437,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 this.cdrs = cdrs;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_get_gsm'), reason));
                 this.unblockUI();
             });
@@ -461,7 +462,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 this.form = this.formBuilder.group(input);
 
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_get_gsm'), reason));
                 this.unblockUI();
             });

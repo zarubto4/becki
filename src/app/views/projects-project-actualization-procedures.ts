@@ -12,6 +12,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
 import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
 import { FormGroup } from '@angular/forms';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class FilterUpdateStates {
@@ -134,7 +135,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                                     procedure.state_complete = value.state_complete;
                                     procedure.finished = value.finished;
                                 })
-                                .catch((reason) => {
+                                .catch((reason: IError) => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                                 });
 
@@ -144,7 +145,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
 
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -159,7 +160,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                 this.unblockUI();
                 this.onFilterActualizationProcedure();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -184,7 +185,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                     this.onProcedureCreateClick();
                     return;
                 })
-                .catch((reason) => {
+                .catch((reason: IError) => {
                     this.unblockUI();
                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                 });
@@ -209,7 +210,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                         this.unblockUI();
                         this.onFilterActualizationProcedure();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
                     });

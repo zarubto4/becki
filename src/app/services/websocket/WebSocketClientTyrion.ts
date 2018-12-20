@@ -2,6 +2,7 @@ import { WebSocketClient } from './WebSocketClient';
 import { IWebSocketMessage, WebSocketMessage } from './WebSocketMessage';
 import { ModelChangeStatus, OnlineChangeStatus, TyrionApiBackend } from '../../backend/BeckiBackend';
 import { INotification, IWebSocketToken } from '../../backend/TyrionAPI';
+import { IError } from '../_backend_class/Responses';
 
 export class WebSocketClientTyrion extends WebSocketClient {
 
@@ -24,7 +25,7 @@ export class WebSocketClientTyrion extends WebSocketClient {
                 this.url = this.baseUrl + token.websocket_token;
                 super.connect();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 console.error(reason);
                 this.reconnectAfterTimeout();
             });
@@ -45,7 +46,7 @@ export class WebSocketClientTyrion extends WebSocketClient {
                     console.error('WebSocketClientTyrion::onOpen - notification subscription failed');
                 }
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 // TODO maybe reconnect?
             });
 

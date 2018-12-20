@@ -11,6 +11,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, IGridProject, IGridProjectList } from '../backend/TyrionAPI';
 import { ModalsGridProjectPropertiesModel } from '../modals/grid-project-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-grid',
@@ -62,7 +63,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
                 this.gridProjects = values;
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -82,7 +83,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_add')));
                         this.onGridProjectClick(gridProject.id);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_project'), reason));
                         this.onFilter();
                     });
@@ -105,7 +106,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_edit')));
                         this.onFilter();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project'), reason));
                         this.onFilter();
                     });
@@ -122,7 +123,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_remove')));
                         this.onFilter();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project'), reason));
                         this.onFilter();
                     });

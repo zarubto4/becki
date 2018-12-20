@@ -8,6 +8,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IProductExtension } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -58,7 +59,7 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
             .then(() => {
                 this.refresh();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.refresh();
             });
@@ -69,7 +70,7 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
             .then(() => {
                 this.refresh();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.refresh();
             });
@@ -88,7 +89,7 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
                 this.extensions = values[1];
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('Product cannot be loaded.', reason));
                 this.unblockUI();
             });

@@ -11,6 +11,7 @@ import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IProject } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-mobile-add-hardware',
@@ -95,7 +96,7 @@ export class MobileAddHardwareComponent extends _BaseMainComponent implements On
                 this.unblockUI();
                 this.router.navigate(['/dashboard']);
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', this.blockForm.controls['id'].value), reason));
                 this.unblockUI();
             });

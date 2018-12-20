@@ -9,6 +9,7 @@ import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../
 import { TyrionBackendService } from '../services/BackendService';
 import { Router } from '@angular/router';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -44,8 +45,8 @@ export class ForgotPasswordComponent implements OnInit {
                 this.router.navigate(['/']);
 
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_email_not_sent', this, null, reason)));
+            .catch((reason: IError) => {
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_email_not_sent', reason.message)));
                 console.error('err send recovery' + reason);
             });
     }

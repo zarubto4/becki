@@ -1090,7 +1090,7 @@ export class StaticTranslation {
                 'btn_login': 'Login',
                 'btn_resend': 'Resend',
                 'msg_login_user_cant_login': 'The user could not be logged in.',
-                'msg_login_resend_vertification': 'Press the resend button to send verification E-mail again',
+                'msg_login_resend_verification': 'Press the resend button to send verification E-mail again',
                 'msg_login_error': 'Error has occurred, when trying to log in.',
                 'msg_login_email_sent': 'Verification E-mail was sent',
 
@@ -1314,6 +1314,8 @@ export class StaticTranslation {
                 'filter_hardware_type': '<strong class="font-color-hardware">HARDWARE</strong>Type',
                 'label_no_code': 'No <strong class="font-color-code">CODE</strong> Programs',
                 'label_no_code_comment': 'Unfortunately we did not find anything... We came to the same conclusion as in your live...',
+                'label_no_file_or_version_selected': 'Select File Or Program with Version!',
+                'label_select_file': 'Select Bin file for manual <strong class="font-color-hardware">HARDWARE</strong> update',
 
             }, 'ModalsBlockSelectComponent': {
 
@@ -1577,7 +1579,7 @@ export class StaticTranslation {
                 'table_id': 'Update ID',
                 'table_program': 'Program',
                 'table_started': 'Created',
-                'table_planed': 'Planed',
+                'table_planned': 'Planed',
                 'table_finished': 'Finished',
                 'table_type': 'Update type',
                 'table_progress': 'Progress',
@@ -1592,7 +1594,8 @@ export class StaticTranslation {
                 'flash_device_restart_success': 'Restart command was successful',
                 'flash_remove_device_success': 'Device has been removed.',
                 'flash_remove_device_fail': 'Device could not be removed, ',
-                'flash_cant_update_bootloader': 'Unable to update Bootloader, {0}.',
+                'flash_cant_update_bootloader': 'Unable to update Bootloader',
+                'flash_cant_update_firmware': 'Unable to update Bootloader.',
                 'flash_cant_edit_backup_mode': 'Device backup mode could not be changed, {0}.',
                 'flash_cant_connect': 'Something is wrong with server parameters, its not possible to subscribe logs form Device',
                 'flash_conection_failed': 'device connection failed',

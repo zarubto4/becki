@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeactivateModel } from '../modals/deactivate';
 import { ModalsFinancialProductModel } from '../modals/financial-product';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-financial-product',
@@ -66,7 +67,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
                         this.refresh();
                     });
@@ -87,7 +88,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_deactivated')));
                         this.onFinanceClick();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_deactivate_product'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -104,7 +105,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_activated')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_activate_product'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -119,7 +120,7 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
             this.product = product;
             this.unblockUI();
         })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.fmError(this.translate('flash_fail'), reason);
                 this.unblockUI();
             });

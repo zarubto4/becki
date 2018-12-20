@@ -14,6 +14,7 @@ import { TranslationService } from '../services/TranslationService';
 import { IBlock, IBlockList, IBlockVersion } from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export interface BlockInterface {
@@ -145,7 +146,7 @@ export class ModalsBlockSelectComponent implements OnInit {
             this.tyrionBackendService.blockGet(this.modalModel.already_selected_code_for_version_change.block_id)
                 .then((block) => {
                     this.onSelectBlockClick(block);
-                }).catch(reason => {
+                }).catch((reason: IError) => {
                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     this.errorMessage = reason.message;
                 });
@@ -218,7 +219,7 @@ export class ModalsBlockSelectComponent implements OnInit {
             .then((list) => {
                 this.blocks = list;
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
             });
     }

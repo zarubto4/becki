@@ -75,12 +75,6 @@
                                             type: 'CHECKBOX_LIST',
                                             content: {
                                                 options: [
-                                                   {
-                                                        key: 'IN_PLAN',
-                                                        label: ('IN_PLAN'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['COMPLETE'],
-                                                        color: 'info'
-                                                    },
                                                     {
                                                         key: 'PENDING',
                                                         label: ('PENDING'|bkTranslateTable:this:'update_state'),
@@ -185,7 +179,7 @@
 
                         <!-- Update State -->
                         <td class="vert-align text-center">
-                            <bk-update-state [updateState]="update.state" [error_code]="update.error_code"></bk-update-state>
+                            <bk-update-state [updateState]="update.planned ? 'IN_PLAN' : update.state" [error_code]="update.error_code"></bk-update-state>
                         </td>
 
                     </tr>

@@ -614,16 +614,10 @@
                                             type: 'CHECKBOX_LIST',
                                             content: {
                                                 options: [
-                                                   {
-                                                        key: 'IN_PLAN',
-                                                        label: ('IN_PLAN'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['IN_PLAN'],
-                                                        color: 'info'
-                                                    },
                                                     {
                                                         key: 'PENDING',
                                                         label: ('PENDING'|bkTranslateTable:this:'update_state'),
-                                                         selected: filterStatesValues['PENDING'],
+                                                        selected: filterStatesValues['PENDING'],
                                                         color: 'info'
                                                     },
                                                     {
@@ -713,6 +707,7 @@
                             <th>{{'table_id'|bkTranslate:this}}</th>
                             <th>{{'table_started'|bkTranslate:this}}</th>
                             <th>{{'table_finished'|bkTranslate:this}}</th>
+                            <th>{{'table_planned'|bkTranslate:this}}</th>
                             <th>{{'table_type'|bkTranslate:this}}</th>
                             <th>
                                 <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}</th>
@@ -740,9 +735,15 @@
                             </td>
                             <td class="vert-align">{{update.created|bkUnixTimeToDate}}</td>
 
-                            <td class="vert-align" *ngIf="update.finished">
-                                {{update.finished|bkUnixTimeToDate}}
+                            <td class="vert-align" *ngIf="update.finished">{{update.finished|bkUnixTimeToDate}}</td>
+                            <td class="vert-align">
+
+                                <span *ngIf="update.planned">{{update.planned|bkUnixTimeToDate}}</span>
+                                <span *ngIf="!update.planned">   </span>
                             </td>
+
+
+
                             <td *ngIf="!update.finished" class="vert-align font-yellow-casablanca">
                                 {{'label_time_missing_in_json'|bkTranslate:this}}
                             </td>
@@ -778,7 +779,7 @@
 
                             <!-- Update State -->
                             <td class="vert-align">
-                                <bk-update-state [updateState]="update.state"></bk-update-state>
+                                <bk-update-state [updateState]="update.planned ? 'IN_PLAN' : update.state"></bk-update-state>
                             </td>
                         </tr>
                     </tbody>

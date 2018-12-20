@@ -12,6 +12,7 @@ import { ICustomer, IContact, IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ContactFormData } from '../components/ContactFormComponent';
 import { FlashMessageError } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-financial-product-billing',
@@ -37,7 +38,7 @@ export class FinancialProductBillingComponent extends _BaseMainComponent impleme
                 this.owner.contact = contact;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_product_edit_error', this), reason));
                 this.unblockUI();
             });
@@ -65,7 +66,7 @@ export class FinancialProductBillingComponent extends _BaseMainComponent impleme
             this.owner = this.product.owner;
 
             this.unblockUI();
-        }).catch(reason => {
+        }).catch((reason: IError) => {
             this.fmError(this.translate('flash_fail'), reason);
             this.unblockUI();
         });
