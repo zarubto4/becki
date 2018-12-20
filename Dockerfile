@@ -1,5 +1,7 @@
 FROM node:10.11
 
+ARG ssh_prv_key
+ARG ssh_pub_key
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -14,18 +16,18 @@ RUN git init
 
 RUN echo "$ssh_prv_key"
 RUN echo ssh_prv_key
+
+
 RUN mkdir -p /root/.ssh && \
     chmod 0700 /root/.ssh && \
     ssh-keyscan github.com > /root/.ssh/known_hosts
 
-RUN echo "$ssh_prv_key" > /root/.ssh/id_rsa && \
-    echo "$ssh_pub_key" > /root/.ssh/id_rsa.pub && \
-    chmod 600 /root/.ssh/id_rsa && \
-    chmod 600 /root/.ssh/id_rsa.pub
+RUN echo "$ssh_prv_key" | python3 -c "key = input();print(\"-----BEGIN RSA PRIVATE KEY-----\" + \"\\n\" + \"\\n\".join(key[i:i+64] for i in range(0, len(key), 64)) + \"\\n\" + \"-----END RSA PRIVATE KEY-----\")" >  /root/.ssh/id_rsa
+
+RUN chmod 600 /root/.ssh/id_rsa
 
 RUN npm install
 RUN npm run build
-RUN ls /usr/src/app
 
 FROM nginx
 
