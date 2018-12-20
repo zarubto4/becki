@@ -1,7 +1,6 @@
 FROM node:10.11
 
 ARG ssh_prv_key
-ARG ssh_pub_key
 
 # Create app directory
 WORKDIR /usr/src/app
