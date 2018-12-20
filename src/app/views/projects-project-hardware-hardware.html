@@ -182,9 +182,9 @@
                                     <bk-online-state [online_state]="hardware.online_state"></bk-online-state>
                                 </div>
                                 <div>
-                                    <div *ngIf="hardware.online_state == 'OFFLINE' || hardware.online_state == 'FREEZED' || hardware.online_state == 'UNKNOWN_LOST_CONNECTION_WITH_SERVER'">
+                                    <div *ngIf="hardware.latest_online && (hardware.online_state == 'OFFLINE' || hardware.online_state == 'FREEZED' || hardware.online_state == 'UNKNOWN_LOST_CONNECTION_WITH_SERVER')">
                                         <span> {{'label_device_last_seen'|bkTranslate:this}}:</span>
-                                        <span *ngIf="hardware.latest_online !== -1" class="font-grey-mint bold"> {{hardware.latest_online|bkUnixTimeToDate}}</span>
+                                        <span *ngIf="hardware.latest_online > 0" class="font-grey-mint bold"> {{hardware.latest_online|bkUnixTimeToDate}}</span>
                                         <span *ngIf="hardware.latest_online === -1" class="font-grey-mint bold"> {{'label_last_seen_un_know'|bkTranslate:this}}</span>
                                     </div>
                                 </div>
@@ -599,12 +599,6 @@
                                             type: 'CHECKBOX_LIST',
                                             content: {
                                                 options: [
-                                                   {
-                                                        key: 'IN_PLAN',
-                                                        label: ('IN_PLAN'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterStatesValues['IN_PLAN'],
-                                                        color: 'info'
-                                                    },
                                                     {
                                                         key: 'PENDING',
                                                         label: ('PENDING'|bkTranslateTable:this:'update_state'),

@@ -27,7 +27,6 @@ export interface ConfigParameters {
 }
 
 export class FilterStatesValues {
-    public IN_PLAN: boolean = true;
     public PENDING: boolean = true;
     public RUNNING: boolean = true;
     public COMPLETE: boolean = false;
