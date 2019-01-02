@@ -139,6 +139,11 @@ export class BeckiAsyncValidators {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
 
+
+                console.log('NameTaken: ', type);
+                console.log('object_id: ', object_id);
+                console.log('project_id: ', project_id);
+
                 if (control == null) {
                     resolve();
                 }

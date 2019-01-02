@@ -226,10 +226,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onPortletClick(action: string): void {
         switch (action) {
-            case 'change_version_instance': {
-                this.onCreateNewSnapshotSelectBProgramVersion();
-                break;
-            }
             case 'edit_Instance': {
                 this.onEditClick();
                 break;
@@ -242,10 +238,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.onInstanceShutdownClick();
                 break;
             }
-            case 'active_instance': {
-                this.onInstanceDeployClick();
-                break;
-            }
             case 'save_snapshot': {
                 this.onSaveSnapshotClick();
                 break;
@@ -256,14 +248,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
             case 'change_version': {
                 this.onChangeVersion();
-                break;
-            }
-            case 'add_api_key': {
-                this.onAddApiKey();
-                break;
-            }
-            case 'add_mesh_key': {
-                this.onAddMeshNetworkKey();
                 break;
             }
             case 'add_api_key': {
@@ -372,6 +356,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     let version_id = this.bProgramVersion.id;
                     let interfaces: IInstanceSnapshotJsonFileInterface[] = [];
 
+                    this.bindings = this.editorView.getBindings();
                     this.bindings.forEach((binding) => {
                         interfaces.push({
                             target_id: binding.targetId,       // hardware.id or group.id
@@ -673,6 +658,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     onInstanceDeployClick(snapshot?: IInstanceSnapshot) {
 
         if (snapshot == null) {
+
             let model = new ModalsSnapShotDeployModel(this.instance.snapshots);
             this.modalService.showModal(model).then((success) => {
                 if (success) {
@@ -691,7 +677,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         });
                 }
             });
+
         } else {
+
             this.tyrionBackendService.instanceSnapshotDeploy({
                 snapshot_id: snapshot.id,
                 upload_time: 0
@@ -732,6 +720,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onFilterHardwareGroup(pageNumber: number = 0): void {
+
+        if (!this.instance.current_snapshot) {
+            return;
+        }
+
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
             project_id: this.projectId,
@@ -751,6 +744,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onFilterHardware(pageNumber: number = 0): void {
+
+        if (!this.instance.current_snapshot) {
+            return;
+        }
 
         let groups: IHardwareGroup[] = [];
         // Set groupd if we he it
@@ -798,9 +795,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.blockUI();
 
         this.tyrionBackendService.hardwareUpdateGetByFilter(pageNumber, {
-            instance_snapshot_ids: [this.instance.current_snapshot.id],
+            instance_snapshot_ids: [ this.instance.current_snapshot != null ? this.instance.current_snapshot.id : null],
             hardware_ids: null,
-            instance_ids: null,
+            instance_ids: [this.instance.id],
             update_states: []
         })
             .then((values) => {
@@ -959,6 +956,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.modalService.showModal(model)
             .then((success) => {
                 let binding: BlockoCore.BoundInterface;
+
+                if (this.editorView.getBindings()) {
+
+                }
+
                 this.zone.runOutsideAngular(() => {
                     if (model.selected_hardware.length > 0) {
                         binding = callback(model.selected_hardware[0].id);
@@ -967,6 +969,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     }
                 });
 
+                /*
                 if (binding) {
                     let index = this.bindings.findIndex((i) => {
                         return i.targetId === binding.targetId;
@@ -978,6 +981,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.bindings[index] = binding;
                     }
                 }
+                */
             })
             .catch((err) => {
 

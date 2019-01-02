@@ -86,7 +86,7 @@ export class ValidatorErrorsService {
             if (errors['InstanceNameTaken']) {
                 return this.translate('label_instance_name_taken');
             }
-            if (errors['SnapShotNameTaken']) {
+            if (errors['SnapshotNameTaken']) {
                 return this.translate('label_snapshot_name_taken');
             }
             if (errors['DatabaseNameTaken']) {
