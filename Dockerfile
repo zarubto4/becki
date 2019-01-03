@@ -29,9 +29,6 @@ FROM nginx
 COPY --from=0 /usr/src/app/dist /usr/src/app/dist
 RUN rm /etc/nginx/conf.d/default.conf
 COPY ngconf /etc/nginx/conf.d/default.conf
-RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get -y install python-certbot-nginx -t stretch-backports
 
 RUN service nginx start
 
