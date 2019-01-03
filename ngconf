@@ -2,7 +2,7 @@ server {
       listen 80;
       listen [::]:80;
 
-      server_name 172.17.0.2;
+      server_name portal.stage.cloud.byzance.cz;
 
       root /usr/src/app/dist;
       index index.html;
