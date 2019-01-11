@@ -26,6 +26,13 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
             <i class="right fa fa-warning" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
             <i class="right fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
 
+            <button *ngIf="type==='password'"
+                    class="customBtn"
+                    type="button"
+                    (click)="onBtnShowPassword()"><i class="fa"></i>
+            </button>
+
+
             <input  *ngIf="control" class="form-control"
                    (keydown)="onEnter($event)"
                    (ngModelChange)="onSelectedChange($event)"
@@ -140,31 +147,31 @@ export class FormInputComponent implements OnInit {
             this.control = form.controls['value'];
         }
 
-        if (this.type === 'password') {
-            this.showButton = {
-                btn_label_for_person: '',
-                colorType: 'ACTIVE',
-                btn_icon: 'fa-eye'
-            };
-
-            this.onBtnClickEvent.subscribe(() => {
-                if (this.type === 'password') {
-                    this.showButton = {
-                        btn_label_for_person: '',
-                        colorType: 'DEACTIVE',
-                        btn_icon: 'fa-eye-slash'
-                    };
-                    this.type = 'text';
-                } else {
-                    this.showButton = {
-                        btn_label_for_person: '',
-                        colorType: 'DEACTIVE',
-                        btn_icon: 'fa-eye'
-                    };
-                    this.type = 'password';
-                }
-            });
-        }
+        // if (this.type === 'password') {
+        //     this.showButton = {
+        //         btn_label_for_person: '',
+        //         colorType: 'ACTIVE',
+        //         btn_icon: 'fa-eye'
+        //     };
+        //
+        //     this.onBtnClickEvent.subscribe(() => {
+        //         if (this.type === 'password') {
+        //             this.showButton = {
+        //                 btn_label_for_person: '',
+        //                 colorType: 'DEACTIVE',
+        //                 btn_icon: 'fa-eye-slash'
+        //             };
+        //             this.type = 'text';
+        //         } else {
+        //             this.showButton = {
+        //                 btn_label_for_person: '',
+        //                 colorType: 'DEACTIVE',
+        //                 btn_icon: 'fa-eye'
+        //             };
+        //             this.type = 'password';
+        //         }
+        //     });
+        // }
     }
 
     onEnter(event: any) {
@@ -183,5 +190,13 @@ export class FormInputComponent implements OnInit {
 
     onBtnClick() {
         this.onBtnClickEvent.emit(true);
+    }
+
+    onBtnShowPassword() {
+        if (this.type === 'password') {
+            this.type = 'text';
+        } else {
+            this.type = 'password';
+        }
     }
 }

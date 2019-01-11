@@ -2846,3 +2846,24 @@ textarea.form-control {
 .logo-wrapper {
     height: 100vh;
 }
+
+.customBtn:focus {
+    outline: none;
+}
+
+.customBtn {
+    left: auto;
+    right: 28px;
+    float: right;
+    position: absolute;
+    margin: 0px 0px 0px 10px;
+    text-align: center;
+    z-index: 3;
+    height: 43px;
+    background: transparent;
+    border: 0px;
+    vertical-align: middle;
+    font-size: 16px;
+    color: #8290a3;
+}
+
