@@ -8,13 +8,13 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalService } from '../services/ModalService';
-import { Injector, NgZone } from '@angular/core';
+import { Injector, NgZone, Type } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockUIService } from '../services/BlockUIService';
 import {
     NotificationService, FlashMessage, FlashMessageInfo,
-    FlashMessageSuccess, FlashMessageWarning, FlashMessageError
+    FlashMessageSuccess, FlashMessageWarning, FlashMessageError, FlashMessageErrorFromString
 } from '../services/NotificationService';
 import { StorageService } from '../services/StorageService';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
@@ -113,13 +113,19 @@ export abstract class _BaseMainComponent {
         return fm;
     }
 
-    protected fmError(msg: string, reason?: IError): FlashMessage {
-        let fm = new FlashMessageError(msg, reason);
+    fmError(reason?: IError): FlashMessage {
+        let fm = new FlashMessageError(reason);
         this.addFlashMessage(fm);
         return fm;
     }
 
-// -- ON CLIC ----------------------------------------------------------------------------------------------------------------
+    fmErrorFromString(body?: string): FlashMessage {
+        let fm = new FlashMessageErrorFromString(body);
+        this.addFlashMessage(fm);
+        return fm;
+    }
+
+// -- ON CLICK ----------------------------------------------------------------------------------------------------------------
 
 
 

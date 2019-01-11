@@ -6,14 +6,14 @@
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IPermission, IPerson, IRole } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPermissionGroupModel } from '../modals/permission-group';
 import { Subscription } from 'rxjs';
 import { ModalsMembersAddModel } from '../modals/members-add';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsRolePermissionAddModel } from '../modals/role-permission-add';
-import { ModalsPermissionPermissionPropertyModel } from '../modals/permission-permission-properties';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-permission-group-group',
@@ -69,8 +69,8 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
                 this.securityRole = values;
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Role cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -92,8 +92,9 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_edit')));
                         this.refresh();
-                    }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                    })
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -113,9 +114,9 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
                             this.navigate(['/admin/permission-group']);
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
-                        this.refresh(); // also unblockUI
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
+                        this.refresh();
                     });
             }
         });
@@ -136,9 +137,9 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
                         .then(() => {
                             this.refresh(); // also unblockUI
                         })
-                        .catch(reason => {
-                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add'), reason));
-                            this.refresh(); // also unblockUI
+                        .catch((reason: IError) => {
+                            this.fmError(reason);
+                            this.refresh();
                         });
                 }
             });
@@ -146,7 +147,7 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
 
     onMemberDeleteClick(member: IPerson) {
         if ((this.tyrionBackendService.personInfoSnapshot.email === member.email) || (this.tyrionBackendService.personInfoSnapshot.id === member.id)) {
-            this.fmError(this.translate('label_cannot_remove_yourself'));
+            this.fmErrorFromString(this.translate('label_cannot_remove_yourself'));
         }
 
         let con = new ModalsConfirmModel(this.translate('modal_title_remove_member'), this.translate('modal_text_remove_member'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
@@ -159,9 +160,9 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
                     .then(() => {
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
-                        this.refresh(); // also unblockUI
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
+                        this.refresh();
                     });
             }
         });
@@ -180,15 +181,15 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
                                 .then(() => {
                                     this.refresh(); // also unblockUI
                                 })
-                                .catch(reason => {
-                                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add'), reason));
-                                    this.refresh(); // also unblockUI
+                                .catch((reason: IError) => {
+                                    this.fmError(reason);
+                                    this.refresh();
                                 });
                         }
                     });
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Role cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -202,9 +203,9 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
-                        this.refresh(); // also unblockUI
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
+                        this.refresh();
                     });
             }
         });
@@ -219,7 +220,6 @@ export class RoleGroupGroupComponent extends _BaseMainComponent implements OnIni
             this.onPermissionDeleteClick(object);
         }
     }
-
 }
 
 

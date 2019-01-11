@@ -5,13 +5,14 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IProject, IGridWidgetList, IWidget } from '../backend/TyrionAPI';
+import { IGridWidgetList, IWidget } from '../backend/TyrionAPI';
 import { ModalsWidgetsWidgetPropertiesModel } from '../modals/widgets-widget-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-widgets-widgets',
@@ -96,8 +97,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                         this.onShowProgramPrivateWidgetFilter();
                         this.tab = 'my_widgets';
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onShowProgramPrivateWidgetFilter();
                         this.onShowProgramPublicWidgetFilter();
                         this.unblockUI();
@@ -123,8 +124,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                         this.unblockUI();
                         this.onWidgetClick(widget.id);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_add_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onShowProgramPrivateWidgetFilter();
                     });
             }
@@ -150,8 +151,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                             this.onShowProgramPublicWidgetFilter();
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         if (widget.publish_type === 'PRIVATE') {
                             this.onShowProgramPrivateWidgetFilter();
                         } else {
@@ -177,8 +178,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                             this.onShowProgramPublicWidgetFilter();
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         if (widget.publish_type === 'PRIVATE') {
                             this.onShowProgramPrivateWidgetFilter();
                         } else {
@@ -200,8 +201,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                     this.onShowProgramPublicWidgetFilter();
                 }
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 if (widget.publish_type === 'PRIVATE') {
                     this.onShowProgramPrivateWidgetFilter();
                 } else {
@@ -220,8 +221,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                     this.onShowProgramPublicWidgetFilter();
                 }
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 if (widget.publish_type === 'PRIVATE') {
                     this.onShowProgramPrivateWidgetFilter();
                 } else {
@@ -239,8 +240,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 this.widgetList = list;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -254,8 +255,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 this.widgetPublicList = list;
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Widget cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -269,8 +270,8 @@ export class ProjectsProjectWidgetsComponent extends _BaseMainComponent implemen
                 this.widgetListNotApproved = list;
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Widget cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

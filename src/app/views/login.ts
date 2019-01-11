@@ -11,7 +11,8 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { BlockUIService } from '../services/BlockUIService';
 import { Subscription } from 'rxjs';
 import { TranslationService } from '../services/TranslationService';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/login;state=[_status_]`;
@@ -69,10 +70,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.resendVertification = false;
                 this.loginError = this.translationService.translate('msg_login_email_sent', this);
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 this.blockUIService.unblockUI();
-                this.loginError = reason;
+                this.loginError = reason.message;
             });
     }
 
@@ -85,15 +86,15 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.blockUIService.unblockUI();
                 this.router.navigate(['/']);
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('msg_login_error', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 this.blockUIService.unblockUI();
 
-                console.trace('OnLoginClic Error Code: ', reason);
+                console.trace('OnLoginClick Error Code: ', reason);
 
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
                 if (reason['code'] === 403) {
-                    this.loginError = reason['message'];
+                    this.loginError = reason.message;
                     return;
                 }
 
@@ -104,7 +105,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     return;
                 }
 
-                this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason['message']);
+                this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, [reason['message']]);
 
             });
     }
@@ -116,13 +117,13 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.blockUIService.unblockUI();
                 this.redirect(url);
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('msg_login_error', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 this.blockUIService.unblockUI();
 
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
                 if (reason['code'] === 403) {
-                    this.loginError = reason['message'];
+                    this.loginError = reason.message;
                     return;
                 }
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
@@ -132,7 +133,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     return;
                 }
 
-                this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason['message']);
+                this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, [reason['message']]);
             });
     }
 

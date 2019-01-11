@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IReportAdminDashboard } from '../backend/TyrionAPI';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-admin-dashboard',
@@ -38,8 +39,8 @@ export class AdminDashboardComponent extends _BaseMainComponent implements OnIni
                 this.report = report;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.fmError(this.translate('flash_cant_load', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

@@ -10,6 +10,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsDatabaseNameDescriptionModel } from '../modals/database-edit';
 import { ModalsDatabaseCollectionModel } from '../modals/database-collection-new';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: `bk-view-projects-project-databases`,
@@ -51,13 +52,13 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
             this.tyrionBackendService.databasesGet(this.productId).then((databaseList) => {
                 this.databases = databaseList;
                 this.unblockUI();
-            }).catch((reason) => {
+            }).catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError('db_loar_error', reason);
+                this.fmError(reason);
             });
-        }).catch((reason) => {
+        }).catch((reason: IError) => {
             this.unblockUI();
-            this.fmError('db_loar_error', reason);
+            this.fmError(reason);
         });
     }
 
@@ -80,9 +81,9 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
                 }).then (() => {
                     this.unblockUI();
                     this.refresh();
-                }).catch((reason) => {
+                }).catch((reason: IError) => {
                     this.unblockUI();
-                    this.fmError('', reason);
+                    this.fmError(reason);
                     this.refresh();
                 });
             }
@@ -104,12 +105,12 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
                         this.refresh();
                     });
             }
-        }).catch((reason) => {
+        }).catch((reason: IError) => {
             this.unblockUI();
             this.refresh();
         });
@@ -124,7 +125,7 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
                         this.refresh();
                     });
@@ -141,9 +142,9 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
                 this.tyrionBackendService.databaseCollectionCreate(database.id, model.collection_name).then (() => {
                     this.unblockUI();
                     this.refresh();
-                }).catch((reason) => {
+                }).catch((reason: IError) => {
                     this.unblockUI();
-                    this.fmError('', reason);
+                    this.fmError(reason);
                     this.refresh();
                 });
             }

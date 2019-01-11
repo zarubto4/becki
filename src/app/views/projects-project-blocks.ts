@@ -6,13 +6,14 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IProject, IBlock, IBlockList } from '../backend/TyrionAPI';
+import { IBlock, IBlockList } from '../backend/TyrionAPI';
 import { ModalsBlocksBlockPropertiesModel } from '../modals/blocks-block-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsBlockoBlockCopyModel } from '../modals/blocko-block-copy';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-blocks',
@@ -98,8 +99,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                         this.tab = 'my_blocks';
 
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -122,8 +123,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                         this.unblockUI();
                         this.onBlockClick(block.id);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onShowProgramPrivateBlocksFilter();
                     });
             }
@@ -149,8 +150,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                             this.onShowProgramPublicBlocksFilter();
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         if (block.publish_type === 'PRIVATE') {
                             this.onShowProgramPrivateBlocksFilter();
                         } else {
@@ -176,8 +177,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                             this.onShowProgramPublicBlocksFilter();
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         if (block.publish_type === 'PRIVATE') {
                             this.onShowProgramPrivateBlocksFilter();
                         } else {
@@ -198,8 +199,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                     this.onShowProgramPublicBlocksFilter();
                 }
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 if (block.publish_type === 'PRIVATE') {
                     this.onShowProgramPrivateBlocksFilter();
                 } else {
@@ -218,8 +219,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                     this.onShowProgramPublicBlocksFilter();
                 }
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 if (block.publish_type === 'PRIVATE') {
                     this.onShowProgramPrivateBlocksFilter();
                 } else {
@@ -237,8 +238,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.blockList = list;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -252,8 +253,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.blockPublicList = list;
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Blocko cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -267,8 +268,8 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.blockListNotApproved = list;
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Blocko cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

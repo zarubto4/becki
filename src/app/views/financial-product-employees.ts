@@ -4,10 +4,11 @@
  */
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IProduct, IEmployee, IProductExtension, IProjectParticipant } from '../backend/TyrionAPI';
+import { IProduct, IEmployee } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsMembersAddModel } from '../modals/members-add';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -55,9 +56,9 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
                         .then(() => {
 
                         })
-                        .catch(reason => {
+                        .catch((reason: IError) => {
                             this.unblockUI();
-                            this.fmError(this.translate('label_cannot_add_new_employees', reason));
+                            this.fmError(reason);
                         });
                 }
             });
@@ -66,7 +67,7 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
     onMemberDeleteClick(member: IEmployee) {
 
         if ((this.tyrionBackendService.personInfoSnapshot.email === member.person.email) || (this.tyrionBackendService.personInfoSnapshot.id === member.person.id)) {
-            this.fmError(this.translate('label_cannot_remove_yourself'));
+            this.fmErrorFromString(this.translate('label_cannot_remove_yourself'));
         }
 
         let con = new ModalsConfirmModel(this.translate('modal_title_remove_member'), this.translate('modal_text_remove_member'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
@@ -79,9 +80,9 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
                     .then(() => {
                         this.refresh();
                     })
-                    .catch((err) => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_cannot_delete_person', err));
+                        this.fmError(reason);
                     });
             }
         });
@@ -98,9 +99,9 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
                 let m = new ModalsConfirmModel(this.translate('modal_label_invitation'), this.translate('modal_label_invitation_send', member.person.email), true, null, null, [this.translate('btn_ok')]);
                 this.modalService.showModal(m);
             })
-            .catch((err) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError(this.translate('label_cannot_resend_invitation', err));
+                this.fmError(reason);
             });
     }
 
@@ -127,11 +128,11 @@ export class FinancialProductEmployeesComponent extends _BaseMainComponent imple
 
     refresh(): void {
         this.blockUI();
-        this.tyrionBackendService.productGet(this.id).then(product =>  {
+        this.tyrionBackendService.productGet(this.id).then(product => {
             this.product = product;
             this.unblockUI();
-        }).catch(reason =>  {
-            this.fmError(this.translate('flash_fail'), reason);
+        }).catch((reason: IError) => {
+            this.fmError(reason);
             this.unblockUI();
         });
 

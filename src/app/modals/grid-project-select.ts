@@ -12,7 +12,8 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
 import { IGridProgram, IGridProgramVersion, IGridProject, IGridProjectList } from '../backend/TyrionAPI';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 export class ModalsSelectGridProjectModel extends ModalModel {
     public selected_grid_project: IGridProject = null;
@@ -58,9 +59,8 @@ export class ModalsGridProjectSelectComponent implements OnInit {
                 .then((project) => {
                     this.onSelectProjectClick(project);
                 })
-                .catch(reason => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
-                    this.errorMessage = reason.message;
+                .catch((reason: IError) => {
+                    this.notificationService.fmError(reason);
                 });
         }
     }
@@ -97,8 +97,8 @@ export class ModalsGridProjectSelectComponent implements OnInit {
             .then((projects) => {
                 this.projects = projects;
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
             });
     }
 

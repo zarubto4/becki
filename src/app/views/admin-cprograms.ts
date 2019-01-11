@@ -2,11 +2,12 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { ICProgram, ICProgramFilter, ICProgramList, ILibraryFilter, ILibraryList, ILibrary, IRole, IHardwareType } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ICProgram, ICProgramList, ILibraryList, ILibrary, IHardwareType } from '../backend/TyrionAPI';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-admin-cprograms',
@@ -41,8 +42,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.hardwareTypes = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Roles cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -67,8 +68,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.cPrograms = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -82,8 +83,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.cProgramsNotApproved = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -97,8 +98,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.libraries = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -112,8 +113,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.librariesNotApproved = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -127,8 +128,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         this.onShowPublicProgramByFilter();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -136,7 +137,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
 
     onCProgramEditClick(code: ICProgram): void {
         if (!this.hardwareTypes) {
-            this.fmError(this.translate('flash_cant_add_code_to_project'));
+            this.fmErrorFromString(this.translate('flash_cant_add_code_to_project'));
         }
 
         let model = new ModalsCodePropertiesModel(this.hardwareTypes, null, code);
@@ -152,8 +153,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.onShowPublicProgramByFilter();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -174,8 +175,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));
                         this.onShowPublicLibraryByFilter();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -190,8 +191,8 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_removed_success')));
                         this.onShowPublicLibraryByFilter();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });

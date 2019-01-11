@@ -6,9 +6,9 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IInvoiceFullDetails } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import { FlashMessageError } from '../services/NotificationService';
 import { FinancialProductInvoiceActions } from './financial-product-invoices';
 import { HttpClient } from '@angular/common/http';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -70,8 +70,8 @@ export class FinancialProductInvoicesInvoiceComponent extends _BaseMainComponent
                     this.router.navigate(['financial', this.idProduct, 'invoices']);
                 }
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Data cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

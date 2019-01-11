@@ -20,7 +20,7 @@
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
 
         <button *ngIf="modalModel.program && !modalModel.copy" type="button" class="btn green"  [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_update")|bkTranslate:this}}</button>
-        <button *ngIf="!modalModel.program" type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_create")|bkTranslate:this}}</button>
+        <button *ngIf="!modalModel.program" type="button" class="btn green"  (click)="onSubmitClick()">{{("btn_create")|bkTranslate:this}}</button>
         <button *ngIf="modalModel.copy"  type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_copy")|bkTranslate:this}}</button>
     </div>
 </div>

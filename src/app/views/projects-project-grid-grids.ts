@@ -4,13 +4,14 @@
  */
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IProject, IGridProject, IGridProgram } from '../backend/TyrionAPI';
+import { IGridProject, IGridProgram } from '../backend/TyrionAPI';
 import { ModalsGridProgramPropertiesModel } from '../modals/grid-program-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsGridProjectPropertiesModel } from '../modals/grid-project-properties';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids',
@@ -54,8 +55,8 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                 this.gridProject = project;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 
@@ -75,8 +76,8 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onGridProgramClick(this.gridProject.id, gridProgram.id);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_program'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -113,8 +114,8 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_edit')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -136,8 +137,8 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                             this.router.navigate(['/admin/widgets']);
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -160,8 +161,8 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_edit')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_program'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -178,8 +179,8 @@ export class ProjectsProjectGridGridsComponent extends _BaseMainComponent implem
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_remove')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_program'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }

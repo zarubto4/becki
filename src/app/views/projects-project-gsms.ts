@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
@@ -20,6 +20,7 @@ import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 import { DataChar, DivideOption } from './projects-project-gsms-gsm';
 import { ChartBarComponent, DataCharInterface } from '../components/ChartBarComponent';
 import * as moment from 'moment';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-gsms',
@@ -99,8 +100,8 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                         this.unblockUI();
                         this.onFilter();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_gsm'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilter();
                     });
             }
@@ -117,8 +118,8 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                         this.unblockUI();
                         this.onFilter();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_success'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilter();
                     });
             }
@@ -132,8 +133,8 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                 this.unblockUI();
                 this.onFilter();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_error'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.onFilter();
             });
     }
@@ -142,8 +143,8 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
         let model = new ModalsAddGSMModel(this.project_id);
         this.modalService.showModal(model).then((success) => {
             this.onFilter();
-        }).catch((reason) => {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_add_gsm_fail', reason)));
+        }).catch((reason: IError) => {
+            this.fmError(reason);
             this.onFilter();
         });
     }
@@ -176,8 +177,8 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                     this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_cellular_update_success')));
                     this.unblockUI();
                     this.onFilter();
-                }).catch(reason => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+                }).catch((reason: IError) => {
+                    this.fmError(reason);
                     this.onFilter();
                 });
             });
@@ -300,8 +301,8 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                 console.info('ProjectsProjectGSMSGSMComponent::DATA:: ', chartData);
                 this.graphView.setData(chartData);
 
-            }).catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+            }).catch((reason: IError) => {
+                this.fmError(reason);
                 return null;
             });
     }
@@ -331,8 +332,8 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                 this.gsmList = gsms;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

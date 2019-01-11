@@ -5,11 +5,12 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { IApplicableProduct, IProject } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -68,7 +69,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
     onAddClick(): void {
 
         if (!this.products) {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
+            this.fmErrorFromString(this.translate('flash_cant_add_project'));
         }
 
         let model = new ModalsProjectPropertiesModel(this.products);
@@ -86,8 +87,8 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
                         this.unblockUI();
                         this.onProjectClick(project.id);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.project.name, reason.message)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -106,7 +107,7 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
 
     onEditClick(project: IProject): void {
         if (!this.products) {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
+            this.fmErrorFromString(this.translate('flash_cant_add_project'));
         }
 
         let model = new ModalsProjectPropertiesModel(this.products, project);
@@ -122,8 +123,8 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_update')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -139,8 +140,8 @@ export class ProjectsComponent extends _BaseMainComponent implements OnInit, OnD
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }

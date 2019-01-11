@@ -4,13 +4,14 @@
  */
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FormGroup } from '@angular/forms';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -92,8 +93,8 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
                         this.refresh();
                         this.unblockUI();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                         this.unblockUI();
                     });
@@ -110,8 +111,8 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.router.navigate(['/projects']);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                         this.unblockUI();
                     });

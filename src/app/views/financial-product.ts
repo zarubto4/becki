@@ -7,9 +7,10 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeactivateModel } from '../modals/deactivate';
 import { ModalsFinancialProductModel } from '../modals/financial-product';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-financial-product',
@@ -66,8 +67,8 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -87,8 +88,8 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_deactivated')));
                         this.onFinanceClick();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_deactivate_product'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -104,8 +105,8 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_product_activated')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_activate_product'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -119,8 +120,8 @@ export class FinancialProductComponent extends _BaseMainComponent implements OnI
             this.product = product;
             this.unblockUI();
         })
-            .catch(reason => {
-                this.fmError(this.translate('flash_fail'), reason);
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
 

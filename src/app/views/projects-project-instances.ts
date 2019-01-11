@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 import { IInstance, IInstanceList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsInstanceCreateComponent, ModalsInstanceCreateModel } from '../modals/instance-create';
+import { FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsInstanceCreateModel } from '../modals/instance-create';
 import { ModalsRemovalModel } from '../modals/removal';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-instances',
@@ -65,9 +66,9 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
 
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -98,8 +99,8 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onFilterInstances();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_create_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                         this.onFilterInstances();
                     });
@@ -126,8 +127,8 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onFilterInstances();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -142,8 +143,8 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.onFilterInstances();
                         this.unblockUI();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilterInstances();
                     });
             }
@@ -160,9 +161,9 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onFilterInstances();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_shut_down_error', reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -181,9 +182,9 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onFilterInstances();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', reason));
+                        this.fmError(reason);
                     });
             }
         });

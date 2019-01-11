@@ -1,14 +1,13 @@
 
-import { Component, Injector, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import {
-    IActualizationProcedureTaskList, ICProgramList, IHardware,
+    IActualizationProcedureTaskList, IHardware,
     IHardwareType
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
-import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-code-program-version-select';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
@@ -18,7 +17,8 @@ import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-serve
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { ModalsSelectCodeModel } from '../modals/code-select';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { IError } from '../services/_backend_class/Responses';
 
 export interface ConfigParameters {
     key: string;
@@ -114,8 +114,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_success')));
             })
-            .catch((reason) => {
-                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -205,8 +205,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.unblockUI();
 
             })
-            .catch((reason) => {
-                this.fmError(this.translate('label_cant_load_device', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -246,8 +246,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -263,8 +263,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -277,8 +277,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                 this.refresh();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -292,8 +292,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -312,8 +312,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_picture_updated')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_update'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -334,8 +334,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             .then(() => {
                 this.refresh();
             })
-            .catch((reason) => {
-                this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -361,8 +361,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -389,8 +389,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -430,8 +430,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -448,8 +448,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_device_restart_success')));
                 this.refresh();
             })
-            .catch((reason) => {
-                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -477,8 +477,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_device_restart_success')));
                 this.refresh();
             })
-            .catch((reason) => {
-                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -500,8 +500,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         .then(() => {
                             this.refresh();
                         })
-                        .catch((reason) => {
-                            this.fmError(this.translate('flash_cant_update_bootloader', reason));
+                        .catch((reason: IError) => {
+                            this.fmError(reason);
                             this.unblockUI();
                         });
                 }
@@ -521,8 +521,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         .then(() => {
                             this.refresh();
                         })
-                        .catch((reason) => {
-                            this.fmError(this.translate('flash_cant_update_bootloader', reason));
+                        .catch((reason: IError) => {
+                            this.fmError(reason);
                             this.unblockUI();
                         });
                 }
@@ -585,8 +585,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                                     task.state = value.state;
                                     task.date_of_finish = value.date_of_finish;
                                 })
-                                .catch((reason) => {
-                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                .catch((reason: IError) => {
+                                    this.fmError(reason);
                                 });
                         }
                     });
@@ -594,9 +594,9 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
 
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -625,8 +625,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                                 this.refresh();
                                 this.onFilterActualizationProcedureTask();
                             })
-                            .catch((reason) => {
-                                this.fmError(this.translate('flash_cant_edit_backup_mode', reason));
+                            .catch((reason: IError) => {
+                                this.fmError(reason);
                                 this.unblockUI();
                             });
                     }
@@ -644,8 +644,8 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 .then(() => {
                     this.refresh();
                 })
-                .catch((reason) => {
-                    this.fmError(this.translate('flash_cant_edit_backup_mode', reason));
+                .catch((reason: IError) => {
+                    this.fmError(reason);
                     this.unblockUI();
                 });
         }

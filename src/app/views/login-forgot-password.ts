@@ -5,10 +5,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../services/NotificationService';
+import { FlashMessageSuccess, NotificationService } from '../services/NotificationService';
 import { TyrionBackendService } from '../services/BackendService';
 import { Router } from '@angular/router';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -44,8 +45,8 @@ export class ForgotPasswordComponent implements OnInit {
                 this.router.navigate(['/']);
 
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_email_not_sent', this, null, reason)));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 console.error('err send recovery' + reason);
             });
     }

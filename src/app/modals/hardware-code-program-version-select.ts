@@ -3,17 +3,13 @@
  * of this distribution.
  */
 
-
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {
-    ICProgram, ICProgramFilter, ICProgramList, ICProgramVersion, ILibrary, ILibraryVersion
-} from '../backend/TyrionAPI';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { ICProgram, ICProgramList, ICProgramVersion } from '../backend/TyrionAPI';
+import { NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsHardwareCodeProgramVersionSelectModel extends ModalModel {
@@ -52,8 +48,8 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
             hardware_type_ids : [this.modalModel.hardwareTypeId]
         }).then((p) => {
             this.codePrograms = p;
-        }).catch(reason => {
-            this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+        }).catch((reason: IError) => {
+            this.notificationService.fmError(reason);
         });
     }
 
@@ -72,8 +68,8 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
             .then((p) => {
                 this.programVersions = p.program_versions;
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
             });
     }
 

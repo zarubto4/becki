@@ -46,6 +46,7 @@ export class ModalsCodePropertiesComponent implements OnInit {
 
     ngOnInit() {
 
+        console.info('ONINIT func');
         if (!this.modalModel.program) {
             this.options = formSelectComponentOptionsMaker(this.modalModel.hardwareTypes, 'id', 'name');
         }
@@ -70,11 +71,17 @@ export class ModalsCodePropertiesComponent implements OnInit {
         };
 
         this.form = this.formBuilder.group(input);
+
+        console.info('ONINIT function, Program name is');
+        console.info(this.modalModel.program.name)
     }
 
 
 
     onSubmitClick(): void {
+        console.info('BEFORE onSubmitClick, Program name is');
+        console.info(this.modalModel.program.name);
+
         if (this.modalModel.program == null) {
             // @ts-ignore
             this.modalModel.block = {};
@@ -84,6 +91,9 @@ export class ModalsCodePropertiesComponent implements OnInit {
         this.modalModel.hardware_type_id = this.form.controls['hardware_type_id'].value;
         this.modalModel.program.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
+
+        console.info('AFTER onSubmitClick, Program name is');
+        console.info(this.modalModel.program.name);
     }
 
     onCloseClick(): void {

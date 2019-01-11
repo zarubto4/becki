@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess, FlashMessage } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { CodeFile, CodeIDEComponent } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
@@ -16,7 +16,6 @@ import { NullSafe } from '../helpers/NullSafe';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { getAllInputOutputs } from '../helpers/CodeInterfaceHelpers';
 import { ModalsCodeAddLibraryModel } from '../modals/code-add-library';
-import moment = require('moment/moment');
 import { ModalsCodeLibraryVersionModel } from '../modals/code-library-version';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
@@ -25,8 +24,7 @@ import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { CodeCompileError, ICodeCompileErrorMessage } from '../services/_backend_class/Responses';
-import { ProgramVersionDiffComponent } from '../components/VersionDiffComponent';
+import { CodeCompileError, ICodeCompileErrorMessage, IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-code-code',
@@ -184,8 +182,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -204,8 +202,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                         }
                         this.router.navigate(['/projects/' + this.project_Id + '/code']);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -226,8 +224,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -246,8 +244,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                         }
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         if (this.project_Id != null) {
                             this.refresh();
                         }
@@ -271,8 +269,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.object.name)));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.object.name, reason)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -321,9 +319,9 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                     this.hardwareType = response;
                     this.onMakeListOfCompilationVersion();
                 });
-        }).catch(reason => {
+        }).catch((reason: IError) => {
             this.unblockUI();
-            this.fmError(this.translate('flash_cant_load_code_types'), reason);
+            this.fmError(reason);
         });
     }
 
@@ -439,8 +437,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                         }
 
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -491,8 +489,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -648,8 +646,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
 
                         this.refresh();
                     })
-                    .catch((err) => {
-                        this.fmError(this.translate('flash_cant_save_code_version', model.object.name, err));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -687,8 +685,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                 this.exitConfirmationService.setConfirmationEnabled(false);
                 this.refresh();
             })
-            .catch((err) => {
-                this.fmError(this.translate('flash_cant_save_code_version', 'Working Copy', err));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -753,10 +751,10 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                 // console.log(success);
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_build_success')));
             })
-            .catch((error) => {
+            .catch((reason: IError) => {
                 this.buildInProgress = false;
-                if (error instanceof CodeCompileError) {
-                    this.buildErrors = error.errors;
+                if (reason instanceof CodeCompileError) {
+                    this.buildErrors = reason.errors;
 
                     // TODO: move to method
                     let filesAnnotations: { [filename: string]: any[] } = {};
@@ -781,7 +779,7 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                     });
 
                 } else {
-                    this.addFlashMessage(new FlashMessageError(error.toString()));
+                    this.fmError(reason);
                 }
             });
     }
@@ -795,8 +793,8 @@ export class ProjectsProjectCodeCodeComponent extends _BaseMainComponent impleme
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_set_as_default')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }

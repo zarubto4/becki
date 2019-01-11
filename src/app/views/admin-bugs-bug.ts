@@ -6,6 +6,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { IServerError } from '../backend/TyrionAPI';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-bugs-bug',
@@ -47,11 +48,10 @@ export class BugsBugComponent extends _BaseMainComponent implements OnInit, OnDe
         this.tyrionBackendService.getBug(this.bugId)
             .then((bug) => {
                 this.bug = bug;
-
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.fmError( this.translate('flash_cant_load', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -64,9 +64,9 @@ export class BugsBugComponent extends _BaseMainComponent implements OnInit, OnDe
                 this.unblockUI();
                 this.fmSuccess(this.translate('flash_report_success'));
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError(this.translate('flash_cant_report'), reason);
+                this.fmError(reason);
             });
     }
 
@@ -75,8 +75,8 @@ export class BugsBugComponent extends _BaseMainComponent implements OnInit, OnDe
             .then((response) => {
                 this.navigate(['/admin/bugs']);
             })
-            .catch((reason) => {
-                this.fmError(this.translate('flash_cant_remove', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 }

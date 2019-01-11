@@ -10,6 +10,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { Subscription } from 'rxjs';
 import { ContactFormData } from '../components/ContactFormComponent';
 import { PaymentDetailsData, PaymentDetailsOptions } from '../components/PaymentDetailsFormComponent';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -74,7 +75,7 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
                         if (t) {
                             this.chooseTariff(t);
                         } else {
-                            this.fmError(this.translate('label_want_tariff_not_found'));
+                            this.fmErrorFromString(this.translate('label_want_tariff_not_found'));
                             this.router.navigate(['/financial/product-registration']);
                         }
                     }
@@ -83,8 +84,8 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
                     this.unblockUI();
                 });
 
-            }).catch(error => {
-                this.fmError(this.translate('label_cant_load_tariff', error));
+            }).catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -296,8 +297,8 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
                     }
                 }
             })
-            .catch(reason => {
-                this.fmError(this.translate('flash_cant_buy_product'), reason);
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

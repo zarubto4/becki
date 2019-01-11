@@ -10,7 +10,7 @@ import { ModalModel } from '../services/ModalService';
 import { IHardware, IHardwareGroupList, IResultBadRequest } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
-import { FlashMessage, FlashMessageError, NotificationService } from '../services/NotificationService';
+import { FlashMessage, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
 import { IError } from '../services/_backend_class/Responses';
 

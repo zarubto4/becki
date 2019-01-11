@@ -4,13 +4,12 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { ILibrary, ILibraryVersion } from '../backend/TyrionAPI';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsCodeLibraryVersionModel extends ModalModel {
@@ -59,8 +58,8 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
                         });
                     }
                 })
-                .catch(reason => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                .catch((reason: IError) => {
+                    this.notificationService.fmError(reason);
                     this.loading = false;
                 });
         }, 1);

@@ -5,12 +5,13 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { IProject, IHardwareType, ICProgram, ICProgramList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-code',
@@ -89,8 +90,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                             this.onFilterPublicPrograms();
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         if (code.publish_type === 'PRIVATE') {
                             this.onFilterPrivatePrograms();
                         } else {
@@ -123,7 +124,7 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                                 this.onCProgramClick(cProgram.id);
                             })
                             .catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.program.name, reason)));
+                                this.fmError(reason);
                                 this.unblockUI();
                                 this.onFilterPrivatePrograms();
                             });
@@ -154,8 +155,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                                     this.onFilterPublicPrograms();
                                 }
                             })
-                            .catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                            .catch((reason: IError) => {
+                                this.fmError(reason);
                                 if (code.publish_type === 'PRIVATE') {
                                     this.onFilterPrivatePrograms();
                                 } else {
@@ -184,8 +185,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                         this.onFilterPrivatePrograms();
                         this.tab = 'my_programs';
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilterPrivatePrograms();
                         this.onFilterPublicPrograms();
                     });
@@ -208,8 +209,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.privatePrograms = iCProgramList;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -231,7 +232,6 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });
     }
@@ -252,8 +252,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.publicPrograms = iCProgramList;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -273,5 +273,4 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
         }
 
     }
-
 }

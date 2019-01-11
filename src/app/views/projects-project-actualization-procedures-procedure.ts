@@ -1,12 +1,13 @@
 
 import { Component, OnInit, Injector } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { IActualizationProcedureTaskList, IProject, IUpdateProcedure } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
 import { FormGroup } from '@angular/forms';
+import { IError } from '../services/_backend_class/Responses';
+
 @Component({
     selector: 'bk-view-projects-project-actualization-procedures-procedure',
     templateUrl: './projects-project-actualization-procedures-procedure.html',
@@ -67,8 +68,8 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
 
                 this.unblockUI();
 
-            }).catch(reason => {
-                this.fmError(this.translate('label_cant_load_actualization_procedure'));
+            }).catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -132,8 +133,8 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
                                     task.state = value.state;
                                     task.date_of_finish = value.date_of_finish;
                                 })
-                                .catch(reason => {
-                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                .catch((reason: IError) => {
+                                    this.fmError(reason);
                                 });
 
                         }
@@ -142,9 +143,9 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
 
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 

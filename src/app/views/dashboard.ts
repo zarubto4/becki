@@ -7,11 +7,12 @@ import { Component, Injector, OnDestroy, OnInit, AfterViewInit } from '@angular/
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IApplicableProduct, IArticle, IArticleList, IProduct, IProject, ITariff } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsArticleModel } from '../modals/article';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { TyrionBackendService } from '../services/BackendService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -101,7 +102,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
     onAddProjectClick(): void {
 
         if (!this.products) {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
+            this.fmErrorFromString(this.translate('flash_cant_add_project'));
         }
 
         let model = new ModalsProjectPropertiesModel(this.products);
@@ -118,8 +119,8 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.project.name)));
                         this.onProjectClick(project.id);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.project.name, reason.message)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -168,8 +169,8 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                 this.articles.grid = values[4];
                 this.articles.cloud = values[5];
                 this.unblockUI();
-            }).catch((err) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_article_create_error', err)));
+            }).catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -190,8 +191,8 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                         this.unblockUI();
                         this.onFilterArticle();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_article_create_error', reason)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -208,8 +209,8 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                         this.unblockUI();
                         this.onFilterArticle();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_article'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilterArticle();
                     });
             }
@@ -232,8 +233,8 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                         this.unblockUI();
                         this.onFilterArticle();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_article_create_error', reason)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }

@@ -7,10 +7,11 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IGSM, IResultBadRequest, IResultInvalidBody } from '../backend/TyrionAPI';
+import { IGSM } from '../backend/TyrionAPI';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
-import { FlashMessage, FlashMessageError, NotificationService } from '../services/NotificationService';
+import { FlashMessage, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsAddGSMModel extends ModalModel {
@@ -103,8 +104,8 @@ export class ModalsAddGSMComponent  implements OnInit {
                 // CAN_REGISTER, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE
                 this.single_error_status = result.status;
             })
-            .catch(() => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cant_change_hash', this)));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
             });
     }
 
@@ -162,8 +163,8 @@ export class ModalsAddGSMComponent  implements OnInit {
                 this.sequenceRegistrationPromise(++pointer);
 
             })
-            .catch((reason: IResultBadRequest|IResultInvalidBody) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 console.error('Nepodařilo se pro ', this.GSMsForRegistration[pointer], ' důvod?', reason.message);
                 console.error('Nepodařilo se pro ', this.GSMsForRegistration[pointer], ' důvod?', reason.state);
 
@@ -192,9 +193,9 @@ export class ModalsAddGSMComponent  implements OnInit {
             .then(() => {
                 this.modalClose.emit(true);
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
-                this.single_error_message = reason.body.message;
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
+                this.single_error_message = reason.message;
             });
     }
 

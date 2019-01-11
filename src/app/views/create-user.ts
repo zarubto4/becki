@@ -10,12 +10,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../services/NotificationService';
+import { FlashMessageSuccess, NotificationService } from '../services/NotificationService';
 import { TyrionBackendService } from '../services/BackendService';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { Subscription } from 'rxjs';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -71,8 +72,8 @@ export class CreateUserComponent implements OnInit, OnDestroy {
                 this.notificationService.addFlashMessage(new FlashMessageSuccess(this.translateService.translate('flash_email_was_send', this)));
                 this.router.navigate(['/']);
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translateService.translate('flash_email_cant_be_sent', this, null, reason)));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 console.error('err ' + reason);
             });
     }

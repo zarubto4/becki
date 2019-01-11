@@ -5,13 +5,13 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 import { IProject, ILibrary, ILibraryList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalsCodePropertiesModel } from '../modals/code-properties';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-libraries',
@@ -77,8 +77,8 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                             this.onFilterPublicLibraries();
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         if (library.publish_type === 'PRIVATE') {
                             this.onFilterPrivateLibraries();
                         } else {
@@ -105,8 +105,8 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onLibraryClick(library.id);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_add_fail', model.library.name, reason)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilterPrivateLibraries();
                     });
             }
@@ -130,8 +130,8 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         this.onFilterPrivateLibraries();
                         this.onFilterPublicLibraries();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilterPrivateLibraries();
                         this.onFilterPublicLibraries();
                     });
@@ -157,8 +157,8 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                             this.onFilterPublicLibraries();
                         }
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         if (library.publish_type === 'PRIVATE') {
                             this.onFilterPrivateLibraries();
                         } else {
@@ -186,8 +186,8 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 this.privateLibraries = iLibraryList;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -208,8 +208,8 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 this.publicLibraries = iLibraryList;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

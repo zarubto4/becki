@@ -21,11 +21,10 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 import { ModalsSelectVersionModel } from '../modals/version-select';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import moment = require('moment/moment');
 import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
 import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -37,6 +36,7 @@ import { WebSocketClientBlocko } from '../services/websocket/WebSocketClientBloc
 import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
 import { ModalsInstanceCreateModel } from '../modals/instance-create';
 import { FormGroup, Validators } from '@angular/forms';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -136,16 +136,16 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         .then((program) => {
                             this.setSnapshotProgram(JSON.parse(program).snapshot);
                         })
-                        .catch((reason) => {
-                            this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        .catch((reason: IError) => {
+                            this.fmError(reason);
                         });
                 } else if (this.bProgramVersion) {
                     this.fileDownloaderService.download(this.bProgramVersion.program)
                         .then((program) => {
                             this.setSnapshotProgram(program);
                         })
-                        .catch((reason) => {
-                            this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        .catch((reason: IError) => {
+                            this.fmError(reason);
                         });
                 }
             }
@@ -197,8 +197,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then((bp) => {
                         this.bProgram = bp;
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_bprogram_load_fail'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
 
                 this.tyrionBackendService.onlineStatus.subscribe((status) => {
@@ -216,8 +216,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.onFilterHardwareGroup();
 
             })
-            .catch(reason => {
-                this.fmError(`Instances ${this.projectId} cannot be loaded.`, reason);
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -303,8 +303,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         .then((program) => {
                             this.setSnapshotProgram(JSON.parse(program).snapshot);
                         })
-                        .catch((reason) => {
-                            this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        .catch((reason: IError) => {
+                            this.fmError(reason);
                         });
 
                     let version = this.bProgram.program_versions.find( vrs => vrs.id === this.instance.current_snapshot.b_program_version.id);
@@ -318,7 +318,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 } else if (this.bProgram.program_versions.length > 0) {
                     this.onChangeVersion(this.bProgram.program_versions[0]);
                 } else {
-                    this.fmError(this.translate('flash_bprogram_no_versions'));
+                    this.fmErrorFromString(this.translate('flash_bprogram_no_versions'));
                 }
             });
         }
@@ -349,13 +349,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                     .then((program) => {
                                         this.setSnapshotProgram(program);
                                     })
-                                    .catch((reason) => {
-                                        this.fmError(this.translate('flash_cannot_download_file'), reason);
+                                    .catch((reason: IError) => {
+                                        this.fmError(reason);
                                     });
                             }
                         })
-                        .catch((reason) => {
-                            this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                        .catch((reason: IError) => {
+                            this.fmError(reason);
                         });
                 }
             });
@@ -394,15 +394,15 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                         this.unblockUI();
                         this.refresh();
-                    }).catch((reason) => {
-                        this.fmError(this.translate('flash_snapshot_save_fail'), reason);
+                    }).catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
                 }
             });
 
         } else {
-            this.fmError(this.translate('flash_not_deployable'));
+            this.fmErrorFromString(this.translate('flash_not_deployable'));
         }
     }
 
@@ -417,8 +417,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then((bpv) => {
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -432,8 +432,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then((sanpshot) => {
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_cannot_remove_api_token'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -450,8 +450,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then((bpv) => {
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -470,8 +470,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then((bpv) => {
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -485,8 +485,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then((sanpshot) => {
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_cannot_remove_api_token'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -503,8 +503,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then((bpv) => {
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -526,13 +526,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                         .then((program) => {
                                             this.setSnapshotProgram(program);
                                         })
-                                        .catch((reason) => {
-                                            this.fmError(this.translate('flash_cannot_download_file'), reason);
+                                        .catch((reason: IError) => {
+                                            this.fmError(reason);
                                         });
                                 }
                             })
-                            .catch((reason) => {
-                                this.fmError(this.translate('flash_bprogram_version_load_fail'), reason);
+                            .catch((reason: IError) => {
+                                this.fmError(reason);
                             });
                     }
                 });
@@ -542,8 +542,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 .then((program) => {
                     this.setSnapshotProgram(program);
                 })
-                .catch((reason) => {
-                    this.fmError(this.translate('flash_cannot_download_file'), reason);
+                .catch((reason: IError) => {
+                    this.fmError(reason);
                 });
         }
     }
@@ -563,8 +563,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then(() => {
                         this.refresh();
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('label_cannot_change_version', reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -607,8 +607,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -628,8 +628,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.unblockUI();
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_snapshot_cant_update'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -643,9 +643,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     .then(() => {
                         this.unblockUI();
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -661,9 +661,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.unblockUI();
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -684,9 +684,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.unblockUI();
                             this.refresh();
                         })
-                        .catch(reason => {
+                        .catch((reason: IError) => {
                             this.unblockUI();
-                            this.fmError(this.translate('label_upload_error', reason));
+                            this.fmError(reason);
                         });
                 }
             });
@@ -699,9 +699,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     this.unblockUI();
                     this.refresh();
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     this.unblockUI();
-                    this.fmError(this.translate('label_upload_error', reason));
+                    this.fmError(reason);
                 });
         }
     }
@@ -743,9 +743,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError('Cannot be loaded.', reason);
+                this.fmError(reason);
             });
     }
 
@@ -782,9 +782,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError('Cannot be loaded.', reason);
+                this.fmError(reason);
             });
     }
 
@@ -814,17 +814,17 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                     task.state = value.state;
                                     task.date_of_finish = value.date_of_finish;
                                 })
-                                .catch((reason) => {
-                                    this.fmError('Cannot be loaded.', reason);
+                                .catch((reason: IError) => {
+                                    this.fmError(reason);
                                 });
                         }
                     });
                 });
 
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError('Cannot be loaded.', reason);
+                this.fmError(reason);
             });
     }
 
@@ -850,8 +850,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             });
                         }
                     })
-                    .catch((reason) => {
-                        this.fmError(this.translate('flash_cannot_download_file'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                     });
             }
         });
@@ -976,8 +976,8 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     }
                 }
             })
-            .catch((err) => {
-
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 
@@ -1023,14 +1023,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.unblockUI();
                 this.refresh();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
     onDropDownEmitterProgram(action: string, m_project: IBProgramVersionSnapGridProject, program: IBProgramVersionSnapGridProjectProgram) {
-
         if (action === 'edit_grid_app') {
             this.onGridProgramPublishClick(m_project, program);
         }

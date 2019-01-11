@@ -8,14 +8,12 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHardware, IHardwareNewPassword } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess, NotificationService } from '../services/NotificationService';
-import { TranslationService } from '../services/TranslationService';
-
+import { NotificationService } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 export class ModalsHardwareRestartMQTTPassModel extends ModalModel {
     constructor(public board: IHardware) {
@@ -42,7 +40,7 @@ export class ModalsHardwareRestartMQTTPassComponent implements OnInit {
 
     pass: IHardwareNewPassword = null;
 
-    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
+    constructor(public backendService: TyrionBackendService, private formBuilder: FormBuilder, protected notificationService: NotificationService) {
         this.form = this.formBuilder.group({});
     }
 
@@ -56,8 +54,8 @@ export class ModalsHardwareRestartMQTTPassComponent implements OnInit {
             .then((pass: IHardwareNewPassword) => {
                 this.pass = pass;
             })
-            .catch((reason) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 this.error_message = reason.message;
             });
     }

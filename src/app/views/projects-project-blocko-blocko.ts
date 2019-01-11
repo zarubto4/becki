@@ -1,5 +1,4 @@
 import { ModalsSelectCodeModel } from '../modals/code-select';
-import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
@@ -22,6 +21,7 @@ import { ModalsSelectGridProjectModel } from '../modals/grid-project-select';
 import { ModalsSelectBlockModel } from '../modals/block-select';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { FileDownloaderService } from '../services/FileDownloaderService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -194,7 +194,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     });
                 }
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 
@@ -209,7 +210,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 // TODO Doplnit do BLOCKA
 
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 
@@ -227,7 +229,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 // TODO Doplnit do BLOCKA
 
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 
@@ -254,7 +257,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     });
                 }
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 
@@ -286,7 +290,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     callback(converted);
                 });
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 
@@ -446,7 +451,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     }
                 });
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
             });
     }
 
@@ -483,7 +489,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     }
                 });
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
 
             });
     }
@@ -501,8 +508,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         this.fmSuccess(this.translate('flash_blocko_removed'));
                         this.router.navigate(['/projects/' + this.projectId + '/blocko']);
                     })
-                    .catch(reason => {
-                        this.fmError(this.translate('flash_cant_remove_blocko'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -519,8 +526,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         this.fmSuccess(this.translate('flash_blocko_updated'));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.fmError(this.translate('flash_cant_update_blocko'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -578,7 +585,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                                     if (ps.grid_program_version) {
                                         this.selectedGrid[pps.grid_project.id][ps.grid_program.id] = ps.grid_program_version.id;
                                     } else {
-                                        this.fmError(this.translate('flash_broken_grid_missing_version'));
+                                        this.fmErrorFromString(this.translate('flash_broken_grid_missing_version'));
                                     }
                                 });
                             }
@@ -588,18 +595,18 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         this.exitConfirmationService.setConfirmationEnabled(false);
                         this.unblockUI();
                     })
-                    .catch((reason) => {
+                    .catch((reason: IError) => {
                         console.error(reason);
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                         this.unblockUI();
-                        this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        this.fmError(reason);
                     });
             })
-            .catch((err) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                console.error(err);
-                this.fmError(this.translate('flash_cant_load_version', programVersion.name, err));
+                console.error(reason);
+                this.fmError(reason);
             });
     }
 
@@ -612,8 +619,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         this.fmSuccess(this.translate('flash_version_removed'));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.fmError(this.translate('flash_cant_remove_version'), reason);
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -632,8 +639,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 }).then(() => {
                     this.fmSuccess(this.translate('flash_edit_version_been_changed', model.object.name));
                     this.refresh();
-                }).catch(reason => {
-                    this.fmError(this.translate('flash_edit_cant_change_version', model.object.name, reason));
+                }).catch((reason: IError) => {
+                    this.fmError(reason);
                     this.refresh();
                 });
             }
@@ -719,8 +726,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     this.refresh(); // also unblockUI
                     this.unsavedChanges = false;
                     this.exitConfirmationService.setConfirmationEnabled(false);
-                }).catch((err) => {
-                    this.fmError(this.translate('flash_cant_save_version', model.object.name, err));
+                }).catch((reason: IError) => {
+                    this.fmError(reason);
                     this.unblockUI();
                 });
             }
@@ -750,8 +757,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 } else {
                     this.unblockUI();
                 }
-            }).catch(reason => {
-                this.fmError(this.translate('flash_cant_load_blocko'), reason);
+            }).catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

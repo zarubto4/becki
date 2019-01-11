@@ -9,10 +9,11 @@ import { ModalModel } from '../services/ModalService';
 import { IBProgramList, IHomerServerList, IInstance } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { Instance } from 'awesome-typescript-loader/dist/instance';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { IError } from '../services/_backend_class/Responses';
 
 
 
@@ -90,8 +91,8 @@ export class ModalsInstanceCreateComponent implements OnInit {
                             };
                         });
                     })
-                    .catch(reason => {
-                        this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    .catch((reason: IError) => {
+                        this.notificationService.fmError(reason);
                     });
 
                 // Find B_Programs
@@ -107,8 +108,8 @@ export class ModalsInstanceCreateComponent implements OnInit {
                             };
                         });
                     })
-                    .catch(reason => {
-                        this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    .catch((reason: IError) => {
+                        this.notificationService.fmError(reason);
                     });
             }, 100);
 

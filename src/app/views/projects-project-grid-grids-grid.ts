@@ -4,7 +4,7 @@
  */
 import { Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import {
     IWidget, IProject, IGridProgram, IGridProject, IGridProgramVersion,
@@ -18,10 +18,11 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { NullSafe } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
-import { Core, EditorRenderer, Widgets } from 'the-grid';
+import { Core, EditorRenderer } from 'the-grid';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsGridProgramPropertiesModel } from '../modals/grid-program-properties';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids-grid',
@@ -164,8 +165,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -186,8 +187,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_change', model.object.name)));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_version', model.object.name, reason)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -214,8 +215,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
 
                 this.unblockUI();
 
-            }).catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_grid'), reason));
+            }).catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -229,8 +230,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.widgets = widgets;
                 this.unblockUI();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -266,9 +267,9 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.unsavedChanges = false;
                 this.exitConfirmationService.setConfirmationEnabled(false);
             })
-            .catch((err) => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
-                this.fmError(this.translate('flash_cant_load_version', programVersion.name, err));
             });
     }
 
@@ -301,8 +302,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_edit')));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -319,8 +320,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_remove')));
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridProgramId]);
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid'), reason));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -351,8 +352,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
-                    .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', model.object.name, err)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -383,10 +384,10 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 event.resolve(widgetVersion.logic_json);
                 this.unblockUI();
             })
-            .catch((err) => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 event.resolve(null);
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_widget_version'), err));
             });
     }
 

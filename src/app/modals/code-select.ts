@@ -13,7 +13,8 @@ import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
 import { ICProgram, ICProgramList, ICProgramVersion, IHardwareType } from '../backend/TyrionAPI';
 import { ProgramVersionSelectorComponent } from '../components/VersionSelectorComponent';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 export class ModalsSelectCodeModel extends ModalModel {
     public selected_c_program_version: ICProgramVersion = null;
@@ -91,8 +92,8 @@ export class ModalsCodeSelectComponent implements OnInit {
                 .then((program) => {
                     this.onSelectProgramClick(program);
                 })
-                .catch(reason => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                .catch((reason: IError) => {
+                    this.notificationService.fmError(reason);
                     this.errorMessage = reason.message;
                 });
         }
@@ -159,8 +160,8 @@ export class ModalsCodeSelectComponent implements OnInit {
             .then((iCProgramList) => {
                 this.programs = iCProgramList;
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
             });
     }
 

@@ -8,9 +8,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IHardware } from '../backend/TyrionAPI';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsDeviceEditDescriptionModel extends ModalModel {
@@ -63,8 +64,9 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
             .then((values) => {
                 this.onSubmitClick();
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 this.onSubmitClick();
             });
     }
@@ -74,15 +76,13 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
             .then((values) => {
                 this.onSubmitClick();
             })
-            .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            .catch((reason: IError) => {
+                this.notificationService.fmError(reason);
                 this.onSubmitClick();
             });
     }
 
     onSubmitClick(): void {
-
-
         if (this.modalModel.hardware == null) {
             // @ts-ignore
             this.modalModel.hardware = {};

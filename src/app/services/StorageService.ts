@@ -10,7 +10,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { IProject, IHardwareType } from '../backend/TyrionAPI';
 import { TyrionBackendService } from './BackendService';
 import { TranslationService } from './TranslationService';
-import { FlashMessageError, NotificationService } from './NotificationService';
+import { NotificationService } from './NotificationService';
+import { IError } from './_backend_class/Responses';
 
 @Injectable()
 export class StorageService {
@@ -68,9 +69,9 @@ export class StorageService {
                     }
                     resolve(true);
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     // TODO: error
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.fmError(reason);
                     this.projectsInProgress[id] = false;
                     resolve(false);
                 });
@@ -116,9 +117,9 @@ export class StorageService {
                     }
                     resolve(true);
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     // TODO: error
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.fmError(reason);
                     this.hardwareTypesInProgress = false;
                     resolve(false);
                 });

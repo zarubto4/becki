@@ -5,15 +5,11 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import {
-    IApplicableProduct, IProductExtension, IProductExtensionType, ITariff, ITariffExtension,
-    ITariffLabel
-} from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsRemovalModel } from '../modals/removal';
+import { ITariff, ITariffExtension } from '../backend/TyrionAPI';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsTariffModel } from '../modals/tariff';
 import { Subscription } from 'rxjs';
-import { ModalsExtensionModel } from '../modals/extension';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-admin-financial',
@@ -53,8 +49,8 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.extensions = values[1];
                 this.unblockUI();
             })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Tariff cannot be loaded.', reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -83,8 +79,8 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_deactive_success')));
                 this.refresh();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_deactive_error'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -96,8 +92,8 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_active_success')));
                 this.refresh();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_active_error'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -133,8 +129,8 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
                         this.refresh();
                     })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -159,8 +155,8 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
             .then(() => {
                 this.refresh();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -175,8 +171,8 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
             .then(() => {
                 this.refresh();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -186,8 +182,8 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
             .then(() => {
                 this.refresh();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.refresh();
             });
     }
