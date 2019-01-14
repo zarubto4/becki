@@ -26,10 +26,11 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
             <i class="right fa fa-warning" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
             <i class="right fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
 
-            <button *ngIf="type==='password'"
-                    class="customBtn"
+            <button *ngIf="showPasswordVisible"
+                    [class.showPasswordBtnRight]="icon!= null"
+                    [class.showPasswordBtnLeft]="icon == null"
                     type="button"
-                    (click)="onBtnShowPassword()"><i class="fa"></i>
+                    (click)="onBtnShowPassword()"><i [class]="type==='password'? 'fa fa-eye' : ' fa fa-eye-slash'"></i>
             </button>
 
 
@@ -125,6 +126,8 @@ export class FormInputComponent implements OnInit {
     @Output()
     onBtnClickEvent: EventEmitter<any> = new EventEmitter<any>();
 
+    showPasswordVisible: boolean;
+
     constructor(public validatorErrorsService: ValidatorErrorsService, private formBuilder: FormBuilder) {
     }
 
@@ -147,31 +150,9 @@ export class FormInputComponent implements OnInit {
             this.control = form.controls['value'];
         }
 
-        // if (this.type === 'password') {
-        //     this.showButton = {
-        //         btn_label_for_person: '',
-        //         colorType: 'ACTIVE',
-        //         btn_icon: 'fa-eye'
-        //     };
-        //
-        //     this.onBtnClickEvent.subscribe(() => {
-        //         if (this.type === 'password') {
-        //             this.showButton = {
-        //                 btn_label_for_person: '',
-        //                 colorType: 'DEACTIVE',
-        //                 btn_icon: 'fa-eye-slash'
-        //             };
-        //             this.type = 'text';
-        //         } else {
-        //             this.showButton = {
-        //                 btn_label_for_person: '',
-        //                 colorType: 'DEACTIVE',
-        //                 btn_icon: 'fa-eye'
-        //             };
-        //             this.type = 'password';
-        //         }
-        //     });
-        // }
+        if (this.type === 'password') {
+            this.showPasswordVisible = true;
+        }
     }
 
     onEnter(event: any) {

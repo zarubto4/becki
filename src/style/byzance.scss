@@ -2847,23 +2847,49 @@ textarea.form-control {
     height: 100vh;
 }
 
-.customBtn:focus {
+.showPasswordBtnLeft:focus {
     outline: none;
 }
 
-.customBtn {
+.showPasswordBtnLeft {
     left: auto;
     right: 28px;
     float: right;
     position: absolute;
     margin: 0px 0px 0px 10px;
-    text-align: center;
     z-index: 3;
     height: 43px;
     background: transparent;
     border: 0px;
+
+}
+
+.showPasswordBtnLeft > i {
+    text-align: center;
     vertical-align: middle;
     font-size: 16px;
     color: #8290a3;
 }
 
+.showPasswordBtnRight:focus {
+    outline: none;
+}
+
+.showPasswordBtnRight {
+    left: auto;
+    right: 8px;
+    float: right;
+    position: absolute;
+    margin: 0px 0px 0px 10px;
+    z-index: 3;
+    height: 43px;
+    background: transparent;
+    border: 0px;
+}
+
+.showPasswordBtnRight > i {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 16px;
+    color: #8290a3;
+}
