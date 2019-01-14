@@ -27,8 +27,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
             <i class="right fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
 
             <button *ngIf="showPasswordVisible"
-                    [class.showPasswordBtnRight]="icon!= null"
-                    [class.showPasswordBtnLeft]="icon == null"
+                    [class]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched))) ? 'showPasswordBtn left' : 'showPasswordBtn right'"
                     type="button"
                     (click)="onBtnShowPassword()"><i [class]="type==='password'? 'fa fa-eye' : ' fa fa-eye-slash'"></i>
             </button>
@@ -174,10 +173,6 @@ export class FormInputComponent implements OnInit {
     }
 
     onBtnShowPassword() {
-        if (this.type === 'password') {
-            this.type = 'text';
-        } else {
-            this.type = 'password';
-        }
+        this.type = this.type === 'password' ? 'text' : 'password';
     }
 }
