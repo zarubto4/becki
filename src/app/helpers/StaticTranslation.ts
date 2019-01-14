@@ -2084,10 +2084,17 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
+                'table_status' : 'Status',
+
+                'tab_ide': 'IDE',
+                'tab_versions': 'Versions',
 
                 'label_publish': 'Publish',
                 'label_publish_decision': 'Decide of Publish',
                 'label_version_set_as_main': 'Set as main',
+
+                'label_program_versions': 'No <strong class="font-color-blocko">WIDGET</strong> version',
+                'label_program_versions_comment': 'Save your code first, and you will never see this screen again',
 
             }, 'ProjectsProjectActualizationProceduresProcedureComponent': {
                 'title': 'Actualization Procedure',
