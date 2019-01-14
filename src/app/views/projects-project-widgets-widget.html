@@ -275,26 +275,15 @@
                                     <span *ngIf="version.author">
                                         {{version.author.nick_name}}
                                     </span>
-                                </td>
+                        </td>
+                        <td class="vert-align no-wrap text-center">
+                            <bk-compilation-status-component
+                                [status]="version.status"></bk-compilation-status-component>
+                            <bk-compilation-status-component
+                                [status]="version.approval_state"></bk-compilation-status-component>
+                        </td>
+                        <td class="action-btn-col">
 
-                                <td class="vert-align no-wrap">
-                                    <span class="icon-hint-wraper red" *ngIf="version.approval_state == 'PENDING'">
-                                        <i class="fa fa-heart font-red-flamingo" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
-                                    </span>
-                                    <span class="icon-hint-wraper green" *ngIf="version.approval_state == 'APPROVED'">
-                                        <i class="fa fa-heart font-green-jungle" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
-                                    </span>
-                                    <span class="icon-hint-wraper gray" *ngIf="version.approval_state == 'DISAPPROVED'">
-                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
-                                    </span>
-                                    <span class="icon-hint-wraper green" *ngIf="version.approval_state == 'EDITED'">
-                                        <i class="fa fa-heart font-blue" style="font-size: 1.6em; margin-left: 5px;" ></i>
-                                        <span class="hint" [innerHTML]="version.approval_state|bkTranslateTable:this:'publish_status'"></span>
-                                    </span>
-                                </td>
 
 
                             <bk-drob-down-button
