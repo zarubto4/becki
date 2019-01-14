@@ -2846,3 +2846,30 @@ textarea.form-control {
 .logo-wrapper {
     height: 100vh;
 }
+
+.showPasswordBtn:focus {
+    outline: none;
+}
+
+.showPasswordBtn {
+    left: auto;
+    float: right;
+    position: absolute;
+    margin-left: 10px;
+    z-index: 3;
+    height: 43px;
+    background: transparent;
+    border: 0px;
+    }
+    .showPasswordBtn > i {
+        text-align: center;
+        vertical-align: 10%;
+        font-size: 16px;
+        color: #8290a3;
+    }
+    .showPasswordBtn.left {
+        right: 28px;
+    }
+    .showPasswordBtn.right {
+        right: 8px;
+    }
