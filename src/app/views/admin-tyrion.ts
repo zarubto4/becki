@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import * as moment from 'moment';
 import { IMyDpOptions } from 'mydatepicker';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-admin-tyrion',
@@ -72,7 +73,7 @@ export class TyrionComponent extends _BaseMainComponent implements OnInit {
                 });
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.fmError(this.translate('flash_cannot_load_updates'), reason);
                 this.unblockUI();
             });
@@ -85,7 +86,7 @@ export class TyrionComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
                 this.fmSuccess(this.translate('flash_successfully_scheduled'));
                 this.refresh();
-            }).catch((reason) => {
+            }).catch((reason: IError) => {
                 this.unblockUI();
                 this.fmError(this.translate('flash_schedule_remove_fail'), reason);
             });
@@ -111,7 +112,7 @@ export class TyrionComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
                 this.fmSuccess(this.translate('flash_successfully_scheduled'));
                 this.refresh();
-            }).catch((reason) => {
+            }).catch((reason: IError) => {
                 this.unblockUI();
                 this.fmError(this.translate('flash_schedule_fail'), reason);
             });

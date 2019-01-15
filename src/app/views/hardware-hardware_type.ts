@@ -93,7 +93,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                 this.hardwareType = hardwareType;
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.fmError(this.translate('flash_project_cant_load', reason));
                 this.unblockUI();
             });
@@ -127,7 +127,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         })
                             .then(() => {
                                 this.refresh();
-                            }).catch(reason => {
+                            }).catch((reason: IError) => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                                 this.refresh();
                             });
@@ -135,7 +135,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                 });
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                 this.unblockUI();
             });
@@ -150,7 +150,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.router.navigate(['/admin/hardware']);
                     });
@@ -171,7 +171,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
@@ -197,7 +197,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
@@ -219,7 +219,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.refresh();
                     });
@@ -236,7 +236,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version'), reason));
                         this.refresh();
                     });
@@ -258,7 +258,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.object.name)));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.object.name, reason)));
                         this.refresh();
                     });
@@ -278,7 +278,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_file_uploaded')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version'), reason));
                         this.refresh();
                     });
@@ -287,7 +287,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
     }
 
     onBootloaderUpdateFile(bootloader: IBootLoader) {
-        let model = new ModalsFileUploadModel('Bootloader', this.translate('label_bootloader_comment'), ['.bin', '.png']);
+        let model = new ModalsFileUploadModel('Bootloader', this.translate('label_bootloader_comment'), ['.bin']);
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -299,7 +299,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_file_uploaded')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_file_upload'), reason));
                         this.refresh();
                     });
@@ -316,7 +316,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_set_as_default')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -333,7 +333,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.fmSuccess(this.translate('flash_successfully_set_main'));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.fmError(this.translate('flash_cant_set_main'), reason);
                         this.refresh(); // also unblockUI
                     });
@@ -350,7 +350,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -382,7 +382,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.refresh();
                     })
-                    .catch((reason) => {
+                    .catch((reason: IError) => {
                         this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
                         this.unblockUI();
                     });
@@ -446,7 +446,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.navigate(['admin/garfield/']);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });

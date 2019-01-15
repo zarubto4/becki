@@ -10,6 +10,7 @@ import { IProject, IProjectParticipant } from '../backend/TyrionAPI';
 import { ModalsMembersAddModel } from '../modals/members-add';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-members',
@@ -59,7 +60,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                         .then(() => {
                             this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                         })
-                        .catch(reason => {
+                        .catch((reason: IError) => {
                             this.unblockUI();
                             this.fmError(this.translate('label_cannot_add_person', reason));
                         });
@@ -83,7 +84,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                     .then(() => {
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
                         this.fmError(this.translate('label_cannot_delete_person', reason));
                     });
@@ -99,7 +100,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                 let m = new ModalsConfirmModel(this.translate('modal_label_invitation'), this.translate('modal_label_invitation_send', member.email), true, null, null, [this.translate('btn_ok')]);
                 this.modalService.showModal(m);
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.fmError(this.translate('label_cannot_resend_invitation', reason));
             });

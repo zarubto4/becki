@@ -15,6 +15,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHardware, IHardwareNewPassword } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsHardwareRestartMQTTPassModel extends ModalModel {
@@ -56,7 +57,7 @@ export class ModalsHardwareRestartMQTTPassComponent implements OnInit {
             .then((pass: IHardwareNewPassword) => {
                 this.pass = pass;
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.error_message = reason.message;
             });

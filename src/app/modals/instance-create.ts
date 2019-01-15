@@ -13,6 +13,7 @@ import { FlashMessageError, NotificationService } from '../services/Notification
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { Instance } from 'awesome-typescript-loader/dist/instance';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { IError } from '../services/_backend_class/Responses';
 
 
 
@@ -90,7 +91,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
                             };
                         });
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     });
 
@@ -107,7 +108,7 @@ export class ModalsInstanceCreateComponent implements OnInit {
                             };
                         });
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     });
             }, 100);

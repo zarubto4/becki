@@ -86,7 +86,7 @@ export class ValidatorErrorsService {
             if (errors['InstanceNameTaken']) {
                 return this.translate('label_instance_name_taken');
             }
-            if (errors['SnapShotNameTaken']) {
+            if (errors['SnapshotNameTaken']) {
                 return this.translate('label_snapshot_name_taken');
             }
             if (errors['DatabaseNameTaken']) {
@@ -114,6 +114,9 @@ export class ValidatorErrorsService {
             }
             if (errors['number']) {
                 return this.translate('label_field_only_number');
+            }
+            if (errors['notRoundNumber']) {
+                return this.translate('label_field_only_float_number');
             }
             if (errors['url']) {
                 return this.translate('label_field_invalid_url');

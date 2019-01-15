@@ -12,6 +12,7 @@ import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IHardwareRegistrationHash } from '../backend/TyrionAPI';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsHardwareFindHash extends ModalModel {
@@ -56,7 +57,7 @@ export class ModalsHardwareFindHashComponent implements OnInit {
             .then((result: IHardwareRegistrationHash) => {
                 this.hash = result.hash;
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.error_message = reason.message;
             });

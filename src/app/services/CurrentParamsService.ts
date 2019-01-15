@@ -102,6 +102,11 @@ export class CurrentParamsService {
     protected currentHardwareNameSubject: Subject<string> = null;
     public currentHardwareNameSnapShot: string = null;
 
+
+    public currentGSMName: Observable<string> = null;
+    protected currentGSMNameSubject: Subject<string> = null;
+    public currentGSMNameSnapShot: string = null;
+
     public currentActualizationProcedureName: Observable<string> = null;
     protected currentActualizationProcedureSubject: Subject<string> = null;
     public currentActualizationProcedureSnapShot: string = null;
@@ -133,6 +138,7 @@ export class CurrentParamsService {
         this.currentBugSummary = this.currentBugSummarySubject = new Subject<string>();
         this.currentGarfieldName = this.currentGarfieldNameSubject = new Subject<string>();
         this.currentHardwareName = this.currentHardwareNameSubject = new Subject<string>();
+        this.currentGSMName = this.currentGSMNameSubject = new Subject<string>();
         this.currentActualizationProcedureName = this.currentActualizationProcedureSubject = new Subject<string>();
 
         router.events.subscribe(event => {
@@ -200,6 +206,20 @@ export class CurrentParamsService {
 
         }
 
+        if (this.currentParamsSnapshot['gsm'] !== params['gsm']) {
+
+            if (!params['gsm']) {
+                this.currentGSMNameSnapShot = null;
+                this.currentGSMNameSubject.next(this.currentGSMNameSnapShot);
+            } else {
+                this.backendService.simGet(params['gsm']).then((gsm) => {
+                    this.currentGSMNameSnapShot = gsm.name != null ? gsm.name : gsm.id;
+                    this.currentGSMNameSubject.next(this.currentGSMNameSnapShot);
+                });
+            }
+
+        }
+
         if (this.currentParamsSnapshot['product'] !== params['product']) {
 
             if (!params['product']) {
@@ -207,7 +227,7 @@ export class CurrentParamsService {
                 this.currentProductNameSubject.next(this.currentProductNameSnapshot);
             } else {
                 this.backendService.productsGetUserOwnList().then((products) => {
-                    let p = products.find(product => params['product'] === '' + product.id); // TODO: make product id string in Tyrion!!! [DH]
+                    let p = products.find(product => params['product'] === '' + product.id);
                     if (p) {
                         this.currentProductNameSnapshot = p.name
                         ;
@@ -224,7 +244,7 @@ export class CurrentParamsService {
                 this.currentProductExtensionNameSnapshot = null;
                 this.currentProductExtensionNameSubject.next(this.currentProductExtensionNameSnapshot);
             } else {
-                this.backendService.productExtensionGet(params['productExtension']).then((extension) => { // TODO [permission]: ProductExtension.read_permission
+                this.backendService.productExtensionGet(params['productExtension']).then((extension) => {
                     this.currentProductExtensionNameSnapshot = extension.name;
                     this.currentProductExtensionNameSubject.next(this.currentProductExtensionNameSnapshot);
                 });
@@ -253,7 +273,7 @@ export class CurrentParamsService {
                 this.currentBlockoNameSnapshot = null;
                 this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
             } else {
-                this.backendService.bProgramGet(params['blocko']).then((blocko) => { // TODO [permission]: Project.read_permission
+                this.backendService.bProgramGet(params['blocko']).then((blocko) => {
                     this.currentBlockoNameSnapshot = blocko.name;
                     this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
                 });
@@ -261,13 +281,13 @@ export class CurrentParamsService {
 
         }
 
-        if (this.currentParamsSnapshot['actualization-procedures'] !== params['actualization-procedures']) {
+        if (this.currentParamsSnapshot['release-update'] !== params['release-update']) {
 
-            if (!params['actualization-procedures']) {
+            if (!params['release-update']) {
                 this.currentActualizationProcedureSnapShot = null;
                 this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
             } else {
-                this.backendService.actualizationProcedureGet(params['actualization-procedures']).then((procedure) => { // TODO [permission]: Project.read_permission
+                this.backendService.hardwareReleaseUpdateGet(params['release-update']).then((procedure) => {
                     this.currentActualizationProcedureSnapShot = procedure.id;
                     this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
                 });
@@ -281,7 +301,7 @@ export class CurrentParamsService {
                 this.currentCodeNameSnapshot = null;
                 this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
             } else {
-                this.backendService.cProgramGet(params['code']).then((code) => { // TODO [permission]: C_program.read_permission(Project.read_permission)
+                this.backendService.cProgramGet(params['code']).then((code) => {
                     this.currentCodeNameSnapshot = code.name;
                     this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
                 });
@@ -295,7 +315,7 @@ export class CurrentParamsService {
                 this.currentBlockNameSnapshot = null;
                 this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
             } else {
-                this.backendService.blockGet(params['block']).then((block) => {// TODO [permission]: BlockoBlock_read_permission
+                this.backendService.blockGet(params['block']).then((block) => {
                     this.currentBlockNameSnapshot = block.name;
                     this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
                 });

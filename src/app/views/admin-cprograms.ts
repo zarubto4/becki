@@ -7,6 +7,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-admin-cprograms',
@@ -41,7 +42,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.hardwareTypes = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('Roles cannot be loaded.', reason));
                 this.unblockUI();
             });
@@ -67,7 +68,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.cPrograms = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
                 this.unblockUI();
             });
@@ -82,7 +83,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.cProgramsNotApproved = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
                 this.unblockUI();
             });
@@ -97,7 +98,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.libraries = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
                 this.unblockUI();
             });
@@ -112,7 +113,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                 this.librariesNotApproved = values[0];
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
                 this.unblockUI();
             });
@@ -127,7 +128,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         this.onShowPublicProgramByFilter();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
                     });
             }
@@ -152,7 +153,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.onShowPublicProgramByFilter();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                     });
             }
@@ -174,7 +175,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));
                         this.onShowPublicLibraryByFilter();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
                     });
             }
@@ -190,7 +191,7 @@ export class CommunityCProgramComponent extends _BaseMainComponent implements On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_removed_success')));
                         this.onShowPublicLibraryByFilter();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
                     });
             }

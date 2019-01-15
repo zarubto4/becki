@@ -12,6 +12,7 @@ import { TyrionApiBackend } from '../backend/BeckiBackend';
 import { ModalService } from '../services/ModalService';
 import { TyrionBackendService } from '../services/BackendService';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-financial-product-invoices',
@@ -66,7 +67,7 @@ export class FinancialProductInvoicesComponent extends _BaseMainComponent implem
                 this.invoices =  values[1];
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('Data cannot be loaded.', reason));
                 this.unblockUI();
             });

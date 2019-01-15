@@ -11,8 +11,8 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel, ModalService } from '../services/ModalService';
 import {
-    IHardwareGroup, IActualizationProcedureMakeHardwareType, IHardwareType,
-    IHardwareGroupList, IShortReference, ICProgramVersion, ICProgram
+    IHardwareGroup, IHardwareType,
+    IHardwareGroupList, IShortReference, ICProgramVersion, ICProgram, IHardwareUpdateMakeHardwareType
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
@@ -21,14 +21,17 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { ModalsSelectCodeModel } from './code-select';
 import { TranslationService } from '../services/TranslationService';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
         public project_id: string = null,
+        public name: string = null,
+        public description: string = null,
         public deviceGroup: IHardwareGroupList = null,         // All possible Hardware groups for settings
         public deviceGroupStringIdSelected: string = '',   // List with group ids for hardware update,
-        public firmwareType: string = 'firmware',
-        public groups: IActualizationProcedureMakeHardwareType[] = [],
+        public firmwareType: ('FIRMWARE' | 'BACKUP' | 'BOOTLOADER') = 'FIRMWARE',
+        public groups: IHardwareUpdateMakeHardwareType[] = [],
         public time: number = 0,
         public timeZoneOffset: number = 0,
     ) {
@@ -99,6 +102,14 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
         private translationService: TranslationService, protected notificationService: NotificationService, ) {
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]],
+            'name': ['',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ]
+            ],
+            'description': ['', [Validators.maxLength(255)]],
             'firmwareType': ['', [Validators.required]],
             'date': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
             'time': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
@@ -150,7 +161,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
                                     };
                                 });
 
-                            }).catch(reason => {
+                            }).catch((reason: IError) => {
                                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                                 console.error('hardwareTypeGet:cProgramGetListByFilter', reason);
                             });
@@ -192,13 +203,13 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
 
         // Set Manual Selector
         this.firmwareTypeSelect.push({
-            value: 'firmware',
+            value: 'FIRMWARE',
             label: 'Firmware - Main'
         });
 
         // Set Manual Selector
         this.firmwareTypeSelect.push({
-            value: 'backup',
+            value: 'BACKUP',
             label: 'Firmware - Backup'
         });
 
@@ -218,18 +229,21 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
 
         this.modalModel.deviceGroupStringIdSelected = this.formGroupList.selectedValue;
 
-        if (this.type === 'bootloader') {
-            this.modalModel.firmwareType = 'bootloader';
+        if (this.type === 'BOOTLOADER') {
+            this.modalModel.firmwareType = 'BOOTLOADER';
         } else {
             this.modalModel.firmwareType = this.form.controls['firmwareType'].value;
         }
+
+        this.modalModel.name = this.form.controls['name'].value;
+        this.modalModel.description = this.form.controls['description'].value;
 
         this.selectedDeviceGroup.hardware_types.forEach((hardwareType: IShortReference) => {
 
             let bootloader_id: string = this.form.controls[hardwareType.id + '_selectedBootloaderId'].value;
             let c_program_version_id: string = this.form.controls[hardwareType.id + '_selectedCProgramVersionId'].value;
 
-            let gr: IActualizationProcedureMakeHardwareType = {
+            let gr: IHardwareUpdateMakeHardwareType = {
                 hardware_type_id: hardwareType.id,
                 bootloader_id: bootloader_id,               // TODO check if this contain id too
                 c_program_version_id: c_program_version_id

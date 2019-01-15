@@ -46,7 +46,7 @@ export class ModalsGridProgramPropertiesComponent implements OnInit {
                     (value) => {
                         return !(this.modalModel && this.modalModel.program && this.modalModel.program.name.length > 3 && this.modalModel.program.name === value);
                     },
-                    BeckiAsyncValidators.nameTaken(this.backendService, 'GridProgram', null, this.modalModel.grid_project_id)
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'GridProgram', this.modalModel.grid_project_id)
                 )
             ],
             'description': [this.modalModel.program != null ? this.modalModel.program.description : '', [Validators.maxLength(255)]],

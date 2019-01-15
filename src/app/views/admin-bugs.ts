@@ -5,6 +5,7 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IServerError } from '../backend/TyrionAPI';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-bugs',
@@ -38,7 +39,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
                 this.bugs = bugs;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.fmError( this.translate('flash_cant_load', reason));
                 this.unblockUI();
             });
@@ -49,7 +50,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
         this.tyrionBackendService.deleteBugAll()
             .then(() => {
                 this.refresh();
-            }).catch(reason => {
+            }).catch((reason: IError) => {
                 this.fmError( this.translate('flash_cant_remove', reason));
                 this.refresh();
             });
@@ -62,7 +63,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
                 this.unblockUI();
                 this.fmSuccess(this.translate('flash_report_success'));
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.fmError(this.translate('flash_cant_report'), reason);
             });
@@ -75,7 +76,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
                 this.fmSuccess(this.translate('flash_report_remove_succesfuly'));
                 this.refresh();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.fmError(this.translate('flash_cant_remove', reason));
             });
     }

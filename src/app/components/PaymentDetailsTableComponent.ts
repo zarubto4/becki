@@ -7,6 +7,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalService } from '../services/ModalService';
 import { BlockUIService } from '../services/BlockUIService';
 import { PaymentDetailsOptions } from './PaymentDetailsFormComponent';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-payment-details-table',
@@ -58,7 +59,7 @@ export class PaymentDetailsTableComponent  {
                         this.blockUIService.unblockUI();
                         this.paymentDetailsChange.emit(paymentDetails);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_product_edit_error', this), reason));
                         this.blockUIService.unblockUI();
                     });

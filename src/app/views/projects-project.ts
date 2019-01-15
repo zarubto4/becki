@@ -11,6 +11,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FormGroup } from '@angular/forms';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -93,7 +94,7 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
                         this.refresh();
                         this.unblockUI();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project'), reason));
                         this.refresh();
                         this.unblockUI();
@@ -111,7 +112,7 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.router.navigate(['/projects']);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project'), reason));
                         this.refresh();
                         this.unblockUI();
