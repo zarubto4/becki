@@ -134,23 +134,17 @@ export class BeckiAsyncValidators {
             'GridProgram'|'GridProgramVersion'|'GridProject'|'Hardware'|'HardwareGroup'|
             'GSM'|'Role'|'Widget'|'WidgetVersion'|'Block'| 'BlockVersion' |'Instance'|'Snapshot'|'Database'|'DatabaseCollection'| 'CLibrary'|
             'CLibraryVersion'),
-        project_id?: string, object_id?: string): AsyncValidatorFn {
+        parent_id?: string): AsyncValidatorFn {
 
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
-
-
-                console.log('NameTaken: ', type);
-                console.log('object_id: ', object_id);
-                console.log('project_id: ', project_id);
 
                 if (control == null) {
                     resolve();
                 }
                 backEnd.projectValidObjectUniqueName({
                     name:  control.value,
-                    project_id: project_id,
-                    object_id: object_id,
+                    parent_id: parent_id,
                     object_type: type
                 }).then((result: IResultOK) => {
 

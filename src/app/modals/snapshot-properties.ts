@@ -51,7 +51,7 @@ export class ModalsSnapShotInstanceComponent implements OnInit {
                     (value) => {
                         return !(this.modalModel && this.modalModel.snapshot && this.modalModel.snapshot.name.length > 3 && this.modalModel.snapshot.name === value);
                     },
-                    BeckiAsyncValidators.nameTaken(this.backendService, 'Snapshot', null, this.modalModel.instance_id)
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'Snapshot', this.modalModel.instance_id)
                 )
             ],
             'description': [this.modalModel.snapshot != null ? this.modalModel.snapshot.description : '', [Validators.maxLength(255)]],
