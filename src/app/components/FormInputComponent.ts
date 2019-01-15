@@ -26,6 +26,13 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
             <i class="right fa fa-warning" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
             <i class="right fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
 
+            <button *ngIf="showPasswordVisible"
+                    [class]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched))) ? 'showPasswordBtn left' : 'showPasswordBtn right'"
+                    type="button"
+                    (click)="onBtnShowPassword()"><i [class]="type==='password'? 'fa fa-eye' : ' fa fa-eye-slash'"></i>
+            </button>
+
+
             <input  *ngIf="control" class="form-control"
                    (keydown)="onEnter($event)"
                    (ngModelChange)="onSelectedChange($event)"
@@ -118,6 +125,8 @@ export class FormInputComponent implements OnInit {
     @Output()
     onBtnClickEvent: EventEmitter<any> = new EventEmitter<any>();
 
+    showPasswordVisible: boolean;
+
     constructor(public validatorErrorsService: ValidatorErrorsService, private formBuilder: FormBuilder) {
     }
 
@@ -141,29 +150,7 @@ export class FormInputComponent implements OnInit {
         }
 
         if (this.type === 'password') {
-            this.showButton = {
-                btn_label_for_person: '',
-                colorType: 'ACTIVE',
-                btn_icon: 'fa-eye'
-            };
-
-            this.onBtnClickEvent.subscribe(() => {
-                if (this.type === 'password') {
-                    this.showButton = {
-                        btn_label_for_person: '',
-                        colorType: 'DEACTIVE',
-                        btn_icon: 'fa-eye-slash'
-                    };
-                    this.type = 'text';
-                } else {
-                    this.showButton = {
-                        btn_label_for_person: '',
-                        colorType: 'DEACTIVE',
-                        btn_icon: 'fa-eye'
-                    };
-                    this.type = 'password';
-                }
-            });
+            this.showPasswordVisible = true;
         }
     }
 
@@ -183,5 +170,9 @@ export class FormInputComponent implements OnInit {
 
     onBtnClick() {
         this.onBtnClickEvent.emit(true);
+    }
+
+    onBtnShowPassword() {
+        this.type = this.type === 'password' ? 'text' : 'password';
     }
 }

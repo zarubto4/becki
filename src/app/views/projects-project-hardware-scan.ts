@@ -9,7 +9,7 @@ import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { IError } from '../services/_backend_class/Responses';
 
 @Component({
-    selector: 'bk-view-projects-project-harware-scan',
+    selector: 'bk-view-projects-project-hardware-scan',
     templateUrl: './projects-project-hardware-scan.html'
 })
 export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponent implements OnInit {
@@ -22,7 +22,7 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
-    scanedCodes = new Set<string>();
+    scanned = new Set<string>();
     waiting = new Set<string>();
     added = new Map<string, IHardware>();
     failed = new Map<string, string>();
@@ -47,7 +47,7 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
     }
 
     refresh(): void {
-        this.scanedCodes = new Set<string>();
+        this.scanned = new Set<string>();
         this.added = new Map<string, IHardware>();
         this.failed = new Map<string, string>();
         this.tyrionBackendService.hardwareGroupGetListByFilter(0, {
@@ -72,8 +72,8 @@ export class ProjectsProjectHardwareAddWithQrComponent extends _BaseMainComponen
 
     add(code: string) {
         code =  code.replace(/ /g, '');
-        if (!this.scanedCodes.has(code)) {
-            this.scanedCodes.add(code);
+        if (!this.scanned.has(code)) {
+            this.scanned.add(code);
             this.waiting.add(code);
 
             let selectedGroupsIds = this.listGroup.selectedItems.map((item) => {

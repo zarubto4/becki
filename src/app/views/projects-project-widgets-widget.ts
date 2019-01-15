@@ -55,6 +55,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     unsavedChanges: boolean = false;
+    tab: string = 'ide';
 
     protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
     protected monacoEditorLoaderService: MonacoEditorLoaderService;

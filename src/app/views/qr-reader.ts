@@ -23,21 +23,23 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
     QrScanClose = new EventEmitter<string>();
     constructor(injector: Injector) {
         super(injector);
-
-
     };
 
     ngOnInit(): void {
         this.startCapture();
+        this.blockUI();
     }
 
     ngOnDestroy(): void {
-
+        this.videoStream.getTracks().forEach((track) => {
+            track.stop()
+        });
+        this.video.nativeElement.stop();
+        this.unblockUI();
     }
 
     startCapture() {
         let _video = this.video.nativeElement;
-        let canvas = this.myCanvas.nativeElement;
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: (this.frontcamera ? 'user' : 'environment') } })
@@ -45,7 +47,8 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
                     this.videoStream = stream;
                     _video.srcObject = stream;
                     _video.play();
-                    this.scanLoop = interval(1000).subscribe(() => {
+                    this.unblockUI();
+                    this.scanLoop = interval(200).subscribe(() => {
                         this.onCapture();
                     });
                 });
@@ -71,40 +74,4 @@ export class ReaderQrComponent extends _BaseMainComponent implements OnInit, OnD
             }
         }
     }
-
-
-    onScanConfirm() {
-        if (this.foundQR && this.qrcode) {
-
-            let _video = this.video.nativeElement;
-            let canvas = this.myCanvas.nativeElement;
-
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(stream => {
-                        let tracks = stream.getTracks().forEach((track) => {
-                            track.stop();
-                        }) // TODO camera is still on, dunno if chrome bug or just bad code [DK]
-                        _video.src = '';
-                        _video.pause();
-                    });
-            }
-
-
-            this.QrScanClose.emit(this.qrcode);
-        }
-
-    }
-
-    confirmedCapture(decoded: string) {
-        this.video.nativeElement.pause();
-        this.foundQR = true;
-        this.scanLoop.unsubscribe();
-        this.qrStatus = this.translate('byzance_qr_code_found');
-
-
-        this.qrcode = decoded;
-        this.onScanConfirm();
-    }
-
 }
