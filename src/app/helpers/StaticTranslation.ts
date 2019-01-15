@@ -2072,6 +2072,8 @@ export class StaticTranslation {
                 'flash_widget_edit_success': 'Widget has been edited.',
                 'flash_widget_edit_fail': 'Unable to edit widget, ',
 
+                'tab_ide': 'IDE',
+                'tab_versions': 'Versions',
                 'label_console_cant_crate_widget': '<strong>Cannot create widget:</strong> Make sure, that you specified size profiles for widget',
                 'label_widget_properties': 'GRID widget properties',
                 'label_remove_widget': 'GRID widget properties',
@@ -2091,16 +2093,19 @@ export class StaticTranslation {
                 'label_console_true': '<span class="bold font-red">true</span>',
                 'label_console_false': '<span class="bold font-blue"> false </span>',
                 'label_grid': 'GRID',
+                'label_program_versions': 'No <strong class="font-color-blocko">WIDGET</strong> version',
+                'label_program_versions_comment': 'Save your code first, and you will never see this screen again',
 
                 'table_name': 'Name',
+                'table_version_name': 'Name',
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
+
                 'table_status' : 'Status',
 
                 'tab_ide': 'IDE',
                 'tab_versions': 'Versions',
-
                 'label_publish': 'Publish',
                 'label_publish_decision': 'Decide of Publish',
                 'label_version_set_as_main': 'Set as main',
