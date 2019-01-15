@@ -160,13 +160,23 @@ let solveType = (prop: any): string => {
     let type = prop['type'];
     // basic types:
     switch (type) {
-        case 'string':
-        case 'boolean':
-        case 'number':
+        case 'string': {
+            type = 'string';
             break;
-        case 'integer':
+        }
+        case 'boolean': {
+            type = 'boolean';
+            break;
+        }
+        case 'number': {
             type = 'number';
             break;
+        }
+        case 'integer': {
+            type = 'number';
+            prop['format'] = 'int32';
+            break;
+        }
         case 'array':
 
             type = null;
@@ -313,10 +323,10 @@ definitionsKeys.forEach((defName) => {
             fileWriteLine('    /**');
             fileWriteLine('     * @name ' + propKey);
             fileWriteLine('     * @type ' + type);
-            if (prop['description']) {        fileWriteLine('     * @description ' + prop['description'].split('\n').join('\n     *    ')); }
-            if (prop['example']) {          fileWriteLine('     * @example ' + prop['example']); }
-            if (prop['format']) {           fileWriteLine('     * @format ' + prop['format']); }
-            if (prop['default']) {           fileWriteLine('     * @default ' + prop['default']); }
+            if (prop['description']) {        fileWriteLine('     * @description '  + prop['description'].split('\n').join('\n     *    ')); }
+            if (prop['example']) {            fileWriteLine('     * @example '      + prop['example']); }
+            if (prop['format']) {             fileWriteLine('     * @format '       + prop['format']); }
+            if (prop['default']) {            fileWriteLine('     * @default '      + prop['default']); }
             if (prop['readOnly'] === true) {  fileWriteLine('     * @readonly'); }
             if (required === '') {            fileWriteLine('     * @required'); }
             fileWriteLine('     */');

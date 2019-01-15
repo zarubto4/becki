@@ -7,6 +7,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IProductExtension } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError } from '../services/NotificationService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-financial-product-extensions-extension',
@@ -54,8 +55,8 @@ export class FinancialProductExtensionsExtensionComponent extends _BaseMainCompo
             .then(() => {
                 this.refresh();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason.message));
                 this.refresh();
             });
     }
@@ -65,8 +66,8 @@ export class FinancialProductExtensionsExtensionComponent extends _BaseMainCompo
             .then(() => {
                 this.refresh();
             })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+            .catch((reason: IError) => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason.message));
                 this.refresh();
             });
     }
@@ -84,7 +85,7 @@ export class FinancialProductExtensionsExtensionComponent extends _BaseMainCompo
                 this.product =  values[1];
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('Data cannot be loaded.', reason));
                 this.unblockUI();
             });

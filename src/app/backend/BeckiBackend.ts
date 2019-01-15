@@ -139,9 +139,8 @@ export abstract class TyrionApiBackend extends TyrionAPI {
         this.increaseTasks();
         return this.requestRestGeneral(request)
             .then((response: RestResponse) => {
-
+                this.decreaseTasks();
                 if (success.indexOf(response.status) > -1) {
-                    this.decreaseTasks();
                     let res = response.body;
                     Object.defineProperty(res, '_code_', {
                         value: response.status,
@@ -189,14 +188,8 @@ export abstract class TyrionApiBackend extends TyrionAPI {
                 }
             })
             .catch((response: RestResponse | IError) => {
-
-                if (response instanceof IError) {
-                    throw response;
-                }
-
                 this.decreaseTasks();
                 throw response;
-
             });
     }
 

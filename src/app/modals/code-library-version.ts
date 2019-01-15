@@ -11,6 +11,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { ILibrary, ILibraryVersion } from '../backend/TyrionAPI';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsCodeLibraryVersionModel extends ModalModel {
@@ -59,7 +60,7 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
                         });
                     }
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     this.loading = false;
                 });

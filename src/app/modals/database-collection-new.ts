@@ -43,7 +43,7 @@ export class ModalsDatabaseCollectionNewComponent implements OnInit {
                     Validators.maxLength(30),
                     Validators.pattern('([a-z0-9_-]*)*')
                 ],
-                BeckiAsyncValidators.nameTaken(this.backendService, 'DatabaseCollection', null,  this.modalModel.database.id)
+                BeckiAsyncValidators.nameTaken(this.backendService, 'DatabaseCollection', this.modalModel.database.id)
             ],
         });
     }

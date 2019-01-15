@@ -47,7 +47,7 @@ export class ModalsVersionDialogComponent implements OnInit {
                     (value) => {
                         return !(this.modalModel && this.modalModel.object && this.modalModel.object.name.length > 3 && this.modalModel.object.name === value);
                     },
-                    BeckiAsyncValidators.nameTaken(this.backendService, this.modalModel.type, null, this.modalModel.parent_object_id)
+                    BeckiAsyncValidators.nameTaken(this.backendService, this.modalModel.type, this.modalModel.parent_object_id)
                 )
             ],
             'description': [this.modalModel.object != null ? this.modalModel.object.description : '', [Validators.maxLength(255)]],

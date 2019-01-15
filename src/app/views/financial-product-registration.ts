@@ -10,6 +10,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { Subscription } from 'rxjs';
 import { ContactFormData } from '../components/ContactFormComponent';
 import { PaymentDetailsData, PaymentDetailsOptions } from '../components/PaymentDetailsFormComponent';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -296,7 +297,7 @@ export class ProductRegistrationComponent extends _BaseMainComponent implements 
                     }
                 }
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.fmError(this.translate('flash_cant_buy_product'), reason);
                 this.unblockUI();
             });

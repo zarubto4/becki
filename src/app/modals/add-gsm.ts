@@ -11,6 +11,7 @@ import { IGSM, IResultBadRequest, IResultInvalidBody } from '../backend/TyrionAP
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessage, FlashMessageError, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsAddGSMModel extends ModalModel {
@@ -120,7 +121,8 @@ export class ModalsAddGSMComponent  implements OnInit {
 
         let data: string = this.multiForm.controls['listOfIds'].value;
 
-        data = data.replace(',', ';');
+        data = data.replace(/,/g, ';');
+
         data = data.replace(/\s+/g, '');
         data = data.replace(/(\r?\n|\r)*(\s)*/g, '');
 
@@ -192,9 +194,9 @@ export class ModalsAddGSMComponent  implements OnInit {
             .then(() => {
                 this.modalClose.emit(true);
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
-                this.single_error_message = reason.body.message;
+                this.single_error_message = reason.message;
             });
     }
 

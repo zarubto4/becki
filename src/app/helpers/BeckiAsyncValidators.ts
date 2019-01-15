@@ -128,47 +128,13 @@ export class BeckiAsyncValidators {
         });
     }
 
-    public static itsNumber(): AsyncValidatorFn {
-        return AsyncValidatorDebounce.debounce((control: FormControl) => {
-            return new Promise<any>((resolve) => {
-
-                if (typeof control.value === 'number') {
-                    return resolve();
-                }
-
-                let error: {} = {};
-                error['notNumber'] = true;
-
-                resolve(error); // invalid
-
-            });
-        });
-    }
-
-    public static roundNumber(): AsyncValidatorFn {
-        return AsyncValidatorDebounce.debounce((control: FormControl) => {
-            return new Promise<any>((resolve) => {
-
-                if (Number.isSafeInteger(control.value)) {
-                    return resolve();
-                }
-
-                let error: {} = {};
-                error['notInteger'] = true;
-
-                resolve(error); // invalid
-
-            });
-        });
-    }
-
     public static nameTaken(
         backEnd: TyrionBackendService,
         type: ('Project'|'BProgram'|'BProgramVersion'|'CProgram'|'CProgramVersion'|
             'GridProgram'|'GridProgramVersion'|'GridProject'|'Hardware'|'HardwareGroup'|
             'GSM'|'Role'|'Widget'|'WidgetVersion'|'Block'| 'BlockVersion' |'Instance'|'Snapshot'|'Database'|'DatabaseCollection'| 'CLibrary'|
             'CLibraryVersion'),
-        project_id?: string, object_id?: string): AsyncValidatorFn {
+        parent_id?: string): AsyncValidatorFn {
 
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
@@ -178,8 +144,7 @@ export class BeckiAsyncValidators {
                 }
                 backEnd.projectValidObjectUniqueName({
                     name:  control.value,
-                    project_id: project_id,
-                    object_id: object_id,
+                    parent_id: parent_id,
                     object_type: type
                 }).then((result: IResultOK) => {
 

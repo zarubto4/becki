@@ -10,6 +10,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
 import { IBProgram, IBProgramList, IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-blocko',
@@ -70,7 +71,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
                         this.onFilterPrivatePrograms();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_remove'), reason));
                         this.onFilterPrivatePrograms();
                     });
@@ -93,7 +94,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                         this.unblockUI();
                         this.onBProgramClick(program.id);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_add_to_project', model.blocko.name, reason)));
                         this.onFilterPrivatePrograms();
@@ -115,7 +116,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_update')));
                         this.onFilterPrivatePrograms();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_update'), reason));
                         this.onFilterPrivatePrograms();
                     });
@@ -138,7 +139,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                 this.privatePrograms = bProgramList;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });

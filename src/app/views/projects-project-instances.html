@@ -79,16 +79,16 @@
                                     permission: (instance.update_permission)
                                 },
                                 {
-                                    condition: (instance.online_state  == 'SHUT_DOWN' && instance.snapshots.length > 0),
-                                    btn_label_for_person: ('label_upload_latest_used_version'|bkTranslate:this),
+                                    condition: (instance.snapshots && instance.snapshots.length > 0),
+                                    btn_label_for_person: ('btn_deploy_snapshot'|bkTranslate:this),
                                     btn_tag: 'start_instance',
                                     icon: 'fa fa-power-off',
                                     colorType: 'DEACTIVE',
                                     permission: (instance.update_permission)
                                 },
                                 {
-                                    condition: instance.online_state  == 'ONLINE',
-                                    btn_label_for_person: ('label_shutdown_instance'|bkTranslate:this),
+                                    condition: (instance.current_snapshot !== null ),
+                                    btn_label_for_person: ('label_deactivate_instance'|bkTranslate:this),
                                     btn_tag: 'shutdown_instance',
                                     icon: 'fa fa-power-off',
                                     colorType: 'ACTIVE',

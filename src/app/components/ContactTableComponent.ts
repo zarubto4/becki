@@ -7,6 +7,7 @@ import { BlockUIService } from '../services/BlockUIService';
 import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 import { ContactFormData } from './ContactFormComponent';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-contact-table',
@@ -49,7 +50,7 @@ export class ContactTableComponent implements OnInit {
                         this.blockUIService.unblockUI();
                         this.contactChange.emit(contact);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_product_edit_error', this), reason));
                         this.blockUIService.unblockUI();
                     });

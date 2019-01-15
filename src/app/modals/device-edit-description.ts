@@ -11,6 +11,7 @@ import { TranslationService } from '../services/TranslationService';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IHardware } from '../backend/TyrionAPI';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsDeviceEditDescriptionModel extends ModalModel {
@@ -63,7 +64,7 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
             .then((values) => {
                 this.onSubmitClick();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.onSubmitClick();
             });
@@ -74,7 +75,7 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
             .then((values) => {
                 this.onSubmitClick();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 this.onSubmitClick();
             });
