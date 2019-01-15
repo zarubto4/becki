@@ -87,7 +87,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/']);
             })
             .catch((reason: IError) => {
-                this.notificationService.fmError(reason);
                 this.blockUIService.unblockUI();
 
                 console.trace('OnLoginClick Error Code: ', reason);
