@@ -4,7 +4,7 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { ILibrary } from '../backend/TyrionAPI';
@@ -54,8 +54,8 @@ export class ModalsLibraryPropertiesComponent implements OnInit {
                     )
                 ],
             ],
-            'description': [this.modalModel.library.description != null ? this.modalModel.library.description : '', [Validators.maxLength(255)]],
-            'tags': [this.modalModel.library != null ? this.modalModel.library.tags : []]
+            'description': [this.modalModel.library != null ? this.modalModel.library.description : '', [Validators.maxLength(255)]],
+            'tags': [this.modalModel.library != null ? this.modalModel.library.tags.slice() : []]
         });
     }
 

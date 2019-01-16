@@ -1,13 +1,13 @@
 
 import { Component, OnInit, Injector } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { IHardwareReleaseUpdate, IHardwareReleaseUpdateFilter, IHardwareReleaseUpdateList, IHardwareUpdateList, IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
 import { FormGroup } from '@angular/forms';
 import { IError } from '../services/_backend_class/Responses';
+
 @Component({
     selector: 'bk-view-projects-project-actualization-procedures-procedure',
     templateUrl: './projects-project-actualization-procedures-procedure.html',
@@ -69,7 +69,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
                 this.unblockUI();
 
             }).catch((reason: IError) => {
-                this.fmError(this.translate('label_cant_load_actualization_procedure'));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -133,7 +133,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
                                     task.finished = value.finished;
                                 })
                                 .catch((reason: IError) => {
-                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                    this.fmError(reason);
                                 });
 
                         }
@@ -144,11 +144,8 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
-
-
-
 }
 

@@ -54,11 +54,11 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
                 this.unblockUI();
             }).catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError('db_loar_error', reason);
+                this.fmError(reason);
             });
         }).catch((reason: IError) => {
             this.unblockUI();
-            this.fmError('db_loar_error', reason);
+            this.fmError(reason);
         });
     }
 
@@ -83,7 +83,7 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
                     this.refresh();
                 }).catch((reason: IError) => {
                     this.unblockUI();
-                    this.fmError('', reason);
+                    this.fmError(reason);
                     this.refresh();
                 });
             }
@@ -144,7 +144,7 @@ export class ProjectsProjectDatabasesComponent extends _BaseMainComponent implem
                     this.refresh();
                 }).catch((reason: IError) => {
                     this.unblockUI();
-                    this.fmError('', reason);
+                    this.fmError(reason);
                     this.refresh();
                 });
             }

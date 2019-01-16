@@ -11,9 +11,8 @@ import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHomerServer } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { IAvailableVersion, IVersionOverview } from '../backend/HomerAPI';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
-import { TranslationService } from '../services/TranslationService';
+import { IAvailableVersion } from '../backend/HomerAPI';
+import { NotificationService } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';
 
 
@@ -40,7 +39,7 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
     options_available_version: FormSelectComponentOption[] = null;
     form: FormGroup;
 
-    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, protected notificationService: NotificationService) {
 
         this.form = this.formBuilder.group({
             'selected_version': ['', [Validators.required]],
@@ -66,7 +65,7 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
                     });
                 })
                 .catch((reason: IError) => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.fmError(reason);
                     console.error(reason);
                     this.onCancelClick();
                 });
@@ -84,7 +83,7 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
                 this.onCloseClick();
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
                 console.error(reason);
                 this.onCancelClick();
             });

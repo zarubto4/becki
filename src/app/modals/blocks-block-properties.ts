@@ -51,18 +51,15 @@ export class ModalsBlocksBlockPropertiesComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.block != null ? this.modalModel.block.description : '' , [Validators.maxLength(255)]],
-            'tags': [this.modalModel.block != null ? this.modalModel.block.tags : []]
+            'tags': [this.modalModel.block != null ? this.modalModel.block.tags.slice() : []]
         });
     }
 
     onSubmitClick(): void {
-
-
         if (this.modalModel.block == null) {
             // @ts-ignore
             this.modalModel.block = {};
         }
-
         this.modalModel.block.name = this.form.controls['name'].value;
         this.modalModel.block.description = this.form.controls['description'].value;
         this.modalModel.block.tags = this.form.controls['tags'].value;

@@ -5,40 +5,40 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
+import { ValidatorErrorsService }  from '../services/ValidatorErrorsService';
 import { TranslationService } from '../services/TranslationService';
-import { TagComponent } from './TagComponent';
+import { TyrionBackendService } from '../services/BackendService';
 
 @Component({
     selector: 'bk-form-tag-input',
     /* tslint:disable */
     template: `
         <div>
-            <div [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"
-                 [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"
-                 [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
+            <div
+                [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"
+                [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"
+                [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
                 <label *ngIf="showLabel">{{label}}</label>
-                <div>
-                    <div class="bootstrap-tagsinput">
-                       <span *ngFor="let tag of tags; let i = index" [attr.data-index]="i">
-                           <span *ngIf="i <= index_stop || index_stop == null" style="margin-right: 3px; padding-right: 3px !important;">
-                                
-                               <bk-single-tag-template-component [tag]="tag" 
-                                                 [tag_color]="'label-info'"
-                                                 [tag_popup_color]="tag_popup_selected_tag == tag"
-                                                 [tag_faded]="tag_faded"
-                                                 [readonly]="readonly"
-                                                 (onRemoveClick)="onRemoveClick($event)">
+                <div class="bootstrap-tagsinput">
+                    <span *ngFor="let tag of tags; let i = index" [attr.data-index]="i"
+                          style="display: inline-block; margin-bottom: 12px;">
+                           <span *ngIf="i <= index_stop || index_stop == null"
+                                 style="margin-right: 3px; padding-right: 3px !important; display: inline-block;">
+                               <bk-single-tag-template-component [tag]="tag"
+                                                                 [tag_color]="'label-info'"
+                                                                 [tag_popup_color]="tag_popup_selected_tag == tag"
+                                                                 [tag_faded]="tag_faded"
+                                                                 [readonly]="readonly"
+                                                                 (onRemoveClick)="onRemoveClick($event)">
                                 </bk-single-tag-template-component>
-                               
                            </span>
                        </span>
-                        <span *ngIf="tag_length_for_read_only_max_size_already_counted > tag_length_for_read_only_max_size && readonly">
+                    <span
+                        *ngIf="tag_length_for_read_only_max_size_already_counted > tag_length_for_read_only_max_size && readonly">
                            ...
-                       </span>
-                    </div>
+                    </span>
                 </div>
-                <div *ngIf="!readonly" style="padding-top: 10px">
+                <div *ngIf="!readonly" style="padding-top: 10px;">
                     <bk-form-input (onEnterEvent)="onEnter($event)"
                                    [placeholder]="placeholder!==null ? placeholder:'label_place_holder'|bkTranslate:this"
                                    [control]="private_form.controls.tag_label" [showLabel]="false"
@@ -92,7 +92,7 @@ export class FormInputTagsComponent implements OnInit {
     private tag_popup_selected_tag: string = null;
     private tag_faded: boolean = false;
 
-    constructor(public validatorErrorsService: ValidatorErrorsService, private formBuilder: FormBuilder, public translationService: TranslationService) {
+    constructor(public validatorErrorsService: ValidatorErrorsService, private formBuilder: FormBuilder, public translationService: TranslationService, private tyrionBackendService: TyrionBackendService) {
     }
 
     ngOnInit() {
@@ -102,7 +102,7 @@ export class FormInputTagsComponent implements OnInit {
         });
 
         if (this.control != null) {
-            this.control.setValue([]);
+            this.tags = this.control.value;
 
         } else if (this.tags != null) {
 
@@ -110,9 +110,7 @@ export class FormInputTagsComponent implements OnInit {
 
             for (let i = 0; i < this.tags.length; i++) {
 
-
                 if (this.tags[i] !== null && !(this.tags[i] === 'undefined')) {
-
 
                     this.tag_length_for_read_only_max_size_already_counted = this.tag_length_for_read_only_max_size_already_counted + this.tags[i].length;
 
@@ -126,10 +124,9 @@ export class FormInputTagsComponent implements OnInit {
                     }
                 }
             }
-
         }
 
-        // Not wait for tuch if control.value is not null (for example edit)
+        // Not wait for touch if control.value is not null (for example edit)
         if (this.waitForTouch) {
             if (this.control !== null && this.control.value !== null && this.control.value !== '') {
                 this.waitForTouch = false;
@@ -150,14 +147,13 @@ export class FormInputTagsComponent implements OnInit {
         (<FormControl>(this.private_form.controls['tag_label'] )).setValue('');
 
         // Add Tag to Array if array not contains this Tag
-
         if (this.tags.indexOf(tag) > -1) {
 
             this.tag_faded = true;
             this.tag_popup_selected_tag = tag;
 
             let that = this;
-            setTimeout(function() {
+            setTimeout(function () {
                 that.tag_popup_selected_tag = '';
                 that.tag_faded = false;
             }, 500);
@@ -185,9 +181,4 @@ export class FormInputTagsComponent implements OnInit {
         this.control.setValue(this.tags);
         this.valueChange.emit(this.tags);
     }
-
-    changeColor(tag: TagComponent, color: string): void {
-
-    }
-
 }

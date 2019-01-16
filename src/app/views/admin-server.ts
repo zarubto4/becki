@@ -5,7 +5,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { ICompilationServer, IHomerServer, IHomerServerFilter, IHomerServerList } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -63,7 +63,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -83,7 +83,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -105,8 +105,9 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                 })
                     .then(() => {
                         this.onFilterHomerServer();
-                    }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                    })
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilterHomerServer();
                     });
             }
@@ -125,7 +126,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     .then(() => {
                         this.onFilterCompilationServer();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -165,7 +166,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     .then(() => {
                         this.onFilterHomerServer();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.onFilterHomerServer();
                     });
             }
@@ -191,7 +192,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                         this.onFilterHomerServer(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.onFilterHomerServer(); // also unblockUI
                     });
             }
@@ -220,7 +221,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     .then(() => {
                         this.onFilterCompilationServer(); // also unblockUI
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.onFilterCompilationServer(); // also unblockUI
                     });
             }
@@ -237,7 +238,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                         this.onFilterCompilationServer(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.onFilterCompilationServer(); // also unblockUI
                     });
             }

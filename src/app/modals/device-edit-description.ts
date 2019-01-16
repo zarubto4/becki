@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IHardware } from '../backend/TyrionAPI';
 import { IError } from '../services/_backend_class/Responses';
@@ -55,7 +55,7 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.hardware != null ? this.modalModel.hardware.description : '' , [Validators.maxLength(255)]],
-            'tags': [this.modalModel.hardware != null ? this.modalModel.hardware.tags : []]
+            'tags': [this.modalModel.hardware != null ? this.modalModel.hardware.tags.slice() : []]
         });
     }
 
@@ -65,7 +65,7 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
                 this.onSubmitClick();
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
                 this.onSubmitClick();
             });
     }
@@ -76,14 +76,12 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
                 this.onSubmitClick();
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
                 this.onSubmitClick();
             });
     }
 
     onSubmitClick(): void {
-
-
         if (this.modalModel.hardware == null) {
             // @ts-ignore
             this.modalModel.hardware = {};

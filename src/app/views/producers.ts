@@ -42,7 +42,7 @@ export class ProducersComponent extends _BaseMainComponent implements OnInit, On
                 this.producers = producers;
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_project_cant_load', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
         this.unblockUI();

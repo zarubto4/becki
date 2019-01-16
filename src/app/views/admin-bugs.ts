@@ -40,7 +40,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.fmError( this.translate('flash_cant_load', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -51,7 +51,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
             .then(() => {
                 this.refresh();
             }).catch((reason: IError) => {
-                this.fmError( this.translate('flash_cant_remove', reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -65,7 +65,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError(this.translate('flash_cant_report'), reason);
+                this.fmError(reason);
             });
     }
 
@@ -77,7 +77,7 @@ export class BugsComponent extends _BaseMainComponent implements OnInit, OnDestr
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_cant_remove', reason));
+                this.fmError(reason);
             });
     }
 

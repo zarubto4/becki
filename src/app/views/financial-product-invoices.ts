@@ -6,8 +6,8 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IInvoice } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsSendInvoiceModel } from './../modals/financial-send-invoice';
+import { FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsSendInvoiceModel } from '../modals/financial-send-invoice';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
 import { ModalService } from '../services/ModalService';
 import { TyrionBackendService } from '../services/BackendService';
@@ -68,7 +68,7 @@ export class FinancialProductInvoicesComponent extends _BaseMainComponent implem
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Data cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -136,9 +136,9 @@ export class FinancialProductInvoiceActions {
                 .subscribe(res => {
                     let url = window.URL.createObjectURL(res);
                     window.open(url, '_blank');
-                }, error => {
+                }, (reason: IError) => {
                     this.page.unblockUI();
-                    this.page.addFlashMessage(new FlashMessageError(this.page.translate('flash_invoice_cant_be_downloaded')));
+                    this.page.fmError(reason);
                     resolve(invoice);
                 }, () => {
                     this.page.unblockUI();
@@ -160,9 +160,9 @@ export class FinancialProductInvoiceActions {
                     this.page.unblockUI();
                     this.page.addFlashMessage(new FlashMessageSuccess(this.page.translate('flash_invoice_been_resend')));
                     resolve(invoice);
-                }).catch(() => {
+                }).catch((reason: IError) => {
                     this.page.unblockUI();
-                    this.page.addFlashMessage(new FlashMessageError(this.page.translate('flash_invoice_cant_be_resend')));
+                    this.page.fmError(reason);
                     reject();
                 });
             });
@@ -176,9 +176,9 @@ export class FinancialProductInvoiceActions {
                 this.page.unblockUI();
                 this.page.addFlashMessage(new FlashMessageSuccess(this.page.translate('flash_invoice_been_confirmed')));
                 resolve(response);
-            }).catch(() => {
+            }).catch((reason: IError) => {
                 this.page.unblockUI();
-                this.page.addFlashMessage(new FlashMessageError(this.page.translate('flash_invoice_cant_be_confirmed')));
+                this.page.fmError(reason);;
                 reject();
             });
         });
@@ -191,9 +191,9 @@ export class FinancialProductInvoiceActions {
                 this.page.unblockUI();
                 this.page.addFlashMessage(new FlashMessageSuccess(this.page.translate('flash_invoice_been_synchronized')));
                 resolve(response);
-            }).catch(() => {
+            }).catch((reason: IError) => {
                 this.page.unblockUI();
-                this.page.addFlashMessage(new FlashMessageError(this.page.translate('flash_invoice_cant_be_synchronized')));
+                this.page.fmError(reason);
                 reject();
             });
         });

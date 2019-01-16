@@ -4,10 +4,9 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
-import { FlashMessage, FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessage, NotificationService } from '../services/NotificationService';
 import { ModalModel } from '../services/ModalService';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
-import { TranslationService } from '../services/TranslationService';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 
@@ -52,7 +51,7 @@ export class ModalsPictureUploadComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private translationService: TranslationService, private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, protected notificationService: NotificationService, ) {
         this.form = this.formBuilder.group({
             'defaultPicture': [''],
             'avatar_picture': [''],
@@ -91,8 +90,7 @@ export class ModalsPictureUploadComponent implements OnInit {
                 image.addEventListener('load', () => {
                     if (image.width < 50 || image.height < 50) {
 
-                        // TODO - zprávu nastavit do templatu!
-                        this.flashMessage.emit(new FlashMessageError(this.translationService.translate('flash_image_too_small', this)));
+                        this.notificationService.fmErrorFromString('Image is too small.');
 
                         this.cropperLoaded = false;
                     } else {
@@ -131,5 +129,4 @@ export class ModalsPictureUploadComponent implements OnInit {
     onCloseClick(): void {
         this.modalClose.emit(false);
     }
-
 }

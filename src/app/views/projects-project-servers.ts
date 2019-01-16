@@ -7,7 +7,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { IHomerServer, IHomerServerList, IProject,
     IServerRegistrationFormData, IServerRegistrationFormDataServerRegion, IServerRegistrationFormDataServerSize
 } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
@@ -110,7 +110,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -135,7 +135,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                         this.onFilterHomerServer();
                         this.tab = 'server_list';
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.onFilterHomerServer();
                         this.tab = 'server_list';
                     });
@@ -156,7 +156,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
             this.unblockUI();
             this.onFilterHomerServer();
         }).catch((reason: IError) => {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+            this.fmError(reason);
             this.onFilterHomerServer();
             this.tab = 'server_list';
         });
@@ -202,7 +202,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                             .then(() => {
                                 this.onFilterHomerServer();
                             }).catch((reason: IError) => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                                this.fmError(reason);
                                 this.onFilterHomerServer();
                             });
                     }
@@ -211,7 +211,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -231,7 +231,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                 this.registration_information = components;
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                this.fmError(reason);
             });
     }
 
@@ -245,7 +245,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
                         this.onFilterHomerServer(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.onFilterHomerServer(); // also unblockUI
                     });
             }
@@ -256,7 +256,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         this.tyrionBackendService.homerServerShutdown(server.id)
             .then(() => {})
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                this.fmError(reason);
                 this.onFilterHomerServer(); // also unblockUI
             });
     }
@@ -265,7 +265,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         this.tyrionBackendService.homerServerStart(server.id)
             .then(() => {})
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                this.fmError(reason);
                 this.onFilterHomerServer(); // also unblockUI
             });
     }
@@ -274,7 +274,7 @@ export class ProjectsProjectServersComponent extends _BaseMainComponent implemen
         this.tyrionBackendService.homerServerRestart(server.id)
             .then(() => {})
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                this.fmError(reason);
                 this.onFilterHomerServer(); // also unblockUI
             });
     }

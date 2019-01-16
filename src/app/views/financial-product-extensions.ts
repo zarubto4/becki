@@ -7,7 +7,6 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct, IProductExtension } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import { FlashMessageError } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';
 
 
@@ -60,7 +59,7 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -71,7 +70,7 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -90,7 +89,7 @@ export class FinancialProductExtensionsComponent extends _BaseMainComponent impl
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Product cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

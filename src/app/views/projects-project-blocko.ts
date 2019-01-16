@@ -4,7 +4,7 @@
  */
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
@@ -72,7 +72,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                         this.onFilterPrivatePrograms();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_remove'), reason));
+                        this.fmError(reason);
                         this.onFilterPrivatePrograms();
                     });
             }
@@ -96,7 +96,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_add_to_project', model.blocko.name, reason)));
+                        this.fmError(reason);
                         this.onFilterPrivatePrograms();
                     });
             }
@@ -110,14 +110,15 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                 this.blockUI();
                 this.tyrionBackendService.bProgramEdit(blocko.id, {
                     name: model.blocko.name,
-                    description: model.blocko.description
+                    description: model.blocko.description,
+                    tags: model.blocko.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_update')));
                         this.onFilterPrivatePrograms();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_update'), reason));
+                        this.fmError(reason);
                         this.onFilterPrivatePrograms();
                     });
             }
@@ -140,7 +141,7 @@ export class ProjectsProjectBlockoComponent extends _BaseMainComponent implement
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

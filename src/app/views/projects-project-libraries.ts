@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
@@ -79,7 +79,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         }
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
+                        this.fmError(reason);
                         if (library.publish_type === 'PRIVATE') {
                             this.onFilterPrivateLibraries();
                         } else {
@@ -107,7 +107,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         this.onLibraryClick(library.id);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_add_fail', model.library.name, reason)));
+                        this.fmError(reason);
                         this.onFilterPrivateLibraries();
                     });
             }
@@ -132,7 +132,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         this.onFilterPublicLibraries();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                        this.fmError(reason);
                         this.onFilterPrivateLibraries();
                         this.onFilterPublicLibraries();
                     });
@@ -159,7 +159,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         }
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
+                        this.fmError(reason);
                         if (library.publish_type === 'PRIVATE') {
                             this.onFilterPrivateLibraries();
                         } else {
@@ -188,7 +188,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -210,7 +210,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

@@ -5,7 +5,8 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { NotificationService, FlashMessageError } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { TyrionBackendService } from '../services/BackendService';
 import { IError } from '../services/_backend_class/Responses';
 
@@ -34,7 +35,7 @@ export class NotificationsComponent extends _BaseMainComponent implements OnInit
                 this.loading = false;
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load'), reason));
+                this.fmError(reason);
                 this.loading = false;
             });
     }
@@ -57,7 +58,7 @@ export class NotificationsComponent extends _BaseMainComponent implements OnInit
                     this.loading = false;
                 })
                 .catch((reason: IError) => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load'), reason));
+                    this.fmError(reason);
                     this.loading = false;
                 });
         }

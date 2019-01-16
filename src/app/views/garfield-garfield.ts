@@ -5,7 +5,7 @@ import {
     IHomerServerList
 } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
 import { FormGroup, Validators } from '@angular/forms';
@@ -270,14 +270,14 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         });
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cant_load_homer_servers', reason));
+                        this.fmError(reason);
                         this.unblockUI();
                     });
 
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_cant_load', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -334,7 +334,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                     this.continueProcess();
                 })
                 .catch((reason: IError) => {
-                    this.fmError(this.translate('flash_fail'), reason);
+                    this.fmError(reason);
                     action.fail();
                     this.onConsoleError(reason.toString());
                 });
@@ -369,7 +369,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_test_print_success')));
             }).catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -402,7 +402,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                     .then(() => {
                         this.refresh();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -419,7 +419,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         this.navigate(['admin/garfield/']);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -490,7 +490,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         resolve(device);
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_fail'), reason);
+                        this.fmError(reason);
                         reject(reason);
                     });
             } else {
@@ -503,7 +503,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         resolve(device);
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_fail'), reason);
+                        this.fmError(reason);
                         reject(reason);
                     });
             }
@@ -647,7 +647,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                 && this.mainServer
                 && this.backupServer
                 && this.productionBatchForm.valid)) {
-            this.fmError(this.translate('flash_prerequisite_not_met'));
+            this.fmErrorFromString(this.translate('flash_prerequisite_not_met'));
             return;
         }
 

@@ -13,7 +13,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHardware, IHomerServer, IHomerServerList } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { TranslationService } from '../services/TranslationService';
 import { IError } from '../services/_backend_class/Responses';
@@ -94,7 +94,7 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
                 });
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
                 this.error_message = reason.message;
             });
     }
@@ -108,7 +108,7 @@ export class ModalsHardwareChangeServerComponent implements OnInit {
         }).then(() => {
             this.onSubmitClick();
         }).catch((reason: IError) => {
-            this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            this.notificationService.fmError(reason);
             this.error_message = reason.message;
         });
     }

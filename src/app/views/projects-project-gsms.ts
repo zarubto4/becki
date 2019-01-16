@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
@@ -102,7 +102,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                         this.onFilter();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_gsm'), reason));
+                        this.fmError(reason);
                         this.onFilter();
                     });
             }
@@ -120,7 +120,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                         this.onFilter();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_success'), reason));
+                        this.fmError(reason);
                         this.onFilter();
                     });
             }
@@ -135,7 +135,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                 this.onFilter();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_error'), reason));
+                this.fmError(reason);
                 this.onFilter();
             });
     }
@@ -145,7 +145,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
         this.modalService.showModal(model).then((success) => {
             this.onFilter();
         }).catch((reason: IError) => {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_add_gsm_fail', reason)));
+            this.fmError(reason);
             this.onFilter();
         });
     }
@@ -181,7 +181,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                     this.unblockUI();
                     this.onFilter();
                 }).catch((reason: IError) => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+                    this.fmError(reason);
                     this.onFilter();
                 });
             });
@@ -305,7 +305,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                 this.graphView.setData(chartData);
 
             }).catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+                this.fmError(reason);
                 return null;
             });
     }
@@ -336,7 +336,7 @@ export class ProjectsProjectGSMSComponent extends _BaseMainComponent implements 
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

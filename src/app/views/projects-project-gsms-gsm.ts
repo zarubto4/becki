@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, IGSM, IDataSimOverview, IModelMongoThingsMobileCRD, IGSMList, IGSMCDRList } from '../backend/TyrionAPI';
@@ -14,9 +14,9 @@ import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 import { ChartBarComponent, DataCharInterface } from '../components/ChartBarComponent';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { IError } from '../services/_backend_class/Responses';
 
 import * as moment from 'moment';
-import { IError } from '../services/_backend_class/Responses';
 
 export class DataChar {
     option: {
@@ -187,7 +187,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                         this.onGSMListClick();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_gsm'), reason));
+                        this.fmError(reason);
                         this.unblockUI();
                         this.onGSMListClick();
                     });
@@ -206,7 +206,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                         this.onGSMListClick();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_success'), reason));
+                        this.fmError(reason);
                         this.unblockUI();
                         this.onGSMListClick();
                     });
@@ -222,7 +222,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_print_error'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -347,7 +347,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 this.graphView.setData(chartData);
 
             }).catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+                this.fmError(reason);
                 return null;
             });
     }
@@ -382,7 +382,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                     this.unblockUI();
                     this.refresh();
                 }).catch((reason: IError) => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+                    this.fmError(reason);
                     this.refresh();
                 });
             });
@@ -421,7 +421,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             this.unblockUI();
             this.refresh();
         }).catch((reason: IError) => {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_cellular_update_error'), reason));
+            this.fmError(reason);
             this.refresh();
         });
     }
@@ -463,7 +463,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
 
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_get_gsm'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

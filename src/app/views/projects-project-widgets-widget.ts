@@ -8,7 +8,7 @@ import { Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef } from '@
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { IWidget, IWidgetVersion, IProject, ICProgramVersion } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import moment = require('moment/moment');
 import { Core, TestRenderer, Widgets } from 'the-grid';
@@ -70,6 +70,8 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
 
+    tab: string = 'ide';
+
     constructor(injector: Injector) {
         super(injector);
 
@@ -125,6 +127,10 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
         }
     }
 
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
+
     onWidgetEditClick(): void {
         let model = new ModalsWidgetsWidgetPropertiesModel(this.projectId, this.widget);
         this.modalService.showModal(model).then((success) => {
@@ -139,7 +145,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -160,7 +166,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         }
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail'), reason));
+                        this.fmError(reason);
                         if (this.projectId) {
                             this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets']);
                         } else {
@@ -182,7 +188,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_removed_fail', reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -204,7 +210,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_changed_success', model.object.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -259,7 +265,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                 }
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_version_load_fail'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -287,7 +293,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
             .catch((reason: IError) => {
                 this.selectedWidgetVersion = null;
                 // console.log(this.widgetCode);
-                this.addFlashMessage(new FlashMessageError((this.translate('flash_version_load_fail', version.name, reason))));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -508,7 +514,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', model.object.name, reason)));
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -526,7 +532,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -562,7 +568,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.navigate(['/admin/widgets']);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -586,7 +592,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.unblockUI();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -600,7 +606,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }

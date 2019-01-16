@@ -55,7 +55,7 @@ export class ProducersProducerComponent extends _BaseMainComponent implements On
                 this.devices = devices;
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_project_cant_load', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
         this.unblockUI();

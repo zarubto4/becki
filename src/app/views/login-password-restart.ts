@@ -11,7 +11,7 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NotificationService, FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
+import { NotificationService, FlashMessageSuccess } from '../services/NotificationService';
 import { TyrionBackendService } from '../services/BackendService';
 import { TranslationService } from '../services/TranslationService';
 import { IError } from '../services/_backend_class/Responses';
@@ -56,7 +56,7 @@ export class PasswordRestartComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/']);
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_password_change_fail', reason.message)));
+                this.notificationService.fmError(reason);
             });
     }
 

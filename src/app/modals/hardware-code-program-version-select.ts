@@ -3,7 +3,6 @@
  * of this distribution.
  */
 
-
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
@@ -54,6 +53,8 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
         }).then((p) => {
             this.codePrograms = p;
         }).catch((reason: IError) => {
+            this.notificationService.fmError(reason);
+        }).catch((reason: IError) => {
             this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
         });
     }
@@ -74,7 +75,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
                 this.programVersions = p.program_versions;
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
             });
     }
 

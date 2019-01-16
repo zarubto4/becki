@@ -7,11 +7,11 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name" [label]="'label_program_name'|bkTranslate:this"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" [label]="'label_program_description'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['name']" [label]="'label_program_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['description']" [label]="'label_program_description'|bkTranslate:this"></bk-form-input>
 
             <!-- Tags -->
-            <bk-form-tag-input [control]="form.controls.tags" [label]="'Optional Tags'"></bk-form-tag-input>
+            <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
 
             <bk-form-select *ngIf="!modalModel.program" [control]="form.controls.hardware_type_id" [label]="'label_device_type'|bkTranslate:this" [options]="options"></bk-form-select>
         </form>
@@ -20,7 +20,7 @@
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
 
         <button *ngIf="modalModel.program && !modalModel.copy" type="button" class="btn green"  [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_update")|bkTranslate:this}}</button>
-        <button *ngIf="!modalModel.program" type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_create")|bkTranslate:this}}</button>
+        <button *ngIf="!modalModel.program" type="button" class="btn green"  (click)="onSubmitClick()">{{("btn_create")|bkTranslate:this}}</button>
         <button *ngIf="modalModel.copy"  type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_copy")|bkTranslate:this}}</button>
     </div>
 </div>

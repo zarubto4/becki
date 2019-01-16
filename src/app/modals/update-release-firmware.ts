@@ -20,7 +20,7 @@ import * as moment from 'moment';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { ModalsSelectCodeModel } from './code-select';
 import { TranslationService } from '../services/TranslationService';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
@@ -161,11 +161,11 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
                                     };
                                 });
 
-                            }).catch((reason: IError) => {
-                                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                            })
+                            .catch((reason: IError) => {
+                                this.notificationService.fmError(reason);
                                 console.error('hardwareTypeGet:cProgramGetListByFilter', reason);
                             });
-
                     });
 
                 }

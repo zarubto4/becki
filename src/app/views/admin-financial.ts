@@ -3,7 +3,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProductExtensionType, ITariff, ITariffExtension } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsTariffModel } from '../modals/tariff';
 import { ModalsExtensionModel } from '../modals/extension';
@@ -53,10 +53,9 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Tariffs cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
-
     }
 
     onToggleTab(tab: string) {
@@ -73,7 +72,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -101,7 +100,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                         this.onTariffClick(tarif);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_create_error', model.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -140,7 +139,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -153,7 +152,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -164,7 +163,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -175,7 +174,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -186,7 +185,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -213,7 +212,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_create_error', model.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -246,7 +245,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_edit_error', model.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -263,7 +262,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_delete_error'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -276,7 +275,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -287,7 +286,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -298,7 +297,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -309,7 +308,7 @@ export class AdminFinancialComponent extends _BaseMainComponent implements OnIni
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
