@@ -438,7 +438,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_get_gsm'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

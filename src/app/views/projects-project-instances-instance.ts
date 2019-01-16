@@ -37,6 +37,7 @@ import { WebSocketClientBlocko } from '../services/websocket/WebSocketClientBloc
 import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
 import { ModalsInstanceCreateModel } from '../modals/instance-create';
 import { FormGroup, Validators } from '@angular/forms';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({

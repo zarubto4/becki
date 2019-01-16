@@ -54,9 +54,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
             this.codePrograms = p;
         }).catch((reason: IError) => {
             this.notificationService.fmError(reason);
-        }).catch((reason: IError) => {
-            this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
-        });
+        })
     }
 
     onBackClick() {
