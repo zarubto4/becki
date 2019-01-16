@@ -260,7 +260,13 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
 
                 // TODO run update fo grid widgets version, then setDataJson ...
                 // console.log('selectProgramVersion: ', this.selectedProgramVersion.program_version);
-                this.gridView.setDataJson(this.selectedProgramVersion.program_version);
+                this.fileDownloaderService.download(this.selectedProgramVersion.link_to_download)
+                    .then((program) => {
+                        this.gridView.setDataJson(program);
+                    })
+                    .catch((reason: IError) => {
+                        this.fmError(this.translate('flash_cannot_download_file'), reason);
+                    });
 
                 this.gridDeviceProfile = this.gridView.getDeviceProfile();
 

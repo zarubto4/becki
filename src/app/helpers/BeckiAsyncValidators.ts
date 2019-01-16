@@ -130,7 +130,7 @@ export class BeckiAsyncValidators {
 
     public static nameTaken(
         backEnd: TyrionBackendService,
-        type: ('Project'|'BProgram'|'BProgramVersion'|'CProgram'|'CProgramVersion'|
+        type: ('Project'|'HomerServer'|'CodeServer'|'BProgram'|'BProgramVersion'|'CProgram'|'CProgramVersion'|
             'GridProgram'|'GridProgramVersion'|'GridProject'|'Hardware'|'HardwareGroup'|
             'GSM'|'Role'|'Widget'|'WidgetVersion'|'Block'| 'BlockVersion' |'Instance'|'Snapshot'|'Database'|'DatabaseCollection'| 'CLibrary'|
             'CLibraryVersion'),

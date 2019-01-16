@@ -29,6 +29,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.edit?"btn_update":"btn_create")|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(this.modalModel.server?"btn_update":"btn_create")|bkTranslate:this}}</button>
     </div>
 </div>

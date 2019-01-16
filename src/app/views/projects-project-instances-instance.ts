@@ -133,7 +133,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.editorView.registerBindInterfaceCallback(this.onSetHardwareByInterfaceClick.bind(this));
 
                 if (this.instance && this.instance.current_snapshot) {
-                    this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                    this.fileDownloaderService.download(this.instance.current_snapshot.link_to_download)
                         .then((program) => {
                             this.setSnapshotProgram(JSON.parse(program).snapshot);
                         })
@@ -141,7 +141,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.fmError(this.translate('flash_cannot_download_file'), reason);
                         });
                 } else if (this.bProgramVersion) {
-                    this.fileDownloaderService.download(this.bProgramVersion.program)
+                    this.fileDownloaderService.download(this.bProgramVersion.link_to_download)
                         .then((program) => {
                             this.setSnapshotProgram(program);
                         })
@@ -284,7 +284,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             setImmediate(() => {
                 if (this.instance.current_snapshot) {
-                    this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                    this.fileDownloaderService.download(this.instance.current_snapshot.link_to_download)
                         .then((program) => {
                             this.setSnapshotProgram(JSON.parse(program).snapshot);
                         })
@@ -330,7 +330,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.bProgramVersion = bpv;
                             this.tab = 'editor';
                             if (this.editorView) {
-                                this.fileDownloaderService.download(this.bProgramVersion.program)
+                                this.fileDownloaderService.download(this.bProgramVersion.link_to_download)
                                     .then((program) => {
                                         this.setSnapshotProgram(program);
                                     })
@@ -508,7 +508,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                 this.bProgramVersion = bpv;
                                 this.tab = 'editor';
                                 if (this.editorView) {
-                                    this.fileDownloaderService.download(this.bProgramVersion.program)
+                                    this.fileDownloaderService.download(this.bProgramVersion.link_to_download)
                                         .then((program) => {
                                             this.setSnapshotProgram(program);
                                         })
@@ -524,7 +524,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 });
         } else {
             this.bProgramVersion = version;
-            this.fileDownloaderService.download(this.bProgramVersion.program)
+            this.fileDownloaderService.download(this.bProgramVersion.link_to_download)
                 .then((program) => {
                     this.setSnapshotProgram(program);
                 })
@@ -832,7 +832,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.zone.runOutsideAngular(() => {
             if (this.liveView && this.instance.current_snapshot) {
 
-                this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                this.fileDownloaderService.download(this.instance.current_snapshot.link_to_download)
                     .then((program) => {
 
                         this.liveView.setDataJson(JSON.parse(program).snapshot);

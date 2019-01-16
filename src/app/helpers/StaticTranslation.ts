@@ -2725,6 +2725,7 @@ export class StaticTranslation {
                 'label_server_type': 'Server Type',
                 'label_server_url': 'Server Link',
                 'label_id': 'Id',
+                'table_actions': 'Actions',
                 'label_status': 'Status',
                 'label_actions': 'Actions',
                 'label_no_servers': 'No servers',
