@@ -567,7 +567,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     this.consoleLog.clear();
                 }
 
-                this.fileDownloaderService.download(this.selectedProgramVersion.program)
+                this.fileDownloaderService.download(this.selectedProgramVersion.link_to_download)
                     .then((program) => {
                         this.blockoView.setDataJson(program);
 

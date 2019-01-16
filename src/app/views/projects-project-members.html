@@ -31,9 +31,11 @@
     <div class="portlet-body">
 
         <!-- Page Content -- START -->
-        <h3 class="margin-top-30" *ngIf="(project && project.participants.length > 1)">Active Users</h3>
+
+
         <div *ngIf="(project && project.participants.length > 1)">
-            <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
+            <h3 class="margin-top-30">Active Users</h3>
+            <table class="table table-hover table-light table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'label_email'|bkTranslate:this}}</th>
@@ -69,10 +71,10 @@
                 </tbody>
             </table>
         </div>
-
-        <hr class="margin-top-30" *ngIf="(project && project.invitations.length > 0 && project.participants.length > 1)">
-        <h3 *ngIf="(project && project.invitations.length > 0)">Invited Users</h3>
         <div *ngIf="(project && project.invitations.length > 0)">
+            <hr class="margin-top-30" *ngIf="project.participants.length > 1">
+            <h3 *ngIf="(project && project.invitations.length > 0)">Invited Users</h3>
+
             <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
@@ -82,8 +84,7 @@
                 </thead>
                 <tbody class="hide-bk-drob-down-button">
                 <tr *ngFor="let invitation of project.invitations">
-                    <td class="vert-align no-wrap">
-                        {{invitation.email}}
+                    <td class="vert-align no-wrap">{{invitation.email}}
                         <span *ngIf="invitation.invited_person">{{invitation.invited_person.first_name + ' ' +invitation.invited_person.last_name}}</span>
                     </td>
                     <td class="action-btn-col">

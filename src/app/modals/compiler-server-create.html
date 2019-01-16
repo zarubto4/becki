@@ -7,16 +7,16 @@
         <form [formGroup]="form">
             <bk-form-input [control]="form.controls.personal_server_name" [placeholder]="'Server Name'" [label]="'label_personal_server_name'|bkTranslate:this"></bk-form-input>
             <bk-form-input [control]="form.controls.server_url" [label]="'label_server_url'|bkTranslate:this"></bk-form-input>
+
+            <div *ngIf="modalModel.server">
+                <bk-form-input [control]="form.controls.hash_certificate" [readonly]="true" [label]="'label_hash_certificate'|bkTranslate:this"></bk-form-input>
+                <bk-form-input [control]="form.controls.connection_identificator" [readonly]="true" [label]="'label_connection_identifier'|bkTranslate:this"></bk-form-input>
+            </div>
+
         </form>
-
-        <div *ngIf="modalModel.hash_certificate && modalModel.connection_identificator">
-            <bk-form-input [control]="form.controls.hash_certificate" [readonly]="true" [label]="'label_hash_certificate'|bkTranslate:this"></bk-form-input>
-            <bk-form-input [control]="form.controls.connection_identificator" [readonly]="true" [label]="'label_connection_identifier'|bkTranslate:this"></bk-form-input>
-        </div>
-
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.edit?"btn_create":"btn_update")|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.server?"btn_update":"btn_create")|bkTranslate:this}}</button>
     </div>
 </div>
