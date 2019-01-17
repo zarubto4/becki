@@ -71,8 +71,6 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
 
-    tab: string = 'ide';
-
     constructor(injector: Injector) {
         super(injector);
 
