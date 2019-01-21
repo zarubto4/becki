@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
+
 @Component({
     selector: 'bk-tabdrop',
     template: `
@@ -7,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
             <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i>&nbsp;<i class="fa fa-angle-down"></i> <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li *ngFor="let tab of tabBtns" >
-                    <a data-toggle="tab" (click)="clickedTabItem(tab.tab_name)">{{tab.tab_label}}</a>
+                    <a data-toggle="tab" (click)="clickedTabItem(tab.tab_name)">{{tab.tab_label | stripHtmlPipe}}</a>
                 </li>
            </ul>
         </li>
@@ -32,3 +33,4 @@ export class TabDropComponent {
         this.tabItemDropdownMenuClick.emit(tabName);
     }
 }
+

@@ -170,6 +170,7 @@ import { FileTreeRootComponent } from '../components/FileTreeRootComponent';
 import { FileTreeNodeComponent } from '../components/FileTreeNodeComponent';
 import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
 import { TabDropComponent } from '../components/TabDropComponent';
+import { StripHtmlPipe } from '../pipes/SanitizeHtmlPipe';
 
 @NgModule({
     imports: [
@@ -193,6 +194,7 @@ import { TabDropComponent } from '../components/TabDropComponent';
         UnixTimeFormatPipe,
         StringReplacerPipe,
         Nl2BrPipe,
+        StripHtmlPipe,
 
         // Directives
         DraggableDirective,
@@ -368,6 +370,7 @@ import { TabDropComponent } from '../components/TabDropComponent';
         BlockoViewComponent,
         Md2HtmlPipe,
         HtmlSanitizeBypassPipe,
+        StripHtmlPipe,
         BlockoViewComponent,
         NotificationsOverlayComponent,
         NotificationsListComponent,
