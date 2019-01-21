@@ -169,6 +169,8 @@ import { ProgramVersionDiffComponent } from '../components/VersionDiffComponent'
 import { FileTreeRootComponent } from '../components/FileTreeRootComponent';
 import { FileTreeNodeComponent } from '../components/FileTreeNodeComponent';
 import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
+import { TabDropComponent } from '../components/TabDropComponent';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -236,6 +238,7 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         LayoutNotLoggedComponent,
         LayoutMainComponent,
         PortletTitleComponent,
+        TabDropComponent,
         PaymentMethodComponent,
         BeckiDrobDownButtonComponent,
         NothingToShowComponent,
@@ -412,6 +415,7 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         LayoutMainComponent,
         TranslatePipe,
         PortletTitleComponent,
+        TabDropComponent,
         PaymentMethodComponent,
         BeckiDrobDownButtonComponent,
         NothingToShowComponent,

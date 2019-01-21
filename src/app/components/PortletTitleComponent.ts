@@ -75,6 +75,11 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                                 </a>
                             </li>
                         </ng-template>
+                        <li *ngIf="tabBtns.length > 3">
+                            <bk-tabdrop [tabBtns]="tabBtns" 
+                                        (tabItemDropdownMenuClick)="onClickTabButton($event)"
+                            ></bk-tabdrop>
+                        </li>
                     </ul>
                 </div>
                 <div class="clearfix"></div>
@@ -135,7 +140,7 @@ export class PortletTitleComponent {
         condition?: boolean,
         tab_color: ('HARDWARE' | 'BLOCKO' | 'GRID' | 'CODE' | 'CLOUD' | 'BYZANCE' | 'DEFAULT'),
         tab_tag_name: string,
-        tab_label_name_for_user: string,
+        tab_label: string,
         icon?: string,
         permission?: boolean
     }[] = null;
@@ -166,5 +171,4 @@ export class PortletTitleComponent {
     onClickTabButton(onClick: string) {
         this.onTabClick.emit(onClick);
     }
-
 }
