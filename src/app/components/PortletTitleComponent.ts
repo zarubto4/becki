@@ -1,4 +1,9 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import {
+    Component, Input, Output, EventEmitter, ViewEncapsulation, OnInit, ViewChild, ElementRef, DoCheck, NgZone,
+    AfterViewInit, HostListener
+} from '@angular/core';
+
+import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
 
 @Component({
     selector: 'bk-portlet-title',
@@ -12,7 +17,6 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                           <span *ngIf="title_object_name" class="bold" [innerHTML]="' - ' + title_object_name"></span>
                     </span>
                 </div>
-
 
                 <div *ngIf="btns && getConditionSize() == 1" class="becki-actions">
                     <ng-template ngFor let-element="$implicit" [ngForOf]="btns">
@@ -59,7 +63,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                     </bk-drob-down-button>
                 </div>
                 
-                <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line">
+                <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line" #tabNavigation>   
                     <ul class="nav nav-tabs becki-tab-menu" style="padding-top: 0px;">
                         <ng-template ngFor let-btn="$implicit" [ngForOf]="tabBtns">
                             <li *ngIf="btn.condition" [class.active]="tab_selected_name == btn.tab_name"
@@ -75,8 +79,9 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
                                 </a>
                             </li>
                         </ng-template>
-                        <li *ngIf="tabBtns.length > 3">
+                        <li *ngIf="tabBtns.length > 3" class="dropdown pull-right tabdrop">
                             <bk-tabdrop [tabBtns]="tabBtns" 
+                                        [visible]="tabdropShown"
                                         (tabItemDropdownMenuClick)="onClickTabButton($event)"
                             ></bk-tabdrop>
                         </li>
@@ -88,7 +93,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
     encapsulation: ViewEncapsulation.None
     /* tslint:enable */
 })
-export class PortletTitleComponent {
+export class PortletTitleComponent implements OnInit, AfterViewInit {
 
     @Input()
     icon: string = 'fa-dollar';
@@ -129,8 +134,6 @@ export class PortletTitleComponent {
     @Output()
     onClick: EventEmitter<string> = new EventEmitter<string>();
 
-
-
 // TAB ------------------------------------------------------------------------------------------------------------------------------
     @Input()
     tab_selected_name: string = null;
@@ -148,10 +151,27 @@ export class PortletTitleComponent {
     @Output()
     onTabClick: EventEmitter<string> = new EventEmitter<string>();
 
+    @ViewChild('tabNavigation') tabNavigation: ElementRef;
+
+    tabdropShown: boolean;
+
+    @HostListener('window:resize') onResize() {
+        this.tabdropShown = this.tabNavigation && this.tabNavigation.nativeElement.offsetWidth < 612;
+    }
+
 
 // HELPERS ------------------------------------------------------------------------------------------------------------------------------
 
     constructor() {
+    }
+
+    ngOnInit() {}
+
+    ngAfterViewInit() {
+        // console.info(this.tabNavigation.nativeElement.offsetWidth);
+        // if (this.tabNavigation.nativeElement.offsetWidth < 612) {
+        //     this.tabdropShown = true;
+        // }
     }
 
     getConditionSize(): number {
