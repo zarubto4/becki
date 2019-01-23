@@ -79,8 +79,8 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
                                 </a>
                             </li>
                         </ng-template>
-                        <li *ngIf="tabBtns.length > 3" class="dropdown pull-right tabdrop">
-                            <bk-tabdrop [tabBtns]="tabBtns" 
+                        <li *ngIf="tabBtns.length > 1" class="dropdown pull-right tabdrop">
+                            <bk-tabdrop [tabBtns]="tabdropItems" 
                                         [visible]="tabdropShown"
                                         (tabItemDropdownMenuClick)="onClickTabButton($event)"
                             ></bk-tabdrop>
@@ -93,7 +93,7 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
     encapsulation: ViewEncapsulation.None
     /* tslint:enable */
 })
-export class PortletTitleComponent implements OnInit, AfterViewInit {
+export class PortletTitleComponent implements AfterViewInit {
 
     @Input()
     icon: string = 'fa-dollar';
@@ -155,8 +155,23 @@ export class PortletTitleComponent implements OnInit, AfterViewInit {
 
     tabdropShown: boolean;
 
+    tabdropItems: {
+        condition?: boolean,
+        tab_color: ('HARDWARE' | 'BLOCKO' | 'GRID' | 'CODE' | 'CLOUD' | 'BYZANCE' | 'DEFAULT'),
+        tab_tag_name: string,
+        tab_label: string,
+        icon?: string,
+        permission?: boolean
+    }[] = [];
+
     @HostListener('window:resize') onResize() {
         this.tabdropShown = this.tabNavigation && this.tabNavigation.nativeElement.offsetWidth < 612;
+
+        if (this.tabNavigation.nativeElement.offsetHeight > 44) {
+            this.tabdropItems.unshift(this.tabBtns[this.tabBtns.length - 1]);
+            console.info(this.tabdropItems);
+            this.tabBtns = this.tabBtns.slice(0, this.tabBtns.length - 1);
+        }
     }
 
 
@@ -165,13 +180,8 @@ export class PortletTitleComponent implements OnInit, AfterViewInit {
     constructor() {
     }
 
-    ngOnInit() {}
-
     ngAfterViewInit() {
-        // console.info(this.tabNavigation.nativeElement.offsetWidth);
-        // if (this.tabNavigation.nativeElement.offsetWidth < 612) {
-        //     this.tabdropShown = true;
-        // }
+        console.info(this.tabBtns);
     }
 
     getConditionSize(): number {
@@ -191,4 +201,5 @@ export class PortletTitleComponent implements OnInit, AfterViewInit {
     onClickTabButton(onClick: string) {
         this.onTabClick.emit(onClick);
     }
+
 }
