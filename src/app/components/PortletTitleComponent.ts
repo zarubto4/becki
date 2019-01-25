@@ -1,6 +1,6 @@
 import {
     Component, Input, Output, EventEmitter, ViewEncapsulation, OnInit, ViewChild, ElementRef, DoCheck, NgZone,
-    AfterViewInit, HostListener
+    AfterViewInit, HostListener, ViewChildren, QueryList
 } from '@angular/core';
 
 import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
@@ -9,8 +9,8 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
     selector: 'bk-portlet-title',
     /* tslint:disable */
     template: `
-            <div class="portlet-title" [style.border-bottom]="(tabbable_under_line == true ? '1px solid #eef1f5' : '')"  [style.padding-bottom]="(tabbable_under_line == true ? '50px' : '')">
-                <div *ngIf="show_title" class="becki-caption" style="padding-bottom: 0px; padding-top: 10px;">
+            <div class="portlet-title" [style.border-bottom]="(tabbable_under_line == true ? '1px solid #eef1f5' : '')"  [style.padding-bottom]="(tabbable_under_line == true ? '50px' : '')"  #portletTitle>
+                <div *ngIf="show_title" class="becki-caption" style="padding-bottom: 0px; padding-top: 10px;" #beckiCaption>
                     <span class="font-blue-dark uppercase">
                         <i class="fa fa-fw {{icon}}"></i>
                           <span [innerHTML]="title_name"></span>
@@ -18,7 +18,7 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
                     </span>
                 </div>
 
-                <div *ngIf="btns && getConditionSize() == 1" class="becki-actions">
+                <div *ngIf="btns && getConditionSize() == 1" class="becki-actions" #beckiActions>
                     <ng-template ngFor let-element="$implicit" [ngForOf]="btns">
 
                         <!-- Only if not a external link link !-->
@@ -63,10 +63,11 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
                     </bk-drob-down-button>
                 </div>
                 
-                <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line" #tabNavigation>   
+                <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line" #tabbableLine>   
                     <ul class="nav nav-tabs becki-tab-menu" style="padding-top: 0px;">
                         <ng-template ngFor let-btn="$implicit" [ngForOf]="tabBtns">
-                            <li *ngIf="btn.condition" [class.active]="tab_selected_name == btn.tab_name"
+                            <li *ngIf="btn.condition" #tabItems
+                                [class.active]="tab_selected_name == btn.tab_name"
                                 [class.color-hardware]="btn.tab_color === 'HARDWARE'"
                                 [class.color-cloud]="btn.tab_color === 'CLOUD'"
                                 [class.color-code]="btn.tab_color === 'CODE'"
@@ -79,9 +80,9 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
                                 </a>
                             </li>
                         </ng-template>
-                        <li *ngIf="tabBtns.length > 1" class="dropdown pull-right tabdrop">
+                        <li *ngIf="tabBtns.length > 1" class="dropdown pull-right tabdrop"  #tabdrop>
                             <bk-tabdrop [tabBtns]="tabdropItems" 
-                                        [visible]="tabdropShown"
+                                        [visible]="true"
                                         (tabItemDropdownMenuClick)="onClickTabButton($event)"
                             ></bk-tabdrop>
                         </li>
@@ -93,7 +94,7 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
     encapsulation: ViewEncapsulation.None
     /* tslint:enable */
 })
-export class PortletTitleComponent implements AfterViewInit {
+export class PortletTitleComponent implements  AfterViewInit {
 
     @Input()
     icon: string = 'fa-dollar';
@@ -145,13 +146,25 @@ export class PortletTitleComponent implements AfterViewInit {
         tab_tag_name: string,
         tab_label: string,
         icon?: string,
-        permission?: boolean
+        permission?: boolean;
+        width?: number
     }[] = null;
 
     @Output()
     onTabClick: EventEmitter<string> = new EventEmitter<string>();
 
-    @ViewChild('tabNavigation') tabNavigation: ElementRef;
+    @ViewChildren('tabItems') tabItems: QueryList<ElementRef>;
+
+    @ViewChild('portletTitle') portletTitle: ElementRef;
+
+    @ViewChild('beckiCaption') beckiCaption: ElementRef;
+
+    @ViewChild('tabbableLine') tabbableLine: ElementRef;
+
+    @ViewChild('beckiActions') beckiActions: ElementRef;
+
+    @ViewChild('tabdrop') tabdrop: ElementRef;
+
 
     tabdropShown: boolean;
 
@@ -161,17 +174,36 @@ export class PortletTitleComponent implements AfterViewInit {
         tab_tag_name: string,
         tab_label: string,
         icon?: string,
-        permission?: boolean
+        permission?: boolean;
+        width?: number
     }[] = [];
 
     @HostListener('window:resize') onResize() {
-        this.tabdropShown = this.tabNavigation && this.tabNavigation.nativeElement.offsetWidth < 612;
 
-        if (this.tabNavigation.nativeElement.offsetHeight > 44) {
+        // Remove element from tabbable-line and add to tabdrop menu, according to the height of container.
+        if (this.portletTitle.nativeElement.offsetHeight > 44) {
             this.tabdropItems.unshift(this.tabBtns[this.tabBtns.length - 1]);
-            console.info(this.tabdropItems);
             this.tabBtns = this.tabBtns.slice(0, this.tabBtns.length - 1);
         }
+
+        if (this.tabdropItems !== [] && this.tabdropItems.length > 0 ) {
+            console.info('Tabdrop items is not empty: ' + this.tabdropItems);
+        }
+
+        let spaceForTabs = this.portletTitle.nativeElement.offsetWidth - this.beckiCaption.nativeElement.offsetWidth - this.beckiActions.nativeElement.offsetWidth - this.tabdrop.nativeElement.offsetWidth;
+        console.info(spaceForTabs + '    THIS IS SPACE FOR TABS');
+
+        // On screen widen.
+        if (this.tabdropItems !== [] && this.tabdropItems.length > 0) {
+            let currentTabbableLineWidth = 0;
+            this.tabBtns.forEach(tab => currentTabbableLineWidth += tab.width);
+            if (spaceForTabs >= currentTabbableLineWidth + this.tabdropItems[0].width + 100) {
+                this.tabBtns.push(this.tabdropItems[0]);
+                this.tabdropItems.shift();
+            }
+
+        }
+
     }
 
 
@@ -181,7 +213,15 @@ export class PortletTitleComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        console.info(this.tabBtns);
+        console.info('After View Init: ');
+        let i = 0;
+        this.tabItems.forEach(item => {
+            this.tabBtns[i].width = item.nativeElement.offsetWidth;
+            console.info('this.tabBtns[' + i + '].width:    ' + this.tabBtns[i].width);
+            i++;
+            console.info(item);
+        });
+
     }
 
     getConditionSize(): number {
@@ -201,5 +241,64 @@ export class PortletTitleComponent implements AfterViewInit {
     onClickTabButton(onClick: string) {
         this.onTabClick.emit(onClick);
     }
-
 }
+/*
+
+    Measure the width of elements in portlet title.
+
+ */
+
+//
+// console.info('WIDTH OF portletTitle: ' + this.portletTitle.nativeElement.offsetWidth);
+// console.info('');
+//
+// console.info('WIDTH OF beckiCaption: ' + this.beckiCaption.nativeElement.offsetWidth);
+// console.info('');
+//
+// console.info('WIDTH OF tabbableLine: ' + this.tabbableLine.nativeElement.offsetWidth);
+// console.info('');
+//
+// // Total items' width.
+// let itemsWidth = 0;
+//
+// this.tabItems.forEach(item => {
+//     console.info('ITEM WIDTH OF UNORDERED LIST, LI: ' + item.nativeElement.offsetWidth);
+//     console.info('');
+//     itemsWidth += item.nativeElement.offsetWidth;
+// });
+//
+// console.info('ITEMS WIDTH: ' + itemsWidth);
+// console.info('');
+//
+// console.info('WIDTH OF beckiActions: ' + this.beckiActions.nativeElement.offsetWidth);
+// console.info('');
+//
+// console.info('WIDTH OF tabdrop: ' + this.tabdrop.nativeElement.offsetWidth);
+// console.info('');
+
+
+// // Becki caption width.
+// console.info('BECKI CAPTION WIDTH: ' + this.beckiCaption.nativeElement.offsetHeight);
+// console.info('');
+//
+// // Becki actions width.
+// console.info('BECKI ACTIONS WIDTH: ' + this.beckiActions.nativeElement.offsetHeight);
+// console.info('');
+//
+// // Tabdrop menu width.
+// console.info('TAB DROP MENU: ' + this.tabItemsContainer.nativeElement.offsetHeight);
+// console.info('');
+
+// // Manipulation with CLOUD tab.
+// if (this.tabdropItems !== [] && this.tabdropItems.length > 0 && containerWidth > itemsWidth) {
+//     console.info('================= WIDTH 650 =================');
+//     console.info('');
+//
+//     this.tabBtns.push(this.tabdropItems[0]);
+//     console.info('TAB BTNS ARRAY ON WIDEN SCREEN' + this.tabBtns);
+//     console.info('');
+//
+//     this.tabdropItems.pop();
+//     console.info('TAB DROP ITEMS AFTER POP' + this.tabdropItems);
+//     console.info('');
+// }
