@@ -80,9 +80,9 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
                                 </a>
                             </li>
                         </ng-template>
-                        <li *ngIf="tabBtns.length > 1" class="dropdown pull-right tabdrop"  #tabdrop>
-                            <bk-tabdrop [tabBtns]="tabdropItems" 
-                                        [visible]="true"
+                        <li *ngIf="tabdropShown" #tabdrop class="dropdown pull-right tabdrop">
+                            <bk-tabdrop [tabBtns]="tabdropItems"
+                                        [visible]="tabdropShown"
                                         (tabItemDropdownMenuClick)="onClickTabButton($event)"
                             ></bk-tabdrop>
                         </li>
@@ -180,24 +180,26 @@ export class PortletTitleComponent implements  AfterViewInit {
 
     @HostListener('window:resize') onResize() {
 
+        this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0;
+
         // Remove element from tabbable-line and add to tabdrop menu, according to the height of container.
         if (this.portletTitle.nativeElement.offsetHeight > 44) {
             this.tabdropItems.unshift(this.tabBtns[this.tabBtns.length - 1]);
             this.tabBtns = this.tabBtns.slice(0, this.tabBtns.length - 1);
         }
 
-        if (this.tabdropItems !== [] && this.tabdropItems.length > 0 ) {
-            console.info('Tabdrop items is not empty: ' + this.tabdropItems);
+        let tabbableListWidth = 0;
+        if (this.tabBtns) {
+            this.tabBtns.forEach(btn => tabbableListWidth += btn.width);
         }
-
         let spaceForTabs = this.portletTitle.nativeElement.offsetWidth - this.beckiCaption.nativeElement.offsetWidth - this.beckiActions.nativeElement.offsetWidth - this.tabdrop.nativeElement.offsetWidth;
-        console.info(spaceForTabs + '    THIS IS SPACE FOR TABS');
 
         // On screen widen.
         if (this.tabdropItems !== [] && this.tabdropItems.length > 0) {
+            this.tabdropShown = true;
             let currentTabbableLineWidth = 0;
             this.tabBtns.forEach(tab => currentTabbableLineWidth += tab.width);
-            if (spaceForTabs >= currentTabbableLineWidth + this.tabdropItems[0].width + 100) {
+            if (spaceForTabs >= currentTabbableLineWidth + this.tabdropItems[0].width + 42) {
                 this.tabBtns.push(this.tabdropItems[0]);
                 this.tabdropItems.shift();
             }
@@ -213,6 +215,7 @@ export class PortletTitleComponent implements  AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0;
         console.info('After View Init: ');
         let i = 0;
         this.tabItems.forEach(item => {
@@ -242,63 +245,3 @@ export class PortletTitleComponent implements  AfterViewInit {
         this.onTabClick.emit(onClick);
     }
 }
-/*
-
-    Measure the width of elements in portlet title.
-
- */
-
-//
-// console.info('WIDTH OF portletTitle: ' + this.portletTitle.nativeElement.offsetWidth);
-// console.info('');
-//
-// console.info('WIDTH OF beckiCaption: ' + this.beckiCaption.nativeElement.offsetWidth);
-// console.info('');
-//
-// console.info('WIDTH OF tabbableLine: ' + this.tabbableLine.nativeElement.offsetWidth);
-// console.info('');
-//
-// // Total items' width.
-// let itemsWidth = 0;
-//
-// this.tabItems.forEach(item => {
-//     console.info('ITEM WIDTH OF UNORDERED LIST, LI: ' + item.nativeElement.offsetWidth);
-//     console.info('');
-//     itemsWidth += item.nativeElement.offsetWidth;
-// });
-//
-// console.info('ITEMS WIDTH: ' + itemsWidth);
-// console.info('');
-//
-// console.info('WIDTH OF beckiActions: ' + this.beckiActions.nativeElement.offsetWidth);
-// console.info('');
-//
-// console.info('WIDTH OF tabdrop: ' + this.tabdrop.nativeElement.offsetWidth);
-// console.info('');
-
-
-// // Becki caption width.
-// console.info('BECKI CAPTION WIDTH: ' + this.beckiCaption.nativeElement.offsetHeight);
-// console.info('');
-//
-// // Becki actions width.
-// console.info('BECKI ACTIONS WIDTH: ' + this.beckiActions.nativeElement.offsetHeight);
-// console.info('');
-//
-// // Tabdrop menu width.
-// console.info('TAB DROP MENU: ' + this.tabItemsContainer.nativeElement.offsetHeight);
-// console.info('');
-
-// // Manipulation with CLOUD tab.
-// if (this.tabdropItems !== [] && this.tabdropItems.length > 0 && containerWidth > itemsWidth) {
-//     console.info('================= WIDTH 650 =================');
-//     console.info('');
-//
-//     this.tabBtns.push(this.tabdropItems[0]);
-//     console.info('TAB BTNS ARRAY ON WIDEN SCREEN' + this.tabBtns);
-//     console.info('');
-//
-//     this.tabdropItems.pop();
-//     console.info('TAB DROP ITEMS AFTER POP' + this.tabdropItems);
-//     console.info('');
-// }
