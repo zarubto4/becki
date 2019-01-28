@@ -1,9 +1,7 @@
 import {
     Component, Input, Output, EventEmitter, ViewEncapsulation, OnInit, ViewChild, ElementRef, DoCheck, NgZone,
-    AfterViewInit, HostListener, ViewChildren, QueryList
+    AfterViewInit, HostListener, ViewChildren, QueryList, AfterContentChecked
 } from '@angular/core';
-
-import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
 
 @Component({
     selector: 'bk-portlet-title',
@@ -94,7 +92,7 @@ import { ElementQueries, ResizeSensor } from 'css-element-queries' ;
     encapsulation: ViewEncapsulation.None
     /* tslint:enable */
 })
-export class PortletTitleComponent implements  AfterViewInit {
+export class PortletTitleComponent implements  AfterContentChecked, AfterViewInit {
 
     @Input()
     icon: string = 'fa-dollar';
@@ -179,14 +177,7 @@ export class PortletTitleComponent implements  AfterViewInit {
     }[] = [];
 
     @HostListener('window:resize') onResize() {
-
-        this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0;
-
-        // Remove element from tabbable-line and add to tabdrop menu, according to the height of container.
-        if (this.portletTitle.nativeElement.offsetHeight > 44) {
-            this.tabdropItems.unshift(this.tabBtns[this.tabBtns.length - 1]);
-            this.tabBtns = this.tabBtns.slice(0, this.tabBtns.length - 1);
-        }
+        this.toTabDrop();
 
         let tabbableListWidth = 0;
         if (this.tabBtns) {
@@ -203,9 +194,7 @@ export class PortletTitleComponent implements  AfterViewInit {
                 this.tabBtns.push(this.tabdropItems[0]);
                 this.tabdropItems.shift();
             }
-
         }
-
     }
 
 
@@ -213,6 +202,11 @@ export class PortletTitleComponent implements  AfterViewInit {
 
     constructor() {
     }
+
+    ngAfterContentChecked() {
+        this.toTabDrop();
+    }
+
 
     ngAfterViewInit() {
         this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0;
@@ -224,7 +218,6 @@ export class PortletTitleComponent implements  AfterViewInit {
             i++;
             console.info(item);
         });
-
     }
 
     getConditionSize(): number {
@@ -244,4 +237,17 @@ export class PortletTitleComponent implements  AfterViewInit {
     onClickTabButton(onClick: string) {
         this.onTabClick.emit(onClick);
     }
+
+    toTabDrop() {
+        console.info('to tab drop');
+        // Remove element from tabbable-line and add to tabdrop menu, according to the height of container.
+        if (this.portletTitle.nativeElement.offsetHeight > 44 && this.tabBtns.length > 1) {
+            console.info(this.portletTitle.nativeElement.offsetHeight);
+            this.tabdropItems.unshift(this.tabBtns[this.tabBtns.length - 1]);
+            this.tabBtns = this.tabBtns.slice(0, this.tabBtns.length - 1);
+            this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0;
+        }
+
+    }
 }
+
