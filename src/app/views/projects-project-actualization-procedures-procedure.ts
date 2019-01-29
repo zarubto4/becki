@@ -3,10 +3,11 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
-import { IActualizationProcedureTaskList, IProject, IUpdateProcedure } from '../backend/TyrionAPI';
+import { IHardwareReleaseUpdate, IHardwareReleaseUpdateFilter, IHardwareReleaseUpdateList, IHardwareUpdateList, IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
 import { FormGroup } from '@angular/forms';
+import { IError } from '../services/_backend_class/Responses';
 @Component({
     selector: 'bk-view-projects-project-actualization-procedures-procedure',
     templateUrl: './projects-project-actualization-procedures-procedure.html',
@@ -17,8 +18,8 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
     project: IProject = null;
     actualization_procedure_id: string;
 
-    procedure: IUpdateProcedure = null;
-    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    procedure: IHardwareReleaseUpdate = null;
+    hardwareUpdateList: IHardwareUpdateList = null;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
@@ -51,7 +52,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
 
     refresh(): void {
         this.blockUI();
-        this.tyrionBackendService.actualizationProcedureGet(this.actualization_procedure_id)
+        this.tyrionBackendService.hardwareReleaseUpdateGet(this.actualization_procedure_id)
             .then((procedure) => {
                 this.procedure = procedure;
 
@@ -61,13 +62,13 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
                     }
                 });
 
-                if (!this.actualizationTaskFilter) {
+                if (!this.hardwareUpdateList) {
                     this.onFilterActualizationProcedureTask();
                 }
 
                 this.unblockUI();
 
-            }).catch(reason => {
+            }).catch((reason: IError) => {
                 this.fmError(this.translate('label_cant_load_actualization_procedure'));
                 this.unblockUI();
             });
@@ -112,27 +113,26 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
         });
 
 
-        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
-            actualization_procedure_ids: [this.actualization_procedure_id],
+        this.tyrionBackendService.hardwareUpdateGetByFilter(pageNumber, {
+            release_update_ids: [this.actualization_procedure_id],
             hardware_ids: null,
             instance_ids: null,
-            update_status: null,
             update_states: <any> state_list,
             type_of_updates: <any>  type_list
         })
-            .then((values) => {
-                this.actualizationTaskFilter = values;
+            .then((values: IHardwareUpdateList) => {
+                this.hardwareUpdateList = values;
 
-                this.actualizationTaskFilter.content.forEach((task, index, obj) => {
+                this.hardwareUpdateList.content.forEach((task, index, obj) => {
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
 
-                            this.tyrionBackendService.actualizationTaskGet(task.id)
+                            this.tyrionBackendService.hardwareReleaseUpdateGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
-                                    task.date_of_finish = value.date_of_finish;
+                                    task.finished = value.finished;
                                 })
-                                .catch(reason => {
+                                .catch((reason: IError) => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                                 });
 
@@ -142,7 +142,7 @@ export class ProjectsProjectActualizationProceduresProcedureComponent extends _B
 
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });

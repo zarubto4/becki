@@ -9,22 +9,11 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { IHomerServer, IWidget } from '../backend/TyrionAPI';
 
 
 export class ModalsCreateHomerServerModel extends ModalModel {
-    constructor(
-        public name: string = '',
-        public description: string = '',
-        public mqtt_port: number = 1881,
-        public grid_port: number = 8053,
-        public web_view_port: number = 8052,
-        public hardware_logger_port: number = 8054,
-        public rest_api_port: number = 3000,
-        public server_url: string = '',
-        public hash_certificate: string = null,
-        public connection_identificator: string = null,
-        public edit: boolean = false,
-    ) {
+    constructor(public project_id: string, public server?: IHomerServer) {
         super();
     }
 }
@@ -44,43 +33,50 @@ export class ModalsCreateHomerServerComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-
-        this.form = this.formBuilder.group({
-            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
-            'description': ['', [Validators.maxLength(65)]],
-            'mqtt_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'grid_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'web_view_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'hardware_logger_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'rest_api_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'server_url': ['', [Validators.required]],    // TODO Valid URL
-            'hash_certificate': [''],
-            'connection_identificator': ['']
-        });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['mqtt_port'])).setValue(this.modalModel.mqtt_port);
-        (<FormControl>(this.form.controls['grid_port'])).setValue(this.modalModel.grid_port);
-        (<FormControl>(this.form.controls['web_view_port'])).setValue(this.modalModel.web_view_port);
-        (<FormControl>(this.form.controls['hardware_logger_port'])).setValue(this.modalModel.hardware_logger_port);
-        (<FormControl>(this.form.controls['rest_api_port'])).setValue(this.modalModel.rest_api_port);
-        (<FormControl>(this.form.controls['server_url'])).setValue(this.modalModel.server_url);
-        (<FormControl>(this.form.controls['hash_certificate'])).setValue(this.modalModel.hash_certificate);
-        (<FormControl>(this.form.controls['connection_identificator'])).setValue(this.modalModel.connection_identificator);
+        this.form = this.formBuilder.group({
+            'name': [this.modalModel.server != null ? this.modalModel.server.name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.server && this.modalModel.server.name.length > 3 && this.modalModel.server.name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'HomerServer',  this.modalModel.project_id)
+                )
+            ],
+            'description': [this.modalModel.server != null ? this.modalModel.server.description : '', [Validators.maxLength(255)]],
+            'mqtt_port': [this.modalModel.server != null ? this.modalModel.server.mqtt_port : '', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'grid_port': [this.modalModel.server != null ? this.modalModel.server.grid_port : '', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'web_view_port': [this.modalModel.server != null ? this.modalModel.server.web_view_port : '', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'hardware_logger_port': [this.modalModel.server != null ? this.modalModel.server.hardware_logger_port : '', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'rest_api_port': [this.modalModel.server != null ? this.modalModel.server.rest_api_port : '', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'server_url': [this.modalModel.server != null ? this.modalModel.server.server_url : '', [Validators.required]],
+            'hash_certificate': [this.modalModel.server != null ? this.modalModel.server.hash_certificate : ''],
+            'connection_identificator': [this.modalModel.server != null ? this.modalModel.server.connection_identificator : ''],
+        });
     }
 
     onSubmitClick(): void {
-        this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.description = this.form.controls['description'].value;
-        this.modalModel.mqtt_port = this.form.controls['mqtt_port'].value;
-        this.modalModel.grid_port = this.form.controls['grid_port'].value;
-        this.modalModel.web_view_port = this.form.controls['web_view_port'].value;
-        this.modalModel.hardware_logger_port = this.form.controls['hardware_logger_port'].value;
-        this.modalModel.rest_api_port = this.form.controls['rest_api_port'].value;
-        this.modalModel.server_url = this.form.controls['server_url'].value;
+
+        if (this.modalModel.server == null) {
+            // @ts-ignore
+            this.modalModel.server = {};
+        }
+
+        this.modalModel.server.name = this.form.controls['name'].value;
+        this.modalModel.server.description = this.form.controls['description'].value;
+        this.modalModel.server.mqtt_port = this.form.controls['mqtt_port'].value;
+        this.modalModel.server.grid_port = this.form.controls['grid_port'].value;
+        this.modalModel.server.web_view_port = this.form.controls['web_view_port'].value;
+        this.modalModel.server.hardware_logger_port = this.form.controls['hardware_logger_port'].value;
+        this.modalModel.server.rest_api_port = this.form.controls['rest_api_port'].value;
+        this.modalModel.server.server_url = this.form.controls['server_url'].value;
         this.modalClose.emit(true);
     }
 

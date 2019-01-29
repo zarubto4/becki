@@ -12,6 +12,7 @@ import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 import { IProject, ILibrary, ILibraryList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-libraries',
@@ -77,7 +78,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                             this.onFilterPublicLibraries();
                         }
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
                         if (library.publish_type === 'PRIVATE') {
                             this.onFilterPrivateLibraries();
@@ -105,7 +106,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                         this.onLibraryClick(library.id);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_add_fail', model.library.name, reason)));
                         this.onFilterPrivateLibraries();
                     });
@@ -130,7 +131,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                         this.onFilterPrivateLibraries();
                         this.onFilterPublicLibraries();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.onFilterPrivateLibraries();
                         this.onFilterPublicLibraries();
@@ -157,7 +158,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                             this.onFilterPublicLibraries();
                         }
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
                         if (library.publish_type === 'PRIVATE') {
                             this.onFilterPrivateLibraries();
@@ -186,7 +187,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 this.privateLibraries = iLibraryList;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });
@@ -208,7 +209,7 @@ export class ProjectsProjectLibrariesComponent extends _BaseMainComponent implem
                 this.publicLibraries = iLibraryList;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });

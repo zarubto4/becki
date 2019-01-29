@@ -14,6 +14,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IAvailableVersion, IVersionOverview } from '../backend/HomerAPI';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
+import { IError } from '../services/_backend_class/Responses';
 
 
 export class ModalsUpdateHomerServerModel extends ModalModel {
@@ -64,7 +65,7 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
                         };
                     });
                 })
-                .catch((reason) => {
+                .catch((reason: IError) => {
                     this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                     console.error(reason);
                     this.onCancelClick();
@@ -82,7 +83,7 @@ export class ModalsUpdateHomerServerComponent implements OnInit {
             .then(() => {
                 this.onCloseClick();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
                 console.error(reason);
                 this.onCancelClick();

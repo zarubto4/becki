@@ -1,0 +1,14 @@
+server {
+      listen 80;
+      listen [::]:80;
+
+      server_name portal.stage.cloud.byzance.cz;
+
+      root /usr/src/app/dist;
+      index index.html;
+
+      location / {
+              try_files $uri /index.html =404;
+              add_header Cache-Control 'must-revalidate, proxy-revalidate, max-age=86400';
+      }
+}

@@ -79,7 +79,7 @@ export class ModalsCodePropertiesComponent implements OnInit {
 
         if (this.modalModel.program == null) {
             // @ts-ignore
-            this.modalModel.block = {};
+            this.modalModel.program = {};
         }
 
         this.modalModel.program.name = this.form.controls['name'].value;

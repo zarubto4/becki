@@ -12,6 +12,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPermissionGroupModel } from '../modals/permission-group';
 import { Subscription } from 'rxjs';
+import { IError } from '../services/_backend_class/Responses';
 
 
 @Component({
@@ -79,7 +80,7 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit, On
                 this.unblockUI();
                 this.securityRoleList = values;
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -104,7 +105,7 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit, On
                 })
                     .then(role => {
                         this.onRoleClick(role.id);
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
@@ -123,7 +124,7 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit, On
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
@@ -140,7 +141,7 @@ export class RoleGroupComponent extends _BaseMainComponent implements OnInit, On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });

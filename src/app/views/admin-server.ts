@@ -10,6 +10,7 @@ import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-creat
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsUpdateHomerServerModel } from '../modals/homer-server-update';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-admin-server',
@@ -60,7 +61,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                 });
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -80,7 +81,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                 });
                 this.unblockUI();
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
@@ -88,23 +89,23 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
 
 
     onCreateHomerServerClick(): void {
-        let model = new ModalsCreateHomerServerModel();
+        let model = new ModalsCreateHomerServerModel(null);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.homerServerCreateManually({
-                    name: model.name,
-                    description: model.description,
-                    web_view_port: model.web_view_port,
-                    server_url: model.server_url,
-                    mqtt_port: model.mqtt_port,
-                    grid_port: model.grid_port,
-                    rest_api_port: model.rest_api_port,
-                    hardware_logger_port: model.hardware_logger_port
+                    name: model.server.name,
+                    description: model.server.description,
+                    web_view_port: model.server.web_view_port,
+                    server_url: model.server.server_url,
+                    mqtt_port: model.server.mqtt_port,
+                    grid_port: model.server.grid_port,
+                    rest_api_port: model.server.rest_api_port,
+                    hardware_logger_port: model.server.hardware_logger_port
                 })
                     .then(() => {
                         this.onFilterHomerServer();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.onFilterHomerServer();
                     });
@@ -118,12 +119,12 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
             if (success) {
                 this.unblockUI();
                 this.tyrionBackendService.compilationServerCreate({
-                    personal_server_name: model.personal_server_name,
-                    server_url: model.server_url
+                    personal_server_name: model.server.personal_server_name,
+                    server_url: model.server.server_url
                 })
                     .then(() => {
                         this.onFilterCompilationServer();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                     });
             }
@@ -135,35 +136,23 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
     }
 
     onHomerServerEditClick(server: IHomerServer): void {
-        let model = new ModalsCreateHomerServerModel(
-            server.name,
-            server.description,
-            server.mqtt_port,
-            server.grid_port,
-            server.web_view_port,
-            server.hardware_logger_port,
-            server.rest_api_port,
-            server.server_url,
-            server.hash_certificate,
-            server.connection_identificator,
-            true
-        );
+        let model = new ModalsCreateHomerServerModel(null, server);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.homerServerEdit(server.id, {
-                    name: model.name,
-                    description: model.description,
-                    web_view_port: model.web_view_port,
-                    server_url: model.server_url,
-                    mqtt_port: model.mqtt_port,
-                    grid_port: model.grid_port,
-                    rest_api_port: model.rest_api_port,
-                    hardware_logger_port: model.hardware_logger_port
+                    name: model.server.name,
+                    description: model.server.description,
+                    web_view_port: model.server.web_view_port,
+                    server_url: model.server.server_url,
+                    mqtt_port: model.server.mqtt_port,
+                    grid_port: model.server.grid_port,
+                    rest_api_port: model.server.rest_api_port,
+                    hardware_logger_port: model.server.hardware_logger_port
                 })
                     .then(() => {
                         this.onFilterHomerServer();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.onFilterHomerServer();
                     });
@@ -189,7 +178,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.onFilterHomerServer(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.onFilterHomerServer(); // also unblockUI
                     });
@@ -202,23 +191,17 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
     }
 
     onCompilationServerEditClick(server: ICompilationServer): void {
-        let model = new ModalsCreateCompilerServerModel(
-            server.personal_server_name,
-            server.server_url,
-            server.id,
-            server.hash_certificate,
-            server.connection_identificator,
-            true);
+        let model = new ModalsCreateCompilerServerModel(server);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.tyrionBackendService.compilationServerEdit(server.id, {
-                    personal_server_name: model.personal_server_name,
-                    server_url: model.server_url
+                    personal_server_name: model.server.personal_server_name,
+                    server_url: model.server.server_url
                 })
                     .then(() => {
                         this.onFilterCompilationServer(); // also unblockUI
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.onFilterCompilationServer(); // also unblockUI
                     });
@@ -235,7 +218,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.onFilterCompilationServer(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.onFilterCompilationServer(); // also unblockUI
                     });

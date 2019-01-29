@@ -15,7 +15,7 @@
         (onClick)="onPortletClick($event)"
         [btns]="[
                       {
-                          condition: (tab == 'updates' && actualizationFilter && actualizationFilter.content.length > 0),
+                          condition: (tab == 'updates' && releaseList && releaseList.content.length > 0),
                           btn_label_for_person: ('btn_add_new_update'|bkTranslate:this),
                           icon: 'fa-plus-circle',
                           colorType: 'ADD',
@@ -42,16 +42,16 @@
                                             type: 'CHECKBOX_LIST',
                                             content: {
                                                 options: [
-                                                    {
+                                                   {
                                                         key: 'SUCCESSFULLY_COMPLETE',
                                                         label: ('SUCCESSFULLY_COMPLETE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterUpdateValues['SUCCESSFULLY_COMPLETE'],
+                                                        selected: filterUpdateValues['IN_PLAN'],
                                                         color: 'info'
                                                     },
                                                     {
                                                         key: 'COMPLETE',
                                                         label: ('COMPLETE'|bkTranslateTable:this:'update_state'),
-                                                        selected: filterUpdateValues['COMPLETE'],
+                                                         selected: filterUpdateValues['COMPLETE'],
                                                         color: 'info'
                                                     },
                                                     {
@@ -63,7 +63,7 @@
                                                     {
                                                         key: 'CANCELED',
                                                         label: ('CANCELED'|bkTranslateTable:this:'update_state'),
-                                                         selected: filterUpdateValues['CANCELED'],
+                                                        selected: filterUpdateValues['CANCELED'],
                                                         color: 'info'
                                                     },
                                                     {
@@ -81,49 +81,12 @@
                                                 ]
                                             },
                                             horizontal: true
-                                        },
-                                        {
-                                            type: 'CHECKBOX_LIST',
-                                            content: {
-                                                options: [
-                                                    {
-                                                        key: 'MANUALLY_BY_USER_INDIVIDUAL',
-                                                        label: ('MANUALLY_BY_USER_INDIVIDUAL'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['MANUALLY_BY_USER_INDIVIDUAL'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP',
-                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME',
-                                                        label: ('MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE',
-                                                        label: ('AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE'],
-                                                        color: 'info'
-                                                    },
-                                                    {
-                                                        key: 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE',
-                                                        label: ('AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE'|bkTranslateTable:this:'type_of_update'),
-                                                        selected: filterTypesValues['AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE'],
-                                                        color: 'info'
-                                                    }
-                                                ]
-                                            }
                                         }
                                     ]"
         ></bk-filter-component>
 
         <div *ngIf="tab == 'updates'">
-            <div *ngIf="(actualizationFilter && actualizationFilter.content.length > 0)">
+            <div *ngIf="(releaseList && releaseList.content.length > 0)">
                 <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
@@ -140,16 +103,16 @@
                     </tr>
                     </thead>
                     <tbody class="hide-bk-drob-down-button">
-                    <tr *ngFor="let procedure of actualizationFilter.content">
+                    <tr *ngFor="let procedure of releaseList.content">
                         <td class="vert-align">
                             <a class="bold" (click)="onActualizationProcedureClick(procedure.id)">{{procedure.id.substr(0, 12)}}</a>
                         </td>
                         <td class="vert-align">{{procedure.created|bkUnixTimeToDate}}</td>
-                        <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                        <td class="vert-align">{{procedure.planned|bkUnixTimeToDate}}</td>
                         <td class="vert-align">
-                            <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                            <span *ngIf="procedure.finished == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
                             <span
-                                *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                                *ngIf="procedure.finished != null">{{procedure.finished|bkUnixTimeToDate}}</span>
                         </td>
 
                         <td class="vert-align text-center">
@@ -210,15 +173,15 @@
                     </tr>
                     </tbody>
                 </table>
-                <bk-filter-page-component [from]="actualizationFilter.from" [to]="actualizationFilter.to"
-                                          [total]="actualizationFilter.total" [totalPages]="actualizationFilter.pages"
+                <bk-filter-page-component [from]="releaseList.from" [to]="releaseList.to"
+                                          [total]="releaseList.total" [totalPages]="releaseList.pages"
                                           (onSelect)="onFilterActualizationProcedure($event)"></bk-filter-page-component>
             </div>
 
 
             <!-- Temporary page content if content is being loaded or if there is no content -- START -->
-            <bk-nothing-to-show [condition_loading]="(actualizationFilter == null)"
-                                [condition_empty]="(actualizationFilter != null && actualizationFilter.content.length == 0)"
+            <bk-nothing-to-show [condition_loading]="(releaseList == null)"
+                                [condition_empty]="(releaseList != null && releaseList.content.length == 0)"
                                 [image_link]="'https://uploads-ssl.webflow.com/593eea4aa4a6f324a1b5d107/5a0c3d316b2b6e0001417b9b_Kreslic%C3%AD%20pl%C3%A1tno%2016-fin1.svg'"
                                 [image_description]="'label_release_documentation_description'|bkTranslate:this"
                                 [main_message_link]="'label_no_updates'|bkTranslate:this"

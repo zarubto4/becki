@@ -12,6 +12,7 @@ import { ModalsArticleModel } from '../modals/article';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { TyrionBackendService } from '../services/BackendService';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-dashboard',
@@ -118,7 +119,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.project.name)));
                         this.onProjectClick(project.id);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.project.name, reason.message)));
                     });
             }
@@ -190,7 +191,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                         this.unblockUI();
                         this.onFilterArticle();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_article_create_error', reason)));
                         this.unblockUI();
                     });
@@ -208,7 +209,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                         this.unblockUI();
                         this.onFilterArticle();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_article'), reason));
                         this.onFilterArticle();
                     });
@@ -232,7 +233,7 @@ export class DashboardComponent extends _BaseMainComponent implements OnInit, On
                         this.unblockUI();
                         this.onFilterArticle();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_article_create_error', reason)));
                         this.unblockUI();
                     });

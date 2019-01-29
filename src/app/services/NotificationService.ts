@@ -11,6 +11,7 @@ import { INotification, INotificationElement, INotificationButton } from '../bac
 import { NullSafe } from '../helpers/NullSafe';
 import { Router } from '@angular/router';
 import { TranslationService } from './TranslationService';
+import { IError } from './_backend_class/Responses';
 
 
 export abstract class Notification {
@@ -565,7 +566,7 @@ export class NotificationService {
                 this.router.navigate(['projects', e.project_id, 'instances', e.id]);
                 break;
             case 'UpdateProcedure':
-                this.router.navigate(['projects', e.project_id, 'actualization-procedures', e.id]);
+                this.router.navigate(['projects', e.project_id, 'release-update', e.id]);
                 break;
             case 'HardwareUpdate':
                 this.router.navigate(['projects', e.project_id, 'hardware', e.id,  { tab: 'update'}]);
@@ -592,7 +593,7 @@ export class NotificationService {
             .then(() => {
                 this.removeNotificationById(n.id);
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_notification', reason)));
 
             });

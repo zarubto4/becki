@@ -16,6 +16,7 @@ import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-descript
 import { ModalsHardwareFindHash } from '../modals/hardware-find-hash';
 import { FormGroup, Validators } from '@angular/forms';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-admin-hardware-type',
@@ -63,7 +64,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 this.unblockUI();
 
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                 this.unblockUI();
             });
@@ -115,7 +116,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 })
                     .then(hardwareType => {
                         this.onHardwareTypeClick(hardwareType.id);
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
@@ -149,7 +150,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.unblockUI();
                         this.refresh();
@@ -167,7 +168,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -190,7 +191,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
@@ -212,7 +213,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
@@ -229,7 +230,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -250,7 +251,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 })
                     .then(producer => {
                         this.onProducerClick(producer.id);
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.unblockUI();
                         this.refresh();
@@ -270,7 +271,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                     });
             }
@@ -286,7 +287,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
                         this.refresh(); // also unblockUI
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
@@ -308,7 +309,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(() => {
                         this.onFilterHardware();
                         this.unblockUI();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                     });
@@ -324,7 +325,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(() => {
                         this.refresh();
                         this.unblockUI();
-                    }).catch(reason => {
+                    }).catch((reason: IError) => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                     });
@@ -346,7 +347,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.refresh();
                         this.unblockUI();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
                     });
@@ -360,7 +361,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
             .then(() => {
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
             });
@@ -403,7 +404,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     });
                 });
             })
-            .catch((reason) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });

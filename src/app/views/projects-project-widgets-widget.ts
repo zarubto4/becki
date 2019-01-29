@@ -24,6 +24,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
 import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
+import { IError } from '../services/_backend_class/Responses';
 
 @Component({
     selector: 'bk-view-projects-project-widgets-widget',
@@ -54,6 +55,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     unsavedChanges: boolean = false;
+    tab: string = 'ide';
 
     protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
     protected monacoEditorLoaderService: MonacoEditorLoaderService;
@@ -124,6 +126,10 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
         }
     }
 
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
+
     onWidgetEditClick(): void {
         let model = new ModalsWidgetsWidgetPropertiesModel(this.projectId, this.widget);
         this.modalService.showModal(model).then((success) => {
@@ -137,7 +143,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail'), reason));
                     });
             }
@@ -158,7 +164,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                             this.navigate(['/admin/grid', this.widget.id]);
                         }
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail'), reason));
                         if (this.projectId) {
                             this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets']);
@@ -180,7 +186,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed_success')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_version_removed_fail', reason)));
                         this.refresh();
                     });
@@ -202,7 +208,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_changed_success', model.object.name)));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_version_changed_success', model.object.name, reason)));
                         this.refresh();
                     });
@@ -257,7 +263,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                     this.unblockUI();
                 }
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_version_load_fail'), reason));
                 this.unblockUI();
             });
@@ -283,7 +289,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
 
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.selectedWidgetVersion = null;
                 // console.log(this.widgetCode);
                 this.addFlashMessage(new FlashMessageError((this.translate('flash_version_load_fail', version.name, reason))));
@@ -506,7 +512,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', model.object.name, reason)));
                         this.unblockUI();
                     });
@@ -524,7 +530,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
                         this.refresh();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
                         this.refresh();
                     });
@@ -560,7 +566,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.navigate(['/admin/widgets']);
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.refresh();
                     });
@@ -584,7 +590,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.unblockUI();
                     })
-                    .catch(reason => {
+                    .catch((reason: IError) => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.unblockUI();
                     });
@@ -598,7 +604,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
             .then(() => {
                 this.refresh();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.refresh();
             });

@@ -19,6 +19,7 @@
                     <div>{{'label_select_avatar'|bkTranslate:this}}</div>
                     <input type="file" (change)="cropperFileChangeListener($event)" accept="image/*">
                 </div>
+
                 <div class="loading" *ngIf="cropperLoaded && !cropperData.image"> {{'loading'|bkTranslate:this}} </div>
                 <img-cropper #cropper [image]="cropperData" [settings]="cropperSettings" [style.display]="(cropperLoaded && cropperData.image)?'block':'none'"></img-cropper>
 
