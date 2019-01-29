@@ -218,6 +218,7 @@ export class PortletTitleComponent implements AfterContentChecked, AfterViewInit
     }
 
     ngAfterViewInit() {
+        
         // Set width to tabs.
         let i = 0;
         this.tabItems.forEach(item => {
