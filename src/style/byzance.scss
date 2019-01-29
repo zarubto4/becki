@@ -2886,3 +2886,9 @@ textarea.form-control {
     color: #5F738B;
 }
 
+.dropdown-menu {
+    z-index: 6000;
+    right: 0;
+    left: auto;
+    margin-top: 20px;
+}

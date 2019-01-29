@@ -16,7 +16,7 @@ import {
                     </span>
                 </div>
 
-                <div *ngIf="btns && getConditionSize() == 1" class="becki-actions" #beckiActions>
+                <div *ngIf="btns && getConditionSize() == 1" class="becki-actions" #beckiActions1>
                     <ng-template ngFor let-element="$implicit" [ngForOf]="btns">
 
                         <!-- Only if not a external link link !-->
@@ -52,7 +52,7 @@ import {
                     </ng-template>
                 </div>
                 
-                <div *ngIf="btns && getConditionSize() > 1" class="becki-actions">
+                <div *ngIf="btns && getConditionSize() > 1" class="becki-actions" #beckiActions2>
                     <!-- If we have more than two Buttons -->
                     <bk-drob-down-button *ngIf="btns != null"
                                          [btns_group_name] = "btns_group_name"
@@ -61,7 +61,7 @@ import {
                     </bk-drob-down-button>
                 </div>
                 
-                <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line" #tabbableLine>   
+                <div *ngIf="tabBtns && tabBtns.length > 0" class="tabbable-line">   
                     <ul class="nav nav-tabs becki-tab-menu" style="padding-top: 0px;">
                         <ng-template ngFor let-btn="$implicit" [ngForOf]="tabBtns">
                             <li *ngIf="btn.condition" #tabItems
@@ -78,7 +78,7 @@ import {
                                 </a>
                             </li>
                         </ng-template>
-                        <li *ngIf="tabdropShown" #tabdrop class="dropdown pull-right tabdrop">
+                        <li *ngIf="tabdropItems !== [] && tabdropItems.length > 0" #tabdrop class="dropdown pull-right tabdrop">
                             <bk-tabdrop [tabBtns]="tabdropItems"
                                         [visible]="tabdropShown"
                                         (tabItemDropdownMenuClick)="onClickTabButton($event)"
@@ -88,11 +88,12 @@ import {
                 </div>
                 <div class="clearfix"></div>
             </div>
+
     `,
     encapsulation: ViewEncapsulation.None
     /* tslint:enable */
 })
-export class PortletTitleComponent implements  AfterContentChecked, AfterViewInit {
+export class PortletTitleComponent implements AfterContentChecked, AfterViewInit {
 
     @Input()
     icon: string = 'fa-dollar';
@@ -157,12 +158,11 @@ export class PortletTitleComponent implements  AfterContentChecked, AfterViewIni
 
     @ViewChild('beckiCaption') beckiCaption: ElementRef;
 
-    @ViewChild('tabbableLine') tabbableLine: ElementRef;
+    @ViewChild('beckiActions1') beckiActions1: ElementRef;
 
-    @ViewChild('beckiActions') beckiActions: ElementRef;
+    @ViewChild('beckiActions2') beckiActions2: ElementRef;
 
     @ViewChild('tabdrop') tabdrop: ElementRef;
-
 
     tabdropShown: boolean;
 
@@ -177,22 +177,32 @@ export class PortletTitleComponent implements  AfterContentChecked, AfterViewIni
     }[] = [];
 
     @HostListener('window:resize') onResize() {
-        this.toTabDrop();
-
-        let tabbableListWidth = 0;
-        if (this.tabBtns) {
-            this.tabBtns.forEach(btn => tabbableListWidth += btn.width);
-        }
-        let spaceForTabs = this.portletTitle.nativeElement.offsetWidth - this.beckiCaption.nativeElement.offsetWidth - this.beckiActions.nativeElement.offsetWidth - this.tabdrop.nativeElement.offsetWidth;
-
-        // On screen widen.
-        if (this.tabdropItems !== [] && this.tabdropItems.length > 0) {
-            this.tabdropShown = true;
-            let currentTabbableLineWidth = 0;
-            this.tabBtns.forEach(tab => currentTabbableLineWidth += tab.width);
-            if (spaceForTabs >= currentTabbableLineWidth + this.tabdropItems[0].width + 42) {
-                this.tabBtns.push(this.tabdropItems[0]);
-                this.tabdropItems.shift();
+        // Only for portletTitle with navigation.
+        if (this.tabBtns !== null && this.tabBtns.length > 0) {
+            // Show tab drop.
+            this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0 && this.tabdropItems.some(element => element.condition !== false);
+            // Check if element exists and count space for tabs in portlet title div according to that.
+            let otherElements = [];
+            let spaceForTabs = this.portletTitle.nativeElement.offsetWidth;
+            otherElements.push(this.beckiCaption, this.beckiActions1, this.beckiActions2, this.tabdrop);
+            otherElements.forEach(element => {
+                if (element) {
+                    spaceForTabs -= element.nativeElement.offsetWidth;
+                }
+            });
+            // Add tabs to navigation line on screen widen.
+            if (this.tabdropItems !== [] && this.tabdropItems.length > 0) {
+                let totalTabsWidth = 0;
+                this.tabBtns.forEach(tab => {
+                    if (tab.width === undefined) {
+                        tab.width = 0;
+                    }
+                    totalTabsWidth += tab.width;
+                });
+                if (spaceForTabs >= totalTabsWidth + this.tabdropItems[0].width + 42) {
+                    this.tabBtns.push(this.tabdropItems[0]);
+                    this.tabdropItems.shift();
+                }
             }
         }
     }
@@ -204,17 +214,14 @@ export class PortletTitleComponent implements  AfterContentChecked, AfterViewIni
     }
 
     ngAfterContentChecked() {
-        this.toTabDrop();
+        this.toTabdrop();
     }
 
-
     ngAfterViewInit() {
-        this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0;
-        console.info('After View Init: ');
+        // Set width to tabs.
         let i = 0;
         this.tabItems.forEach(item => {
             this.tabBtns[i].width = item.nativeElement.offsetWidth;
-            console.info('this.tabBtns[' + i + '].width:    ' + this.tabBtns[i].width);
             i++;
             console.info(item);
         });
@@ -238,16 +245,13 @@ export class PortletTitleComponent implements  AfterContentChecked, AfterViewIni
         this.onTabClick.emit(onClick);
     }
 
-    toTabDrop() {
-        console.info('to tab drop');
+    toTabdrop() {
         // Remove element from tabbable-line and add to tabdrop menu, according to the height of container.
         if (this.portletTitle.nativeElement.offsetHeight > 44 && this.tabBtns.length > 1) {
-            console.info(this.portletTitle.nativeElement.offsetHeight);
-            this.tabdropItems.unshift(this.tabBtns[this.tabBtns.length - 1]);
-            this.tabBtns = this.tabBtns.slice(0, this.tabBtns.length - 1);
-            this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0;
+            let removedElement = this.tabBtns.pop();
+            this.tabdropItems.unshift(removedElement);
+            this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0 && this.tabdropItems.some(element => element.condition !== false);
         }
-
     }
 }
 
