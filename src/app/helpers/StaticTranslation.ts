@@ -348,6 +348,8 @@ export class StaticTranslation {
                 'label_picture': 'Picture',
                 'label_unsaved': '(not saved)',
                 'label_select_avatar': 'Select file',
+                'image_is_too_big': 'Soubor je větší než 3MB.',
+
 
             }, 'ModalsDeviceEditDescriptionComponent': {
                 'title': '<strong class="font-color-hardware">Hardware</strong> basic Properties',

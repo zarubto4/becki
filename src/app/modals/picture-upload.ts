@@ -4,7 +4,7 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
-import { FlashMessage, FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessage, FlashMessageError } from '../services/NotificationService';
 import { ModalModel } from '../services/ModalService';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { TranslationService } from '../services/TranslationService';
@@ -37,6 +37,8 @@ export class ModalsPictureUploadComponent implements OnInit {
     cropperSettings: CropperSettings;
 
     cropperLoaded = false;
+
+    single_error_status: string = null;
 
     @Input()
     cropSettings: CropperSettings = null;
@@ -85,10 +87,11 @@ export class ModalsPictureUploadComponent implements OnInit {
     cropperFileChangeListener($event: any) {
         let image = new Image();
         let file: File = $event.target.files[0];
-        if (file) {
+        if (file && file.size < 3000000) {
             let myReader: FileReader = new FileReader();
             myReader.addEventListener('load', () => {
                 image.addEventListener('load', () => {
+                    this.single_error_status = null;
                     if (image.width < 50 || image.height < 50) {
 
                         // TODO - zprávu nastavit do templatu!
@@ -113,6 +116,8 @@ export class ModalsPictureUploadComponent implements OnInit {
             myReader.readAsDataURL(file);
             this.saved = false;
         } else {
+            this.single_error_status = this.translationService.translate('image_is_too_big', this);
+            console.info('File is too large');
             this.cropperLoaded = false;
         }
     }
