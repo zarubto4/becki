@@ -26,7 +26,7 @@
                 <div class="clearfix margin-top-10"></div>
             </div>
         </form>
-
+        <div *ngIf="single_error_status != null" class="text-center"> <span class="font-red-flamingo bold">{{single_error_status}}</span> </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
