@@ -1471,7 +1471,6 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
             color: #fa739c;
         }
     }
-
 }
 
 .font-color-byzance-blue {
@@ -2838,15 +2837,12 @@ textarea.form-control {
     cursor: pointer;
 }
 
-.fade_animation {
-    opacity: 0;
-    transition: opacity 0.05s ease;
-}
-
+/* For loading icon in the center, when app is loading */
 .logo-wrapper {
     height: 100vh;
 }
 
+/* Show password button */
 .showPasswordBtn:focus {
     outline: none;
 }
@@ -2887,4 +2883,28 @@ textarea.form-control {
     white-space: normal;
     word-break: break-all;
     min-width: 80px;
+}
+
+
+/* Tabdrop menu */
+.dropdown.pull-right.tabdrop {
+    margin: 10px;
+    padding-right: 5px;
+    border-bottom: transparent;
+}
+
+.dropdown.pull-right.tabdrop:hover{
+    border-bottom: transparent;
+}
+
+.dropdown-toggle {
+    line-height: 1.42857;
+    color: #5F738B;
+}
+
+.dropdown-menu {
+    z-index: 6000;
+    right: 0;
+    left: auto;
+    margin-top: 20px;
 }

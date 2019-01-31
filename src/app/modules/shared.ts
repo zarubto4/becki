@@ -169,6 +169,9 @@ import { ProgramVersionDiffComponent } from '../components/VersionDiffComponent'
 import { FileTreeRootComponent } from '../components/FileTreeRootComponent';
 import { FileTreeNodeComponent } from '../components/FileTreeNodeComponent';
 import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
+import { TabDropComponent } from '../components/TabDropComponent';
+import { StripHtmlPipe } from '../pipes/SanitizeHtmlPipe';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -191,6 +194,7 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         UnixTimeFormatPipe,
         StringReplacerPipe,
         Nl2BrPipe,
+        StripHtmlPipe,
 
         // Directives
         DraggableDirective,
@@ -236,6 +240,7 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         LayoutNotLoggedComponent,
         LayoutMainComponent,
         PortletTitleComponent,
+        TabDropComponent,
         PaymentMethodComponent,
         BeckiDrobDownButtonComponent,
         NothingToShowComponent,
@@ -365,6 +370,7 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         BlockoViewComponent,
         Md2HtmlPipe,
         HtmlSanitizeBypassPipe,
+        StripHtmlPipe,
         BlockoViewComponent,
         NotificationsOverlayComponent,
         NotificationsListComponent,
@@ -412,6 +418,7 @@ import { FileTreeFileComponent } from '../components/FileTreeFileComponent';
         LayoutMainComponent,
         TranslatePipe,
         PortletTitleComponent,
+        TabDropComponent,
         PaymentMethodComponent,
         BeckiDrobDownButtonComponent,
         NothingToShowComponent,
