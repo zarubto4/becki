@@ -75,4 +75,6 @@ export class ModalsVersionDialogComponent implements OnInit {
     onCancelClick(): void {
         this.modalClose.emit(false);
     }
+
+
 }
