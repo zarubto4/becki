@@ -2873,3 +2873,18 @@ textarea.form-control {
     .showPasswordBtn.right {
         right: 8px;
     }
+
+/* Overflowing tables hardware*/
+.hardware-table-wrapper {
+    overflow: auto;
+}
+
+.hardware-table-wrapper > table {
+    width: 100%;
+}
+
+.onresize-table {
+    white-space: normal;
+    word-break: break-all;
+    min-width: 80px;
+}
