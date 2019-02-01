@@ -691,4 +691,22 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
             this.onRemoveVersionClick(version);
         }
     }
+
+    nextVersion() {
+        let versionNames = [];
+        let regexp = /\d.\d.\d/g;
+        this.blockoBlockVersions.forEach(versionName => {
+            console.info(versionName.name);
+            console.info('');
+            versionNames.push(versionName.name);
+        });
+        console.info(versionNames);
+        console.info('');
+
+        versionNames.forEach(name => {
+            if (name.match(regexp)) {
+                console.info(name);
+            }
+        })
+    }
 }
