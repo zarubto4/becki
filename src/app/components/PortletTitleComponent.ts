@@ -218,7 +218,6 @@ export class PortletTitleComponent implements AfterContentChecked, AfterViewInit
     }
 
     ngAfterViewInit() {
-        
         // Set width to tabs.
         let i = 0;
         this.tabItems.forEach(item => {
@@ -248,7 +247,7 @@ export class PortletTitleComponent implements AfterContentChecked, AfterViewInit
 
     toTabdrop() {
         // Remove element from tabbable-line and add to tabdrop menu, according to the height of container.
-        if (this.portletTitle.nativeElement.offsetHeight > 44 && this.tabBtns.length > 1) {
+        if (this.portletTitle && this.tabBtns && this.portletTitle.nativeElement.offsetHeight > 44 && this.tabBtns.length > 1) {
             let removedElement = this.tabBtns.pop();
             this.tabdropItems.unshift(removedElement);
             this.tabdropShown = this.tabdropItems !== [] && this.tabdropItems.length > 0 && this.tabdropItems.some(element => element.condition !== false);
