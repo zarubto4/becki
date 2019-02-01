@@ -4,12 +4,13 @@
  */
 
 
-import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
+import { Input, Output, EventEmitter, Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { TyrionBackendService } from '../services/BackendService';
 import moment = require('moment/moment');
+import { IBlockVersion } from '../backend/TyrionAPI';
 
 export class ModalsVersionDialogModel extends ModalModel {
     constructor(public parent_object_id: string, public type: ('BlockVersion' | 'WidgetVersion' | 'BProgramVersion' | 'CProgramVersion' | 'GridProgramVersion'|'Snapshot'), public object?: any) {
@@ -21,7 +22,7 @@ export class ModalsVersionDialogModel extends ModalModel {
     selector: 'bk-modals-version-dialog',
     templateUrl: './version-dialog.html'
 })
-export class ModalsVersionDialogComponent implements OnInit {
+export class ModalsVersionDialogComponent implements OnInit, AfterViewInit {
 
     @Input()
     modalModel: ModalsVersionDialogModel;
@@ -30,6 +31,7 @@ export class ModalsVersionDialogComponent implements OnInit {
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
+
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
     }
@@ -55,6 +57,11 @@ export class ModalsVersionDialogComponent implements OnInit {
         });
     }
 
+    ngAfterViewInit() {
+        console.info('After view init');
+        console.info(this.modalModel.object);
+    }
+
     onSubmitClick(): void {
 
         if (this.modalModel.object == null) {
@@ -76,5 +83,7 @@ export class ModalsVersionDialogComponent implements OnInit {
         this.modalClose.emit(false);
     }
 
-
+    setVersion() {
+        console.info();
+    }
 }

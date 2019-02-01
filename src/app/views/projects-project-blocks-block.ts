@@ -13,7 +13,6 @@ import {
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { Blocks, Core } from 'blocko';
 import { FormGroup, Validators } from '@angular/forms';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import { Types, Libs } from 'common-lib';
 import { TypescriptBuildError } from 'script-engine';
@@ -545,9 +544,15 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
     onSaveClick(): void {
         if (this.successfullyTested && this.renderer) {
+            console.info('In condition: block was successfully tested and rendered.');
+            console.info('');
             let model = new ModalsVersionDialogModel(this.block.id, 'BlockVersion');
+            console.info('So, model was created it is new instance of Modals Version Dialogue Model. It takes as a parameter block id(parent id?) and as a type BlockVersion');
+            console.info(model);
             this.modalService.showModal(model).then((success) => {
+                console.info('Then, model service makes model to be shown.');
                 if (success) {
+                    console.info('This is condition if model was successfully SAVED.');
 
                     let data: object = {
                         name: this.blockForm.controls['name'].value,
@@ -557,12 +562,14 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                         data: {}
                     };
 
+                    console.info('New object :data: was created.');
+
                     if (this.renderer.icon) {
                         data['data']['editor'] = {
                             icon: this.renderer.icon.getData()
                         };
                     }
-
+                    console.info(model.object.name);
                     this.blockUI();
                     this.tyrionBackendService.blockVersionCreate(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
                         name: model.object.name,
