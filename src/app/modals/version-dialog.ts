@@ -22,7 +22,7 @@ export class ModalsVersionDialogModel extends ModalModel {
     selector: 'bk-modals-version-dialog',
     templateUrl: './version-dialog.html'
 })
-export class ModalsVersionDialogComponent implements OnInit, AfterViewInit {
+export class ModalsVersionDialogComponent implements OnInit {
 
     @Input()
     modalModel: ModalsVersionDialogModel;
@@ -33,13 +33,14 @@ export class ModalsVersionDialogComponent implements OnInit, AfterViewInit {
     form: FormGroup;
 
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder) {
     }
 
 
     ngOnInit() {
         this.form = this.formBuilder.group({
-            'name': [this.modalModel.object != null ? this.modalModel.object.name : moment().format('YYYY-MM-DD HH:mm:ss'),
+            'name': [
+                this.modalModel.object != null ? this.modalModel.object.name : moment().format('YYYY-MM-DD HH:mm:ss'),
                 [
                     Validators.required,
                     Validators.minLength(4),
@@ -49,17 +50,12 @@ export class ModalsVersionDialogComponent implements OnInit, AfterViewInit {
                     (value) => {
                         return !(this.modalModel && this.modalModel.object && this.modalModel.object.name.length > 3 && this.modalModel.object.name === value);
                     },
-                    BeckiAsyncValidators.nameTaken(this.backendService, this.modalModel.type, this.modalModel.parent_object_id)
+                    BeckiAsyncValidators.nameTaken(this.tyrionBackendService, this.modalModel.type, this.modalModel.parent_object_id)
                 )
             ],
             'description': [this.modalModel.object != null ? this.modalModel.object.description : '', [Validators.maxLength(255)]],
             'tags': [this.modalModel.object != null ? this.modalModel.object.tags : []],
         });
-    }
-
-    ngAfterViewInit() {
-        console.info('After view init');
-        console.info(this.modalModel.object);
     }
 
     onSubmitClick(): void {
@@ -81,9 +77,5 @@ export class ModalsVersionDialogComponent implements OnInit, AfterViewInit {
 
     onCancelClick(): void {
         this.modalClose.emit(false);
-    }
-
-    setVersion() {
-        console.info();
     }
 }

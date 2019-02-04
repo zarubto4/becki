@@ -544,16 +544,9 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
     onSaveClick(): void {
         if (this.successfullyTested && this.renderer) {
-            console.info('In condition: block was successfully tested and rendered.');
-            console.info('');
-            let model = new ModalsVersionDialogModel(this.block.id, 'BlockVersion');
-            console.info('So, model was created it is new instance of Modals Version Dialogue Model. It takes as a parameter block id(parent id?) and as a type BlockVersion');
-            console.info(model);
+            let model = new ModalsVersionDialogModel(this.block.id, 'BlockVersion', {name: this.nextVersion()});
             this.modalService.showModal(model).then((success) => {
-                console.info('Then, model service makes model to be shown.');
                 if (success) {
-                    console.info('This is condition if model was successfully SAVED.');
-
                     let data: object = {
                         name: this.blockForm.controls['name'].value,
                         description: this.blockForm.controls['description'].value,
@@ -561,9 +554,6 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
                         block_id: this.block.id,
                         data: {}
                     };
-
-                    console.info('New object :data: was created.');
-
                     if (this.renderer.icon) {
                         data['data']['editor'] = {
                             icon: this.renderer.icon.getData()
@@ -692,21 +682,25 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
         }
     }
 
-    nextVersion() {
-        let versionNames = [];
-        let regexp = /\d.\d.\d/g;
-        this.blockoBlockVersions.forEach(versionName => {
-            console.info(versionName.name);
-            console.info('');
-            versionNames.push(versionName.name);
-        });
-        console.info(versionNames);
-        console.info('');
+    nextVersion(): string {
+        let nextVersion: string = null;
+        let matchedVersionNames = [];
 
-        versionNames.forEach(name => {
-            if (name.match(regexp)) {
-                console.info(name);
+        let regexp = /^[0-9]+\.[0-9]+\.?[0-9]*$/;
+
+        this.blockoBlockVersions.forEach(version => {
+            if (version.name.match(regexp)) {
+                matchedVersionNames.push(version.name);
             }
-        })
+        });
+
+        console.info('Array of matched names ' + matchedVersionNames);
+
+        if (matchedVersionNames.length === 0) {
+            nextVersion = '1.0.0';
+        }
+
+        console.info('Next version before return ' + nextVersion);
+        return nextVersion;
     }
 }
