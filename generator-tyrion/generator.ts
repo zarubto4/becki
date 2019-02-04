@@ -67,6 +67,7 @@ let CONFIG = {
         'get:/facebook/{return_link}': '__loginFacebook',
         'get:/github/{return_link}': '__loginGitHub',
     },
+    tagMethodIgnore: ['CEZ' , 'EON', 'P&G'],
     allowedDefinitions: ['MSINumber'],   // ignore cases
     methodsOkCodes: [200, 201, 202],
 };
@@ -471,10 +472,32 @@ for (let pathUrl in paths) {
             console.log();
             console.log(path['description']);
         }
+
         let m = makeReadableMethodName(pathMethod, pathUrl, path);
 
         if (!m) {
             console.log(chalk.yellow('Skip generation method for endpoint ' + pathMethod + ':' + pathUrl));
+            continue;
+        }
+
+        let tags = path['tags'];
+
+        let toSkipForProhibitedTag: boolean = false;
+        if ( tags ) {
+
+            for (let tag in tags) {
+                if (!tags.hasOwnProperty(tag)) {
+                    continue;
+                }
+
+                if (CONFIG.tagMethodIgnore.indexOf(tags[tag]) > -1) {
+                    toSkipForProhibitedTag = true;
+                }
+            }
+        }
+
+        if (toSkipForProhibitedTag) {
+            console.warn(chalk.yellow('Skip prohibited method by tagMethodIgnore config for endpoint ' + pathMethod + ':' + pathUrl));
             continue;
         }
 

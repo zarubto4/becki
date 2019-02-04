@@ -68,9 +68,12 @@ export class ModalsCodeSelectComponent implements OnInit {
     data: any = null;
 
     constructor(private tyrionBackendService: TyrionBackendService, private formBuilder: FormBuilder, private translationService: TranslationService, protected notificationService: NotificationService) {
+        console.info('ModalsCodeSelectComponent: created');
     }
 
     ngOnInit(): void {
+
+        console.info('onSelectCProgramVersion: ngOnInit modalModel', this.modalModel);
 
         if (this.modalModel.hardware_type_id) {
             this.hardware_type_id = this.modalModel.hardware_type_id;

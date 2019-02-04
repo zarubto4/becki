@@ -1989,6 +1989,8 @@ export class StaticTranslation {
                 'btn_add_members': 'Invite collaborators',
 
                 'table_name': 'Name',
+                'table_invited': 'Date of invitation',
+                'table_who_invite': 'Invited by',
                 'table_state': 'State',
                 'table_actions': 'Actions',
 
