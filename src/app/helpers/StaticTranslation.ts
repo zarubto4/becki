@@ -1129,7 +1129,7 @@ export class StaticTranslation {
             }, 'ModalsUpdateReleaseFirmwareComponent': {
                 'title': 'Firmware Release Settings',
                 'label_hw_group_title': '<strong class="font-color-hardware">HARDWARE</strong> Groups',
-                'label_select': 'Select',
+                'label_select': 'Please, select one:',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_hardware_group': 'Hardware Group',
