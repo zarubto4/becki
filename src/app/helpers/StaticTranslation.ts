@@ -348,6 +348,8 @@ export class StaticTranslation {
                 'label_picture': 'Picture',
                 'label_unsaved': '(not saved)',
                 'label_select_avatar': 'Select file',
+                'image_is_too_big': 'Soubor je větší než 3MB.',
+
 
             }, 'ModalsDeviceEditDescriptionComponent': {
                 'title': '<strong class="font-color-hardware">Hardware</strong> basic Properties',
@@ -1127,7 +1129,7 @@ export class StaticTranslation {
             }, 'ModalsUpdateReleaseFirmwareComponent': {
                 'title': 'Firmware Release Settings',
                 'label_hw_group_title': '<strong class="font-color-hardware">HARDWARE</strong> Groups',
-                'label_select': 'Select',
+                'label_select': 'Please, select one:',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_hardware_group': 'Hardware Group',
@@ -1987,6 +1989,8 @@ export class StaticTranslation {
                 'btn_add_members': 'Invite collaborators',
 
                 'table_name': 'Name',
+                'table_invited': 'Date of invitation',
+                'table_who_invite': 'Invited by',
                 'table_state': 'State',
                 'table_actions': 'Actions',
 

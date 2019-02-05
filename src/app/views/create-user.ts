@@ -73,7 +73,7 @@ export class CreateUserComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/']);
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translateService.translate('flash_email_cant_be_sent', reason.message)));
+                this.notificationService.addFlashMessage(new FlashMessageError(reason.message));
                 console.error('err ' + reason);
             });
     }

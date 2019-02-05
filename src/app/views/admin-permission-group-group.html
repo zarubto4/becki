@@ -78,7 +78,7 @@
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let person of securityRole.persons">
                         <td class="vert-align no-wrap">
-                            <a (click)="onPersonClick(person.id)" class="no-wrap"><strong>{{person.full_name}}</strong> ({{person.nick_name}})</a>
+                            <a (click)="onPersonClick(person.id)" class="no-wrap"><strong>{{person.first_name + ' ' + person.last_name}}</strong> ({{person.nick_name}})</a>
                         </td>
                         <td class="vert-align no-wrap">{{person.email}}</td>
                         <td class="action-btn-col">

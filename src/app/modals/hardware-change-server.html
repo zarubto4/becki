@@ -8,10 +8,11 @@
         <form [formGroup]="form">
 
             <div class="text-center">
+                <h4>Redirect Types. Please, select one:</h4>
             <h3>
-                <span class="cursor-hand" [class.bold]="tab == 'selector'" (click)="onToggleHardwareTab('selector')" [innerHTML]="'label_select'|bkTranslate:this"></span>
-                /
-                <span class="cursor-hand" [class.bold]="tab == 'manual'" (click)="onToggleHardwareTab('manual')" [innerHTML]="'label_manually'|bkTranslate:this"></span>
+                <span class="cursor-hand" [class.selected-redirect-type]="tab == 'selector'" (click)="onToggleHardwareTab('selector')" [innerHTML]="'label_select'|bkTranslate:this"></span>
+                 or
+                <span class="cursor-hand" [class.selected-redirect-type]="tab == 'manual'" (click)="onToggleHardwareTab('manual')" [innerHTML]="'label_manually'|bkTranslate:this"></span>
             </h3>
             </div>
 

@@ -6,11 +6,12 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
-import { IProject, IProjectParticipant } from '../backend/TyrionAPI';
+import { IInvitation, IPerson, IProject, IRoleList } from '../backend/TyrionAPI';
 import { ModalsMembersAddModel } from '../modals/members-add';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { IError } from '../services/_backend_class/Responses';
+import { FlashMessageError } from '../services/NotificationService';
 
 @Component({
     selector: 'bk-view-projects-project-members',
@@ -24,6 +25,10 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
     projectSubscription: Subscription;
 
     project: IProject = null;
+    invitations: IInvitation[] = null;
+    securityRoleList: IRoleList = null;
+
+    activeMembers: number = 0;
 
     selfId: string = '';
 
@@ -41,6 +46,9 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
             });
         });
         this.selfId = this.tyrionBackendService.personInfoSnapshot.id;
+
+        this.onGetInvitations();
+        this.onFilterRole();
     }
 
     ngOnDestroy(): void {
@@ -48,6 +56,47 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
+    }
+
+    onGetInvitations() {
+        this.tyrionBackendService.projectGetInvitation(this.project_id)
+            .then((value: IInvitation[]) => {
+                this.invitations = value;
+                this.unblockUI();
+            })
+            .catch((reason: IError) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
+
+    onFilterRole(pageNumber: number = 0): void {
+
+        // For loading purpose
+        this.securityRoleList = null;
+
+        this.tyrionBackendService.roleGetListByFilter(pageNumber, {
+            project_id: this.project_id
+        })
+            .then((values: IRoleList) => {
+
+
+                let size: number = 0;
+                for (let role in values.content) {
+                    if (values.content.hasOwnProperty(role)) {
+                        size = size + values.content[role].persons.length;
+                    }
+                }
+
+                this.activeMembers = size;
+                this.securityRoleList = values;
+
+                this.unblockUI();
+            })
+            .catch((reason: IError) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
     }
 
     onMembersAddClick() {
@@ -58,7 +107,8 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                     this.blockUI();
                     this.tyrionBackendService.projectShare(this.project_id, { persons_mail: m.emails })
                         .then(() => {
-                            this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                            this.onGetInvitations();
+                            this.unblockUI();
                         })
                         .catch((reason: IError) => {
                             this.unblockUI();
@@ -68,7 +118,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
             });
     }
 
-    onMemberDeleteClick(member: IProjectParticipant) {
+    onMemberDeleteClick(member: IInvitation) {
 
         if ((this.tyrionBackendService.personInfoSnapshot.email === member.email) || (this.tyrionBackendService.personInfoSnapshot.id === member.id)) {
             this.fmError(this.translate('label_cannot_remove_yourself'));
@@ -82,7 +132,8 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                 this.blockUI();
                 this.tyrionBackendService.projectUnshare(this.project_id, { persons_mail: [member.email] })
                     .then(() => {
-                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        this.onGetInvitations();
+                        this.onFilterRole();
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
@@ -92,7 +143,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
         });
     }
 
-    onMemberSendAgainClick(member: IProjectParticipant) {
+    onMemberSendAgainClick(member: IInvitation) {
         this.blockUI();
         this.tyrionBackendService.projectShare(this.project_id, { persons_mail: [member.email] })
             .then(() => {
@@ -106,17 +157,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
             });
     }
 
-    readableState(state: ('owner' | 'admin' | 'member' | 'invited')) {
-        switch (state) {
-            case 'owner': return this.translate('label_project_owner');
-            case 'admin': return this.translate('label_project_admin');
-            case 'member': return this.translate('label_project_member');
-            case 'invited': return this.translate('label_invitation_sent');
-        }
-        return 'Unknown';
-    }
-
-    onDrobDownEmiter(action: string, member: IProjectParticipant): void {
+    onDrobDownEmiter(action: string, member: IInvitation): void {
 
         if (action === 'send_invitation') {
             this.onMemberSendAgainClick(member);

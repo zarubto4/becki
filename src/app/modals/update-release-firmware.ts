@@ -18,10 +18,10 @@ import { FormSelectComponent, FormSelectComponentOption } from '../components/Fo
 import { IMyDpOptions } from 'mydatepicker';
 import * as moment from 'moment';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { ModalsSelectCodeModel } from './code-select';
 import { TranslationService } from '../services/TranslationService';
 import { FlashMessageError, NotificationService } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';
+import { ModalsSelectCodeModel } from './code-select';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
@@ -177,9 +177,18 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
         }
     }
 
-    onSelectCProgramVersion(hardwareType: IShortReference) {
+    onSelectCProgramVersion = (hardwareType: IShortReference) => {
+        console.info('onSelectCProgramVersion: hardwareType', hardwareType);
+        console.info('onSelectCProgramVersion: project_ID', this.modalModel.project_id);
+
         let model = new ModalsSelectCodeModel(this.modalModel.project_id, hardwareType.id);
+
+
+        console.info('onSelectCProgramVersion: model', model);
+        console.info('onSelectCProgramVersion: model', model.project_id, model.selected_c_program);
+
         this.modalService.showModal(model).then((success) => {
+
             if (success) {
                 this.selectedProgram[hardwareType.id] = {
                     program: model.selected_c_program,
@@ -187,6 +196,9 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit, AfterViewCh
                 };
                 (<FormControl>(this.form.controls[hardwareType.id + '_selectedCProgramVersionId'])).setValue(model.selected_c_program_version.id);
             }
+
+        }).catch((exception) => {
+            console.error('onSelectCProgramVersion:: error:: ', exception);
         });
     }
 

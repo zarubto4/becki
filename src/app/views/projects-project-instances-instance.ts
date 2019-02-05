@@ -751,7 +751,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
         let groups: IHardwareGroup[] = [];
         // Set groupd if we he it
-        if (groups.length > 0 && this.deviceGroupFilter != null) {
+        if (this.deviceGroupFilter != null) {
             groups = this.deviceGroupFilter.content;
         }
 
@@ -759,7 +759,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId],
             instance_snapshot: groups.length === 0 ? this.instance.current_snapshot.id : null,
-            hardware_groups_id: groups.length === 0 ? null : groups.map(group => group.id),
+            hardware_groups_id: groups.length === 0 ? null : groups.map((group) => { return group.id}),
             order_by: this.formFilterGroup.controls['orderBy'].value,
             order_schema: this.formFilterGroup.controls['order_schema'].value,
             full_id: this.formFilterGroup.controls['full_id'].value,
