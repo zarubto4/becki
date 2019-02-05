@@ -685,7 +685,6 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
     nextVersion(): string {
         let nextVersion: string = null;
         let matchedVersionNames = [];
-
         let regexp = /^[0-9]+\.[0-9]+\.?[0-9]*$/;
 
         this.blockoBlockVersions.forEach(version => {
@@ -694,21 +693,18 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
             }
         });
 
-        console.info(matchedVersionNames);
         if (matchedVersionNames.length === 0) {
             nextVersion = '1.0.0';
         } else {
-            nextVersion = this.increamentPatch(matchedVersionNames[0]);
+            nextVersion = this.incrementPatch(matchedVersionNames[0]);
         }
 
         return nextVersion;
     }
 
-    increamentPatch(lastVersion: string): string {
+    incrementPatch(lastVersion: string): string {
         let parts = lastVersion.split('.');
-        console.info(parts);
         let patch = parts[2];
-        console.info(patch);
         let patchInt = parseInt(patch, 10);
         patchInt++;
         patch = patchInt.toString();
