@@ -680,7 +680,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
 
         // save dialog
-        let model = new ModalsVersionDialogModel(this.blockoProgram.id, 'BProgramVersion');
+        let model = new ModalsVersionDialogModel(this.blockoProgram.id, 'BProgramVersion', {name: this.nextVersion(this.blockoProgramVersions)});
         this.modalService.showModal(model).then((success) => {
             if (success) {
 
