@@ -694,13 +694,26 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
             }
         });
 
-        console.info('Array of matched names ' + matchedVersionNames);
-
+        console.info(matchedVersionNames);
         if (matchedVersionNames.length === 0) {
             nextVersion = '1.0.0';
+        } else {
+            nextVersion = this.increamentPatch(matchedVersionNames[0]);
         }
 
-        console.info('Next version before return ' + nextVersion);
         return nextVersion;
+    }
+
+    increamentPatch(lastVersion: string): string {
+        let parts = lastVersion.split('.');
+        console.info(parts);
+        let patch = parts[2];
+        console.info(patch);
+        let patchInt = parseInt(patch, 10);
+        patchInt++;
+        patch = patchInt.toString();
+        parts[2] = patch;
+        let newVersion = parts.join('.');
+        return newVersion;
     }
 }
