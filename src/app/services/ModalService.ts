@@ -68,28 +68,20 @@ export class ModalService {
         // console.info('ModalService init');
     }
 
-
     translate(key: string, ...args: any[]): string {
         return this.translationService.translate(key, this, null, args);
     }
 
-
     showModal(modalModel: ModalModel): Promise<boolean> {
         if (!modalModel) {
-            console.error('error_missing_modal')
             throw new Error(this.translate('error_missing_modal'));
         }
         let wrapper = this.modalWrappers.find((mw) => mw.modalModel === modalModel);
         if (wrapper) {
-            console.error('error_modal_already_open');
             throw new Error(this.translate('error_modal_already_open'));
         }
         wrapper = new ModalWrapper(modalModel);
-        if (this.modalWrappers.length === 0) {
-            this.modalWrappers.push(wrapper);
-        }
-
-        console.info('showModal');
+        this.modalWrappers.push(wrapper);
         return wrapper.showModal(this.ngZone);
     }
 
