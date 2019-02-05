@@ -151,8 +151,7 @@
                         </td>
                         <td class="vert-align no-wrap">{{bootloader.name}}</td>
                         <td class="vert-align breakable">{{bootloader.version_identifier}}</td>
-                        <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span
-                            *ngIf="bootloader.changing_note.length > 32">...</span></td>
+                        <td class="vert-align breakable" style="min-width: 150px;">{{bootloader.changing_note}}</td>
 
                         <td class="action-btn-col">
 
