@@ -48,6 +48,7 @@ export class BugsBugComponent extends _BaseMainComponent implements OnInit, OnDe
         this.tyrionBackendService.getBug(this.bugId)
             .then((bug) => {
                 this.bug = bug;
+
                 this.unblockUI();
             })
             .catch((reason: IError) => {

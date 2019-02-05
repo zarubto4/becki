@@ -14,7 +14,7 @@ import { ProjectsProjectGSMSGSMComponent } from '../views/projects-project-gsms-
 export const PROJECT_GSMS_ROUTES: Routes = [
 
     { path: '', data: { breadName: 'CELLULAR modules' }, component: ProjectsProjectGSMSComponent, canActivate: [AuthGuard]},
-    { path: ':gsm',  data: { breadName: ':last' }, component: ProjectsProjectGSMSGSMComponent, canActivate: [AuthGuard]},
+    { path: ':gsm',  data: { breadName: ':gsm' }, component: ProjectsProjectGSMSGSMComponent, canActivate: [AuthGuard]},
 
 ];
 

@@ -99,8 +99,8 @@
                                     ]"
             ></bk-filter-component>
 
-            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)">
-                <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
+            <div *ngIf="(devicesFilter && devicesFilter.content.length > 0)" class="hardware-table-wrapper">
+                <table class="table table-hover table-light table-scrollable table-scrollable-borderless">
                     <thead>
                         <tr>
                             <th class="">
@@ -152,7 +152,7 @@
                     <tbody class="hide-bk-drob-down-button">
                     <tr *ngFor="let device of devicesFilter.content">
 
-                        <td class="vert-align">
+                        <td class="vert-align onresize-table">
 
                             <div class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
                                 <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
@@ -163,19 +163,19 @@
                                 </div>
                             </div>
 
-                            <a (click)="onDeviceClick(device.id)" class="no-wrap">
+                            <a (click)="onDeviceClick(device.id)">
                                 <strong *ngIf="device.name && device.name != 'null'">{{device.name}}</strong>
                                 <strong *ngIf="!device.name || device.name == 'null'">{{device.full_id}}</strong>
                             </a>
 
                         </td>
-                        <td class="vert-align breakable">{{device.id.substr(0,13)}}</td>
-                        <td class="vert-align breakable">{{device.full_id}}</td>
-                        <td class="vert-align breakable">{{device.description}}</td>
+                        <td class="vert-align onresize-table ">{{device.id.substr(0,13)}}</td>
+                        <td class="vert-align onresize-table ">{{device.full_id}}</td>
+                        <td class="vert-align onresize-table ">{{device.description}}</td>
                         <td class="vert-align text-center"><a
                             (click)="onHardwareTypeClick(device.hardware_type.id)">{{device.hardware_type.name}}</a>
                         </td>
-                        <td class="vert-align text-center no-wrap">
+                        <td class="vert-align text-center onresize-table">
 
                             <div *ngIf="!device.hardware_groups">
                                 -
@@ -190,7 +190,7 @@
 
                         </td>
 
-                        <td class="vert-align text-center no-wrap">
+                        <td class="vert-align text-center onresize-table">
 
                             <div *ngIf="!device.dominant_entity && device.dominant_project_active">
                                 <span *ngIf="device.dominant_project_active.id">Active In: <a (click)="onProjectClick(device.dominant_project_active.id)">{{device.dominant_project_active.name}}</a></span>
@@ -200,11 +200,11 @@
                                 <span class="font-green-jungle">Can Be Activated</span>
                             </div>
                         </td>
-                        <td class="vert-align text-center no-wrap">
+                        <td class="vert-align text-center onresize-table">
                             <bk-online-state [online_state]="device.online_state" [latest_online]="device.latest_online"></bk-online-state>
                         </td>
 
-                        <td class="vert-align">
+                        <td class="vert-align onresize-table">
                             <bk-form-tag-input [tags_without_form]="device.tags" [readonly]="true"></bk-form-tag-input>
                         </td>
 

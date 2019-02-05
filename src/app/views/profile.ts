@@ -210,26 +210,30 @@ export class ProfileComponent extends _BaseMainComponent implements OnInit {
             key: 'email',
             value: this.emailForm.controls['newEmail'].value
         }).then(response => {
-            this.backendService.personEditProperty({
-                property: 'email',
-                email: this.emailForm.controls['newEmail'].value
-            })
-                .then(ok => {
-                    this.unblockUI();
-                    this.backendService.logout()
-                        .then(() => {
-                            this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
-                            this.navigate(['/login']);
-                        })
-                        .catch((reason: IError) => {
-                            this.fmError(reason);
-                        });
-                    this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
+            if (response.valid) {
+                this.backendService.personEditProperty({
+                    property: 'email',
+                    email: this.emailForm.controls['newEmail'].value
                 })
-                .catch((reason: IError) => {
-                    this.unblockUI();
-                    this.fmError(reason);
-                });
+                    .then(ok => {
+                        this.unblockUI();
+                        this.backendService.logout()
+                            .then(() => {
+                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
+                                this.navigate(['/login']);
+                            })
+                            .catch((reason: IError) => {
+                                this.fmError(reason);
+                            });
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
+                    })
+                    .catch((reason: IError) => {
+                        this.unblockUI();
+                        this.fmError(reason);                    });
+            } else {
+                this.unblockUI();
+                this.fmErrorFromString(response.message);
+            }
         });
     }
 

@@ -175,7 +175,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                             this.fmInfo(this.translate('flash_garfield_connected'));
                         }
                     })
-                    .catch((reason) => {
+                    .catch((reason: IError) => {
                         console.error('connectGarfieldWebSocket:', reason);
                     });
 
@@ -194,7 +194,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         throw new Error('Unsubscribe failed');
                     }
                 })
-                .catch((reason) => {
+                .catch((reason: IError) => {
                     console.error('ngOnDestroy:', reason);
                 })
                 .then(() => {
@@ -356,7 +356,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                     this.printer_label_1 = values[1];
                     this.printer_label_2 = values[2];
                 })
-                .catch(reason => {
+                .catch((reason: IError) => {
                     // this.addFlashMessage(new FlashMessageError('Printers cannot be loaded.', reason));
                     // not show error message -it will be showed in template
                 });
@@ -469,7 +469,7 @@ export class GarfieldGarfieldComponent extends _BaseMainComponent implements OnI
                         throw new Error('Keep alive unsuccessful');
                     }
                 })
-                .catch((reason) => {
+                .catch((reason: IError) => {
                     console.error('setDetection:', reason);
                 });
 
@@ -722,6 +722,4 @@ export class GarfieldAction {
     public isFailed(): boolean {
         return this.failed;
     }
-
-
 }

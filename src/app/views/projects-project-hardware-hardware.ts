@@ -1,8 +1,8 @@
 
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import {
-    IActualizationProcedureTaskList, IHardware,
-    IHardwareType
+    IHardware,
+    IHardwareType, IHardwareUpdateList
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -17,7 +17,8 @@ import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-serve
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { ModalsSelectCodeModel } from '../modals/code-select';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
+import { ModalsFileUploadModel } from '../modals/file-upload';
 import { IError } from '../services/_backend_class/Responses';
 
 export interface ConfigParameters {
@@ -28,24 +29,18 @@ export interface ConfigParameters {
 }
 
 export class FilterStatesValues {
-    public COMPLETE: boolean = true;
-    public CANCELED: boolean = true;
-    public BIN_FILE_MISSING: boolean = false;
-    public NOT_YET_STARTED: boolean = true;
-    public IN_PROGRESS: boolean = true;
+    public PENDING: boolean = true;
+    public RUNNING: boolean = true;
+    public COMPLETE: boolean = false;
+    public CANCELED: boolean = false;
     public OBSOLETE: boolean = false;
-    public NOT_UPDATED: boolean = true;
-    public WAITING_FOR_DEVICE: boolean = true;
-    public INSTANCE_INACCESSIBLE: boolean = false;
-    public HOMER_SERVER_IS_OFFLINE: boolean = true;
-    public HOMER_SERVER_NEVER_CONNECTED: boolean = true;
-    public CRITICAL_ERROR: boolean = true;
+    public FAILED: boolean = true;
 }
 
 export class FilterTypesValues {
     public MANUALLY_BY_USER_INDIVIDUAL:  boolean = true;
-    public MANUALLY_BY_USER_BLOCKO_GROUP: boolean = true;
-    public MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME:  boolean = true;
+    public MANUALLY_RELEASE_MANAGER: boolean = true;
+    public MANUALLY_BY_INSTANCE:  boolean = false;
     public AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE:  boolean = true;
     public AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE: boolean = true;
 }
@@ -65,7 +60,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     projectId: string;
     hardwareId: string;
     routeParamsSubscription: Subscription;
-    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    actualizationTaskFilter: IHardwareUpdateList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
     tab: string = 'overview';
@@ -101,9 +96,11 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
             if (status.model === 'Hardware' && this.hardwareId === status.model_id) {
                 this.refresh();
-                this.onFilterActualizationProcedureTask();
+                this.onFilterHardwareUpdates();
             }
         });
+
+
     }
 
     onBlinkDeviceClick(): void {
@@ -171,7 +168,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         this.tab = tab;
 
         if (tab === 'updates' && this.actualizationTaskFilter === null) {
-            this.onFilterActualizationProcedureTask();
+            this.onFilterHardwareUpdates();
         }
 
         if (tab === 'command_center') {
@@ -509,24 +506,32 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
     }
 
     onManualIndividualUpdate(): void {
+
         let model = new ModalsSelectCodeModel(this.projectId, this.hardwareType.id);
         this.modalService.showModal(model)
             .then((success) => {
                 if (success) {
 
-                    this.tyrionBackendService.cProgramUploadIntoHardware({
-                        hardware_ids: [this.hardware.id],
-                        c_program_version_id: model.selected_c_program_version.id
+                    this.tyrionBackendService.hardwareUpdate({
+                        hardware_id: this.hardware.id,
+                        c_program_version_id: model.selected_c_program_version != null ? model.selected_c_program_version.id : null,
+                        file: model.file,
+                        firmware_type: 'FIRMWARE'
                     })
                         .then(() => {
                             this.refresh();
+
+
+                            this.tab = 'updates';
+                            this.onFilterHardwareUpdates();
+
                         })
                         .catch((reason: IError) => {
                             this.fmError(reason);
                             this.unblockUI();
                         });
                 }
-            });
+            })
     }
 
 
@@ -543,10 +548,10 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             this.filterTypesValues[filter.key] = filter.value;
         }
 
-        this.onFilterActualizationProcedureTask();
+        this.onFilterHardwareUpdates();
     }
 
-    onFilterActualizationProcedureTask(pageNumber: number = 0) {
+    onFilterHardwareUpdates(pageNumber: number = 0) {
         this.blockUI();
 
         let state_list: string[] = [];
@@ -567,9 +572,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             }
         });
 
-
-
-        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
+        this.tyrionBackendService.hardwareUpdateGetByFilter(pageNumber, {
             hardware_ids: [this.hardwareId],
             update_states:  <any>state_list,
             type_of_updates: <any>type_list,
@@ -580,10 +583,10 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.actualizationTaskFilter.content.forEach((task, index, obj) => {
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
-                            this.tyrionBackendService.actualizationTaskGet(task.id)
+                            this.tyrionBackendService.hardwareUpdateGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
-                                    task.date_of_finish = value.date_of_finish;
+                                    task.finished = value.finished;
                                 })
                                 .catch((reason: IError) => {
                                     this.fmError(reason);
@@ -607,23 +610,20 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
         }
 
         if (backup_mode === 'STATIC_BACKUP') {
-            let m = new ModalsSelectCodeModel(this.projectId, this.hardware.hardware_type.id);
-            this.modalService.showModal(m)
+            let model = new ModalsSelectCodeModel(this.projectId, this.hardware.hardware_type.id);
+            this.modalService.showModal(model)
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.tyrionBackendService.boardUpdateBackup({
-                            hardware_backup_pairs: [
-                                {
-                                    hardware_id: this.hardware.id,
-                                    backup_mode: false,
-                                    c_program_version_id: m.selected_c_program_version.id
-                                }
-                            ]
+                        this.tyrionBackendService.hardwareUpdate({
+                            hardware_id: this.hardware.id,
+                            c_program_version_id: model.selected_c_program_version != null ? model.selected_c_program_version.id : null,
+                            file: model.file != null ? model.file : null,
+                            firmware_type: 'FIRMWARE'
                         })
                             .then(() => {
                                 this.refresh();
-                                this.onFilterActualizationProcedureTask();
+                                this.onFilterHardwareUpdates();
                             })
                             .catch((reason: IError) => {
                                 this.fmError(reason);
@@ -631,8 +631,12 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                             });
                     }
                 });
+
         } else {
+
+            /*
             this.blockUI();
+
             this.tyrionBackendService.boardUpdateBackup({
                 hardware_backup_pairs: [
                     {
@@ -648,6 +652,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                     this.fmError(reason);
                     this.unblockUI();
                 });
+                */
         }
     }
 }

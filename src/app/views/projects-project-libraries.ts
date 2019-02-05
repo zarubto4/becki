@@ -11,6 +11,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 import { IProject, ILibrary, ILibraryList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { IError } from '../services/_backend_class/Responses';
 
 @Component({

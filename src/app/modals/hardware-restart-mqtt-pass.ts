@@ -8,9 +8,10 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHardware, IHardwareNewPassword } from '../backend/TyrionAPI';
 import { NotificationService } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';

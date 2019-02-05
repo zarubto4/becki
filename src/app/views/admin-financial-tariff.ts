@@ -5,11 +5,16 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { ITariff, ITariffExtension } from '../backend/TyrionAPI';
+import {
+    IApplicableProduct, IProductExtension, IProductExtensionType, ITariff, ITariffExtension,
+    ITariffLabel
+} from '../backend/TyrionAPI';
 import { FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsTariffModel } from '../modals/tariff';
 import { Subscription } from 'rxjs';
 import { IError } from '../services/_backend_class/Responses';
+import { ModalsExtensionModel } from '../modals/extension';
 
 @Component({
     selector: 'bk-view-admin-financial',

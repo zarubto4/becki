@@ -67,6 +67,7 @@ let CONFIG = {
         'get:/facebook/{return_link}': '__loginFacebook',
         'get:/github/{return_link}': '__loginGitHub',
     },
+    tagMethodIgnore: ['CEZ' , 'EON', 'P&G'],
     allowedDefinitions: ['MSINumber'],   // ignore cases
     methodsOkCodes: [200, 201, 202],
 };
@@ -160,13 +161,23 @@ let solveType = (prop: any): string => {
     let type = prop['type'];
     // basic types:
     switch (type) {
-        case 'string':
-        case 'boolean':
-        case 'number':
+        case 'string': {
+            type = 'string';
             break;
-        case 'integer':
+        }
+        case 'boolean': {
+            type = 'boolean';
+            break;
+        }
+        case 'number': {
             type = 'number';
             break;
+        }
+        case 'integer': {
+            type = 'number';
+            prop['format'] = 'int32';
+            break;
+        }
         case 'array':
 
             type = null;
@@ -313,10 +324,10 @@ definitionsKeys.forEach((defName) => {
             fileWriteLine('    /**');
             fileWriteLine('     * @name ' + propKey);
             fileWriteLine('     * @type ' + type);
-            if (prop['description']) {        fileWriteLine('     * @description ' + prop['description'].split('\n').join('\n     *    ')); }
-            if (prop['example']) {          fileWriteLine('     * @example ' + prop['example']); }
-            if (prop['format']) {           fileWriteLine('     * @format ' + prop['format']); }
-            if (prop['default']) {           fileWriteLine('     * @default ' + prop['default']); }
+            if (prop['description']) {        fileWriteLine('     * @description '  + prop['description'].split('\n').join('\n     *    ')); }
+            if (prop['example']) {            fileWriteLine('     * @example '      + prop['example']); }
+            if (prop['format']) {             fileWriteLine('     * @format '       + prop['format']); }
+            if (prop['default']) {            fileWriteLine('     * @default '      + prop['default']); }
             if (prop['readOnly'] === true) {  fileWriteLine('     * @readonly'); }
             if (required === '') {            fileWriteLine('     * @required'); }
             fileWriteLine('     */');
@@ -461,10 +472,32 @@ for (let pathUrl in paths) {
             console.log();
             console.log(path['description']);
         }
+
         let m = makeReadableMethodName(pathMethod, pathUrl, path);
 
         if (!m) {
             console.log(chalk.yellow('Skip generation method for endpoint ' + pathMethod + ':' + pathUrl));
+            continue;
+        }
+
+        let tags = path['tags'];
+
+        let toSkipForProhibitedTag: boolean = false;
+        if ( tags ) {
+
+            for (let tag in tags) {
+                if (!tags.hasOwnProperty(tag)) {
+                    continue;
+                }
+
+                if (CONFIG.tagMethodIgnore.indexOf(tags[tag]) > -1) {
+                    toSkipForProhibitedTag = true;
+                }
+            }
+        }
+
+        if (toSkipForProhibitedTag) {
+            console.warn(chalk.yellow('Skip prohibited method by tagMethodIgnore config for endpoint ' + pathMethod + ':' + pathUrl));
             continue;
         }
 

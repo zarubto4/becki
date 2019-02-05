@@ -8,16 +8,12 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { BeckiValidators } from '../helpers/BeckiValidators';
+import { ICompilationServer } from '../backend/TyrionAPI';
 
 export class ModalsCreateCompilerServerModel extends ModalModel {
-    constructor(
-        public personal_server_name: string = '',
-        public server_url: string = '',
-        public server_id: string = '',
-        public hash_certificate: string = '',
-        public connection_identificator: string = '',
-        public edit: boolean = false
-    ) {
+    constructor(public server?: ICompilationServer) {
         super();
     }
 }
@@ -37,25 +33,38 @@ export class ModalsCreateCompilationServerComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
-
-        this.form = this.formBuilder.group({
-            'personal_server_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
-            'server_url': ['', [Validators.required]],   // TODO Valid URL
-            'hash_certificate': [''],
-            'connection_identificator': ['']
-        });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['personal_server_name'])).setValue(this.modalModel.personal_server_name);
-        (<FormControl>(this.form.controls['server_url'])).setValue(this.modalModel.server_url);
-        (<FormControl>(this.form.controls['hash_certificate'])).setValue(this.modalModel.hash_certificate);
-        (<FormControl>(this.form.controls['connection_identificator'])).setValue(this.modalModel.connection_identificator);
+        this.form = this.formBuilder.group({
+            'personal_server_name': [this.modalModel.server != null ? this.modalModel.server.personal_server_name : '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(32)
+                ],
+                BeckiAsyncValidators.condition(
+                    (value) => {
+                        return !(this.modalModel && this.modalModel.server && this.modalModel.server.personal_server_name.length > 3 && this.modalModel.server.personal_server_name === value);
+                    },
+                    BeckiAsyncValidators.nameTaken(this.backendService, 'CodeServer',  null)
+                )
+            ],
+            'server_url': [this.modalModel.server != null ? this.modalModel.server.server_url : '', [Validators.required]],
+            'hash_certificate': [this.modalModel.server != null ? this.modalModel.server.hash_certificate : ''],
+            'connection_identificator': [this.modalModel.server != null ? this.modalModel.server.connection_identificator : ''],
+        });
     }
 
     onSubmitClick(): void {
-        this.modalModel.personal_server_name = this.form.controls['personal_server_name'].value;
-        this.modalModel.server_url = this.form.controls['server_url'].value;
+
+        if (this.modalModel.server == null) {
+            // @ts-ignore
+            this.modalModel.server = {};
+        }
+
+        this.modalModel.server.personal_server_name = this.form.controls['personal_server_name'].value;
+        this.modalModel.server.server_url = this.form.controls['server_url'].value;
         this.modalClose.emit(true);
     }
 

@@ -3,10 +3,10 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IHardwareList, IProcessor, IProducer, IHardwareType, IHardware } from '../backend/TyrionAPI';
-import { FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateProducerModel } from '../modals/create-producer';
 import { ModalsCreateProcessorModel } from '../modals/create-processor';
 import { ModalsCreateHardwareTypeModel } from '../modals/type-of-board-create';

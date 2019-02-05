@@ -56,7 +56,7 @@
                             />
                             <div class="empty-avatar" *ngIf="!backendService.personInfoSnapshot.picture_link"></div>
                             <span class="username">
-                                {{backendService.personInfoSnapshot.full_name?backendService.personInfoSnapshot.full_name:backendService.personInfoSnapshot.nick_name}}
+                                {{backendService.personInfoSnapshot.first_name? ( backendService.personInfoSnapshot.first_name +' '+ backendService.personInfoSnapshot.last_name ) :backendService.personInfoSnapshot.nick_name}}
                             </span>
                             <i class="fa fa-angle-down"></i>
                         </a>

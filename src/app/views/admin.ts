@@ -3,7 +3,7 @@
  * of this distribution.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IReportAdminDashboard } from '../backend/TyrionAPI';
 import { IError } from '../services/_backend_class/Responses';

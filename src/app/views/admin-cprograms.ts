@@ -2,8 +2,8 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { ICProgram, ICProgramList, ILibraryList, ILibrary, IHardwareType } from '../backend/TyrionAPI';
-import { FlashMessageSuccess } from '../services/NotificationService';
+import { ICProgram, ICProgramFilter, ICProgramList, ILibraryFilter, ILibraryList, ILibrary, IRole, IHardwareType } from '../backend/TyrionAPI';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';

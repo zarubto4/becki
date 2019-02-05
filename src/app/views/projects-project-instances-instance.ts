@@ -4,11 +4,11 @@
  */
 import {
     IInstanceSnapshot, IInstance, IBProgram,
-    IActualizationProcedureTaskList, IHardwareGroupList, IHardwareList, IBProgramVersion,
+    IHardwareUpdateList, IHardwareGroupList, IHardwareList, IBProgramVersion,
     IInstanceSnapshotJsonFileInterface, IHardwareGroup, ISwaggerInstanceSnapShotConfigurationFile,
     ISwaggerInstanceSnapShotConfigurationProgram,
     IBProgramVersionSnapGridProjectProgram, IBProgramVersionSnapGridProject,
-    IUpdateProcedure, ISwaggerInstanceSnapShotConfigurationApiKeys, IShortReference
+    ISwaggerInstanceSnapShotConfigurationApiKeys, IShortReference, IHardwareReleaseUpdate
 } from '../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';
 import {
@@ -25,6 +25,7 @@ import { FlashMessageSuccess } from '../services/NotificationService';
 import { InstanceHistoryTimeLineComponent } from '../components/InstanceHistoryTimeLineComponent';
 import { ModalsSelectVersionModel } from '../modals/version-select';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
+import moment = require('moment/moment');
 import { ModalsSnapShotInstanceModel } from '../modals/snapshot-properties';
 import { ModalsSnapShotDeployModel } from '../modals/snapshot-deploy';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -52,7 +53,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     instance: IInstance = null;
     bProgram: IBProgram = null;
     bProgramVersion: IBProgramVersion = null;
-    actualizationTaskFilter: IActualizationProcedureTaskList = null;
+    actualizationTaskFilter: IHardwareUpdateList = null;
     devicesFilter: IHardwareList = null;
     deviceGroupFilter: IHardwareGroupList = null;
 
@@ -132,7 +133,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.editorView.registerBindInterfaceCallback(this.onSetHardwareByInterfaceClick.bind(this));
 
                 if (this.instance && this.instance.current_snapshot) {
-                    this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                    this.fileDownloaderService.download(this.instance.current_snapshot.link_to_download)
                         .then((program) => {
                             this.setSnapshotProgram(JSON.parse(program).snapshot);
                         })
@@ -140,7 +141,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.fmError(reason);
                         });
                 } else if (this.bProgramVersion) {
-                    this.fileDownloaderService.download(this.bProgramVersion.program)
+                    this.fileDownloaderService.download(this.bProgramVersion.link_to_download)
                         .then((program) => {
                             this.setSnapshotProgram(program);
                         })
@@ -225,10 +226,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onPortletClick(action: string): void {
         switch (action) {
-            case 'change_version_instance': {
-                this.onCreateNewSnapshotSelectBProgramVersion();
-                break;
-            }
             case 'edit_Instance': {
                 this.onEditClick();
                 break;
@@ -241,10 +238,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 this.onInstanceShutdownClick();
                 break;
             }
-            case 'active_instance': {
-                this.onInstanceDeployClick();
-                break;
-            }
             case 'save_snapshot': {
                 this.onSaveSnapshotClick();
                 break;
@@ -255,14 +248,6 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
             }
             case 'change_version': {
                 this.onChangeVersion();
-                break;
-            }
-            case 'add_api_key': {
-                this.onAddApiKey();
-                break;
-            }
-            case 'add_mesh_key': {
-                this.onAddMeshNetworkKey();
                 break;
             }
             case 'add_api_key': {
@@ -299,7 +284,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
             setImmediate(() => {
                 if (this.instance.current_snapshot) {
-                    this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                    this.fileDownloaderService.download(this.instance.current_snapshot.link_to_download)
                         .then((program) => {
                             this.setSnapshotProgram(JSON.parse(program).snapshot);
                         })
@@ -345,7 +330,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                             this.bProgramVersion = bpv;
                             this.tab = 'editor';
                             if (this.editorView) {
-                                this.fileDownloaderService.download(this.bProgramVersion.program)
+                                this.fileDownloaderService.download(this.bProgramVersion.link_to_download)
                                     .then((program) => {
                                         this.setSnapshotProgram(program);
                                     })
@@ -371,6 +356,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     let version_id = this.bProgramVersion.id;
                     let interfaces: IInstanceSnapshotJsonFileInterface[] = [];
 
+                    this.bindings = this.editorView.getBindings();
                     this.bindings.forEach((binding) => {
                         interfaces.push({
                             target_id: binding.targetId,       // hardware.id or group.id
@@ -522,7 +508,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                                 this.bProgramVersion = bpv;
                                 this.tab = 'editor';
                                 if (this.editorView) {
-                                    this.fileDownloaderService.download(this.bProgramVersion.program)
+                                    this.fileDownloaderService.download(this.bProgramVersion.link_to_download)
                                         .then((program) => {
                                             this.setSnapshotProgram(program);
                                         })
@@ -538,7 +524,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                 });
         } else {
             this.bProgramVersion = version;
-            this.fileDownloaderService.download(this.bProgramVersion.program)
+            this.fileDownloaderService.download(this.bProgramVersion.link_to_download)
                 .then((program) => {
                     this.setSnapshotProgram(program);
                 })
@@ -672,6 +658,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     onInstanceDeployClick(snapshot?: IInstanceSnapshot) {
 
         if (snapshot == null) {
+
             let model = new ModalsSnapShotDeployModel(this.instance.snapshots);
             this.modalService.showModal(model).then((success) => {
                 if (success) {
@@ -690,7 +677,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         });
                 }
             });
+
         } else {
+
             this.tyrionBackendService.instanceSnapshotDeploy({
                 snapshot_id: snapshot.id,
                 upload_time: 0
@@ -731,6 +720,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     onFilterHardwareGroup(pageNumber: number = 0): void {
+
+        if (!this.instance.current_snapshot) {
+            return;
+        }
+
         this.blockUI();
         this.tyrionBackendService.hardwareGroupGetListByFilter(pageNumber, {
             project_id: this.projectId,
@@ -751,9 +745,13 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
 
     onFilterHardware(pageNumber: number = 0): void {
 
+        if (!this.instance.current_snapshot) {
+            return;
+        }
+
         let groups: IHardwareGroup[] = [];
         // Set groupd if we he it
-        if (groups.length > 0 && this.deviceGroupFilter != null) {
+        if (this.deviceGroupFilter != null) {
             groups = this.deviceGroupFilter.content;
         }
 
@@ -761,7 +759,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.tyrionBackendService.boardsGetListByFilter(pageNumber, {
             projects: [this.projectId],
             instance_snapshot: groups.length === 0 ? this.instance.current_snapshot.id : null,
-            hardware_groups_id: groups.length === 0 ? null : groups.map(group => group.id),
+            hardware_groups_id: groups.length === 0 ? null : groups.map((group) => { return group.id}),
             order_by: this.formFilterGroup.controls['orderBy'].value,
             order_schema: this.formFilterGroup.controls['order_schema'].value,
             full_id: this.formFilterGroup.controls['full_id'].value,
@@ -789,15 +787,17 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
     }
 
     // tslint:disable:max-line-length
-    onFilterActualizationProcedureTask(pageNumber: number = 0, status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[] = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET']): void {
+    onFilterActualizationProcedureTask(
+        pageNumber: number = 0,
+        status: ('SUCCESSFULLY_COMPLETE' | 'COMPLETE' | 'COMPLETE_WITH_ERROR' | 'CANCELED' | 'IN_PROGRESS' | 'NOT_START_YET')[]
+            = ['SUCCESSFULLY_COMPLETE', 'COMPLETE', 'COMPLETE_WITH_ERROR', 'CANCELED', 'IN_PROGRESS', 'NOT_START_YET']): void {
+
         this.blockUI();
 
-        this.tyrionBackendService.actualizationTaskGetByFilter(pageNumber, {
-            actualization_procedure_ids: null,
-            instance_snapshot_ids: [this.instance.current_snapshot.id],
+        this.tyrionBackendService.hardwareUpdateGetByFilter(pageNumber, {
+            instance_snapshot_ids: [ this.instance.current_snapshot != null ? this.instance.current_snapshot.id : null],
             hardware_ids: null,
-            instance_ids: null,
-            update_status: status,
+            instance_ids: [this.instance.id],
             update_states: []
         })
             .then((values) => {
@@ -809,10 +809,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((online_status) => {
                         if (online_status.model === 'CProgramUpdatePlan' && task.id === online_status.model_id) {
 
-                            this.tyrionBackendService.actualizationTaskGet(task.id)
+                            this.tyrionBackendService.hardwareUpdateGet(task.id)
                                 .then((value) => {
                                     task.state = value.state;
-                                    task.date_of_finish = value.date_of_finish;
+                                    task.finished = value.finished;
                                 })
                                 .catch((reason: IError) => {
                                     this.fmError(reason);
@@ -832,7 +832,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.zone.runOutsideAngular(() => {
             if (this.liveView && this.instance.current_snapshot) {
 
-                this.fileDownloaderService.download(this.instance.current_snapshot.program)
+                this.fileDownloaderService.download(this.instance.current_snapshot.link_to_download)
                     .then((program) => {
 
                         this.liveView.setDataJson(JSON.parse(program).snapshot);
@@ -956,6 +956,11 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         this.modalService.showModal(model)
             .then((success) => {
                 let binding: BlockoCore.BoundInterface;
+
+                if (this.editorView.getBindings()) {
+
+                }
+
                 this.zone.runOutsideAngular(() => {
                     if (model.selected_hardware.length > 0) {
                         binding = callback(model.selected_hardware[0].id);
@@ -964,6 +969,7 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                     }
                 });
 
+                /*
                 if (binding) {
                     let index = this.bindings.findIndex((i) => {
                         return i.targetId === binding.targetId;
@@ -975,9 +981,10 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
                         this.bindings[index] = binding;
                     }
                 }
+                */
             })
             .catch((reason: IError) => {
-                this.fmError(reason);
+                // this.fmError(reason);
             });
     }
 
@@ -1016,9 +1023,9 @@ export class ProjectsProjectInstancesInstanceComponent extends _BaseMainComponen
         }
     }
 
-    onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
+    onUpdateProcedureCancelClick(procedure: IHardwareReleaseUpdate): void {
         this.blockUI();
-        this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
+        this.tyrionBackendService.hardwareReleaseUpdateCancel(procedure.id)
             .then(() => {
                 this.unblockUI();
                 this.refresh();

@@ -7,7 +7,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IGridProject, IGridProgram } from '../backend/TyrionAPI';
+import { IProject, IGridProject, IGridProgram } from '../backend/TyrionAPI';
 import { ModalsGridProgramPropertiesModel } from '../modals/grid-program-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsGridProjectPropertiesModel } from '../modals/grid-project-properties';

@@ -3,6 +3,7 @@
  * of this distribution.
  */
 
+import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
@@ -12,6 +13,7 @@ import {
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { Blocks, Core } from 'blocko';
 import { FormGroup, Validators } from '@angular/forms';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import { Types, Libs } from 'common-lib';
 import { TypescriptBuildError } from 'script-engine';

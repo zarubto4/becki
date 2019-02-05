@@ -8,7 +8,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IGridWidgetList, IWidget } from '../backend/TyrionAPI';
+import { IProject, IGridWidgetList, IWidget } from '../backend/TyrionAPI';
 import { ModalsWidgetsWidgetPropertiesModel } from '../modals/widgets-widget-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';

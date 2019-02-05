@@ -9,7 +9,7 @@ import { IInstance, IInstanceList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsInstanceCreateModel } from '../modals/instance-create';
+import { ModalsInstanceCreateComponent, ModalsInstanceCreateModel } from '../modals/instance-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IError } from '../services/_backend_class/Responses';
 

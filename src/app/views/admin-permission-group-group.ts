@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { ModalsMembersAddModel } from '../modals/members-add';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsRolePermissionAddModel } from '../modals/role-permission-add';
+import { ModalsPermissionPermissionPropertyModel } from '../modals/permission-permission-properties';
 import { IError } from '../services/_backend_class/Responses';
 
 @Component({

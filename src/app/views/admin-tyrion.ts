@@ -4,7 +4,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IGitHubReleases, IServerUpdates } from '../backend/TyrionAPI';
+import { IGitHubReleases, IServerUpdate, IServerUpdates } from '../backend/TyrionAPI';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import * as moment from 'moment';

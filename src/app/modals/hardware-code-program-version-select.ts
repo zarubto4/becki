@@ -3,10 +3,15 @@
  * of this distribution.
  */
 
+
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { ICProgram, ICProgramList, ICProgramVersion } from '../backend/TyrionAPI';
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import {
+    ICProgram, ICProgramFilter, ICProgramList, ICProgramVersion, ILibrary, ILibraryVersion
+} from '../backend/TyrionAPI';
 import { NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
 import { IError } from '../services/_backend_class/Responses';

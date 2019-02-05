@@ -231,7 +231,8 @@ export class ProjectsProjectCodeComponent extends _BaseMainComponent implements 
                 this.publicPrograms = iCProgramList;
                 this.unblockUI();
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

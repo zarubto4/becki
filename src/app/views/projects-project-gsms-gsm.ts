@@ -8,15 +8,15 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IProject, IGSM, IDataSimOverview } from '../backend/TyrionAPI';
+import { IProject, IGSM, IDataSimOverview, IModelMongoThingsMobileCRD, IGSMList, IGSMCDRList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsGsmPropertiesModel } from '../modals/gsm-properties';
 import { ChartBarComponent, DataCharInterface } from '../components/ChartBarComponent';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { IError } from '../services/_backend_class/Responses';
 
 import * as moment from 'moment';
-import { IError } from '../services/_backend_class/Responses';
 
 export class DataChar {
     option: {
@@ -108,6 +108,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     graphView: ChartBarComponent;
 
     gsm: IGSM = null;
+    cdrs: IGSMCDRList = null;
     form: FormGroup;
 
 
@@ -161,6 +162,10 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
 
         if (tab === 'traffic_details') {
             this.onFilterData();
+        }
+
+        if (tab === 'cdr_details') {
+            this.onFilterCDR();
         }
     }
 
@@ -287,7 +292,7 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             }
             case 'FROM_BEGINNING': {
 
-                this.from = this.gsm.sim_tm_status.activation_date_in_millis;
+                this.from = this.gsm.sim_tm_status.activation_date;
                 this.to = moment().endOf('day').valueOf();
                 break;
             }
@@ -318,8 +323,8 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                     }
                     numberData.push(overview.datagram[k].data_consumption);
 
-                    let from = moment.unix(overview.datagram[k].long_from / 1000);
-                    let to = moment.unix(overview.datagram[k].long_to / 1000);
+                    let from = moment.unix(overview.datagram[k].date_from / 1000);
+                    let to = moment.unix(overview.datagram[k].date_to / 1000);
 
                     if (this.DIVIDE_OPTION !== 'HOUR') {
                         chartLabels.push(from.format('DD.MM') + '-' + to.format('DD.MM') );
@@ -353,15 +358,15 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
             .then((success) => {
                 this.blockUI();
                 this.tyrionBackendService.simUpdate(gsm.id, {
-                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold  * 1024 * 1024,
+                    daily_traffic_threshold: model.gsm.sim_tm_status.daily_traffic_threshold,
                     block_sim_daily: model.gsm.sim_tm_status.block_sim_daily,
                     daily_traffic_threshold_notify_type: model.gsm.daily_traffic_threshold_notify_type,
 
-                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold  * 1024 * 1024,
+                    monthly_traffic_threshold: model.gsm.sim_tm_status.monthly_traffic_threshold,
                     block_sim_monthly: model.gsm.sim_tm_status.block_sim_monthly,
                     monthly_traffic_threshold_notify_type: model.gsm.monthly_traffic_threshold_notify_type,
 
-                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold  * 1024 * 1024,
+                    total_traffic_threshold: model.gsm.sim_tm_status.total_traffic_threshold,
                     block_sim_total: model.gsm.sim_tm_status.block_sim_total,
                     total_traffic_threshold_notify_type: model.gsm.total_traffic_threshold_notify_type,
 
@@ -386,21 +391,21 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     onUpdateClick(): void {
         this.blockUI();
 
-        // console.log('vdaily_traffic_threshold' +  this.form.controls['daily_traffic_threshold'].value);
-        // console.log('monthly_traffic_threshold' +  this.form.controls['monthly_traffic_threshold'].value);
-        // console.log('total_traffic_threshold' +  this.form.controls['total_traffic_threshold'].value);
+        if (!this.form.valid) {
+            return;
+        }
 
         this.tyrionBackendService.simUpdate(this.gsm.id, {
 
-            daily_traffic_threshold:                this.form.controls['daily_traffic_threshold'].value * 1024 * 1024,
+            daily_traffic_threshold:                this.form.controls['daily_traffic_threshold'].value,
             block_sim_daily:                        this.gsm.sim_tm_status.block_sim_daily,
             daily_traffic_threshold_notify_type:    this.gsm.daily_traffic_threshold_notify_type,
 
-            monthly_traffic_threshold:              this.form.controls['monthly_traffic_threshold'].value * 1024 * 1024,
+            monthly_traffic_threshold:              this.form.controls['monthly_traffic_threshold'].value,
             block_sim_monthly:                      this.gsm.sim_tm_status.block_sim_monthly,
             monthly_traffic_threshold_notify_type:  this.gsm.monthly_traffic_threshold_notify_type,
 
-            total_traffic_threshold:                this.form.controls['total_traffic_threshold'].value * 1024 * 1024,
+            total_traffic_threshold:                this.form.controls['total_traffic_threshold'].value,
             block_sim_total:                        this.gsm.sim_tm_status.block_sim_total,
             total_traffic_threshold_notify_type:    this.gsm.total_traffic_threshold_notify_type,
 
@@ -422,6 +427,23 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
     }
 
 
+    onFilterCDR(page: number = 0): void {
+        this.tyrionBackendService.simGetCrdRecords(page, {
+            gsm_ids: [this.gsm.id],
+            project_id: this.project_id,
+            count_on_page: 50
+        })
+            .then((cdrs: IGSMCDRList) => {
+                this.cdrs = cdrs;
+                this.unblockUI();
+            })
+            .catch((reason: IError) => {
+                this.fmError(reason);
+                this.unblockUI();
+            });
+    }
+
+
     refresh(): void {
         console.info('ProjectsProjectGSMSGSMComponent::Refresh');
         this.tyrionBackendService.simGet(this.sim_id)
@@ -431,9 +453,9 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
 
                 /* tslint:disable:max-line-length */
                 let input: { [key: string]: any } = {
-                    'total_traffic_threshold': [this.gsm.sim_tm_status.total_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.total_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-                    'monthly_traffic_threshold': [this.gsm.sim_tm_status.monthly_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.monthly_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
-                    'daily_traffic_threshold': [this.gsm.sim_tm_status.daily_traffic_threshold ? this.onMathRound(this.gsm.sim_tm_status.daily_traffic_threshold) : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+                    'total_traffic_threshold': [this.gsm.sim_tm_status.total_traffic_threshold ?     this.gsm.sim_tm_status.total_traffic_threshold : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+                    'monthly_traffic_threshold': [this.gsm.sim_tm_status.monthly_traffic_threshold ? this.gsm.sim_tm_status.monthly_traffic_threshold : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
+                    'daily_traffic_threshold': [this.gsm.sim_tm_status.daily_traffic_threshold ?     this.gsm.sim_tm_status.daily_traffic_threshold : 0, [Validators.required, BeckiValidators.number, Validators.maxLength(12)]],
                 };
                 /* tslint:enable:max-line-length */
 
@@ -444,15 +466,6 @@ export class ProjectsProjectGSMSGSMComponent extends _BaseMainComponent implemen
                 this.fmError(reason);
                 this.unblockUI();
             });
-    }
-
-    onMathRound(num: number): string {
-
-        if (num === 0) {
-            return '0';
-        }
-
-        return '' + Math.round((num / 1024 / 1024) * 100) / 100;
     }
 
     onDrobDownEmiter(action: string, object: any): void {

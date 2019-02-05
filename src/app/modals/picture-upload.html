@@ -17,15 +17,16 @@
 
                 <div class="file-select">
                     <div>{{'label_select_avatar'|bkTranslate:this}}</div>
-                    <input type="file" (change)="cropperFileChangeListener($event)" accept="image/*">
+                    <input type="file" (change)="cropperFileChangeListener($event)" accept="image/*" style="width: 100%">
                 </div>
+
                 <div class="loading" *ngIf="cropperLoaded && !cropperData.image"> {{'loading'|bkTranslate:this}} </div>
                 <img-cropper #cropper [image]="cropperData" [settings]="cropperSettings" [style.display]="(cropperLoaded && cropperData.image)?'block':'none'"></img-cropper>
 
                 <div class="clearfix margin-top-10"></div>
             </div>
         </form>
-
+        <div *ngIf="single_error_status != null" class="text-center"> <span class="font-red-flamingo bold">{{single_error_status}}</span> </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>

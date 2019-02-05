@@ -7,6 +7,9 @@
 
         <form [formGroup]="form">
 
+            <bk-form-input [control]="form.controls['name']" [label]="'label_name'|bkTranslate:this"></bk-form-input>
+            <bk-form-input [control]="form.controls['description']" [label]="'label_description'|bkTranslate:this"></bk-form-input>
+
             <!-- Select Hardware Group -->
             <div class="row">
                 <div class="col-md-12">
@@ -38,7 +41,9 @@
                             <span [innerHTML]="'label_select'|bkTranslate:this"></span><br>
                             <span class="cursor-hand" [class.bold]="type == 'firmware'"
                                   [class.font-color-code]="type == 'firmware'" (click)="set_firmware()"
-                                  [innerHTML]="'label_firmware_title'|bkTranslate:this"></span> / <span class="cursor-hand" [class.font-color-code]="type == 'bootloader'"  [class.bold]="type == 'bootloader'" (click)="set_bootloader()" [innerHTML]="'label_bootloader_title'|bkTranslate:this"></span>
+                                  [innerHTML]="'label_firmware_title'|bkTranslate:this"></span>
+                             or
+                            <span class="cursor-hand" [class.font-color-code]="type == 'bootloader'"  [class.bold]="type == 'bootloader'" (click)="set_bootloader()" [innerHTML]="'label_bootloader_title'|bkTranslate:this"></span>
                         </h4>
                         <br>
                     </div>

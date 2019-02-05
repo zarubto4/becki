@@ -25,7 +25,7 @@
                               btn_tag: 'edit_Instance'
                           },
                           {
-                              condition: (tab == 'overview' && instance.current_snapshot && instance.online_state != 'SHUT_DOWN'),
+                              condition: (tab == 'overview' && instance.current_snapshot != null && instance.server),
                               btn_label_for_person: ('label_deactivate_instance'|bkTranslate:this),
                               icon: 'fa-plus-circle',
                               colorType: 'DEACTIVE',
@@ -33,28 +33,12 @@
                               btn_tag: 'deactivate_instance'
                           },
                           {
-                              condition: (tab == 'overview' && instance.current_snapshot && instance.online_state == 'SHUT_DOWN' ),
-                              btn_label_for_person: ('label_activate_instance'|bkTranslate:this),
-                              icon: 'fa-plus-circle',
-                              colorType: 'ACTIVE',
-                              permission: instance.update_permission,
-                              btn_tag: 'active_instance'
-                          },
-                          {
-                              condition: ((tab === 'overview' || tab === 'editor') && instance.snapshots != null && instance.snapshots.length > 0),
+                              condition: ((tab === 'overview' || tab === 'editor') && instance.snapshots && instance.snapshots.length > 0),
                               btn_label_for_person: ('btn_deploy_snapshot'|bkTranslate:this),
                               icon: 'fa-upload',
                               colorType: 'ACTIVE',
                               permission: instance.update_permission,
                               btn_tag: 'deploy_snapshot'
-                          },
-                          {
-                              condition: (tab === 'overview'),
-                              btn_label_for_person: ('btn_select_cloud_version'|bkTranslate:this),
-                              icon: 'fa-plus-circle',
-                              colorType: 'UPDATE',
-                              permission: instance.update_permission,
-                              btn_tag: 'change_version_instance'
                           },
                           {
                               condition: (tab == 'editor'),
@@ -209,10 +193,10 @@
                                           (onClick)="onPortletClick($event)">
                         </bk-portlet-title>
                         <div class="portlet-body margin-left-15 margin-top-15">
-                            <div>
+                            <div *ngIf="instance.server">
                                 <div>
                                     <span [innerHTML]="'label_server_name'|bkTranslate:this"></span>:
-                                    {{instance.server.name}}
+                                    <strong>{{instance.server.name}}</strong>
                                 </div>
                                 <div>
                                     <span [innerHTML]="'label_server_description'|bkTranslate:this"></span>:
@@ -237,11 +221,11 @@
                             <div *ngIf="instance.current_snapshot">
                                 <div>
                                     <span [innerHTML]="'label_instance_version_name'|bkTranslate:this"></span>:
-                                    {{instance.current_snapshot.name}}
+                                    <strong>{{instance.current_snapshot.name}}</strong>
                                 </div>
                                 <div>
                                     <span [innerHTML]="'label_instance_version_description'|bkTranslate:this"></span>:
-                                    {{instance.current_snapshot.b_program_version.description}}
+                                    <strong>{{instance.current_snapshot.b_program_version.description}}</strong>
                                 </div>
                                 <div class="margin-left-15 margin-top-15 margin-bottom-15">
                                     <div>
@@ -251,22 +235,22 @@
                                     <div>
                                         <span
                                             [innerHTML]="'label_b_program_version_description'|bkTranslate:this"></span>:
-                                        {{instance.current_snapshot.b_program_version.description}}
+                                        <strong>{{instance.current_snapshot.b_program_version.description}}</strong>
                                     </div>
                                 </div>
                                 <div>
                                     <span [innerHTML]="'label_created'|bkTranslate:this"></span>:
-                                    {{instance.current_snapshot.created|bkUnixTimeToDate}}
+                                    <strong>{{instance.current_snapshot.created|bkUnixTimeToDate}}</strong>
                                 </div>
                                 <div>
                                     <span [innerHTML]="'label_deployed'|bkTranslate:this"></span>:
-                                    {{instance.current_snapshot.deployed|bkUnixTimeToDate}}
+                                    <strong>{{instance.current_snapshot.deployed|bkUnixTimeToDate}}</strong>
                                 </div>
                                 <br>
-                                <div>
-                                    <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>:
-                                    <bk-online-state [online_state]="instance.online_state"></bk-online-state>
-                                </div>
+                            </div>
+                            <div>
+                                <span [innerHTML]="'label_instance_status'|bkTranslate:this"></span>:
+                                <bk-online-state [online_state]="instance.online_state"></bk-online-state>
                             </div>
 
                         </div>
@@ -297,14 +281,14 @@
                                 12)}}</a>
                         </td>
                         <td class="vert-align  text-center ">{{procedure.created|bkUnixTimeToDate}}</td>
-                        <td class="vert-align  text-center">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                        <td class="vert-align  text-center">{{procedure.planned|bkUnixTimeToDate}}</td>
                         <td class="vert-align  text-center">
-                            <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                            <span *ngIf="procedure.finished == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
                             <span
-                                *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                                *ngIf="procedure.finished != null">{{procedure.finished|bkUnixTimeToDate}}</span>
                         </td>
                         <td class="vert-align  text-center">
-                            <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
+                            <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.state_complete}}/{{procedure.procedure_size_all}}</span>
                             <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 "
                                   class="bold">-/-</span>
                         </td>

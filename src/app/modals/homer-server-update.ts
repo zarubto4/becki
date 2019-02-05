@@ -4,13 +4,16 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { BeckiValidators } from '../helpers/BeckiValidators';
 import { IHomerServer } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { IAvailableVersion } from '../backend/HomerAPI';
+import { IAvailableVersion, IVersionOverview } from '../backend/HomerAPI';
 import { NotificationService } from '../services/NotificationService';
+import { TranslationService } from '../services/TranslationService';
 import { IError } from '../services/_backend_class/Responses';
 
 

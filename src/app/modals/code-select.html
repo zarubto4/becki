@@ -112,13 +112,22 @@
         </div>
 
 
-        <div *ngIf="errorMessage">
-            <span class="font-red bold">{{errorMessage}}</span>
+        <!-- Send Manual File -->
+        <hr>
+        <div [hidden]="modalModel.selected_c_program != null" class="file-select center">
+            <div><span [innerHTML]="'label_select_file'|bkTranslate:this"></span></div>
+            <input type="file" (change)="fileChangeListener($event)" [placeholder]="'Upload file'" accept="*">
         </div>
+
+        <div *ngIf="errorMessage">
+            <span class="font-red bold center">{{errorMessage}}</span>
+        </div>
+
     </div>
     <div class="modal-footer">
         <button *ngIf="modalModel.selected_c_program && modalModel.already_selected_code_for_version_change == null" type="button" class="btn default red" style="float: left;" (click)="onBack()"><i class="fa fa-arrow-left"></i> </button>
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>
+        <button [disabled]="(modalModel.selected_c_program === null && modalModel.selected_c_program_version === null) && (modalModel.file === null)"
+                type="button" class="btn green" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>
     </div>
 </div>

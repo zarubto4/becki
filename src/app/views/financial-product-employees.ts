@@ -4,7 +4,7 @@
  */
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { IProduct, IEmployee } from '../backend/TyrionAPI';
+import { IProduct, IEmployee, IProductExtension } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsMembersAddModel } from '../modals/members-add';

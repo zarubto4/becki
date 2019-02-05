@@ -16,10 +16,17 @@ export class UnixTimeFormatPipe implements PipeTransform {
     transform(unixtime: number, format: string = 'LLLL'): string {
 
         // Tim in second
+        // 15 44 97 46 41
         if (unixtime < 9999999999) {
             unixtime = unixtime * 1000;
         }
 
-        return moment(unixtime * 1000).format(format);
+        console.log('UnixTimeFormatPipe:: ', unixtime);
+        console.log('UnixTimeFormatPipe:: ', moment(unixtime).format(format));
+        console.log('UnixTimeFormatPipe:: ', moment(unixtime).format('LLLL'));
+        console.log('UnixTimeFormatPipe:: ', moment(unixtime).format('L'));
+        console.log('UnixTimeFormatPipe:: ', moment(unixtime).format('L'));
+
+        return moment(unixtime).format('LLLL');
     }
 }

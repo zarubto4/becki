@@ -92,4 +92,8 @@ export class ModalsProjectPropertiesComponent implements OnInit {
     onCancelClick(): void {
         this.modalClose.emit(false);
     }
+
+    onPrintTagsClick(){
+        console.log(this.form.controls['tags'].value);
+    }
 }

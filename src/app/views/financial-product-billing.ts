@@ -8,7 +8,7 @@
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { ICustomer, IProduct } from '../backend/TyrionAPI';
+import { ICustomer, IContact, IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ContactFormData } from '../components/ContactFormComponent';
 import { IError } from '../services/_backend_class/Responses';

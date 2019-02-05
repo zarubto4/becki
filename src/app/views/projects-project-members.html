@@ -16,7 +16,7 @@
         (onClick)="onMembersAddClick()"
         [btns]="[
                 {
-                    condition: (project && project.invitations.length > 0),
+                    condition: (project && invitations.length > 0),
                     btn_label_for_person: ('btn_add_members'|bkTranslate:this),
                     colorType: 'ADD',
                     icon: 'fa-plus-circle',
@@ -31,60 +31,81 @@
     <div class="portlet-body">
 
         <!-- Page Content -- START -->
-        <h3 class="margin-top-30" *ngIf="(project && project.participants.length > 1)">Active Users</h3>
-        <div *ngIf="(project && project.participants.length > 1)">
-            <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
+
+
+        <div *ngIf="(project && securityRoleList && securityRoleList.content.length > 1 && activeMembers > 1)">
+            <h3 class="margin-top-30">Active Users</h3>
+            <table class="table table-hover table-light table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'label_email'|bkTranslate:this}}</th>
-                    <th class="">{{'table_name'|bkTranslate:this}}</th>
-                    <th class="">{{'table_state'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_state'|bkTranslate:this}}</th>
                     <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody class="hide-bk-drob-down-button">
-                <tr *ngFor="let member of project.participants">
-                    <td class="vert-align no-wrap">{{member.email}}</td>
-                    <td class="vert-align no-wrap">{{member.full_name}}</td>
-                    <td class="vert-align no-wrap">{{readableState(member.state)}}</td>
-                    <td class="action-btn-col">
-                        <bk-drob-down-button
-                            [btns_group_name]="('label_settings'|bkTranslate:this)"
-                            [btns]="[
+
+                <ng-template ngFor let-role="$implicit" [ngForOf]="securityRoleList.content">
+
+                    <tr *ngFor="let member of role.persons">
+                        <td class="vert-align no-wrap">{{member.email}}</td>
+                        <td class="vert-align no-wrap text-center">{{member.first_name + ' ' + member.last_name}}</td>
+                        <td class="vert-align no-wrap text-center">{{role.name}}</td>
+                        <td class="vert-align no-wrap"></td>
+                        <td class="action-btn-col">
+                            <bk-drob-down-button
+                                [btns_group_name]="('label_settings'|bkTranslate:this)"
+                                [btns]="[
                                 {
                                     condition: (member.id != selfId),
                                     btn_label_for_person: ('label_remove_member'|bkTranslate:this),
                                     btn_tag: 'remove_member',
                                     icon: 'fa fa-trash',
                                     colorType: 'REMOVE',
-                                    permission: project.update_permission
+                                    permission: (role.update_permission)
                                 }
                             ]"
-                            (onValueChanged)="onDrobDownEmiter($event, member)"
-                        >
-                        </bk-drob-down-button>
+                                (onValueChanged)="onDrobDownEmiter($event, member)"
+                            >
+                            </bk-drob-down-button>
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+
+                </ng-template>
+
                 </tbody>
             </table>
         </div>
 
-        <hr class="margin-top-30" *ngIf="(project && project.invitations.length > 0 && project.participants.length > 1)">
-        <h3 *ngIf="(project && project.invitations.length > 0)">Invited Users</h3>
-        <div *ngIf="(project && project.invitations.length > 0)">
+
+        <div *ngIf="(project && invitations && invitations.length > 0)">
+            <hr class="margin-top-30" *ngIf="securityRoleList &&  activeMembers > 1">
+            <h3 *ngIf="(project && invitations.length > 0)">Invited Users</h3>
+
             <table class="table table-hover table-light   table-scrollable table-scrollable-borderless">
                 <thead>
                 <tr>
                     <th class="">{{'label_email'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_invited'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_who_invite'|bkTranslate:this}}</th>
                     <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody class="hide-bk-drob-down-button">
-                <tr *ngFor="let invitation of project.invitations">
-                    <td class="vert-align no-wrap">
+                <tr *ngFor="let invitation of invitations">
+                    <td class="vert-align">
                         {{invitation.email}}
                         <span *ngIf="invitation.invited_person">{{invitation.invited_person.first_name + ' ' +invitation.invited_person.last_name}}</span>
+                    </td>
+                    <td class="vert-align text-center">
+                        {{invitation.created|bkUnixTimeToDate}}
+                    </td>
+                    <td class="vert-align text-center">
+                        <span *ngIf="invitation.who_invite">
+                             {{invitation.who_invite.email + ' (' + invitation.who_invite.first_name + ' ' + invitation.who_invite.last_name + ')'}}
+                        </span>
                     </td>
                     <td class="action-btn-col">
                         <bk-drob-down-button
@@ -96,7 +117,7 @@
                                     btn_tag: 'remove_invitation',
                                     icon: 'fa fa-trash',
                                     colorType: 'REMOVE',
-                                    permission: project.update_permission
+                                    permission: invitation.update_permission
                                 },
                                 {
                                     condition: (true),
@@ -104,7 +125,7 @@
                                     btn_tag: 'send_invitation',
                                     icon: 'fa-envelope',
                                     colorType: 'CREATE',
-                                    permission: project.update_permission
+                                    permission: invitation.update_permission
                                 }
                             ]"
                             (onValueChanged)="onDrobDownEmiter($event, invitation)"
@@ -120,8 +141,8 @@
 
         <!-- Temporary page content if content is being loaded or if there is no content -- START -->
         <!-- Admin is always in Project -->
-        <bk-nothing-to-show [condition_loading]="(project == null)"
-                            [condition_empty]="(project != null && ( project.participants.length < 2 && project.invitations.length == 0))"
+        <bk-nothing-to-show [condition_loading]="(project == null || invitations == null)"
+                            [condition_empty]="(project != null && invitations && ( activeMembers < 2 && invitations.length == 0))"
                             [main_message_link]="'no_persons_in_this_projects'|bkTranslate:this"
                             [main_message_comment_link]="'no_persons_in_this_projects_comment'|bkTranslate:this"
                             [btn_label]="'btn_add_members'|bkTranslate:this"

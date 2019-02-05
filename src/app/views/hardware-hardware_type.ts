@@ -287,7 +287,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
     }
 
     onBootloaderUpdateFile(bootloader: IBootLoader) {
-        let model = new ModalsFileUploadModel('Bootloader', this.translate('label_bootloader_comment'), ['.bin', '.png']);
+        let model = new ModalsFileUploadModel('Bootloader', this.translate('label_bootloader_comment'), ['.bin']);
 
         this.modalService.showModal(model).then((success) => {
             if (success) {

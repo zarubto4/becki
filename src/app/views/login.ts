@@ -100,7 +100,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
                 // Special exception when verifying errors manually because I do not leave a bug to be notified with "Notification"
                 if (reason['code'] === 705) {
-                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null);
+                    this.loginError = this.translationService.translate('msg_login_resend_verification', this, null);
                     this.resendVertification = true;
                     return;
                 }
@@ -145,7 +145,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.blockUIService.unblockUI();
                 this.redirect(url);
             })
-            .catch(reason => {
+            .catch((reason: IError) => {
                 this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('msg_login_error', this), reason));
                 this.blockUIService.unblockUI();
 

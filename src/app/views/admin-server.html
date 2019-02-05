@@ -52,9 +52,8 @@
 
         <div *ngIf="tab == 'homer_server'">
 
-            <div *ngIf="(homer_servers && homer_servers.content.length > 0)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light  ">
+            <div *ngIf="(homer_servers && homer_servers.content.length > 0)">
+                <table class="table table-hover table-light table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'label_server_name'|bkTranslate:this}}</th>
@@ -142,13 +141,13 @@
 
         <div *ngIf="tab == 'compilation_server'">
 
-            <div *ngIf="(compilations_servers && compilations_servers.length > 0)"
-                 class="table-scrollable table-scrollable-borderless">
-                <table class="table table-hover table-light  ">
+            <div *ngIf="(compilations_servers && compilations_servers.length > 0)">
+                <table class="table table-hover table-light table-scrollable table-scrollable-borderless">
                     <thead>
                     <tr>
                         <th class="">{{'label_server_name'|bkTranslate:this}}</th>
                         <th class="">{{'label_id'|bkTranslate:this}}</th>
+                        <th class="">{{'label_server_url'|bkTranslate:this}}</th>
                         <th class="">{{'label_status'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
@@ -163,6 +162,7 @@
                         </td>
 
                         <td class="vert-align breakable">{{compilations_server.id}}</td>
+                        <td class="vert-align breakable">{{compilations_server.server_url}}</td>
 
                         <td class="vert-align no-wrap">
                             <bk-online-state [online_state]="compilations_server.online_state"></bk-online-state>

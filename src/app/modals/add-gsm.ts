@@ -7,7 +7,7 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
-import { IGSM } from '../backend/TyrionAPI';
+import { IGSM, IResultBadRequest, IResultInvalidBody } from '../backend/TyrionAPI';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
 import { FlashMessage, NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
@@ -121,7 +121,8 @@ export class ModalsAddGSMComponent  implements OnInit {
 
         let data: string = this.multiForm.controls['listOfIds'].value;
 
-        data = data.replace(',', ';');
+        data = data.replace(/,/g, ';');
+
         data = data.replace(/\s+/g, '');
         data = data.replace(/(\r?\n|\r)*(\s)*/g, '');
 

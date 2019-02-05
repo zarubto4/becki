@@ -9,7 +9,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IBlock, IBlockList } from '../backend/TyrionAPI';
+import { IProject, IBlock, IBlockList } from '../backend/TyrionAPI';
 import { ModalsBlocksBlockPropertiesModel } from '../modals/blocks-block-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsBlockoBlockCopyModel } from '../modals/blocko-block-copy';

@@ -151,7 +151,6 @@ export class ModalsBlockSelectComponent implements OnInit {
                     this.notificationService.fmError(reason);
                     this.errorMessage = reason.message;
                 });
-
         }
     }
 

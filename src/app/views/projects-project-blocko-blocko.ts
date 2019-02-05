@@ -1,4 +1,5 @@
 import { ModalsSelectCodeModel } from '../modals/code-select';
+import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
@@ -195,7 +196,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 }
             })
             .catch((reason: IError) => {
-                this.fmError(reason);
             });
     }
 
@@ -211,7 +211,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
             })
             .catch((reason: IError) => {
-                this.fmError(reason);
             });
     }
 
@@ -230,7 +229,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
 
             })
             .catch((reason: IError) => {
-                this.fmError(reason);
             });
     }
 
@@ -258,7 +256,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 }
             })
             .catch((reason: IError) => {
-                this.fmError(reason);
             });
     }
 
@@ -291,7 +288,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 });
             })
             .catch((reason: IError) => {
-                this.fmError(reason);
             });
     }
 
@@ -452,7 +448,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 });
             })
             .catch((reason: IError) => {
-                this.fmError(reason);
             });
     }
 
@@ -490,7 +485,6 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                 });
             })
             .catch((reason: IError) => {
-                this.fmError(reason);
 
             });
     }
@@ -573,7 +567,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     this.consoleLog.clear();
                 }
 
-                this.fileDownloaderService.download(this.selectedProgramVersion.program)
+                this.fileDownloaderService.download(this.selectedProgramVersion.link_to_download)
                     .then((program) => {
                         this.blockoView.setDataJson(program);
 

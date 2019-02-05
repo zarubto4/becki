@@ -20,6 +20,7 @@
         </form>
     </div>
     <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onPrintTagsClick()">TAGS</button>
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
         <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">
             {{(modalModel.project?"btn_update":"btn_add")|bkTranslate:this}}

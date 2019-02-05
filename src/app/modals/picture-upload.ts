@@ -7,6 +7,7 @@ import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angu
 import { FlashMessage, NotificationService } from '../services/NotificationService';
 import { ModalModel } from '../services/ModalService';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
+import { TranslationService } from '../services/TranslationService';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { TyrionBackendService } from '../services/BackendService';
 
@@ -37,6 +38,8 @@ export class ModalsPictureUploadComponent implements OnInit {
 
     cropperLoaded = false;
 
+    single_error_status: string = null;
+
     @Input()
     cropSettings: CropperSettings = null;
 
@@ -51,7 +54,7 @@ export class ModalsPictureUploadComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, protected notificationService: NotificationService, ) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, protected notificationService: NotificationService, private translationService: TranslationService) {
         this.form = this.formBuilder.group({
             'defaultPicture': [''],
             'avatar_picture': [''],
@@ -84,10 +87,11 @@ export class ModalsPictureUploadComponent implements OnInit {
     cropperFileChangeListener($event: any) {
         let image = new Image();
         let file: File = $event.target.files[0];
-        if (file) {
+        if (file && file.size < 3000000) {
             let myReader: FileReader = new FileReader();
             myReader.addEventListener('load', () => {
                 image.addEventListener('load', () => {
+                    this.single_error_status = null;
                     if (image.width < 50 || image.height < 50) {
 
                         this.notificationService.fmErrorFromString('Image is too small.');
@@ -111,6 +115,7 @@ export class ModalsPictureUploadComponent implements OnInit {
             myReader.readAsDataURL(file);
             this.saved = false;
         } else {
+            this.single_error_status = this.translationService.translate('image_is_too_big', this);
             this.cropperLoaded = false;
         }
     }

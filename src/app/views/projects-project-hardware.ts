@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageSuccess } from '../services/NotificationService';
+import {  FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -122,7 +122,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                         this.onFilterHardware();
                     });
             }
-        }).catch((reason) => {
+        }).catch((reason: IError) => {
             this.onFilterHardware();
         });
     }
@@ -363,7 +363,11 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
 
                 this.devicesFilter.content.forEach((device, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
+
+                        console.info('Change online state on Hardware model', status.model, 'id:', status.model_id);
+
                         if (status.model === 'Hardware' && device.id === status.model_id) {
+                            console.info('Change online state on Hardware');
                             device.online_state = status.online_state;
                         }
                     });
@@ -414,12 +418,14 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             return;
         }
 
-        let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, this.deviceGroup);
+        let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, '', '', this.deviceGroup);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.tyrionBackendService.actualizationProcedureMake({
+                this.tyrionBackendService.hardwareReleaseUpdateMake({
+                    name: model.name,
+                    description: model.description,
                     firmware_type: model.firmwareType,
-                    hardware_group_id: model.deviceGroupStringIdSelected,
+                    hardware_group_ids: [model.deviceGroupStringIdSelected],
                     project_id: this.projectId,
                     time: model.time,
                     hardware_type_settings: model.groups,

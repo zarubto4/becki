@@ -5,11 +5,12 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
+import { FlashMessageError } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
-import { IProject, IActualizationProcedureList, IUpdateProcedure, IHardwareGroupList } from '../backend/TyrionAPI';
+import { IProject, IHardwareUpdateList, IHardwareGroupList, IHardwareUpdate, IHardwareReleaseUpdate, IHardwareReleaseUpdateList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
-import { FilterTypesValues } from './projects-project-hardware-hardware';
+import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
 import { FormGroup } from '@angular/forms';
 import { IError }  from '../services/_backend_class/Responses';
 
@@ -37,14 +38,13 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
 
 
     deviceGroup: IHardwareGroupList = null;
-    actualizationFilter: IActualizationProcedureList = null;
+    releaseList: IHardwareReleaseUpdateList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by _BaseMainComponent
 
     formFilterGroup: FormGroup;
 
     filterUpdateValues = new FilterUpdateStates();
-    filterTypesValues = new FilterTypesValues();
 
     tab: string = 'updates';
 
@@ -80,7 +80,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
     onToggleTab(tab: string) {
         this.tab = tab;
 
-        if (tab === 'updates' && this.actualizationFilter == null) {
+        if (tab === 'updates' && this.releaseList == null) {
             this.onFilterActualizationProcedure();
         }
 
@@ -102,10 +102,6 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             this.filterUpdateValues[filter.key] = filter.value;
         }
 
-        if (this.filterTypesValues.hasOwnProperty(filter.key)) {
-            this.filterTypesValues[filter.key] = filter.value;
-        }
-
         this.onFilterActualizationProcedure();
     }
 
@@ -121,32 +117,23 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             }
         }
 
-        let type_list: string[] = [];
-        Object.keys(this.filterTypesValues).forEach((propKey) => {
-
-            if (this.filterTypesValues[propKey].value === true) {
-                type_list.push(propKey);
-            }
-        });
-
         this.blockUI();
-        this.tyrionBackendService.actualizationProcedureGetByFilter(pageNumber, {
+        this.tyrionBackendService.hardwareReleaseUpdateGetByFilter(pageNumber, {
             project_id: this.projectId,
-            update_states: <any> state_list,
-            type_of_updates: <any>  type_list
+            states: <any> state_list
         })
             .then((values) => {
-                this.actualizationFilter = values;
+                this.releaseList = values;
 
-                this.actualizationFilter.content.forEach((procedure, index, obj) => {
+                this.releaseList.content.forEach((procedure, index, obj) => {
                     this.tyrionBackendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'ActualizationProcedure' && procedure.id === status.model_id) {
 
-                            this.tyrionBackendService.actualizationProcedureGet(procedure.id)
-                                .then((value) => {
+                            this.tyrionBackendService.hardwareReleaseUpdateGet(procedure.id)
+                                .then((value: IHardwareReleaseUpdate) => {
                                     procedure.state = value.state;
-                                    procedure.procedure_size_complete = value.procedure_size_complete;
-                                    procedure.date_of_finish = value.date_of_finish;
+                                    procedure.state_complete = value.state_complete;
+                                    procedure.finished = value.finished;
                                 })
                                 .catch((reason: IError) => {
                                     this.fmError(reason);
@@ -166,8 +153,8 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
 
     // Actualization Procedure -----------------------------------------------------------------------------------------
 
-    onUpdateProcedureCancelClick(procedure: IUpdateProcedure): void {
-        this.tyrionBackendService.actualizationProcedureCancel(procedure.id)
+    onUpdateProcedureCancelClick(procedure: IHardwareReleaseUpdate): void {
+        this.tyrionBackendService.hardwareReleaseUpdateCancel(procedure.id)
             .then(() => {
                 this.unblockUI();
                 this.onFilterActualizationProcedure();
@@ -178,7 +165,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             });
     }
 
-    onUpdateProcedureUpdateClick(procedure: IUpdateProcedure): void {
+    onUpdateProcedureUpdateClick(procedure: IHardwareReleaseUpdate): void {
         // TODO
     }
 
@@ -204,12 +191,15 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             return;
         }
 
-        let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, this.deviceGroup);
+        let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, '', '', this.deviceGroup);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.tyrionBackendService.actualizationProcedureMake({
+                this.tyrionBackendService.hardwareReleaseUpdateMake({
+                    name: model.name,
+                    description: model.description,
                     firmware_type: model.firmwareType,
-                    hardware_group_id: model.deviceGroupStringIdSelected,
+                    hardware_group_ids: [ model.deviceGroupStringIdSelected ],
+                    hardware_ids: [],
                     project_id: this.projectId,
                     time: model.time,
                     hardware_type_settings: model.groups,

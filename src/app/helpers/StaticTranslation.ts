@@ -347,6 +347,8 @@ export class StaticTranslation {
                 'label_picture': 'Picture',
                 'label_unsaved': '(not saved)',
                 'label_select_avatar': 'Select file',
+                'image_is_too_big': 'Soubor je větší než 3MB.',
+
 
             }, 'ModalsDeviceEditDescriptionComponent': {
                 'title': '<strong class="font-color-hardware">Hardware</strong> basic Properties',
@@ -1066,7 +1068,7 @@ export class StaticTranslation {
                 'btn_login': 'Login',
                 'btn_resend': 'Resend',
                 'msg_login_user_cant_login': 'The user could not be logged in.',
-                'msg_login_resend_vertification': 'Press the resend button to send verification E-mail again',
+                'msg_login_resend_verification': 'Press the resend button to send verification E-mail again',
                 'msg_login_error': 'Error has occurred, when trying to log in.',
                 'msg_login_email_sent': 'Verification E-mail was sent',
 
@@ -1102,7 +1104,9 @@ export class StaticTranslation {
             }, 'ModalsUpdateReleaseFirmwareComponent': {
                 'title': 'Firmware Release Settings',
                 'label_hw_group_title': '<strong class="font-color-hardware">HARDWARE</strong> Groups',
-                'label_select': 'Select',
+                'label_select': 'Please, select one:',
+                'label_name': 'Name',
+                'label_description': 'Description',
                 'label_hardware_group': 'Hardware Group',
                 'label_firmware_title': 'FIRMWARE',
                 'label_bootloader_title': 'BOOTLOADER',
@@ -1279,6 +1283,8 @@ export class StaticTranslation {
                 'filter_hardware_type': '<strong class="font-color-hardware">HARDWARE</strong>Type',
                 'label_no_code': 'No <strong class="font-color-code">CODE</strong> Programs',
                 'label_no_code_comment': 'Unfortunately we did not find anything... We came to the same conclusion as in your live...',
+                'label_no_file_or_version_selected': 'Select File Or Program with Version!',
+                'label_select_file': 'Select Bin file for manual <strong class="font-color-hardware">HARDWARE</strong> update',
 
             }, 'ModalsBlockSelectComponent': {
 
@@ -1538,7 +1544,7 @@ export class StaticTranslation {
                 'table_id': 'Update ID',
                 'table_program': 'Program',
                 'table_started': 'Created',
-                'table_planed': 'Planed',
+                'table_planned': 'Planed',
                 'table_finished': 'Finished',
                 'table_type': 'Update type',
                 'table_progress': 'Progress',
@@ -1551,6 +1557,10 @@ export class StaticTranslation {
                 'flash_edit_device_success': 'Device information was updated.',
                 'flash_device_restart_success': 'Restart command was successful',
                 'flash_remove_device_success': 'Device has been removed.',
+                'flash_remove_device_fail': 'Device could not be removed, ',
+                'flash_cant_update_bootloader': 'Unable to update Bootloader',
+                'flash_cant_update_firmware': 'Unable to update Bootloader.',
+                'flash_cant_edit_backup_mode': 'Device backup mode could not be changed, {0}.',
                 'flash_cant_connect': 'Something is wrong with server parameters, its not possible to subscribe logs form Device',
                 'flash_conection_failed': 'device connection failed',
                 'modal_unsubscribe_device': 'Are you sure you want to unsubribe {0}?\n (It can be subscribed again)',
@@ -1646,6 +1656,12 @@ export class StaticTranslation {
                 'label_weekly_report': 'Weekly Report',
                 'table_report_type': 'Report Period',
                 'table_report_sate': 'State',
+                'table_start_date': 'Start Date',
+                'table_end_date': 'End Date',
+                'table_msi_country': 'Country',
+                'table_operator': 'Operator',
+                'table_data_traffic': 'Traffic',
+                'table_cost': 'Cost',
 
             }, 'ProjectsProjectInstancesComponent': {
 
@@ -1665,12 +1681,13 @@ export class StaticTranslation {
                 'label_no_instances': 'No <strong class="font-color-cloud">Instances</strong> found in <strong class="font-color-cloud">CLOUD</strong>',
                 'label_no_instances_comment': 'If You already create <strong class="font-color-blocko">BLOCKO</strong>, you are ready to deploy it!',
                 'label_instance_documentation_description': '<p><strong class="font-color-cloud">INSTANCE</strong>  is a <strong>container</strong> for a running application created in the <strong class="font-color-blocko">BLOCKO</strong> editor.</p><p><strong class="font-color-cloud">CLOUD</strong> Server is a <strong>container manager</strong>.</p><p>The server handles Hardware via MQTT and applications connected via the websocket and passes data safely to the container and from the container to the end devices. Each container (<strong class="font-color-cloud">INSTANCE</strong>) is totally separate from others. The more the instance is computationally more demanding, the fewer the Server can handle.<br>You can have an <strong class="font-color-cloud">INSTANCE</strong> in restricted mode on a public server or <strong>on your own servers.</strong></p>',
-                'label_shutdown_instance': 'Shutdown instance',
+                'label_deactivate_instance': 'Shutdown instance',
                 'label_upload_latest_used_version': 'Upload Latest Configuration to Cloud',
                 'label_start': 'Start instance',
                 'label_instance_properties': 'Instance properties',
                 'label_own_name_and_description': 'You can set your own name and description',
                 'btn_create_instance': 'Create Instance',
+                'btn_deploy_snapshot': 'Deploy Some Snapshot',
                 'label_shut_down_instance_modal': 'Permanently shut down <strong class="font-color-instance">INSTANCE</strong> ',
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
                 'label_instance_remove': 'Remove instance',
@@ -1735,7 +1752,7 @@ export class StaticTranslation {
                 'label_shut_down_instance_modal_comment': ' <p> This <strong class="font-color-instance">INSTANCE</strong> will be turned off permanently. The <strong class="font-color-blocko">BLOCKO</strong> program stops working and all hardware will be unregistered from the instance. But All <strong class="font-color-code">CODE</strong> programs on the <strong class="font-color-hardware">HARDWARE</strong> will remain in the current / latest state.</p><p>The incomplete Actualization procedures for this instance will be immediately terminated. It is possible that another update will run, because is not possible to interrupt the ongoing <strong class="font-color-hardware">HARDWARE</strong> update. The <strong class="font-color-hardware">HARDWARE</strong> will be able to connect to another instance or update individually in a few seconds later.</p><p>The <strong class="font-color-instance">INSTANCE</strong> can be <strong>turned on at any time</strong> and everything will be restored.<br>A new Synchronization procedure will started to update / synchronize the <strong class="font-color-hardware">HARDWARE</strong> to the required state.</p>',
                 'label_no_api_keys': 'No Api Keys',
                 'label_no_api_keys_comment': 'Create New one, if you want use your <strong>Webhooks</strong> in this <strong class="font-color-instance">INSTANCE</strong>',
-                'label_instance_properties': 'properties',
+                'label_instance_properties': 'Properties',
                 'label_instance_name': 'Name',
                 'label_instance_description': 'Description',
                 'label_no_instance_history': 'No <strong class="font-color-instance">INSTANCE</strong> Snap Shots',
@@ -1763,7 +1780,7 @@ export class StaticTranslation {
                 'label_deployed': 'Deployed',
                 'label_running_to': 'Running until',
                 'label_deactivate_instance': 'Deactivated',
-                'label_activate_instance': 'Activated',
+                'label_activate_instance': 'Deploy snapshot',
                 'label_b_program_name': '<strong class="font-color-blocko">BLOCKO</strong> Program',
                 'label_b_program_description': 'Program description',
                 'label_b_program_version_name': '<strong class="font-color-blocko">BLOCKO</strong> Version name',
@@ -1923,6 +1940,8 @@ export class StaticTranslation {
                 'btn_add_members': 'Invite collaborators',
 
                 'table_name': 'Name',
+                'table_invited': 'Date of invitation',
+                'table_who_invite': 'Invited by',
                 'table_state': 'State',
                 'table_actions': 'Actions',
 
@@ -2026,19 +2045,21 @@ export class StaticTranslation {
                 'label_console_true': '<span class="bold font-red">true</span>',
                 'label_console_false': '<span class="bold font-blue"> false </span>',
                 'label_grid': 'GRID',
-                'label_program_versions': 'No <strong class="font-color-blocko">WIDGET</strong> version',
-                'label_program_versions_comment': 'Save your code first, and you will never see this screen again',
 
                 'table_name': 'Name',
                 'table_version_name': 'Name',
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
-                'table_status': 'Status',
+
+                'table_status' : 'Status',
 
                 'label_publish': 'Publish',
                 'label_publish_decision': 'Decide of Publish',
                 'label_version_set_as_main': 'Set as main',
+
+                'label_program_versions': 'No <strong class="font-color-blocko">WIDGET</strong> version',
+                'label_program_versions_comment': 'Save your code first, and you will never see this screen again',
 
             }, 'ProjectsProjectActualizationProceduresProcedureComponent': {
                 'title': 'Actualization Procedure',
@@ -2426,6 +2447,7 @@ export class StaticTranslation {
                 'label_different_password': 'Passwords do not match.',
                 'label_invalid_file_name': 'Invalid file/directory name.',
                 'label_field_only_number': 'This field only accepts numbers.',
+                'label_field_only_float_number': 'This field only accepts real numbers.',
                 'label_field_invalid_url': 'Invalid URL.',
                 'label_unknown_error': 'Unknown error.',
 
@@ -2623,6 +2645,7 @@ export class StaticTranslation {
                 'label_server_type': 'Server Type',
                 'label_server_url': 'Server Link',
                 'label_id': 'Id',
+                'table_actions': 'Actions',
                 'label_status': 'Status',
                 'label_actions': 'Actions',
                 'label_no_servers': 'No servers',
@@ -3020,8 +3043,8 @@ export class StaticTranslation {
             'type_of_update': {
                 'MANUALLY_BY_USER_INDIVIDUAL': 'Individual Update',
                 'MANUALLY_RELEASE_MANAGER': 'Release Manager',
-                'MANUALLY_BY_USER_BLOCKO_GROUP': 'Manually through <strong class="font-color-blocko">BLOCKO</strong>',
-                'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME': 'Scheduled through <strong class="font-color-blocko">BLOCKO</strong>',
+                'MANUALLY_BY_INSTANCE': 'Manually through <strong class="font-color-blocko">BLOCKO</strong>',
+                'AUTOMATICALLY_BY_INSTANCE': 'Scheduled through <strong class="font-color-blocko">BLOCKO</strong>',
                 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE': 'System up-to-date',
                 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'Critical patch',
             },
@@ -3060,22 +3083,14 @@ export class StaticTranslation {
 
             },
             'update_state': {
+                'IN_PLAN': 'Planed',
+                'PENDING': 'Pending',
+                'IN_PROGRESS': 'In Progress',
                 'COMPLETE': 'Completed',
                 'CANCELED': 'Cancelled',
-                'NOT_YET_STARTED': 'Waiting in que',
-                'IN_PROGRESS': 'Update is in progress',
+                'RUNNING': 'Update is in progress',
                 'OBSOLETE': 'Obsolete',
-                'NOT_UPDATED': 'Updated to wrong version.',
-                'WAITING_FOR_DEVICE': 'Waiting for the device to reconnect.',
-                'BIN_FILE_MISSING': 'Bin file not found.',
-                'CRITICAL_ERROR': 'Critical error',
-                'HOMER_SERVER_IS_OFFLINE': 'Server is offline.',
-                'INSTANCE_INACCESSIBLE': 'Instance is not accessible.',
-                'HOMER_SERVER_NEVER_CONNECTED': 'Never connected',
-                'COMPLETE_WITH_ERROR': 'Complete with error',
-                'SUCCESSFULLY_COMPLETE': 'Successfully completed',
-                'PROHIBITED_BY_CONFIG': 'Prohibited by config',
-                'NOT_START_YET': 'Not start yet',
+                'FAILED': 'Failed',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu
@@ -3083,12 +3098,6 @@ export class StaticTranslation {
                 'not_start_yet_description': 'TODO',
                 'in_progress_description': 'TODO',
                 'overwritten_description': 'TODO',
-                'not_updated_description': 'TODO',
-                'waiting_for_device_description': 'TODO',
-                'bin_file_not_found_description': 'TODO',
-                'critical_error_description': 'TODO',
-                'homer_server_is_offline_description': 'TODO',
-                'instance_inaccessible_description': 'TODO',
 
             }, 'hardware_device_id': {
                 'ALREADY_REGISTERED_IN_YOUR_ACCOUNT': 'Device is already registered with your account.',
