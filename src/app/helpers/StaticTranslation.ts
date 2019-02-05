@@ -2288,7 +2288,7 @@ export class StaticTranslation {
                 'tab_ide': 'IDE',
                 'tab_diff': 'Diff',
                 'tab_label_version': 'Saved Versions',
-                'tab_error_list': 'Build Errors',
+                'tab_error_list': 'Build Output',
                 'tab_online_terminal': 'Terminal',
                 'tab_versions': 'Versions',
                 'label_file_and_line': 'File: <b>{0}</b> Line: <b>{1}</b>',
