@@ -10,7 +10,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../services/NotificationService';
+import { FlashMessageSuccess, NotificationService } from '../services/NotificationService';
 import { TyrionBackendService } from '../services/BackendService';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
@@ -73,7 +73,7 @@ export class CreateUserComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/']);
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(reason.message));
+                this.notificationService.fmError(reason);
                 console.error('err ' + reason);
             });
     }

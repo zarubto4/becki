@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IPaymentDetails } from '../backend/TyrionAPI';
 import { ModalsPaymentDetailsModel } from '../modals/payment-details';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalService } from '../services/ModalService';
@@ -60,7 +60,7 @@ export class PaymentDetailsTableComponent  {
                         this.paymentDetailsChange.emit(paymentDetails);
                     })
                     .catch((reason: IError) => {
-                        this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_product_edit_error', this), reason));
+                        this.notificationService.fmError(reason);
                         this.blockUIService.unblockUI();
                     });
             }

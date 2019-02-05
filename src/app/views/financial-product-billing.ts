@@ -11,7 +11,6 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { ICustomer, IContact, IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ContactFormData } from '../components/ContactFormComponent';
-import { FlashMessageError } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';
 
 @Component({
@@ -39,7 +38,7 @@ export class FinancialProductBillingComponent extends _BaseMainComponent impleme
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_product_edit_error', this), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -67,7 +66,7 @@ export class FinancialProductBillingComponent extends _BaseMainComponent impleme
 
             this.unblockUI();
         }).catch((reason: IError) => {
-            this.fmError(this.translate('flash_fail'), reason);
+            this.fmError(reason);
             this.unblockUI();
         });
 

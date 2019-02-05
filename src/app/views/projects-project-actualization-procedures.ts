@@ -12,7 +12,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
 import { FilterStatesValues, FilterTypesValues } from './projects-project-hardware-hardware';
 import { FormGroup } from '@angular/forms';
-import { IError } from '../services/_backend_class/Responses';
+import { IError }  from '../services/_backend_class/Responses';
 
 
 export class FilterUpdateStates {
@@ -136,9 +136,8 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                                     procedure.finished = value.finished;
                                 })
                                 .catch((reason: IError) => {
-                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                    this.fmError(reason);
                                 });
-
                         }
                     });
                 });
@@ -147,7 +146,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -162,7 +161,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -187,7 +186,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                 })
                 .catch((reason: IError) => {
                     this.unblockUI();
-                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                    this.fmError(reason);
                 });
             return;
         }
@@ -212,7 +211,7 @@ export class ProjectsProjectActualizationProceduresComponent extends _BaseMainCo
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                        this.fmError(reason);
                     });
             }
         });

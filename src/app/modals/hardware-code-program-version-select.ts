@@ -12,7 +12,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import {
     ICProgram, ICProgramFilter, ICProgramList, ICProgramVersion, ILibrary, ILibraryVersion
 } from '../backend/TyrionAPI';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
 import { IError } from '../services/_backend_class/Responses';
 
@@ -54,7 +54,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
         }).then((p) => {
             this.codePrograms = p;
         }).catch((reason: IError) => {
-            this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+            this.notificationService.fmError(reason);
         });
     }
 
@@ -74,7 +74,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
                 this.programVersions = p.program_versions;
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
             });
     }
 

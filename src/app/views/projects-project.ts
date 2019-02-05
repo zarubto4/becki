@@ -4,7 +4,7 @@
  */
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -94,7 +94,7 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
                         this.unblockUI();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project'), reason));
+                        this.fmError(reason);
                         this.refresh();
                         this.unblockUI();
                     });
@@ -112,7 +112,7 @@ export class ProjectsProjectComponent extends _BaseMainComponent implements OnIn
                         this.router.navigate(['/projects']);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project'), reason));
+                        this.fmError(reason);
                         this.refresh();
                         this.unblockUI();
                     });

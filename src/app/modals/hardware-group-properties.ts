@@ -53,12 +53,17 @@ export class ModalsHardwareGroupPropertiesComponent implements OnInit {
                 )
             ],
             'description': [this.modalModel.group != null ? this.modalModel.group.description : ''],
-            'tags': [this.modalModel.group != null ? this.modalModel.group.tags : []]
+            'tags': [this.modalModel.group != null ? this.modalModel.group.tags.slice() : []]
         });
+
+        console.info('Group onInit');
+        this.modalModel.group ? console.info(this.modalModel.group.tags) : console.info('There is no Group, so there is no tags ');
 
     }
 
     onSubmitClick(): void {
+        console.info('Tags before sumbit');
+        this.modalModel.group ? console.info(this.modalModel.group.tags) : console.info('There is no tags ');
 
         if (this.modalModel.group == null) {
             // @ts-ignore
@@ -69,6 +74,10 @@ export class ModalsHardwareGroupPropertiesComponent implements OnInit {
         this.modalModel.group.description = this.form.controls['description'].value;
         this.modalModel.group.tags = this.form.controls['tags'].value;
         this.modalClose.emit(true);
+
+        console.info('Tags after submit');
+        this.modalModel.group ? console.info(this.modalModel.group.tags) : console.info('There is no tags ');
+
     }
 
     onCloseClick(): void {

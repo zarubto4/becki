@@ -16,7 +16,7 @@ import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-ed
 import { IBlock, IBlockVersion } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
 import { TyrionApiBackend } from '../backend/BeckiBackend';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { BlockRenderer } from 'blocko/dist/editor/block/BlockRenderer';
 import { IError } from '../services/_backend_class/Responses';
 
@@ -120,9 +120,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                                 this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block, b.versions, this.blockChangeVersion));
                             })
                             .catch((reason: IError) => {
-                                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this)));
+                                this.notificationService.fmError(reason);
                             });
-
                     } else {
                         this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block));
                     }
@@ -341,8 +340,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 block.setCode(versionObject.logic_json);
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_cannot_load_versions', this), reason));
-            });
+                this.notificationService.fmError(reason);
+            });;
     }
 
     registerBlockRemovedCallback(callback: (block: BlockoCore.Block) => void): void {

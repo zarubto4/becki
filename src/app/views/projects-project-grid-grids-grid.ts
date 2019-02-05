@@ -4,7 +4,7 @@
  */
 import { Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import {
     IWidget, IProject, IGridProgram, IGridProject, IGridProgramVersion,
@@ -166,7 +166,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -188,7 +188,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_version', model.object.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -216,7 +216,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.unblockUI();
 
             }).catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_grid'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -231,7 +231,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -265,7 +265,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.gridView.setDataJson(program);
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        this.fmError(reason);
                     });
 
                 this.gridDeviceProfile = this.gridView.getDeviceProfile();
@@ -273,9 +273,10 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 this.unsavedChanges = false;
                 this.exitConfirmationService.setConfirmationEnabled(false);
             })
-            .catch((err) => {
+            .catch((reason: IError) => {
+                this.fmError(reason);
                 this.unblockUI();
-                this.fmError(this.translate('flash_cant_load_version', programVersion.name, err));
+                this.fmError(reason);
             });
     }
 
@@ -309,7 +310,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -327,7 +328,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridProgramId]);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -358,8 +359,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
-                    .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', model.object.name, err)));
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -390,10 +391,10 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
                 event.resolve(widgetVersion.logic_json);
                 this.unblockUI();
             })
-            .catch((err) => {
+            .catch((reason: IError) => {
                 event.resolve(null);
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_widget_version'), err));
+                this.fmError(reason);
             });
     }
 

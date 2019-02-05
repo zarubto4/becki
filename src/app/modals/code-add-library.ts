@@ -7,7 +7,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { ILibrary } from '../backend/TyrionAPI';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { TranslationService } from '../services/TranslationService';
 import { IError } from '../services/_backend_class/Responses';
 
@@ -62,7 +62,7 @@ export class ModalsCodeAddLibraryComponent implements OnInit {
 
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
                 this.loading = false;
             });
 

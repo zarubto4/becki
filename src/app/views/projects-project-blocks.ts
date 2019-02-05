@@ -6,7 +6,7 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, IBlock, IBlockList } from '../backend/TyrionAPI';
@@ -100,7 +100,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
 
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail'), reason));
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -116,14 +116,15 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.tyrionBackendService.blockCreate({
                     name: model.block.name,
                     description: model.block.description,
-                    project_id: this.projectId
+                    project_id: this.projectId,
+                    tags: model.block.tags
                 })
                     .then(block => {
                         this.unblockUI();
                         this.onBlockClick(block.id);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block'), reason));
+                        this.fmError(reason);
                         this.onShowProgramPrivateBlocksFilter();
                     });
             }
@@ -139,6 +140,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.tyrionBackendService.blockEdit(block.id, {
                     name: model.block.name,
                     description: model.block.description,
+                    tags: model.block.tags
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_edit')));
@@ -149,7 +151,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                         }
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block'), reason));
+                        this.fmError(reason);
                         if (block.publish_type === 'PRIVATE') {
                             this.onShowProgramPrivateBlocksFilter();
                         } else {
@@ -176,7 +178,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                         }
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block'), reason));
+                        this.fmError(reason);
                         if (block.publish_type === 'PRIVATE') {
                             this.onShowProgramPrivateBlocksFilter();
                         } else {
@@ -198,7 +200,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 }
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+                this.fmError(reason);
                 if (block.publish_type === 'PRIVATE') {
                     this.onShowProgramPrivateBlocksFilter();
                 } else {
@@ -218,7 +220,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 }
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
+                this.fmError(reason);
                 if (block.publish_type === 'PRIVATE') {
                     this.onShowProgramPrivateBlocksFilter();
                 } else {
@@ -237,7 +239,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -252,7 +254,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Blocko cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -267,7 +269,7 @@ export class ProjectsProjectBlocksComponent extends _BaseMainComponent implement
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Blocko cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

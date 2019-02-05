@@ -65,7 +65,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
 
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -118,7 +118,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.onHardwareTypeClick(hardwareType.id);
                     }).catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -151,7 +151,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(() => {
                         this.refresh();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.unblockUI();
                         this.refresh();
                     });
@@ -169,7 +169,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.refresh(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -191,9 +191,10 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch((reason: IError) => {
+                    })
+                    .catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -213,9 +214,10 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                 })
                     .then(() => {
                         this.refresh();
-                    }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
-                        this.refresh();
+                    })
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -231,7 +233,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.refresh(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -252,7 +254,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(producer => {
                         this.onProducerClick(producer.id);
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.unblockUI();
                         this.refresh();
                     });
@@ -272,7 +274,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     .then(() => {
                         this.refresh();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -288,7 +290,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.refresh(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -311,7 +313,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.unblockUI();
                     }).catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -327,7 +329,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                         this.unblockUI();
                     }).catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -349,7 +351,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -363,7 +365,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
+                this.fmError(reason);
             });
     }
 
@@ -406,7 +408,7 @@ export class AdminHardwareComponent extends _BaseMainComponent implements OnInit
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 

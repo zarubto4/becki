@@ -74,7 +74,7 @@ export class TyrionComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_cannot_load_updates'), reason);
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -88,7 +88,7 @@ export class TyrionComponent extends _BaseMainComponent implements OnInit {
                 this.refresh();
             }).catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError(this.translate('flash_schedule_remove_fail'), reason);
+                this.fmError(reason);
             });
     }
 
@@ -114,7 +114,7 @@ export class TyrionComponent extends _BaseMainComponent implements OnInit {
                 this.refresh();
             }).catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError(this.translate('flash_schedule_fail'), reason);
+                this.fmError(reason);
             });
     }
 }

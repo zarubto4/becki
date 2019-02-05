@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, IGridProject, IGridProjectList } from '../backend/TyrionAPI';
@@ -65,7 +65,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -84,7 +84,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
                         this.onGridProjectClick(gridProject.id);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_project'), reason));
+                        this.fmError(reason);
                         this.onFilter();
                     });
             }
@@ -107,7 +107,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
                         this.onFilter();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project'), reason));
+                        this.fmError(reason);
                         this.onFilter();
                     });
             }
@@ -124,7 +124,7 @@ export class ProjectsProjectGridComponent extends _BaseMainComponent implements 
                         this.onFilter();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project'), reason));
+                        this.fmError(reason);
                         this.onFilter();
                     });
             }

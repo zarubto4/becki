@@ -9,12 +9,12 @@ import {
     IApplicableProduct, IProductExtension, IProductExtensionType, ITariff, ITariffExtension,
     ITariffLabel
 } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsTariffModel } from '../modals/tariff';
 import { Subscription } from 'rxjs';
-import { ModalsExtensionModel } from '../modals/extension';
 import { IError } from '../services/_backend_class/Responses';
+import { ModalsExtensionModel } from '../modals/extension';
 
 @Component({
     selector: 'bk-view-admin-financial',
@@ -55,7 +55,7 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Tariff cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
 
@@ -85,7 +85,7 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_deactive_error'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -98,7 +98,7 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_active_error'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -135,7 +135,7 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -161,7 +161,7 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -177,7 +177,7 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -188,7 +188,7 @@ export class AdminFinancialTariffComponent extends _BaseMainComponent implements
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }

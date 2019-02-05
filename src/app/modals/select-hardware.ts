@@ -12,7 +12,7 @@ import {
     IHardware, IHardwareGroup, IHardwareGroupList, IHardwareList, IHardwareType,
     IShortReference
 } from '../backend/TyrionAPI';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IError } from '../services/_backend_class/Responses';
 
@@ -135,7 +135,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
                 }
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
                 this.errorMessage = reason.message;
             });
     }
@@ -164,7 +164,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
                 }
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
                 this.errorMessage = reason.message;
             });
     }

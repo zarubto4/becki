@@ -11,7 +11,6 @@ import { ModalsMembersAddModel } from '../modals/members-add';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { IError } from '../services/_backend_class/Responses';
-import { FlashMessageError } from '../services/NotificationService';
 
 @Component({
     selector: 'bk-view-projects-project-members',
@@ -66,7 +65,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -95,7 +94,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -107,12 +106,15 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                     this.blockUI();
                     this.tyrionBackendService.projectShare(this.project_id, { persons_mail: m.emails })
                         .then(() => {
+                            this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                        })
+                        .catch((reason: IError) => {
                             this.onGetInvitations();
                             this.unblockUI();
                         })
                         .catch((reason: IError) => {
                             this.unblockUI();
-                            this.fmError(this.translate('label_cannot_add_person', reason));
+                            this.fmError(reason);
                         });
                 }
             });
@@ -121,7 +123,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
     onMemberDeleteClick(member: IInvitation) {
 
         if ((this.tyrionBackendService.personInfoSnapshot.email === member.email) || (this.tyrionBackendService.personInfoSnapshot.id === member.id)) {
-            this.fmError(this.translate('label_cannot_remove_yourself'));
+            this.fmErrorFromString(this.translate('label_cannot_remove_yourself'));
         }
 
         let con = new ModalsConfirmModel(this.translate('modal_title_remove_member'), this.translate('modal_text_remove_member'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
@@ -137,7 +139,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_cannot_delete_person', reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -153,7 +155,7 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.fmError(this.translate('label_cannot_resend_invitation', reason));
+                this.fmError(reason);
             });
     }
 
@@ -170,5 +172,4 @@ export class ProjectsProjectMembersComponent extends _BaseMainComponent implemen
             this.onMemberDeleteClick(member);
         }
     }
-
 }

@@ -503,7 +503,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         this.router.navigate(['/projects/' + this.projectId + '/blocko']);
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cant_remove_blocko'), reason);
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -521,7 +521,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cant_update_blocko'), reason);
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -579,7 +579,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                                     if (ps.grid_program_version) {
                                         this.selectedGrid[pps.grid_project.id][ps.grid_program.id] = ps.grid_program_version.id;
                                     } else {
-                                        this.fmError(this.translate('flash_broken_grid_missing_version'));
+                                        this.fmErrorFromString(this.translate('flash_broken_grid_missing_version'));
                                     }
                                 });
                             }
@@ -594,13 +594,13 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                         this.unblockUI();
-                        this.fmError(this.translate('flash_cannot_download_file'), reason);
+                        this.fmError(reason);
                     });
             })
-            .catch((err) => {
+            .catch((reason: IError) => {
                 this.unblockUI();
-                console.error(err);
-                this.fmError(this.translate('flash_cant_load_version', programVersion.name, err));
+                console.error(reason);
+                this.fmError(reason);
             });
     }
 
@@ -614,7 +614,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cant_remove_version'), reason);
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -634,7 +634,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     this.fmSuccess(this.translate('flash_edit_version_been_changed', model.object.name));
                     this.refresh();
                 }).catch((reason: IError) => {
-                    this.fmError(this.translate('flash_edit_cant_change_version', model.object.name, reason));
+                    this.fmError(reason);
                     this.refresh();
                 });
             }
@@ -720,8 +720,8 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     this.refresh(); // also unblockUI
                     this.unsavedChanges = false;
                     this.exitConfirmationService.setConfirmationEnabled(false);
-                }).catch((err) => {
-                    this.fmError(this.translate('flash_cant_save_version', model.object.name, err));
+                }).catch((reason: IError) => {
+                    this.fmError(reason);
                     this.unblockUI();
                 });
             }
@@ -752,7 +752,7 @@ export class ProjectsProjectBlockoBlockoComponent extends _BaseMainComponent imp
                     this.unblockUI();
                 }
             }).catch((reason: IError) => {
-                this.fmError(this.translate('flash_cant_load_blocko'), reason);
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

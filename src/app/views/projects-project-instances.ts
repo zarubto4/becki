@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { IInstance, IInstanceList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceCreateComponent, ModalsInstanceCreateModel } from '../modals/instance-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IError } from '../services/_backend_class/Responses';
@@ -68,7 +68,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -100,7 +100,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.onFilterInstances();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_create_fail'), reason));
+                        this.fmError(reason);
                         this.unblockUI();
                         this.onFilterInstances();
                     });
@@ -128,7 +128,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.onFilterInstances();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -144,7 +144,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                         this.unblockUI();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
+                        this.fmError(reason);
                         this.onFilterInstances();
                     });
             }
@@ -163,7 +163,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_shut_down_error', reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -184,7 +184,7 @@ export class ProjectsProjectInstancesComponent extends _BaseMainComponent implem
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.fmError(this.translate('label_upload_error', reason));
+                        this.fmError(reason);
                     });
             }
         });

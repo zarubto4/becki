@@ -10,7 +10,6 @@ import {
     IProductExtension
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import { FlashMessageError } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';
 
 
@@ -73,7 +72,7 @@ export class FinancialProductInvoicesInvoiceEventsComponent extends _BaseMainCom
                 this.financialEvents = values[2];
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Product cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

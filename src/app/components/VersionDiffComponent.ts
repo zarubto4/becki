@@ -1,19 +1,9 @@
-import { ICProgramFilter } from './../backend/TyrionAPI';
-import { Component, Input, Output, EventEmitter, OnInit, NgZone, OnChanges, SimpleChanges, ViewChildren, AfterViewInit } from '@angular/core';
-import {
-    IBlock, IBlockVersion, ICProgram, ICProgramVersion, IGridProgram, IGridProgramVersion,
-    IGridProject, IShortReference, IWidget, IWidgetVersion
-} from '../backend/TyrionAPI';
-import { _BaseMainComponent } from '../views/_BaseMainComponent';
-import { TyrionBackendService } from '../services/BackendService';
+import { Component, Input, OnChanges, SimpleChanges, ViewChildren, AfterViewInit } from '@angular/core';
+import { ICProgramVersion } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
-import { ModalService } from '../services/ModalService';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
 import { CodeFile } from './CodeIDEComponent';
 import { FormSelectComponentOption, FormSelectComponent } from './FormSelectComponent';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FileTreeRootComponent } from './FileTreeRootComponent';
-import { MonacoDiffComponent } from './MonacoDiffComponent';
 
 @Component({
     selector: 'bk-program-version-diff',
@@ -113,10 +103,10 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
     onSourceSelectionChanges(value: String) {
         const selectedVersion =  this.versionList.find((version) => {
             return version.name === value;
-        })
+        });
         let files = selectedVersion.program.files.map((file) => {
             return new CodeFile(file.file_name, file.content)
-        })
+        });
         files.push(new CodeFile('main.cpp', selectedVersion.program.main));
         this.codeFilesSource = files;
         if (this.selectedFilePath) {
@@ -127,10 +117,10 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
     onTargetSelectionChanges(value: String) {
         const selectedVersion =  this.versionList.find((version) => {
             return version.name === value;
-        })
+        });
         let files = selectedVersion.program.files.map((file) => {
             return new CodeFile(file.file_name, file.content)
-        })
+        });
         files.push(new CodeFile('main.cpp', selectedVersion.program.main));
         this.codeFilesTarget = files;
         if (this.selectedFilePath) {
@@ -141,7 +131,7 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
     onFileSelected(path: string) {
         const originalFile = this.codeFilesSource.find((f: CodeFile) => {
             return f.objectFullPath === path;
-        })
+        });
         if (originalFile) {
             this.sourceFileContent = originalFile.content;
         } else {
@@ -151,7 +141,7 @@ export class ProgramVersionDiffComponent implements  OnChanges, AfterViewInit {
 
         const changedFile = this.codeFilesTarget.find((f: CodeFile) => {
             return f.objectFullPath === path;
-        })
+        });
         if (changedFile) {
             this.targetFileContent = changedFile.content;
         } else {

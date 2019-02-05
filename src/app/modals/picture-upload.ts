@@ -4,7 +4,7 @@
  */
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
-import { FlashMessage, FlashMessageError } from '../services/NotificationService';
+import { FlashMessage, NotificationService } from '../services/NotificationService';
 import { ModalModel } from '../services/ModalService';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { TranslationService } from '../services/TranslationService';
@@ -54,7 +54,7 @@ export class ModalsPictureUploadComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private translationService: TranslationService, private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder, protected notificationService: NotificationService, private translationService: TranslationService) {
         this.form = this.formBuilder.group({
             'defaultPicture': [''],
             'avatar_picture': [''],
@@ -94,8 +94,7 @@ export class ModalsPictureUploadComponent implements OnInit {
                     this.single_error_status = null;
                     if (image.width < 50 || image.height < 50) {
 
-                        // TODO - zprávu nastavit do templatu!
-                        this.flashMessage.emit(new FlashMessageError(this.translationService.translate('flash_image_too_small', this)));
+                        this.notificationService.fmErrorFromString('Image is too small.');
 
                         this.cropperLoaded = false;
                     } else {
@@ -117,7 +116,6 @@ export class ModalsPictureUploadComponent implements OnInit {
             this.saved = false;
         } else {
             this.single_error_status = this.translationService.translate('image_is_too_big', this);
-            console.info('File is too large');
             this.cropperLoaded = false;
         }
     }
@@ -136,5 +134,4 @@ export class ModalsPictureUploadComponent implements OnInit {
     onCloseClick(): void {
         this.modalClose.emit(false);
     }
-
 }

@@ -40,8 +40,6 @@ export class ModalsProjectPropertiesComponent implements OnInit {
 
     form: FormGroup;
 
-    myTags: string[] = [];
-
     constructor(private backendService: TyrionBackendService, private formBuilder: FormBuilder) {
     }
 
@@ -71,14 +69,8 @@ export class ModalsProjectPropertiesComponent implements OnInit {
             ],
             'description': [this.modalModel.project != null ? this.modalModel.project.description : ''],
             'product': [this.modalModel.project ? this.modalModel.project.product.id : '', [BeckiValidators.condition(() => this.modalModel.project == null, Validators.required)]],
-            'tags': [this.modalModel.project != null ? this.modalModel.project.tags : []]
+            'tags': [this.modalModel.project != null ? this.modalModel.project.tags.slice() : []]
         });
-
-        if (this.modalModel.project) {
-            this.myTags = this.modalModel.project.tags;
-        }
-
-        console.info('My Tags on init function are     ' + this.myTags.toString() + '\n\n');
     }
 
     onSubmitClick(): void {

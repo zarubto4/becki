@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import {  FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -117,7 +117,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                         this.onFilterHardware();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
+                        this.fmError(reason);
                         this.unblockUI();
                         this.onFilterHardware();
                     });
@@ -135,7 +135,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.onFilterHardware();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_fail'), reason);
+                this.fmError(reason);
                 this.unblockUI();
                 this.onFilterHardware();
             });
@@ -149,7 +149,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.onFilterHardware();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_fail'), reason);
+                this.fmError(reason);
                 this.unblockUI();
                 this.onFilterHardware();
             });
@@ -166,7 +166,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                         this.onFilterHardware();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
+                        this.fmError(reason);
                         this.unblockUI();
                         this.onFilterHardware();
                     });
@@ -185,7 +185,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     this.onHardwareAddClick();
                 })
                 .catch((reason: IError) => {
-                    this.fmError(this.translate('flash_add_device_fail'), reason);
+                    this.fmError(reason);
                     this.unblockUI();
                 });
         } else {
@@ -195,7 +195,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.onFilterHardware();
                 this.unblockUI();
             }).catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', reason)));
+                this.fmError(reason);
                 this.unblockUI();
             });
         }
@@ -212,7 +212,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     this.onDeviceEditGroupClick(device);
                 })
                 .catch((reason: IError) => {
-                    this.fmError(this.translate('flash_edit_device_fail'), reason);
+                    this.fmError(reason);
                     this.unblockUI();
                 });
 
@@ -235,7 +235,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                         })
                         .catch((reason: IError) => {
                             this.unblockUI();
-                            this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                            this.fmError(reason);
                             this.onFilterHardwareGroup();
                             this.onFilterHardware();
                         });
@@ -262,7 +262,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                        this.fmError(reason);
                         this.onFilterHardwareGroup();
                         this.onFilterHardware();
                     });
@@ -289,7 +289,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                        this.fmError(reason);
                     });
             }
         });
@@ -311,7 +311,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                        this.fmError(reason);
                     });
             }
         });
@@ -328,7 +328,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                         this.onFilterHardware();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_group_fail', reason)));
+                        this.fmError(reason);
                         this.unblockUI();
                         this.onFilterHardwareGroup();
                         this.onFilterHardware();
@@ -364,10 +364,10 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.devicesFilter.content.forEach((device, index, obj) => {
                     this.tyrionBackendService.onlineStatus.subscribe((status) => {
 
-                        console.log('Change online state on Hardware model', status.model, 'id:', status.model_id);
+                        console.info('Change online state on Hardware model', status.model, 'id:', status.model_id);
 
                         if (status.model === 'Hardware' && device.id === status.model_id) {
-                            console.log('Change online state on Hardware');
+                            console.info('Change online state on Hardware');
                             device.online_state = status.online_state;
                         }
                     });
@@ -375,7 +375,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -390,7 +390,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -413,7 +413,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 })
                 .catch((reason: IError) => {
                     this.unblockUI();
-                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                    this.fmError(reason);
                 });
             return;
         }
@@ -437,7 +437,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                     })
                     .catch((reason: IError) => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                        this.fmError(reason);
                     });
             }
         });
@@ -454,7 +454,7 @@ export class ProjectsProjectHardwareComponent extends _BaseMainComponent impleme
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_success')));
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

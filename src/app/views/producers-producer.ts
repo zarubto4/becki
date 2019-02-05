@@ -7,7 +7,7 @@ import { _BaseMainComponent } from './_BaseMainComponent';
 import { Subscription } from 'rxjs';
 import { IProducer, IHardwareType } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { IError } from '../services/_backend_class/Responses';
+import {IError} from "../services/_backend_class/Responses";
 
 @Component({
     selector: 'bk-view-producers',
@@ -55,7 +55,7 @@ export class ProducersProducerComponent extends _BaseMainComponent implements On
                 this.devices = devices;
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_project_cant_load', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
         this.unblockUI();

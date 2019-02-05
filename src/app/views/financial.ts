@@ -10,7 +10,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { _BaseMainComponent } from './_BaseMainComponent';
 import { IProduct } from '../backend/TyrionAPI';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsFinancialProductModel } from '../modals/financial-product';
 import { IError } from '../services/_backend_class/Responses';
 
@@ -47,7 +47,7 @@ export class FinancialComponent extends _BaseMainComponent implements OnInit {
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_products_edit_error', model.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -62,7 +62,7 @@ export class FinancialComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_products_cant_load'), reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

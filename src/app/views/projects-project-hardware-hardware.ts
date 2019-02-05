@@ -7,7 +7,7 @@ import {
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
@@ -112,7 +112,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('blink_device_success')));
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -203,7 +203,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
 
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('label_cant_load_device', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -244,7 +244,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -261,7 +261,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -275,7 +275,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
+                this.fmError(reason);
                 this.refresh();
             });
     }
@@ -290,7 +290,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -310,7 +310,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_update'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -332,7 +332,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -359,7 +359,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -387,7 +387,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -428,7 +428,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -446,7 +446,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -475,7 +475,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                 this.refresh();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -498,7 +498,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                             this.refresh();
                         })
                         .catch((reason: IError) => {
-                            this.fmError(this.translate('flash_cant_update_bootloader', reason));
+                            this.fmError(reason);
                             this.unblockUI();
                         });
                 }
@@ -527,7 +527,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
 
                         })
                         .catch((reason: IError) => {
-                            this.fmError(this.translate('flash_cant_update_firmware'), reason);
+                            this.fmError(reason);
                             this.unblockUI();
                         });
                 }
@@ -589,7 +589,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                                     task.finished = value.finished;
                                 })
                                 .catch((reason: IError) => {
-                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                    this.fmError(reason);
                                 });
                         }
                     });
@@ -599,7 +599,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -626,7 +626,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                                 this.onFilterHardwareUpdates();
                             })
                             .catch((reason: IError) => {
-                                this.fmError(this.translate('flash_cant_edit_backup_mode'), reason);
+                                this.fmError(reason);
                                 this.unblockUI();
                             });
                     }
@@ -649,7 +649,7 @@ export class ProjectsProjectHardwareHardwareComponent extends _BaseMainComponent
                     this.refresh();
                 })
                 .catch((reason: IError) => {
-                    this.fmError(this.translate('flash_cant_edit_backup_mode', reason));
+                    this.fmError(reason);
                     this.unblockUI();
                 });
                 */

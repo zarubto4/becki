@@ -63,7 +63,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -83,7 +83,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
             })
             .catch((reason: IError) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
             });
     }
 
@@ -105,8 +105,9 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                 })
                     .then(() => {
                         this.onFilterHomerServer();
-                    }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                    })
+                    .catch((reason: IError) => {
+                        this.fmError(reason);
                         this.onFilterHomerServer();
                     });
             }
@@ -125,7 +126,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     .then(() => {
                         this.onFilterCompilationServer();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                     });
             }
         });
@@ -153,7 +154,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     .then(() => {
                         this.onFilterHomerServer();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.onFilterHomerServer();
                     });
             }
@@ -179,7 +180,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                         this.onFilterHomerServer(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.onFilterHomerServer(); // also unblockUI
                     });
             }
@@ -202,7 +203,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                     .then(() => {
                         this.onFilterCompilationServer(); // also unblockUI
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.onFilterCompilationServer(); // also unblockUI
                     });
             }
@@ -219,7 +220,7 @@ export class ServerComponent extends _BaseMainComponent implements OnInit {
                         this.onFilterCompilationServer(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.onFilterCompilationServer(); // also unblockUI
                     });
             }

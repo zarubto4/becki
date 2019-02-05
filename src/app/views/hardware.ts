@@ -32,7 +32,7 @@ export class HardwareComponent extends _BaseMainComponent implements OnInit {
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.fmError( this.translate('flash_project_cant_load', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }

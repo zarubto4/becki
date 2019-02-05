@@ -276,8 +276,14 @@ export class FlashMessageWarning extends FlashMessage {
 }
 
 export class FlashMessageError extends FlashMessage {
-    constructor(body: string, reason?: Object) {
-        super('danger', 'times-circle', body, reason);
+    constructor(reason: IError) {
+        super('danger', 'times-circle', 'Error: ', reason);
+    }
+}
+
+export class FlashMessageErrorFromString extends FlashMessage {
+    constructor(body: string) {
+        super('danger', 'times-circle', body, null);
     }
 }
 
@@ -343,8 +349,8 @@ export class NotificationService {
         });
 
         // register error handler for websocket error
-        this.backendService.webSocketErrorOccurred.subscribe(error => {
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_communication_failed')));
+        this.backendService.webSocketErrorOccurred.subscribe( (reason: IError) => {
+            this.fmErrorFromString('Connection to Server for Real Time synchronization and Notification subscription failed.');
         });
 
         // subscribe websocket notifications
@@ -581,9 +587,9 @@ export class NotificationService {
             action: b.action,
             payload: b.payload
         })
-            .catch((e) => {
+            .catch((reason: IError) => {
                 n.confirmed = false; // is this okay?
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_confirm_notification', e)));
+                this.fmError(reason);
             });
     }
 
@@ -594,8 +600,7 @@ export class NotificationService {
                 this.removeNotificationById(n.id);
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_notification', reason)));
-
+                this.fmError(reason);
             });
     }
 
@@ -662,5 +667,17 @@ export class NotificationService {
 
                 return this.notifications;
             });
+    }
+
+    fmError(reason?: IError): FlashMessage {
+        let fm = new FlashMessageError(reason);
+        this.addFlashMessage(fm);
+        return fm;
+    }
+
+    fmErrorFromString(body?: string): FlashMessage {
+        let fm = new FlashMessageErrorFromString(body);
+        this.addFlashMessage(fm);
+        return fm;
     }
 }

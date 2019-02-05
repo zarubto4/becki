@@ -12,7 +12,7 @@ import { TyrionBackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { TranslationService } from '../services/TranslationService';
 import { IGridProgram, IGridProgramVersion, IGridProject, IGridProjectList } from '../backend/TyrionAPI';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';
 
 export class ModalsSelectGridProjectModel extends ModalModel {
@@ -60,8 +60,7 @@ export class ModalsGridProjectSelectComponent implements OnInit {
                     this.onSelectProjectClick(project);
                 })
                 .catch((reason: IError) => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
-                    this.errorMessage = reason.message;
+                    this.notificationService.fmError(reason);
                 });
         }
     }
@@ -99,7 +98,7 @@ export class ModalsGridProjectSelectComponent implements OnInit {
                 this.projects = projects;
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
             });
     }
 

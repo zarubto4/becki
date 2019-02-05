@@ -16,7 +16,7 @@ import { FormSelectComponentOption } from './FormSelectComponent';
 import { ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { WebSocketClientHardware } from '../services/websocket/WebSocketClientHardware';
 import { IWebSocketMessage } from '../services/websocket/WebSocketMessage';
-import { FlashMessageError, NotificationService } from '../services/NotificationService';
+import { NotificationService } from '../services/NotificationService';
 import { IError } from '../services/_backend_class/Responses';
 
 @Component({
@@ -294,7 +294,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
                     }
                 })
                 .catch((reason: IError) => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.fmError(reason);
                     console.error('onHardwareUnSubscribeClick:', reason);
                 });
         }
@@ -318,7 +318,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
                 }
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                this.notificationService.fmError(reason);
                 console.error('onHardwareSubscribeClick:', reason);
             });
     }
@@ -352,7 +352,7 @@ export class TerminalLogSubscriberComponent implements OnInit, OnDestroy, AfterV
                 }
             })
             .catch((reason: IError) => {
-                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason.message));
+                this.notificationService.fmError(reason);
                 console.error('onUserChangeLogLevelClick:', reason);
             });
 

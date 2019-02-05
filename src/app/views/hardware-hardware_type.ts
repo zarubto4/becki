@@ -10,7 +10,7 @@ import {
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsSetAsMainModel } from '../modals/set-as-main';
 import { ModalsCreateHardwareTypeModel } from '../modals/type-of-board-create';
 import { ModalsBootloaderPropertyModel } from '../modals/bootloader-property';
@@ -94,7 +94,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_project_cant_load', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -128,7 +128,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                             .then(() => {
                                 this.refresh();
                             }).catch((reason: IError) => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                                this.fmError(reason);
                                 this.refresh();
                             });
                     }
@@ -136,7 +136,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
@@ -151,7 +151,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.router.navigate(['/admin/hardware']);
                     });
             }
@@ -172,7 +172,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                     .then(() => {
                         this.refresh();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -198,7 +198,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                     .then(() => {
                         this.refresh();
                     }).catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -220,7 +220,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -237,7 +237,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -259,7 +259,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.object.name, reason)));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -279,7 +279,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -300,7 +300,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_file_upload'), reason));
+                        this.fmError(reason);
                         this.refresh();
                     });
             }
@@ -317,7 +317,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -334,7 +334,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cant_set_main'), reason);
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -351,7 +351,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh(); // also unblockUI
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }
@@ -383,7 +383,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -430,7 +430,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.refresh();
                     })
                     .catch((reason: IError) => {
-                        this.fmError(null, reason);
+                        this.fmError(reason);
                         this.unblockUI();
                     });
             }
@@ -447,7 +447,7 @@ export class HardwareHardwareTypeComponent extends _BaseMainComponent implements
                         this.navigate(['admin/garfield/']);
                     })
                     .catch((reason: IError) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(reason);
                         this.refresh(); // also unblockUI
                     });
             }

@@ -61,7 +61,7 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
                     }
                 })
                 .catch((reason: IError) => {
-                    this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_fail', this), reason));
+                    this.notificationService.fmError(reason);
                     this.loading = false;
                 });
         }, 1);

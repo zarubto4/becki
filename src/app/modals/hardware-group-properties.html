@@ -1,7 +1,7 @@
-<div>
+<div *ngIf="modalModel">
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{(modalModel.group?"title_edit":"title_add")|bkTranslate:this}}</h4>
+        <h4 class="modal-title" [innerHTML]="(modalModel.group?'title_edit':'title_add')|bkTranslate:this"></h4>
     </div>
     <div class="modal-body" *ngIf="form">
         <form [formGroup]="form">
@@ -9,7 +9,7 @@
             <bk-form-input [control]="form.controls['description']" [label]="'label_group_description'|bkTranslate:this"></bk-form-input>
 
             <!-- Tags -->
-           <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
+            <bk-form-tag-input [control]="form.controls['tags']" [label]="'Optional Tags'"></bk-form-tag-input>
         </form>
     </div>
     <div class="modal-footer">

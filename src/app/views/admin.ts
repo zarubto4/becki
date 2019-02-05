@@ -40,7 +40,7 @@ export class AdminDashboardComponent extends _BaseMainComponent implements OnIni
                 this.unblockUI();
             })
             .catch((reason: IError) => {
-                this.fmError(this.translate('flash_cant_load', reason));
+                this.fmError(reason);
                 this.unblockUI();
             });
     }
