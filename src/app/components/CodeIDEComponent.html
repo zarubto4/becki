@@ -202,8 +202,7 @@
                     </button>
 
                     <button *ngIf="enableSaveButton" type="button" class="btn default green-haze pull-right" (click)="onToolBarSaveClick()" style="margin-right: 3px;">
-                        <i class="fa fa-floppy-o"></i>
-                        <i class="fa fa-bookmark"></i>
+                        {{'btn_save_as'|bkTranslate:this}}
                     </button>
                     <button *ngIf="enableSaveButton" type="button" class="btn default blue pull-right" (click)="onToolBarSaveAsClick()" style="margin-right: 3px;">
                         <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}

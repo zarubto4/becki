@@ -3027,6 +3027,7 @@ export class StaticTranslation {
             'label_description': 'Description',
             'label_user': 'User',
             'btn_save': 'Save',
+            'btn_save_as': 'Save as',
             'table_tags': 'Tags',
             'btn_test': 'Test',
             'btn_close': 'Close',
