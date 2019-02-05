@@ -223,7 +223,6 @@ export class PortletTitleComponent implements AfterContentChecked, AfterViewInit
         this.tabItems.forEach(item => {
             this.tabBtns[i].width = item.nativeElement.offsetWidth;
             i++;
-            console.info(item);
         });
     }
 
