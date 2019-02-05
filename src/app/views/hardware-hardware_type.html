@@ -134,7 +134,6 @@
                         <th></th>
                         <th class="">{{'table_name'|bkTranslate:this}}</th>
                         <th class="">{{'table_identifier'|bkTranslate:this}}</th>
-                        <th class="">{{'table_description'|bkTranslate:this}}</th>
                         <th class="">{{'table_change_notes'|bkTranslate:this}}</th>
                         <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                     </tr>
@@ -152,8 +151,6 @@
                         </td>
                         <td class="vert-align no-wrap">{{bootloader.name}}</td>
                         <td class="vert-align breakable">{{bootloader.version_identifier}}</td>
-                        <td class="vert-align no-wrap">{{bootloader.description.substr(0, 32)}}<span
-                            *ngIf="bootloader.description.length > 32">...</span></td>
                         <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span
                             *ngIf="bootloader.changing_note.length > 32">...</span></td>
 

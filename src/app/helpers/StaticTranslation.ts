@@ -1031,8 +1031,7 @@ export class StaticTranslation {
 
                 'table_id': 'Id',
                 'table_name': 'Name',
-                'table_identifier': 'Version Identification',
-                'table_description': 'Description',
+                'table_identifier': 'Version',
                 'table_change_notes': 'Change notes',
                 'table_author': 'Author',
                 'table_status': 'Status',
