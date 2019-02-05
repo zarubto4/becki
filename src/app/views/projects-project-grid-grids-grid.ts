@@ -44,6 +44,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     gridProgram: IGridProgram = null;
     selectedProgramVersion: IGridProgramVersion = null;
 
+    gridProgramVersions: IGridProgramVersion[] = [];
+
     gridDeviceProfile: string = 'mobile';
 
     projectSubscription: Subscription;
@@ -202,6 +204,8 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
             .then((program: IGridProgram) => {
                 this.gridProgram = program;
 
+                this.gridProgramVersions = program.program_versions || [];
+
                 let version = null;
                 if (this.afterLoadSelectedVersionId) {
                     version = this.gridProgram.program_versions.find((bpv) => bpv.id === this.afterLoadSelectedVersionId);
@@ -340,7 +344,7 @@ export class ProjectsProjectGridGridsGridComponent extends _BaseMainComponent im
     }
 
     onSaveClick(): void {
-        let model = new ModalsVersionDialogModel(this.gridProgram.id, 'GridProgramVersion');
+        let model = new ModalsVersionDialogModel(this.gridProgram.id, 'GridProgramVersion', {name: this.nextVersion(this.gridProgramVersions)});
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

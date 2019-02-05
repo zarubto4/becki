@@ -242,4 +242,37 @@ export abstract class _BaseMainComponent {
     public onScanHardwareClick(project_id: string): void {
         this.navigate(['/projects', project_id, 'scanHardware']);
     }
+
+// -- SemVer ----------------------------------------------------------------------------------------------------------------
+
+    nextVersion(versions: any[]): string {
+        let nextVersion: string = null;
+        let matchedVersionNames = [];
+        let regexp = /^[0-9]+\.[0-9]+\.?[0-9]*$/;
+
+        versions.forEach(version => {
+            if (version.name.match(regexp)) {
+                matchedVersionNames.push(version.name);
+            }
+        });
+
+        if (matchedVersionNames.length === 0) {
+            nextVersion = '1.0.0';
+        } else {
+            nextVersion = this.incrementPatch(matchedVersionNames[0]);
+        }
+
+        return nextVersion;
+    }
+
+    incrementPatch(lastVersion: string): string {
+        let parts = lastVersion.split('.');
+        let patch = parts[2];
+        let patchInt = parseInt(patch, 10);
+        patchInt++;
+        patch = patchInt.toString();
+        parts[2] = patch;
+        let newVersion = parts.join('.');
+        return newVersion;
+    }
 }

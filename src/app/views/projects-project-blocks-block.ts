@@ -544,7 +544,7 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
 
     onSaveClick(): void {
         if (this.successfullyTested && this.renderer) {
-            let model = new ModalsVersionDialogModel(this.block.id, 'BlockVersion', {name: this.nextVersion()});
+            let model = new ModalsVersionDialogModel(this.block.id, 'BlockVersion', {name: this.nextVersion(this.blockoBlockVersions)});
             this.modalService.showModal(model).then((success) => {
                 if (success) {
                     let data: object = {
@@ -680,36 +680,5 @@ export class ProjectsProjectBlocksBlockComponent extends _BaseMainComponent impl
         } else if (action === 'remove_version') {
             this.onRemoveVersionClick(version);
         }
-    }
-
-    nextVersion(): string {
-        let nextVersion: string = null;
-        let matchedVersionNames = [];
-        let regexp = /^[0-9]+\.[0-9]+\.?[0-9]*$/;
-
-        this.blockoBlockVersions.forEach(version => {
-            if (version.name.match(regexp)) {
-                matchedVersionNames.push(version.name);
-            }
-        });
-
-        if (matchedVersionNames.length === 0) {
-            nextVersion = '1.0.0';
-        } else {
-            nextVersion = this.incrementPatch(matchedVersionNames[0]);
-        }
-
-        return nextVersion;
-    }
-
-    incrementPatch(lastVersion: string): string {
-        let parts = lastVersion.split('.');
-        let patch = parts[2];
-        let patchInt = parseInt(patch, 10);
-        patchInt++;
-        patch = patchInt.toString();
-        parts[2] = patch;
-        let newVersion = parts.join('.');
-        return newVersion;
     }
 }

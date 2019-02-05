@@ -496,7 +496,7 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
     }
 
     onSaveClick(): void {
-        let model = new ModalsVersionDialogModel(this.widget.id, 'WidgetVersion', {name: this.nextVersion()});
+        let model = new ModalsVersionDialogModel(this.widget.id, 'WidgetVersion', {name: this.nextVersion(this.gridWidgetVersions)});
         this.modalService.showModal(model).then((success) => {
             if (success) {
 
@@ -636,36 +636,4 @@ export class ProjectsProjectWidgetsWidgetComponent extends _BaseMainComponent im
             this.onRemoveVersionClick(version);
         }
     }
-
-    nextVersion(): string {
-        let nextVersion: string = null;
-        let matchedVersionNames = [];
-        let regexp = /^[0-9]+\.[0-9]+\.?[0-9]*$/;
-
-        this.gridWidgetVersions.forEach(version => {
-            if (version.name.match(regexp)) {
-                matchedVersionNames.push(version.name);
-            }
-        });
-
-        if (matchedVersionNames.length === 0) {
-            nextVersion = '1.0.0';
-        } else {
-            nextVersion = this.incrementPatch(matchedVersionNames[0]);
-        }
-
-        return nextVersion;
-    }
-
-    incrementPatch(lastVersion: string): string {
-        let parts = lastVersion.split('.');
-        let patch = parts[2];
-        let patchInt = parseInt(patch, 10);
-        patchInt++;
-        patch = patchInt.toString();
-        parts[2] = patch;
-        let newVersion = parts.join('.');
-        return newVersion;
-    }
-
 }
