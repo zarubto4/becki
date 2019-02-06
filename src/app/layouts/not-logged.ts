@@ -30,10 +30,20 @@ export class LayoutNotLoggedComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        console.info('');
+        console.info('On init bk not logged component');
+        console.info('');
+
         document.body.classList.add(...BODY_CLASSES);
+        this.backendService.stopWebSocketCommunication();
+
     }
 
     ngOnDestroy(): void {
+        console.info('');
+        console.info('ngOnDestroy bk not logged component');
+        console.info('');
+
         document.body.classList.remove(...BODY_CLASSES);
     }
 }

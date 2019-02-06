@@ -34,6 +34,11 @@ export class WebsocketService {
         setImmediate(() => this.tyrion.connect());
     }
 
+    public closeTyrionConnection(): void {
+        this.tyrion.disconnect();
+        console.info('should be disonnected');
+    }
+
     // WebSocket Messages From Homer For HArdware Logger:
     public connectDeviceTerminalWebSocket(server_url: string, port: string, callback: (socket: WebSocketClientHardware, error: any) => void) {
 
